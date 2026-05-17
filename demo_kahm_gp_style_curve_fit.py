@@ -200,7 +200,7 @@ def train_kahm_curve_model(args: argparse.Namespace, data: dict[str, ArrayF]) ->
         singleton_strategy="augment",
         singleton_aux_mix=0.05,
         cluster_strategy="y_then_x",
-        max_x_splits_per_y_cluster=10
+        max_x_splits_per_y_cluster=20
     )
 
     soft_result = tune_soft_params(
@@ -312,16 +312,16 @@ def parse_args() -> argparse.Namespace:
         )
     )
 
-    parser.add_argument("--n-train", type=int, default=500, help="Number of noisy training samples.")
+    parser.add_argument("--n-train", type=int, default=200, help="Number of noisy training samples.")
     parser.add_argument("--n-grid", type=int, default=2000, help="Number of dense grid points for evaluation/plotting.")
-    parser.add_argument("--noise-std", type=float, default=0.35, help="Standard deviation of Gaussian observation noise.")
-    parser.add_argument("--n-clusters", type=int, default=100, help="Number of output clusters/prototypes for KAHM.")
+    parser.add_argument("--noise-std", type=float, default=0.5, help="Standard deviation of Gaussian observation noise.")
+    parser.add_argument("--n-clusters", type=int, default=50, help="Number of output clusters/prototypes for KAHM.")
     parser.add_argument("--nb", type=int, default=100, help="Number of KAHM autoencoder bases per cluster.")
     parser.add_argument("--batch-size", type=int, default=1024, help="Batch size for prediction/NLMS operations.")
     parser.add_argument("--n-jobs", type=int, default=-1, help="Parallel jobs passed to KAHM distance evaluation.")
     parser.add_argument("--random-state", type=int, default=0, help="Reproducibility seed.")
     parser.add_argument("--alphas", type=float, nargs="+", default=[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0], help="Soft KAHM alpha values to sweep for tuning.")
-    parser.add_argument("--nlms-epochs", type=int, default=1000, help="Optional extra NLMS epochs after tune_soft_params; set >0 to run additional refinement.")
+    parser.add_argument("--nlms-epochs", type=int, default=20, help="Optional extra NLMS epochs after tune_soft_params; set >0 to run additional refinement.")
     parser.add_argument("--nlms-mu", type=float, default=0.1, help="NLMS step size for cluster-center refinement.")
     parser.add_argument("--anchor-lambda", type=float, default=0.0, help="Small anchor regularizer for NLMS centers.")
     parser.add_argument("--preload-classifier", action="store_true", help="Preload disk-backed AE shards before NLMS.")

@@ -347,8 +347,6 @@ def _hierarchical_y_then_x_labels(
     n_y_clusters_i = _validate_positive_int("n_y_clusters", int(n_y_clusters))
     max_splits_i = _validate_positive_int("max_x_splits_per_y_cluster", int(max_x_splits_per_y_cluster))
     min_child_i = _validate_positive_int("min_child_size", int(min_child_size))
-    if min_child_i < 2:
-        raise ValueError("min_child_size must be at least 2 for KAHM autoencoder training.")
     if n_y_clusters_i > n_samples:
         raise ValueError(f"n_y_clusters={n_y_clusters_i} cannot exceed number of samples N={n_samples}.")
 
@@ -540,7 +538,7 @@ def train_kahm_regressor(
     ae_compress: int = 3,
     singleton_strategy: Literal["augment", "merge"] = "augment",
     singleton_aux_mix: float = 0.05,
-    cluster_strategy: Literal["kmeans_y", "y_then_x"] = "kmeans_y",
+    cluster_strategy: Literal["kmeans_y", "y_then_x"] = "y_then_x",
     n_y_clusters: int | None = None,
     max_x_splits_per_y_cluster: int = 3,
     min_child_size: int = 2,
@@ -573,8 +571,6 @@ def train_kahm_regressor(
         raise ValueError("cluster_strategy must be one of {'kmeans_y', 'y_then_x'}.")
     max_x_splits_i = _validate_positive_int("max_x_splits_per_y_cluster", int(max_x_splits_per_y_cluster))
     min_child_size_i = _validate_positive_int("min_child_size", int(min_child_size))
-    if min_child_size_i < 2:
-        raise ValueError("min_child_size must be at least 2 for KAHM autoencoder training.")
     n_y_clusters_i: int | None = None
     if n_y_clusters is not None:
         n_y_clusters_i = _validate_positive_int("n_y_clusters", int(n_y_clusters))
@@ -606,6 +602,7 @@ def train_kahm_regressor(
         kmeans = None
         labels_zero = np.arange(int(n_samples), dtype=np.int64)
     elif cluster_strategy == "y_then_x":
+        print(f"Using hierarchical y_then_x clustering strategy with n_y_clusters={n_y_clusters_i} and max_x_splits_per_y_cluster={max_x_splits_i}...")
         if n_y_clusters_i is None:
             # Interpret n_clusters as an approximate requested final cluster count.
             n_y_clusters_i = max(1, int(np.ceil(n_clusters_i / max(1, max_x_splits_i))))
@@ -1760,14 +1757,14 @@ if __name__ == "__main__":
     model_demo = train_kahm_regressor(
         X_train_demo,
         Y_train_demo,
-        n_clusters=int(0.2 * n_train),
+        n_clusters=int(0.1 * n_train),
         subspace_dim=20,
         Nb=100,
         random_state=0,
         save_ae_to_disk=False,
         verbose=True,
         cluster_strategy="y_then_x",
-        max_x_splits_per_y_cluster=3
+        max_x_splits_per_y_cluster=10
     )
 
     # Baseline: default soft parameters from kahm_regress().
@@ -1825,7 +1822,7 @@ if __name__ == "__main__":
         Y_train_demo, 
         mu=0.1,
         epsilon=1.0,
-        epochs=100,
+        epochs=20,
         batch_size=1024,
         shuffle=True,
         random_state=0,

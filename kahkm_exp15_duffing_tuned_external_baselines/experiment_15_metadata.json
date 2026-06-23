@@ -1,0 +1,54 @@
+{
+  "systems": [
+    "duffing"
+  ],
+  "train_seeds": [
+    0,
+    1,
+    2
+  ],
+  "test_seeds": [
+    100,
+    101,
+    102
+  ],
+  "n_steps_train": 1200,
+  "n_steps_test": 800,
+  "horizons": [
+    1,
+    10,
+    50,
+    100,
+    200
+  ],
+  "subspace_dim": 4,
+  "nb": 100,
+  "beta": 0.1,
+  "nlms_epochs": 20,
+  "kmeans_kind": "full",
+  "batch_size": 256,
+  "n_jobs": -1,
+  "output_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp15_duffing_tuned_external_baselines",
+  "save_ae_to_disk": false,
+  "max_train_per_cluster": null,
+  "vanderpol_mu": 1.0,
+  "ridge": 1e-08,
+  "system_configs": {
+    "duffing": {
+      "name": "duffing",
+      "dt": 0.03,
+      "n_clusters": 10,
+      "omega": 2.0,
+      "tau": 1e-06
+    },
+    "vanderpol": {
+      "name": "vanderpol",
+      "dt": 0.02,
+      "n_clusters": 20,
+      "omega": 4.0,
+      "tau": 1e-06
+    }
+  },
+  "purpose": "Compare KAHKM association rollout with state-space DMD and polynomial EDMD baselines, all evaluated in KAHKM association space on unseen trajectories.",
+  "total_seconds": 6.0453407764434814
+}

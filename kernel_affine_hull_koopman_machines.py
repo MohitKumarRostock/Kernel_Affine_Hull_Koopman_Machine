@@ -48,10 +48,15 @@ import inspect
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Literal, Sequence, cast
+from typing import Any, Callable, Literal, Sequence, cast
 from uuid import uuid4
 
 import numpy as np
+
+try:
+    from numba import njit as _numba_njit  # type: ignore[import]
+except Exception:  # pragma: no cover - optional speed path
+    _numba_njit = None
 from joblib import Parallel, delayed, dump, load
 from numpy.typing import DTypeLike
 from sklearn.cluster import KMeans, MiniBatchKMeans
@@ -852,6 +857,62 @@ def kahm_associations(
 # -----------------------------------------------------------------------------
 
 
+
+NLMSFastFn = Callable[[np.ndarray, np.ndarray, float, int, np.ndarray], tuple[np.ndarray, np.ndarray]]
+
+
+def _nlms_koopman_closure_numba_impl(
+    Phi_arr: np.ndarray,
+    Chi_arr: np.ndarray,
+    beta_f: float,
+    epochs_i: int,
+    B: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    c_count = Phi_arr.shape[0]
+    n_samples = Phi_arr.shape[1]
+    history = np.empty(epochs_i, dtype=np.float64)
+    denom_target = 0.0
+    for j in range(c_count):
+        for i in range(n_samples):
+            denom_target += Chi_arr[j, i] * Chi_arr[j, i]
+    if denom_target < 1e-12:
+        denom_target = 1e-12
+
+    err = np.empty(c_count, dtype=np.float64)
+    for ep in range(epochs_i):
+        for idx in range(n_samples):
+            norm_phi = 0.0
+            for k in range(c_count):
+                val = Phi_arr[k, idx]
+                norm_phi += val * val
+            for j in range(c_count):
+                pred_j = 0.0
+                for k in range(c_count):
+                    pred_j += B[k, j] * Phi_arr[k, idx]
+                err[j] = Chi_arr[j, idx] - pred_j
+            scale = beta_f / (1.0 + beta_f * norm_phi)
+            for k in range(c_count):
+                phi_k = Phi_arr[k, idx]
+                for j in range(c_count):
+                    B[k, j] += scale * phi_k * err[j]
+
+        numerator = 0.0
+        for i in range(n_samples):
+            for j in range(c_count):
+                pred_j = 0.0
+                for k in range(c_count):
+                    pred_j += B[k, j] * Phi_arr[k, i]
+                diff = Chi_arr[j, i] - pred_j
+                numerator += diff * diff
+        history[ep] = numerator / denom_target
+    return B, history
+
+
+if _numba_njit is None:
+    _nlms_koopman_closure_fast: NLMSFastFn | None = None
+else:
+    _nlms_koopman_closure_fast = cast(NLMSFastFn, _numba_njit(cache=True)(_nlms_koopman_closure_numba_impl))
+
 def nlms_koopman_closure(
     Phi: np.ndarray,
     Chi: np.ndarray,
@@ -900,6 +961,10 @@ def nlms_koopman_closure(
             raise ValueError(f"B0 must have shape {(c_count, c_count)}; got {B.shape}.")
         if not np.all(np.isfinite(B)):
             raise ValueError("B0 must contain only finite values.")
+
+    if (not bool(shuffle)) and _nlms_koopman_closure_fast is not None:
+        B_fast, history_fast = _nlms_koopman_closure_fast(Phi_arr, Chi_arr, beta_f, epochs_i, B)
+        return np.asarray(B_fast, dtype=np.float64), tuple(float(v) for v in np.asarray(history_fast, dtype=np.float64))
 
     rng = np.random.default_rng(random_state)
     base_order = np.arange(n_samples, dtype=np.int64)

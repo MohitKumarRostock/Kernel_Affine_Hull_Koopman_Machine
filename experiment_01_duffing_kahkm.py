@@ -79,7 +79,7 @@ def parse_args() -> argparse.Namespace:
 
     # KAHKM abstraction
     parser.add_argument("--n-clusters", type=int, default=25, help="Number of state-regime clusters C.")
-    parser.add_argument("--subspace-dim", type=int, default=4, help="KAHM/OTFL subspace dimension.")
+    parser.add_argument("--subspace-dim", type=int, default=20, help="KAHM/OTFL subspace dimension.")
     parser.add_argument("--nb", type=int, default=100, help="Nb passed to parallel_autoencoders.")
     parser.add_argument("--omega", type=float, default=8.0, help="Association sharpness parameter omega.")
     parser.add_argument("--tau", type=float, default=1e-6, help="Positive association offset tau.")

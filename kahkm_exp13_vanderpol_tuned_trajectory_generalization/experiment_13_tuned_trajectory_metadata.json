@@ -1,0 +1,65 @@
+{
+  "experiment": "Van der Pol tuned trajectory-generalization",
+  "config": {
+    "train_counts": [
+      1,
+      2,
+      3,
+      5,
+      8
+    ],
+    "replicates": [
+      0,
+      1,
+      2
+    ],
+    "train_seed_pool_start": 0,
+    "test_seeds": [
+      100,
+      101,
+      102
+    ],
+    "n_steps_train": 900,
+    "n_steps_test": 800,
+    "dt": 0.02,
+    "mu": 1.0,
+    "horizons": [
+      1,
+      10,
+      50,
+      100,
+      200
+    ],
+    "subspace_dim": 4,
+    "nb": 100,
+    "beta": 0.1,
+    "nlms_epochs": 20,
+    "tau": 1e-06,
+    "kmeans_kind": "full",
+    "kmeans_batch_size": 4096,
+    "batch_size": 256,
+    "n_jobs": -1,
+    "max_train_per_cluster": null,
+    "output_dir": "kahkm_exp13_vanderpol_tuned_trajectory_generalization",
+    "resume": false
+  },
+  "configs": [
+    {
+      "name": "robust_tuned",
+      "n_clusters": 10,
+      "omega": 0.25
+    },
+    {
+      "name": "clean_tuned",
+      "n_clusters": 15,
+      "omega": 0.5
+    },
+    {
+      "name": "old_default",
+      "n_clusters": 20,
+      "omega": 4.0
+    }
+  ],
+  "total_jobs": 45,
+  "total_seconds": 170.5302300453186
+}

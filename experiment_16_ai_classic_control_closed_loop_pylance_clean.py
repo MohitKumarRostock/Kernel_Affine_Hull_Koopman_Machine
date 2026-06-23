@@ -160,8 +160,8 @@ class StateKoopmanModel:
 
 
 DEFAULT_TASK_CONFIGS: dict[TaskName, TaskConfig] = {
-    "CartPole-v1": TaskConfig("CartPole-v1", n_clusters=20, omega=8.0, tau=1e-6, max_steps=250, exploration_eps=0.05),
-    "MountainCar-v0": TaskConfig("MountainCar-v0", n_clusters=20, omega=4.0, tau=1e-6, max_steps=200, exploration_eps=0.05),
+    "CartPole-v1": TaskConfig("CartPole-v1", n_clusters=20, omega=1.0, tau=1e-6, max_steps=250, exploration_eps=0.05),
+    "MountainCar-v0": TaskConfig("MountainCar-v0", n_clusters=100, omega=1.0, tau=1e-6, max_steps=200, exploration_eps=0.05),
 }
 
 
@@ -458,12 +458,12 @@ def summarize(rows: Sequence[CsvRow], keys: tuple[str, ...], value_keys: tuple[s
 def parse_args() -> ExperimentArgs:
     parser = argparse.ArgumentParser(description="Experiment 16: Gymnasium closed-loop AI state-abstraction benchmark.")
     parser.add_argument("--tasks", nargs="+", default=["CartPole-v1", "MountainCar-v0"])
-    parser.add_argument("--train-episodes", type=int, default=24)
-    parser.add_argument("--test-episodes", type=int, default=12)
+    parser.add_argument("--train-episodes", type=int, default=8)
+    parser.add_argument("--test-episodes", type=int, default=4)
     parser.add_argument("--max-steps", type=int, default=0, help="0 uses task default.")
     parser.add_argument("--train-seed", type=int, default=0)
     parser.add_argument("--test-seed", type=int, default=1000)
-    parser.add_argument("--horizons", nargs="+", default=["1", "5", "10", "25", "50", "100"])
+    parser.add_argument("--horizons", nargs="+", default=["1", "5", "10", "20", "50"])
     parser.add_argument("--n-clusters", type=int, default=None, help="Override task default.")
     parser.add_argument("--omega", type=float, default=None, help="Override task default.")
     parser.add_argument("--tau", type=float, default=1e-6)
@@ -473,11 +473,12 @@ def parse_args() -> ExperimentArgs:
     parser.add_argument("--nlms-epochs", type=int, default=20)
     parser.add_argument("--kmeans-kind", type=str, default="full", choices=["auto", "full", "minibatch"])
     parser.add_argument("--kmeans-batch-size", type=int, default=2048)
-    parser.add_argument("--batch-size", type=int, default=256)
-    parser.add_argument("--n-jobs", type=int, default=-1)
-    parser.add_argument("--max-train-per-cluster", type=int, default=300)
+    parser.add_argument("--batch-size", type=int, default=512)
+    parser.add_argument("--n-jobs", type=int, default=1)
+    parser.add_argument("--max-train-per-cluster", type=int, default=0)
     parser.add_argument("--output-dir", type=str, default="kahkm_experiment_16_outputs")
     parser.add_argument("--save-ae-to-disk", action="store_true")
+    parser.add_argument("--no-save-ae-to-disk", action="store_true", help="Compatibility flag; disables saving autoencoder objects.")
     parser.add_argument("--ridge", type=float, default=1e-8)
     parser.add_argument("--exploration-eps", type=float, default=None, help="Override task default.")
     parser.add_argument("--random-state", type=int, default=0)
@@ -504,7 +505,7 @@ def parse_args() -> ExperimentArgs:
         n_jobs=int(ns.n_jobs),
         max_train_per_cluster=max_train_per_cluster,
         output_dir=str(ns.output_dir),
-        save_ae_to_disk=bool(ns.save_ae_to_disk),
+        save_ae_to_disk=bool(ns.save_ae_to_disk) and not bool(getattr(ns, "no_save_ae_to_disk", False)),
         ridge=float(ns.ridge),
         exploration_eps=None if ns.exploration_eps is None else float(ns.exploration_eps),
         random_state=int(ns.random_state),

@@ -1,0 +1,67 @@
+{
+  "experiment": "Duffing KAHKM C/omega tuning",
+  "config": {
+    "n_steps": 1600,
+    "dt": 0.03,
+    "train_fraction": 0.75,
+    "clusters": [
+      8,
+      10,
+      12,
+      15,
+      20,
+      25,
+      30,
+      40
+    ],
+    "omegas": [
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0,
+      16.0,
+      20.0
+    ],
+    "random_states": [
+      0,
+      1,
+      2
+    ],
+    "horizons": [
+      1,
+      10,
+      50,
+      100,
+      200
+    ],
+    "selection_horizons": [
+      1,
+      10,
+      50,
+      100,
+      200
+    ],
+    "subspace_dim": 4,
+    "nb": 100,
+    "beta": 0.1,
+    "nlms_epochs": 20,
+    "tau": 1e-06,
+    "kmeans_kind": "full",
+    "kmeans_batch_size": 4096,
+    "batch_size": 256,
+    "n_jobs": -1,
+    "max_train_per_cluster": null,
+    "process_noise": 1e-05,
+    "output_dir": "kahkm_exp_duffing_tuning",
+    "resume": false
+  },
+  "old_default_reference": {
+    "n_clusters": 15,
+    "omega": 12.0
+  },
+  "total_jobs": 192,
+  "completed_jobs": 192,
+  "total_seconds": 145.92100310325623
+}

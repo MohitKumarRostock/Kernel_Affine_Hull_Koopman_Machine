@@ -1,0 +1,48 @@
+{
+  "runner": "run_exp15_vanderpol_tuned_external_baselines_fixed.py",
+  "purpose": "Rerun external Koopman baselines with the tuned/noise-aware Van der Pol KAHKM configuration C=10, omega=0.25.",
+  "runner_config": {
+    "python_executable": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/.venv/bin/python",
+    "script": "experiment_15_external_koopman_baselines.py",
+    "output_dir": "kahkm_exp15_vanderpol_tuned_external_baselines",
+    "zip_name": "kahkm_exp15_vanderpol_tuned_external_baselines_results",
+    "systems": [
+      "vanderpol"
+    ],
+    "train_seeds": [
+      0,
+      1,
+      2
+    ],
+    "test_seeds": [
+      100,
+      101,
+      102
+    ],
+    "n_steps_train": 1200,
+    "n_steps_test": 800,
+    "horizons": [
+      1,
+      10,
+      50,
+      100,
+      200
+    ],
+    "subspace_dim": 4,
+    "nb": 100,
+    "beta": 0.1,
+    "nlms_epochs": 20,
+    "batch_size": 256,
+    "n_jobs": -1,
+    "kmeans_kind": "full",
+    "max_train_per_cluster": null,
+    "ridge": 1e-08,
+    "vanderpol_c": 10,
+    "vanderpol_omega": 0.25,
+    "dry_run": false,
+    "skip_existing": false
+  },
+  "project_root": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine",
+  "patched_script": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp15_vanderpol_tuned_external_baselines/_patched_experiment_15_vanderpol_tuned.py",
+  "total_seconds_runner_including_child": 8.600085020065308
+}

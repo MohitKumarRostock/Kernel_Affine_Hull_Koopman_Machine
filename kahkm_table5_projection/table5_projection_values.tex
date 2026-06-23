@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Projection diagnostics. Errors are mean relative association errors over three runs. The row-stochastic matrix is useful for interpretation, but is not the best predictive operator in these experiments.}
+\label{tab:projection}
+\begin{tabular}{llccc}
+\toprule
+System & Rollout mode & $E_1$ & $E_{20}$ & $E_{200}$ \\
+\midrule
+Duffing & raw $\widehat{B}$ & $2.09\times10^{-5}$ & $5.11\times10^{-4}$ & $9.14\times10^{-4}$ \\
+Duffing & raw $\widehat{B}$ + simplex projection & $2.08\times10^{-5}$ & $5.09\times10^{-4}$ & $1.07\times10^{-3}$ \\
+Duffing & row-stochastic matrix & $4.4\times10^{-5}$ & $7.71\times10^{-3}$ & $1.59\times10^{-1}$ \\
+\midrule
+Van der Pol & raw $\widehat{B}$ & $1.89\times10^{-3}$ & $2.6\times10^{-2}$ & $1.8\times10^{-1}$ \\
+Van der Pol & raw $\widehat{B}$ + simplex projection & $1.84\times10^{-3}$ & $2.22\times10^{-2}$ & $1.53\times10^{-1}$ \\
+Van der Pol & row-stochastic matrix & $3.93\times10^{-3}$ & $3.14\times10^{-1}$ & $9.56\times10^{-1}$ \\
+\bottomrule
+\end{tabular}
+\end{table}

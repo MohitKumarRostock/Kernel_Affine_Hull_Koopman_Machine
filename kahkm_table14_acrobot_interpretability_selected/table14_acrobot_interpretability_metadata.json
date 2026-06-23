@@ -1,0 +1,129 @@
+{
+  "table": "Table 14",
+  "description": "Acrobot-v1 regime-level interpretability diagnostics for selected C=150, omega=0.5 model validated over three seeds.",
+  "selected_n_clusters": 150,
+  "selected_omega": 0.5,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "risk_window": 25,
+  "std_convention": "population",
+  "source_runner": "run_exp18_acrobot_selected_3seed_validation.py",
+  "source_seed_dirs": [
+    "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp18_acrobot_selected_seed0",
+    "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp18_acrobot_selected_seed1",
+    "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp18_acrobot_selected_seed2"
+  ],
+  "cli_args": {
+    "source_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine",
+    "experiment_output_root": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine",
+    "output_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_table14_acrobot_interpretability_selected",
+    "python_executable": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/.venv/bin/python",
+    "runner_script": "run_exp18_acrobot_selected_3seed_validation.py",
+    "no_run": true,
+    "skip_existing": false,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "horizons": [
+      1,
+      5,
+      10,
+      20,
+      50
+    ],
+    "n_clusters": 150,
+    "omega": 0.5,
+    "train_episodes": 12,
+    "test_episodes": 6,
+    "max_steps": 500,
+    "subspace_dim": 20,
+    "nb": 100,
+    "beta": 0.1,
+    "nlms_epochs": 20,
+    "exploration_eps": 0.1,
+    "risk_window": 25,
+    "n_jobs": -1,
+    "batch_size": 256,
+    "kmeans_kind": "full",
+    "kmeans_batch_size": 4096,
+    "max_train_per_cluster": 0,
+    "test_seed_base": 100,
+    "output_prefix": "kahkm_exp18_acrobot_selected_seed",
+    "zip_name": "kahkm_exp18_acrobot_selected_3seed_validation_results",
+    "std_convention": "population",
+    "allow_config_mismatch": false
+  },
+  "seed_model_summary_rows": [
+    {
+      "seed": 0,
+      "row": {
+        "task": "Acrobot-v1",
+        "state_dim": "6",
+        "requested_subspace_dim": "20",
+        "effective_subspace_dim": "6",
+        "selected_n_clusters": "150",
+        "selected_omega": "0.5",
+        "active_regimes": "132",
+        "train_transitions": "1730",
+        "test_transitions": "1079",
+        "train_closure_error": "0.01006967305007096",
+        "train_r2": "0.7734465205672967",
+        "count_weighted_action_purity": "0.9026876737720121",
+        "mass_in_action_purity_ge_0p9": "0.6645041705282675",
+        "weighted_terminal_risk_within_25": "0.14457831325301196",
+        "max_risk_regime": "24",
+        "max_risk_regime_count": "7",
+        "max_risk_value": "1.0"
+      }
+    },
+    {
+      "seed": 1,
+      "row": {
+        "task": "Acrobot-v1",
+        "state_dim": "6",
+        "requested_subspace_dim": "20",
+        "effective_subspace_dim": "6",
+        "selected_n_clusters": "150",
+        "selected_omega": "0.5",
+        "active_regimes": "119",
+        "train_transitions": "1659",
+        "test_transitions": "780",
+        "train_closure_error": "0.011523468416952643",
+        "train_r2": "0.7222539681843407",
+        "count_weighted_action_purity": "0.8589743589743581",
+        "mass_in_action_purity_ge_0p9": "0.5410256410256409",
+        "weighted_terminal_risk_within_25": "0.1999999999999999",
+        "max_risk_regime": "20",
+        "max_risk_regime_count": "1",
+        "max_risk_value": "1.0"
+      }
+    },
+    {
+      "seed": 2,
+      "row": {
+        "task": "Acrobot-v1",
+        "state_dim": "6",
+        "requested_subspace_dim": "20",
+        "effective_subspace_dim": "6",
+        "selected_n_clusters": "150",
+        "selected_omega": "0.5",
+        "active_regimes": "97",
+        "train_transitions": "1758",
+        "test_transitions": "707",
+        "train_closure_error": "0.011149696435278068",
+        "train_r2": "0.7481181534240784",
+        "count_weighted_action_purity": "0.87977369165488",
+        "mass_in_action_purity_ge_0p9": "0.5502121640735503",
+        "weighted_terminal_risk_within_25": "0.2206506364922204",
+        "max_risk_regime": "13",
+        "max_risk_regime_count": "4",
+        "max_risk_value": "1.0"
+      }
+    }
+  ]
+}

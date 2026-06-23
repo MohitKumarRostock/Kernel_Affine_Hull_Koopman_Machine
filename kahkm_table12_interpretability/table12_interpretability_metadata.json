@@ -1,0 +1,48 @@
+{
+  "source_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine",
+  "experiment_output_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine",
+  "runner_script": "run_exp17_tuned_interpretability.py",
+  "no_run": false,
+  "seeds": [
+    0
+  ],
+  "task_configs": {
+    "CartPole-v1": {
+      "C": 20,
+      "omega": 1.0
+    },
+    "MountainCar-v0": {
+      "C": 100,
+      "omega": 1.0
+    }
+  },
+  "aggregation": "default seed 0; if multiple seeds are supplied, table values are averaged across seed-level diagnostics except max terminal risk, which is maximized.",
+  "seed_level_diagnostics": [
+    {
+      "task": "CartPole-v1",
+      "seed_label": "0",
+      "n_clusters": 20,
+      "omega": 1.0,
+      "active_count": 17,
+      "total_count": 20,
+      "train_error": 0.06097341565076395,
+      "train_r2": 0.19807136747797893,
+      "action_purity": 0.792,
+      "learned_persistence": 0.7636511300698418,
+      "max_terminal_risk": 0.0
+    },
+    {
+      "task": "MountainCar-v0",
+      "seed_label": "0",
+      "n_clusters": 100,
+      "omega": 1.0,
+      "active_count": 94,
+      "total_count": 100,
+      "train_error": 0.003474003217667411,
+      "train_r2": 0.9397001434092214,
+      "action_purity": 0.8831417624521073,
+      "learned_persistence": 0.9994955887387265,
+      "max_terminal_risk": 0.8
+    }
+  ]
+}

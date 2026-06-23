@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Tuned Acrobot-v1 sequential-decision benchmark validated over three seeds. The selected KAHKM configuration is $C=150,\omega=0.5$ with effective subspace dimension 6. Errors are relative association errors measured in the selected KAHKM association space; entries are mean $\pm$ standard deviation.}
+\label{tab:acrobot_baselines}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Method & $E_1$ & $R^2_1$ & $E_{50}$ & $R^2_{50}$ \\
+\midrule
+KAHKM + NLMS & $0.0096\pm0.0014$ & $0.7566\pm0.0307$ & $0.0577\pm0.0019$ & $-0.3860\pm0.2369$ \\
+KAHKM + simplex projection & $0.0096\pm0.0014$ & $0.7566\pm0.0307$ & $0.0577\pm0.0019$ & $-0.3860\pm0.2369$ \\
+KMeans RBF + NLMS & $0.0313\pm0.0167$ & $0.7730\pm0.0598$ & $0.1524\pm0.0382$ & $-0.0068\pm0.1800$ \\
+KMeans distance + NLMS & $0.1886\pm0.0510$ & $0.5052\pm0.0680$ & $0.3526\pm0.0313$ & $0.0232\pm0.0828$ \\
+KMeans hard + NLMS & $0.8162\pm0.0379$ & $0.1720\pm0.0366$ & $0.9887\pm0.0082$ & $-0.0039\pm0.0085$ \\
+State DMD & $0.0096\pm0.0003$ & $0.7535\pm0.0325$ & $0.0663\pm0.0150$ & $-0.5856\pm0.3776$ \\
+State EDMD poly2 & $0.0059\pm0.0001$ & $0.8475\pm0.0208$ & $0.0806\pm0.0163$ & $-0.8703\pm0.0928$ \\
+State EDMD poly3 & $0.0030\pm0.0003$ & $0.9247\pm0.0076$ & $0.0790\pm0.0083$ & $-0.9422\pm0.5819$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

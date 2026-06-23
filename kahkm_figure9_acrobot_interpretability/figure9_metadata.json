@@ -1,0 +1,50 @@
+{
+  "figure": "Figure 9",
+  "manuscript_files": {
+    "angles_panel": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/figures/fig_acrobot_dominant_regime_angles.pdf",
+    "energy_panel": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/figures/fig_acrobot_dominant_regime_energy.pdf"
+  },
+  "local_copies": {
+    "angles_panel": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_figure9_acrobot_interpretability/fig_acrobot_dominant_regime_angles.pdf",
+    "energy_panel": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_figure9_acrobot_interpretability/fig_acrobot_dominant_regime_energy.pdf"
+  },
+  "source_runner": "run_exp18_acrobot_selected_3seed_validation.py",
+  "source_experiment": "experiment_18_acrobot_sequential_decision_pylance_clean.py",
+  "source_seed_directories": [
+    "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp18_acrobot_selected_seed0",
+    "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp18_acrobot_selected_seed1",
+    "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp18_acrobot_selected_seed2"
+  ],
+  "representative_seed": 0,
+  "aggregate_directory": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp18_acrobot_selected_3seed_validation_aggregate",
+  "selected_model": {
+    "task": "Acrobot-v1",
+    "n_clusters": 150,
+    "omega": 0.5,
+    "validated_seeds": [
+      0,
+      1,
+      2
+    ]
+  },
+  "settings": {
+    "train_episodes": 12,
+    "test_episodes": 6,
+    "max_steps": 500,
+    "horizons": [
+      1,
+      5,
+      10,
+      20,
+      50
+    ],
+    "subspace_dim": 20,
+    "nb": 100,
+    "beta": 0.1,
+    "nlms_epochs": 20,
+    "exploration_eps": 0.1,
+    "risk_window": 25,
+    "kmeans_kind": "full"
+  },
+  "interpretation": "Representative Acrobot-v1 panels for the selected C=150, omega=0.5 model. The model selection and validation are over three seeds; the figure displays the representative seed specified above."
+}

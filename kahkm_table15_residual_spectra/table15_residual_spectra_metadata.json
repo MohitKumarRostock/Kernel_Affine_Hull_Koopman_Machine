@@ -1,0 +1,93 @@
+{
+  "source_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine",
+  "experiment_output_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_experiment_19_residual_verified_spectra",
+  "runner_script": "experiment_19_residual_verified_kahkm_spectra.py",
+  "no_run": false,
+  "skip_existing": false,
+  "systems": [
+    "duffing",
+    "vanderpol"
+  ],
+  "operators": [
+    "nlms",
+    "ridge_ls"
+  ],
+  "train_seeds": [
+    0,
+    1,
+    2
+  ],
+  "test_seeds": [
+    100,
+    101,
+    102
+  ],
+  "total_train_snapshots": 3600,
+  "total_test_snapshots": 2400,
+  "duffing": {
+    "C": 10,
+    "omega": 2.0
+  },
+  "vanderpol": {
+    "C": 10,
+    "omega": 0.25
+  },
+  "spectral_subsample": 800,
+  "ridge": 1e-08,
+  "residual_thresholds": [
+    0.001,
+    0.01,
+    0.05,
+    0.1
+  ],
+  "table_rows": [
+    {
+      "system": "duffing",
+      "operator": "nlms",
+      "test_e1": 0.000250255143929194,
+      "test_r2": 0.9835266167215356,
+      "spectral_radius": 0.9999999999999997,
+      "min_residual": 0.0052475279411169735,
+      "median_residual": 0.2298642972130075,
+      "modes_le_1e_2": 1,
+      "modes_le_5e_2": 3,
+      "modes_le_1e_1": 3
+    },
+    {
+      "system": "duffing",
+      "operator": "ridge_ls",
+      "test_e1": 0.00024067071254510006,
+      "test_r2": 0.9841575248787762,
+      "spectral_radius": 1.0000000000148987,
+      "min_residual": 0.0009754597190381984,
+      "median_residual": 0.023026082000521333,
+      "modes_le_1e_2": 3,
+      "modes_le_5e_2": 8,
+      "modes_le_1e_1": 9
+    },
+    {
+      "system": "vanderpol",
+      "operator": "nlms",
+      "test_e1": 0.00017863470923530544,
+      "test_r2": 0.9903647066173773,
+      "spectral_radius": 0.9999999999999996,
+      "min_residual": 0.004586951277183415,
+      "median_residual": 0.04422998704535233,
+      "modes_le_1e_2": 1,
+      "modes_le_5e_2": 7,
+      "modes_le_1e_1": 10
+    },
+    {
+      "system": "vanderpol",
+      "operator": "ridge_ls",
+      "test_e1": 0.00017007175337374885,
+      "test_r2": 0.9908265798574757,
+      "spectral_radius": 0.999999999971232,
+      "min_residual": 0.0004349742940667828,
+      "median_residual": 0.014103223114873649,
+      "modes_le_1e_2": 3,
+      "modes_le_5e_2": 10,
+      "modes_le_1e_1": 10
+    }
+  ]
+}

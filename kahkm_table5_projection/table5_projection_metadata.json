@@ -1,0 +1,31 @@
+{
+  "table": "Table 5",
+  "description": "Projection diagnostics for Duffing and Van der Pol.",
+  "source_scripts": [
+    "experiment_04_duffing_projection_diagnostics.py",
+    "experiment_08_vanderpol_projection_diagnostics.py"
+  ],
+  "manuscript_convention": {
+    "duffing": "Use experiment_04 defaults: C=15, omega=12.",
+    "vanderpol": "Use diagnostic default C=20, omega=4, overriding older experiment_08 local defaults.",
+    "reported_cells": "Mean relative association error over three runs at h=1,20,200.",
+    "included_rollout_modes": [
+      "raw_free",
+      "raw_simplex_project_each_step",
+      "row_stochastic_free"
+    ]
+  },
+  "input_summaries": {
+    "duffing": "kahkm_table5_projection/exp04_duffing_projection/experiment_04_projection_summary.csv",
+    "vanderpol": "kahkm_table5_projection/exp08_vanderpol_projection/experiment_08_projection_summary.csv"
+  },
+  "args": {
+    "source_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine",
+    "output_dir": "kahkm_table5_projection",
+    "no_run": false,
+    "duffing_summary": null,
+    "vanderpol_summary": null,
+    "python_executable": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/.venv/bin/python",
+    "force": false
+  }
+}

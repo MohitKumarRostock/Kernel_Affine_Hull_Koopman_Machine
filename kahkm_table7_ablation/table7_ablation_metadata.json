@@ -1,0 +1,32 @@
+{
+  "table": "Table 7",
+  "description": "Abstraction ablation: KAHKM folding versus KMeans simplex-coordinate baselines.",
+  "experiments": [
+    {
+      "system": "Duffing",
+      "script_name": "experiment_06_duffing_abstraction_ablation.py",
+      "output_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_experiment_06_outputs",
+      "one_step_summary_name": "experiment_06_one_step_summary.csv",
+      "multistep_summary_name": "experiment_06_multistep_summary.csv",
+      "extra_args": []
+    },
+    {
+      "system": "Van der Pol",
+      "script_name": "experiment_07_vanderpol_abstraction_ablation.py",
+      "output_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_experiment_07_outputs",
+      "one_step_summary_name": "experiment_07_one_step_summary.csv",
+      "multistep_summary_name": "experiment_07_multistep_summary.csv",
+      "extra_args": [
+        "--n-clusters",
+        "20",
+        "--omega",
+        "4.0"
+      ]
+    }
+  ],
+  "notes": [
+    "Duffing uses Experiment 06 defaults.",
+    "Van der Pol is run with the manuscript diagnostic default C and omega unless overridden.",
+    "Only the association map changes; all rows use the NLMS closure estimator inside the experiment scripts."
+  ]
+}

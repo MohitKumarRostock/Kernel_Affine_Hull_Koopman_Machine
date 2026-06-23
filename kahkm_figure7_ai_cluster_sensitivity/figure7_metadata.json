@@ -1,0 +1,52 @@
+{
+  "figure": "Figure 7",
+  "manuscript_file": "figures/fig_ai_cluster_sensitivity.pdf",
+  "source_experiment": "experiment_16a_ai_hyperparameter_sensitivity_pylance_clean.py",
+  "source_one_step_summary": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_experiment_16a_sensitivity_outputs/experiment_16a_kahkm_one_step_summary.csv",
+  "source_multistep_summary": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_experiment_16a_sensitivity_outputs/experiment_16a_kahkm_multistep_summary.csv",
+  "data_csv": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_figure7_ai_cluster_sensitivity/figure7_plot_data.csv",
+  "pdf": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/figures/fig_ai_cluster_sensitivity.pdf",
+  "png_preview": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_figure7_ai_cluster_sensitivity/fig_ai_cluster_sensitivity.png",
+  "selection_rule": "For each task and C, select omega minimizing kahkm_nlms relative_error at h=50; plot that configuration's E1 and E50.",
+  "settings": {
+    "tasks": [
+      "CartPole-v1",
+      "MountainCar-v0"
+    ],
+    "clusters": [
+      10,
+      15,
+      20,
+      30,
+      50,
+      80,
+      100
+    ],
+    "omegas": [
+      2.0,
+      4.0,
+      8.0,
+      12.0
+    ],
+    "horizons": [
+      1,
+      5,
+      10,
+      20,
+      50
+    ],
+    "selection_horizon": 50,
+    "train_episodes": 8,
+    "test_episodes": 4,
+    "max_steps": 0,
+    "train_seed": 0,
+    "test_seed": 100,
+    "random_state": 0,
+    "nb": 100,
+    "subspace_dim": 20,
+    "beta": 0.1,
+    "nlms_epochs": 20,
+    "tau": 1e-06,
+    "kmeans_kind": "full"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "table": "Table 6",
+  "description": "Closure-estimator comparison on Duffing using fixed KAHKM features.",
+  "source_script": "experiment_05_duffing_closure_estimators.py",
+  "manuscript_convention": {
+    "system": "Duffing",
+    "settings": "Experiment 05 defaults: C=15, omega=12, beta=0.1, 20 NLMS epochs, seeds 0,1,2.",
+    "reported_cells": "test E1 from one-step summary, test R2 from one-step summary, E200 from multistep summary.",
+    "estimators": [
+      "nlms",
+      "ols",
+      "ridge_0.0001",
+      "ridge_0.01",
+      "row_stochastic_nlms"
+    ]
+  },
+  "input_summaries": {
+    "one_step": "kahkm_table6_estimators/exp05_duffing_estimators/experiment_05_one_step_summary.csv",
+    "multistep": "kahkm_table6_estimators/exp05_duffing_estimators/experiment_05_multistep_summary.csv"
+  },
+  "args": {
+    "source_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine",
+    "output_dir": "kahkm_table6_estimators",
+    "no_run": false,
+    "one_step_summary": null,
+    "multistep_summary": null,
+    "python_executable": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/.venv/bin/python",
+    "force": false
+  }
+}

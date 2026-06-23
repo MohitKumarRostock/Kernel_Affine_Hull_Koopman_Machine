@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Noise-aware Van der Pol tuning with the robust selected configuration $C=10$, $\omega=0.25$. Gaussian noise is added only to training snapshots and evaluation is performed on clean held-out snapshots. Values are mean $\pm$ standard deviation over three random states.}
+\label{tab:vdp_noise_tuned}
+\begin{tabular}{cccc}
+\toprule
+Training noise & $E_{50}$ & $E_{100}$ & $E_{200}$ \\
+\midrule
+0% & $(1.33\pm0.02)\times10^{-2}$ & $(1.79\pm0.05)\times10^{-2}$ & $(1.64\pm0.10)\times10^{-2}$ \\
+0.5% & $(1.34\pm0.16)\times10^{-2}$ & $(1.81\pm0.19)\times10^{-2}$ & $(1.74\pm0.49)\times10^{-2}$ \\
+1% & $(1.13\pm0.03)\times10^{-2}$ & $(1.60\pm0.12)\times10^{-2}$ & $(1.68\pm0.34)\times10^{-2}$ \\
+2% & $(1.27\pm0.02)\times10^{-2}$ & $(1.90\pm0.11)\times10^{-2}$ & $(2.18\pm0.17)\times10^{-2}$ \\
+5% & $(1.41\pm0.06)\times10^{-2}$ & $(2.52\pm0.32)\times10^{-2}$ & $(3.80\pm0.40)\times10^{-2}$ \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,57 @@
+{
+  "experiment": "noise-aware Van der Pol KAHKM tuning",
+  "config": {
+    "n_steps": 1600,
+    "dt": 0.02,
+    "mu": 1.0,
+    "train_fraction": 0.75,
+    "clusters": [
+      25
+    ],
+    "omegas": [
+      4.0
+    ],
+    "noise_levels": [
+      0.0,
+      0.005,
+      0.01,
+      0.02,
+      0.05
+    ],
+    "random_states": [
+      0,
+      1,
+      2
+    ],
+    "horizons": [
+      1,
+      10,
+      50,
+      100,
+      200
+    ],
+    "subspace_dim": 4,
+    "nb": 100,
+    "beta": 0.1,
+    "nlms_epochs": 20,
+    "tau": 1e-06,
+    "kmeans_kind": "full",
+    "kmeans_batch_size": 4096,
+    "batch_size": 256,
+    "n_jobs": -1,
+    "max_train_per_cluster": null,
+    "output_dir": "kahkm_exp12_retvar_C25_w4",
+    "zip_name": "kahkm_exp12_retvar_C25_w4"
+  },
+  "selection_weights": {
+    "50": 0.25,
+    "100": 0.25,
+    "200": 0.5
+  },
+  "centered_selection": "per seed: weighted mean of 1-R^2 over configured selection horizons at each training-noise level; average over noise levels; one-SE set across seeds; retained variation used only within that set",
+  "retained_variation": "computed on the complete clean held-out X1 association set for each fitted model",
+  "noise_convention": "training-only coordinate-wise Gaussian observation noise; sigma_j = noise_level * std_j(training coordinate); clean held-out evaluation",
+  "total_jobs": 15,
+  "completed_jobs": 15,
+  "total_seconds": 3.966779947280884
+}

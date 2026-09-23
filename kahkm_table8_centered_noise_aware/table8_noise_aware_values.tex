@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Centered noise-aware Van der Pol evaluation for the retained-variation-selected configuration $(C,\omega)=(25,4)$. Gaussian observation noise is added only to the training snapshots; evaluation uses clean held-out trajectories. Entries in the three $R^2$ columns are mean $\pm$ standard deviation over 3 random states. $S_{\mathrm{noise}}=0.25(1-R^2_{50})+0.25(1-R^2_{100})+0.50(1-R^2_{200})$ is the noise-specific centered score; the selection rule averages the corresponding per-seed score across all noise levels and applies the centered one-SE/retained-variation rule.}
+\label{tab:vdp_noise_tuned}
+\begin{tabular}{ccccc}
+\toprule
+Training noise & $R^2_{50}$ & $R^2_{100}$ & $R^2_{200}$ & $S_{\mathrm{noise}}$ \\
+\midrule
+0% & $0.8915\pm0.0028$ & $0.8036\pm0.0081$ & $0.7494\pm0.0117$ & $0.2015$ \\
+0.5% & $0.8898\pm0.0015$ & $0.7763\pm0.0093$ & $0.7187\pm0.0398$ & $0.2241$ \\
+1% & $0.8829\pm0.0103$ & $0.7710\pm0.0150$ & $0.6888\pm0.0309$ & $0.2421$ \\
+2% & $0.8466\pm0.0193$ & $0.7195\pm0.0224$ & $0.5956\pm0.0622$ & $0.3106$ \\
+5% & $0.6246\pm0.0478$ & $0.4608\pm0.0454$ & $0.2976\pm0.0389$ & $0.5798$ \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -160,8 +160,11 @@ def parse_args(argv: Sequence[str] | None = None) -> CliArgs:
     parser.add_argument(
         "--experiment-output-dir",
         type=Path,
-        default=Path("kahkm_exp12_vanderpol_noise_aware_tuning"),
-        help="Experiment 12 output directory.",
+        default=Path("kahkm_exp12_retvar_C25_w4"),
+        help=(
+            "Selected Experiment 12 retained-variation output directory. "
+            "Default: kahkm_exp12_retvar_C25_w4."
+        ),
     )
     parser.add_argument(
         "--output-dir",

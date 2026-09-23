@@ -21,9 +21,17 @@ The training snapshots are corrupted by coordinate-wise Gaussian observation noi
 
 The held-out evaluation trajectory remains clean.
 
-Default robust-selection objective:
+Legacy robust-selection objective:
     score = mean over seeds and noise levels of
             0.25 E50 + 0.25 E100 + 0.50 E200
+
+Centered/non-collapse robust selection:
+    For each seed and training-noise level, compute
+        0.25 (1 - R2_50) + 0.25 (1 - R2_100) + 0.50 (1 - R2_200).
+    Average this centered score over training-noise levels for each seed,
+    then form a one-standard-error set across seeds. Within that set,
+    prefer the configuration with the largest clean held-out normalized
+    association variation; normalized effective rank is secondary.
 
 Useful pilot run:
     python3 run_exp12_vanderpol_noise_aware_tuning.py \
@@ -39,7 +47,11 @@ Outputs:
 - kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_noise_tuning_raw.csv
 - kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_noise_tuning_summary_by_config_noise_horizon.csv
 - kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_noise_tuning_robust_selection.csv
+  (legacy uncentered-error ranking, preserved for provenance)
 - kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_noise_tuning_best_by_noise.csv
+- kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_centered_robust_ranking.csv
+- kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_centered_one_se_finalists.csv
+- kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_centered_retvar_selected_config.csv
 - kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_noise_tuning_metadata.json
 - kahkm_exp12_vanderpol_noise_aware_tuning_results.zip
 """
@@ -67,6 +79,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from kernel_affine_hull_koopman_machines import (  # noqa: E402
+    association_variation_diagnostics,
     fit_kahkm,
     kahm_associations,
     simplex_violation,
@@ -110,6 +123,7 @@ class ExperimentConfig:
     n_jobs: int
     max_train_per_cluster: int | None
     output_dir: str
+    zip_name: str
     selection_weights: dict[int, float]
 
 
@@ -173,6 +187,22 @@ def _int_or_zero(value: str | int | float | None) -> int:
     if not math.isfinite(number):
         return 0
     return int(number)
+
+
+def _sample_std(values: Sequence[float]) -> float:
+    if len(values) < 2:
+        return 0.0
+    mean_value = mean(values)
+    return math.sqrt(
+        sum((value - mean_value) ** 2 for value in values)
+        / (len(values) - 1)
+    )
+
+
+def _standard_error(values: Sequence[float]) -> float:
+    if not values:
+        return math.nan
+    return _sample_std(values) / math.sqrt(len(values))
 
 
 def _read_csv(path: Path) -> list[RawCsvRow]:
@@ -263,6 +293,14 @@ def parse_args() -> ExperimentConfig:
         "--output-dir",
         default="kahkm_exp12_vanderpol_noise_aware_tuning",
     )
+    parser.add_argument(
+        "--zip-name",
+        default="kahkm_exp12_vanderpol_noise_aware_tuning_results",
+        help=(
+            "ZIP filename without the .zip suffix. The default preserves "
+            "the original repository behavior."
+        ),
+    )
 
     ns = parser.parse_args()
 
@@ -303,6 +341,7 @@ def parse_args() -> ExperimentConfig:
         n_jobs=int(ns.n_jobs),
         max_train_per_cluster=max_train_per_cluster,
         output_dir=str(ns.output_dir),
+        zip_name=str(ns.zip_name),
         selection_weights=selection_weights,
     )
 
@@ -469,6 +508,20 @@ def append_raw_rows(path: Path, rows: Sequence[CsvRow]) -> None:
     fieldnames = list(rows[0].keys())
     file_exists = path.exists() and path.stat().st_size > 0
 
+    if file_exists:
+        with path.open("r", encoding="utf-8", newline="") as handle:
+            reader = csv.reader(handle)
+            existing_header = next(reader, [])
+
+        if existing_header != fieldnames:
+            raise RuntimeError(
+                "Existing Experiment 12 raw CSV uses a different schema. "
+                "Do not append retained-variation rows to a legacy raw file. "
+                "Use a new --output-dir for the updated experiment. "
+                f"Existing columns: {existing_header}; "
+                f"new columns: {fieldnames}"
+            )
+
     with path.open("a", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         if not file_exists:
@@ -495,11 +548,26 @@ def summarize(raw_path: Path, output_dir: Path, selection_weights: dict[int, flo
         r2s = [_float_or_nan(_cell(row, "association_r2")) for row in rows]
         violations = [_float_or_nan(_cell(row, "simplex_violation")) for row in rows]
         fit_seconds = [_float_or_nan(_cell(row, "fit_seconds")) for row in rows]
+        rho_vars = [
+            _float_or_nan(_cell(row, "target_normalized_association_variation"))
+            for row in rows
+        ]
+        effective_ranks = [
+            _float_or_nan(_cell(row, "target_association_effective_rank"))
+            for row in rows
+        ]
+        rho_ranks = [
+            _float_or_nan(_cell(row, "target_normalized_association_effective_rank"))
+            for row in rows
+        ]
 
         errors = [value for value in errors if math.isfinite(value)]
         r2s = [value for value in r2s if math.isfinite(value)]
         violations = [value for value in violations if math.isfinite(value)]
         fit_seconds = [value for value in fit_seconds if math.isfinite(value)]
+        rho_vars = [value for value in rho_vars if math.isfinite(value)]
+        effective_ranks = [value for value in effective_ranks if math.isfinite(value)]
+        rho_ranks = [value for value in rho_ranks if math.isfinite(value)]
 
         if not errors:
             continue
@@ -519,6 +587,26 @@ def summarize(raw_path: Path, output_dir: Path, selection_weights: dict[int, flo
                 "association_r2_std": pstdev(r2s) if len(r2s) > 1 else 0.0,
                 "simplex_violation_mean": mean(violations) if violations else math.nan,
                 "simplex_violation_max": max(violations) if violations else math.nan,
+                "target_normalized_association_variation_mean": (
+                    mean(rho_vars) if rho_vars else math.nan
+                ),
+                "target_normalized_association_variation_std": (
+                    pstdev(rho_vars) if len(rho_vars) > 1 else (0.0 if rho_vars else math.nan)
+                ),
+                "target_association_effective_rank_mean": (
+                    mean(effective_ranks) if effective_ranks else math.nan
+                ),
+                "target_association_effective_rank_std": (
+                    pstdev(effective_ranks)
+                    if len(effective_ranks) > 1
+                    else (0.0 if effective_ranks else math.nan)
+                ),
+                "target_normalized_association_effective_rank_mean": (
+                    mean(rho_ranks) if rho_ranks else math.nan
+                ),
+                "target_normalized_association_effective_rank_std": (
+                    pstdev(rho_ranks) if len(rho_ranks) > 1 else (0.0 if rho_ranks else math.nan)
+                ),
                 "fit_seconds_mean": mean(fit_seconds) if fit_seconds else math.nan,
             }
         )
@@ -599,6 +687,326 @@ def summarize(raw_path: Path, output_dir: Path, selection_weights: dict[int, flo
         ranked_selection.append(updated)
 
     _write_csv(output_dir / "experiment_12_noise_tuning_robust_selection.csv", ranked_selection)
+
+    # -----------------------------------------------------------------
+    # Centered robust selection.
+    #
+    # Independent units for the one-SE rule are the random-state seeds.
+    # For each seed, first compute the weighted centered error at each
+    # training-noise level, then average those scores over noise levels.
+    # -----------------------------------------------------------------
+    per_seed_noise_r2: dict[
+        tuple[int, float, int, float],
+        dict[int, float],
+    ] = defaultdict(dict)
+
+    for row in raw:
+        horizon = _int_or_zero(_cell(row, "horizon"))
+        if horizon not in selection_weights:
+            continue
+
+        r2 = _float_or_nan(_cell(row, "association_r2"))
+        if not math.isfinite(r2):
+            continue
+
+        key = (
+            _int_or_zero(_cell(row, "n_clusters")),
+            _float_or_nan(_cell(row, "omega")),
+            _int_or_zero(_cell(row, "seed")),
+            _float_or_nan(_cell(row, "noise_level")),
+        )
+        per_seed_noise_r2[key][horizon] = r2
+
+    seed_noise_scores: dict[
+        tuple[int, float, int],
+        list[float],
+    ] = defaultdict(list)
+
+    for (
+        n_clusters,
+        omega,
+        seed,
+        _noise_level,
+    ), horizon_r2 in per_seed_noise_r2.items():
+        if not all(horizon in horizon_r2 for horizon in selection_weights):
+            continue
+
+        centered_score = sum(
+            selection_weights[horizon] * (1.0 - horizon_r2[horizon])
+            for horizon in selection_weights
+        )
+        seed_noise_scores[(n_clusters, omega, seed)].append(centered_score)
+
+    centered_scores_by_config: dict[
+        tuple[int, float],
+        list[float],
+    ] = defaultdict(list)
+
+    for (n_clusters, omega, _seed), noise_scores in seed_noise_scores.items():
+        if not noise_scores:
+            continue
+        centered_scores_by_config[(n_clusters, omega)].append(
+            mean(noise_scores)
+        )
+
+    # Retained variation is a model-level diagnostic. Each run repeats the
+    # same value on all horizon rows, so deduplicate by
+    # (C, omega, noise_level, seed) before aggregating by configuration.
+    run_retvar: dict[
+        tuple[int, float, float, int],
+        tuple[float, float, float],
+    ] = {}
+
+    for row in raw:
+        rho_var = _float_or_nan(
+            _cell(row, "target_normalized_association_variation")
+        )
+        effective_rank = _float_or_nan(
+            _cell(row, "target_association_effective_rank")
+        )
+        rho_rank = _float_or_nan(
+            _cell(row, "target_normalized_association_effective_rank")
+        )
+
+        if not (
+            math.isfinite(rho_var)
+            and math.isfinite(effective_rank)
+            and math.isfinite(rho_rank)
+        ):
+            continue
+
+        run_key = (
+            _int_or_zero(_cell(row, "n_clusters")),
+            _float_or_nan(_cell(row, "omega")),
+            _float_or_nan(_cell(row, "noise_level")),
+            _int_or_zero(_cell(row, "seed")),
+        )
+        run_retvar[run_key] = (
+            rho_var,
+            effective_rank,
+            rho_rank,
+        )
+
+    retvar_by_config: dict[
+        tuple[int, float],
+        dict[str, list[float]],
+    ] = defaultdict(
+        lambda: {
+            "rho_var": [],
+            "effective_rank": [],
+            "rho_rank": [],
+        }
+    )
+
+    for (
+        n_clusters,
+        omega,
+        _noise_level,
+        _seed,
+    ), (
+        rho_var,
+        effective_rank,
+        rho_rank,
+    ) in run_retvar.items():
+        bucket = retvar_by_config[(n_clusters, omega)]
+        bucket["rho_var"].append(rho_var)
+        bucket["effective_rank"].append(effective_rank)
+        bucket["rho_rank"].append(rho_rank)
+
+    centered_rows: list[CsvRow] = []
+
+    for (n_clusters, omega), seed_scores in centered_scores_by_config.items():
+        if not seed_scores:
+            continue
+
+        centered_mean = mean(seed_scores)
+        centered_sd = _sample_std(seed_scores)
+        centered_se = _standard_error(seed_scores)
+
+        diagnostics = retvar_by_config.get(
+            (n_clusters, omega),
+            {
+                "rho_var": [],
+                "effective_rank": [],
+                "rho_rank": [],
+            },
+        )
+        rho_vars = diagnostics["rho_var"]
+        effective_ranks = diagnostics["effective_rank"]
+        rho_ranks = diagnostics["rho_rank"]
+
+        centered_rows.append(
+            {
+                "centered_rank": 0,
+                "n_clusters": n_clusters,
+                "omega": omega,
+                "n_seeds": len(seed_scores),
+                "n_noise_levels_per_seed": (
+                    len(
+                        seed_noise_scores.get(
+                            (n_clusters, omega, next(
+                                seed
+                                for (config_c, config_omega, seed)
+                                in seed_noise_scores
+                                if config_c == n_clusters
+                                and abs(config_omega - omega) < 1e-12
+                            )),
+                            [],
+                        )
+                    )
+                    if seed_scores
+                    else 0
+                ),
+                "centered_robust_score_mean": centered_mean,
+                "centered_robust_score_sd": centered_sd,
+                "centered_robust_score_se": centered_se,
+                "mean_robust_multihorizon_r2": 1.0 - centered_mean,
+                "target_normalized_association_variation_mean": (
+                    mean(rho_vars) if rho_vars else math.nan
+                ),
+                "target_normalized_association_variation_std": (
+                    _sample_std(rho_vars) if rho_vars else math.nan
+                ),
+                "target_association_effective_rank_mean": (
+                    mean(effective_ranks) if effective_ranks else math.nan
+                ),
+                "target_association_effective_rank_std": (
+                    _sample_std(effective_ranks) if effective_ranks else math.nan
+                ),
+                "target_normalized_association_effective_rank_mean": (
+                    mean(rho_ranks) if rho_ranks else math.nan
+                ),
+                "target_normalized_association_effective_rank_std": (
+                    _sample_std(rho_ranks) if rho_ranks else math.nan
+                ),
+                "n_retained_variation_runs": len(rho_vars),
+                "selection_weights": ",".join(
+                    f"{h}:{w:.6g}"
+                    for h, w in sorted(selection_weights.items())
+                ),
+                "inside_centered_one_se_set": 0,
+                "selected_by_centered_retvar_rule": 0,
+            }
+        )
+
+    if centered_rows:
+        centered_rows.sort(
+            key=lambda row: float(row["centered_robust_score_mean"])
+        )
+
+        best_mean = float(
+            centered_rows[0]["centered_robust_score_mean"]
+        )
+        best_se = float(
+            centered_rows[0]["centered_robust_score_se"]
+        )
+        one_se_limit = best_mean + best_se
+
+        for rank, row in enumerate(centered_rows, start=1):
+            row["centered_rank"] = rank
+            row["centered_best_mean_score"] = best_mean
+            row["centered_best_standard_error"] = best_se
+            row["centered_one_se_limit"] = one_se_limit
+            row["inside_centered_one_se_set"] = int(
+                float(row["centered_robust_score_mean"])
+                <= one_se_limit
+            )
+
+        finalists = [
+            dict(row)
+            for row in centered_rows
+            if int(row["inside_centered_one_se_set"]) == 1
+        ]
+
+        def _retvar_sort_key(
+            row: CsvRow,
+        ) -> tuple[float, float, float, int, float]:
+            rho_var = float(
+                row["target_normalized_association_variation_mean"]
+            )
+            rho_rank = float(
+                row[
+                    "target_normalized_association_effective_rank_mean"
+                ]
+            )
+            centered_score = float(
+                row["centered_robust_score_mean"]
+            )
+
+            if not math.isfinite(rho_var):
+                rho_var = -math.inf
+            if not math.isfinite(rho_rank):
+                rho_rank = -math.inf
+
+            return (
+                -rho_var,
+                -rho_rank,
+                centered_score,
+                int(row["n_clusters"]),
+                float(row["omega"]),
+            )
+
+        finalists.sort(key=_retvar_sort_key)
+
+        # If the centered one-SE set contains a unique member, it is selected
+        # even when retained-variation fields are unavailable. If there are
+        # multiple finalists, retained variation must be available to break
+        # the tie; otherwise we fail loudly rather than silently reverting to
+        # the legacy objective.
+        if len(finalists) == 1:
+            selected_c = int(finalists[0]["n_clusters"])
+            selected_omega = float(finalists[0]["omega"])
+        else:
+            if not math.isfinite(
+                float(
+                    finalists[0][
+                        "target_normalized_association_variation_mean"
+                    ]
+                )
+            ):
+                raise RuntimeError(
+                    "Multiple configurations are inside the centered robust "
+                    "one-SE set, but retained-variation diagnostics are not "
+                    "available. Rerun those finalists with the updated "
+                    "Experiment 12 script in a new output directory."
+                )
+            selected_c = int(finalists[0]["n_clusters"])
+            selected_omega = float(finalists[0]["omega"])
+
+        for row in centered_rows:
+            row["selected_by_centered_retvar_rule"] = int(
+                int(row["n_clusters"]) == selected_c
+                and abs(float(row["omega"]) - selected_omega) < 1e-12
+            )
+
+        finalists = [
+            dict(row)
+            for row in centered_rows
+            if int(row["inside_centered_one_se_set"]) == 1
+        ]
+        finalists.sort(key=_retvar_sort_key)
+
+        for rank, row in enumerate(finalists, start=1):
+            row["retained_variation_rank_within_one_se"] = rank
+
+        selected_rows = [
+            dict(row)
+            for row in centered_rows
+            if int(row["selected_by_centered_retvar_rule"]) == 1
+        ]
+
+        _write_csv(
+            output_dir / "experiment_12_centered_robust_ranking.csv",
+            centered_rows,
+        )
+        _write_csv(
+            output_dir / "experiment_12_centered_one_se_finalists.csv",
+            finalists,
+        )
+        _write_csv(
+            output_dir / "experiment_12_centered_retvar_selected_config.csv",
+            selected_rows,
+        )
 
     # Best configuration by noise level.
     best_by_noise_rows: list[CsvRow] = []
@@ -754,6 +1162,24 @@ def main() -> None:
                         batch_size=int(config.batch_size),
                     )
 
+                    # Model-level non-collapse diagnostics on the complete
+                    # clean held-out one-step target association set.
+                    target_associations = np.asarray(
+                        kahm_associations(
+                            getattr(fit, "abstraction_model"),
+                            X1_test_clean,
+                            omega=float(getattr(fit, "omega")),
+                            tau=float(getattr(fit, "tau")),
+                            n_jobs=int(config.n_jobs),
+                            batch_size=int(config.batch_size),
+                            show_progress=False,
+                        ),
+                        dtype=np.float64,
+                    )
+                    target_variation = association_variation_diagnostics(
+                        target_associations
+                    )
+
                     csv_rows: list[CsvRow] = []
                     for horizon, n_eval_starts, error, r2, violation in eval_rows:
                         csv_rows.append(
@@ -767,6 +1193,27 @@ def main() -> None:
                                 "relative_association_error": float(error),
                                 "association_r2": float(r2),
                                 "simplex_violation": float(violation),
+                                "target_association_variation": float(
+                                    target_variation["association_variation"]
+                                ),
+                                "target_max_variation_given_mean": float(
+                                    target_variation["max_variation_given_mean"]
+                                ),
+                                "target_normalized_association_variation": float(
+                                    target_variation[
+                                        "normalized_association_variation"
+                                    ]
+                                ),
+                                "target_association_effective_rank": float(
+                                    target_variation[
+                                        "association_effective_rank"
+                                    ]
+                                ),
+                                "target_normalized_association_effective_rank": float(
+                                    target_variation[
+                                        "normalized_association_effective_rank"
+                                    ]
+                                ),
                                 "train_closure_error_noisy_train": float(getattr(fit, "train_closure_error")),
                                 "train_association_r2_noisy_train": float(getattr(fit, "association_r2")),
                                 "fit_seconds": float(fit_seconds),
@@ -779,7 +1226,10 @@ def main() -> None:
                     e200 = next((row["relative_association_error"] for row in csv_rows if row["horizon"] == 200), math.nan)
                     print(
                         f"  done: train_err={float(getattr(fit, 'train_closure_error')):.6g}, "
-                        f"E200={float(e200):.6g}, fit_seconds={fit_seconds:.2f}"
+                        f"E200={float(e200):.6g}, "
+                        f"rho_var={float(target_variation['normalized_association_variation']):.6g}, "
+                        f"rho_rank={float(target_variation['normalized_association_effective_rank']):.6g}, "
+                        f"fit_seconds={fit_seconds:.2f}"
                     )
 
                     # Refresh summaries after every completed fit, so interrupted runs are usable.
@@ -793,6 +1243,14 @@ def main() -> None:
             if key != "selection_weights"
         },
         "selection_weights": config.selection_weights,
+        "centered_selection": (
+            "per seed: weighted mean of 1-R^2 over configured selection horizons "
+            "at each training-noise level; average over noise levels; one-SE set "
+            "across seeds; retained variation used only within that set"
+        ),
+        "retained_variation": (
+            "computed on the complete clean held-out X1 association set for each fitted model"
+        ),
         "noise_convention": (
             "training-only coordinate-wise Gaussian observation noise; "
             "sigma_j = noise_level * std_j(training coordinate); clean held-out evaluation"
@@ -805,11 +1263,14 @@ def main() -> None:
         json.dump(metadata, handle, indent=2)
 
     summarize(raw_path, output_dir, config.selection_weights)
-    zip_path = make_zip(output_dir, "kahkm_exp12_vanderpol_noise_aware_tuning_results")
+    zip_path = make_zip(output_dir, config.zip_name)
 
     print("\nFinished noise-aware Van der Pol tuning.")
     print(f"Raw results: {raw_path.resolve()}")
-    print(f"Robust selection: {(output_dir / 'experiment_12_noise_tuning_robust_selection.csv').resolve()}")
+    print(f"Legacy robust selection: {(output_dir / 'experiment_12_noise_tuning_robust_selection.csv').resolve()}")
+    print(f"Centered robust ranking: {(output_dir / 'experiment_12_centered_robust_ranking.csv').resolve()}")
+    print(f"Centered one-SE finalists: {(output_dir / 'experiment_12_centered_one_se_finalists.csv').resolve()}")
+    print(f"Centered/retained-variation selected config: {(output_dir / 'experiment_12_centered_retvar_selected_config.csv').resolve()}")
     print(f"Best by noise: {(output_dir / 'experiment_12_noise_tuning_best_by_noise.csv').resolve()}")
     print(f"Created ZIP: {zip_path.resolve()}")
     print("Upload the ZIP for manuscript updating.")

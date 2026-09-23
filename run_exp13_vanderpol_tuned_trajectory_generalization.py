@@ -45,6 +45,12 @@ Resume interrupted run:
 
 Outputs:
 - kahkm_exp13_vanderpol_tuned_trajectory_generalization/
+- experiment_13_tuned_trajectory_summary.csv
+- experiment_13_tuned_trajectory_table_values.csv
+- experiment_13_tuned_trajectory_best_by_train_count.csv
+  (legacy E200-based comparison, preserved for provenance)
+- experiment_13_centered_multihorizon_summary.csv
+- experiment_13_centered_paired_comparisons.csv
 - kahkm_exp13_vanderpol_tuned_trajectory_generalization_results.zip
 """
 
@@ -121,6 +127,7 @@ class ExperimentConfig:
     n_jobs: int
     max_train_per_cluster: int | None
     output_dir: str
+    zip_name: str
     resume: bool
 
 
@@ -171,6 +178,22 @@ def _int_or_zero(value: str | int | float | None) -> int:
     if not math.isfinite(number):
         return 0
     return int(number)
+
+
+def _sample_std(values: Sequence[float]) -> float:
+    if len(values) < 2:
+        return 0.0
+    mean_value = mean(values)
+    return math.sqrt(
+        sum((value - mean_value) ** 2 for value in values)
+        / (len(values) - 1)
+    )
+
+
+def _standard_error(values: Sequence[float]) -> float:
+    if not values:
+        return math.nan
+    return _sample_std(values) / math.sqrt(len(values))
 
 
 def _read_csv(path: Path) -> list[RawCsvRow]:
@@ -254,6 +277,11 @@ def parse_args() -> ExperimentConfig:
         "--output-dir",
         default="kahkm_exp13_vanderpol_tuned_trajectory_generalization",
     )
+    parser.add_argument(
+        "--zip-name",
+        default="kahkm_exp13_vanderpol_tuned_trajectory_generalization_results",
+        help="ZIP filename without the .zip suffix.",
+    )
     parser.add_argument("--resume", action="store_true")
 
     ns = parser.parse_args()
@@ -283,6 +311,7 @@ def parse_args() -> ExperimentConfig:
         n_jobs=int(ns.n_jobs),
         max_train_per_cluster=max_train_per_cluster,
         output_dir=str(ns.output_dir),
+        zip_name=str(ns.zip_name),
         resume=bool(ns.resume),
     )
 
@@ -585,6 +614,215 @@ def summarize(raw_path: Path, output_dir: Path) -> None:
 
     _write_csv(output_dir / "experiment_13_tuned_trajectory_best_by_train_count.csv", best_rows)
 
+    # -----------------------------------------------------------------
+    # Centered multi-horizon comparison.
+    #
+    # For each fitted replicate, average 1 - R_h^2 over all evaluated
+    # horizons. Replicates remain the independent units for SD/SE and
+    # for the paired configuration comparisons below.
+    # -----------------------------------------------------------------
+    available_horizons = sorted(
+        {
+            _int_or_zero(_cell(row, "horizon"))
+            for row in raw
+            if _int_or_zero(_cell(row, "horizon")) > 0
+        }
+    )
+    horizon_set = set(available_horizons)
+
+    per_replicate_r2: dict[
+        tuple[str, int, int],
+        dict[int, float],
+    ] = defaultdict(dict)
+
+    config_metadata: dict[
+        tuple[str, int],
+        tuple[int, float],
+    ] = {}
+
+    for row in raw:
+        config_name = _cell(row, "config_name")
+        train_count = _int_or_zero(
+            _cell(row, "n_train_trajectories")
+        )
+        replicate = _int_or_zero(_cell(row, "replicate"))
+        horizon = _int_or_zero(_cell(row, "horizon"))
+        r2 = _float_or_nan(_cell(row, "association_r2"))
+
+        if (
+            config_name
+            and train_count > 0
+            and horizon in horizon_set
+            and math.isfinite(r2)
+        ):
+            per_replicate_r2[
+                (config_name, train_count, replicate)
+            ][horizon] = r2
+
+            config_metadata[(config_name, train_count)] = (
+                _int_or_zero(_cell(row, "n_clusters")),
+                _float_or_nan(_cell(row, "omega")),
+            )
+
+    centered_per_replicate: dict[
+        tuple[str, int, int],
+        float,
+    ] = {}
+
+    for key, horizon_r2 in per_replicate_r2.items():
+        if set(horizon_r2) != horizon_set:
+            continue
+
+        centered_per_replicate[key] = mean(
+            [
+                1.0 - horizon_r2[horizon]
+                for horizon in available_horizons
+            ]
+        )
+
+    centered_groups: dict[
+        tuple[str, int],
+        list[tuple[int, float]],
+    ] = defaultdict(list)
+
+    for (
+        config_name,
+        train_count,
+        replicate,
+    ), centered_error in centered_per_replicate.items():
+        centered_groups[(config_name, train_count)].append(
+            (replicate, centered_error)
+        )
+
+    centered_summary_rows: list[CsvRow] = []
+
+    for (
+        config_name,
+        train_count,
+    ), replicate_values in sorted(centered_groups.items()):
+        replicate_values = sorted(replicate_values)
+        errors = [
+            value
+            for _replicate, value in replicate_values
+        ]
+
+        if not errors:
+            continue
+
+        n_clusters, omega = config_metadata[
+            (config_name, train_count)
+        ]
+
+        centered_mean = mean(errors)
+        centered_sd = _sample_std(errors)
+        centered_se = _standard_error(errors)
+
+        centered_summary_rows.append(
+            {
+                "config_name": config_name,
+                "n_clusters": n_clusters,
+                "omega": omega,
+                "n_train_trajectories": train_count,
+                "selection_horizons": " ".join(
+                    str(horizon)
+                    for horizon in available_horizons
+                ),
+                "n_replicates": len(errors),
+                "mean_centered_error": centered_mean,
+                "mean_multihorizon_r2": 1.0 - centered_mean,
+                "centered_error_sd": centered_sd,
+                "centered_error_se": centered_se,
+            }
+        )
+
+    _write_csv(
+        output_dir / "experiment_13_centered_multihorizon_summary.csv",
+        centered_summary_rows,
+    )
+
+    # Paired comparisons use the same replicate ID (and therefore the same
+    # training-seed block) for both configurations. Negative differences
+    # mean config_a has the lower centered error.
+    paired_rows: list[CsvRow] = []
+
+    train_counts = sorted(
+        {
+            train_count
+            for _config_name, train_count
+            in centered_groups
+        }
+    )
+
+    for train_count in train_counts:
+        config_names = sorted(
+            {
+                config_name
+                for config_name, count
+                in centered_groups
+                if count == train_count
+            }
+        )
+
+        for left_index, config_a in enumerate(config_names):
+            for config_b in config_names[left_index + 1 :]:
+                a_by_replicate = {
+                    replicate: value
+                    for replicate, value
+                    in centered_groups[(config_a, train_count)]
+                }
+                b_by_replicate = {
+                    replicate: value
+                    for replicate, value
+                    in centered_groups[(config_b, train_count)]
+                }
+
+                shared_replicates = sorted(
+                    set(a_by_replicate)
+                    & set(b_by_replicate)
+                )
+
+                if not shared_replicates:
+                    continue
+
+                differences = [
+                    a_by_replicate[replicate]
+                    - b_by_replicate[replicate]
+                    for replicate in shared_replicates
+                ]
+
+                diff_mean = mean(differences)
+                diff_sd = _sample_std(differences)
+                diff_se = _standard_error(differences)
+
+                paired_row: CsvRow = {
+                    "n_train_trajectories": train_count,
+                    "config_a": config_a,
+                    "config_b": config_b,
+                    "difference_definition": (
+                        "mean_centered_error(config_a) - "
+                        "mean_centered_error(config_b)"
+                    ),
+                    "n_paired_replicates": len(differences),
+                    "mean_paired_difference": diff_mean,
+                    "paired_difference_sd": diff_sd,
+                    "paired_difference_se": diff_se,
+                }
+
+                for replicate, difference in zip(
+                    shared_replicates,
+                    differences,
+                ):
+                    paired_row[
+                        f"replicate_{replicate}_difference"
+                    ] = difference
+
+                paired_rows.append(paired_row)
+
+    _write_csv(
+        output_dir / "experiment_13_centered_paired_comparisons.csv",
+        paired_rows,
+    )
+
 
 def make_zip(output_dir: Path, zip_name: str) -> Path:
     zip_base = output_dir.parent / zip_name
@@ -620,6 +858,10 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     raw_path = output_dir / "experiment_13_tuned_trajectory_raw.csv"
+    if raw_path.exists() and raw_path.stat().st_size > 0 and not config.resume:
+        raise RuntimeError("Experiment 13 raw results already exist in the output directory. "
+                           "Refusing to append duplicate runs. Use --resume to continue an "
+                           "interrupted experiment, or choose a new --output-dir.")
     done = completed_keys(raw_path) if config.resume else set()
 
     total_jobs = len(config.configs) * len(config.train_counts) * len(config.replicates)
@@ -753,13 +995,15 @@ def main() -> None:
         json.dump(metadata, handle, indent=2)
 
     summarize(raw_path, output_dir)
-    zip_path = make_zip(output_dir, "kahkm_exp13_vanderpol_tuned_trajectory_generalization_results")
+    zip_path = make_zip(output_dir, config.zip_name)
 
     print("\nFinished Van der Pol tuned trajectory-generalization experiment.")
     print(f"Raw results: {raw_path.resolve()}")
     print(f"Summary: {(output_dir / 'experiment_13_tuned_trajectory_summary.csv').resolve()}")
     print(f"Table values: {(output_dir / 'experiment_13_tuned_trajectory_table_values.csv').resolve()}")
-    print(f"Best by train count: {(output_dir / 'experiment_13_tuned_trajectory_best_by_train_count.csv').resolve()}")
+    print(f"Legacy best by train count: {(output_dir / 'experiment_13_tuned_trajectory_best_by_train_count.csv').resolve()}")
+    print(f"Centered multihorizon summary: {(output_dir / 'experiment_13_centered_multihorizon_summary.csv').resolve()}")
+    print(f"Centered paired comparisons: {(output_dir / 'experiment_13_centered_paired_comparisons.csv').resolve()}")
     print(f"Created ZIP: {zip_path.resolve()}")
     print("Upload the ZIP for manuscript updating.")
 

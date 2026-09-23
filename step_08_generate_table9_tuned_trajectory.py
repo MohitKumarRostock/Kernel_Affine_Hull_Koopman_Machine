@@ -1,22 +1,40 @@
 #!/usr/bin/env python3
-"""Generate manuscript Table 9 from Experiment 13 outputs.
+"""Generate manuscript Table 9 from centered Experiment 13 outputs.
 
-Table 9: Tuned Van der Pol unseen-trajectory generalization.
+Table 9: centered multi-horizon Van der Pol unseen-trajectory generalization.
 
-Place this script in the same directory as the experiment scripts and run:
+The generator is aligned with the retained-variation/centered-selection update.
+It compares the three manuscript Experiment 13 configurations:
 
-    python step_08_generate_table9_tuned_trajectory.py
+    robust_tuned: C=25, omega=4
+    clean_tuned:  C=25, omega=6
+    old_default:  C=20, omega=4
 
-By default, it runs/reuses:
+The manuscript-facing score is the mean association R^2 across horizons
+{1, 10, 50, 100, 200}. The paired columns report matched-replicate
+differences in the corresponding centered error
+
+    Delta E_clean-robust = E_clean - E_robust
+    Delta E_ref-robust   = E_old_default - E_robust
+
+so a positive paired difference means that robust_tuned has the lower centered
+error for that comparison. Paired differences are reported as mean +/- SE;
+configuration-level mean multihorizon R^2 is reported as mean +/- SD across the
+three replicate training-seed blocks.
+
+By default, the script runs/reuses:
 
     run_exp13_vanderpol_tuned_trajectory_generalization.py
 
 and reads:
 
-    kahkm_exp13_vanderpol_tuned_trajectory_generalization/
-        experiment_13_tuned_trajectory_table_values.csv
+    kahkm_exp13_retvar_updated_configs/
+        experiment_13_centered_multihorizon_summary.csv
+        experiment_13_centered_paired_comparisons.csv
 
-Use --no-run to format existing experiment outputs only.
+Legacy Experiment 13 E_h summaries remain untouched for provenance.
+
+Use --no-run to format existing centered Experiment 13 outputs only.
 """
 
 from __future__ import annotations
@@ -29,17 +47,27 @@ import subprocess
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Sequence
+from typing import Final, Sequence
 
 
-EXPERIMENT_RUNNER = "run_exp13_vanderpol_tuned_trajectory_generalization.py"
-EXPERIMENT_OUTPUT_DIR = "kahkm_exp13_vanderpol_tuned_trajectory_generalization"
-TABLE_OUTPUT_DIR = "kahkm_table9_tuned_trajectory"
-TABLE_VALUES_FILE = "experiment_13_tuned_trajectory_table_values.csv"
+EXPERIMENT_RUNNER: Final[str] = "run_exp13_vanderpol_tuned_trajectory_generalization.py"
+EXPERIMENT_OUTPUT_DIR: Final[str] = "kahkm_exp13_retvar_updated_configs"
+TABLE_OUTPUT_DIR: Final[str] = "kahkm_table9_centered_tuned_trajectory"
+CENTERED_SUMMARY_FILE: Final[str] = "experiment_13_centered_multihorizon_summary.csv"
+PAIRED_COMPARISONS_FILE: Final[str] = "experiment_13_centered_paired_comparisons.csv"
 
-CONFIG_ROBUST = "robust_tuned"
-CONFIG_CLEAN = "clean_tuned"
-CONFIG_DEFAULT = "old_default"
+CONFIG_ROBUST: Final[str] = "robust_tuned"
+CONFIG_CLEAN: Final[str] = "clean_tuned"
+CONFIG_REFERENCE: Final[str] = "old_default"
+
+EXPECTED_CONFIGS: Final[dict[str, tuple[int, float]]] = {
+    CONFIG_ROBUST: (25, 4.0),
+    CONFIG_CLEAN: (25, 6.0),
+    CONFIG_REFERENCE: (20, 4.0),
+}
+EXPECTED_SELECTION_HORIZONS: Final[tuple[int, ...]] = (1, 10, 50, 100, 200)
+EXPECTED_TRAIN_COUNTS: Final[tuple[int, ...]] = (1, 2, 3, 5, 8)
+EXPECTED_REPLICATES: Final[int] = 3
 
 
 @dataclass(frozen=True)
@@ -55,58 +83,86 @@ class CliArgs:
 
 
 @dataclass(frozen=True)
-class ExperimentRow:
+class CenteredSummaryRow:
     config_name: str
     n_clusters: int
     omega: float
     n_train_trajectories: int
-    E50_mean: float
-    E50_std: float
-    E100_mean: float
-    E100_std: float
-    E200_mean: float
-    E200_std: float
+    selection_horizons: tuple[int, ...]
+    n_replicates: int
+    mean_centered_error: float
+    mean_multihorizon_r2: float
+    centered_error_sd: float
+    centered_error_se: float
+
+
+@dataclass(frozen=True)
+class PairedComparisonRow:
+    n_train_trajectories: int
+    config_a: str
+    config_b: str
+    difference_definition: str
+    n_paired_replicates: int
+    mean_paired_difference: float
+    paired_difference_sd: float
+    paired_difference_se: float
+    replicate_0_difference: float
+    replicate_1_difference: float
+    replicate_2_difference: float
 
 
 @dataclass(frozen=True)
 class TableRow:
     training_trajectories: int
-    robust_E50_mean: float
-    robust_E50_std: float
-    robust_E100_mean: float
-    robust_E100_std: float
-    robust_E200_mean: float
-    robust_E200_std: float
-    clean_tuned_E200_mean: float
-    clean_tuned_E200_std: float
-    default_E200_mean: float
-    default_E200_std: float
+
+    robust_r2_mean: float
+    robust_r2_sd: float
+    robust_centered_error_mean: float
+
+    clean_r2_mean: float
+    clean_r2_sd: float
+    clean_centered_error_mean: float
+
+    reference_r2_mean: float
+    reference_r2_sd: float
+    reference_centered_error_mean: float
+
+    clean_minus_robust_mean: float
+    clean_minus_robust_sd: float
+    clean_minus_robust_se: float
+
+    reference_minus_robust_mean: float
+    reference_minus_robust_sd: float
+    reference_minus_robust_se: float
 
     @property
-    def robust_E50_cell(self) -> str:
-        return format_mean_std_scientific(self.robust_E50_mean, self.robust_E50_std)
+    def robust_r2_cell(self) -> str:
+        return format_mean_sd(self.robust_r2_mean, self.robust_r2_sd)
 
     @property
-    def robust_E100_cell(self) -> str:
-        return format_mean_std_scientific(self.robust_E100_mean, self.robust_E100_std)
+    def clean_r2_cell(self) -> str:
+        return format_mean_sd(self.clean_r2_mean, self.clean_r2_sd)
 
     @property
-    def robust_E200_cell(self) -> str:
-        return format_mean_std_scientific(self.robust_E200_mean, self.robust_E200_std)
+    def reference_r2_cell(self) -> str:
+        return format_mean_sd(self.reference_r2_mean, self.reference_r2_sd)
 
     @property
-    def clean_tuned_E200_cell(self) -> str:
-        return format_mean_std_scientific(self.clean_tuned_E200_mean, self.clean_tuned_E200_std)
+    def clean_minus_robust_cell(self) -> str:
+        return format_signed_mean_se(self.clean_minus_robust_mean, self.clean_minus_robust_se)
 
     @property
-    def default_E200_cell(self) -> str:
-        return format_mean_std_scientific(self.default_E200_mean, self.default_E200_std)
+    def reference_minus_robust_cell(self) -> str:
+        return format_signed_mean_se(self.reference_minus_robust_mean, self.reference_minus_robust_se)
 
 
 def parse_args(argv: Sequence[str] | None = None) -> CliArgs:
     script_dir = Path(__file__).resolve().parent
     parser = argparse.ArgumentParser(
-        description="Generate manuscript Table 9 from Experiment 13 Van der Pol trajectory-generalization outputs."
+        description=(
+            "Generate centered manuscript Table 9 from Experiment 13 "
+            "Van der Pol trajectory-generalization outputs."
+        )
     )
     parser.add_argument(
         "--source-dir",
@@ -119,7 +175,7 @@ def parse_args(argv: Sequence[str] | None = None) -> CliArgs:
         type=Path,
         default=None,
         help=(
-            "Directory containing Experiment 13 outputs. Default: "
+            "Directory containing centered Experiment 13 outputs. Default: "
             f"<source-dir>/{EXPERIMENT_OUTPUT_DIR}."
         ),
     )
@@ -127,7 +183,7 @@ def parse_args(argv: Sequence[str] | None = None) -> CliArgs:
         "--output-dir",
         type=Path,
         default=None,
-        help=f"Directory for generated Table 9 files. Default: <source-dir>/{TABLE_OUTPUT_DIR}.",
+        help=f"Directory for generated centered Table 9 files. Default: <source-dir>/{TABLE_OUTPUT_DIR}.",
     )
     parser.add_argument(
         "--runner",
@@ -137,12 +193,12 @@ def parse_args(argv: Sequence[str] | None = None) -> CliArgs:
     parser.add_argument(
         "--python-executable",
         default=sys.executable,
-        help="Python executable used to run the experiment runner.",
+        help="Python executable used to run the Experiment 13 runner.",
     )
     parser.add_argument(
         "--no-run",
         action="store_true",
-        help="Do not run Experiment 13; only format existing outputs.",
+        help="Do not run Experiment 13; only format existing centered outputs.",
     )
     parser.add_argument(
         "--resume",
@@ -197,8 +253,8 @@ def run_experiment(args: CliArgs) -> None:
     if args.n_jobs is not None:
         command.extend(["--n-jobs", str(args.n_jobs)])
 
-    print("Running Experiment 13:")
-    print(" ".join(command))
+    print("Running centered Experiment 13:")
+    print(" ".join(command), flush=True)
     subprocess.run(command, cwd=args.source_dir, check=True)
 
 
@@ -206,118 +262,289 @@ def read_csv_dicts(path: Path) -> list[dict[str, str]]:
     if not path.exists():
         raise FileNotFoundError(f"Required CSV not found: {path}")
     with path.open("r", encoding="utf-8", newline="") as handle:
-        return [dict(row) for row in csv.DictReader(handle)]
+        rows = [dict(row) for row in csv.DictReader(handle)]
+    if not rows:
+        raise ValueError(f"Required CSV is empty: {path}")
+    return rows
 
 
-def parse_float(row: dict[str, str], key: str) -> float:
+def parse_float(row: dict[str, str], key: str, *, context: str) -> float:
     value = row.get(key, "")
+    if value == "":
+        raise ValueError(f"Missing numeric column {key!r} for {context}.")
     try:
         number = float(value)
     except ValueError as exc:
-        raise ValueError(f"Could not parse numeric column {key!r} from value {value!r}") from exc
+        raise ValueError(f"Could not parse numeric column {key!r}={value!r} for {context}.") from exc
     if not math.isfinite(number):
-        return math.nan
+        raise ValueError(f"Non-finite numeric column {key!r}={value!r} for {context}.")
     return number
 
 
-def parse_int(row: dict[str, str], key: str) -> int:
-    return int(float(row.get(key, "0")))
+def parse_int(row: dict[str, str], key: str, *, context: str) -> int:
+    return int(round(parse_float(row, key, context=context)))
 
 
-def load_experiment_rows(table_values_path: Path) -> list[ExperimentRow]:
-    rows: list[ExperimentRow] = []
-    for row in read_csv_dicts(table_values_path):
+def parse_horizons(value: str, *, context: str) -> tuple[int, ...]:
+    try:
+        horizons = tuple(int(part) for part in value.split())
+    except ValueError as exc:
+        raise ValueError(f"Could not parse selection_horizons={value!r} for {context}.") from exc
+    if not horizons:
+        raise ValueError(f"Empty selection_horizons for {context}.")
+    return horizons
+
+
+def load_centered_summary(path: Path) -> list[CenteredSummaryRow]:
+    rows: list[CenteredSummaryRow] = []
+    for raw in read_csv_dicts(path):
+        config_name = raw.get("config_name", "")
+        count_text = raw.get("n_train_trajectories", "?")
+        context = f"centered summary {config_name}/N={count_text}"
         rows.append(
-            ExperimentRow(
-                config_name=row.get("config_name", ""),
-                n_clusters=parse_int(row, "n_clusters"),
-                omega=parse_float(row, "omega"),
-                n_train_trajectories=parse_int(row, "n_train_trajectories"),
-                E50_mean=parse_float(row, "E50_mean"),
-                E50_std=parse_float(row, "E50_std"),
-                E100_mean=parse_float(row, "E100_mean"),
-                E100_std=parse_float(row, "E100_std"),
-                E200_mean=parse_float(row, "E200_mean"),
-                E200_std=parse_float(row, "E200_std"),
+            CenteredSummaryRow(
+                config_name=config_name,
+                n_clusters=parse_int(raw, "n_clusters", context=context),
+                omega=parse_float(raw, "omega", context=context),
+                n_train_trajectories=parse_int(raw, "n_train_trajectories", context=context),
+                selection_horizons=parse_horizons(
+                    raw.get("selection_horizons", ""), context=context
+                ),
+                n_replicates=parse_int(raw, "n_replicates", context=context),
+                mean_centered_error=parse_float(raw, "mean_centered_error", context=context),
+                mean_multihorizon_r2=parse_float(raw, "mean_multihorizon_r2", context=context),
+                centered_error_sd=parse_float(raw, "centered_error_sd", context=context),
+                centered_error_se=parse_float(raw, "centered_error_se", context=context),
             )
         )
     return rows
 
 
-def format_mean_std_scientific(mean_value: float, std_value: float) -> str:
-    if not math.isfinite(mean_value) or not math.isfinite(std_value):
-        return "--"
-    if mean_value == 0.0:
-        return f"$({mean_value:.2f}\\pm{std_value:.2f})$"
-    exponent = int(math.floor(math.log10(abs(mean_value))))
-    scale = 10.0 ** exponent
-    mean_scaled = mean_value / scale
-    std_scaled = std_value / scale
-    return f"$({mean_scaled:.2f}\\pm{std_scaled:.2f})\\times10^{{{exponent}}}$"
+def load_paired_comparisons(path: Path) -> list[PairedComparisonRow]:
+    rows: list[PairedComparisonRow] = []
+    for raw in read_csv_dicts(path):
+        config_a = raw.get("config_a", "")
+        config_b = raw.get("config_b", "")
+        count_text = raw.get("n_train_trajectories", "?")
+        context = f"paired comparison {config_a}-{config_b}/N={count_text}"
+        rows.append(
+            PairedComparisonRow(
+                n_train_trajectories=parse_int(raw, "n_train_trajectories", context=context),
+                config_a=config_a,
+                config_b=config_b,
+                difference_definition=raw.get("difference_definition", ""),
+                n_paired_replicates=parse_int(raw, "n_paired_replicates", context=context),
+                mean_paired_difference=parse_float(raw, "mean_paired_difference", context=context),
+                paired_difference_sd=parse_float(raw, "paired_difference_sd", context=context),
+                paired_difference_se=parse_float(raw, "paired_difference_se", context=context),
+                replicate_0_difference=parse_float(raw, "replicate_0_difference", context=context),
+                replicate_1_difference=parse_float(raw, "replicate_1_difference", context=context),
+                replicate_2_difference=parse_float(raw, "replicate_2_difference", context=context),
+            )
+        )
+    return rows
 
 
-def build_table_rows(experiment_rows: Sequence[ExperimentRow]) -> list[TableRow]:
-    indexed: dict[tuple[str, int], ExperimentRow] = {}
-    for row in experiment_rows:
-        indexed[(row.config_name, row.n_train_trajectories)] = row
+def validate_centered_summary(rows: Sequence[CenteredSummaryRow]) -> None:
+    indexed: dict[tuple[str, int], CenteredSummaryRow] = {}
+    for row in rows:
+        if row.config_name not in EXPECTED_CONFIGS:
+            raise ValueError(f"Unexpected Experiment 13 config in centered summary: {row.config_name!r}.")
+        key = (row.config_name, row.n_train_trajectories)
+        if key in indexed:
+            raise ValueError(f"Duplicate centered summary row for {key}.")
+        indexed[key] = row
 
-    train_counts = sorted(
-        count for config, count in indexed if config == CONFIG_ROBUST
-    )
-    table_rows: list[TableRow] = []
-
-    for train_count in train_counts:
-        missing = [
-            name
-            for name in (CONFIG_ROBUST, CONFIG_CLEAN, CONFIG_DEFAULT)
-            if (name, train_count) not in indexed
-        ]
-        if missing:
-            missing_text = ", ".join(missing)
+        expected_c, expected_omega = EXPECTED_CONFIGS[row.config_name]
+        if row.n_clusters != expected_c or not math.isclose(
+            row.omega, expected_omega, rel_tol=0.0, abs_tol=1e-12
+        ):
             raise ValueError(
-                f"Missing Experiment 13 rows for train_count={train_count}: {missing_text}"
+                f"Centered summary config mismatch for {row.config_name}: "
+                f"found C={row.n_clusters}, omega={row.omega}; "
+                f"expected C={expected_c}, omega={expected_omega}."
+            )
+        if row.selection_horizons != EXPECTED_SELECTION_HORIZONS:
+            raise ValueError(
+                f"Selection-horizon mismatch for {key}: found {row.selection_horizons}, "
+                f"expected {EXPECTED_SELECTION_HORIZONS}."
+            )
+        if row.n_replicates != EXPECTED_REPLICATES:
+            raise ValueError(
+                f"Replicate-count mismatch for {key}: found {row.n_replicates}, "
+                f"expected {EXPECTED_REPLICATES}."
             )
 
-        robust = indexed[(CONFIG_ROBUST, train_count)]
-        clean = indexed[(CONFIG_CLEAN, train_count)]
-        default = indexed[(CONFIG_DEFAULT, train_count)]
+        # Since mean_multihorizon_r2 is the mean of R^2 over the same horizons,
+        # it must equal 1 - mean_centered_error up to roundoff.
+        expected_r2 = 1.0 - row.mean_centered_error
+        if not math.isclose(
+            row.mean_multihorizon_r2, expected_r2, rel_tol=0.0, abs_tol=1e-12
+        ):
+            raise ValueError(
+                f"Centered summary identity failed for {key}: "
+                f"mean_multihorizon_r2={row.mean_multihorizon_r2}, "
+                f"1-mean_centered_error={expected_r2}."
+            )
+
+    expected_keys = {
+        (config, count)
+        for config in EXPECTED_CONFIGS
+        for count in EXPECTED_TRAIN_COUNTS
+    }
+    actual_keys = set(indexed)
+    if actual_keys != expected_keys:
+        missing = sorted(expected_keys - actual_keys)
+        extra = sorted(actual_keys - expected_keys)
+        raise ValueError(
+            f"Centered summary protocol mismatch. Missing={missing}; extra={extra}."
+        )
+
+
+def validate_paired_comparisons(rows: Sequence[PairedComparisonRow]) -> None:
+    expected_pairs = {
+        (CONFIG_CLEAN, CONFIG_REFERENCE),
+        (CONFIG_CLEAN, CONFIG_ROBUST),
+        (CONFIG_REFERENCE, CONFIG_ROBUST),
+    }
+    indexed: dict[tuple[int, str, str], PairedComparisonRow] = {}
+
+    for row in rows:
+        key = (row.n_train_trajectories, row.config_a, row.config_b)
+        if key in indexed:
+            raise ValueError(f"Duplicate centered paired-comparison row for {key}.")
+        indexed[key] = row
+
+        if row.n_train_trajectories not in EXPECTED_TRAIN_COUNTS:
+            raise ValueError(f"Unexpected training count in paired comparisons: {row.n_train_trajectories}.")
+        if (row.config_a, row.config_b) not in expected_pairs:
+            raise ValueError(
+                f"Unexpected config pair in centered paired comparisons: "
+                f"{row.config_a!r}, {row.config_b!r}."
+            )
+        if row.n_paired_replicates != EXPECTED_REPLICATES:
+            raise ValueError(
+                f"Paired replicate-count mismatch for {key}: "
+                f"found {row.n_paired_replicates}, expected {EXPECTED_REPLICATES}."
+            )
+        expected_definition = (
+            "mean_centered_error(config_a) - mean_centered_error(config_b)"
+        )
+        if row.difference_definition != expected_definition:
+            raise ValueError(
+                f"Unexpected difference definition for {key}: "
+                f"{row.difference_definition!r}."
+            )
+
+    expected_keys = {
+        (count, config_a, config_b)
+        for count in EXPECTED_TRAIN_COUNTS
+        for config_a, config_b in expected_pairs
+    }
+    actual_keys = set(indexed)
+    if actual_keys != expected_keys:
+        missing = sorted(expected_keys - actual_keys)
+        extra = sorted(actual_keys - expected_keys)
+        raise ValueError(
+            f"Paired-comparison protocol mismatch. Missing={missing}; extra={extra}."
+        )
+
+
+def format_mean_sd(mean_value: float, sd_value: float) -> str:
+    return f"${mean_value:.4f}\\pm{sd_value:.4f}$"
+
+
+def format_signed_mean_se(mean_value: float, se_value: float) -> str:
+    return f"${mean_value:+.4f}\\pm{se_value:.4f}$"
+
+
+def build_table_rows(
+    summary_rows: Sequence[CenteredSummaryRow],
+    paired_rows: Sequence[PairedComparisonRow],
+) -> list[TableRow]:
+    summary_index = {
+        (row.config_name, row.n_train_trajectories): row for row in summary_rows
+    }
+    paired_index = {
+        (row.n_train_trajectories, row.config_a, row.config_b): row
+        for row in paired_rows
+    }
+
+    table_rows: list[TableRow] = []
+    for train_count in EXPECTED_TRAIN_COUNTS:
+        robust = summary_index[(CONFIG_ROBUST, train_count)]
+        clean = summary_index[(CONFIG_CLEAN, train_count)]
+        reference = summary_index[(CONFIG_REFERENCE, train_count)]
+
+        clean_vs_robust = paired_index[
+            (train_count, CONFIG_CLEAN, CONFIG_ROBUST)
+        ]
+        reference_vs_robust = paired_index[
+            (train_count, CONFIG_REFERENCE, CONFIG_ROBUST)
+        ]
+
         table_rows.append(
             TableRow(
                 training_trajectories=train_count,
-                robust_E50_mean=robust.E50_mean,
-                robust_E50_std=robust.E50_std,
-                robust_E100_mean=robust.E100_mean,
-                robust_E100_std=robust.E100_std,
-                robust_E200_mean=robust.E200_mean,
-                robust_E200_std=robust.E200_std,
-                clean_tuned_E200_mean=clean.E200_mean,
-                clean_tuned_E200_std=clean.E200_std,
-                default_E200_mean=default.E200_mean,
-                default_E200_std=default.E200_std,
+                robust_r2_mean=robust.mean_multihorizon_r2,
+                robust_r2_sd=robust.centered_error_sd,
+                robust_centered_error_mean=robust.mean_centered_error,
+                clean_r2_mean=clean.mean_multihorizon_r2,
+                clean_r2_sd=clean.centered_error_sd,
+                clean_centered_error_mean=clean.mean_centered_error,
+                reference_r2_mean=reference.mean_multihorizon_r2,
+                reference_r2_sd=reference.centered_error_sd,
+                reference_centered_error_mean=reference.mean_centered_error,
+                clean_minus_robust_mean=clean_vs_robust.mean_paired_difference,
+                clean_minus_robust_sd=clean_vs_robust.paired_difference_sd,
+                clean_minus_robust_se=clean_vs_robust.paired_difference_se,
+                reference_minus_robust_mean=reference_vs_robust.mean_paired_difference,
+                reference_minus_robust_sd=reference_vs_robust.paired_difference_sd,
+                reference_minus_robust_se=reference_vs_robust.paired_difference_se,
             )
         )
-
     return table_rows
 
 
 def table_row_to_csv(row: TableRow) -> dict[str, str]:
     return {
         "training_trajectories": str(row.training_trajectories),
-        "robust_E50_mean": repr(row.robust_E50_mean),
-        "robust_E50_std": repr(row.robust_E50_std),
-        "robust_E100_mean": repr(row.robust_E100_mean),
-        "robust_E100_std": repr(row.robust_E100_std),
-        "robust_E200_mean": repr(row.robust_E200_mean),
-        "robust_E200_std": repr(row.robust_E200_std),
-        "clean_tuned_E200_mean": repr(row.clean_tuned_E200_mean),
-        "clean_tuned_E200_std": repr(row.clean_tuned_E200_std),
-        "default_E200_mean": repr(row.default_E200_mean),
-        "default_E200_std": repr(row.default_E200_std),
-        "robust_E50_table_cell": row.robust_E50_cell,
-        "robust_E100_table_cell": row.robust_E100_cell,
-        "robust_E200_table_cell": row.robust_E200_cell,
-        "clean_tuned_E200_table_cell": row.clean_tuned_E200_cell,
-        "default_E200_table_cell": row.default_E200_cell,
+        "robust_mean_multihorizon_r2": repr(row.robust_r2_mean),
+        "robust_r2_sd": repr(row.robust_r2_sd),
+        "robust_mean_centered_error": repr(row.robust_centered_error_mean),
+        "clean_mean_multihorizon_r2": repr(row.clean_r2_mean),
+        "clean_r2_sd": repr(row.clean_r2_sd),
+        "clean_mean_centered_error": repr(row.clean_centered_error_mean),
+        "reference_mean_multihorizon_r2": repr(row.reference_r2_mean),
+        "reference_r2_sd": repr(row.reference_r2_sd),
+        "reference_mean_centered_error": repr(row.reference_centered_error_mean),
+        "clean_minus_robust_centered_error_mean": repr(row.clean_minus_robust_mean),
+        "clean_minus_robust_centered_error_sd": repr(row.clean_minus_robust_sd),
+        "clean_minus_robust_centered_error_se": repr(row.clean_minus_robust_se),
+        "reference_minus_robust_centered_error_mean": repr(row.reference_minus_robust_mean),
+        "reference_minus_robust_centered_error_sd": repr(row.reference_minus_robust_sd),
+        "reference_minus_robust_centered_error_se": repr(row.reference_minus_robust_se),
+        "robust_r2_table_cell": row.robust_r2_cell,
+        "clean_r2_table_cell": row.clean_r2_cell,
+        "reference_r2_table_cell": row.reference_r2_cell,
+        "clean_minus_robust_table_cell": row.clean_minus_robust_cell,
+        "reference_minus_robust_table_cell": row.reference_minus_robust_cell,
+    }
+
+
+def paired_row_to_csv(row: PairedComparisonRow) -> dict[str, str]:
+    return {
+        "n_train_trajectories": str(row.n_train_trajectories),
+        "config_a": row.config_a,
+        "config_b": row.config_b,
+        "difference_definition": row.difference_definition,
+        "n_paired_replicates": str(row.n_paired_replicates),
+        "mean_paired_difference": repr(row.mean_paired_difference),
+        "paired_difference_sd": repr(row.paired_difference_sd),
+        "paired_difference_se": repr(row.paired_difference_se),
+        "replicate_0_difference": repr(row.replicate_0_difference),
+        "replicate_1_difference": repr(row.replicate_1_difference),
+        "replicate_2_difference": repr(row.replicate_2_difference),
     }
 
 
@@ -333,51 +560,76 @@ def write_csv(path: Path, rows: Sequence[dict[str, str]]) -> None:
 
 def write_markdown(path: Path, rows: Sequence[TableRow]) -> None:
     lines = [
-        "# Table 9: Tuned Van der Pol unseen-trajectory generalization",
+        "# Table 9: Centered multi-horizon Van der Pol unseen-trajectory generalization",
         "",
-        "| Training trajectories | Robust E50 | Robust E100 | Robust E200 | Clean-tuned E200 | Default E200 |",
+        (
+            "| Training trajectories | Robust mean R2 | Clean mean R2 | Reference mean R2 | "
+            "Delta E clean-robust | Delta E reference-robust |"
+        ),
         "|---:|---:|---:|---:|---:|---:|",
     ]
     for row in rows:
         lines.append(
             "| "
             f"{row.training_trajectories} | "
-            f"{row.robust_E50_cell} | "
-            f"{row.robust_E100_cell} | "
-            f"{row.robust_E200_cell} | "
-            f"{row.clean_tuned_E200_cell} | "
-            f"{row.default_E200_cell} |"
+            f"{row.robust_r2_cell} | "
+            f"{row.clean_r2_cell} | "
+            f"{row.reference_r2_cell} | "
+            f"{row.clean_minus_robust_cell} | "
+            f"{row.reference_minus_robust_cell} |"
         )
+    lines.extend(
+        [
+            "",
+            (
+                "Mean R2 is the mean association R2 over horizons "
+                "{1, 10, 50, 100, 200}; configuration entries are mean +/- SD "
+                "over three replicate training-seed blocks."
+            ),
+            (
+                "Paired Delta E columns are mean +/- SE over matched replicates, "
+                "with Delta E = centered error(comparator) - centered error(robust). "
+                "Positive values therefore indicate lower centered error for robust_tuned."
+            ),
+        ]
+    )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def make_latex(rows: Sequence[TableRow]) -> str:
-    body_lines: list[str] = []
-    for row in rows:
-        body_lines.append(
+    body_lines = [
+        (
             f"{row.training_trajectories} & "
-            f"{row.robust_E50_cell} & "
-            f"{row.robust_E100_cell} & "
-            f"{row.robust_E200_cell} & "
-            f"{row.clean_tuned_E200_cell} & "
-            f"{row.default_E200_cell} \\\\" 
+            f"{row.robust_r2_cell} & "
+            f"{row.clean_r2_cell} & "
+            f"{row.reference_r2_cell} & "
+            f"{row.clean_minus_robust_cell} & "
+            f"{row.reference_minus_robust_cell} \\\\"
         )
+        for row in rows
+    ]
     body = "\n".join(body_lines)
     return (
         "\\begin{table}[t]\n"
         "\\centering\n"
         "\\small\n"
-        "\\caption{Tuned Van der Pol unseen-trajectory generalization. "
-        "The robust setting $C=10,\\omega=0.25$ is compared with the clean-tuned "
-        "setting $C=15,\\omega=0.5$ and the default setting $C=20,\\omega=4$. "
-        "Values are mean $\\pm$ standard deviation over three independent "
-        "training-seed blocks and three unseen test trajectories.}\n"
+        "\\caption{Centered multi-horizon Van der Pol unseen-trajectory generalization. "
+        "The noise-aware robust setting $(C,\\omega)=(25,4)$ is compared with the "
+        "clean-tuned setting $(25,6)$ and the older reference setting $(20,4)$. "
+        "For each configuration, $\\overline{R^2}$ is the mean association $R^2$ over "
+        "$h\\in\\{1,10,50,100,200\\}$ and is reported as mean $\\pm$ standard deviation "
+        "over three replicate training-seed blocks. Paired columns report "
+        "$\\Delta E=E_{\\mathrm{comp}}-E_{\\mathrm{robust}}$ as mean $\\pm$ standard error "
+        "over the same matched replicates; positive $\\Delta E$ therefore means lower "
+        "centered multi-horizon error for the robust setting. With three paired replicates, "
+        "these differences are reported descriptively rather than as formal significance tests.}\n"
         "\\label{tab:vanderpol_tuned_trajectory}\n"
         "\\resizebox{\\textwidth}{!}{%\n"
         "\\begin{tabular}{cccccc}\n"
         "\\toprule\n"
-        "Training trajectories & Robust $E_{50}$ & Robust $E_{100}$ & Robust $E_{200}$ & "
-        "Clean-tuned $E_{200}$ & Default $E_{200}$ \\\\\n"
+        "Training trajectories & Robust $\\overline{R^2}$ & Clean $\\overline{R^2}$ & "
+        "Reference $\\overline{R^2}$ & $\\Delta E_{\\mathrm{clean-robust}}$ & "
+        "$\\Delta E_{\\mathrm{ref-robust}}$ \\\\\n"
         "\\midrule\n"
         f"{body}\n"
         "\\bottomrule\n"
@@ -387,21 +639,46 @@ def make_latex(rows: Sequence[TableRow]) -> str:
     )
 
 
-def write_metadata(path: Path, args: CliArgs, table_values_path: Path, rows: Sequence[TableRow]) -> None:
+def write_metadata(
+    path: Path,
+    args: CliArgs,
+    summary_path: Path,
+    paired_path: Path,
+    table_rows: Sequence[TableRow],
+    paired_rows: Sequence[PairedComparisonRow],
+) -> None:
     metadata = {
         "table": "Table 9",
-        "description": "Tuned Van der Pol unseen-trajectory generalization",
+        "description": "Centered multi-horizon Van der Pol unseen-trajectory generalization",
         "experiment_runner": args.runner,
         "experiment_output_dir": str(args.experiment_output_dir),
-        "source_table_values_csv": str(table_values_path),
+        "source_centered_summary_csv": str(summary_path),
+        "source_centered_paired_comparisons_csv": str(paired_path),
         "configs": {
-            "robust": "robust_tuned: C=10, omega=0.25",
-            "clean_tuned": "clean_tuned: C=15, omega=0.5",
-            "default": "old_default: C=20, omega=4",
+            "robust_tuned": {"C": 25, "omega": 4.0},
+            "clean_tuned": {"C": 25, "omega": 6.0},
+            "old_default_reference": {"C": 20, "omega": 4.0},
         },
-        "training_trajectories": [row.training_trajectories for row in rows],
+        "selection_horizons": list(EXPECTED_SELECTION_HORIZONS),
+        "n_replicates": EXPECTED_REPLICATES,
+        "uncertainty_convention": {
+            "configuration_mean_multihorizon_r2": "mean +/- SD across replicate training-seed blocks",
+            "paired_centered_error_differences": "mean +/- SE across matched replicates",
+        },
+        "paired_difference_definition": (
+            "centered error(comparator) - centered error(robust_tuned); "
+            "positive values indicate lower centered error for robust_tuned"
+        ),
+        "statistical_scope": (
+            "Three paired replicates; differences are descriptive and no formal "
+            "significance test is encoded by this generator."
+        ),
+        "training_trajectories": list(EXPECTED_TRAIN_COUNTS),
         "outputs": {
             "csv": str(args.output_dir / "table9_tuned_trajectory_values.csv"),
+            "paired_comparisons_csv": str(
+                args.output_dir / "table9_tuned_trajectory_paired_comparisons.csv"
+            ),
             "markdown": str(args.output_dir / "table9_tuned_trajectory_values.md"),
             "latex": str(args.output_dir / "table9_tuned_trajectory_values.tex"),
         },
@@ -411,7 +688,8 @@ def write_metadata(path: Path, args: CliArgs, table_values_path: Path, rows: Seq
             "resume": args.resume,
             "n_jobs": args.n_jobs,
         },
-        "rows": [asdict(row) for row in rows],
+        "table_rows": [asdict(row) for row in table_rows],
+        "all_paired_comparisons": [asdict(row) for row in paired_rows],
     }
     path.write_text(json.dumps(metadata, indent=2), encoding="utf-8")
 
@@ -421,23 +699,39 @@ def main(argv: Sequence[str] | None = None) -> None:
     if not args.no_run:
         run_experiment(args)
 
-    table_values_path = args.experiment_output_dir / TABLE_VALUES_FILE
-    experiment_rows = load_experiment_rows(table_values_path)
-    table_rows = build_table_rows(experiment_rows)
+    centered_summary_path = args.experiment_output_dir / CENTERED_SUMMARY_FILE
+    paired_comparisons_path = args.experiment_output_dir / PAIRED_COMPARISONS_FILE
+
+    summary_rows = load_centered_summary(centered_summary_path)
+    paired_rows = load_paired_comparisons(paired_comparisons_path)
+    validate_centered_summary(summary_rows)
+    validate_paired_comparisons(paired_rows)
+    table_rows = build_table_rows(summary_rows, paired_rows)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    csv_rows = [table_row_to_csv(row) for row in table_rows]
-    write_csv(args.output_dir / "table9_tuned_trajectory_values.csv", csv_rows)
-    write_markdown(args.output_dir / "table9_tuned_trajectory_values.md", table_rows)
-    latex = make_latex(table_rows)
-    (args.output_dir / "table9_tuned_trajectory_values.tex").write_text(latex, encoding="utf-8")
-    write_metadata(args.output_dir / "table9_tuned_trajectory_metadata.json", args, table_values_path, table_rows)
 
-    print("Generated Table 9 files:")
-    print(args.output_dir / "table9_tuned_trajectory_values.csv")
-    print(args.output_dir / "table9_tuned_trajectory_values.md")
-    print(args.output_dir / "table9_tuned_trajectory_values.tex")
-    print(args.output_dir / "table9_tuned_trajectory_metadata.json")
+    table_csv = args.output_dir / "table9_tuned_trajectory_values.csv"
+    paired_csv = args.output_dir / "table9_tuned_trajectory_paired_comparisons.csv"
+    markdown_path = args.output_dir / "table9_tuned_trajectory_values.md"
+    latex_path = args.output_dir / "table9_tuned_trajectory_values.tex"
+    metadata_path = args.output_dir / "table9_tuned_trajectory_metadata.json"
+
+    write_csv(table_csv, [table_row_to_csv(row) for row in table_rows])
+    write_csv(paired_csv, [paired_row_to_csv(row) for row in paired_rows])
+    write_markdown(markdown_path, table_rows)
+    latex_path.write_text(make_latex(table_rows), encoding="utf-8")
+    write_metadata(
+        metadata_path,
+        args,
+        centered_summary_path,
+        paired_comparisons_path,
+        table_rows,
+        paired_rows,
+    )
+
+    print("Generated centered Table 9 files:")
+    for path in (table_csv, paired_csv, markdown_path, latex_path, metadata_path):
+        print(path)
 
 
 if __name__ == "__main__":

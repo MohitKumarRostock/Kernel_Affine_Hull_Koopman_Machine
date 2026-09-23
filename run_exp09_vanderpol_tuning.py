@@ -21,8 +21,16 @@ Default tuning grid:
 - C in {10, 15, 20, 25, 30, 40, 50}
 - omega in {0.5, 1, 2, 4, 6, 8, 12}
 
-Default selection objective:
+Legacy selection objective:
 - minimize mean relative association error over horizons {1, 10, 50, 100, 200}
+
+Centered/non-collapse selection:
+- compute, per seed, the mean centered error 1 - R^2 over the same horizons;
+- form a one-standard-error set around the configuration with minimum mean
+  centered error;
+- within that statistically competitive set, prefer the configuration with
+  the largest held-out normalized association variation;
+- use normalized association effective rank as a secondary tie-breaker.
 
 Manuscript-compatible closure settings:
 - beta = 0.1
@@ -33,7 +41,11 @@ Manuscript-compatible closure settings:
 At the end, this script creates:
 - kahkm_exp09_vanderpol_tuning_results.zip
 - kahkm_exp09_vanderpol_tuning/experiment_09_selected_config_by_mean_horizon.csv
+  (legacy uncentered-error ranking, preserved for provenance)
 - kahkm_exp09_vanderpol_tuning/experiment_09_best_by_horizon.csv
+- kahkm_exp09_vanderpol_tuning/experiment_09_centered_one_se_ranking.csv
+- kahkm_exp09_vanderpol_tuning/experiment_09_centered_one_se_finalists.csv
+- kahkm_exp09_vanderpol_tuning/experiment_09_centered_retvar_selected_config.csv
 """
 
 from __future__ import annotations
@@ -102,6 +114,26 @@ def _int_or_zero(value: str | int | float | None) -> int:
     if not math.isfinite(number):
         return 0
     return int(number)
+
+
+def _mean(values: Sequence[float]) -> float:
+    return float(sum(values) / len(values)) if values else math.nan
+
+
+def _sample_std(values: Sequence[float]) -> float:
+    if len(values) < 2:
+        return 0.0
+    mean_value = _mean(values)
+    return math.sqrt(
+        sum((value - mean_value) ** 2 for value in values)
+        / (len(values) - 1)
+    )
+
+
+def _standard_error(values: Sequence[float]) -> float:
+    if not values:
+        return math.nan
+    return _sample_std(values) / math.sqrt(len(values))
 
 
 def parse_args() -> argparse.Namespace:
@@ -386,6 +418,303 @@ def select_best_configs(output_dir: Path, selection_horizons: Sequence[str]) -> 
         _write_csv(output_dir / "experiment_09_top_selected_config_summary.csv", top_summary)
 
 
+def select_centered_retained_variation(
+    output_dir: Path,
+    selection_horizons: Sequence[str],
+) -> None:
+    """Select a non-collapsed model using centered prediction and retained variation.
+
+    The legacy ranking based on uncentered relative association error is left
+    untouched. This routine uses raw per-seed multi-step R^2 values to compute
+
+        centered_error(seed) = mean_h (1 - R_h^2)
+
+    over the requested selection horizons. It then forms a one-standard-error
+    set around the configuration with the lowest mean centered error.
+
+    Among configurations inside that set, the primary tie-breaker is the
+    held-out normalized association variation from the one-step summary.
+    Normalized effective rank is secondary, and mean centered error is tertiary.
+    """
+    multistep_raw_path = output_dir / "experiment_09_multistep_raw_results.csv"
+    one_step_summary_path = output_dir / "experiment_09_one_step_summary.csv"
+
+    multistep_raw_rows = _read_csv(multistep_raw_path)
+    one_step_rows = _read_csv(one_step_summary_path)
+
+    if not multistep_raw_rows:
+        raise RuntimeError(
+            "Centered/non-collapse selection requires "
+            f"{multistep_raw_path}, but no rows were found."
+        )
+    if not one_step_rows:
+        raise RuntimeError(
+            "Centered/non-collapse selection requires "
+            f"{one_step_summary_path}, but no rows were found."
+        )
+
+    required_retvar_columns = {
+        "target_normalized_association_variation_mean",
+        "target_normalized_association_variation_std",
+        "target_normalized_association_effective_rank_mean",
+        "target_normalized_association_effective_rank_std",
+        "target_association_effective_rank_mean",
+        "target_association_effective_rank_std",
+    }
+    missing_columns = sorted(
+        column
+        for column in required_retvar_columns
+        if column not in one_step_rows[0]
+    )
+    if missing_columns:
+        raise RuntimeError(
+            "The one-step summary does not contain the retained-variation "
+            "diagnostics required by the centered/non-collapse selector. "
+            "Rerun Experiment 09 with the updated "
+            "experiment_09_vanderpol_sensitivity.py. Missing columns: "
+            + ", ".join(missing_columns)
+        )
+
+    wanted_horizons = {
+        _int_or_zero(value)
+        for value in selection_horizons
+    }
+    if not wanted_horizons or 0 in wanted_horizons:
+        raise ValueError(
+            "selection_horizons must contain positive integer horizons."
+        )
+
+    per_seed_horizon_r2: dict[
+        tuple[ConfigKey, int],
+        dict[int, float],
+    ] = defaultdict(dict)
+
+    for row in multistep_raw_rows:
+        horizon = _int_or_zero(_cell(row, "horizon"))
+        if horizon not in wanted_horizons:
+            continue
+
+        key = ConfigKey(
+            n_clusters=_int_or_zero(_cell(row, "n_clusters")),
+            omega=_float_or_nan(_cell(row, "omega")),
+        )
+        seed = _int_or_zero(_cell(row, "seed"))
+        r2 = _float_or_nan(_cell(row, "association_r2"))
+
+        if math.isfinite(r2):
+            per_seed_horizon_r2[(key, seed)][horizon] = r2
+
+    centered_errors_by_config: dict[
+        ConfigKey,
+        list[float],
+    ] = defaultdict(list)
+
+    for (key, _seed), horizon_map in per_seed_horizon_r2.items():
+        if set(horizon_map) != wanted_horizons:
+            continue
+
+        centered_error = _mean(
+            [
+                1.0 - horizon_map[horizon]
+                for horizon in sorted(wanted_horizons)
+            ]
+        )
+        centered_errors_by_config[key].append(centered_error)
+
+    if not centered_errors_by_config:
+        raise RuntimeError(
+            "No configuration had complete per-seed R^2 values across all "
+            "requested centered-selection horizons."
+        )
+
+    one_step_by_config: dict[ConfigKey, RawCsvRow] = {}
+    for row in one_step_rows:
+        key = ConfigKey(
+            n_clusters=_int_or_zero(_cell(row, "n_clusters")),
+            omega=_float_or_nan(_cell(row, "omega")),
+        )
+        one_step_by_config[key] = row
+
+    centered_rows: list[CsvRow] = []
+
+    for key, centered_errors in centered_errors_by_config.items():
+        one_step = one_step_by_config.get(key)
+        if one_step is None:
+            continue
+
+        centered_mean = _mean(centered_errors)
+        centered_sd = _sample_std(centered_errors)
+        centered_se = _standard_error(centered_errors)
+
+        rho_var_mean = _float_or_nan(
+            _cell(
+                one_step,
+                "target_normalized_association_variation_mean",
+            )
+        )
+        rho_var_std = _float_or_nan(
+            _cell(
+                one_step,
+                "target_normalized_association_variation_std",
+            )
+        )
+        effective_rank_mean = _float_or_nan(
+            _cell(
+                one_step,
+                "target_association_effective_rank_mean",
+            )
+        )
+        effective_rank_std = _float_or_nan(
+            _cell(
+                one_step,
+                "target_association_effective_rank_std",
+            )
+        )
+        rho_rank_mean = _float_or_nan(
+            _cell(
+                one_step,
+                "target_normalized_association_effective_rank_mean",
+            )
+        )
+        rho_rank_std = _float_or_nan(
+            _cell(
+                one_step,
+                "target_normalized_association_effective_rank_std",
+            )
+        )
+
+        centered_rows.append(
+            {
+                "centered_rank": 0,
+                "n_clusters": key.n_clusters,
+                "omega": key.omega,
+                "selection_horizons": " ".join(
+                    str(horizon)
+                    for horizon in sorted(wanted_horizons)
+                ),
+                "n_runs": len(centered_errors),
+                "mean_centered_error": centered_mean,
+                "mean_multihorizon_r2": 1.0 - centered_mean,
+                "centered_error_sd": centered_sd,
+                "centered_error_se": centered_se,
+                "target_normalized_association_variation_mean": rho_var_mean,
+                "target_normalized_association_variation_std": rho_var_std,
+                "target_association_effective_rank_mean": effective_rank_mean,
+                "target_association_effective_rank_std": effective_rank_std,
+                "target_normalized_association_effective_rank_mean": rho_rank_mean,
+                "target_normalized_association_effective_rank_std": rho_rank_std,
+                "inside_centered_one_se_set": 0,
+                "selected_by_centered_retvar_rule": 0,
+            }
+        )
+
+    if not centered_rows:
+        raise RuntimeError(
+            "No centered-selection rows could be matched to the one-step "
+            "retained-variation summary."
+        )
+
+    centered_rows.sort(
+        key=lambda row: float(row["mean_centered_error"])
+    )
+
+    best_mean = float(centered_rows[0]["mean_centered_error"])
+    best_se = float(centered_rows[0]["centered_error_se"])
+    one_se_limit = best_mean + best_se
+
+    for index, row in enumerate(centered_rows, start=1):
+        row["centered_rank"] = index
+        row["centered_best_mean_error"] = best_mean
+        row["centered_best_standard_error"] = best_se
+        row["centered_one_se_limit"] = one_se_limit
+        row["inside_centered_one_se_set"] = int(
+            float(row["mean_centered_error"]) <= one_se_limit
+        )
+
+    finalists = [
+        dict(row)
+        for row in centered_rows
+        if int(row["inside_centered_one_se_set"]) == 1
+    ]
+
+    def _selection_sort_key(row: CsvRow) -> tuple[float, float, float, int, float]:
+        rho_var = float(
+            row["target_normalized_association_variation_mean"]
+        )
+        rho_rank = float(
+            row["target_normalized_association_effective_rank_mean"]
+        )
+        centered_error = float(row["mean_centered_error"])
+
+        if not math.isfinite(rho_var):
+            rho_var = -math.inf
+        if not math.isfinite(rho_rank):
+            rho_rank = -math.inf
+
+        return (
+            -rho_var,
+            -rho_rank,
+            centered_error,
+            int(row["n_clusters"]),
+            float(row["omega"]),
+        )
+
+    finalists.sort(key=_selection_sort_key)
+
+    if not finalists:
+        raise RuntimeError(
+            "Centered one-SE set was unexpectedly empty."
+        )
+
+    selected_key = ConfigKey(
+        n_clusters=int(finalists[0]["n_clusters"]),
+        omega=float(finalists[0]["omega"]),
+    )
+
+    for row in centered_rows:
+        key = ConfigKey(
+            n_clusters=int(row["n_clusters"]),
+            omega=float(row["omega"]),
+        )
+        row["selected_by_centered_retvar_rule"] = int(
+            key == selected_key
+        )
+
+    finalists = [
+        dict(row)
+        for row in centered_rows
+        if int(row["inside_centered_one_se_set"]) == 1
+    ]
+    finalists.sort(key=_selection_sort_key)
+
+    for index, row in enumerate(finalists, start=1):
+        row["retained_variation_rank_within_one_se"] = index
+
+    selected_rows = [
+        dict(row)
+        for row in centered_rows
+        if int(row["selected_by_centered_retvar_rule"]) == 1
+    ]
+    if len(selected_rows) != 1:
+        raise RuntimeError(
+            "Expected exactly one centered/retained-variation selected "
+            f"configuration, found {len(selected_rows)}."
+        )
+
+    _write_csv(
+        output_dir / "experiment_09_centered_one_se_ranking.csv",
+        centered_rows,
+    )
+    _write_csv(
+        output_dir / "experiment_09_centered_one_se_finalists.csv",
+        finalists,
+    )
+    _write_csv(
+        output_dir / "experiment_09_centered_retvar_selected_config.csv",
+        selected_rows,
+    )
+
+
 def make_zip(output_dir: Path, zip_name: str) -> Path:
     zip_base = output_dir.parent / zip_name
     zip_path = Path(str(zip_base) + ".zip")
@@ -435,14 +764,30 @@ def main() -> None:
             f"{output_dir}"
         )
 
-    select_best_configs(output_dir, selection_horizons=[str(v) for v in args.selection_horizons])
+    selection_horizons = [str(v) for v in args.selection_horizons]
+
+    # Preserve the original uncentered-error ranking for provenance.
+    select_best_configs(
+        output_dir,
+        selection_horizons=selection_horizons,
+    )
+
+    # Add the centered one-SE / retained-variation selector.
+    select_centered_retained_variation(
+        output_dir,
+        selection_horizons=selection_horizons,
+    )
+
     zip_path = make_zip(output_dir, zip_name=str(args.zip_name))
 
     print("\nFinished Van der Pol tuning.")
     print(f"Output directory: {output_dir.resolve()}")
-    print(f"Selected config CSV: {(output_dir / 'experiment_09_selected_config_by_mean_horizon.csv').resolve()}")
+    print(f"Legacy selected config CSV: {(output_dir / 'experiment_09_selected_config_by_mean_horizon.csv').resolve()}")
     print(f"Best by horizon CSV: {(output_dir / 'experiment_09_best_by_horizon.csv').resolve()}")
-    print(f"Top selected summary CSV: {(output_dir / 'experiment_09_top_selected_config_summary.csv').resolve()}")
+    print(f"Legacy top selected summary CSV: {(output_dir / 'experiment_09_top_selected_config_summary.csv').resolve()}")
+    print(f"Centered one-SE ranking CSV: {(output_dir / 'experiment_09_centered_one_se_ranking.csv').resolve()}")
+    print(f"Centered one-SE finalists CSV: {(output_dir / 'experiment_09_centered_one_se_finalists.csv').resolve()}")
+    print(f"Centered/retained-variation selected config CSV: {(output_dir / 'experiment_09_centered_retvar_selected_config.csv').resolve()}")
     print(f"Created ZIP: {zip_path.resolve()}")
     print("Upload the ZIP for manuscript updating.")
 

@@ -14,9 +14,10 @@ abstraction itself for Van der Pol by sweeping:
 For each configuration and seed, the script reports:
 
 1. one-step held-out closure error and association R^2;
-2. raw-matrix multi-step association errors at requested horizons;
-3. simplex violation of raw rollouts;
-4. basic spectral and matrix diagnostics.
+2. held-out target-association retained variation and effective rank;
+3. raw-matrix multi-step association errors at requested horizons;
+4. simplex violation of raw rollouts;
+5. basic spectral and matrix diagnostics.
 
 Expected local files
 --------------------
@@ -304,7 +305,19 @@ def _summarize_one_step(rows: Sequence[CsvRow]) -> list[CsvRow]:
         test_errs = [float(row["test_closure_error"]) for row in group]
         test_r2s = [float(row["test_association_r2"]) for row in group]
         train_errs = [float(row["train_closure_error"]) for row in group]
-        viols = [float(row["raw_predicted_simplex_violation"] ) for row in group]
+        target_variations = [
+            float(row["target_association_variation"]) for row in group
+        ]
+        target_normalized_variations = [
+            float(row["target_normalized_association_variation"]) for row in group
+        ]
+        target_effective_ranks = [
+            float(row["target_association_effective_rank"]) for row in group
+        ]
+        target_normalized_effective_ranks = [
+            float(row["target_normalized_association_effective_rank"]) for row in group
+        ]
+        viols = [float(row["raw_predicted_simplex_violation"]) for row in group]
         summary.append(
             {
                 "n_clusters": n_clusters,
@@ -319,6 +332,26 @@ def _summarize_one_step(rows: Sequence[CsvRow]) -> list[CsvRow]:
                 "test_association_r2_mean": _mean(test_r2s),
                 "test_association_r2_std": _std(test_r2s),
                 "test_association_r2_min": min(test_r2s),
+                "target_association_variation_mean": _mean(target_variations),
+                "target_association_variation_std": _std(target_variations),
+                "target_normalized_association_variation_mean": _mean(
+                    target_normalized_variations
+                ),
+                "target_normalized_association_variation_std": _std(
+                    target_normalized_variations
+                ),
+                "target_association_effective_rank_mean": _mean(
+                    target_effective_ranks
+                ),
+                "target_association_effective_rank_std": _std(
+                    target_effective_ranks
+                ),
+                "target_normalized_association_effective_rank_mean": _mean(
+                    target_normalized_effective_ranks
+                ),
+                "target_normalized_association_effective_rank_std": _std(
+                    target_normalized_effective_ranks
+                ),
                 "raw_predicted_simplex_violation_mean": _mean(viols),
                 "raw_predicted_simplex_violation_max": max(viols),
             }
@@ -450,7 +483,24 @@ def main() -> None:
                             "train_association_r2": float(fit.association_r2),
                             "test_closure_error": float(eval_result.closure_error),
                             "test_association_r2": float(eval_result.association_r2),
-                            "raw_predicted_simplex_violation": float(eval_result.simplex_violation_raw),
+                            "target_association_variation": float(
+                                eval_result.target_association_variation
+                            ),
+                            "target_max_variation_given_mean": float(
+                                eval_result.target_max_variation_given_mean
+                            ),
+                            "target_normalized_association_variation": float(
+                                eval_result.target_normalized_association_variation
+                            ),
+                            "target_association_effective_rank": float(
+                                eval_result.target_association_effective_rank
+                            ),
+                            "target_normalized_association_effective_rank": float(
+                                eval_result.target_normalized_association_effective_rank
+                            ),
+                            "raw_predicted_simplex_violation": float(
+                                eval_result.simplex_violation_raw
+                            ),
                             "projected_stochastic_simplex_violation": float(eval_result.simplex_violation_stochastic)
                             if eval_result.simplex_violation_stochastic is not None
                             else float("nan"),
@@ -488,6 +538,8 @@ def main() -> None:
                     print(
                         f"OK: test_err={float(eval_result.closure_error):.6g}, "
                         f"test_R2={float(eval_result.association_r2):.6g}, "
+                        f"rho_var={float(eval_result.target_normalized_association_variation):.6g}, "
+                        f"rho_rank={float(eval_result.target_normalized_association_effective_rank):.6g}, "
                         f"fit={fit_seconds:.2f}s, eval={eval_seconds:.2f}s"
                     )
                 except Exception as exc:  # noqa: BLE001 - experiments should continue after one failed grid point.
@@ -561,6 +613,8 @@ def main() -> None:
                 f"  C={int(row['n_clusters']):>2}, omega={float(row['omega']):>5g}: "
                 f"test_err={float(row['test_closure_error_mean']):.6g} +/- {float(row['test_closure_error_std']):.3g}, "
                 f"R2={float(row['test_association_r2_mean']):.6g}, "
+                f"rho_var={float(row['target_normalized_association_variation_mean']):.6g}, "
+                f"rho_rank={float(row['target_normalized_association_effective_rank_mean']):.6g}, "
                 f"simplex_max={float(row['raw_predicted_simplex_violation_max']):.3g}"
             )
 

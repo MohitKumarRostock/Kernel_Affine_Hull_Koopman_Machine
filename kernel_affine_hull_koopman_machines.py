@@ -662,12 +662,18 @@ class KAHKMFitResult:
 
 @dataclass(frozen=True)
 class KAHKMEvaluationResult:
-    """Held-out closure diagnostics."""
+    """Held-out closure and target-variation diagnostics."""
 
     closure_error: float
     association_r2: float
     simplex_violation_raw: float
     simplex_violation_stochastic: float | None
+
+    target_association_variation: float
+    target_max_variation_given_mean: float
+    target_normalized_association_variation: float
+    target_association_effective_rank: float
+    target_normalized_association_effective_rank: float
 
 
 # -----------------------------------------------------------------------------
@@ -708,6 +714,119 @@ def _association_r2(pred: np.ndarray, target: np.ndarray) -> float:
         return float("nan")
     return 1.0 - residual_ss / total_ss
 
+def association_variation_diagnostics(
+    Phi: np.ndarray,
+    eps: float = 1e-12,
+) -> dict[str, float]:
+    """Return retained-variation diagnostics for simplex-valued associations.
+
+    Parameters
+    ----------
+    Phi
+        Association matrix shaped (C, N), with one simplex-valued
+        association vector per column.
+    eps
+        Numerical threshold for detecting effectively zero total variation.
+
+    Returns
+    -------
+    dict[str, float]
+        association_variation
+            Trace of the empirical covariance of the association vectors.
+
+        max_variation_given_mean
+            Maximum possible total variation for simplex-valued vectors
+            having the same empirical mean.
+
+        normalized_association_variation
+            association_variation / max_variation_given_mean.
+
+        association_effective_rank
+            Entropy effective rank of the centered association covariance.
+
+        normalized_association_effective_rank
+            Effective rank divided by C - 1.
+    """
+    Phi_arr = np.asarray(Phi, dtype=np.float64)
+
+    if Phi_arr.ndim != 2:
+        raise ValueError("Phi must be a 2D array shaped (C, N).")
+
+    n_regimes, n_samples = Phi_arr.shape
+
+    if n_regimes < 2:
+        raise ValueError("Phi must contain at least two association coordinates.")
+
+    if n_samples < 1:
+        raise ValueError("Phi must contain at least one sample.")
+
+    if not np.all(np.isfinite(Phi_arr)):
+        raise ValueError("Phi must contain only finite values.")
+
+    mean_phi = Phi_arr.mean(axis=1, keepdims=True)
+    centered = Phi_arr - mean_phi
+
+    covariance = (centered @ centered.T) / float(n_samples)
+
+    total_variation = float(np.trace(covariance))
+
+    mean_vector = mean_phi[:, 0]
+    max_variation_given_mean = float(
+        max(0.0, 1.0 - np.dot(mean_vector, mean_vector))
+    )
+
+    if max_variation_given_mean <= eps:
+        normalized_variation = 0.0
+    else:
+        normalized_variation = (
+            total_variation / max_variation_given_mean
+        )
+
+    eigvals = np.linalg.eigvalsh(covariance)
+    eigvals = np.maximum(eigvals, 0.0)
+
+    if total_variation <= eps:
+        effective_rank = 0.0
+        normalized_effective_rank = 0.0
+    else:
+        max_eig = float(np.max(eigvals))
+
+        eig_tol = (
+            np.finfo(np.float64).eps
+            * max(n_regimes, 1)
+            * max_eig
+        )
+
+        positive = eigvals[eigvals > eig_tol]
+
+        if positive.size == 0:
+            effective_rank = 0.0
+            normalized_effective_rank = 0.0
+        else:
+            probabilities = positive / np.sum(positive)
+
+            entropy = -float(
+                np.sum(
+                    probabilities * np.log(probabilities)
+                )
+            )
+
+            effective_rank = float(np.exp(entropy))
+
+            normalized_effective_rank = (
+                effective_rank / float(n_regimes - 1)
+            )
+
+    return {
+        "association_variation": total_variation,
+        "max_variation_given_mean": max_variation_given_mean,
+        "normalized_association_variation":
+            float(normalized_variation),
+        "association_effective_rank":
+            float(effective_rank),
+        "normalized_association_effective_rank":
+            float(normalized_effective_rank),
+    }
 
 def simplex_violation(P: np.ndarray) -> float:
     """Return a scalar violation of nonnegativity and unit column sums."""
@@ -1194,18 +1313,35 @@ def evaluate_kahkm(
     )
     pred_raw = fit.B.T @ Phi
     raw_violation = simplex_violation(pred_raw)
-
+    target_variation = association_variation_diagnostics(Chi)
     stochastic_violation = None
     if fit.B_stochastic is not None:
         pred_stoch = fit.B_stochastic.T @ Phi
         stochastic_violation = simplex_violation(pred_stoch)
+
 
     return KAHKMEvaluationResult(
         closure_error=_relative_closure_error(pred_raw, Chi),
         association_r2=_association_r2(pred_raw, Chi),
         simplex_violation_raw=raw_violation,
         simplex_violation_stochastic=stochastic_violation,
+        target_association_variation=target_variation[
+            "association_variation"
+        ],
+        target_max_variation_given_mean=target_variation[
+            "max_variation_given_mean"
+        ],
+        target_normalized_association_variation=target_variation[
+            "normalized_association_variation"
+        ],
+        target_association_effective_rank=target_variation[
+            "association_effective_rank"
+        ],
+        target_normalized_association_effective_rank=target_variation[
+            "normalized_association_effective_rank"
+        ],
     )
+
 
 
 def kahm_koopman_kernel(Psi_A: np.ndarray, Psi_B: np.ndarray) -> np.ndarray:
@@ -1294,11 +1430,36 @@ def _demo() -> None:
     print(f"Train closure error: {fit.train_closure_error:.6g}")
     print(f"Train association R^2: {fit.association_r2:.6g}")
     print(f"NLMS history: {[round(v, 6) for v in fit.nlms_history]}")
+
     print(f"Test closure error: {test.closure_error:.6g}")
     print(f"Test association R^2: {test.association_r2:.6g}")
-    print(f"Raw predicted-simplex violation: {test.simplex_violation_raw:.6g}")
+
+    print(
+    f"Test target association variation: "
+    f"{test.target_association_variation:.6g}")
+    print(
+    f"Test normalized association variation: "
+    f"{test.target_normalized_association_variation:.6g}")
+    print(
+    f"Test target association effective rank: "
+    f"{test.target_association_effective_rank:.6g}")
+    print(
+    f"Test normalized association effective rank: "
+    f"{test.target_normalized_association_effective_rank:.6g}")
+    print(
+    f"Test max variation given mean: "
+    f"{test.target_max_variation_given_mean:.6g}")
+
+    print(
+    f"Raw predicted-simplex violation: "
+    f"{test.simplex_violation_raw:.6g}")
+
     if test.simplex_violation_stochastic is not None:
-        print(f"Projected stochastic violation: {test.simplex_violation_stochastic:.6g}")
+        print(
+        f"Projected stochastic violation: "
+        f"{test.simplex_violation_stochastic:.6g}")
+
+
 
 
 if __name__ == "__main__":

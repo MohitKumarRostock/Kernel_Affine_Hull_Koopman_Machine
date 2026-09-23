@@ -6,6 +6,8 @@ import ast
 import json
 import subprocess
 import sys
+
+sys.dont_write_bytecode = True
 from pathlib import Path
 from typing import Any, Iterable
 

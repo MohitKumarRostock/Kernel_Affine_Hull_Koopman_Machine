@@ -14,8 +14,8 @@ Purpose
 This runner reruns:
     experiment_15_external_koopman_baselines.py
 
-with the tuned/noise-aware Van der Pol KAHKM configuration:
-    C = 10, omega = 0.25
+with the centered noise-aware Van der Pol KAHKM configuration:
+    C = 25, omega = 4
 
 The original Experiment 15 file is NOT modified.
 
@@ -32,8 +32,12 @@ Dry run:
     python3 run_exp15_vanderpol_tuned_external_baselines_fixed.py --dry-run
 
 Outputs:
-- kahkm_exp15_vanderpol_tuned_external_baselines/
-- kahkm_exp15_vanderpol_tuned_external_baselines_results.zip
+- kahkm_exp15_vanderpol_retvar_external_baselines/
+- experiment_15_tuned_vanderpol_table_values.csv
+- experiment_15_tuned_vanderpol_method_ranking.csv
+  (legacy uncentered-error ranking, preserved for provenance)
+- experiment_15_tuned_vanderpol_centered_method_ranking.csv
+- kahkm_exp15_vanderpol_retvar_external_baselines_results.zip
 """
 
 from __future__ import annotations
@@ -147,8 +151,8 @@ def parse_args() -> RunnerConfig:
     )
     parser.add_argument("--python", default=sys.executable)
     parser.add_argument("--script", default="experiment_15_external_koopman_baselines.py")
-    parser.add_argument("--output-dir", default="kahkm_exp15_vanderpol_tuned_external_baselines")
-    parser.add_argument("--zip-name", default="kahkm_exp15_vanderpol_tuned_external_baselines_results")
+    parser.add_argument("--output-dir", default="kahkm_exp15_vanderpol_retvar_external_baselines")
+    parser.add_argument("--zip-name", default="kahkm_exp15_vanderpol_retvar_external_baselines_results")
 
     parser.add_argument("--systems", nargs="+", default=["vanderpol"])
     parser.add_argument("--train-seeds", nargs="+", default=["0", "1", "2"])
@@ -167,8 +171,8 @@ def parse_args() -> RunnerConfig:
     parser.add_argument("--max-train-per-cluster", type=int, default=0)
     parser.add_argument("--ridge", type=float, default=1e-8)
 
-    parser.add_argument("--vanderpol-c", type=int, default=10)
-    parser.add_argument("--vanderpol-omega", type=float, default=0.25)
+    parser.add_argument("--vanderpol-c", type=int, default=25)
+    parser.add_argument("--vanderpol-omega", type=float, default=4.0)
 
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--skip-existing", action="store_true")
@@ -432,6 +436,63 @@ def summarize_for_manuscript(output_dir: Path) -> None:
 
     _write_csv(output_dir / "experiment_15_tuned_vanderpol_method_ranking.csv", ranking_rows)
 
+    # Centered ranking: higher association R^2 is better. This avoids ranking
+    # methods by an uncentered target norm that can favor low-contrast
+    # association representations. The legacy relative-error ranking above is
+    # intentionally preserved for provenance.
+    centered_ranking_rows: list[CsvRow] = []
+    for horizon in (1, 10, 50, 100, 200):
+        rows_for_h = [
+            row
+            for row in summary_rows
+            if _cell(row, "system") == "vanderpol"
+            and _int_or_zero(_cell(row, "horizon")) == horizon
+        ]
+
+        rows_for_h = [
+            row
+            for row in rows_for_h
+            if math.isfinite(
+                _float_or_nan(_cell(row, "association_r2_mean"))
+            )
+        ]
+
+        rows_for_h.sort(
+            key=lambda row: _float_or_nan(
+                _cell(row, "association_r2_mean")
+            ),
+            reverse=True,
+        )
+
+        for rank, row in enumerate(rows_for_h, start=1):
+            r2_mean = _float_or_nan(
+                _cell(row, "association_r2_mean")
+            )
+            centered_ranking_rows.append(
+                {
+                    "horizon": horizon,
+                    "rank": rank,
+                    "method": _cell(row, "method"),
+                    "association_r2_mean": r2_mean,
+                    "association_r2_std": _float_or_nan(
+                        _cell(row, "association_r2_std")
+                    ),
+                    "centered_error_mean": 1.0 - r2_mean,
+                    "relative_association_error_mean": _float_or_nan(
+                        _cell(row, "relative_association_error_mean")
+                    ),
+                    "relative_association_error_std": _float_or_nan(
+                        _cell(row, "relative_association_error_std")
+                    ),
+                }
+            )
+
+    _write_csv(
+        output_dir
+        / "experiment_15_tuned_vanderpol_centered_method_ranking.csv",
+        centered_ranking_rows,
+    )
+
     fit_summary: list[CsvRow] = []
     for row in fit_rows:
         if _cell(row, "system") != "vanderpol":
@@ -522,8 +583,8 @@ def main() -> None:
     runner_metadata = {
         "runner": "run_exp15_vanderpol_tuned_external_baselines_fixed.py",
         "purpose": (
-            "Rerun external Koopman baselines with the tuned/noise-aware Van der Pol "
-            "KAHKM configuration C=10, omega=0.25."
+            "Rerun external Koopman baselines with the centered noise-aware "
+            "Van der Pol KAHKM configuration C=25, omega=4."
         ),
         "runner_config": asdict(config),
         "project_root": str(project_root),
@@ -538,7 +599,8 @@ def main() -> None:
     print("\nFinished tuned Van der Pol external-baseline run.")
     print(f"Output directory: {output_dir}")
     print(f"Table values: {output_dir / 'experiment_15_tuned_vanderpol_table_values.csv'}")
-    print(f"Method ranking: {output_dir / 'experiment_15_tuned_vanderpol_method_ranking.csv'}")
+    print(f"Legacy method ranking: {output_dir / 'experiment_15_tuned_vanderpol_method_ranking.csv'}")
+    print(f"Centered method ranking: {output_dir / 'experiment_15_tuned_vanderpol_centered_method_ranking.csv'}")
     print(f"Created ZIP: {zip_path.resolve()}")
     print("Upload the ZIP for manuscript updating.")
 

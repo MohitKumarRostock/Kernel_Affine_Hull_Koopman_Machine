@@ -1,7 +1,6 @@
 {
   "result_id": "R04",
-  "description": "Expanded clean-data selection diagnostics",
-  "aggregation_mode": "horizon-mean",
+  "description": "Expanded clean-data selection diagnostics with centered retained-variation Van der Pol selection",
   "seeds": [
     0,
     1,
@@ -14,13 +13,30 @@
     100,
     200
   ],
-  "mean_definition": "For each configuration, overline_E is the arithmetic mean of the five horizon-specific seed means.",
-  "uncertainty_definition": "At each horizon, uncertainty is the archived standard deviation across seeds 0,1,2. For overline_E, the displayed uncertainty is the arithmetic mean of those five horizon-specific standard deviations.",
-  "duffing_raw": "kahkm_exp_duffing_tuning/experiment_duffing_tuning_raw.csv",
-  "vanderpol_raw": "kahkm_exp09_vanderpol_tuning/experiment_09_multistep_raw_results.csv",
-  "duffing_generator": "step_02_generate_table3_duffing.py",
-  "vanderpol_generator": "step_03_generate_table4_vanderpol.py",
-  "git_commit": "b19aa141823e0b4eab716bbcc52863ae7faf06f0",
+  "panels": {
+    "duffing": {
+      "selection_rule": "rank by mean relative association error over h={1,10,50,100,200}",
+      "aggregation_mode": "horizon-mean",
+      "uncertainty_definition": "At each horizon, archived standard deviation across seeds 0,1,2; for overline_E, displayed uncertainty is the arithmetic mean of the five horizon-specific standard deviations.",
+      "raw": "kahkm_exp_duffing_tuning/experiment_duffing_tuning_raw.csv",
+      "generator": "step_02_generate_table3_duffing.py",
+      "rows": 6
+    },
+    "vanderpol": {
+      "selection_rule": "rank configurations by mean centered error mean_h(1-R_h^2); form one-SE set using the SE of the minimum-error configuration; within the set choose largest normalized retained variation rho_var with normalized effective rank rho_rank as secondary tie-break",
+      "uncertainty_definition": "Centered error is mean across seeds 0,1,2 with standard error SD/sqrt(3); retained-variation and effective-rank diagnostics report archived across-seed mean and SD.",
+      "raw": "kahkm_exp09_retvar_fullgrid_selection/experiment_09_multistep_raw_results.csv",
+      "experiment_output_dir": "kahkm_exp09_retvar_fullgrid_selection",
+      "generator": "step_03_generate_table4_vanderpol.py",
+      "one_se_finalists": 3,
+      "selected_C": 25,
+      "selected_omega": 6.0,
+      "centered_best_mean_error": 0.11151195624733601,
+      "centered_best_standard_error": 0.0033955645044961634,
+      "centered_one_se_limit": 0.11490752075183217
+    }
+  },
+  "git_commit": "ebb47a5722a24547d11c484332adda3266501e50",
   "outputs": [
     "reproduction/generated/selection_table/selection_table_values.csv",
     "reproduction/generated/selection_table/selection_table_values.tex"

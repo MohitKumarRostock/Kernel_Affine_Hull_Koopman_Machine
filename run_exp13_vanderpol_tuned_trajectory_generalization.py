@@ -10,12 +10,13 @@ experiment after the noise-aware Van der Pol tuning.
 It compares three KAHKM configurations by default:
 
 1. robust_tuned:
-      C = 10, omega = 0.25
-   selected by the noise-aware Van der Pol tuning.
+      C = 25, omega = 4
+   selected by the centered noise-aware Van der Pol tuning.
 
 2. clean_tuned:
-      C = 15, omega = 0.5
-   selected by the clean multi-horizon Van der Pol tuning.
+      C = 25, omega = 6
+   selected by the centered multi-horizon Van der Pol tuning with
+   retained-variation validation.
 
 3. old_default:
       C = 20, omega = 4.0
@@ -124,8 +125,8 @@ class ExperimentConfig:
 
 
 AVAILABLE_CONFIGS: dict[str, KAHKMConfig] = {
-    "robust_tuned": KAHKMConfig("robust_tuned", n_clusters=10, omega=0.25),
-    "clean_tuned": KAHKMConfig("clean_tuned", n_clusters=15, omega=0.5),
+    "robust_tuned": KAHKMConfig("robust_tuned", n_clusters=25, omega=4.0),
+    "clean_tuned": KAHKMConfig("clean_tuned", n_clusters=25, omega=6.0),
     "old_default": KAHKMConfig("old_default", n_clusters=20, omega=4.0),
 }
 

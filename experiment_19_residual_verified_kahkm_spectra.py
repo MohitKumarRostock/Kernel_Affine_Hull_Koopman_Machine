@@ -1,54 +1,74 @@
 #!/usr/bin/env python3
-"""Experiment 19: residual-verified KAHKM spectra.
+"""Experiment 19: rank-aware, residual-verified KAHKM spectra.
 
 Purpose
 -------
-This script adds an RKHS residual-verification diagnostic for the KAHKM paper.
-It uses the finite-rank KAHM Koopman kernel
+This script implements the manuscript's R3-style RKHS spectral verification
+diagnostic for the finite-rank KAHM Koopman kernel
 
-    k_KAHM(x, x') = Psi(x)^T Psi(x')
+    k_KAHM(x, x') = Psi(x)^T Psi(x').
 
-and evaluates SpecRKHS-style adjoint residuals for candidate KAHKM spectral
-modes. The experiment is designed to be run in the same directory as the
-manuscript experiment scripts, especially:
-
-- kernel_affine_hull_koopman_machines.py
-- parallel_autoencoders.py
-- combine_multiple_autoencoders_extended.py
-
-Optional Acrobot support also uses:
-
-- experiment_18_acrobot_sequential_decision_pylance_clean.py
-
-Main diagnostic
----------------
-For snapshot pairs (x_i, y_i), let
+For snapshot pairs (x_i, y_i), write
 
     Phi = Psi(X)      shape (C, N)
-    Chi = Psi(Y)      shape (C, N)
+    Chi = Psi(Y)      shape (C, N).
 
-For a candidate adjoint eigenpair (lambda, w) in the C-dimensional KAHM
-feature/RKHS coefficient space, the script first represents w by a kernel-section
-combination
+Candidate spectral modes are constructed in the empirically supported
+coefficient subspace.  From the training association matrix Phi_train, compute
 
-    w ~= Phi v,
+    Phi_train = U Sigma V^T
 
-using the minimum-ridge-norm coefficient vector v. It then computes the RKHS
-relative residual
+and retain the left singular vectors whose singular values satisfy
 
-    res*(lambda, v) = ||Chi v - lambda Phi v||_2 / ||Phi v||_2.
+    sigma_j > rank_rtol * sigma_max.
 
-Equivalently, with the finite-rank KAHM Gram matrices
+The resulting basis Q_Phi has shape (C, r_Phi).  For each fitted feature
+operator M (NLMS: M = B^T; ridge-LS: M fitted from Chi_train ~= M Phi_train),
+form the reduced operator
 
-    G = Phi^T Phi,  A = Chi^T Phi,  R = Chi^T Chi,
+    M_red = Q_Phi^T M Q_Phi,
 
-the same residual is
+solve
 
-    res*^2 = v^* (R - lambda A - conj(lambda) A^* + |lambda|^2 G) v
-             / (v^* G v).
+    M_red w_tilde = lambda w_tilde,
 
-The script reports both the direct feature residual and the matrix-formula
-residual when the subsample size is small enough to form G, A, and R.
+and lift the candidate coefficient vector as
+
+    w = Q_Phi w_tilde.
+
+R3 verification
+---------------
+On a held-out spectral subsample, represent the lifted candidate by kernel
+sections using ridge-regularized coefficients
+
+    v_hat = argmin_v ||Phi v - w||_2^2
+                    + representation_ridge ||v||_2^2.
+
+The representation defect is
+
+    eta_rep = ||Phi v_hat - w||_2^2 / ||w||_2^2.
+
+The successor-normalized squared RKHS residual is
+
+    rho(lambda, v_hat)
+        = ||Chi v_hat - lambda Phi v_hat||_2^2
+          / ||Chi v_hat||_2^2.
+
+With
+
+    G = Phi^T Phi,
+    A = Chi^T Phi,
+    R = Chi^T Chi,
+
+the same residual is verified independently by
+
+    rho = v^* (R - lambda A - conj(lambda) A^* + |lambda|^2 G) v
+          / (v^* R v).
+
+The main Experiment 19 CSVs report these rank-aware R3 quantities.  For
+provenance, the script also writes separate legacy CSVs reproducing the
+previous ambient-C eigenvector / source-normalized unsquared residual
+diagnostic.
 
 Recommended full run
 --------------------
@@ -63,7 +83,8 @@ Fast smoke test
 python experiment_19_residual_verified_kahkm_spectra.py \
   --systems duffing --train-seeds 0 --test-seeds 100 \
   --n-steps-train 300 --n-steps-test 200 \
-  --spectral-subsample 120 --duffing-c 5 --nb 30 --nlms-epochs 3
+  --spectral-subsample 120 --duffing-c 5 --nb 30 --nlms-epochs 3 \
+  --output-dir kahkm_exp19_r3_smoke --zip-name kahkm_exp19_r3_smoke_results
 
 Outputs
 -------
@@ -71,9 +92,16 @@ The output directory contains:
 
 - experiment_19_system_summary.csv
 - experiment_19_mode_residuals.csv
+- experiment_19_legacy_ambient_system_summary.csv
+- experiment_19_legacy_ambient_mode_residuals.csv
 - experiment_19_config.json
+- experiment_19_<system>_feature_rank.npz
+- experiment_19_<system>_subsample_indices.npz
 - spectrum scatter plots, if matplotlib is installed and --no-plots is not set
 - a zipped copy of the output directory
+
+The default Van der Pol representation is the centered noise-aware selection
+C=25, omega=4.  Duffing remains C=10, omega=2.
 """
 
 from __future__ import annotations
@@ -152,6 +180,8 @@ class ExperimentArgs:
     n_jobs: int
     max_train_per_cluster: int | None
     ridge: float
+    representation_ridge: float
+    rank_rtol: float
     spectral_subsample: int
     residual_thresholds: tuple[float, ...]
     top_modes: int
@@ -213,14 +243,14 @@ def parse_args() -> ExperimentArgs:
     parser.add_argument("--n-steps-train", type=int, default=1200)
     parser.add_argument("--n-steps-test", type=int, default=800)
 
-    parser.add_argument("--output-dir", default="kahkm_experiment_19_residual_verified_spectra")
-    parser.add_argument("--zip-name", default="kahkm_experiment_19_residual_verified_spectra_results")
+    parser.add_argument("--output-dir", default="kahkm_experiment_19_r3_residual_verified_spectra")
+    parser.add_argument("--zip-name", default="kahkm_experiment_19_r3_residual_verified_spectra_results")
 
     # Tuned manuscript settings.
     parser.add_argument("--duffing-c", type=int, default=10)
     parser.add_argument("--duffing-omega", type=float, default=2.0)
-    parser.add_argument("--vanderpol-c", type=int, default=10)
-    parser.add_argument("--vanderpol-omega", type=float, default=0.25)
+    parser.add_argument("--vanderpol-c", type=int, default=25)
+    parser.add_argument("--vanderpol-omega", type=float, default=4.0)
     parser.add_argument("--acrobot-c", type=int, default=150)
     parser.add_argument("--acrobot-omega", type=float, default=0.5)
 
@@ -235,7 +265,24 @@ def parse_args() -> ExperimentArgs:
     parser.add_argument("--batch-size", type=int, default=256)
     parser.add_argument("--n-jobs", type=int, default=-1)
     parser.add_argument("--max-train-per-cluster", type=int, default=0)
-    parser.add_argument("--ridge", type=float, default=1e-8)
+    parser.add_argument(
+        "--ridge",
+        type=float,
+        default=1e-8,
+        help="Ridge parameter for the comparison ridge-LS feature operator.",
+    )
+    parser.add_argument(
+        "--representation-ridge",
+        type=float,
+        default=1e-8,
+        help="Ridge parameter used to represent lifted spectral candidates by held-out kernel sections.",
+    )
+    parser.add_argument(
+        "--rank-rtol",
+        type=float,
+        default=1e-10,
+        help="Relative SVD threshold for the training-supported feature basis: sigma_j > rank_rtol * sigma_max.",
+    )
 
     parser.add_argument(
         "--spectral-subsample",
@@ -265,6 +312,10 @@ def parse_args() -> ExperimentArgs:
 
     ns = parser.parse_args()
     max_train_per_cluster = int(ns.max_train_per_cluster)
+    if float(ns.representation_ridge) < 0.0:
+        parser.error("--representation-ridge must be nonnegative.")
+    if not (0.0 < float(ns.rank_rtol) < 1.0):
+        parser.error("--rank-rtol must lie strictly between 0 and 1.")
     return ExperimentArgs(
         systems=_parse_system_tuple([str(v) for v in ns.systems]),
         operators=_parse_operator_tuple([str(v) for v in ns.operators]),
@@ -292,6 +343,8 @@ def parse_args() -> ExperimentArgs:
         n_jobs=int(ns.n_jobs),
         max_train_per_cluster=None if max_train_per_cluster <= 0 else max_train_per_cluster,
         ridge=float(ns.ridge),
+        representation_ridge=float(ns.representation_ridge),
+        rank_rtol=float(ns.rank_rtol),
         spectral_subsample=int(ns.spectral_subsample),
         residual_thresholds=_parse_float_tuple([str(v) for v in ns.residual_thresholds]),
         top_modes=int(ns.top_modes),
@@ -453,7 +506,284 @@ def _preimage_coefficients(Phi: FloatArray, w: ComplexArray, ridge: float) -> Co
     return (Phi.T.astype(np.complex128) @ alpha).astype(np.complex128, copy=False)
 
 
-def _mode_residual_rows(
+def _training_feature_basis(
+    Phi_train: FloatArray,
+    *,
+    rank_rtol: float,
+) -> tuple[FloatArray, FloatArray, float]:
+    """Return Q_Phi, singular values, and the explicit numerical-rank threshold.
+
+    The basis is estimated from training associations only.  Phi_train is left
+    uncentered so the constant/simplex direction remains available to the
+    spectral diagnostic.
+    """
+    Phi = np.asarray(Phi_train, dtype=np.float64)
+    if Phi.ndim != 2:
+        raise ValueError(f"Phi_train must be two-dimensional, got shape {Phi.shape}.")
+    if Phi.shape[0] == 0 or Phi.shape[1] == 0:
+        raise ValueError("Phi_train must be nonempty.")
+
+    U, singular_values, _Vh = np.linalg.svd(Phi, full_matrices=False)
+    singular_values = np.asarray(singular_values, dtype=np.float64)
+    if singular_values.size == 0 or not math.isfinite(float(singular_values[0])):
+        raise ValueError("Could not determine a finite singular spectrum for Phi_train.")
+
+    sigma_max = float(singular_values[0])
+    if sigma_max <= 0.0:
+        raise ValueError("Phi_train has zero numerical norm; no spectral coefficient space exists.")
+
+    threshold = float(rank_rtol) * sigma_max
+    rank = int(np.sum(singular_values > threshold))
+    if rank <= 0:
+        raise ValueError(
+            f"Numerical feature rank is zero at rank_rtol={rank_rtol:g}; "
+            f"sigma_max={sigma_max:.6g}."
+        )
+
+    Q_phi = np.asarray(U[:, :rank], dtype=np.float64)
+    return Q_phi, singular_values, threshold
+
+
+def _r3_mode_residual_rows(
+    *,
+    system: SystemName,
+    operator_name: OperatorName,
+    M: FloatArray,
+    Q_phi: FloatArray,
+    Phi_sub: FloatArray,
+    Chi_sub: FloatArray,
+    representation_ridge: float,
+    rank_rtol: float,
+    rank_threshold: float,
+    singular_values: FloatArray,
+    residual_thresholds: tuple[float, ...],
+) -> tuple[list[CsvRow], CsvRow]:
+    """Compute rank-aware manuscript-R3 spectral residual rows.
+
+    Candidates are eigenpairs of Q_phi^T M Q_phi.  Each lifted candidate
+    w = Q_phi w_tilde is represented by held-out kernel sections Phi_sub v,
+    then verified with the successor-normalized squared residual
+
+        rho = ||Chi_sub v - lambda Phi_sub v||^2 / ||Chi_sub v||^2.
+    """
+    M_full = np.asarray(M, dtype=np.float64)
+    Q = np.asarray(Q_phi, dtype=np.float64)
+    Phi = np.asarray(Phi_sub, dtype=np.float64)
+    Chi = np.asarray(Chi_sub, dtype=np.float64)
+
+    c = int(M_full.shape[0])
+    rank = int(Q.shape[1])
+    n_sub = int(Phi.shape[1])
+
+    if M_full.shape != (c, c):
+        raise ValueError(f"M must be square, got {M_full.shape}.")
+    if Q.shape[0] != c:
+        raise ValueError(f"Q_phi shape {Q.shape} is incompatible with M shape {M_full.shape}.")
+    if Phi.shape[0] != c or Chi.shape != Phi.shape:
+        raise ValueError(
+            f"Phi_sub/Chi_sub must both have shape (C, N); got {Phi.shape} and {Chi.shape} for C={c}."
+        )
+
+    M_reduced = np.asarray(Q.T @ M_full @ Q, dtype=np.float64)
+    eigvals, eigvecs = np.linalg.eig(M_reduced.astype(np.complex128))
+
+    # Held-out finite-rank KAHM Gram matrices used to verify the direct R3 formula.
+    G = Phi.T @ Phi
+    A = Chi.T @ Phi
+    R = Chi.T @ Chi
+
+    rows: list[CsvRow] = []
+    rho_values: list[float] = []
+    matrix_rho_values: list[float] = []
+    eta_values: list[float] = []
+    legacy_reduced_values: list[float] = []
+
+    Phi_complex = Phi.astype(np.complex128)
+    Chi_complex = Chi.astype(np.complex128)
+    G_complex = G.astype(np.complex128)
+    A_complex = A.astype(np.complex128)
+    R_complex = R.astype(np.complex128)
+
+    sigma_max = float(singular_values[0]) if singular_values.size else float("nan")
+    sigma_min_retained = (
+        float(singular_values[rank - 1])
+        if singular_values.size >= rank and rank > 0
+        else float("nan")
+    )
+
+    for mode_idx in range(rank):
+        lam = complex(eigvals[mode_idx])
+        w_tilde = eigvecs[:, mode_idx].astype(np.complex128, copy=False)
+        reduced_norm = float(np.linalg.norm(w_tilde))
+        if reduced_norm <= 1e-14 or not math.isfinite(reduced_norm):
+            continue
+        w_tilde = w_tilde / reduced_norm
+
+        w = (Q.astype(np.complex128) @ w_tilde).astype(np.complex128, copy=False)
+        w_norm_sq = float(np.real(np.vdot(w, w)))
+        if w_norm_sq <= 1e-28 or not math.isfinite(w_norm_sq):
+            continue
+
+        v = _preimage_coefficients(Phi, w, ridge=float(representation_ridge))
+        phi_v = (Phi_complex @ v).astype(np.complex128, copy=False)
+        chi_v = (Chi_complex @ v).astype(np.complex128, copy=False)
+
+        rep_residual = phi_v - w
+        eta_rep = float(np.real(np.vdot(rep_residual, rep_residual)) / w_norm_sq)
+
+        spectral_residual = chi_v - lam * phi_v
+        numerator_sq = float(np.real(np.vdot(spectral_residual, spectral_residual)))
+        successor_norm_sq = float(np.real(np.vdot(chi_v, chi_v)))
+        source_norm_sq = float(np.real(np.vdot(phi_v, phi_v)))
+
+        if successor_norm_sq <= 1e-28 or not math.isfinite(successor_norm_sq):
+            rho_feature = float("nan")
+        else:
+            rho_feature = float(max(numerator_sq, 0.0) / successor_norm_sq)
+
+        # Independent matrix-form verification:
+        # ||(Chi-lambda Phi)v||^2 =
+        # v^*(R-lambda A-conj(lambda)A^*+|lambda|^2G)v.
+        v_col = v.reshape(-1, 1)
+        residual_matrix = (
+            R_complex
+            - lam * A_complex
+            - np.conj(lam) * A_complex.conj().T
+            + (abs(lam) ** 2) * G_complex
+        )
+        matrix_numerator = complex((v_col.conj().T @ residual_matrix @ v_col)[0, 0])
+        matrix_successor_denominator = complex((v_col.conj().T @ R_complex @ v_col)[0, 0])
+        if abs(matrix_successor_denominator) <= 1e-28:
+            rho_matrix = float("nan")
+        else:
+            rho_matrix = float(
+                max(float(np.real(matrix_numerator / matrix_successor_denominator)), 0.0)
+            )
+
+        # Same reduced candidate under the previous source-normalized,
+        # unsquared residual.  This is diagnostic only; the exact old ambient-C
+        # procedure is written separately by _legacy_ambient_mode_residual_rows.
+        if source_norm_sq <= 1e-28 or not math.isfinite(source_norm_sq):
+            legacy_source_residual_reduced_candidate = float("nan")
+        else:
+            legacy_source_residual_reduced_candidate = float(
+                math.sqrt(max(numerator_sq, 0.0) / source_norm_sq)
+            )
+
+        rows.append(
+            {
+                "system": system,
+                "operator": operator_name,
+                "mode_index": int(mode_idx),
+                "lambda_real": float(np.real(lam)),
+                "lambda_imag": float(np.imag(lam)),
+                "lambda_abs": float(abs(lam)),
+                "r3_residual_rho": rho_feature,
+                "r3_residual_matrix_formula": rho_matrix,
+                "r3_feature_matrix_formula_abs_diff": (
+                    abs(rho_feature - rho_matrix)
+                    if math.isfinite(rho_feature) and math.isfinite(rho_matrix)
+                    else float("nan")
+                ),
+                "representation_defect_eta": eta_rep,
+                "legacy_source_normalized_residual_reduced_candidate": (
+                    legacy_source_residual_reduced_candidate
+                ),
+                "successor_denominator_norm_sq": successor_norm_sq,
+                "source_denominator_norm_sq": source_norm_sq,
+                "representation_ridge": float(representation_ridge),
+                "rank_rtol": float(rank_rtol),
+                "rank_threshold": float(rank_threshold),
+                "sigma_max": sigma_max,
+                "sigma_min_retained": sigma_min_retained,
+                "effective_feature_rank": rank,
+                "ambient_num_regimes": c,
+                "subsample_size": n_sub,
+            }
+        )
+
+        if math.isfinite(rho_feature):
+            rho_values.append(rho_feature)
+        if math.isfinite(rho_matrix):
+            matrix_rho_values.append(rho_matrix)
+        if math.isfinite(eta_rep):
+            eta_values.append(eta_rep)
+        if math.isfinite(legacy_source_residual_reduced_candidate):
+            legacy_reduced_values.append(legacy_source_residual_reduced_candidate)
+
+    rows.sort(
+        key=lambda row: (
+            not math.isfinite(float(row["r3_residual_rho"])),
+            float(row["r3_residual_rho"]),
+        )
+    )
+    for rank_index, row in enumerate(rows, start=1):
+        row["rank_by_r3_residual"] = int(rank_index)
+
+    rho_arr = np.asarray(rho_values, dtype=np.float64)
+    matrix_rho_arr = np.asarray(matrix_rho_values, dtype=np.float64)
+    eta_arr = np.asarray(eta_values, dtype=np.float64)
+    legacy_arr = np.asarray(legacy_reduced_values, dtype=np.float64)
+    eig_abs = np.abs(eigvals)
+
+    summary: CsvRow = {
+        "system": system,
+        "operator": operator_name,
+        "ambient_num_regimes": c,
+        "effective_feature_rank": rank,
+        "rank_rtol": float(rank_rtol),
+        "rank_threshold": float(rank_threshold),
+        "sigma_max": sigma_max,
+        "sigma_min_retained": sigma_min_retained,
+        "subsample_size": n_sub,
+        "num_valid_r3_modes": int(rho_arr.size),
+        "spectral_radius": float(np.max(eig_abs)) if eig_abs.size else float("nan"),
+        "reduced_spectral_radius": float(np.max(eig_abs)) if eig_abs.size else float("nan"),
+        "max_abs_imag_lambda": (
+            float(np.max(np.abs(np.imag(eigvals)))) if eigvals.size else float("nan")
+        ),
+        "min_r3_residual_rho": float(np.min(rho_arr)) if rho_arr.size else float("nan"),
+        "median_r3_residual_rho": (
+            float(np.median(rho_arr)) if rho_arr.size else float("nan")
+        ),
+        "mean_r3_residual_rho": float(np.mean(rho_arr)) if rho_arr.size else float("nan"),
+        "q25_r3_residual_rho": (
+            float(np.quantile(rho_arr, 0.25)) if rho_arr.size else float("nan")
+        ),
+        "q75_r3_residual_rho": (
+            float(np.quantile(rho_arr, 0.75)) if rho_arr.size else float("nan")
+        ),
+        "max_r3_residual_rho": float(np.max(rho_arr)) if rho_arr.size else float("nan"),
+        "median_representation_defect_eta": (
+            float(np.median(eta_arr)) if eta_arr.size else float("nan")
+        ),
+        "max_representation_defect_eta": (
+            float(np.max(eta_arr)) if eta_arr.size else float("nan")
+        ),
+        "median_r3_matrix_formula_rho": (
+            float(np.median(matrix_rho_arr)) if matrix_rho_arr.size else float("nan")
+        ),
+        "max_r3_feature_matrix_formula_abs_diff": (
+            max(
+                (
+                    float(row["r3_feature_matrix_formula_abs_diff"])
+                    for row in rows
+                    if math.isfinite(float(row["r3_feature_matrix_formula_abs_diff"]))
+                ),
+                default=float("nan"),
+            )
+        ),
+        "median_legacy_source_residual_reduced_candidate": (
+            float(np.median(legacy_arr)) if legacy_arr.size else float("nan")
+        ),
+    }
+    for threshold in residual_thresholds:
+        key = f"modes_with_r3_rho_le_{threshold:g}"
+        summary[key] = int(np.sum(rho_arr <= float(threshold))) if rho_arr.size else 0
+    return rows, summary
+
+
+def _legacy_ambient_mode_residual_rows(
     *,
     system: SystemName,
     operator_name: OperatorName,
@@ -463,13 +793,11 @@ def _mode_residual_rows(
     ridge: float,
     residual_thresholds: tuple[float, ...],
 ) -> tuple[list[CsvRow], CsvRow]:
-    """Compute residual-verified spectral rows for one candidate operator."""
+    """Reproduce the pre-R3 ambient-C/source-normalized diagnostic for provenance."""
     eigvals, eigvecs = np.linalg.eig(np.asarray(M, dtype=np.float64).astype(np.complex128))
     c = int(M.shape[0])
     n_sub = int(Phi_sub.shape[1])
 
-    # Kernel matrices for the finite-rank KAHM kernel. These are used only to
-    # verify that the explicit matrix residual matches the direct feature residual.
     G = Phi_sub.T @ Phi_sub
     A = Chi_sub.T @ Phi_sub
     R = Chi_sub.T @ Chi_sub
@@ -500,8 +828,6 @@ def _mode_residual_rows(
         rep_den = max(float(np.linalg.norm(w)), 1e-14)
         representation_error = float(np.linalg.norm(phi_v - w) / rep_den)
 
-        # Matrix-formula residual from G, A, R. For real features and complex lambda:
-        # ||(Chi - lambda Phi)v||^2 = v^*(R - lambda A - conj(lambda) A^* + |lambda|^2G)v.
         v_col = v.reshape(-1, 1)
         mat = (
             R.astype(np.complex128)
@@ -510,7 +836,9 @@ def _mode_residual_rows(
             + (abs(lam) ** 2) * G.astype(np.complex128)
         )
         numerator = complex((v_col.conj().T @ mat @ v_col)[0, 0])
-        denominator = complex((v_col.conj().T @ G.astype(np.complex128) @ v_col)[0, 0])
+        denominator = complex(
+            (v_col.conj().T @ G.astype(np.complex128) @ v_col)[0, 0]
+        )
         if abs(denominator) <= 1e-14:
             matrix_residual = float("nan")
         else:
@@ -525,15 +853,15 @@ def _mode_residual_rows(
                 "lambda_real": float(np.real(lam)),
                 "lambda_imag": float(np.imag(lam)),
                 "lambda_abs": float(abs(lam)),
-                "rkhs_residual_feature": feature_residual,
-                "rkhs_residual_matrix_formula": matrix_residual,
-                "feature_matrix_formula_abs_diff": (
+                "legacy_rkhs_residual_feature": feature_residual,
+                "legacy_rkhs_residual_matrix_formula": matrix_residual,
+                "legacy_feature_matrix_formula_abs_diff": (
                     abs(feature_residual - matrix_residual)
                     if math.isfinite(feature_residual) and math.isfinite(matrix_residual)
                     else float("nan")
                 ),
-                "representation_error": representation_error,
-                "denominator_norm": denom,
+                "legacy_representation_error_unsquared": representation_error,
+                "legacy_denominator_norm": denom,
                 "subsample_size": n_sub,
                 "num_regimes": c,
             }
@@ -545,9 +873,14 @@ def _mode_residual_rows(
         if math.isfinite(representation_error):
             representation_errors.append(representation_error)
 
-    rows.sort(key=lambda row: float(row["rkhs_residual_feature"]))
-    for rank, row in enumerate(rows, start=1):
-        row["rank_by_residual"] = int(rank)
+    rows.sort(
+        key=lambda row: (
+            not math.isfinite(float(row["legacy_rkhs_residual_feature"])),
+            float(row["legacy_rkhs_residual_feature"]),
+        )
+    )
+    for rank_index, row in enumerate(rows, start=1):
+        row["legacy_rank_by_residual"] = int(rank_index)
 
     res_arr = np.asarray(residuals, dtype=np.float64)
     rep_arr = np.asarray(representation_errors, dtype=np.float64)
@@ -558,22 +891,44 @@ def _mode_residual_rows(
         "num_regimes": c,
         "subsample_size": n_sub,
         "num_valid_modes": int(res_arr.size),
-        "spectral_radius": float(np.max(eig_abs)) if eig_abs.size else float("nan"),
-        "max_abs_imag_lambda": float(np.max(np.abs(np.imag(eigvals)))) if eigvals.size else float("nan"),
-        "min_rkhs_residual": float(np.min(res_arr)) if res_arr.size else float("nan"),
-        "median_rkhs_residual": float(np.median(res_arr)) if res_arr.size else float("nan"),
-        "mean_rkhs_residual": float(np.mean(res_arr)) if res_arr.size else float("nan"),
-        "q25_rkhs_residual": float(np.quantile(res_arr, 0.25)) if res_arr.size else float("nan"),
-        "q75_rkhs_residual": float(np.quantile(res_arr, 0.75)) if res_arr.size else float("nan"),
-        "max_rkhs_residual": float(np.max(res_arr)) if res_arr.size else float("nan"),
-        "median_representation_error": float(np.median(rep_arr)) if rep_arr.size else float("nan"),
-        "max_representation_error": float(np.max(rep_arr)) if rep_arr.size else float("nan"),
-        "median_matrix_formula_residual": float(np.median(np.asarray(matrix_residuals, dtype=np.float64)))
-        if matrix_residuals
-        else float("nan"),
+        "legacy_ambient_spectral_radius": (
+            float(np.max(eig_abs)) if eig_abs.size else float("nan")
+        ),
+        "legacy_max_abs_imag_lambda": (
+            float(np.max(np.abs(np.imag(eigvals)))) if eigvals.size else float("nan")
+        ),
+        "legacy_min_rkhs_residual": (
+            float(np.min(res_arr)) if res_arr.size else float("nan")
+        ),
+        "legacy_median_rkhs_residual": (
+            float(np.median(res_arr)) if res_arr.size else float("nan")
+        ),
+        "legacy_mean_rkhs_residual": (
+            float(np.mean(res_arr)) if res_arr.size else float("nan")
+        ),
+        "legacy_q25_rkhs_residual": (
+            float(np.quantile(res_arr, 0.25)) if res_arr.size else float("nan")
+        ),
+        "legacy_q75_rkhs_residual": (
+            float(np.quantile(res_arr, 0.75)) if res_arr.size else float("nan")
+        ),
+        "legacy_max_rkhs_residual": (
+            float(np.max(res_arr)) if res_arr.size else float("nan")
+        ),
+        "legacy_median_representation_error_unsquared": (
+            float(np.median(rep_arr)) if rep_arr.size else float("nan")
+        ),
+        "legacy_max_representation_error_unsquared": (
+            float(np.max(rep_arr)) if rep_arr.size else float("nan")
+        ),
+        "legacy_median_matrix_formula_residual": (
+            float(np.median(np.asarray(matrix_residuals, dtype=np.float64)))
+            if matrix_residuals
+            else float("nan")
+        ),
     }
     for threshold in residual_thresholds:
-        key = f"modes_with_residual_le_{threshold:g}"
+        key = f"legacy_modes_with_residual_le_{threshold:g}"
         summary[key] = int(np.sum(res_arr <= float(threshold))) if res_arr.size else 0
     return rows, summary
 
@@ -596,7 +951,21 @@ def _write_csv(path: Path, rows: Sequence[CsvRow]) -> None:
             writer.writerow(row)
 
 
-def _plot_spectrum(output_dir: Path, rows: Sequence[CsvRow], *, system: str, operator_name: str) -> None:
+def _read_csv_rows(path: Path) -> list[CsvRow]:
+    """Read an existing experiment CSV for safe --skip-existing resumption."""
+    if not path.exists():
+        return []
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        return [dict(row) for row in csv.DictReader(handle)]  # type: ignore[return-value]
+
+
+def _plot_spectrum(
+    output_dir: Path,
+    rows: Sequence[CsvRow],
+    *,
+    system: str,
+    operator_name: str,
+) -> None:
     if not rows:
         return
     try:
@@ -607,21 +976,21 @@ def _plot_spectrum(output_dir: Path, rows: Sequence[CsvRow], *, system: str, ope
 
     x = np.asarray([float(row["lambda_real"]) for row in rows], dtype=np.float64)
     y = np.asarray([float(row["lambda_imag"]) for row in rows], dtype=np.float64)
-    r = np.asarray([float(row["rkhs_residual_feature"]) for row in rows], dtype=np.float64)
-    r_plot = np.log10(np.maximum(r, 1e-14))
+    rho = np.asarray([float(row["r3_residual_rho"]) for row in rows], dtype=np.float64)
+    rho_plot = np.log10(np.maximum(rho, 1e-16))
 
     fig, ax = plt.subplots(figsize=(5.2, 4.6))
-    sc = ax.scatter(x, y, c=r_plot, s=36)
+    sc = ax.scatter(x, y, c=rho_plot, s=36)
     unit = mpatches.Circle((0.0, 0.0), 1.0, fill=False, linestyle="--", linewidth=1.0)
     ax.add_patch(unit)
     ax.axhline(0.0, linewidth=0.8)
     ax.axvline(0.0, linewidth=0.8)
     ax.set_xlabel("Re(lambda)")
     ax.set_ylabel("Im(lambda)")
-    ax.set_title(f"Residual-verified KAHKM spectrum: {system}, {operator_name}")
+    ax.set_title(f"R3-verified reduced KAHKM spectrum: {system}, {operator_name}")
     ax.set_aspect("equal", adjustable="datalim")
     cbar = fig.colorbar(sc, ax=ax)
-    cbar.set_label("log10 RKHS residual")
+    cbar.set_label("log10 R3 residual rho")
     fig.tight_layout()
     fig.savefig(output_dir / f"experiment_19_spectrum_{system}_{operator_name}.png", dpi=200)
     plt.close(fig)
@@ -718,11 +1087,38 @@ def run() -> None:
     args = parse_args()
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    with (output_dir / "experiment_19_config.json").open("w", encoding="utf-8") as handle:
-        json.dump(asdict(args), handle, indent=2)
 
-    all_mode_rows: list[CsvRow] = []
-    all_summary_rows: list[CsvRow] = []
+    config_payload: dict[str, Any] = dict(asdict(args))
+    config_payload["diagnostic_definition"] = {
+        "feature_basis": "uncentered SVD of Phi_train; retain sigma_j > rank_rtol * sigma_max",
+        "reduced_operator": "M_red = Q_Phi.T @ M @ Q_Phi",
+        "representation_defect_eta": "||Phi_spec v - w||^2 / ||w||^2",
+        "r3_residual_rho": "||Chi_spec v - lambda Phi_spec v||^2 / ||Chi_spec v||^2",
+        "matrix_formula_denominator": "v^* R v, R = Chi_spec^T Chi_spec",
+        "legacy_outputs": (
+            "Separate CSVs reproduce the previous ambient-C candidate construction "
+            "and source-normalized unsquared residual."
+        ),
+    }
+    with (output_dir / "experiment_19_config.json").open("w", encoding="utf-8") as handle:
+        json.dump(config_payload, handle, indent=2)
+
+    mode_path = output_dir / "experiment_19_mode_residuals.csv"
+    summary_path = output_dir / "experiment_19_system_summary.csv"
+    legacy_mode_path = output_dir / "experiment_19_legacy_ambient_mode_residuals.csv"
+    legacy_summary_path = output_dir / "experiment_19_legacy_ambient_system_summary.csv"
+
+    if args.skip_existing:
+        all_mode_rows = _read_csv_rows(mode_path)
+        all_summary_rows = _read_csv_rows(summary_path)
+        all_legacy_mode_rows = _read_csv_rows(legacy_mode_path)
+        all_legacy_summary_rows = _read_csv_rows(legacy_summary_path)
+    else:
+        all_mode_rows: list[CsvRow] = []
+        all_summary_rows: list[CsvRow] = []
+        all_legacy_mode_rows: list[CsvRow] = []
+        all_legacy_summary_rows: list[CsvRow] = []
+
     rng = np.random.default_rng(int(args.random_state))
 
     for system in args.systems:
@@ -732,10 +1128,13 @@ def run() -> None:
             print(f"Skipping {system}: marker exists at {marker}")
             continue
 
-        print(f"\n=== Experiment 19 residual-verified spectra: {system} ===")
+        print(f"\n=== Experiment 19 R3 residual-verified spectra: {system} ===")
         start = time.time()
         X0_train, X1_train, X0_test, X1_test = _load_system_data(system, cfg, args)
-        print(f"Train snapshots: {X0_train.shape[1]}; test snapshots: {X0_test.shape[1]}; state_dim={X0_train.shape[0]}")
+        print(
+            f"Train snapshots: {X0_train.shape[1]}; test snapshots: {X0_test.shape[1]}; "
+            f"state_dim={X0_train.shape[0]}"
+        )
 
         effective_dim = min(int(cfg.subspace_dim), int(X0_train.shape[0]))
         ae_dir = str(output_dir / f"ae_cache_{system}") if args.save_ae_to_disk else None
@@ -801,6 +1200,26 @@ def run() -> None:
             show_progress=True,
         )
 
+        Q_phi, singular_values, rank_threshold = _training_feature_basis(
+            Phi_train,
+            rank_rtol=float(args.rank_rtol),
+        )
+        feature_rank = int(Q_phi.shape[1])
+        print(
+            f"Training-supported coefficient rank for {system}: "
+            f"r_Phi={feature_rank}/{cfg.n_clusters}, "
+            f"threshold={rank_threshold:.6g}, "
+            f"sigma_max={float(singular_values[0]):.6g}, "
+            f"sigma_min_retained={float(singular_values[feature_rank - 1]):.6g}"
+        )
+        np.savez_compressed(
+            output_dir / f"experiment_19_{system}_feature_rank.npz",
+            Q_phi=Q_phi,
+            singular_values=singular_values,
+            rank_threshold=np.asarray([rank_threshold], dtype=np.float64),
+            rank_rtol=np.asarray([float(args.rank_rtol)], dtype=np.float64),
+        )
+
         Phi_sub, Chi_sub, subsample_idx = _select_subsample(
             Phi_test,
             Chi_test,
@@ -839,14 +1258,20 @@ def run() -> None:
         }
 
         for operator_name in args.operators:
-            print(f"Computing residual-verified modes for {system}, operator={operator_name}...")
-            mode_rows, summary = _mode_residual_rows(
+            print(
+                f"Computing rank-aware R3 modes for {system}, operator={operator_name}..."
+            )
+            mode_rows, summary = _r3_mode_residual_rows(
                 system=system,
                 operator_name=operator_name,
                 M=operator_matrices[operator_name],
+                Q_phi=Q_phi,
                 Phi_sub=Phi_sub,
                 Chi_sub=Chi_sub,
-                ridge=float(args.ridge),
+                representation_ridge=float(args.representation_ridge),
+                rank_rtol=float(args.rank_rtol),
+                rank_threshold=float(rank_threshold),
+                singular_values=singular_values,
                 residual_thresholds=args.residual_thresholds,
             )
             summary.update(
@@ -868,38 +1293,72 @@ def run() -> None:
             all_summary_rows.append(summary)
             all_mode_rows.extend(mode_rows)
 
+            legacy_rows, legacy_summary = _legacy_ambient_mode_residual_rows(
+                system=system,
+                operator_name=operator_name,
+                M=operator_matrices[operator_name],
+                Phi_sub=Phi_sub,
+                Chi_sub=Chi_sub,
+                ridge=float(args.ridge),
+                residual_thresholds=args.residual_thresholds,
+            )
+            legacy_summary.update(
+                {
+                    "n_clusters": int(cfg.n_clusters),
+                    "omega": float(cfg.omega),
+                    "tau": float(cfg.tau),
+                    "wall_seconds_so_far_system": float(time.time() - start),
+                }
+            )
+            legacy_summary.update(closure_by_operator[operator_name])
+            all_legacy_summary_rows.append(legacy_summary)
+            all_legacy_mode_rows.extend(legacy_rows)
+
             if not args.no_plots:
-                _plot_spectrum(output_dir, mode_rows, system=system, operator_name=operator_name)
+                _plot_spectrum(
+                    output_dir,
+                    mode_rows,
+                    system=system,
+                    operator_name=operator_name,
+                )
 
             print(
-                f"{system}/{operator_name}: min residual={summary['min_rkhs_residual']:.6g}, "
-                f"median residual={summary['median_rkhs_residual']:.6g}, "
-                f"test closure={summary['test_closure_error']:.6g}"
+                f"{system}/{operator_name}: "
+                f"r_Phi={feature_rank}, "
+                f"min R3 rho={float(summary['min_r3_residual_rho']):.6g}, "
+                f"median R3 rho={float(summary['median_r3_residual_rho']):.6g}, "
+                f"median eta_rep={float(summary['median_representation_defect_eta']):.6g}, "
+                f"test R2={float(summary['test_association_r2']):.6g}"
             )
             top = mode_rows[: max(int(args.top_modes), 0)]
             for row in top:
                 print(
-                    f"  rank {row['rank_by_residual']:>2}: "
-                    f"lambda={row['lambda_real']:+.5f}{row['lambda_imag']:+.5f}i, "
-                    f"|lambda|={row['lambda_abs']:.5f}, "
-                    f"res={row['rkhs_residual_feature']:.6g}, "
-                    f"rep_err={row['representation_error']:.3g}"
+                    f"  rank {int(row['rank_by_r3_residual']):>2}: "
+                    f"lambda={float(row['lambda_real']):+.5f}"
+                    f"{float(row['lambda_imag']):+.5f}i, "
+                    f"|lambda|={float(row['lambda_abs']):.5f}, "
+                    f"rho={float(row['r3_residual_rho']):.6g}, "
+                    f"eta_rep={float(row['representation_defect_eta']):.3g}"
                 )
 
         marker.write_text("done\n", encoding="utf-8")
 
         # Write incrementally so partial results survive long runs.
-        _write_csv(output_dir / "experiment_19_mode_residuals.csv", all_mode_rows)
-        _write_csv(output_dir / "experiment_19_system_summary.csv", all_summary_rows)
+        _write_csv(mode_path, all_mode_rows)
+        _write_csv(summary_path, all_summary_rows)
+        _write_csv(legacy_mode_path, all_legacy_mode_rows)
+        _write_csv(legacy_summary_path, all_legacy_summary_rows)
 
-    _write_csv(output_dir / "experiment_19_mode_residuals.csv", all_mode_rows)
-    _write_csv(output_dir / "experiment_19_system_summary.csv", all_summary_rows)
+    _write_csv(mode_path, all_mode_rows)
+    _write_csv(summary_path, all_summary_rows)
+    _write_csv(legacy_mode_path, all_legacy_mode_rows)
+    _write_csv(legacy_summary_path, all_legacy_summary_rows)
 
     zip_base = str(Path(args.zip_name))
     if zip_base.endswith(".zip"):
         zip_base = zip_base[:-4]
     archive_path = shutil.make_archive(zip_base, "zip", output_dir)
-    print(f"\nWrote results to: {output_dir.resolve()}")
+    print(f"\nWrote R3 results to: {output_dir.resolve()}")
     print(f"Wrote archive to: {archive_path}")
 
 

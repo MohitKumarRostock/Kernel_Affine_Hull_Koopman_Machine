@@ -108,12 +108,12 @@
         100,
         200
       ],
-      "objective": "mean_E_H",
-      "objective_detail": "mean relative association error over h={1,10,50,100,200}",
+      "objective": "mean_centered_error_one_se_retvar",
+      "objective_detail": "rank by mean_h(1-R_h^2) over h={1,10,50,100,200}; form one-SE set using the SE of the minimum-error configuration; within the set choose largest rho_var with rho_rank as secondary tie-break",
       "scheduled_search_evaluations": 147,
       "completed_search_evaluations": "",
-      "validation": "",
-      "source": "run_exp09_vanderpol_tuning.py; kahkm_table4_vanderpol/table4_vanderpol_metadata.json"
+      "validation": "centered one-SE finalists verified; selected C=25, omega=6 by retained-variation rule",
+      "source": "run_exp09_vanderpol_tuning.py; kahkm_table4_centered_vanderpol/table4_vanderpol_metadata.json"
     },
     {
       "study": "Van der Pol noise-aware",
@@ -152,12 +152,12 @@
         100,
         200
       ],
-      "objective": "0.25*E50 + 0.25*E100 + 0.50*E200",
-      "objective_detail": "mean weighted long-horizon score across search seeds and training-noise levels",
+      "objective": "weighted_centered_error_one_se_retvar",
+      "objective_detail": "per seed/noise: 0.25*(1-R2_50) + 0.25*(1-R2_100) + 0.50*(1-R2_200); average across noise levels per seed, then across seeds; form centered one-SE set and use retained variation as tie-break when multiple finalists remain",
       "scheduled_search_evaluations": 450,
       "completed_search_evaluations": 450,
-      "validation": "clean held-out evaluation; noise applied only to training snapshots",
-      "source": "run_exp12_vanderpol_noise_aware_tuning.py; kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_noise_tuning_metadata.json"
+      "validation": "clean held-out evaluation; noise applied only to training snapshots; full centered 30-config ranking reconstructed from raw data; unique one-SE finalist and selected configuration C=25, omega=4",
+      "source": "run_exp12_vanderpol_noise_aware_tuning.py; kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_noise_tuning_metadata.json; experiment_12_noise_tuning_raw.csv; centered ranking reconstructed deterministically from raw association R2"
     },
     {
       "study": "Acrobot",

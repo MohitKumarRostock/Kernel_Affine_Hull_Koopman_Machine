@@ -1,11 +1,39 @@
 {
-  "git_commit": "b19aa141823e0b4eab716bbcc52863ae7faf06f0",
+  "git_commit": "8c67c87685b1a9a39a968023d42c0b9f253da775",
   "verified": {
     "duffing_reference_grid": true,
     "duffing_reference_objective": "mean test closure error / manuscript E1",
     "duffing_expanded_grid": true,
     "vanderpol_clean_grid": true,
+    "vanderpol_clean_centered_selection": {
+      "verified": true,
+      "selected_C": 25,
+      "selected_omega": 6.0,
+      "one_se_finalists": 3,
+      "selection_horizons": [
+        1,
+        10,
+        50,
+        100,
+        200
+      ],
+      "primary_objective": "mean centered error mean_h(1 - R_h^2)",
+      "retained_variation_tiebreak": "largest normalized retained variation rho_var"
+    },
     "vanderpol_noise_grid": true,
+    "vanderpol_noise_centered_selection": {
+      "verified": true,
+      "full_centered_ranking_rows": 30,
+      "selected_C": 25,
+      "selected_omega": 4.0,
+      "selection_weights": {
+        "50": 0.25,
+        "100": 0.25,
+        "200": 0.5
+      },
+      "one_se_finalists": 1,
+      "ranking_source": "reconstructed from original raw association R2"
+    },
     "noise_aware_jobs": "450/450",
     "acrobot_grid": true,
     "acrobot_selection_horizon": 50,
@@ -15,5 +43,11 @@
       1,
       2
     ]
+  },
+  "provenance": {
+    "vanderpol_clean_centered_metadata": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_table4_centered_vanderpol/table4_vanderpol_metadata.json",
+    "vanderpol_noise_full_grid_metadata": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_noise_tuning_metadata.json",
+    "vanderpol_noise_raw_full_grid": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_noise_tuning_raw.csv",
+    "vanderpol_noise_centered_ranking_reconstruction": "scripts/generate_search_protocol.py reconstructs weighted centered scores from the original raw grid"
   }
 }

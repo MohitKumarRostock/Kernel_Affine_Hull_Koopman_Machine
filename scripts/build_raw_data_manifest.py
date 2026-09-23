@@ -40,8 +40,8 @@ def main() -> None:
             "metadata_sha256": sha256_file(meta_path),
             "git_commit": git.get("commit"),
             "tree_dirty_before_capture": bool(git.get("tree_dirty")),
-            "archive_path": str(npz_path),
-            "metadata_path": str(meta_path),
+            "archive_path": npz_path.name,
+            "metadata_path": meta_path.name,
         })
 
     if a.require_nonempty and not records:

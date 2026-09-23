@@ -100,7 +100,7 @@ def capture_environment(root: Path) -> dict[str, Any]:
 
     return {
         "python": sys.version.split()[0],
-        "python_executable": sys.executable,
+        "python_executable": Path(sys.executable).name,
         "platform": platform.platform(),
         "machine": platform.machine(),
         "numpy": np.__version__,

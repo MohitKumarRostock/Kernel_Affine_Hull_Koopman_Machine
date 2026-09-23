@@ -1,0 +1,267 @@
+{
+  "campaign_id": "duffing_reference_27_prospective",
+  "campaign_spec_version": 1,
+  "expected_job_count": 27,
+  "failure_policy": {
+    "continue_after_job_failure": true,
+    "never_drop_failed_attempts": true,
+    "preserve_exit_code_per_attempt": true,
+    "preserve_stdout_stderr_per_attempt": true
+  },
+  "fixed_arguments": {
+    "batch_size": 256,
+    "beta": 0.1,
+    "data_seed": 1,
+    "dt": 0.03,
+    "kmeans_batch_size": 4096,
+    "kmeans_kind": "auto",
+    "max_train_per_cluster": null,
+    "n_jobs": 1,
+    "n_steps": 1200,
+    "nb": 100,
+    "nlms_epochs": 20,
+    "project_stochastic": true,
+    "save_ae_to_disk": false,
+    "singleton_aux_mix": 0.05,
+    "singleton_strategy": "augment",
+    "subspace_dim": 4,
+    "tau": 1e-06,
+    "train_fraction": 0.75
+  },
+  "grid": {
+    "C": [
+      15,
+      25,
+      35
+    ],
+    "omega": [
+      4.0,
+      8.0,
+      12.0
+    ],
+    "seed": [
+      0,
+      1,
+      2
+    ]
+  },
+  "historical_audit_commit": "03cd857",
+  "historical_finding": {
+    "archived_gap": [
+      {
+        "C": 35,
+        "omega": 4.0,
+        "seed": 0
+      },
+      {
+        "C": 35,
+        "omega": 4.0,
+        "seed": 1
+      },
+      {
+        "C": 35,
+        "omega": 4.0,
+        "seed": 2
+      },
+      {
+        "C": 35,
+        "omega": 8.0,
+        "seed": 0
+      },
+      {
+        "C": 35,
+        "omega": 8.0,
+        "seed": 1
+      },
+      {
+        "C": 35,
+        "omega": 8.0,
+        "seed": 2
+      },
+      {
+        "C": 35,
+        "omega": 12.0,
+        "seed": 0
+      },
+      {
+        "C": 35,
+        "omega": 12.0,
+        "seed": 1
+      },
+      {
+        "C": 35,
+        "omega": 12.0,
+        "seed": 2
+      }
+    ],
+    "archived_jobs_detected": 18,
+    "documented_jobs": 27
+  },
+  "jobs": [
+    {
+      "C": 15,
+      "job_id": "C15_omega4p0_seed0",
+      "omega": 4.0,
+      "seed": 0
+    },
+    {
+      "C": 15,
+      "job_id": "C15_omega4p0_seed1",
+      "omega": 4.0,
+      "seed": 1
+    },
+    {
+      "C": 15,
+      "job_id": "C15_omega4p0_seed2",
+      "omega": 4.0,
+      "seed": 2
+    },
+    {
+      "C": 15,
+      "job_id": "C15_omega8p0_seed0",
+      "omega": 8.0,
+      "seed": 0
+    },
+    {
+      "C": 15,
+      "job_id": "C15_omega8p0_seed1",
+      "omega": 8.0,
+      "seed": 1
+    },
+    {
+      "C": 15,
+      "job_id": "C15_omega8p0_seed2",
+      "omega": 8.0,
+      "seed": 2
+    },
+    {
+      "C": 15,
+      "job_id": "C15_omega12p0_seed0",
+      "omega": 12.0,
+      "seed": 0
+    },
+    {
+      "C": 15,
+      "job_id": "C15_omega12p0_seed1",
+      "omega": 12.0,
+      "seed": 1
+    },
+    {
+      "C": 15,
+      "job_id": "C15_omega12p0_seed2",
+      "omega": 12.0,
+      "seed": 2
+    },
+    {
+      "C": 25,
+      "job_id": "C25_omega4p0_seed0",
+      "omega": 4.0,
+      "seed": 0
+    },
+    {
+      "C": 25,
+      "job_id": "C25_omega4p0_seed1",
+      "omega": 4.0,
+      "seed": 1
+    },
+    {
+      "C": 25,
+      "job_id": "C25_omega4p0_seed2",
+      "omega": 4.0,
+      "seed": 2
+    },
+    {
+      "C": 25,
+      "job_id": "C25_omega8p0_seed0",
+      "omega": 8.0,
+      "seed": 0
+    },
+    {
+      "C": 25,
+      "job_id": "C25_omega8p0_seed1",
+      "omega": 8.0,
+      "seed": 1
+    },
+    {
+      "C": 25,
+      "job_id": "C25_omega8p0_seed2",
+      "omega": 8.0,
+      "seed": 2
+    },
+    {
+      "C": 25,
+      "job_id": "C25_omega12p0_seed0",
+      "omega": 12.0,
+      "seed": 0
+    },
+    {
+      "C": 25,
+      "job_id": "C25_omega12p0_seed1",
+      "omega": 12.0,
+      "seed": 1
+    },
+    {
+      "C": 25,
+      "job_id": "C25_omega12p0_seed2",
+      "omega": 12.0,
+      "seed": 2
+    },
+    {
+      "C": 35,
+      "job_id": "C35_omega4p0_seed0",
+      "omega": 4.0,
+      "seed": 0
+    },
+    {
+      "C": 35,
+      "job_id": "C35_omega4p0_seed1",
+      "omega": 4.0,
+      "seed": 1
+    },
+    {
+      "C": 35,
+      "job_id": "C35_omega4p0_seed2",
+      "omega": 4.0,
+      "seed": 2
+    },
+    {
+      "C": 35,
+      "job_id": "C35_omega8p0_seed0",
+      "omega": 8.0,
+      "seed": 0
+    },
+    {
+      "C": 35,
+      "job_id": "C35_omega8p0_seed1",
+      "omega": 8.0,
+      "seed": 1
+    },
+    {
+      "C": 35,
+      "job_id": "C35_omega8p0_seed2",
+      "omega": 8.0,
+      "seed": 2
+    },
+    {
+      "C": 35,
+      "job_id": "C35_omega12p0_seed0",
+      "omega": 12.0,
+      "seed": 0
+    },
+    {
+      "C": 35,
+      "job_id": "C35_omega12p0_seed1",
+      "omega": 12.0,
+      "seed": 1
+    },
+    {
+      "C": 35,
+      "job_id": "C35_omega12p0_seed2",
+      "omega": 12.0,
+      "seed": 2
+    }
+  ],
+  "purpose": "Prospective reproducibility rerun of the complete documented Duffing reference sensitivity grid. This campaign closes an archival evidence gap without representing new outputs as historical originals.",
+  "source_script": "experiment_02_duffing_sensitivity.py",
+  "status": "planned"
+}

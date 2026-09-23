@@ -1,0 +1,99 @@
+{
+  "claim_boundaries": {
+    "historical_archive": "The historical repository has complete archived schedule coverage for 7 of 8 checked campaign structures. The documented Duffing reference grid remains historically incomplete at 18/27.",
+    "no_cherry_picking": "The prospective Duffing campaign preserves every scheduled attempt and exit status. Historical campaigns have archived schedule coverage evidence, but a blanket claim that every failed historical execution attempt was preserved would be stronger than the current evidence supports.",
+    "prospective_closure": "A separately labeled prospective campaign attempted and passed all 27 Duffing reference jobs from a frozen clean commit.",
+    "remaining_release_work": [
+      "manuscript cleanup for the two REMOVE items and clarified captions",
+      "final immutable archival release and DOI/version metadata",
+      "final end-to-end release verification after manuscript/repository cleanup"
+    ]
+  },
+  "historical_run_accounting": {
+    "audit_note_path": "reproduction/run_accounting/README.md",
+    "completeness_path": "reproduction/run_accounting/expected_run_completeness.json",
+    "expected_run_checks": 8,
+    "gap_checks": 1,
+    "historical_gap": {
+      "campaign": "duffing_reference_search",
+      "documented_jobs": 27,
+      "missing_dimension": "all C=35 combinations",
+      "missing_jobs": 9,
+      "represented_jobs": 18
+    },
+    "missing_declared_references": 0,
+    "pass_checks": 7,
+    "resolved_source_files": 320,
+    "retained_results_covered": 23,
+    "summary_path": "reproduction/run_accounting/summary.json",
+    "tabular_source_rows": 11501
+  },
+  "prospective_gap_closure": {
+    "attempted_jobs": 27,
+    "campaign": "duffing_reference_27_prospective",
+    "campaign_git_commit": "eab0ad4042bff713e86188309de53a95e79df51c",
+    "failed_jobs": 0,
+    "git_tree_clean_after_campaign": true,
+    "git_tree_clean_before_campaign": true,
+    "ledger_path": "reproduction/prospective_campaigns/duffing_reference_27/run_eab0ad4/ledger.tsv",
+    "passed_jobs": 27,
+    "provenance_interpretation": "Prospective reproducibility rerun; closes the evidence gap without being represented as historical original output.",
+    "scheduled_jobs": 27,
+    "summary_path": "reproduction/prospective_campaigns/duffing_reference_27/run_eab0ad4/campaign_summary.json",
+    "verification_path": "reproduction/prospective_campaigns/duffing_reference_27/run_eab0ad4/verification_report.json",
+    "verified_output_files": 81
+  },
+  "purpose": "Reviewer-facing consolidation of repository reproducibility evidence. Historical audit findings and prospective gap-closing evidence are kept explicitly distinct.",
+  "raw_scientific_inputs": {
+    "all_captures_started_clean": true,
+    "all_datasets_verified": true,
+    "capture_git_commit": "ac531aefc66066c3fc320d94c0b362fb88f94967",
+    "dataset_card_path": "reproduction/raw_data/DATASET_CARD.md",
+    "dataset_index_path": "reproduction/raw_data/canonical/dataset_index.tsv",
+    "family_archives": 7,
+    "logical_subdatasets": 553,
+    "manifest_path": "reproduction/raw_data/canonical/manifest.json"
+  },
+  "reported_results": {
+    "matrix_path": "reproduction/reported_results.tsv",
+    "remove_results": 2,
+    "removed_results": [
+      {
+        "description": "Archived event-label outputs",
+        "label": "",
+        "result_id": "R24"
+      },
+      {
+        "description": "Archived MountainCar event diagnostic",
+        "label": "",
+        "result_id": "R25"
+      }
+    ],
+    "retained_pass_results": 23,
+    "total_audited_results": 25
+  },
+  "repository_controls": {
+    "bootstrap_script": "scripts/bootstrap_arm64.sh",
+    "citation_metadata": "CITATION.cff",
+    "code_license": "LICENSE",
+    "data_license": "DATA_LICENSE",
+    "environment_verifier": "scripts/verify_environment.py",
+    "reference_lockfile": "requirements-lock-arm64.txt",
+    "reference_platform": "Apple Silicon arm64",
+    "reference_python": "3.14.7",
+    "reproducibility_guide": "REPRODUCIBILITY.md"
+  },
+  "schema_version": 1,
+  "source_checkpoints": {
+    "environment": "8b451d0",
+    "historical_run_accounting": "03cd857",
+    "licensing_and_citation": "a809d4a",
+    "prospective_duffing_archive": "c01a057",
+    "prospective_duffing_definition": "eab0ad4",
+    "raw_capture_cleanliness_fix": "ac531ae",
+    "raw_data_infrastructure": "1585956",
+    "raw_data_release": "57ffcfc",
+    "raw_input_plan": "5a2408c",
+    "reported_result_audit": "8637818"
+  }
+}

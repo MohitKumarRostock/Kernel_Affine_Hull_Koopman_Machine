@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 
-SOURCE = Path("kahkm_experiment_19_residual_verified_spectra/experiment_19_mode_residuals.csv")
+SOURCE = Path("kahkm_experiment_19_r3_residual_verified_spectra/experiment_19_mode_residuals.csv")
 FIGURE_DIR = Path("figures")
 
 OUTPUTS = {
@@ -35,7 +35,7 @@ def plot(rows: list[dict[str, str]], system: str, operator: str, output: Path) -
     x = np.asarray([float(row["lambda_real"]) for row in selected], dtype=float)
     y = np.asarray([float(row["lambda_imag"]) for row in selected], dtype=float)
     residual = np.asarray([
-        float(row["rkhs_residual_feature"]) for row in selected
+        float(row["r3_residual_rho"]) for row in selected
     ], dtype=float)
 
     finite = np.isfinite(x) & np.isfinite(y) & np.isfinite(residual)
@@ -63,11 +63,11 @@ def plot(rows: list[dict[str, str]], system: str, operator: str, output: Path) -
     ax.axvline(0.0, linewidth=0.8)
     ax.set_xlabel("Re(lambda)")
     ax.set_ylabel("Im(lambda)")
-    ax.set_title(f"Residual-verified KAHKM spectrum: {system}, {operator}")
+    ax.set_title(f"R3 residual-verified KAHKM spectrum: {system}, {operator}")
     ax.set_aspect("equal", adjustable="datalim")
 
     colorbar = fig.colorbar(scatter, ax=ax)
-    colorbar.set_label("log10 RKHS residual")
+    colorbar.set_label(r"$\log_{10}\rho$ (R3 spectral residual)")
 
     fig.tight_layout()
     output.parent.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,199 @@
+{
+  "source_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine",
+  "experiment_output_dir": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_experiment_19_r3_residual_verified_spectra",
+  "runner_script": "experiment_19_residual_verified_kahkm_spectra.py",
+  "no_run": true,
+  "skip_existing": false,
+  "systems": [
+    "duffing",
+    "vanderpol"
+  ],
+  "operators": [
+    "nlms",
+    "ridge_ls"
+  ],
+  "train_seeds": [
+    0,
+    1,
+    2
+  ],
+  "test_seeds": [
+    100,
+    101,
+    102
+  ],
+  "total_train_snapshots": 3600,
+  "total_test_snapshots": 2400,
+  "duffing": {
+    "C": 10,
+    "omega": 2.0
+  },
+  "vanderpol": {
+    "C": 25,
+    "omega": 4.0
+  },
+  "spectral_subsample": 800,
+  "ridge_operator": 1e-08,
+  "representation_ridge": 1e-08,
+  "rank_rtol": 1e-10,
+  "residual_thresholds": [
+    0.001,
+    0.01,
+    0.05,
+    0.1
+  ],
+  "displayed_thresholds": [
+    0.01,
+    0.05,
+    0.1
+  ],
+  "r3_definition": {
+    "feature_basis": "uncentered training Phi SVD; retain sigma_j > rank_rtol * sigma_max",
+    "reduced_operator": "M_red = Q_Phi.T @ M @ Q_Phi",
+    "representation_defect_eta": "||Phi_spec v - w||^2 / ||w||^2",
+    "spectral_residual_rho": "||Chi_spec v - lambda Phi_spec v||^2 / ||Chi_spec v||^2"
+  },
+  "experiment_config": {
+    "systems": [
+      "duffing",
+      "vanderpol"
+    ],
+    "operators": [
+      "nlms",
+      "ridge_ls"
+    ],
+    "train_seeds": [
+      0,
+      1,
+      2
+    ],
+    "test_seeds": [
+      100,
+      101,
+      102
+    ],
+    "n_steps_train": 1200,
+    "n_steps_test": 800,
+    "output_dir": "kahkm_experiment_19_r3_residual_verified_spectra",
+    "zip_name": "kahkm_experiment_19_r3_residual_verified_spectra_results",
+    "duffing_c": 10,
+    "duffing_omega": 2.0,
+    "vanderpol_c": 25,
+    "vanderpol_omega": 4.0,
+    "acrobot_c": 150,
+    "acrobot_omega": 0.5,
+    "tau": 1e-06,
+    "subspace_dim": 4,
+    "acrobot_subspace_dim": 20,
+    "nb": 100,
+    "beta": 0.1,
+    "nlms_epochs": 20,
+    "kmeans_kind": "full",
+    "kmeans_batch_size": 4096,
+    "batch_size": 256,
+    "n_jobs": -1,
+    "max_train_per_cluster": null,
+    "ridge": 1e-08,
+    "representation_ridge": 1e-08,
+    "rank_rtol": 1e-10,
+    "spectral_subsample": 800,
+    "residual_thresholds": [
+      0.001,
+      0.01,
+      0.05,
+      0.1
+    ],
+    "top_modes": 10,
+    "random_state": 0,
+    "vanderpol_mu": 1.0,
+    "acrobot_train_episodes": 12,
+    "acrobot_test_episodes": 6,
+    "acrobot_max_steps": 500,
+    "acrobot_exploration_eps": 0.1,
+    "save_ae_to_disk": false,
+    "no_plots": false,
+    "skip_existing": false,
+    "diagnostic_definition": {
+      "feature_basis": "uncentered SVD of Phi_train; retain sigma_j > rank_rtol * sigma_max",
+      "reduced_operator": "M_red = Q_Phi.T @ M @ Q_Phi",
+      "representation_defect_eta": "||Phi_spec v - w||^2 / ||w||^2",
+      "r3_residual_rho": "||Chi_spec v - lambda Phi_spec v||^2 / ||Chi_spec v||^2",
+      "matrix_formula_denominator": "v^* R v, R = Chi_spec^T Chi_spec",
+      "legacy_outputs": "Separate CSVs reproduce the previous ambient-C candidate construction and source-normalized unsquared residual."
+    }
+  },
+  "table_rows": [
+    {
+      "system": "duffing",
+      "operator": "nlms",
+      "test_e1": 0.00025025514392919295,
+      "test_r2": 0.9835266167215357,
+      "ambient_num_regimes": 10,
+      "effective_feature_rank": 10,
+      "num_valid_r3_modes": 10,
+      "reduced_spectral_radius": 1.0000000000000007,
+      "min_r3_rho": 2.752743554385469e-05,
+      "median_r3_rho": 0.05875483264615074,
+      "median_eta_rep": 6.063387682557589e-11,
+      "max_eta_rep": 4.580688926500327e-10,
+      "max_formula_abs_diff": 2.65898414397725e-14,
+      "modes_le_1e_2": 3,
+      "modes_le_5e_2": 4,
+      "modes_le_1e_1": 9
+    },
+    {
+      "system": "duffing",
+      "operator": "ridge_ls",
+      "test_e1": 0.00024067071254530502,
+      "test_r2": 0.9841575248787626,
+      "ambient_num_regimes": 10,
+      "effective_feature_rank": 10,
+      "num_valid_r3_modes": 10,
+      "reduced_spectral_radius": 1.000000000012294,
+      "min_r3_rho": 9.51714256235137e-07,
+      "median_r3_rho": 0.0006439769328586149,
+      "median_eta_rep": 2.177884157180796e-12,
+      "max_eta_rep": 3.657226293616106e-12,
+      "max_formula_abs_diff": 7.598088824778415e-16,
+      "modes_le_1e_2": 9,
+      "modes_le_5e_2": 10,
+      "modes_le_1e_1": 10
+    },
+    {
+      "system": "vanderpol",
+      "operator": "nlms",
+      "test_e1": 0.003053580424033925,
+      "test_r2": 0.9963465429113917,
+      "ambient_num_regimes": 25,
+      "effective_feature_rank": 25,
+      "num_valid_r3_modes": 25,
+      "reduced_spectral_radius": 1.0000000000000002,
+      "min_r3_rho": 1.8935402655546158e-05,
+      "median_r3_rho": 0.00017453244167975823,
+      "median_eta_rep": 3.787914223390425e-17,
+      "max_eta_rep": 1.3154196199549188e-14,
+      "max_formula_abs_diff": 2.634611279139776e-16,
+      "modes_le_1e_2": 23,
+      "modes_le_5e_2": 25,
+      "modes_le_1e_1": 25
+    },
+    {
+      "system": "vanderpol",
+      "operator": "ridge_ls",
+      "test_e1": 0.0030333250432858167,
+      "test_r2": 0.9963707774669299,
+      "ambient_num_regimes": 25,
+      "effective_feature_rank": 25,
+      "num_valid_r3_modes": 25,
+      "reduced_spectral_radius": 0.999999999929069,
+      "min_r3_rho": 1.909601989025243e-05,
+      "median_r3_rho": 0.00010107840261385427,
+      "median_eta_rep": 1.9154866941937482e-17,
+      "max_eta_rep": 1.1333900491633094e-14,
+      "max_formula_abs_diff": 3.5128150388530344e-16,
+      "modes_le_1e_2": 25,
+      "modes_le_5e_2": 25,
+      "modes_le_1e_1": 25
+    }
+  ]
+}

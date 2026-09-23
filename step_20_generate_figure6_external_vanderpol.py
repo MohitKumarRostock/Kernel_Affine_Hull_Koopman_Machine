@@ -10,7 +10,7 @@ It is derived from Experiment 15:
     experiment_15_external_koopman_baselines.py
 
 This figure is the default diagnostic plot, not the tuned Table 10 comparison.
-The tuned Table 10 Van der Pol values use the noise-aware setting C=10, omega=0.25; this figure uses the
+The tuned Table 10 Van der Pol values use the retained-variation/noise-aware setting C=25, omega=4; this figure uses the
 Experiment 15 default Van der Pol abstraction, C=20, omega=4, matching the current
 manuscript caption.
 
@@ -423,7 +423,7 @@ def write_metadata(args: CliArgs, data_path: Path, pdf_path: Path, png_path: Pat
         "pdf": str(pdf_path),
         "png_preview": str(png_path),
         "diagnostic": "default external-baseline plot",
-        "note": "This figure uses Experiment 15 default Van der Pol KAHKM settings C=20, omega=4. Table 10 uses the noise-aware tuned Van der Pol setting C=10, omega=0.25.",
+        "note": "This figure uses Experiment 15 default Van der Pol KAHKM settings C=20, omega=4. Table 10 uses the retained-variation/noise-aware tuned Van der Pol setting C=25, omega=4.",
         "settings": {
             "system": "vanderpol",
             "default_n_clusters": 20,

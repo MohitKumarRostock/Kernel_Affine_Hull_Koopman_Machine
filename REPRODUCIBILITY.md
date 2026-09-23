@@ -87,19 +87,46 @@ The repository follows these principles for reproducible experimental results:
 1. Experiment parameters are stored in version-controlled configuration or manifest files.
 2. Random seeds are explicit and recorded for every stochastic run.
 3. Training, tuning, and final evaluation data are separated explicitly.
-4. Every scheduled run is recorded, including failed runs.
-5. Raw unaggregated experimental outputs are retained.
+4. Prospective reproducibility campaigns use failure-preserving run ledgers that record every scheduled attempt, including failures.
+5. Raw unaggregated experimental outputs used as reproducibility evidence are retained where available, with historical gaps reported explicitly rather than inferred away.
 6. Aggregated results are derived programmatically from raw outputs.
 7. Tables and figures are generated programmatically.
 8. Every reported result is traceable to the runs that produced it.
 9. The exact source commit and execution environment are recorded.
-10. Release artifacts are protected by cryptographic checksums and immutable archival releases.
+10. Release artifacts are protected by cryptographic checksums; the final immutable archival release is created only at the release stage.
 
 ## Experimental reproduction
 
 Environment reproduction and scientific-result reproduction are treated as separate stages.
 
 The environment bootstrap establishes a validated computational environment. Experiment manifests, raw-data capture, run ledgers, result indexing, and full reproduction commands are maintained separately so that each stage can be audited independently.
+
+## Evidence map
+
+The current reviewer-facing evidence summary is:
+
+`reproduction/REPRODUCIBILITY_EVIDENCE.md`
+
+Its machine-readable counterpart is:
+
+`reproduction/reproducibility_evidence.json`
+
+The principal evidence layers are:
+
+- `reproduction/raw_data/DATASET_CARD.md` for canonical raw scientific inputs;
+- `reproduction/run_accounting/README.md` for the historical run-accounting audit;
+- `reproduction/prospective_campaigns/duffing_reference_27/README.md` for the prospective Duffing reference campaign;
+- `reproduction/reported_results.tsv` for result-level provenance and retention status.
+
+The historical and prospective evidence are deliberately distinguished. The
+historical run-accounting audit preserves a documented gap in the original
+Duffing reference-search archive. A separately labeled prospective campaign
+then reruns the complete 27-job grid from a frozen clean commit and records every
+attempt, exit status, log, and output checksum.
+
+This supports a strong failure-preserving claim for that prospective campaign.
+It does not establish that every failed execution attempt from every historical
+campaign was preserved.
 
 ## Historical environments
 

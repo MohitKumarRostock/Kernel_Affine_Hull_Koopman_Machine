@@ -49,6 +49,25 @@ Composite or newly canonicalized reported artifacts can be regenerated with:
 
 Other reported tables and figures use the corresponding `step_*` generators and experiment runners identified in `reproduction/reported_results.tsv`.
 
+## Reproducibility evidence
+
+For a reviewer-facing summary of the current evidence state, see:
+
+- `reproduction/REPRODUCIBILITY_EVIDENCE.md` — consolidated evidence summary and claim boundaries.
+- `reproduction/reproducibility_evidence.json` — machine-readable form of the same summary.
+- `reproduction/raw_data/DATASET_CARD.md` — canonical raw scientific input package.
+- `reproduction/run_accounting/README.md` — historical run-accounting audit.
+- `reproduction/prospective_campaigns/duffing_reference_27/README.md` — prospective 27-job Duffing reference rerun.
+
+The historical audit and prospective gap-closing campaign are intentionally
+kept separate. The historical run-accounting audit preserves the original
+Duffing reference-search gap, while the prospective campaign records all 27
+scheduled attempts and their exit statuses from a frozen clean commit.
+
+The repository does not claim that every failed attempt from every historical
+campaign was preserved when the available historical evidence does not support
+that stronger statement.
+
 ## Repository organization
 
 - `experiment_*.py` — primary experiment implementations.

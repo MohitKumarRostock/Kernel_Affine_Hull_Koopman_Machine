@@ -1,0 +1,56 @@
+{
+  "runner": "run_exp15_vanderpol_tuned_external_baselines.py",
+  "purpose": "Rerun external Koopman baselines with the retained-variation/noise-aware Van der Pol KAHKM configuration C=25, omega=4.",
+  "runner_config": {
+    "python_executable": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/.venv-retvar-arm64/bin/python",
+    "script": "experiment_15_external_koopman_baselines.py",
+    "output_dir": "kahkm_exp15_vanderpol_retvar_external_baselines",
+    "zip_name": "kahkm_exp15_vanderpol_retvar_external_baselines_results",
+    "systems": [
+      "vanderpol"
+    ],
+    "train_seeds": [
+      0,
+      1,
+      2
+    ],
+    "test_seeds": [
+      100,
+      101,
+      102
+    ],
+    "n_steps_train": 1200,
+    "n_steps_test": 800,
+    "horizons": [
+      1,
+      10,
+      50,
+      100,
+      200
+    ],
+    "subspace_dim": 4,
+    "nb": 100,
+    "beta": 0.1,
+    "nlms_epochs": 20,
+    "batch_size": 256,
+    "n_jobs": -1,
+    "kmeans_kind": "full",
+    "max_train_per_cluster": null,
+    "ridge": 1e-08,
+    "vanderpol_c": 25,
+    "vanderpol_omega": 4.0,
+    "dry_run": false,
+    "skip_existing": true
+  },
+  "project_root": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine",
+  "base_experiment_script": "experiment_15_external_koopman_baselines.py",
+  "runtime_patch": {
+    "deterministic": true,
+    "transient_output": "/Users/mohit/Pythonprojects/Kernel_affine_hull_Koopman_machine/kahkm_exp15_vanderpol_retvar_external_baselines/_patched_experiment_15_vanderpol_tuned.py",
+    "inject_project_root_for_local_imports": true,
+    "vanderpol_n_clusters": 25,
+    "vanderpol_omega": 4.0,
+    "note": "The transient patched script is generated deterministically from the committed base experiment by this committed runner and is not required as a tracked reproducibility artifact."
+  },
+  "total_seconds_runner_including_child": 0.0020499229431152344
+}

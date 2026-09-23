@@ -581,14 +581,26 @@ def main() -> None:
     summarize_for_manuscript(output_dir)
 
     runner_metadata = {
-        "runner": "run_exp15_vanderpol_tuned_external_baselines_fixed.py",
+        "runner": Path(__file__).name,
         "purpose": (
-            "Rerun external Koopman baselines with the centered noise-aware "
-            "Van der Pol KAHKM configuration C=25, omega=4."
+            "Rerun external Koopman baselines with the retained-variation/"
+            "noise-aware Van der Pol KAHKM configuration C=25, omega=4."
         ),
         "runner_config": asdict(config),
         "project_root": str(project_root),
-        "patched_script": str(patched_script),
+        "base_experiment_script": config.script,
+        "runtime_patch": {
+            "deterministic": True,
+            "transient_output": str(patched_script),
+            "inject_project_root_for_local_imports": True,
+            "vanderpol_n_clusters": config.vanderpol_c,
+            "vanderpol_omega": config.vanderpol_omega,
+            "note": (
+                "The transient patched script is generated deterministically "
+                "from the committed base experiment by this committed runner "
+                "and is not required as a tracked reproducibility artifact."
+            ),
+        },
         "total_seconds_runner_including_child": time.time() - start,
     }
     with (output_dir / "experiment_15_tuned_runner_metadata.json").open("w", encoding="utf-8") as handle:

@@ -1,0 +1,21 @@
+\begin{table}[t]
+\centering
+\small
+\caption{External Koopman baselines evaluated in KAHKM association space on unseen trajectories using centered association $R^2$. Duffing rows use the tuned KAHKM association map $(C,\omega)=(10,2)$; Van der Pol rows use the retained-variation/noise-aware map $(C,\omega)=(25,4)$. Entries are mean $\pm$ standard deviation over three train/test trajectory pairs. The corresponding uncentered relative association errors are retained in the generated CSV for provenance.}
+\label{tab:external_baselines}
+\begin{tabular}{llccc}
+\toprule
+System & Method & $R^2_1$ & $R^2_{50}$ & $R^2_{200}$ \\
+\midrule
+Duffing & KAHKM + NLMS & $0.9835\pm0.0003$ & $0.5056\pm0.0167$ & $-0.3155\pm0.0552$ \\
+Duffing & State DMD & $0.9895\pm0.0021$ & $-0.7108\pm0.1433$ & $-15.0419\pm1.7772$ \\
+Duffing & State EDMD poly2 & $0.9984\pm0.0015$ & $0.9975\pm0.0019$ & $0.9546\pm0.0134$ \\
+Duffing & State EDMD poly3 & $0.9990\pm0.0017$ & $0.9961\pm0.0009$ & $0.9774\pm0.0114$ \\
+\midrule
+Van der Pol & KAHKM + NLMS & $0.9963\pm0.0002$ & $0.9020\pm0.0024$ & $0.7724\pm0.0044$ \\
+Van der Pol & State DMD & $0.9574\pm0.0015$ & $0.0909\pm0.0037$ & $0.2051\pm0.0019$ \\
+Van der Pol & State EDMD poly2 & $0.9578\pm0.0014$ & $0.0777\pm0.0054$ & $0.2061\pm0.0027$ \\
+Van der Pol & State EDMD poly3 & $1.0000\pm0.0000$ & $0.5339\pm0.0176$ & $0.4075\pm0.0106$ \\
+\bottomrule
+\end{tabular}
+\end{table}

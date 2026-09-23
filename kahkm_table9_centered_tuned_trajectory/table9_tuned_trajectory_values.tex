@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Centered multi-horizon Van der Pol unseen-trajectory generalization. The noise-aware robust setting $(C,\omega)=(25,4)$ is compared with the clean-tuned setting $(25,6)$ and the older reference setting $(20,4)$. For each configuration, $\overline{R^2}$ is the mean association $R^2$ over $h\in\{1,10,50,100,200\}$ and is reported as mean $\pm$ standard deviation over three replicate training-seed blocks. Paired columns report $\Delta E=E_{\mathrm{comp}}-E_{\mathrm{robust}}$ as mean $\pm$ standard error over the same matched replicates; positive $\Delta E$ therefore means lower centered multi-horizon error for the robust setting. With three paired replicates, these differences are reported descriptively rather than as formal significance tests.}
+\label{tab:vanderpol_tuned_trajectory}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{cccccc}
+\toprule
+Training trajectories & Robust $\overline{R^2}$ & Clean $\overline{R^2}$ & Reference $\overline{R^2}$ & $\Delta E_{\mathrm{clean-robust}}$ & $\Delta E_{\mathrm{ref-robust}}$ \\
+\midrule
+1 & $0.8745\pm0.0055$ & $0.8768\pm0.0134$ & $0.8795\pm0.0081$ & $-0.0022\pm0.0055$ & $-0.0049\pm0.0077$ \\
+2 & $0.8876\pm0.0050$ & $0.8840\pm0.0047$ & $0.8889\pm0.0125$ & $+0.0036\pm0.0030$ & $-0.0013\pm0.0064$ \\
+3 & $0.8930\pm0.0062$ & $0.8936\pm0.0065$ & $0.8982\pm0.0044$ & $-0.0005\pm0.0033$ & $-0.0052\pm0.0051$ \\
+5 & $0.8985\pm0.0029$ & $0.8861\pm0.0027$ & $0.8958\pm0.0070$ & $+0.0124\pm0.0024$ & $+0.0028\pm0.0036$ \\
+8 & $0.9021\pm0.0100$ & $0.8891\pm0.0045$ & $0.9077\pm0.0030$ & $+0.0130\pm0.0032$ & $-0.0056\pm0.0070$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

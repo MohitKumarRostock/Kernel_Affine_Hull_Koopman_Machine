@@ -1,0 +1,28 @@
+{
+  "result_id": "R04",
+  "description": "Expanded clean-data selection diagnostics",
+  "aggregation_mode": "horizon-mean",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "horizons": [
+    1,
+    10,
+    50,
+    100,
+    200
+  ],
+  "mean_definition": "For each configuration, overline_E is the arithmetic mean of the five horizon-specific seed means.",
+  "uncertainty_definition": "At each horizon, uncertainty is the archived standard deviation across seeds 0,1,2. For overline_E, the displayed uncertainty is the arithmetic mean of those five horizon-specific standard deviations.",
+  "duffing_raw": "kahkm_exp_duffing_tuning/experiment_duffing_tuning_raw.csv",
+  "vanderpol_raw": "kahkm_exp09_vanderpol_tuning/experiment_09_multistep_raw_results.csv",
+  "duffing_generator": "step_02_generate_table3_duffing.py",
+  "vanderpol_generator": "step_03_generate_table4_vanderpol.py",
+  "git_commit": "b19aa141823e0b4eab716bbcc52863ae7faf06f0",
+  "outputs": [
+    "reproduction/generated/selection_table/selection_table_values.csv",
+    "reproduction/generated/selection_table/selection_table_values.tex"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "result_id": "R17",
+  "description": "Dominant-regime behavioral summaries",
+  "cartpole_source": "kahkm_exp17_cartpole_tuned_seed0/experiment_17_regime_statistics.csv",
+  "mountaincar_source": "kahkm_exp17_mountaincar_tuned_seed0/experiment_17_regime_statistics.csv",
+  "acrobot_source": "kahkm_table14_acrobot_interpretability_selected/table14_acrobot_interpretability_values.csv",
+  "definitions": {
+    "action_purity": "count-weighted maximum empirical action frequency within each active regime",
+    "high_purity_mass": "fraction of samples assigned to active regimes with action purity >= 0.9",
+    "soft_persistence": "count-weighted learned self-transition probability",
+    "hard_persistence": "count-weighted empirical persistence"
+  },
+  "aggregation": {
+    "CartPole-v1": "single diagnostic fit, seed 0",
+    "MountainCar-v0": "single diagnostic fit, seed 0",
+    "Acrobot-v1": "population mean and standard deviation over validated seeds 0,1,2"
+  },
+  "git_commit": "b19aa141823e0b4eab716bbcc52863ae7faf06f0",
+  "outputs": [
+    "reproduction/generated/behavioral_summary/behavioral_summary_values.csv",
+    "reproduction/generated/behavioral_summary/behavioral_summary_values.tex"
+  ]
+}

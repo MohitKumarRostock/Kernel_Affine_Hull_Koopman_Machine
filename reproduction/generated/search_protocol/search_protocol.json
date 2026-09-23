@@ -1,0 +1,199 @@
+{
+  "result_id": "R23",
+  "count_convention": "grid_count is |C|*|omega| and excludes seed and noise-level repetitions",
+  "protocols": [
+    {
+      "study": "Duffing reference",
+      "C": [
+        15,
+        25,
+        35
+      ],
+      "omega": [
+        4,
+        8,
+        12
+      ],
+      "grid_count": 9,
+      "search_seeds": [
+        0,
+        1,
+        2
+      ],
+      "noise_levels": [],
+      "horizons": [
+        1
+      ],
+      "objective": "E1",
+      "objective_detail": "minimize mean test closure error",
+      "scheduled_search_evaluations": 27,
+      "completed_search_evaluations": "",
+      "validation": "",
+      "source": "experiment_02_duffing_sensitivity.py"
+    },
+    {
+      "study": "Duffing expanded",
+      "C": [
+        8,
+        10,
+        12,
+        15,
+        20,
+        25,
+        30,
+        40
+      ],
+      "omega": [
+        2.0,
+        4.0,
+        6.0,
+        8.0,
+        10.0,
+        12.0,
+        16.0,
+        20.0
+      ],
+      "grid_count": 64,
+      "search_seeds": [
+        0,
+        1,
+        2
+      ],
+      "noise_levels": [],
+      "horizons": [
+        1,
+        10,
+        50,
+        100,
+        200
+      ],
+      "objective": "mean_E_H",
+      "objective_detail": "mean relative association error over h={1,10,50,100,200}",
+      "scheduled_search_evaluations": 192,
+      "completed_search_evaluations": "",
+      "validation": "",
+      "source": "run_exp_duffing_tuning.py; kahkm_table3_duffing/table3_duffing_metadata.json"
+    },
+    {
+      "study": "Van der Pol clean",
+      "C": [
+        10,
+        15,
+        20,
+        25,
+        30,
+        40,
+        50
+      ],
+      "omega": [
+        0.5,
+        1.0,
+        2.0,
+        4.0,
+        6.0,
+        8.0,
+        12.0
+      ],
+      "grid_count": 49,
+      "search_seeds": [
+        0,
+        1,
+        2
+      ],
+      "noise_levels": [],
+      "horizons": [
+        1,
+        10,
+        50,
+        100,
+        200
+      ],
+      "objective": "mean_E_H",
+      "objective_detail": "mean relative association error over h={1,10,50,100,200}",
+      "scheduled_search_evaluations": 147,
+      "completed_search_evaluations": "",
+      "validation": "",
+      "source": "run_exp09_vanderpol_tuning.py; kahkm_table4_vanderpol/table4_vanderpol_metadata.json"
+    },
+    {
+      "study": "Van der Pol noise-aware",
+      "C": [
+        10,
+        15,
+        20,
+        25,
+        30,
+        40
+      ],
+      "omega": [
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "grid_count": 30,
+      "search_seeds": [
+        0,
+        1,
+        2
+      ],
+      "noise_levels": [
+        0.0,
+        0.005,
+        0.01,
+        0.02,
+        0.05
+      ],
+      "horizons": [
+        1,
+        10,
+        50,
+        100,
+        200
+      ],
+      "objective": "0.25*E50 + 0.25*E100 + 0.50*E200",
+      "objective_detail": "mean weighted long-horizon score across search seeds and training-noise levels",
+      "scheduled_search_evaluations": 450,
+      "completed_search_evaluations": 450,
+      "validation": "clean held-out evaluation; noise applied only to training snapshots",
+      "source": "run_exp12_vanderpol_noise_aware_tuning.py; kahkm_exp12_vanderpol_noise_aware_tuning/experiment_12_noise_tuning_metadata.json"
+    },
+    {
+      "study": "Acrobot",
+      "C": [
+        20,
+        40,
+        50,
+        75,
+        100,
+        150
+      ],
+      "omega": [
+        0.5,
+        1.0,
+        2.0,
+        4.0,
+        8.0
+      ],
+      "grid_count": 30,
+      "search_seeds": [
+        0
+      ],
+      "noise_levels": [],
+      "horizons": [
+        1,
+        5,
+        10,
+        20,
+        50
+      ],
+      "objective": "E50",
+      "objective_detail": "minimize KAHKM relative error at max(search horizons)=50",
+      "scheduled_search_evaluations": 30,
+      "completed_search_evaluations": "",
+      "validation": "selected C=150, omega=0.5 configuration validated separately on seeds 0,1,2",
+      "source": "experiment_18_acrobot_sequential_decision_pylance_clean.py; run_exp18_acrobot_tuning_pylance_clean.py"
+    }
+  ]
+}

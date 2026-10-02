@@ -1,0 +1,148 @@
+{
+  "campaign_id": "four_state_original_iid_pilot_v1",
+  "campaign_role": "pilot",
+  "cases": [
+    {
+      "case_id": "identity_p_half",
+      "case_key": 0,
+      "dynamics": "identity",
+      "endpoint_case": true,
+      "kappa": 1.4142135623730951,
+      "p": 0.5
+    },
+    {
+      "case_id": "identity_p_four_fifths",
+      "case_key": 1,
+      "dynamics": "identity",
+      "endpoint_case": false,
+      "kappa": 1.4142135623730951,
+      "p": 0.8
+    },
+    {
+      "case_id": "identity_p_31_over_32",
+      "case_key": 2,
+      "dynamics": "identity",
+      "endpoint_case": false,
+      "kappa": 1.4142135623730951,
+      "p": 0.96875
+    },
+    {
+      "case_id": "identity_p_one",
+      "case_key": 3,
+      "dynamics": "identity",
+      "endpoint_case": true,
+      "kappa": 1.4142135623730951,
+      "p": 1.0
+    },
+    {
+      "case_id": "conflicting_successors_p_half",
+      "case_key": 4,
+      "dynamics": "conflicting_successors",
+      "endpoint_case": true,
+      "kappa": 1.4142135623730951,
+      "p": 0.5
+    },
+    {
+      "case_id": "conflicting_successors_p_four_fifths",
+      "case_key": 5,
+      "dynamics": "conflicting_successors",
+      "endpoint_case": false,
+      "kappa": 1.4142135623730951,
+      "p": 0.8
+    },
+    {
+      "case_id": "conflicting_successors_p_31_over_32",
+      "case_key": 6,
+      "dynamics": "conflicting_successors",
+      "endpoint_case": false,
+      "kappa": 1.4142135623730951,
+      "p": 0.96875
+    },
+    {
+      "case_id": "conflicting_successors_p_one",
+      "case_key": 7,
+      "dynamics": "conflicting_successors",
+      "endpoint_case": true,
+      "kappa": 1.4142135623730951,
+      "p": 1.0
+    }
+  ],
+  "certificate_id": "original_iid_eq8_v1",
+  "count_statistics_id": "four_state_count_statistics_v1",
+  "environment_lockfile": "requirements-lock-arm64.txt",
+  "evaluation": {
+    "binomial_interval_confidence": 0.95,
+    "binomial_interval_method": "clopper_pearson",
+    "certificate_quantiles": [
+      0.05,
+      0.5,
+      0.95
+    ],
+    "comparison_atol": 1e-12,
+    "confidence_scope": "pointwise_per_fixed_case_and_sample_size",
+    "coverage_reporting": "strict_and_tolerance_aware",
+    "delta": 0.05,
+    "exclusion_rule": "L_kappa_delta > tolerance",
+    "exclusion_tolerances": [
+      0.1,
+      0.3,
+      0.45
+    ],
+    "quantile_method": "linear",
+    "strict_coverage_rule": "L_kappa_delta <= exact_optimal_rmse",
+    "tolerance_aware_coverage_rule": "L_kappa_delta <= exact_optimal_rmse + comparison_atol",
+    "zero_certificate_rule": "L_kappa_delta == 0.0"
+  },
+  "execution_policy": {
+    "overwrite_existing_runs": false,
+    "record_execution_commit_at_run_time": true,
+    "require_clean_source_commit": true,
+    "retain_all_scheduled_attempts": true,
+    "retain_failed_attempts": true
+  },
+  "purpose": "Validate the execution and evidence pipeline and inspect certificate behavior. Not the final manuscript campaign.",
+  "reference_id": "four_state_uniform_reference_v1",
+  "rng": {
+    "bit_generator": "PCG64",
+    "campaign_key": 1,
+    "replicate_index_base": 0,
+    "reuse_counts_across_cases": false,
+    "root_seed": 20261002,
+    "seed_material_order": [
+      "campaign_key",
+      "case_key",
+      "n_pairs",
+      "replicate_index",
+      "root_seed"
+    ],
+    "seed_sequence": "SeedSequence",
+    "seed_sequence_pool_size": 4
+  },
+  "sampling": {
+    "count_sampler": "numpy.random.Generator.multinomial",
+    "draws_per_replicate": 1,
+    "independent_unit": "evaluation_pair",
+    "law": "iid_uniform_four_state",
+    "probabilities": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "replicates_per_cell": 256,
+    "sample_sizes": [
+      128,
+      1024,
+      2048,
+      4096,
+      8192
+    ],
+    "state_order": [
+      "a",
+      "b",
+      "d",
+      "e"
+    ]
+  },
+  "schema_version": 1
+}

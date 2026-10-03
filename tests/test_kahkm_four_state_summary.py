@@ -70,7 +70,8 @@ def fixture():
     config = dict(
         campaign_id="unit_test_summary_only", campaign_role="pilot", cases=cases,
         sampling=dict(sample_sizes=[4096, 128], replicates_per_cell=4),
-        evaluation=dict(delta=.05, binomial_interval_method="clopper_pearson",
+        evaluation=dict(delta=.05, comparison_atol=1e-12,
+                        binomial_interval_method="clopper_pearson",
                         binomial_interval_confidence=.95, quantile_method="linear",
                         certificate_quantiles=[.05, .5, .95],
                         exclusion_tolerances=tolerances),
@@ -236,17 +237,71 @@ class FourStateSummaryTests(unittest.TestCase):
         self.assertEqual(cell["sampling_gap_minimum"], -3/32)
         self.assertEqual(cell["population_bound_slack"], 1/16)
 
-    def test_exclusion_power_and_false_exclusion_are_distinguished(self):
+    def test_exclusion_power_false_exclusion_and_boundary_are_distinguished(self):
         _, rows = self.aggregate()
         by_key = {(r["case_key"], r["n_pairs"], r["tolerance"]): r for r in rows}
+
         false = by_key[(3, 4096, .5)]
-        self.assertEqual(false["interpretation"], "false_exclusion_rate")
-        self.assertFalse(false["exact_error_exceeds_tolerance"])
-        self.assertEqual((false["count"], false["erroneous_exclusion_count"], false["rate"]), (1, 1, .25))
+        self.assertEqual(false["ground_truth_relation"], "boundary")
+        self.assertEqual(false["interpretation"], "boundary_exclusion_rate")
+        self.assertFalse(false["raw_float_exact_error_exceeds_tolerance"])
+        self.assertEqual(false["raw_saved_erroneous_exclusion_count"], 1)
+        self.assertIsNone(false["scientific_false_exclusion_count"])
+        self.assertEqual(false["rate"], .25)
+
         power = by_key[(2, 4096, .3)]
+        self.assertEqual(power["ground_truth_relation"], "above")
         self.assertEqual(power["interpretation"], "exclusion_power")
-        self.assertEqual((power["count"], power["rate"], power["erroneous_exclusion_count"]), (2, .5, 0))
-        self.assertEqual(by_key[(1, 4096, .3)]["interpretation"], "false_exclusion_rate")
+        self.assertTrue(power["raw_float_exact_error_exceeds_tolerance"])
+        self.assertEqual(power["raw_saved_erroneous_exclusion_count"], 0)
+        self.assertIsNone(power["scientific_false_exclusion_count"])
+        self.assertEqual((power["count"], power["rate"]), (2, .5))
+
+        boundary = by_key[(1, 4096, .3)]
+        self.assertEqual(boundary["ground_truth_relation"], "boundary")
+        self.assertEqual(boundary["interpretation"], "boundary_exclusion_rate")
+        self.assertEqual(boundary["optimum_minus_tolerance"], 0.)
+        self.assertEqual(boundary["comparison_atol"], 1e-12)
+        self.assertFalse(boundary["raw_float_exact_error_exceeds_tolerance"])
+        self.assertIsNone(boundary["scientific_false_exclusion_count"])
+
+        genuinely_false = by_key[(0, 4096, .3)]
+        self.assertEqual(genuinely_false["ground_truth_relation"], "below")
+        self.assertEqual(genuinely_false["interpretation"], "false_exclusion_rate")
+        self.assertEqual(genuinely_false["scientific_false_exclusion_count"], 0)
+
+    def test_threshold_relation_uses_reporting_tolerance_only(self):
+        atol = 1e-12
+
+        self.assertEqual(
+            summary.threshold_relation(.30000000000000004, .3, atol),
+            "boundary",
+        )
+        self.assertEqual(
+            summary.threshold_relation(.3, .30000000000000004, atol),
+            "boundary",
+        )
+        self.assertEqual(
+            summary.threshold_relation(.300000000002, .3, atol),
+            "above",
+        )
+        self.assertEqual(
+            summary.threshold_relation(.299999999998, .3, atol),
+            "below",
+        )
+        self.assertEqual(
+            summary.threshold_relation(.3, .3, 0.),
+            "boundary",
+        )
+
+        for values in (
+            (math.nan, .3, atol),
+            (.3, math.inf, atol),
+            (.3, .3, -1e-12),
+            (True, .3, atol),
+        ):
+            with self.subTest(values=values), self.assertRaises(ValueError):
+                summary.threshold_relation(*values)
 
     def test_order_invariance_and_inputs_are_unchanged(self):
         before = deepcopy((self.config, self.references, self.rows))

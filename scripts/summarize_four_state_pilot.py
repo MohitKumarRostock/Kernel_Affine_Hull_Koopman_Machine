@@ -67,6 +67,27 @@ def distribution(values):
                 q95=float(quantiles[2]), maximum=max(values))
 
 
+def threshold_relation(optimum, tolerance, comparison_atol):
+    """Classify a threshold comparison without turning roundoff into ground truth.
+
+    "above" means optimum > tolerance by more than comparison_atol.
+    "below" means optimum < tolerance by more than comparison_atol.
+    "boundary" means the two values differ by at most comparison_atol.
+
+    This affects reporting/interpretation only. It does not change a saved
+    certificate, coverage flag, exclusion decision, or original evidence.
+    """
+    values = (optimum, tolerance, comparison_atol)
+    if not all(type(x) in (int, float) and math.isfinite(x) for x in values):
+        raise ValueError("Threshold comparison requires finite numeric values")
+    if comparison_atol < 0:
+        raise ValueError("comparison_atol must be nonnegative")
+    difference = optimum - tolerance
+    if abs(difference) <= comparison_atol:
+        return "boundary"
+    return "above" if difference > 0 else "below"
+
+
 def summarize_cells(config, references, results):
     """Aggregate audited results; independently reject omitted/duplicated cells."""
     options = config["evaluation"]
@@ -128,23 +149,57 @@ def summarize_cells(config, references, results):
             cells.append(cell)
             for position, tolerance in enumerate(options["exclusion_tolerances"]):
                 decisions = []
+                raw_float_truth = optimum > tolerance
+                relation = threshold_relation(
+                    optimum, tolerance, options["comparison_atol"]
+                )
+                interpretation = {
+                    "above": "exclusion_power",
+                    "below": "false_exclusion_rate",
+                    "boundary": "boundary_exclusion_rate",
+                }[relation]
+
                 for row in rows:
                     require(len(row["exclusions"]) == len(options["exclusion_tolerances"]),
                             "Wrong number of exclusion decisions")
                     decision = row["exclusions"][position]
                     require(decision["tolerance"] == tolerance, "Exclusion tolerance mismatch")
-                    truth = optimum > tolerance
-                    require(decision["exact_error_exceeds_tolerance"] is truth,
-                            "Inconsistent exclusion ground truth")
+
+                    # Audit the original stored binary64 decision exactly.
+                    # Scientific interpretation below is deliberately separate.
+                    require(
+                        decision["exact_error_exceeds_tolerance"] is raw_float_truth,
+                        "Inconsistent saved raw-float exclusion ground truth",
+                    )
                     require(type(decision["excluded"]) is bool, "Non-Boolean exclusion flag")
-                    require(decision["erroneous_exclusion"] is (decision["excluded"] and not truth),
-                            "Inconsistent erroneous-exclusion flag")
+                    require(
+                        decision["erroneous_exclusion"]
+                        is (decision["excluded"] and not raw_float_truth),
+                        "Inconsistent saved raw-float erroneous-exclusion flag",
+                    )
                     decisions.append(decision)
-                exclusion = dict(base, tolerance=tolerance,
-                                 exact_error_exceeds_tolerance=truth,
-                                 interpretation="exclusion_power" if truth else "false_exclusion_rate",
-                                 erroneous_exclusion_count=sum(d["erroneous_exclusion"] for d in decisions))
-                exclusion.update(binomial_rate([d["excluded"] for d in decisions], confidence))
+
+                exclusion_flags = [d["excluded"] for d in decisions]
+                exclusion_count = sum(exclusion_flags)
+
+                exclusion = dict(
+                    base,
+                    tolerance=tolerance,
+                    optimum_minus_tolerance=optimum - tolerance,
+                    comparison_atol=options["comparison_atol"],
+                    ground_truth_relation=relation,
+                    raw_float_exact_error_exceeds_tolerance=raw_float_truth,
+                    interpretation=interpretation,
+                    raw_saved_erroneous_exclusion_count=sum(
+                        d["erroneous_exclusion"] for d in decisions
+                    ),
+                    scientific_false_exclusion_count=(
+                        exclusion_count if relation == "below" else None
+                    ),
+                )
+                exclusion.update(
+                    binomial_rate(exclusion_flags, confidence)
+                )
                 exclusions.append(exclusion)
     return cells, exclusions
 
@@ -226,7 +281,11 @@ Pilot only, not final manuscript evidence. Every scheduled replicate is retained
 cell_summary.csv has one row per fixed case and sample size. Probability columns
 use independent replicate datasets as trials, not individual evaluation pairs.
 exclusion_summary.csv has one row per cell and tolerance. The interpretation
-column distinguishes power from false-exclusion rate using the analytical optimum.
+column distinguishes exclusion power, false-exclusion rate, and numerical
+boundary cases. A threshold is labeled `boundary` when the analytical optimum
+and tolerance differ by at most the configured comparison_atol. This prevents
+binary floating-point roundoff from being promoted into scientific ground truth.
+The original saved raw-float comparison is retained in a separate audit column.
 
 Probability intervals are two-sided pointwise 95% Clopper-Pearson intervals.
 They are not simultaneous across cells, metrics, or tolerances. Zero observed

@@ -1156,7 +1156,158 @@ class RepresentationBuildRunnerTests(unittest.TestCase):
             ).is_file()
         )
 
-    # 20
+    def test_preflight_explicitly_runs_representation_runner_tests(self):
+        output = (
+            self.temp_root
+            / "preflight-output"
+        )
+        output.mkdir()
+
+        lock_path = (
+            runner.ROOT
+            / "requirements-lock-arm64.txt"
+        )
+
+        expected_versions = {}
+
+        for line in lock_path.read_text(
+            encoding="utf-8"
+        ).splitlines():
+            line = line.strip()
+
+            if (
+                not line
+                or line.startswith("#")
+            ):
+                continue
+
+            name, separator, version = (
+                line.partition("==")
+            )
+
+            if separator:
+                expected_versions[
+                    name
+                ] = version
+
+        calls = []
+
+        def fake_check(
+            *,
+            logs,
+            name,
+            command,
+        ):
+            calls.append(
+                (
+                    name,
+                    tuple(command),
+                )
+            )
+
+        def fake_version(
+            name,
+        ):
+            return expected_versions[
+                name
+            ]
+
+        with (
+            mock.patch.object(
+                runner,
+                "run_command_check",
+                side_effect=fake_check,
+            ),
+            mock.patch.object(
+                runner.importlib.metadata,
+                "version",
+                side_effect=fake_version,
+            ),
+        ):
+            runner.run_preflight(
+                output
+            )
+
+        names = [
+            name
+            for name, _
+            in calls
+        ]
+
+        self.assertEqual(
+            names,
+            [
+                "environment",
+                "pip_check",
+                "pip_freeze",
+                "unit_tests",
+                "representation_runner_tests",
+            ],
+        )
+
+        command_by_name = dict(
+            calls
+        )
+
+        self.assertEqual(
+            command_by_name[
+                "representation_runner_tests"
+            ],
+            (
+                runner.sys.executable,
+                "-m",
+                "unittest",
+                "tests.test_build_dynamical_certificate_representations",
+                "-v",
+            ),
+        )
+
+        self.assertEqual(
+            command_by_name[
+                "unit_tests"
+            ],
+            (
+                runner.sys.executable,
+                "-m",
+                "unittest",
+                "discover",
+                "-s",
+                "tests",
+                "-p",
+                "test_kahkm_*.py",
+                "-v",
+            ),
+        )
+
+        locked = json.loads(
+            (
+                output
+                / "checks"
+                / "locked_packages.json"
+            ).read_text(
+                encoding="utf-8"
+            )
+        )
+
+        self.assertTrue(
+            locked[
+                "packages"
+            ]
+        )
+
+        self.assertTrue(
+            all(
+                item[
+                    "matches"
+                ]
+                for item
+                in locked[
+                    "packages"
+                ]
+            )
+        )
+
+    # 21
     def test_main_success_returns_zero_without_extra_execution(self):
         output = self.external_path()
 

@@ -390,6 +390,16 @@ def run_preflight(
                 "-v",
             ),
         ),
+        (
+            "representation_runner_tests",
+            (
+                sys.executable,
+                "-m",
+                "unittest",
+                "tests.test_build_dynamical_certificate_representations",
+                "-v",
+            ),
+        ),
     )
 
     logs = output / "checks"

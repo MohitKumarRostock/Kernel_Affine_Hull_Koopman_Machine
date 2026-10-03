@@ -1,0 +1,187 @@
+{
+  "campaign_id": "dynamical_original_iid_confirmatory_v1",
+  "campaign_role": "confirmatory",
+  "certificate": {
+    "delta": 0.05,
+    "implementation_id": "original_iid_pair_certificate_v1"
+  },
+  "config_schema_id": "dynamical_original_iid_confirmatory_config_v1",
+  "confirmatory_design": {
+    "planned_attempts": 64,
+    "planned_retained_pairs": 1048576,
+    "replicates_per_cell": 32,
+    "sample_sizes": [
+      16384
+    ],
+    "systems": [
+      "vanderpol"
+    ]
+  },
+  "confirmatory_representation": {
+    "batch_size": 256,
+    "beta": 0.1,
+    "implementation_id": "frozen_abstraction_omega_refit_nlms_v1",
+    "n_jobs": -1,
+    "n_steps_train": 1200,
+    "nlms_epochs": 20,
+    "nlms_initial_matrix": "identity",
+    "nlms_shuffle": false,
+    "omega": 128.0,
+    "operator_refit_uses_training_data_only": true,
+    "predictor_orientation": "B.T @ Phi",
+    "project_stochastic": false,
+    "system": "vanderpol",
+    "tau": 1e-06,
+    "train_seeds": [
+      0,
+      1,
+      2
+    ]
+  },
+  "execution": {
+    "archive_after_independent_verification": true,
+    "no_retry_with_replacement_seed_material": true,
+    "output_must_not_exist": true,
+    "preflight_full_certificate_test_suite": true,
+    "require_clean_source": true,
+    "require_committed_configuration": true
+  },
+  "norm_budgets": {
+    "deduplicate_exact_binary64": true,
+    "fixed_constants": [
+      1.0,
+      1.4142135623730951
+    ],
+    "sort_ascending": true,
+    "training_derived": [
+      "nlms_spectral_norm",
+      "twice_nlms_spectral_norm"
+    ]
+  },
+  "pair_sampling": {
+    "evaluation_modes": [
+      "matched_stochastic",
+      "deterministic"
+    ],
+    "horizon_steps": 1200,
+    "implementation_id": "independent_uniform_time_pair_v1"
+  },
+  "protocol": "reproduction/certificates/DYNAMICAL_CONFIRMATORY_PROTOCOL.md",
+  "protocol_sha256": "daec3dc5bb96e115ce6c0bf82e64e7497318796b9cdd1dc80557b691f46b071c",
+  "reference_class_map": {
+    "implementation_id": "nearest_stored_kmeans_center_v1"
+  },
+  "retained_quantities": {
+    "save_F_delta": true,
+    "save_V_delta": true,
+    "save_all_kappa_bounds": true,
+    "save_class_counts": true,
+    "save_f_hat": true,
+    "save_frozen_nlms_mse": true,
+    "save_frozen_nlms_rmse": true,
+    "save_pair_seed_metadata": true,
+    "save_pair_states": true,
+    "save_pair_time_indices": true,
+    "save_phi": true,
+    "save_reference_class_labels": true,
+    "save_runtime": true,
+    "save_s_hat": true,
+    "save_selected_center_squared_distances": true,
+    "save_simplex_diagnostics": true,
+    "save_state_range_diagnostics": true,
+    "save_successor_coordinates": true
+  },
+  "seed_scheme": {
+    "bit_generator": "PCG64",
+    "campaign_key": 4,
+    "evaluation_seed_components": [
+      "campaign_key",
+      "system_key",
+      "mode_key",
+      "sample_size",
+      "replicate_index",
+      "pair_index",
+      "stream_key",
+      "root_seed"
+    ],
+    "mode_keys": {
+      "deterministic": 2,
+      "matched_stochastic": 1
+    },
+    "notes": "Every retained pair receives distinct trajectory and time-index seed material derived from the full evaluation tuple. Evaluation seed material is disjoint from the literal representation-training seeds 0, 1, and 2.",
+    "root_seed": 20261003,
+    "seed_sequence": "numpy.random.SeedSequence",
+    "stream_keys": {
+      "time_seed": 2,
+      "trajectory_seed": 1
+    },
+    "system_keys": {
+      "duffing": 1,
+      "vanderpol": 2
+    },
+    "training_seed_namespace": [
+      0,
+      1,
+      2
+    ]
+  },
+  "selection_provenance": {
+    "design_selected_after_completed_pilot": true,
+    "fresh_confirmatory_evaluation_pairs_required": true,
+    "pilot_archive_sha256": "17d19181ebc31eaa1b084f8673d4f6ece786dafaa3573452b2753e2a1367dd15",
+    "pilot_campaign_id": "dynamical_original_iid_pilot_v1",
+    "pilot_configuration_sha256": "3fdee83ec36f8e7a62032407875738e5687d2da06884ae0a124fb43498da50b1",
+    "pilot_evaluation_pairs_may_be_used_as_confirmatory_evidence": false,
+    "pilot_evaluation_pairs_may_be_used_for_planning": true,
+    "pilot_execution_source_commit": "4cda98e027cdc6b820e37f13869155e6f35956a8",
+    "pilot_verifier_source_commit": "615b017d6d6e480cd6547982851747d8dbc7f432",
+    "selection_summary": "Post-pilot exploratory planning selected Van der Pol with omega=128 after training-only NLMS refits. The original Van der Pol omega=4 representation was structurally vacuous at the fitted predictor norm, while omega=128 was asymptotically positive in every retained M=2048 planning replicate and plug-in finite-sample positive in every planning replicate at M=4096. Duffing remained structurally vacuous through the exploratory high-omega stability screen."
+  },
+  "source_frozen_abstraction": {
+    "implementation_id": "verified_frozen_kahkm_abstraction_source_v1",
+    "refit_autoencoders": false,
+    "refit_kmeans": false,
+    "representation_archive_sha256": "04a5ad3d4dae3a8fafce2576512fdce06d6c738907ced7d3ad9fde600d8c0e2a",
+    "representation_build_execution_commit": "1add19b94372257d16118f60c69e1e8afa668259",
+    "representation_verifier_source_commit": "65db148f865c94f988676381c6b5f12222356b31",
+    "reuse_kahm_autoencoders": true,
+    "reuse_state_space_kmeans_centers": true,
+    "source_configuration_relative_path": "reproduction/certificates/configs/dynamical_pilot_v1.json",
+    "source_configuration_sha256": "3fdee83ec36f8e7a62032407875738e5687d2da06884ae0a124fb43498da50b1",
+    "source_frozen_representation": {
+      "Nb": 100,
+      "batch_size": 256,
+      "beta": 0.1,
+      "format_id": "kahkm_frozen_representation_v1",
+      "kmeans_kind": "full",
+      "max_train_per_cluster": null,
+      "n_jobs": -1,
+      "n_steps_train": 1200,
+      "nlms_epochs": 20,
+      "project_stochastic": false,
+      "representation_random_state": 0,
+      "save_ae_to_disk": true,
+      "subspace_dim": 4,
+      "systems": {
+        "vanderpol": {
+          "dt": 0.02,
+          "initial_state_center": [
+            2.0,
+            0.0
+          ],
+          "initial_state_noise_std": 0.05,
+          "matched_process_noise_std": 1e-05,
+          "n_clusters": 25,
+          "omega": 4.0,
+          "tau": 1e-06,
+          "vanderpol_mu": 1.0
+        }
+      },
+      "train_seeds": [
+        0,
+        1,
+        2
+      ]
+    }
+  }
+}

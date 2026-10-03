@@ -40,6 +40,21 @@ from typing import Any, Mapping, Sequence
 
 import numpy as np
 
+# Support direct execution as
+#
+#     python scripts/verify_dynamical_pilot_numerics.py
+#
+# Python otherwise places only the scripts/ directory at sys.path[0], which
+# prevents imports of repository-root modules such as
+# kahkm_dynamical_frozen_source.
+_IMPORT_ROOT = Path(__file__).resolve().parents[1]
+
+if str(_IMPORT_ROOT) not in sys.path:
+    sys.path.insert(
+        0,
+        str(_IMPORT_ROOT),
+    )
+
 from kahkm_dynamical_frozen_source import (
     EXPECTED_ARCHIVE_SHA256,
     restore_repository_frozen_representations,

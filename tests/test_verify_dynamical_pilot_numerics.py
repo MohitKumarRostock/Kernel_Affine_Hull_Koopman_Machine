@@ -7,8 +7,11 @@ do not generate dynamical trajectories, and do not fit KAHM representations.
 
 import hashlib
 import json
+import os
 from pathlib import Path
 from types import SimpleNamespace
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -1780,6 +1783,67 @@ class DynamicalPilotVerifierTests(unittest.TestCase):
         )
 
     # 21
+    def test_direct_script_launch_can_import_repository_modules(self):
+        script = (
+            verifier.ROOT
+            / "scripts"
+            / "verify_dynamical_pilot_numerics.py"
+        )
+
+        environment = dict(
+            os.environ
+        )
+
+        # Make the regression independent of any user PYTHONPATH that could
+        # accidentally mask the direct-script import problem.
+        environment.pop(
+            "PYTHONPATH",
+            None,
+        )
+
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(
+                    script
+                ),
+                "--help",
+            ],
+            cwd=
+                verifier.ROOT,
+            env=
+                environment,
+            stdin=
+                subprocess.DEVNULL,
+            stdout=
+                subprocess.PIPE,
+            stderr=
+                subprocess.PIPE,
+            text=True,
+            check=False,
+        )
+
+        self.assertEqual(
+            completed.returncode,
+            0,
+            msg=(
+                "Direct verifier launch failed.\n"
+                f"STDOUT:\n{completed.stdout}\n"
+                f"STDERR:\n{completed.stderr}"
+            ),
+        )
+
+        self.assertIn(
+            "--evidence",
+            completed.stdout,
+        )
+
+        self.assertNotIn(
+            "ModuleNotFoundError",
+            completed.stderr,
+        )
+
+    # 22
     def test_evaluation_verification_enforces_evidence_order_and_dimensions(self):
         cases = (
             (

@@ -1,0 +1,154 @@
+{
+  "campaign_id": "dynamical_original_iid_pilot_v1",
+  "campaign_role": "pilot",
+  "certificate": {
+    "delta": 0.05,
+    "implementation_id": "original_iid_pair_certificate_v1"
+  },
+  "execution": {
+    "archive_after_independent_verification": true,
+    "no_retry_with_replacement_seed_material": true,
+    "output_must_not_exist": true,
+    "preflight_full_certificate_test_suite": true,
+    "require_clean_source": true,
+    "require_committed_configuration": true
+  },
+  "frozen_representation": {
+    "Nb": 100,
+    "batch_size": 256,
+    "beta": 0.1,
+    "format_id": "kahkm_frozen_representation_v1",
+    "kmeans_kind": "full",
+    "max_train_per_cluster": null,
+    "n_jobs": -1,
+    "n_steps_train": 1200,
+    "nlms_epochs": 20,
+    "project_stochastic": false,
+    "representation_random_state": 0,
+    "save_ae_to_disk": true,
+    "subspace_dim": 4,
+    "systems": {
+      "duffing": {
+        "dt": 0.03,
+        "initial_state_center": [
+          0.7,
+          0.0
+        ],
+        "initial_state_noise_std": 0.05,
+        "matched_process_noise_std": 0.0001,
+        "n_clusters": 10,
+        "omega": 2.0,
+        "tau": 1e-06,
+        "vanderpol_mu": 1.0
+      },
+      "vanderpol": {
+        "dt": 0.02,
+        "initial_state_center": [
+          2.0,
+          0.0
+        ],
+        "initial_state_noise_std": 0.05,
+        "matched_process_noise_std": 1e-05,
+        "n_clusters": 25,
+        "omega": 4.0,
+        "tau": 1e-06,
+        "vanderpol_mu": 1.0
+      }
+    },
+    "train_seeds": [
+      0,
+      1,
+      2
+    ]
+  },
+  "norm_budgets": {
+    "deduplicate_exact_binary64": true,
+    "fixed_constants": [
+      1.0,
+      1.4142135623730951
+    ],
+    "sort_ascending": true,
+    "training_derived": [
+      "nlms_spectral_norm",
+      "twice_nlms_spectral_norm"
+    ]
+  },
+  "pair_sampling": {
+    "evaluation_modes": [
+      "matched_stochastic",
+      "deterministic"
+    ],
+    "horizon_steps": 1200,
+    "implementation_id": "independent_uniform_time_pair_v1"
+  },
+  "pilot_design": {
+    "replicates_per_cell": 8,
+    "sample_sizes": [
+      128,
+      512,
+      2048
+    ],
+    "systems": [
+      "duffing",
+      "vanderpol"
+    ]
+  },
+  "protocol": "reproduction/certificates/DYNAMICAL_PROTOCOL.md",
+  "reference_class_map": {
+    "implementation_id": "nearest_stored_kmeans_center_v1"
+  },
+  "retained_quantities": {
+    "save_F_delta": true,
+    "save_V_delta": true,
+    "save_all_kappa_bounds": true,
+    "save_class_counts": true,
+    "save_f_hat": true,
+    "save_frozen_nlms_mse": true,
+    "save_frozen_nlms_rmse": true,
+    "save_pair_seed_metadata": true,
+    "save_pair_states": true,
+    "save_pair_time_indices": true,
+    "save_phi": true,
+    "save_reference_class_labels": true,
+    "save_runtime": true,
+    "save_s_hat": true,
+    "save_selected_center_squared_distances": true,
+    "save_simplex_diagnostics": true,
+    "save_state_range_diagnostics": true,
+    "save_successor_coordinates": true
+  },
+  "seed_scheme": {
+    "bit_generator": "PCG64",
+    "campaign_key": 3,
+    "evaluation_seed_components": [
+      "campaign_key",
+      "system_key",
+      "mode_key",
+      "sample_size",
+      "replicate_index",
+      "pair_index",
+      "stream_key",
+      "root_seed"
+    ],
+    "mode_keys": {
+      "deterministic": 2,
+      "matched_stochastic": 1
+    },
+    "notes": "Every retained pair receives distinct trajectory and time-index seed material derived from the full evaluation tuple. Evaluation seed material is disjoint from the literal representation-training seeds 0, 1, and 2.",
+    "root_seed": 20261003,
+    "seed_sequence": "numpy.random.SeedSequence",
+    "stream_keys": {
+      "time_seed": 2,
+      "trajectory_seed": 1
+    },
+    "system_keys": {
+      "duffing": 1,
+      "vanderpol": 2
+    },
+    "training_seed_namespace": [
+      0,
+      1,
+      2
+    ]
+  }
+}

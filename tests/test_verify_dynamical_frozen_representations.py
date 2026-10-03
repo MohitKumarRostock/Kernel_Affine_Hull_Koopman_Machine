@@ -8,6 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 from types import SimpleNamespace
+import subprocess
 import tempfile
 import unittest
 from unittest import mock
@@ -1073,7 +1074,42 @@ class FrozenRepresentationVerifierTests(unittest.TestCase):
             output.exists()
         )
 
-    # 20
+    def test_direct_script_entrypoint_can_import_repository_modules(self):
+        completed = subprocess.run(
+            [
+                verifier.sys.executable,
+                str(
+                    PROJECT_ROOT
+                    / "scripts"
+                    / "verify_dynamical_frozen_representations.py"
+                ),
+                "--help",
+            ],
+            cwd=PROJECT_ROOT,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=False,
+        )
+
+        self.assertEqual(
+            completed.returncode,
+            0,
+            msg=completed.stderr,
+        )
+
+        self.assertIn(
+            "--evidence-dir",
+            completed.stdout,
+        )
+
+        self.assertNotIn(
+            "ModuleNotFoundError",
+            completed.stderr,
+        )
+
+    # 21
     def test_main_success_writes_report_and_checksum(self):
         output = (
             self.temp_root

@@ -33,6 +33,23 @@ from typing import Any, Mapping
 
 import numpy as np
 
+
+# When this file is executed directly as
+#
+#     python scripts/verify_dynamical_frozen_representations.py
+#
+# Python places the scripts/ directory, not the repository root, at
+# sys.path[0]. Add the repository root before importing local project modules.
+# This bootstrap is deterministic and has no file-system side effects.
+ROOT = Path(__file__).resolve().parents[1]
+
+if str(ROOT) not in sys.path:
+    sys.path.insert(
+        0,
+        str(ROOT),
+    )
+
+
 from kahkm_dynamical_representation import (
     DYNAMICAL_PILOT_CONFIG_RELATIVE,
     DYNAMICAL_PILOT_CONFIG_SHA256,
@@ -45,8 +62,6 @@ from kernel_affine_hull_koopman_machines import (
     kahm_associations,
 )
 
-
-ROOT = Path(__file__).resolve().parents[1]
 
 VERIFIER_ID = "dynamical_frozen_representation_verifier_v1"
 

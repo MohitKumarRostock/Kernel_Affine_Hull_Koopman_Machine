@@ -87,6 +87,8 @@ class DynamicalEvaluationResult:
     frozen_predictor_rmse: float
     statistics: PairStatistics
     budget_certificates: tuple[BudgetCertificate, ...]
+    phi_rows: NDArray[np.float64]
+    successor_rows: NDArray[np.float64]
     labels: tuple[int, ...]
     selected_center_squared_distances: tuple[float, ...]
     phi_coordinate_min: float
@@ -490,6 +492,32 @@ def evaluate_frozen_dynamical_pairs(
         labels=labels,
     )
 
+    # Retain the exact already-computed association coordinates for campaign
+    # evidence. Store them in the same row-major (M, C) convention consumed by
+    # statistics_from_pairs, and make the returned copies read-only so callers
+    # cannot silently mutate an evaluation result after certification.
+    retained_phi_rows = np.array(
+        phi_rows,
+        dtype=np.float64,
+        copy=True,
+        order="C",
+    )
+
+    retained_successor_rows = np.array(
+        successor_rows,
+        dtype=np.float64,
+        copy=True,
+        order="C",
+    )
+
+    retained_phi_rows.setflags(
+        write=False
+    )
+
+    retained_successor_rows.setflags(
+        write=False
+    )
+
     operator = _finite_matrix(
         "B",
         B,
@@ -644,6 +672,10 @@ def evaluate_frozen_dynamical_pairs(
             tuple(
                 budget_results
             ),
+        phi_rows=
+            retained_phi_rows,
+        successor_rows=
+            retained_successor_rows,
         labels=
             tuple(
                 int(value)

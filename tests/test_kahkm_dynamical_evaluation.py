@@ -869,7 +869,59 @@ class DynamicalEvaluationTests(unittest.TestCase):
                         delta=0.05,
                     )
 
-    # 20
+    def test_retained_association_coordinates_are_exact_row_major_and_read_only(self):
+        phi, successor_phi = self.associations()
+
+        result, _ = self.evaluate(
+            phi=phi,
+            successor_phi=successor_phi,
+        )
+
+        self.assertEqual(
+            result.phi_rows.shape,
+            (3, 2),
+        )
+
+        self.assertEqual(
+            result.successor_rows.shape,
+            (3, 2),
+        )
+
+        np.testing.assert_array_equal(
+            result.phi_rows,
+            phi.T,
+        )
+
+        np.testing.assert_array_equal(
+            result.successor_rows,
+            successor_phi.T,
+        )
+
+        self.assertFalse(
+            result.phi_rows.flags.writeable
+        )
+
+        self.assertFalse(
+            result.successor_rows.flags.writeable
+        )
+
+        with self.assertRaises(
+            ValueError
+        ):
+            result.phi_rows[
+                0,
+                0,
+            ] = 0.0
+
+        with self.assertRaises(
+            ValueError
+        ):
+            result.successor_rows[
+                0,
+                0,
+            ] = 0.0
+
+    # 21
     def test_results_are_immutable_and_evaluation_does_not_mutate_inputs(self):
         model = self.model()
         B = self.operator()

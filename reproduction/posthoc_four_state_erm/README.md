@@ -18,7 +18,7 @@ This directory documents a *secondary analysis* of the original four-state campa
 - The fixed prototypes use the known model parameter `p`, independently of evaluation data. This is an oracle-design advantage.
 - All new figures and comparisons must be labeled post-hoc. Historical manuscript numerical results remain historical.
 
-See `scripts/reanalyze_historical_four_state.py` for the archived-dataset ingestion and verification workflow. The formula dependency `certificate_reanalysis.py`, full 117,000-row CSVs, test suite, and accompanying source files are in the independently retained complete reproducibility ZIP, `KAHKM_FourState_ERM_Full_Reanalysis.zip`; the present directory is not yet the complete runnable source distribution until those files are committed.
+The repository now includes the complete four-state post-hoc calculation and archived outputs. Follow [`README_REPRODUCE.md`](README_REPRODUCE.md) for the verified frozen-input commands and exact expected SHA-256 values. Scripts `scripts/build_source_zip.py`, `scripts/reanalyze_historical_four_state.py` and `scripts/certificate_reanalysis.py` reproduce the computations from the unchanged original campaign. `outputs/historical_117k/` contains both 117-cell summary CSVs and full 117,000-row replicate-level CSVs stored as `.csv.gz` (decompress to verify the published uncompressed checksums). `tests/test_frozen_erm.py` checks the four-state special-case formulas and the archived summaries. The immutable results-bearing commit is `d6505683d7d899beb69b00b4831db1ad37e386f2`.
 
 ## Four-state illustrative results
 See `selected_comparison_joint.csv` for the p=31/32 conflicting-successor case, 1,000 archived replicates per sample size.

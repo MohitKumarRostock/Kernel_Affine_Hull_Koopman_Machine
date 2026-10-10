@@ -1,0 +1,70 @@
+name: Verify and archive frozen four-state post-hoc results
+on:
+  push:
+    branches:
+      - posthoc-four-state-erm-2026-10-10
+    paths:
+      - '.github/workflows/four_state_erm_reanalysis.yml'
+      - 'reproduction/posthoc_four_state_erm/scripts/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: posthoc-four-state-erm-2026-10-10
+  cancel-in-progress: false
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install numerical dependency
+        run: python -m pip install numpy==2.3.5
+      - name: Repackage archived inputs without modifying them
+        run: |
+          python reproduction/posthoc_four_state_erm/scripts/build_source_zip.py \
+            --repo-root . --out /tmp/kahkm_four_state_frozen.zip
+      - name: Recompute old and new certificates from 117,000 archived count vectors
+        run: |
+          python reproduction/posthoc_four_state_erm/scripts/reanalyze_historical_four_state.py \
+            --archive /tmp/kahkm_four_state_frozen.zip \
+            --out reproduction/posthoc_four_state_erm/outputs/historical_117k
+      - name: Compare deterministic results against recorded SHA-256 and pack replicate evidence
+        run: |
+          python - <<'PY'
+          import gzip,hashlib,json
+          from pathlib import Path
+          p=Path("reproduction/posthoc_four_state_erm/outputs/historical_117k")
+          m=json.loads((p/"manifest.json").read_text())
+          expected={
+            "cell_summary_joint.csv":"6ffea4bfe2e8e1e545ddb8aecf241fc1341a2c3b7a934767907c96d7e2bfac37",
+            "cell_summary_pointwise.csv":"eefda7da73d7dc9024f36e33664b121e92cedbb6b305cb19c961ad8c298b35a6",
+            "replicates_joint.csv":"380476b3ce1f01129580ebfa0932828be7e2eae1c495d90bd980335278b859b9",
+            "replicates_pointwise.csv":"927d48bfd80707abf17ff319f712282c948b0a8162c77a86ab161d5aa4519373"
+          }
+          for name,checksum in expected.items():
+            path=p/name
+            h=hashlib.sha256(path.read_bytes()).hexdigest()
+            assert h==checksum,(name,h,checksum)
+            assert m["outputs"][name]==checksum
+            if name.startswith("replicates_"):
+              with path.open("rb") as source,(p/(name+".gz")).open("wb") as target:
+                with gzip.GzipFile(fileobj=target,mode="wb",filename="",compresslevel=9,mtime=0) as stream:
+                  for block in iter(lambda:source.read(1<<20),b""):stream.write(block)
+              path.unlink()
+          assert m["source_archive_records"]==117000
+          assert m["original_certificate_recalculation_max_abs_error"]["L_label"]<2e-11
+          print("All four deterministic CSV checksums matched frozen reanalysis outputs.")
+          PY
+      - name: Publish regenerated summaries and compressed replicate-level files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reproduction/posthoc_four_state_erm/outputs/historical_117k
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive SHA-verified four-state post-hoc certificate comparisons"
+            git push origin HEAD:posthoc-four-state-erm-2026-10-10
+          fi

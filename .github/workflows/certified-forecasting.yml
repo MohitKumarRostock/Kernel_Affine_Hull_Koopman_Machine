@@ -1,0 +1,32 @@
+name: Certified forecasting checks
+on:
+  push:
+    branches: [research/certified-soft-state-forecasting]
+    paths:
+      - extensions/certified_forecasting/**
+      - .github/workflows/certified-forecasting.yml
+  pull_request:
+    paths:
+      - extensions/certified_forecasting/**
+      - .github/workflows/certified-forecasting.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mathematical-and-protocol-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      PYTHONPATH: src
+    defaults:
+      run:
+        working-directory: extensions/certified_forecasting
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-reference.txt
+      - run: python -m unittest discover -s tests -v

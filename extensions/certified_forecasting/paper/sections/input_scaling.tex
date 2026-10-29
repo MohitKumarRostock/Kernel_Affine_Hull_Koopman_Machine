@@ -1,0 +1,188 @@
+\section{A follow-up comparison of KAHM input scaling}
+\label{sec:input-scaling}
+
+\input{tables/input_scaling_numbers}
+
+The preceding experiments use training-moment standardization before fitting
+the geometric dictionaries. Although every raw observation in those tasks is
+already bounded by $[-1,1]$, standardization generally sends the histories
+outside that interval. We therefore conducted a separate follow-up to test
+whether KAHMs benefit from modeling histories whose training range is
+$[-1,1]$. This is an empirical preprocessing question: the reconstruction
+regularization and folding score in the reused KAHM implementation depend on
+input magnitudes and geometry, so bounded raw targets alone do not determine
+the scale seen by a KAHM.
+
+\subsection{A fixed intervention and two types of replication}
+
+For each history coordinate $j$, let $a_j$ and $b_j$ be its minimum and maximum
+over the training histories, computed before the original geometry
+subsampling. The primary alternative replaces standardization by
+\begin{equation}
+ z_j(x)=
+ \begin{cases}
+  2\dfrac{x_j-a_j}{b_j-a_j}-1,&b_j>a_j,\\[4pt]
+  0,&b_j=a_j.
+ \end{cases}
+ \label{eq:input-minmax}
+\end{equation}
+The training extrema are frozen for validation, calibration, and testing.
+An unseen coordinate outside the training extrema can map outside $[-1,1]$;
+the primary arm does not clip it. A separately specified diagnostic arm uses
+$\widetilde z_j=\max\{-1,\min\{1,z_j\}\}$ for all queries. A second diagnostic
+arm uses the existing bounded raw histories without standardization.
+Training-constant coordinates map to zero in both min--max arms. No extrema
+are estimated from a validation set, test set, or completed individual test
+trajectory.
+
+The intervention applies only to KAHM geometry and its dependent retained,
+Frobenius-budget, duplicate-block, hard-assignment, and feature-rollout models.
+The non-KAHM feature families, forecast targets, output clipping, coefficient
+budgets, ridge coefficient, affinity exponent, history lengths, origins,
+sample counts, local-point limits, and random streams are unchanged. Each
+family selects its history and dictionary stage by mean validation MSE over
+the horizons, separately within each preprocessing arm. The preprocessing
+arms themselves are not selected using test error.
+
+The first comparison replays all original fitting seeds and every
+coefficient-budget condition. Its four arms are paired on identical data.
+Because the hypothesis was proposed after inspecting the original study,
+these reused streams provide a matched follow-up comparison, not a newly
+untouched test set. The primary outcome, alternatives, selection rule, and
+complete schedule were recorded before the new scaling results were read.
+All outcomes are retained, including regressions. The exact-risk two-atom
+experiment and analytic duplicate-invariance illustration do not fit KAHM
+input geometry and therefore have no corresponding scaling intervention.
+
+For confirmation, we froze the same four preprocessing arms and used fitting
+seeds $4701$--$4703$ on all six synthetic systems. The original stream-offset
+rule then generates new training, validation, calibration, and test episodes,
+with the original sample counts and main-study budget $\kappa=4$. This adds
+18 paired synthetic repetitions, with no tuning between the replay and
+confirmation stages. For PenDigits, the same three new seeds select new
+training subsamples from the existing development writers. Its validation
+writers and held-out cohort remain the same. This is confirmation across
+training subsamples on a fixed cohort; it is not a replication on newly
+sampled writers.
+
+\subsection{Accuracy gains, regressions, and fitting variation}
+
+\input{tables/input_scaling_primary}
+
+Table~\ref{tab:input-scaling-primary} reports the complete primary contrast.
+Mean all-horizon MSE decreases on the harmonic, quasiperiodic, and Duffing
+systems in both stages. The Duffing reduction is
+\ScalingDuffingOriginalMagnitude\% on the original seeds and
+\ScalingDuffingConfirmationMagnitude\% on the new seeds. The nonlinear-AR
+effect is small and changes sign between stages. Logistic error instead
+increases by \ScalingLogisticOriginalMagnitude\% and
+\ScalingLogisticConfirmationMagnitude\%, and Van der Pol error increases by
+\ScalingVDPOriginalMagnitude\% and \ScalingVDPConfirmationMagnitude\%.
+These adverse results are part of the comparison. An all-horizon improvement
+also need not hold at every horizon: on the original quasiperiodic repetitions,
+short-horizon gains accompany an increase in horizon-12 mean RMSE from 0.2841
+to 0.2894.
+
+\input{tables/input_scaling_uncertainty}
+
+The fitting repetition is distinct from an individual test episode.
+Table~\ref{tab:input-scaling-uncertainty} reports both the sample variation of
+the paired MSE change across complete repetitions and its conditional
+test-episode standard error. For the latter, we first subtract the two
+models' losses on each common episode and average horizons within that
+episode. We estimate the variance of each repetition's paired average from
+its independent test episodes, then combine those variances for the mean
+over repetitions. This measures Monte Carlo uncertainty conditional on the
+fitted, validation-selected models. The many test episodes do not supply
+many independent fits. The mean change weights effect sizes, so it need not
+have the sign of a majority of repetitions. The archive retains every seed's sign and effect;
+neither a small conditional standard error nor a favorable mean is treated
+as a general guarantee that scaling improves a newly fitted model.
+
+\input{tables/input_scaling_pendigits}
+
+The strongest relative gain in the primary comparison occurs for the retained soft
+KAHM predictor on PenDigits. Its all-horizon, coordinate-pooled cohort MSE
+decreases by \ScalingPenOriginalMagnitude\% in the replay and
+\ScalingPenConfirmationMagnitude\% with the new training subsamples.
+Table~\ref{tab:input-scaling-pendigits} reports the horizon-wise RMSEs and
+their fitting-seed variation. All three horizons improve for each coordinate
+and each fitting seed in both stages. Every held-out writer also has a smaller
+coordinate-pooled, all-horizon mean loss in each seed. These repeated writer
+comparisons concern the same 13 writers and do not establish an iid-writer
+population claim. Quadratic regression and ridge AR remain more accurate
+than the scaled retained KAHM predictor on this task; the one-step retained
+KAHM error also remains above persistence.
+
+The improvement does not extend to every KAHM-derived predictor. On PenDigits,
+the hard-assignment model's all-horizon MSE increases by
+\ScalingHardPenOriginalIncrease\% on the original seeds and
+\ScalingHardPenConfirmationIncrease\% on the new seeds, with degradation in
+every fitting repetition. The complete records retain the other KAHM
+ablations and rollouts as well. The evidence supports a benefit for particular
+soft representations under the stated task and protocol, not a claim that
+all KAHMs improve under the same scaling.
+
+As a distinct secondary outcome, the KAHM rollout has smaller mean all-horizon
+MSE on \ScalingRolloutOriginalImprovingTasks\ of seven original tasks and
+\ScalingRolloutConfirmationImprovingTasks\ of seven new-seed tasks.
+The new-seed reductions include \ScalingRolloutVDPConfirmationMagnitude\%
+on Van der Pol, \ScalingRolloutDuffingConfirmationMagnitude\% on Duffing,
+and \ScalingRolloutPenConfirmationMagnitude\% on PenDigits, while the
+logistic rollout instead worsens by
+\ScalingRolloutLogisticConfirmationMagnitude\%.
+
+\subsection{Diagnostic arms, coefficient budgets, and certification}
+
+\input{tables/input_scaling_diagnostics}
+\input{tables/input_scaling_sensitivity}
+
+Clipped min--max scaling gives very similar primary-family results to the
+unclipped alternative in this study, while using raw bounded histories can
+give a different change in accuracy (Table~\ref{tab:input-scaling-diagnostics}).
+Both diagnostics retain the logistic and Van der Pol limitations. Thus the
+observation that a history lies in $[-1,1]$ is insufficient to predict whether
+the learned forecasting model improves. The raw-history arm also removes
+centering and variance normalization, and min--max scaling changes both
+location and coordinate scale; this study does not attribute each outcome
+to a single internal component of KAHM geometry.
+
+Table~\ref{tab:input-scaling-budget} retains every original sensitivity
+condition. At $\kappa=1$, the mean effects are small and their seed signs are
+mixed. At $\kappa=4$ and 16, the quasiperiodic comparison improves in all three
+repetitions, while the logistic comparison worsens in all three. The harmonic
+mean changes sign across budgets. No budget or preprocessing arm is chosen
+by test performance. These results also limit extrapolation of a gain from
+one coefficient class to another.
+
+Improved empirical accuracy does not automatically produce a new certification
+decision. At each recorded tolerance $0.20$, $0.35$, and $0.50$, the number of
+repetitions in which the retained KAHM family certifies the all-horizon
+requirement is identical between standardization and the primary min--max
+arm for every original synthetic system and budget and every synthetic
+confirmation system. PenDigits retains the same small number of writer
+units and its uninformative conditional bounds. The original failure
+allocations apply within each frozen preprocessing arm; they do not provide
+a joint event for searching across all four arms. We do not label the
+cross-arm accuracy comparisons as certified preprocessing improvements.
+
+\paragraph{Audit and resulting implementation choice.}
+The standardization replay reproduces every retained non-timing numerical
+result of the original campaigns exactly. Across arms, all non-KAHM numerical
+results and saved synthetic score arrays are unchanged; the writer-level
+control losses are unchanged as well. Four truncated score archives, two in
+the original replay and two in synthetic confirmation, were regenerated by
+exact replays with the same frozen source, configuration, and seeds. Their
+non-timing result records and frozen candidate descriptions agree exactly;
+hashes of the damaged and replayed archives and the exact-replay repair
+records are retained. Final archive
+integrity checks and independent aggregation of the selected-model test
+scores precede reporting.
+
+The implementation consequently exposes the scaling alternatives as explicit
+options and preserves standardization as the default for the original
+campaigns. The manuscript retains its original tables and reports this
+follow-up separately. The replicated PenDigits and Duffing gains justify
+making the option available, while the replicated regressions preclude
+presenting it as a universal improvement or silently replacing every original
+experimental result.

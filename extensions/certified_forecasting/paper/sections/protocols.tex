@@ -1,0 +1,144 @@
+\section{Synthetic protocols, comparison models, and reproduction}
+\label{app:protocols}
+
+\subsection{Episode laws}
+
+Each row of a generated data array is an independent episode. Uniform random
+variables below are independent unless a shared episode parameter is explicitly
+specified. The observation range is contained in $[-1,1]$ in all four main
+systems, so the scalar loss range is $[0,4]$ after prediction clipping.
+\begin{enumerate}[leftmargin=*,itemsep=5pt]
+\item \textbf{Harmonic.} Draw phase $\theta\sim U[0,2\pi]$ and frequency
+$\nu\sim U[.12,.28]$ per episode. At integer times,
+$y_t=.85\cos(\theta+\nu t)+\eta_t$ with
+$\eta_t\sim U[-.03,.03]$. Thus $|y_t|\leq.88$.
+\item \textbf{Quasiperiodic.} Draw two phases independently and
+$\nu\sim U[.10,.22]$. Set
+$y_t=.55\cos(\theta_1+\nu t)+.30\cos(\theta_2+\sqrt2\nu t)+\eta_t$,
+with the same bounded observation noise. Again $|y_t|\leq.88$.
+\item \textbf{Nonlinear AR.} Initialize two values independently from
+$U[-.8,.8]$ and apply
+\[
+ y_{t+1}=\tanh\{1.25y_t-.65y_{t-1}+.25\sin(3y_t)+\eta_{t+1}\},
+ \qquad\eta_{t+1}\sim U[-.10,.10].
+\]
+The code discards its first 80 stored values before retaining the length-72
+episode. The two initial values occupy indices zero and one, and recursive
+updates start at index two. Hyperbolic tangent gives the output bound directly.
+\item \textbf{Logistic.} Draw $r\sim U[3.65,3.95]$ and
+$u_0\sim U[.05,.95]$, then iterate $u_{t+1}=ru_t(1-u_t)$.
+The code performs 40 burn-in loop iterations and stores the next 72 updated
+values as $y=2u-1$. Since $r\leq4$ and $u_0\in[0,1]$, the interval is invariant.
+The dynamics can be chaotic within an episode, but independence follows from
+independent episode initialization, not from a mixing assertion.
+\end{enumerate}
+
+The risk is defined by the finite generation and origin protocol, so neither
+stationarity after burn-in nor an invariant-distribution claim is needed.
+Physical units and horizon meanings are those of each explicitly defined
+synthetic observation process; no cross-generator average is presented as a
+universal physical error measure.
+
+\subsection{Random streams and configuration}
+
+The main fitting seeds are $1701,\ldots,1705$. For seed $s$, the four NumPy
+generator seeds are $100s+11$ for training, $100s+23$ for validation,
+$100s+47$ for calibration, and $100s+89$ for independent testing. They define
+separate pseudorandom streams. The same seed domains across generators are
+used for reproducible comparison; no independence across different benchmark
+conditions is needed for a within-run guarantee. Clustering receives a
+training-seed and history-length offset, and each retained block receives its
+own deterministic offset. All random-number generation uses the versions and
+bit-generator defaults in the archived environment.
+
+Within the training data, geometry may use a fixed seeded subset of at most
+1600 rows; the decoder uses all 1664 rows from 128 episodes and 13 origins.
+Training rows may overlap because no independent-row assumption is made for
+the finite optimization objective. Validation and test losses weight episodes
+equally, then origins equally within each episode. All comparisons use identical
+origin sets, and validation selection averages MSE over all three horizons.
+
+\subsection{Comparison definitions}
+
+The RBF comparator uses training $k$-means centers and a global bandwidth given
+by the median within-cluster squared radius. Its normalized exponential
+distance weights form one simplex block. The affine-hull comparator fits a
+local principal subspace, retaining at most two directions and at least one
+normal direction when possible. Its score combines the normalized squared
+orthogonal residual with $0.1$ times normalized squared distance to the cluster
+center, followed by exponential normalization. These constructions isolate
+different geometric coordinates under the same retained-block decoder.
+
+Hard KAHM states choose the largest coordinate of the final block and replace
+it by a one-hot vector. Ridge AR uses the untransformed causal history;
+quadratic regression uses training-standardized histories and all monomials
+through degree two, without an extra constant feature because the intercept is
+unpenalized. Their direct heads use the stated Frobenius constraint and ridge
+coefficient. Persistence repeats the latest observation. The constant model is
+the training target mean for each horizon, with zero sensitivity budget.
+
+The iterated baselines fit an affine transition $F_{t+1}\approx F_tA+b$ and a
+scalar decoder $y_t\approx F_td+c$, both by ridge regression. The $h$-step
+forecast uses their exact affine composition and clips the final output only.
+Its effective raw-output coefficient vector is computed explicitly; its
+Euclidean norm supplies the frozen Lipschitz budget at that horizon. No
+spectral stability, exact closure, or trajectory-distribution approximation is
+silently assumed in the risk certificate.
+
+\subsection{Reproducing the retained results}
+
+The main configurations, source hashes, per-repetition candidate descriptions,
+all certificate endpoints, full scalar trial records, and generated tables
+are provided with the code. Double-precision per-episode score archives allow
+independent reconstruction of each confidence calculation. If large generated
+archives are not checked into the code repository, the fixed-seed runners
+regenerate them; the full evidence package retains the originally generated
+archives. A deterministic replay was checked for one full main experiment,
+and the audit checks the complete retained main campaign.
+
+From the extension directory, the reproduction commands are
+\begin{verbatim}
+export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
+export PYTHONPATH=src
+python experiments/run_forecasting.py --config configs/main_v1.json \
+  --output results/reproduced_main
+python experiments/run_known_risk.py \
+  --output results/reproduced_known_risk
+python experiments/prepare_pendigits.py
+python experiments/run_pendigits.py --help
+python -m unittest discover -s tests -v
+\end{verbatim}
+The documentation gives the exact commands for comparison against retained
+results, the real-data and follow-up campaigns, generating figures, and building
+the manuscript. The reference package versions are NumPy 2.3.5, SciPy 1.17.0,
+scikit-learn 1.8.0, Matplotlib 3.10.8, pandas 2.2.3, and joblib 1.5.3.
+Bitwise reproducibility across different numerical libraries or architectures
+is not assumed. The runner refuses to overwrite an existing run and records
+exceptions instead of silently omitting failed attempts.
+
+\subsection{Reproducing the input-scaling follow-up}
+
+The original numerical campaigns above remain the reference experiments.
+The separate input-scaling study retains its original-seed and confirmation
+analyses in \path{results/input_scaling_study/analysis_original} and
+\path{results/input_scaling_study/analysis_confirmation}, respectively.
+The study directory also contains frozen protocols, per-seed comparisons,
+source provenance, and score-archive repair records. From the extension
+directory, the full four-arm schedule and the new manuscript tables can be
+generated with
+\begin{verbatim}
+python experiments/prepare_pendigits.py
+python experiments/run_input_scaling.py \
+  --output results/reproduced_input_scaling --workers 4
+python scripts/make_scaling_assets.py
+\end{verbatim}
+The study runner uses a new output directory and freezes both phase schedules
+before execution. Its \texttt{--phases}, \texttt{--campaigns}, and
+\texttt{--modes} options permit explicitly scoped reproductions. The asset
+generator reads the released audited comparison CSVs by default and accepts
+alternative analysis directories through \texttt{--analysis} and
+\texttt{--confirmation}. It does not refit models or choose preprocessing
+arms. The original code baseline is commit
+\texttt{a8bcf6c8016499e1a4b64f7dd4196af43c60bd78}; the release retains the
+original source hashes rather than relabeling old results as outputs of the
+new optional-scaling interface.

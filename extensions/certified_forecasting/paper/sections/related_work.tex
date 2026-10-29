@@ -1,0 +1,83 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Soft abstractions and geometric representations.}
+Soft state aggregation and its adaptive construction predate modern representation learning
+\citep{singh1994soft}. Approximate state abstractions provide guarantees for decision
+quality in reinforcement learning \citep{abel2016abstraction}, while latent transition
+models can be learned through task-relevant prediction objectives \citep{gelada2019deepmdp}.
+Kernel Affine Hull Machines construct geometric reconstruction models in reproducing
+kernel Hilbert spaces \citep{kumar2024kahm,kumar2025collaborative}. We use their
+reconstruction affinities to obtain soft coordinates; the underlying geometric
+reconstruction method is inherited, rather than a new component of this paper.
+Our statistical target is the forecasting error on the original output variables,
+and every comparison uses the same target and evaluation law.
+
+\paragraph{Koopman regression and learned dictionaries.}
+Extended dynamic mode decomposition approximates the Koopman operator on a finite
+dictionary \citep{williams2015edmd}. Learning that dictionary jointly with its
+propagation model is established \citep{li2017dictionary}.
+\citet{kostic2022regression} formulate RKHS Koopman estimation as a regression
+problem and give finite-sample bounds for independent and mixing data.
+The quality of a coordinate-space residual depends on the chosen basis;
+\citet{haseli2023consistency} develop a basis-invariant consistency index with a
+prediction-error interpretation. More recently, \citet{conradie2026trustworthy}
+combine invariance diagnostics, multistep projection-error bounds, and dictionary
+refinement, while \citet{coote2026residual} learn dictionaries using spectral
+residuals and conditioning penalties. Consequently, certified forecasting and
+dictionary refinement are not new at this level of generality. Our focus is a
+finite-sample statistical decision about a fixed, raw-output prediction target:
+certifying a fitted forecast, excluding an entire Lipschitz-bounded prediction
+class, and preserving admissible forecasts under geometric refinement.
+
+\paragraph{Lower bounds and model invalidation.}
+\citet{kumar2026limits} give lower confidence bounds for norm-bounded linear
+prediction of soft successor coordinates, based on the imbalance between
+within-class successor variation and retained input variation. The present work
+extends the prediction target and predictor class, and studies pairwise geometric
+witnesses that do not estimate two root-variance terms separately. The prior paper also includes fitted-model upper risk bounds and independent-trajectory evaluation. We inherit that sampling principle; the matched raw-output pair witness, refinement geometry, and implemented selection procedure are the extensions developed here.
+The broader objective of bounding the best risk in a model class is studied by
+\citet{muller2025falsification}; \citet{wu2026minimal} give non-asymptotic bounds
+in terms of minimal empirical risk. Dimension-free lower certification itself
+is therefore not our novelty claim. Pairwise differences also underlie the Gamma
+test for noise variance under smooth regression \citep{evans2002gamma}.
+Lipschitz regularity has long supported set-membership identification
+\citep{milanese2004setmembership} and trajectory invalidation through data-driven
+abstractions \citep{jin2020invalidation}. Pairwise Lipschitz violations are used
+by \citet{blum2026reliable} to compute prediction ranges robust to a bounded
+number of corrupted observations. Those guarantees concern feasible functions
+or adversarially corrupted interpolation. Here, the object is a lower confidence
+bound on population mean squared forecasting error.
+
+\paragraph{Risk calibration and temporal dependence.}
+The concentration ingredients are classical bounded-mean inequalities
+\citep{hoeffding1963} and empirical Bernstein bounds
+\citep{maurer2009empirical}. Learn then Test explicitly casts predictive risk
+control as multiple testing \citep{angelopoulos2025ltt}. We use this established
+principle when selecting among models fixed before calibration, and do not
+present a finite-family union bound as a new concentration theorem.
+Non-asymptotic guarantees for time-series forecasting have also been developed
+for standard statistical models \citep{mcdonald2017forecasting}.
+Our principal experimental protocol uses independent episodes; the observations
+within an episode may be dependent. For a single dependent series, a calibration
+split alone does not restore independence. Concentration and decoupling require
+additional assumptions, as illustrated by \citet{oliveira2024conformal} in the
+distinct setting of conformal coverage. A confidence statement about expected
+squared error is not a prediction interval and does not provide conditional
+coverage for every observed history.
+
+\paragraph{Scope of the extension.}
+The contribution is the connection between geometric loss of distinguishability,
+an explicit prediction-risk exclusion certificate, and refinement that preserves
+the previous forecasting class. Soft gating and residual fitting themselves have
+long histories \citep{jordan1994experts,buhlmann2003boosting}. The value of the
+block norm used for refinement is likewise an instance of the established
+group-norm and multiple-kernel-learning framework \citep{bach2008group}; its role
+here is to retain a comparable prediction budget when geometric blocks are
+added, including invariance to exact duplicate blocks. The proposed procedure
+must therefore be assessed through its derived guarantees and
+through comparisons that hold the raw forecasting task and calibration
+procedure fixed, with explicit representation-cost accounting. A lower bound above a desired error tolerance
+supports changing the representation or prediction class; a zero lower bound
+does not establish adequacy, and a positive lower bound does not by itself prove
+that a proposed refinement will improve prediction.

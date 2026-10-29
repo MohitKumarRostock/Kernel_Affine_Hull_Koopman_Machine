@@ -1,0 +1,424 @@
+{
+  "study": "KAHM input scaling paired follow-up, 29 October 2026",
+  "registered_before_new_results": true,
+  "parent_commit": "a8bcf6c8016499e1a4b64f7dd4196af43c60bd78",
+  "modes": {
+    "standard": "Published training mean/std preprocessing, unchanged.",
+    "minmax": "Primary contrast: featurewise training min/max maps to [-1,1]; no clipping of unseen extremes.",
+    "minmax_clip": "Prespecified bounded variant: same training min/max, clip all queries to [-1,1].",
+    "raw": "Prespecified control: existing mathematically bounded raw histories; no standardization."
+  },
+  "scope": "Change only KAHM banks and dependent direct/hard/Frobenius/duplicate/Koopman models; all other features and targets unchanged.",
+  "primary_family": "kahm_nested",
+  "primary_outcome": "Mean held-out MSE over all three horizons after within-arm validation selection, summarized separately for each task.",
+  "secondary_outcomes": [
+    "Per-horizon RMSE and between-fitting-seed SD",
+    "Other KAHM model families",
+    "Coefficient-budget sensitivity at kappa 1, 4, and 16",
+    "Conditional fitted-model paired episode-loss differences",
+    "Existing within-arm risk endpoints and decisions, descriptive across preprocessing arms"
+  ],
+  "selection": "Use the manuscript's validation-only selection separately in each arm. Never select history, prefix, or scaling arm by test scores.",
+  "aggregation": "Report per-task effects. An equal-task mean relative MSE change is descriptive, not a pooled physical risk. Treat PenDigits as one coordinate-pooled task.",
+  "change_gate": "No manuscript or GitHub change without a reproducible, supported improvement in forecasting. Mixed task effects do not establish a universal improvement. Any proposed promotion requires a fresh confirmation campaign with preprocessing fixed before new evaluation.",
+  "statistical_scope": "A post-publication-design follow-up. Replaying old streams is a matched descriptive comparison, not a fresh untouched test claim. Original risk deltas apply within each frozen arm, not jointly over all scaling arms. PenDigits writers are a fixed cohort; training seeds are not new test cohorts.",
+  "training_only_scaler": "Fit on all training history rows before the original seeded geometry subsample; save parameters. Constant coordinates map to zero.",
+  "preserved": [
+    "all original seeds and streams",
+    "train/validation/calibration/test sizes",
+    "causal histories and origins",
+    "horizons",
+    "target units and output clipping",
+    "kappa",
+    "ridge",
+    "omega",
+    "cluster counts",
+    "geometry sample budget",
+    "local KAHM training-point budget",
+    "decoder solver",
+    "non-KAHM controls"
+  ],
+  "excluded_from_rerun": "Analytical two-atom known-risk and exact duplicate-invariance illustrations do not train KAHM input geometry; no scaling intervention applies.",
+  "configurations": {
+    "main_v1": {
+      "campaign": "main_v1",
+      "systems": [
+        "harmonic",
+        "quasiperiodic",
+        "nonlinear_ar",
+        "logistic"
+      ],
+      "seeds": [
+        1701,
+        1702,
+        1703,
+        1704,
+        1705
+      ],
+      "n_train": 128,
+      "n_validation": 512,
+      "n_calibration": 4096,
+      "n_test": 2048,
+      "episode_length": 72,
+      "histories": [
+        4,
+        12
+      ],
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "origin_stride": 4,
+      "cluster_counts": [
+        2,
+        4,
+        8,
+        16
+      ],
+      "feature_kinds": [
+        "kahm",
+        "rbf",
+        "affine"
+      ],
+      "kappa": 4.0,
+      "alpha": 0.0001,
+      "omega": 16.0,
+      "max_geometry_inputs": 1600,
+      "max_train_per_cluster": 24,
+      "delta": 0.05,
+      "risk_delta_fraction": 0.8,
+      "rmse_tolerances": [
+        0.2,
+        0.35,
+        0.5
+      ],
+      "certificate_method": "bernstein",
+      "save_episode_scores": true
+    },
+    "oscillators_v1": {
+      "campaign": "oscillators_v1",
+      "systems": [
+        "vanderpol",
+        "duffing"
+      ],
+      "seeds": [
+        3701,
+        3702,
+        3703
+      ],
+      "n_train": 128,
+      "n_validation": 512,
+      "n_calibration": 4096,
+      "n_test": 2048,
+      "episode_length": 72,
+      "histories": [
+        4,
+        12
+      ],
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "origin_stride": 4,
+      "cluster_counts": [
+        2,
+        4,
+        8,
+        16
+      ],
+      "feature_kinds": [
+        "kahm",
+        "rbf",
+        "affine"
+      ],
+      "kappa": 4.0,
+      "alpha": 0.0001,
+      "omega": 16.0,
+      "max_geometry_inputs": 1600,
+      "max_train_per_cluster": 24,
+      "delta": 0.05,
+      "risk_delta_fraction": 0.8,
+      "rmse_tolerances": [
+        0.2,
+        0.35,
+        0.5
+      ],
+      "certificate_method": "bernstein",
+      "save_episode_scores": true,
+      "generator": {
+        "integrator": "vectorized classical RK4, float64",
+        "dt": 0.025,
+        "observation_interval": 0.1,
+        "burn_time": 10.0,
+        "initial_position_range": [
+          -2.0,
+          2.0
+        ],
+        "initial_velocity_range": [
+          -2.0,
+          2.0
+        ],
+        "duffing_phase_range": [
+          0.0,
+          6.283185307179586
+        ],
+        "vanderpol_mu": 1.0,
+        "duffing_damping": 0.2,
+        "duffing_forcing_amplitude": 0.3,
+        "duffing_forcing_frequency": 1.2,
+        "sensor": "0.95*tanh(position) + independent Uniform[-0.02,0.02]",
+        "known_sensor_bounds": [
+          -1.0,
+          1.0
+        ],
+        "numerical_check_seed": 8675309,
+        "numerical_check_episodes": 16,
+        "numerical_check_max_sensor_difference": 0.001
+      }
+    },
+    "sensitivity_v1_k1": {
+      "campaign": "sensitivity_v1_k1",
+      "systems": [
+        "harmonic",
+        "quasiperiodic",
+        "nonlinear_ar",
+        "logistic"
+      ],
+      "seeds": [
+        2701,
+        2702,
+        2703
+      ],
+      "n_train": 128,
+      "n_validation": 512,
+      "n_calibration": 4096,
+      "n_test": 2048,
+      "episode_length": 72,
+      "histories": [
+        12
+      ],
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "origin_stride": 4,
+      "cluster_counts": [
+        2,
+        4,
+        8,
+        16
+      ],
+      "feature_kinds": [
+        "kahm",
+        "rbf",
+        "affine"
+      ],
+      "kappa": 1.0,
+      "alpha": 0.0001,
+      "omega": 16.0,
+      "max_geometry_inputs": 1600,
+      "max_train_per_cluster": 24,
+      "delta": 0.016666666666666666,
+      "risk_delta_fraction": 0.8,
+      "rmse_tolerances": [
+        0.2,
+        0.35,
+        0.5
+      ],
+      "certificate_method": "bernstein",
+      "save_episode_scores": true
+    },
+    "sensitivity_v1_k4": {
+      "campaign": "sensitivity_v1_k4",
+      "systems": [
+        "harmonic",
+        "quasiperiodic",
+        "nonlinear_ar",
+        "logistic"
+      ],
+      "seeds": [
+        2701,
+        2702,
+        2703
+      ],
+      "n_train": 128,
+      "n_validation": 512,
+      "n_calibration": 4096,
+      "n_test": 2048,
+      "episode_length": 72,
+      "histories": [
+        12
+      ],
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "origin_stride": 4,
+      "cluster_counts": [
+        2,
+        4,
+        8,
+        16
+      ],
+      "feature_kinds": [
+        "kahm",
+        "rbf",
+        "affine"
+      ],
+      "kappa": 4.0,
+      "alpha": 0.0001,
+      "omega": 16.0,
+      "max_geometry_inputs": 1600,
+      "max_train_per_cluster": 24,
+      "delta": 0.016666666666666666,
+      "risk_delta_fraction": 0.8,
+      "rmse_tolerances": [
+        0.2,
+        0.35,
+        0.5
+      ],
+      "certificate_method": "bernstein",
+      "save_episode_scores": true
+    },
+    "sensitivity_v1_k16": {
+      "campaign": "sensitivity_v1_k16",
+      "systems": [
+        "harmonic",
+        "quasiperiodic",
+        "nonlinear_ar",
+        "logistic"
+      ],
+      "seeds": [
+        2701,
+        2702,
+        2703
+      ],
+      "n_train": 128,
+      "n_validation": 512,
+      "n_calibration": 4096,
+      "n_test": 2048,
+      "episode_length": 72,
+      "histories": [
+        12
+      ],
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "origin_stride": 4,
+      "cluster_counts": [
+        2,
+        4,
+        8,
+        16
+      ],
+      "feature_kinds": [
+        "kahm",
+        "rbf",
+        "affine"
+      ],
+      "kappa": 16.0,
+      "alpha": 0.0001,
+      "omega": 16.0,
+      "max_geometry_inputs": 1600,
+      "max_train_per_cluster": 24,
+      "delta": 0.016666666666666666,
+      "risk_delta_fraction": 0.8,
+      "rmse_tolerances": [
+        0.2,
+        0.35,
+        0.5
+      ],
+      "certificate_method": "bernstein",
+      "save_episode_scores": true
+    },
+    "pendigits_v1": {
+      "campaign": "pendigits_v1",
+      "seeds": [
+        1701,
+        1702,
+        1703
+      ],
+      "coordinates": [
+        0,
+        1
+      ],
+      "first_stroke_only": true,
+      "episode_length": 32,
+      "train_writer_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "validation_writer_ids": [
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "training_strokes_per_writer": 20,
+      "histories": [
+        4,
+        8
+      ],
+      "horizons": [
+        1,
+        2,
+        4
+      ],
+      "origin_stride": 4,
+      "cluster_counts": [
+        2,
+        4,
+        8,
+        16
+      ],
+      "feature_kinds": [
+        "kahm",
+        "rbf",
+        "affine"
+      ],
+      "kappa": 4.0,
+      "alpha": 0.0001,
+      "omega": 16.0,
+      "max_geometry_inputs": 1600,
+      "max_train_per_cluster": 24,
+      "delta": 0.05,
+      "bound_method": "hoeffding",
+      "scalar_squared_loss_bound": 4.0,
+      "rmse_tolerances": [
+        0.2,
+        0.35,
+        0.5
+      ]
+    }
+  }
+}

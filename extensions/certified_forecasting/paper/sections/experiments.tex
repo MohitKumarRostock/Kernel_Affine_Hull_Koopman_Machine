@@ -1,0 +1,197 @@
+\section{Experiments with known sampling laws}
+\label{sec:experiments}
+
+The experiments address four separate questions: whether the confidence
+statements cover known risks in controlled cases, whether retained geometric
+models forecast the original signal accurately, whether the upper bounds support
+useful tolerance decisions, and whether added blocks produce a certified
+improvement. Every candidate and every completed fitting seed is retained.
+Configurations, random streams, raw certificate scores, and machine-readable
+results accompany the implementation. There is no selection of favorable
+replicates for the reported aggregates.
+
+\subsection{Exact-risk calibration and small retained variation}
+
+The controlled experiment uses two input atoms with probabilities $p$ and $1-p$,
+targets $-1$ and $1$, and soft coordinates
+$((1-a)/2,(1+a)/2)$ and their reversal. Their distance is $\sqrt2a$.
+Proposition~\ref{prop:two-atom} gives the exact optimum
+$p(1-p)(2-\kappa\sqrt2a)_+^2$. We also fit the constrained two-atom predictor
+using 256 independent training observations, and compute its true population
+risk analytically rather than substituting a test estimate. The comparison
+uses the pair lower bound, the centered raw-target version of the earlier
+variance certificate, and the fitted-model upper bound. Each receives a
+failure allocation of $0.05/3$; details of the centered correction and the
+fitted risk appear in Appendix~\ref{app:known-risk}.
+
+The parameter grid is
+\[
+p\in\{.2,.5\},\qquad a\in\{0,.2,.6,1\},\qquad
+\kappa\in\{.5,1,2\}.
+\]
+Calibration sizes are $n\in\{64,256,1024,4096\}$, with 300 independent repetitions per condition:
+28,800 trials in total. One pair lower bound exceeds its exact oracle risk;
+the centered lower and fitted upper bounds have no violations in this finite
+campaign. Thus 28,799 of the 28,800 trials satisfy all three reported directions.
+This is a descriptive Monte Carlo check of these configurations, not an
+empirical proof of the coverage theorem or a global confidence statement over
+the entire campaign. The single violation is retained in the released records.
+
+\begin{figure}[t]
+\centering\includegraphics[width=\linewidth]{figures/known_risk.pdf}
+\caption{Controlled two-atom experiment, $p=.5$ and $\kappa=1$. Lines average
+300 trials at each calibration size. The exact optimum is known analytically.
+Both methods use the same constant reference class; no comparison across
+different conditioning laws is implied. The fitted upper bound concerns the
+empirically fitted predictor, whose population risk can exceed the oracle.}
+\label{fig:known-risk}
+\end{figure}
+
+Figure~\ref{fig:known-risk} shows the effect of directly estimating the pair
+discrepancy. For the collapsed map $a=0$, the exact minimum MSE is one.
+At $n=4096$, the mean pair lower endpoint is $0.9177$, compared with
+$0.5327$ for the centered endpoint; the mean fitted upper endpoint is $1.0200$.
+The centered input-variance estimate is exactly zero here, but its additive
+confidence correction is subsequently square-rooted, producing an
+$n^{-1/4}$-order input penalty. The pair statistic avoids that particular
+operation. For $a=.6$ and the same $n$, the exact optimum is $0.3315$,
+the mean pair and centered lower endpoints are $0.2980$ and $0.2230$,
+and the mean fitted upper endpoint is $0.3451$. At small samples, both lower
+methods frequently return zero. We do not infer a new general minimax rate or
+uniform finite-sample dominance from these controlled comparisons.
+
+\subsection{Bounded time-series forecasting}
+
+The main learning experiment uses four independently sampled finite-episode
+generators: a noisy harmonic oscillator with random frequency and phase, a
+quasiperiodic signal with two components, a nonlinear autoregression with
+bounded innovations, and a logistic map with an episode-specific parameter.
+Their definitions guarantee observed values in $[-1,1]$. The precise equations,
+initialization, noise ranges, and burn-in conventions are given in
+Appendix~\ref{app:protocols}. Independence is between generated episodes, not
+between their overlapping histories.
+
+For each generator, five complete learning repetitions use 128 training,
+512 validation, 4096 calibration, and 2048 independent test episodes of
+length 72. Histories have length four or twelve. Horizons are $1,4,12$ and
+the common origins are $11,15,\ldots,59$, giving 13 origins per episode.
+All geometric maps are relearned in each repetition. The main decoder budget
+is $\kappa=4$, ridge coefficient $10^{-4}$, and KAHM sharpness $\omega=16$.
+The four retained dictionaries have $2,4,8,16$ coordinates. Up to 1600 training
+histories enter geometry construction and up to 24 local training points enter
+each KAHM model. The decoder uses all available training rows.
+
+There are 40 frozen candidates per repetition. They include retained KAHM,
+radial-basis-function (RBF), and local affine-hull features; hard KAHM state
+assignments; ordinary Frobenius-budget and exact-duplicate ablations;
+ridge autoregression; direct quadratic regression; affine feature-transition
+rollouts on KAHM and polynomial dictionaries; persistence; and a constant model.
+The RBF and affine-hull alternatives are separate constructions, not relabeled
+KAHMs. A common numerical norm budget across different feature maps does not
+make their statistical capacities identical. These fixed configurations test
+the procedure and its failure modes, rather than establishing a tuned
+state-of-the-art accuracy frontier.
+
+The risk endpoints allocate $0.04$ over the $2\times40\times3$ selected tails,
+giving $\alpha=1/6000$ per tail. The remaining $0.01$ is allocated over
+18 adjacent-prefix improvement comparisons, giving $1/1800$ each. This yields
+one joint 95\% event per complete learning repetition. Confidence is not
+claimed jointly across all 20 independent experimental repetitions. The upper
+sample size is 4096 and the lower sample size is 2048 disjoint episode pairs;
+the 13 within-episode origins do not multiply these sample sizes.
+
+\input{tables/forecast_results}
+
+Table~\ref{tab:forecast} reports the independent-test behavior of a
+validation-selected candidate from each family. KAHM soft states improve
+substantially over persistence at long horizons in the harmonic and
+quasiperiodic tasks, but quadratic and autoregressive models are stronger on
+these particular generators. In the nonlinear autoregression, the KAHM model
+has mean test RMSE $0.0743$ at horizon 12, compared with $0.0802$ for ridge AR
+and $0.0813$ for quadratic regression; the simple autoregressive models are
+better at horizon one. These results support task-dependent behavior rather
+than a universal benefit from geometric soft coordinates. Direct KAHM fitting
+also improves mean horizon-12 error relative to its iterated feature-transition
+counterpart on the two periodic tasks. That difference is empirical and does
+not establish that direct fitting dominates rollout in general.
+
+\subsection{Useful certificates, class exclusions, and refinement decisions}
+
+\input{tables/certified_selection}
+
+Table~\ref{tab:selection} reports the actual tolerance decisions. For the
+retained KAHM family, every nonlinear-AR repetition certifies RMSE at most
+$0.20$ at all three horizons. Every quasiperiodic repetition certifies $0.35$,
+and every harmonic repetition certifies $0.50$ but none certifies $0.35$.
+When all comparison models are eligible, the harmonic task also certifies
+$0.35$ in every repetition. No candidate certifies the $0.50$ all-horizon
+requirement for the logistic task. This last result is an unresolved decision;
+it does not establish that the true risk of every candidate exceeds $0.50$.
+
+The upper bounds can be conservative even with thousands of episodes.
+For example, the selected harmonic quadratic model has mean horizon-one
+test RMSE $0.0311$ but mean upper endpoint $0.1497$. The bound is useful for
+some requested tolerances and uninformative for others. Reporting only its
+coverage or positivity would obscure this practical distinction.
+
+\begin{figure}[t]
+\centering\includegraphics[width=\linewidth]{figures/refinement.pdf}
+\caption{Retained KAHM prefixes with history length 12, sensitivity budget
+$\kappa=4$, and horizon four. Curves average five separately learned models.
+The lower endpoint concerns the whole sensitivity-bounded class; the upper
+endpoint concerns the particular fitted model. Test RMSE is an independent
+finite-sample estimate. Population nesting does not assert that every
+finite-sample fitted risk decreases.}
+\label{fig:refinement}
+\end{figure}
+
+Across the 480 KAHM candidate--horizon statements, 119 have a positive lower
+endpoint. Such an endpoint identifies a restriction on the stated class,
+whereas a zero endpoint leaves its adequacy unresolved. Figure~\ref{fig:refinement}
+shows how increasing retained resolution changes the obstruction and the
+fitted error. The block metric and common budget are held fixed in meaning
+throughout this comparison. The certificate neither labels every geometric
+change as useful nor assumes that an observed improvement of a training
+objective generalizes.
+
+\input{tables/improvements}
+
+The paired comparison certifies positive risk reduction in 72 of the 360
+adjacent KAHM refinement statements, under the per-repetition joint event.
+Table~\ref{tab:improvements} retains the inconclusive comparisons. The nonlinear
+AR generator has no certified adjacent-prefix gain in this study, even though
+its fitted models can meet a useful overall accuracy tolerance. Its coarse
+representation already captures much of the persistent regime structure.
+This illustrates why a fitted-risk certificate and a refinement-improvement
+certificate answer different questions.
+
+\begin{figure}[t]
+\centering\includegraphics[width=.76\linewidth]{figures/duplicate_invariance.pdf}
+\caption{Exact two-atom counterexample at budget one. Copying the same
+two-coordinate feature block twice permits zero error under an ordinary
+Frobenius constraint, although the observations contain exactly the same
+information. The sum-of-block-norms constraint preserves the original optimum.
+The curves are analytic values from Theorem~\ref{thm:replication-invariance},
+not measured accuracy on a new dataset.}
+\label{fig:duplication}
+\end{figure}
+
+Figure~\ref{fig:duplication} isolates the replication issue without confounding
+training noise. Numerical zero-ridge tests independently check that fitting a
+single block and exact copies gives matching optimum training risk within the
+recorded solver gaps. The ordinary main-study duplicate candidate uses zero
+ridge while the primary models use $10^{-4}$; differences between those fitted
+candidates are not used as proof of replication invariance.
+
+\subsection{Numerical and reproducibility verification}
+
+All 20 scheduled main runs completed and all 800 fitted candidates are retained.
+The largest recorded block-solver first-order gap is below $10^{-7}$.
+An independent audit reconstructs all 4800 selected one-sided risk endpoints
+and all 360 improvement bounds from the saved double-precision episode scores,
+with maximum discrepancy zero. A fresh replay of the first harmonic run
+matches every non-timing result and all 120 retained score arrays exactly,
+including 983,040 scalar entries. These are numerical reproducibility checks;
+they do not replace the probability arguments or constitute formal verification
+of floating-point arithmetic. The full source and configuration hashes, failure
+accounting, and verification output are archived.

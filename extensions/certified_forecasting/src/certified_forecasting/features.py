@@ -152,12 +152,19 @@ class NestedSoftFeatures:
 
     ``max_fit`` limits geometry-training inputs using a seeded sample without
     replacement.  It does not limit the inputs used to fit the decoder.
+
+    ``input_scaling=None`` preserves the historical ``standardize`` flag.
+    Explicit modes are ``standard``, ``raw``, ``minmax``, and ``minmax_clip``.
+    Both min/max modes fit coordinate extrema on all training histories before
+    geometry subsampling and map training-constant coordinates to zero. Only
+    ``minmax_clip`` clips new inputs to [-1, 1]; plain ``minmax`` extrapolates
+    outside the training extrema. Target/output scaling is never changed.
     """
 
     def __init__(self, cluster_counts=(2, 4, 8, 16), kind="kahm", seed=0,
                  omega=16.0, tau=1e-6, max_fit=2500,
                  max_train_per_cluster=48, subspace_dim=2,
-                 sharpness=1.0, standardize=True):
+                 sharpness=1.0, standardize=True, input_scaling=None):
         self.cluster_counts = tuple(int(c) for c in cluster_counts)
         self.kind = kind
         self.seed = int(seed)
@@ -167,6 +174,7 @@ class NestedSoftFeatures:
         self.subspace_dim = int(subspace_dim)
         self.sharpness = float(sharpness)
         self.standardize = bool(standardize)
+        self.input_scaling = input_scaling
 
     def fit(self, X):
         X = _matrix(X)
@@ -182,11 +190,24 @@ class NestedSoftFeatures:
             raise ValueError("sharpness must be positive and finite.")
         if len(X) < max(self.cluster_counts):
             raise ValueError("There are fewer observations than requested states.")
+        requested = getattr(self, "input_scaling", None)
+        self.input_scaling_ = (
+            "standard" if self.standardize else "raw"
+        ) if requested is None else requested
+        if self.input_scaling_ not in ("standard", "raw", "minmax", "minmax_clip"):
+            raise ValueError("input_scaling must be standard, raw, minmax, minmax_clip, or None.")
         self.n_features_in_ = X.shape[1]
-        self.mean_ = X.mean(axis=0) if self.standardize else np.zeros(X.shape[1])
-        self.scale_ = X.std(axis=0) if self.standardize else np.ones(X.shape[1])
+        standard = self.input_scaling_ == "standard"
+        self.mean_ = X.mean(axis=0) if standard else np.zeros(X.shape[1])
+        self.scale_ = X.std(axis=0) if standard else np.ones(X.shape[1])
         self.scale_ = np.where(self.scale_ > 1e-12, self.scale_, 1.0)
-        Z = (X - self.mean_) / self.scale_
+        if self.input_scaling_ in ("minmax", "minmax_clip"):
+            self.input_min_, self.input_max_ = X.min(axis=0), X.max(axis=0)
+            self.input_range_ = self.input_max_ - self.input_min_
+            if not np.isfinite(self.input_range_).all():
+                raise ValueError("Training coordinate ranges must be finite.")
+            self.constant_features_ = self.input_range_ == 0.0
+        Z = self._scale_inputs(X, clip=False)
         rng = np.random.default_rng(self.seed)
         if self.max_fit is not None and len(Z) > self.max_fit:
             self.fit_indices_ = np.sort(rng.choice(len(Z), self.max_fit, replace=False))
@@ -211,6 +232,39 @@ class NestedSoftFeatures:
         self.n_features_out_ = start
         return self
 
+    def _scale_inputs(self, X, *, clip=True):
+        # Older saved banks lack input_scaling_; their mean_/scale_ remain valid.
+        mode = getattr(self, "input_scaling_", None)
+        if mode in ("minmax", "minmax_clip"):
+            span = np.where(self.constant_features_, 1.0, self.input_range_)
+            X = 2.0 * ((X - self.input_min_) / span) - 1.0
+            X[:, self.constant_features_] = 0.0
+            if not np.isfinite(X).all():
+                raise ValueError("Scaled inputs must be finite.")
+            if clip and mode == "minmax_clip":
+                X = np.clip(X, -1.0, 1.0)
+        return (X - self.mean_) / self.scale_
+
+    def input_scaling_metadata(self):
+        """JSON-safe frozen input-map parameters; no held-out statistics."""
+        if not hasattr(self, "blocks_"):
+            raise ValueError("Fit the feature map before requesting scaling metadata.")
+        mode = getattr(self, "input_scaling_", "standard" if self.standardize else "raw")
+        description = {
+            "mode": mode, "clip": mode == "minmax_clip",
+            "mean": self.mean_.tolist(), "scale": self.scale_.tolist(),
+        }
+        if mode in ("minmax", "minmax_clip"):
+            description.update({
+                "training_min": self.input_min_.tolist(),
+                "training_max": self.input_max_.tolist(),
+                "training_range": self.input_range_.tolist(),
+                "constant_features": self.constant_features_.tolist(),
+                "constant_feature_policy": "map to zero",
+                "formula": "2*(x-training_min)/training_range-1",
+            })
+        return description
+
     def transform(self, X, n_blocks=None):
         X = _matrix(X)
         if not hasattr(self, "blocks_"):
@@ -220,7 +274,7 @@ class NestedSoftFeatures:
         n = len(self.blocks_) if n_blocks is None else int(n_blocks)
         if n < 1 or n > len(self.blocks_):
             raise ValueError("n_blocks must select a nonempty fitted prefix.")
-        Z = (X - self.mean_) / self.scale_
+        Z = self._scale_inputs(X)
         return np.concatenate([b.transform(Z) for b in self.blocks_[:n]], axis=1)
 
     def fit_transform(self, X, n_blocks=None):

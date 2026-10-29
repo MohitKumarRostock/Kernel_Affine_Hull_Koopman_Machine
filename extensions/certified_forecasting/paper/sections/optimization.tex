@@ -1,0 +1,107 @@
+\section{Convex fitting and a numerical optimality certificate}
+\label{app:optimization}
+
+This appendix describes the fitted decoder, including a computable
+regularized-objective gap.  The gap concerns the finite training objective;
+it is distinct from the population prediction-risk certificate.
+
+Let $F\in\mathbb R^{N\times P}$ contain the frozen geometric feature
+rows and $Y\in\mathbb R^{N\times H}$ the corresponding scalar targets
+at $H$ horizons.  Different output coordinates can also be placed in
+different columns.  The training windows can be dependent: optimization
+of this finite objective makes no independence claim about its rows.
+With an unpenalized intercept $a\in\mathbb R^H$, the fitted coefficient
+matrix solves
+\begin{equation}
+ \min_{W,a}\frac1N\|Y-\boldsymbol1a^\top-FW\|_{\rm F}^2
+                       +\lambda\|W\|_{\rm F}^2
+ \quad\text{subject to}\quad
+       \sum_{b=1}^s\|W_b\|_{\rm F}\leq\kappa.
+ \label{eq:training-program}
+\end{equation}
+Here $W_b$ contains the rows belonging to block $b$ and $\lambda\geq0$.
+The loss sums the horizon losses before averaging over rows; it is not
+additionally divided by $H$.  Clipping is applied after fitting.  Thus
+\eqref{eq:training-program} is a convex surrogate for the evaluated
+clipped-forecast risk, not an assertion that the clipped empirical loss
+was globally minimized.
+
+Eliminating the intercept gives $a^\top=\bar Y-\bar F W$.  With centered
+matrices $F_c,Y_c$, write
+\[
+ M=F_c^\top F_c/N+\lambda I,
+ \qquad C=F_c^\top Y_c/N,
+ \qquad c=\|Y_c\|_{\rm F}^2/N.
+\]
+The reduced objective and gradient are
+\[
+ J(W)=\operatorname{tr}(W^\top M W)
+             -2\langle W,C\rangle_{\rm F}+c,
+ \qquad G(W)=2(MW-C).
+\]
+Its gradient is Lipschitz in Frobenius norm with constant $2\|M\|_2$.
+The implementation uses projected gradient steps with acceleration and
+monotone restarts.  The following formulas allow feasibility and
+optimization quality to be assessed independently of convergence-rate
+claims about that particular implementation.
+
+\begin{proposition}[Projection onto the block norm ball]
+\label{prop:block-projection}
+Let $A$ have the same block partition as $W$ and define
+$a_b=\|A_b\|_{\rm F}$.  If $\sum_ba_b\leq\kappa$, its Euclidean
+projection onto the feasible set in \eqref{eq:training-program} is $A$.
+Otherwise, let $\tau\geq0$ satisfy
+$\sum_b(a_b-\tau)_+=\kappa$.  The projection is
+\begin{equation}
+ \bigl[\mathcal P_\kappa(A)\bigr]_b
+ =\begin{cases}
+       (1-\tau/a_b)_+ A_b,& a_b>0,\\
+       0,& a_b=0.
+   \end{cases}
+ \label{eq:block-projection}
+\end{equation}
+When $\kappa=0$ the projection is the zero matrix.  For a feasible $W$, a
+regularized-objective suboptimality bound is
+\begin{equation}
+ 0\leq J(W)-J^*
+ \leq \mathcal D(W)
+ :=\langle G(W),W\rangle_{\rm F}
+                    +\kappa\max_b\|G_b(W)\|_{\rm F},
+ \label{eq:optimization-gap}
+\end{equation}
+where $J^*$ is the minimum of \eqref{eq:training-program}.
+\end{proposition}
+
+\begin{proof}
+For a fixed block norm $v_b\geq0$, Cauchy--Schwarz shows that the
+closest block to $A_b$ points in its direction and has squared distance
+$(v_b-a_b)^2$.  The projection therefore reduces to Euclidean projection
+of $(a_b)_b$ onto $\{v_b\geq0:\sum_bv_b\leq\kappa\}$.
+The scalar Karush--Kuhn--Tucker conditions give
+$v_b=(a_b-\tau)_+$ and the stated threshold equation, proving
+\eqref{eq:block-projection}.  For the gap, convexity gives
+$J(W)-J(V)\leq\langle G(W),W-V\rangle_{
+m F}$ for every feasible $V$.
+The minimum of $\langle G(W),V\rangle_{
+m F}$ over the block norm
+ball is $-\kappa\max_b\|G_b(W)\|_{
+m F}$: put the entire budget in a
+block of largest gradient norm and point opposite to that gradient.
+Substituting an optimal $V$ proves \eqref{eq:optimization-gap}.
+\end{proof}
+
+The implementation records the coefficient norms, objective gap,
+iteration count, and whether the requested gap tolerance was reached.
+These are numerical quantities evaluated in floating point; they are
+not interval-arithmetic certificates.  Prediction-risk validity only
+requires that the returned model satisfy the Lipschitz budget used in
+calibration.  It does not require a globally optimal training solution.
+For the joint multi-horizon program, each column satisfies
+$\sum_b\|(W_b)_{\cdot h}\|_2\leq
+\sum_b\|W_b\|_{
+m F}\leq\kappa$, so the same declared budget is
+valid at every horizon.  The objective's squared Frobenius ridge term
+is not invariant to duplicated feature blocks, even though the
+constraint's predictor class is invariant.  The unregularized
+duplicate-block test therefore sets $\lambda=0$.
+

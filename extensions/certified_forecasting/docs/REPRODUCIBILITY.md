@@ -62,8 +62,140 @@ comparison.
 The tests check the original KAHM execution path, stable normalization,
 decoder feasibility and optimality diagnostics, affine Koopman composition,
 causal windows, bounded episodes, independent sampling units, duplicate-block
-invariance, and rejection of invalid certificate inputs. They do not replace
-the mathematical proofs.
+invariance, and rejection of invalid certificate inputs. Scaling checks cover
+training-only extrema, extrapolation versus clipping, constant coordinates,
+exact default behavior, and saved models. Archive checks exercise complete
+writes, interrupted writes, and refusal to overwrite. They do not replace the
+mathematical proofs.
+
+## KAHM input-scaling comparison
+
+Scaling is optional and task dependent. The original configs and default
+mean/std preprocessing are unchanged. The comparison retains four fixed arms:
+
+| Mode | Geometry input | Behavior beyond training extrema |
+|---|---|---|
+| `standard` | Original training mean/std standardization | Affine extrapolation |
+| `minmax` | Featurewise training map `2*(x-min)/(max-min)-1` | Can leave `[-1,1]` |
+| `minmax_clip` | The same fitted training min/max map | Clip to `[-1,1]` |
+| `raw` | Existing raw histories, already bounded in these tasks | No extra input transform |
+
+Min/max parameters are fitted on all training histories before the original
+seeded geometry subsampling. A training-constant coordinate maps to zero.
+Neither validation nor calibration/test observations refit the scaler.
+Forecast targets, output clipping, loss units, and non-KAHM features retain
+their original definitions. The numerical coefficient budget continues to
+refer to the resulting soft-feature decoder.
+
+The primary comparison is the validation-selected `kahm_nested` forecaster
+with `minmax` versus `standard`. Histories and stages are selected separately
+within each arm using the original validation criterion; the scaling arm is
+not selected using test errors. Strictly bounded `minmax_clip` and already
+bounded `raw` are separate diagnostic arms. The full ablation includes
+regressions, including the PenDigits hard-assignment variant. The favorable
+soft-KAHM PenDigits result does not imply a universal default or a new writer
+population guarantee.
+
+After preparing the pinned PenDigits data, reproduce both schedules into a
+new study root:
+
+    python experiments/run_input_scaling.py \
+      --output results/reproduced_input_scaling --workers 4 \
+      --prepared data_cache/pendigits/pendigits_original.npz
+
+The default original phase runs all main, oscillator, three norm-budget, and
+PenDigits configurations in all four arms. The confirmation phase runs main,
+oscillator, and PenDigits configurations with fitting seeds 4701, 4702, and
+4703. Synthetic confirmation regenerates all four episode streams with the
+inherited offsets. PenDigits confirmation changes training-stroke subsampling
+and geometry randomness while reusing the original training, validation and
+held-out writers: it is fitting-seed confirmation on a fixed cohort. The
+analytic two-atom and exact duplication illustrations fit no KAHM input
+geometry and are not part of the scaling intervention.
+
+Useful subsets are:
+
+    python experiments/run_input_scaling.py \
+      --output results/reproduced_scaling_main \
+      --phases original --campaigns main_v1 \
+      --modes standard minmax --workers 2
+
+    python experiments/run_input_scaling.py \
+      --output results/reproduced_scaling_pendigits_confirmation \
+      --phases confirmation --campaigns pendigits_v1 --workers 1 \
+      --prepared data_cache/pendigits/pendigits_original.npz
+
+`--campaigns` accepts the original config stems listed by `--help`.
+Norm-budget sensitivity is in the original phase only; phase/campaign
+selections are intersected with the fixed schedules. `--modes` selects a
+predeclared subset of the four arms. `--config-dir` can point to separate
+config copies for small interface checks; such a reduced run is not the
+retained manuscript experiment, and the manifest records whether its base
+configs match the reference bytes.
+
+The output layout is:
+
+- `results/<mode>/<campaign>/`: original-seed runs, with one subdirectory per
+  synthetic system/seed. PenDigits retains its complete coordinate/seed family
+  directly in its campaign directory.
+- `confirmation_results/<mode>/<campaign>/`: confirmation runs in the same
+  result schemas.
+- `frozen_configs/<phase>/<mode>/<campaign>.json`: exact copied configuration,
+  including the explicit `kahm_input_scaling` setting.
+- `frozen_manifests/`, `manifest.json` and `schedule.json`: source hashes,
+  versions, configuration hashes, cohort scope and the complete schedule
+  written before fitting.
+- `logs/` and `completion.json`: per-job logs and complete success/failure
+  accounting. Failed runs retain partial artifacts and exception records.
+
+Every output root must be a new path. The runner uses separate processes and
+passes the scaling mode through each job's config; it does not replace a
+global feature class. The original oscillator generator is temporarily
+installed within its process and restored after that job. All oscillator arms
+also retain the matched half-step consistency check.
+
+Audit a new full synthetic arm using its frozen config:
+
+    python scripts/audit_results.py \
+      --campaign results/reproduced_input_scaling/results/minmax/main_v1 \
+      --config results/reproduced_input_scaling/frozen_configs/original/minmax/main_v1.json \
+      --output results/reproduced_input_scaling/minmax_main_audit.json
+
+Risk allocations retain their original within-arm, within-replicate scope.
+They do not provide a simultaneous event over all preprocessing modes or all
+tasks. PenDigits writer-population bounds retain their explicit, unverified
+iid-writer assumption. The full retained follow-up is in
+`results/input_scaling_study/` and the manuscript discussion is in
+`paper/sections/input_scaling.tex`.
+
+### Optional scaling outside the study runner
+
+Existing experiment runners honor `"kahm_input_scaling": "minmax"` in a new
+config copy, applying it only to KAHM and dependent KAHM variants. Explicit
+configs save the fitted scaler parameters in candidate descriptions.
+Configurations without this key keep the historical result schema.
+
+The direct Python API is `NestedSoftFeatures(input_scaling="minmax")`;
+`input_scaling=None` preserves the historical `standardize` flag. The reusable
+example accepts `--kahm-input-scaling minmax` or `minmax_clip` and saves the
+frozen scaler together with the fitted model.
+
+### Historical provenance and atomic score archives
+
+The original retained campaign manifests refer to source commit
+`a8bcf6c8016499e1a4b64f7dd4196af43c60bd78`. Audit those historical source hashes
+in a separate checkout of that commit. Adding optional scaling and safer
+archive publication changes source bytes even though default numerical
+behavior is preserved. Historical manifests must not be rewritten to match
+the newer implementation; new runs retain their own source/config hashes.
+
+Production forecasting now writes each NPZ archive through a temporary file,
+flushes and fsyncs it, then atomically renames it. A completed `results.json`
+is published after its requested archive. An interrupted write leaves its
+temporary file for diagnosis rather than exposing a truncated archive under
+the completed filename. Existing archives and run directories are not
+overwritten. These storage checks do not alter any fitted prediction or
+statistical formula.
 
 ## Independent-episode campaign
 

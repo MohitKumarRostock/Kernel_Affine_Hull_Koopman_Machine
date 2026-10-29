@@ -1,0 +1,86 @@
+\documentclass[twoside,11pt]{article}
+\usepackage[preprint]{jmlr2e}
+\usepackage{amsmath,mathtools,booktabs,microtype,enumitem}
+\usepackage{lastpage}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\jmlrheading{}{2026}{1--\pageref{LastPage}}{}{}{}{Mohit Kumar and Somayeh Kargaran}
+\ShortHeadings{Learning Geometric Soft State Forecasts with Risk Certificates}{Kumar and Kargaran}
+\firstpageno{1}
+\allowdisplaybreaks
+\setlength{\emergencystretch}{1.5em}
+
+\begin{document}
+\title{Learning Geometric Soft State Forecasts\\with Two-Sided Prediction Risk Certificates}
+\author{\name Mohit Kumar \email mohit.kumar@uni-rostock.de\\
+\addr University of Rostock, Rostock, Germany\\
+Software Competence Center Hagenberg, Hagenberg, Austria
+\AND
+\name Somayeh Kargaran \email somayeh.kargaran@scch.at\\
+\addr Software Competence Center Hagenberg, Hagenberg, Austria}
+\maketitle
+\begin{center}\small Research draft for author review --- 29 October 2026\end{center}
+
+\begin{abstract}%
+Soft geometric state abstractions compress a time-series history into a small
+collection of association weights, but neither geometric reconstruction nor a
+small coordinate-prediction residual establishes accurate forecasting of the
+observed signal. We develop a learning and certification procedure whose target
+is the original future output. A pairwise discrepancy between target separation
+and representation separation lower-bounds the risk of every decoder with a
+prescribed Lipschitz budget. The bound is exact on a two-atom model and dominates
+a root-variance obstruction when both use the same conditional pairing law.
+Retaining geometric feature blocks and constraining the sum of their coefficient
+norms gives nested forecasting classes without improving their apparent
+capacity through exact feature replication. We also quantify a necessary amount
+of geometric change for a refinement to meet a desired accuracy. Independent
+episode averages yield simultaneous lower certificates for the prediction class,
+upper certificates for fitted multihorizon forecasts, and certificates of actual
+improvement between fixed refinements. Observations within episodes may be
+arbitrarily dependent. We implement the method using Kernel Affine Hull Machine
+coordinates, convex constrained decoders, and explicit abstention when a risk
+requirement cannot be certified. Experiments evaluate exact-risk calibration,
+four bounded episode laws, two nonlinear oscillators, and raw pen trajectories with writer-disjoint
+evaluation. They distinguish valid but uninformative certificates from useful
+decisions, and do not establish universal forecasting superiority or guarantees
+for an arbitrary single dependent series. A training-only input-scaling
+follow-up reproduces an accuracy gain on the fixed pen-trajectory cohort and
+also records regressions.
+\end{abstract}
+\begin{keywords}
+time-series forecasting, soft state abstraction, prediction risk, geometric
+representations, finite-sample certification, Koopman regression
+\end{keywords}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/method}
+\input{sections/theory}
+\input{sections/experiments}
+\input{sections/oscillators}
+\input{sections/sensitivity}
+\input{sections/real_data}
+\input{sections/input_scaling}
+\input{sections/discussion}
+
+\section*{Reproducibility and research provenance}
+The implementation, frozen configurations, retained result summaries, and
+figure generators are distributed in the
+\path{extensions/certified_forecasting} directory of the accompanying
+repository. Editable manuscript source is included in its \path{paper}
+directory. The original results and the input-scaling follow-up are retained
+separately, with frozen configurations, source hashes, and documented exact
+replays of damaged score archives. Full per-episode archives are regenerated
+by the fixed-seed runners and retained with the experimental evidence. The experimental
+configurations and independent sampling units are specified in the appendices. No external journal submission is represented by
+this draft. AI assistance was used for derivation exploration, implementation,
+literature retrieval, and writing. Independent author verification of the
+scientific claims, authorship information, and submission declarations is still
+required; funding and conflict-of-interest declarations must be supplied by the
+authors before submission.
+
+\appendix
+\input{sections/optimization}
+\input{sections/protocols}
+\input{sections/known_risk_details}
+\bibliography{references}
+\end{document}

@@ -10,6 +10,7 @@ import argparse
 from dataclasses import dataclass
 import hashlib
 import json
+import os
 from pathlib import Path
 import platform
 import subprocess
@@ -36,6 +37,24 @@ def write_json(path, obj):
     temp = path.with_suffix(path.suffix + ".tmp")
     temp.write_text(json.dumps(obj, indent=2, allow_nan=False) + "\n")
     temp.replace(path)
+
+
+def write_npz_atomic(path, arrays):
+    """Publish a score archive only after the entire temporary file is flushed.
+
+    A failed write leaves its .tmp file for diagnosis and never exposes a
+    truncated file under the completed archive name. Existing archives are
+    not overwritten.
+    """
+    path = Path(path)
+    if path.exists():
+        raise FileExistsError(f"Refusing to overwrite score archive {path}")
+    temporary = path.with_name(path.name + ".tmp")
+    with temporary.open("xb") as stream:
+        np.savez_compressed(stream, **arrays)
+        stream.flush()
+        os.fsync(stream.fileno())
+    temporary.replace(path)
 
 
 def flat(X):
@@ -80,11 +99,13 @@ def build_candidates(train, validation, cfg, seed):
 
         for kind in cfg["feature_kinds"]:
             started = time.perf_counter()
+            first_kind_candidate = len(candidates)
             bank = NestedSoftFeatures(
                 cluster_counts=cfg["cluster_counts"], kind=kind,
                 seed=seed + history, omega=cfg["omega"],
                 max_fit=cfg["max_geometry_inputs"],
                 max_train_per_cluster=cfg["max_train_per_cluster"],
+                input_scaling=cfg.get("kahm_input_scaling", "standard") if kind == "kahm" else None,
             ).fit(xf)
             F = bank.transform(xf)
             geometry_seconds = time.perf_counter() - started
@@ -151,6 +172,11 @@ def build_candidates(train, validation, cfg, seed):
                     koop.lipschitz_for(H), koopman=True,
                     train_seconds=geometry_seconds+time.perf_counter()-start_fit,
                 ))
+                if "kahm_input_scaling" in cfg:
+                    # Explicit new configurations retain the frozen scaler;
+                    # inherited configurations keep their original output schema.
+                    for candidate in candidates[first_kind_candidate:]:
+                        candidate.input_scaling = bank.input_scaling_metadata()
 
         start_fit=time.perf_counter()
         ar = BoundedRidge(cfg["alpha"], cfg["kappa"],(-1,1)).fit(xf,yf)
@@ -205,6 +231,8 @@ def candidate_description(c):
         if hasattr(c.model,name):
             value=getattr(c.model,name)
             desc[name.rstrip("_")]=value.item() if isinstance(value,np.generic) else value
+    if hasattr(c, "input_scaling"):
+        desc["input_scaling"] = c.input_scaling
     return desc
 
 
@@ -276,10 +304,11 @@ def run_one(cfg,system,seed,destination):
             "delta":cfg["delta"],"tail_delta":tail,"results":results,
             "paired_improvements":improvements,"selected_by_validation":selected_validation,
             "certified_selections":selections,"elapsed_seconds":time.perf_counter()-start}
-    write_json(destination/"results.json",record)
     if cfg.get("save_episode_scores",True):
         # Full double-precision per-episode scores let every certificate be recomputed.
-        np.savez_compressed(destination/"episode_scores.npz",**scores)
+        write_npz_atomic(destination/"episode_scores.npz",scores)
+    # A completed result is published after its requested score archive.
+    write_json(destination/"results.json",record)
     return record
 
 

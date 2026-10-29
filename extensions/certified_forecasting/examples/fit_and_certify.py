@@ -61,7 +61,7 @@ def load_episodes(path, bounds):
 
 def fit_export(train_path, calibration_path, output, *, history, horizons,
                target_bounds, rmse_tolerance, origin_stride=1, kappa=4.0,
-               delta=0.05, seed=0, alpha=1e-4):
+               delta=0.05, seed=0, alpha=1e-4, kahm_input_scaling=None):
     """Fit four retained KAHM stages, certify them jointly, and save all fits.
 
     Even an unresolved run saves all models and all certificates. The returned
@@ -92,6 +92,7 @@ def fit_export(train_path, calibration_path, output, *, history, horizons,
     feature = NestedSoftFeatures(
         cluster_counts=(2, 4, 8, 16), kind="kahm", seed=seed,
         omega=16.0, max_fit=1600, max_train_per_cluster=24,
+        input_scaling=kahm_input_scaling,
     ).fit(xf)
     F = feature.transform(xf)
     models, frozen = [], []
@@ -107,10 +108,13 @@ def fit_export(train_path, calibration_path, output, *, history, horizons,
             "optimization_gap": model.optimization_gap_,
             "optimizer_converged": bool(model.converged_),
         })
-    save_json(output / "frozen_candidates.json", {
+    frozen_record = {
         "history": int(history), "horizons": list(map(int, horizons)),
         "candidates": frozen, "frozen_before_loading_calibration_episodes": True,
-    })
+    }
+    if kahm_input_scaling is not None:
+        frozen_record["input_scaling"] = feature.input_scaling_metadata()
+    save_json(output / "frozen_candidates.json", frozen_record)
 
     # The family above is now frozen. Calibration outcomes cannot change it.
     calibration = load_episodes(calibration_path, bounds)
@@ -245,6 +249,8 @@ def main():
     parser.add_argument("--kappa", type=float, default=4.0)
     parser.add_argument("--delta", type=float, default=0.05)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--kahm-input-scaling", choices=["standard", "raw", "minmax", "minmax_clip"],
+                        help="Training-fitted KAHM input map; default is training standardization")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--demo", action="store_true")
     parser.add_argument("--demo-train-episodes", type=int, default=128)
@@ -294,6 +300,7 @@ def main():
         target_bounds=(args.target_min, args.target_max),
         rmse_tolerance=args.rmse_tolerance, origin_stride=args.origin_stride,
         kappa=args.kappa, delta=args.delta, seed=args.seed,
+        kahm_input_scaling=args.kahm_input_scaling,
     )
     print(json.dumps({
         "status": report["status"], "selected_stage": report["selected_stage"],

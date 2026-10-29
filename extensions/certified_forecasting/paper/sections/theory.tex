@@ -1,0 +1,485 @@
+\section{Pairwise obstructions and certified forecasting}
+\label{sec:theory}
+
+This section separates three questions: whether a representation can support a
+specified accuracy, whether a fitted forecaster attains that accuracy, and what
+can be concluded when the representation is refined.  All population risks
+refer to the same raw forecasting target.  No Markov assumption, invariant
+distribution, or exact Koopman closure is imposed.
+
+\subsection{A directly estimable pairwise obstruction}
+
+Let $X$ be an available history, $Y\in\mathbb R^q$ a future target, and
+$U=\Gamma(X)$ a fixed representation.  Let $d$ be a pseudometric on the
+representation space and write
+\[
+ \mathcal G_\kappa(d)
+ =\{g:\|g(u)-g(v)\|_2\leq\kappa d(u,v)\},\qquad
+ R^*_\kappa(\Gamma,d)=\inf_{g\in\mathcal G_\kappa(d)}
+             \mathbb E\|Y-g(U)\|_2^2.
+\]
+The metric, representation, and nonnegative budget $\kappa$ are fixed before
+the certificate data are observed.  The infimum may be over a larger class
+than the fitted decoder family.  A lower bound for this larger class is also
+a lower bound for every decoder in the family.
+
+For a conditioning variable $A$, construct $(U,Y)$ and $(U',Y')$ independently
+conditional on $A$, with the same conditional law and with the original
+marginal law for each copy.  The case of a constant $A$ is an ordinary
+independent pair.  Define
+\begin{equation}
+ W_{\kappa,A}(\Gamma,d)
+ =\frac12\mathbb E\left[
+       \bigl(\|Y-Y'\|_2-\kappa d(U,U')\bigr)_+^2\right].
+ \label{eq:pair-witness}
+\end{equation}
+The shared variable specifies a sampling construction; arbitrary nearest
+neighbor matching is not covered by this definition.
+
+\begin{theorem}[Pairwise prediction obstruction]
+\label{thm:pair-obstruction}
+Assume $\mathbb E\|Y\|_2^2<\infty$.  Then
+\begin{equation}
+ R^*_\kappa(\Gamma,d)\geq W_{\kappa,A}(\Gamma,d).
+ \label{eq:pair-population}
+\end{equation}
+For Euclidean representation distance, assume also $\mathbb E\|U\|_2^2<\infty$ and put
+\[
+ \sigma_{Y\mid A}^2=\mathbb E\|Y-\mathbb E[Y\mid A]\|_2^2,
+ \qquad
+ \tau_{U\mid A}^2=\mathbb E\|U-\mathbb E[U\mid A]\|_2^2.
+\]
+Then the pairwise obstruction satisfies
+\begin{equation}
+ W_{\kappa,A}(\Gamma,\|\cdot\|_2)
+ \geq (\sigma_{Y\mid A}-\kappa\tau_{U\mid A})_+^2.
+ \label{eq:pair-dominance}
+\end{equation}
+Both comparisons use the same conditioning variable and evaluation law.
+\end{theorem}
+
+\begin{proof}
+Fix an admissible $g$ with finite risk and set $r=Y-g(U)$ and
+$r'=Y'-g(U')$.  The triangle inequality and the Lipschitz condition give
+\[
+ (\|Y-Y'\|_2-\kappa d(U,U'))_+\leq\|r-r'\|_2.
+\]
+Conditional independence gives
+\[
+ \mathbb E[\|r-r'\|_2^2\mid A]
+ =2\{\mathbb E[\|r\|_2^2\mid A]
+                    -\|\mathbb E[r\mid A]\|_2^2\}.
+\]
+Taking expectations proves $W_{\kappa,A}\leq R(g)$; taking the infimum
+proves \eqref{eq:pair-population}.  Infinite-risk predictors satisfy the
+inequality trivially.  To prove \eqref{eq:pair-dominance}, write
+$a=\|Y-Y'\|_2$ and $b=\|U-U'\|_2$.  Pointwise,
+$a\leq(a-\kappa b)_++\kappa b$.  The triangle inequality in $L^2$ therefore
+implies
+\[
+ \|(a-\kappa b)_+\|_{L^2}
+ \geq(\|a\|_{L^2}-\kappa\|b\|_{L^2})_+
+ =\sqrt2(\sigma_{Y\mid A}-\kappa\tau_{U\mid A})_+.
+\]
+Square and divide by two.
+\end{proof}
+
+The new statistic estimates a squared positive-part distance discrepancy
+directly.  It does not estimate two variances separately and then subtract
+their square roots.  This distinction can matter when retained input
+variation is small.  It is not a claim of a new minimax estimation rate:
+bounded-mean concentration is used below, and taking a square root of a
+risk bound can still have slow behavior near zero.  In particular,
+\eqref{eq:pair-dominance} does not imply that pairing at a common time origin
+dominates a certificate conditioned on a different reference class $c(X)$.
+
+\begin{proposition}[Exactness on a two-atom law]
+\label{prop:two-atom}
+Let $(U,Y)$ equal $(u_0,y_0)$ with probability $p\in(0,1)$ and
+$(u_1,y_1)$ otherwise.  Use Euclidean input distance and an unconditioned
+independent pair.  Then
+\begin{equation}
+ R^*_\kappa
+ =W_\kappa
+ =p(1-p)\bigl(\|y_1-y_0\|_2
+                 -\kappa\|u_1-u_0\|_2\bigr)_+^2.
+ \label{eq:two-atom-optimum}
+\end{equation}
+The optimum is attainable by an affine map.  If the outputs are constrained
+to a closed convex set containing $y_0,y_1$, projecting that map onto the
+set preserves the optimum and the Lipschitz budget.
+\end{proposition}
+
+\begin{proof}
+Let $q=1-p$, $a=\|y_1-y_0\|_2$, $b=\|u_1-u_0\|_2$, and
+$\mu=py_0+qy_1$.  The two unequal ordered pairs have total probability
+$2pq$, so \eqref{eq:pair-witness} gives the right side of
+\eqref{eq:two-atom-optimum} as a lower bound.  If $a=0$, a constant predictor
+attains zero.  Otherwise let $v=(y_1-y_0)/a$ and $s=\min\{a,\kappa b\}$.
+Choose fitted values $f_0=\mu-qsv$ and $f_1=\mu+psv$.  Their separation is
+$s$, and their risk is $pq(a-s)^2$.  If $b=0$, these values coincide and
+a constant map attains this risk.  If $b>0$, the affine map
+\[
+ g(u)=f_0+
+ \frac{\langle u-u_0,u_1-u_0\rangle}{b^2}(f_1-f_0)
+\]
+has operator norm $s/b\leq\kappa$ and the prescribed two fitted values.
+Both fitted values lie on the segment between $y_0$ and $y_1$.  Euclidean
+projection onto a closed convex output set fixes these values and is
+nonexpansive.
+\end{proof}
+
+\subsection{Independent episodes, dependent observations within episodes}
+
+Let $E_1,\ldots,E_n$ be independent, identically distributed complete
+episodes, independent of all model construction and selection data.  For
+horizon $h$, let $\mathcal T_h$ be a fixed nonempty set of available causal
+origins common to all episodes and all compared candidates.  Within an
+episode, observations may have arbitrary dependence and their distribution
+may change with time.  Candidate $j$ has a representation $\Gamma_j$,
+metric $d_j$, frozen forecaster $f_{jh}=g_{jh}\circ\Gamma_j$, and known
+Lipschitz budget $\kappa_{jh}$ for its decoder.  Denote its episode loss by
+\begin{equation}
+ Z_{i,jh}=\frac1{|\mathcal T_h|}\sum_{t\in\mathcal T_h}
+       \|Y_{i,t+h}-f_{jh}(X_{i,t})\|_2^2,
+ \qquad R_{jh}=\mathbb E Z_{i,jh}.
+ \label{eq:episode-risk}
+\end{equation}
+This is risk for a new episode and a uniformly sampled common origin.  It
+is not a guarantee conditional on each particular history.  Different
+episode weights or a different origin law define a different risk.
+
+Assume the target and prediction lie in a known closed convex output set
+of diameter $D_h$, and put $B_h=D_h^2$.  Prediction clipping alone is
+insufficient if the target is unbounded.  Bounds inferred only from observed
+training minima and maxima do not establish the assumed population range.
+For $m=\lfloor n/2\rfloor$ disjoint episode pairs define
+\begin{equation}
+ Q_{r,jh}=\frac1{2|\mathcal T_h|}\sum_{t\in\mathcal T_h}
+ \left(\|Y_{2r-1,t+h}-Y_{2r,t+h}\|_2
+ -\kappa_{jh}d_j(\Gamma_j(X_{2r-1,t}),
+                         \Gamma_j(X_{2r,t}))\right)_+^2.
+ \label{eq:episode-pairs}
+\end{equation}
+The $Z_i$ are independent across episodes, and the $Q_r$ are independent
+across disjoint pairs.  The terms within either average need not be
+independent.  Their ranges are $[0,B_h]$ and $[0,B_h/2]$, respectively.
+For the pair statistic, the conditioning variable in
+Theorem~\ref{thm:pair-obstruction} is the common random origin $A=t$.
+
+For observations $V_1,\ldots,V_N$ in an interval of length $b$, let
+$\bar V$ be their mean and $s_V^2=(N-1)^{-1}\sum_i(V_i-\bar V)^2$.
+For $N\geq2$ define
+\begin{equation}
+ \operatorname{rad}_{\rm EB}(V;b,\alpha)
+ =\sqrt{\frac{2s_V^2\log(2/\alpha)}{N}}
+       +\frac{7b\log(2/\alpha)}{3(N-1)}.
+ \label{eq:eb-radius}
+\end{equation}
+This is the bounded-variable empirical Bernstein radius of
+\citet{maurer2009empirical}; applying it to the reflected variables gives
+the lower confidence bound used here.
+
+\begin{theorem}[Simultaneous two-sided episode certificate]
+\label{thm:episode-certificate}
+Suppose $J$ candidates and $H$ horizons are frozen using independent
+development data, $n\geq4$, and all fitted decoders satisfy their stated
+Lipschitz budgets.  Set $\alpha=\delta/(2JH)$ and
+\begin{align}
+ L_{jh}&=\max\{0,\bar Q_{jh}
+ -\operatorname{rad}_{\rm EB}(Q_{\cdot,jh};B_h/2,\alpha)\},
+ \label{eq:pair-lcb}\\
+ U_{jh}&=\min\{B_h,\bar Z_{jh}
+ +\operatorname{rad}_{\rm EB}(Z_{\cdot,jh};B_h,\alpha)\}.
+ \label{eq:risk-ucb}
+\end{align}
+With probability at least $1-\delta$, conditional on the development data,
+all $j,h$ simultaneously satisfy
+\begin{equation}
+ L_{jh}\leq W_{jh}\leq R^*_{jh}\leq R_{jh}\leq U_{jh}.
+ \label{eq:risk-sandwich}
+\end{equation}
+Here $R^*_{jh}$ is the minimum risk over all $\kappa_{jh}$-Lipschitz
+decoders of $\Gamma_j$ under the same horizon, origin law, and raw target.
+\end{theorem}
+
+\begin{proof}
+Condition on development data.  For each fixed $j,h$, apply the empirical
+Bernstein inequality to the $n$ episode losses and its reflected version
+to the $m$ disjoint-pair scores.  A union bound over the $2JH$ events gives
+simultaneous validity with failure probability at most $\delta$.
+Theorem~\ref{thm:pair-obstruction}, applied at each common origin and
+averaged over origins, gives $W_{jh}\leq R^*_{jh}$.  The fitted decoder
+belongs to the infimum's class, giving $R^*_{jh}\leq R_{jh}$.  Independence
+between the upper and lower statistics is not required.
+\end{proof}
+
+The confidence parameter $\delta$ controls the random calibration sample.
+It does not state that every future error is at most $\sqrt U$, or give
+conditional coverage of a prediction interval.  The effective independent
+sample sizes in \eqref{eq:eb-radius} are $n$ and $m$, not the number of
+overlapping windows.  More origins can reduce the variability of an
+episode average, but cannot be counted as additional independent episodes.
+The representation, score normalization, dictionary sizes, budgets,
+horizons, and any baseline included in the reported joint event must all
+be fixed before calibration.  Training-dependent choices are allowed
+because the guarantee conditions on training.
+
+\begin{corollary}[Acceptance, exclusion, and inconclusive decisions]
+\label{cor:decisions}
+On the event in \eqref{eq:risk-sandwich}, $U_{jh}\leq\epsilon_h^2$
+certifies that the fitted forecaster attains root-mean-square error at
+most $\epsilon_h$.  The inequality $L_{jh}>\epsilon_h^2$ excludes that
+tolerance for every decoder in the corresponding Lipschitz class.
+When neither condition holds, the decision is inconclusive.  Among a
+frozen finite family, selecting any candidate satisfying
+$U_{jh}\leq\epsilon_h^2$ at every required horizon preserves these
+guarantees.  In particular, a predeclared cost can be minimized over the
+certified candidates, with abstention if the set is empty.
+\end{corollary}
+
+The selected candidate is cheapest among those certified by the data,
+not necessarily among all candidates whose unknown true risks meet the
+tolerance.  Also, $\sqrt{U_{jh}}-\sqrt{L_{jh}}$ upper-bounds the fitted
+decoder's RMSE suboptimality within the stated class, but a large gap
+does not diagnose optimization error: the lower witness and both
+confidence corrections can be loose.
+
+For transparent sample-size calculations, the empirical Bernstein radii
+can instead be replaced by the prespecified Hoeffding radii
+$b\sqrt{\log(1/\alpha)/(2N)}$.  If a fitted risk is at least $\gamma>0$
+below a squared-error tolerance, $n\geq
+2B_h^2\log(1/\alpha)/\gamma^2$ makes its Hoeffding upper bound pass
+that tolerance with probability at least $1-\alpha$.  Similarly, if a
+pair-witness mean exceeds the tolerance by $\gamma$, then
+$m\geq B_h^2\log(1/\alpha)/(2\gamma^2)$ makes the corresponding lower
+bound exclude it with probability at least $1-\alpha$.  These statements
+follow by bounding the empirical mean's deviation in the direction
+opposite to the confidence bound.  They are sufficient sample sizes,
+not optimal rates, and use the witness margin rather than the unknown
+oracle-risk margin for exclusion.  Taking the better of separately
+computed Hoeffding and empirical Bernstein bounds requires a joint
+confidence allocation or a single prespecified choice.
+
+\subsection{Refinement that preserves the meaning of the norm budget}
+
+Let $\Phi_1,\ldots,\Phi_s$ be simplex-valued geometric dictionaries, with
+possibly different numbers of coordinates, and retain the whole stack
+$\Gamma_s=(\Phi_1,\ldots,\Phi_s)$.  Refinement appends a block; it does
+not silently refit or replace previous blocks.  Use the block maximum
+metric and the sum of block Frobenius norms,
+\begin{equation}
+ d_s(x,x')=\max_{1\leq b\leq s}
+                  \|\Phi_b(x)-\Phi_b(x')\|_2,
+ \qquad
+ \|W\|_{2,1}=\sum_{b=1}^s\|W_b\|_{\rm F}.
+ \label{eq:block-geometry}
+\end{equation}
+The notation $d_s$ denotes the induced pseudometric on histories, or
+equivalently the block maximum metric on the stacked representation.
+The decoder class is
+\begin{equation}
+ \mathcal F_{s,\kappa}
+ =\left\{x\mapsto\Pi_{\mathcal Y}\!
+       \left(a+\sum_{b=1}^sW_b\Phi_b(x)\right):
+                         \sum_b\|W_b\|_{\rm F}\leq\kappa\right\},
+ \label{eq:block-decoder}
+\end{equation}
+where the intercept $a$ is unpenalized and $\Pi_{\mathcal Y}$ is
+Euclidean projection onto the convex output set.  Group norm constraints
+are established tools \citep{bach2008group}; their role here is to align retained geometric
+blocks with the sensitivity budget used in the certificate.
+
+\begin{theorem}[Nested and replication-invariant refinement]
+\label{thm:replication-invariance}
+Every decoder in $\mathcal F_{s,\kappa}$ is $\kappa$-Lipschitz with
+respect to $d_s$.  Appending a block preserves
+$\mathcal F_{s,\kappa}\subseteq\mathcal F_{s+1,\kappa}$, and
+$d_{s+1}\geq d_s$ pointwise.  Consequently, the optimal risk in the
+decoder class cannot increase, and the population pair witness cannot
+increase at the same $\kappa$ and with the same pairing law.  Appending
+an exact copy of an existing block leaves both the decoder class and
+the pair witness unchanged.
+\end{theorem}
+
+\begin{proof}
+For the unprojected decoder,
+\[
+ \left\|\sum_bW_b\bigl(\Phi_b(x)-\Phi_b(x')\bigr)\right\|_2
+ \leq\sum_b\|W_b\|_{\rm F}
+                  \|\Phi_b(x)-\Phi_b(x')\|_2
+ \leq\kappa d_s(x,x').
+\]
+Projection is nonexpansive, so the same bound holds afterward.  Set a
+new block's coefficient to zero to embed any old decoder in the refined
+class.  The maximum distance increases when a new block is added;
+therefore each positive-part pair score decreases or stays unchanged.
+If the new block duplicates block $b$, its contribution can be merged
+into $W_b$ and
+$\|W_b+W_{s+1}\|_{\rm F}\leq\|W_b\|_{\rm F}+
+\|W_{s+1}\|_{\rm F}$.  This proves reverse inclusion of the decoder
+classes.  A duplicate does not change a maximum distance.
+\end{proof}
+
+The risk statement concerns population optima in nested feasible sets,
+not the performance of separately fitted finite-sample estimators.
+Nor does it imply that every newly learned block supplies useful
+information.  The maximum metric remains bounded by $\sqrt2$ because
+each block is simplex-valued; its range does not grow merely by adding
+blocks.  If a fitted decoder's smaller actual norm is used for an
+additional certificate, that changes the comparator class.  Monotonicity
+across refinements is claimed only at a common norm budget.
+
+This distinction is material for a usual Frobenius constraint on the
+concatenated coefficient matrix.  Consider a two-point input with
+$\Phi(x_0)=e_1$, $\Phi(x_1)=e_2$, equally likely targets $-1$ and $1$,
+and budget one.  Its best affine MSE is
+$(2-\sqrt2)^2/4$.  Duplicating the block permits coefficients
+$(-1/2,1/2,-1/2,1/2)$ of Frobenius norm one and zero error.  No information
+was added: duplication only relaxed the effective norm constraint.
+The block-sum construction prevents this effect.  It does not prevent
+a genuinely different block from changing the useful geometry.
+
+\begin{theorem}[A necessary amount of geometric change]
+\label{thm:necessary-expansion}
+Let $d_0,d_1$ be two induced representation pseudometrics on the same
+histories, and use the same target, conditionally independent pairing
+law, and positive sensitivity budget $\kappa$.  Write
+$\Delta=(d_1(X,X')-d_0(X,X'))_+$ and let $W_0,W_1$ be their pair
+witnesses.  Then
+\begin{equation}
+ \sqrt{W_1}\geq
+ \left(\sqrt{W_0}-\frac{\kappa}{\sqrt2}
+                       \|\Delta\|_{L^2}\right)_+.
+ \label{eq:metric-change}
+\end{equation}
+In particular, if any $\kappa$-Lipschitz decoder of the new
+representation attains RMSE at most $\epsilon$, then
+\begin{equation}
+ \|\Delta\|_{L^2}\geq
+       \frac{\sqrt2}{\kappa}(\sqrt{W_0}-\epsilon)_+.
+ \label{eq:required-change}
+\end{equation}
+On any event $L_0\leq W_0$, replacing $W_0$ by $L_0$ in the right side
+of \eqref{eq:required-change} is valid simultaneously for every new
+representation.  The new representations need not have been fixed
+when $L_0$ was computed.
+\end{theorem}
+
+\begin{proof}
+Let $a=\|Y-Y'\|_2$ and $v_i=(a-\kappa d_i)_+$.  The hinge function is
+nonexpansive, and pointwise $v_0\leq v_1+\kappa\Delta$.
+Consequently $\|v_1\|_{L^2}\geq
+(\|v_0\|_{L^2}-\kappa\|\Delta\|_{L^2})_+$, which proves
+\eqref{eq:metric-change}.  A feasible new decoder with RMSE at most
+$\epsilon$ implies $W_1\leq\epsilon^2$ by
+Theorem~\ref{thm:pair-obstruction}; rearrange.  The final statement
+follows from the deterministic inequality and monotonicity in $W_0$.
+\end{proof}
+
+This is a necessary condition, not a sufficient refinement rule.  It
+rules out repairs whose pairwise distance expansion is too small.  The
+quantity $L_0$ must lower-bound the old \emph{pair witness}; an arbitrary
+lower bound on old oracle risk cannot be substituted.  If sensitivity
+budgets are also changed, the corresponding necessary condition is
+\[
+ \| (\kappa_1d_1-\kappa_0d_0)_+\|_{L^2}
+ \geq\sqrt2(\sqrt{W_{\kappa_0,0}}-\epsilon)_+.
+\]
+This form makes explicit that increasing sensitivity can compensate for
+changing the geometry.
+
+\subsection{When an added block can improve prediction}
+
+The preceding obstruction only identifies a necessary geometric change.
+The following elementary quadratic-risk calculation identifies a
+sufficient population condition for a particular residual direction.
+It is a projection calculation, not a claim that a positive obstruction
+guarantees a useful split.
+
+\begin{proposition}[Residual correlation and budget slack]
+\label{prop:residual-gain}
+Consider the unprojected affine decoder
+\[
+ f_0(x)=a+\sum_{b=1}^sW_b\Phi_b(x),
+\]
+with $\sum_b\|W_b\|_{\rm F}<\kappa$, and let
+$\psi(X)\in\mathbb R^p$ be a new square-integrable feature block.
+Write
+\[
+ r=Y-f_0(X),\quad C=\mathbb E[r\psi(X)^\top],\quad
+ G=\mathbb E[\psi(X)\psi(X)^\top],\quad
+ s_0=\kappa-\sum_b\|W_b\|_{\rm F}.
+\]
+If $C\ne0$, define $a_0=\|C\|_{\rm F}^2$,
+$b_0=\operatorname{tr}(CGC^\top)$, and
+\[
+ \eta=\min\{a_0/b_0,\ s_0/\sqrt{a_0}\}.
+\]
+Then $b_0>0$, the appended coefficient $V=\eta C$ is feasible, and
+\begin{equation}
+ R(f_0)-R(f_0+V\psi)
+       =2\eta a_0-\eta^2b_0\geq\eta a_0>0.
+ \label{eq:residual-gain}
+\end{equation}
+If $f_0(X)$ already lies in the convex output set almost surely,
+projecting the new forecast onto that set retains this improvement.
+\end{proposition}
+
+\begin{proof}
+Expanding the square gives
+$R(f_0+V\psi)=R(f_0)-2\langle V,C\rangle_{
+m F}
++\operatorname{tr}(VGV^\top)$.  For $V=\eta C$ this yields the equality
+in \eqref{eq:residual-gain}.  The budget holds because
+$\|V\|_{
+m F}=\eta\sqrt{a_0}\leq s_0$.  If $b_0=0$, then
+$C\psi=0$ almost surely.  For each row $c$ of $C$ this implies
+$c\psi=0$ almost surely, whence
+$\|c\|_2^2=\mathbb E[r_\ell\psi^\top]c^\top
+=\mathbb E[r_\ell(c\psi)]=0$, contradicting $C\ne0$.
+Since $\eta\leq a_0/b_0$, the gain is at least $\eta a_0$.
+Projection onto a convex set containing $Y$ cannot increase squared
+error; when $f_0$ is already in the set, its reference risk is unchanged.
+\end{proof}
+
+The proviso about the old output is essential.  Improvement of two
+unprojected affine risks does not, by itself, imply improvement between
+their separately clipped versions.  Nor does the proposition guarantee
+strict improvement when the old decoder exhausts its budget.  For
+actual clipped models, improvement is checked directly using paired
+episode losses.  The moments in Proposition~\ref{prop:residual-gain} are
+population moments: substituting estimates from training does not by
+itself retain the claimed population gain.
+
+For two forecasts fixed before an independent evaluation block, define
+$D_i=Z_i^{\rm old}-Z_i^{\rm new}\in[-B_h,B_h]$.  With probability at
+least $1-\alpha$,
+\begin{equation}
+ R^{\rm old}-R^{\rm new}\geq
+ \bar D-\operatorname{rad}_{\rm EB}(D;2B_h,\alpha).
+ \label{eq:paired-improvement}
+\end{equation}
+A positive right side certifies actual risk reduction for the two
+fitted predictors.  A nonpositive value is inconclusive.  To certify
+many fixed comparisons jointly, allocate confidence over the whole
+comparison family.  For genuinely adaptive sequential refinement,
+each new candidate may depend on the past, but its evaluation block
+must be fresh and independent conditional on that past.  Assigning
+stage failure probabilities $\alpha_s$ with
+$\sum_s\alpha_s\leq\delta$ and accepting a change only when its
+paired lower bound is positive then makes every accepted improvement
+valid on a common event of probability at least $1-\delta$.  This
+follows by conditional validity at each stage and a union bound; it
+does not authorize repeatedly tuning on one fixed calibration set.
+
+Finally, a positive obstruction need not be repairable.  If $Y$ is an
+independent, symmetric random sign of amplitude $a$, then every
+representation measurable from $X$ has Bayes risk $a^2$.  A constant
+representation already has pair witness $a^2$; no refinement of the
+observed history can remove this independent future noise.  Conversely,
+a zero pair witness is not proof of a useful predictor.  Matched-origin
+pairing, for example, sees no variation between identical deterministic
+episodes even if an inadequate representation loses variation between
+origins.  These examples motivate reporting obstruction, fitted risk,
+and inconclusive outcomes separately.

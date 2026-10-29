@@ -1,0 +1,62 @@
+{
+  "campaign": "matched_geometry_main",
+  "systems": [
+    "harmonic",
+    "quasiperiodic",
+    "nonlinear_ar",
+    "logistic"
+  ],
+  "seeds": [
+    5701,
+    5702,
+    5703,
+    5704,
+    5705
+  ],
+  "n_train": 128,
+  "n_validation": 512,
+  "n_calibration": 4096,
+  "n_test": 2048,
+  "episode_length": 72,
+  "histories": [
+    4,
+    12
+  ],
+  "horizons": [
+    1,
+    4,
+    12
+  ],
+  "origin_stride": 4,
+  "cluster_counts": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "feature_kinds": [
+    "kahm",
+    "rbf",
+    "affine"
+  ],
+  "kappa": 4.0,
+  "alpha": 0.0001,
+  "omega": 16.0,
+  "max_geometry_inputs": 1600,
+  "max_train_per_cluster": 24,
+  "delta": 0.01,
+  "risk_delta_fraction": 0.8,
+  "rmse_tolerances": [
+    0.2,
+    0.35,
+    0.5
+  ],
+  "certificate_method": "bernstein",
+  "save_episode_scores": true,
+  "matched_geometry_heads": true,
+  "input_scaling_by_kind": {
+    "kahm": "standard",
+    "rbf": "standard",
+    "affine": "standard"
+  }
+}

@@ -1,17 +1,18 @@
 \section{Related Work}
 \label{sec:related}
 
-\paragraph{Soft abstractions and geometric representations.}
+\paragraph{KAHMs and soft geometric representations.}
+KAHMs construct geometric reconstruction models in reproducing kernel Hilbert
+spaces \citep{kumar2024kahm,kumar2025collaborative}. Here their reconstruction
+affinities become soft dictionary coordinates for forecasting the observed
+signal. We retain that established construction and develop its use with
+constrained output decoders, comparable refinement, and risk-based decisions.
 Soft state aggregation and its adaptive construction predate modern representation learning
 \citep{singh1994soft}. Approximate state abstractions provide guarantees for decision
 quality in reinforcement learning \citep{abel2016abstraction}, while latent transition
 models can be learned through task-relevant prediction objectives \citep{gelada2019deepmdp}.
-Kernel Affine Hull Machines construct geometric reconstruction models in reproducing
-kernel Hilbert spaces \citep{kumar2024kahm,kumar2025collaborative}. We use their
-reconstruction affinities to obtain soft coordinates; the underlying geometric
-reconstruction method is inherited, rather than a new component of this paper.
-Our statistical target is the forecasting error on the original output variables,
-and every comparison uses the same target and evaluation law.
+Our comparisons hold the raw forecasting target and evaluation law fixed as
+the representation changes.
 
 \paragraph{Koopman regression and learned dictionaries.}
 Extended dynamic mode decomposition approximates the Koopman operator on a finite
@@ -35,7 +36,11 @@ class, and preserving admissible forecasts under geometric refinement.
 prediction of soft successor coordinates, based on the imbalance between
 within-class successor variation and retained input variation. The present work
 extends the prediction target and predictor class, and studies pairwise geometric
-witnesses that do not estimate two root-variance terms separately. The prior paper also includes fitted-model upper risk bounds and independent-trajectory evaluation. We inherit that sampling principle; the matched raw-output pair witness, refinement geometry, and implemented selection procedure are the extensions developed here.
+witnesses that do not estimate two root-variance terms separately. The prior
+paper also includes fitted-model upper risk bounds and independent-trajectory
+evaluation. We inherit that sampling principle; the matched raw-output pair
+witness, refinement geometry, and implemented selection procedure are the
+extensions developed here.
 The broader objective of bounding the best risk in a model class is studied by
 \citet{muller2025falsification}; \citet{wu2026minimal} give non-asymptotic bounds
 in terms of minimal empirical risk. Dimension-free lower certification itself

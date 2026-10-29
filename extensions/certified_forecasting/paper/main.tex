@@ -4,13 +4,13 @@
 \usepackage{lastpage}
 \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
 \jmlrheading{}{2026}{1--\pageref{LastPage}}{}{}{}{Mohit Kumar and Somayeh Kargaran}
-\ShortHeadings{Learning Geometric Soft State Forecasts with Risk Certificates}{Kumar and Kargaran}
+\ShortHeadings{Forecasting with Kernel Affine Hull Machines}{Kumar and Kargaran}
 \firstpageno{1}
 \allowdisplaybreaks
 \setlength{\emergencystretch}{1.5em}
 
 \begin{document}
-\title{Learning Geometric Soft State Forecasts\\with Two-Sided Prediction Risk Certificates}
+\title{Forecasting with Kernel Affine Hull Machines:\\Representation Refinement and Risk Certification}
 \author{\name Mohit Kumar \email mohit.kumar@uni-rostock.de\\
 \addr University of Rostock, Rostock, Germany\\
 Software Competence Center Hagenberg, Hagenberg, Austria
@@ -21,34 +21,30 @@ Software Competence Center Hagenberg, Hagenberg, Austria
 \begin{center}\small Research draft for author review --- 29 October 2026\end{center}
 
 \begin{abstract}%
-Soft geometric state abstractions compress a time-series history into a small
-collection of association weights, but neither geometric reconstruction nor a
-small coordinate-prediction residual establishes accurate forecasting of the
-observed signal. We develop a learning and certification procedure whose target
-is the original future output. A pairwise discrepancy between target separation
-and representation separation lower-bounds the risk of every decoder with a
-prescribed Lipschitz budget. The bound is exact on a two-atom model and dominates
-a root-variance obstruction when both use the same conditional pairing law.
-Retaining geometric feature blocks and constraining the sum of their coefficient
-norms gives nested forecasting classes without improving their apparent
-capacity through exact feature replication. We also quantify a necessary amount
-of geometric change for a refinement to meet a desired accuracy. Independent
-episode averages yield simultaneous lower certificates for the prediction class,
-upper certificates for fitted multihorizon forecasts, and certificates of actual
-improvement between fixed refinements. Observations within episodes may be
-arbitrarily dependent. We implement the method using Kernel Affine Hull Machine
-coordinates, convex constrained decoders, and explicit abstention when a risk
-requirement cannot be certified. Experiments evaluate exact-risk calibration,
-four bounded episode laws, two nonlinear oscillators, and raw pen trajectories with writer-disjoint
-evaluation. They distinguish valid but uninformative certificates from useful
-decisions, and do not establish universal forecasting superiority or guarantees
-for an arbitrary single dependent series. A training-only input-scaling
-follow-up reproduces an accuracy gain on the fixed pen-trajectory cohort and
-also records regressions.
+Kernel Affine Hull Machines (KAHMs) describe data through local geometric
+reconstruction models. We develop a forecasting procedure that turns their soft
+associations into predictions of the observed future signal and evaluates when
+those predictions are adequate. The learner retains KAHM dictionary blocks and
+fits constrained multihorizon decoders. A sum of block coefficient norms
+preserves earlier prediction classes and prevents exact duplication from
+enlarging the feasible class. A pairwise discrepancy between target and
+representation separation lower-bounds the risk of every decoder with a
+prescribed Lipschitz budget; it is exact on a two-atom law and dominates a
+root-variance obstruction under the same conditional pairing law.
+Independent-episode calibration combines this lower certificate with
+fitted-risk upper bounds, paired refinement comparisons, and explicit
+abstention. The theory also applies to other fixed representations.
+Experiments cover exact-risk calibration, six synthetic dynamics, and
+writer-disjoint pen trajectories. Matched RBF and affine-hull controls identify
+KAHM benefits on nonlinear autoregression and pen trajectories, alongside
+substantial affine-hull advantages on the oscillators. Input-scaling ablations
+retain replicated gains and regressions. Few independent evaluation units can
+leave certificates uninformative. The guarantees concern expected squared
+error under a specified episode law.
 \end{abstract}
 \begin{keywords}
-time-series forecasting, soft state abstraction, prediction risk, geometric
-representations, finite-sample certification, Koopman regression
+Kernel Affine Hull Machines, time-series forecasting, soft state abstraction,
+representation refinement, prediction risk certification
 \end{keywords}
 
 \input{sections/introduction}
@@ -60,6 +56,7 @@ representations, finite-sample certification, Koopman regression
 \input{sections/sensitivity}
 \input{sections/real_data}
 \input{sections/input_scaling}
+\input{sections/matched_geometry}
 \input{sections/discussion}
 
 \section*{Reproducibility and research provenance}
@@ -67,10 +64,11 @@ The implementation, frozen configurations, retained result summaries, and
 figure generators are distributed in the
 \path{extensions/certified_forecasting} directory of the accompanying
 repository. Editable manuscript source is included in its \path{paper}
-directory. The original results and the input-scaling follow-up are retained
-separately, with frozen configurations, source hashes, and documented exact
-replays of damaged score archives. Full per-episode archives are regenerated
-by the fixed-seed runners and retained with the experimental evidence. The experimental
+directory. The original experiments, input-scaling follow-up, and matched
+geometry/head comparison are retained separately, with frozen configurations,
+source hashes, and documented exact replays of damaged score archives in the
+scaling study. The evidence packages identify the retained score arrays;
+fixed-seed runners regenerate full per-episode archives. The experimental
 configurations and independent sampling units are specified in the appendices. No external journal submission is represented by
 this draft. AI assistance was used for derivation exploration, implementation,
 literature retrieval, and writing. Independent author verification of the

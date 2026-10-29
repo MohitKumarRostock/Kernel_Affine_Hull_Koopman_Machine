@@ -1,6 +1,19 @@
 \section{Discussion and limitations}
 \label{sec:discussion}
 
+\paragraph{What this adds to KAHM forecasting.}
+KAHM reconstruction affinities become part of a complete learning procedure
+with a fixed prediction target, a controlled decoder class, and explicit
+accuracy decisions. Retaining dictionary blocks makes geometric refinement
+comparable, and evaluating the original output connects those decisions to
+the forecasting task. The matched study identifies consistent gains against
+the geometric alternatives on nonlinear AR and against RBF on the fixed
+PenDigits cohort, while affine-hull Frobenius and rollout heads are stronger
+on the oscillators. These results make the value of KAHM geometry a question
+about the task, head, and retained resolution. The reconstruction algorithm
+is inherited, and the general certification arguments do not select a
+preferred representation in advance.
+
 \paragraph{What the certificate adds to validation.}
 An empirical error ranks candidates, whereas an upper confidence bound makes a
 statement about a requested population error tolerance. The lower certificate
@@ -13,7 +26,7 @@ may justify changing the representation or budget; a large gap between the two
 can remain statistically or structurally inconclusive.
 
 \paragraph{What is and is not learned.}
-The implemented method learns geometric reconstruction models and constrained
+The implemented method learns KAHM reconstruction models and constrained
 forecasting heads, then selects among retained dictionary prefixes. It is not a
 proof that unsupervised geometric clustering discovers a sufficient state.
 The residual-correlation result gives a population sufficient condition for one
@@ -69,7 +82,9 @@ confidence allocation.
 
 \paragraph{Experimental breadth and computational claims.}
 The experiments include several controlled dynamics and one real acquisition
-domain. They are not a broad benchmark of modern neural time-series models,
+domain. The matched geometry comparisons concern the specified implementations
+and shared selection grids; independent family-specific tuning could change
+their ranking. They are not a broad benchmark of modern neural time-series models,
 and the fixed configurations do not establish an accuracy frontier against
 extensively tuned deep forecasters. Representation-size comparisons are
 reported separately from runtime: the prototype runner recomputes some shared
@@ -79,15 +94,16 @@ the actual experiment, rather than a deployment-speed claim.
 
 \section{Conclusion}
 
-Geometry-induced soft states can support a practical forecasting procedure with
-explicit, finite-sample risk statements. A direct pairwise obstruction connects
-lost distinguishability to the best achievable prediction risk in a
-sensitivity-bounded class. Retained geometric blocks with a matching group norm
-make refinement comparable and prevent exact feature replication from creating
-an artificial improvement. Independent-episode calibration then separates
-class exclusion, fitted accuracy, and actual refinement gains, while permitting
-selection among a frozen family. The resulting method is useful when its
-sampling assumptions and target bounds are credible and enough independent
-evaluation episodes are available. When these conditions do not yield an
-informative bound, the appropriate output is an unresolved decision, which is
-retained in the experimental record.
+KAHM soft associations can support forecasts of the observed signal together
+with explicit finite-sample risk statements. Retained dictionaries and a
+matching block budget preserve earlier predictors and prevent exact feature
+replication from creating an artificial class improvement. A pairwise
+obstruction, fitted-risk bounds, and paired refinement comparisons answer
+separate questions about the representation and the learned forecast.
+The same analysis permits comparison with other geometric dictionaries.
+The experiments establish useful KAHM decisions and favorable geometric
+comparisons on nonlinear AR and pen trajectories, while retaining stronger
+oscillator alternatives, preprocessing regressions, and unresolved tolerances.
+This makes the conditions for using KAHM geometry part of the
+reported result: credible target bounds, an appropriate evaluation law, and
+enough independent units are required for informative certification.

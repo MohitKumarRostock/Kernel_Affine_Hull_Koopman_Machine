@@ -4,6 +4,21 @@ Research software and reproducibility artifacts for Kernel Affine Hull Koopman M
 
 The repository contains the KAHKM implementation, experiment runners, hyperparameter-search scripts, archived numerical outputs, figure and table generators, and provenance records used to reproduce the reported results.
 
+## KAHM forecasting and risk certification
+
+The [certified forecasting extension](extensions/certified_forecasting/)
+develops KAHM soft representations for direct prediction of future observed
+outputs, retained representation refinement, and prediction-risk certification.
+Its [editable manuscript](extensions/certified_forecasting/paper/) is titled
+**Forecasting with Kernel Affine Hull Machines: Representation Refinement and
+Risk Certification**. The extension includes the original studies, a complete
+input-scaling investigation, and a matched geometry/head follow-up designed to
+identify when the KAHM representation contributes to forecasting performance.
+
+Use the extension's own [reproduction guide](extensions/certified_forecasting/docs/REPRODUCIBILITY.md)
+for its Linux/Python environment and experiment commands. The parent KAHKM
+study and its reference environment below retain their original provenance.
+
 ## Reproducibility
 
 The authoritative mapping from each reported result to its generator, experiment runner, configuration, seeds, raw or per-run output, and aggregate artifact is:

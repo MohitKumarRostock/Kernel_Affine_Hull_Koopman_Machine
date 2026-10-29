@@ -1,5 +1,11 @@
-\section{Learning a certified soft-state forecasting model}
+\section{Learning and certifying KAHM forecasts}
 \label{sec:method}
+
+The learner separates three operations: KAHM reconstruction supplies soft
+geometric coordinates, a constrained decoder learns the future observed
+output, and independent calibration evaluates the resulting forecasts.
+This separation keeps the KAHM construction explicit while allowing the same
+decoder and evaluation rules to be used with alternative representations.
 
 \subsection{A fixed raw-output forecasting task}
 
@@ -28,7 +34,19 @@ family frozen before it is observed. The final test set is used only to describe
 forecasting behavior independently of those decisions. A test estimate is not
 treated as an exact population risk.
 
-\subsection{Geometric dictionaries and stable soft associations}
+\subsection{KAHM dictionaries and stable soft associations}
+
+The KAHM representation uses a local reconstruction model for each reference
+group. Its affinity depends on that model's response to a history; an RBF
+alternative instead uses distance to a reference center, and the affine-hull
+alternative uses the residual from a fitted local affine subspace together with
+a locality term. These are distinct
+geometric hypotheses about which histories should receive similar coordinates.
+Soft associations retain relative affinities across groups, whereas a hard
+assignment records only the selected group. Multiple dictionary resolutions
+can be retained as separate blocks without replacing earlier associations.
+These properties motivate the construction and the ablations below; they do
+not imply that reconstruction geometry must preserve predictive information.
 
 For dictionary block $b$, partition the training histories into $C_b$ reference
 groups and fit one KAHM reconstruction model to each group, following
@@ -49,8 +67,11 @@ destroy meaningful relative weights even when they are representable in log
 arithmetic. A unit test contains a concrete case where the direct powers sum to
 less than $10^{-12}$ but one normalized association is essentially one.
 
-The original repository's KAHM training and folding routines are reused, with
-their source hashes retained in the experiment manifest. In the original
+The KAHM training and folding routines are inherited from the original
+repository, with their source hashes retained in the experiment manifest.
+The forecasting contribution is the retained representation, constrained
+raw-output decoder, and associated calibration procedure, rather than a new
+KAHM reconstruction algorithm. In the original
 experimental campaigns, history standardization uses training moments only.
 The separate follow-up in Section~\ref{sec:input-scaling} compares this
 preprocessing with training-only range scaling and bounded raw histories.
@@ -115,7 +136,7 @@ lower bound for a different latent-coordinate target.
 \begin{figure}[t]
 \centering
 \fbox{\begin{minipage}{0.94\linewidth}
-\textbf{Algorithm 1: Certified geometric forecasting}
+\textbf{Algorithm 1: Learning and certifying KAHM forecasts}
 \begin{enumerate}[leftmargin=*,itemsep=3pt]
 \item Specify horizons, causal origins, known target bounds, tolerances,
 confidence level, and a candidate-cost rule.
@@ -133,7 +154,8 @@ tolerances. Also report excluded classes and inconclusive candidates. If no
 candidate passes, return an unresolved decision.
 \end{enumerate}
 \end{minipage}}
-\caption{The finite-family learner and its certification decision. A new model
+\caption{The KAHM forecasting procedure; replacing its feature construction
+gives the same evaluation procedure for an alternative dictionary. A new model
 fitted after inspecting calibration requires fresh evaluation data or a
 separately justified adaptive guarantee.}
 \label{alg:procedure}

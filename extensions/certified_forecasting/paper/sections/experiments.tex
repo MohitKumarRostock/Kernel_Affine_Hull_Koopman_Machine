@@ -1,14 +1,18 @@
 \section{Experiments with known sampling laws}
 \label{sec:experiments}
 
-The experiments address four separate questions: whether the confidence
-statements cover known risks in controlled cases, whether retained geometric
-models forecast the original signal accurately, whether the upper bounds support
-useful tolerance decisions, and whether added blocks produce a certified
-improvement. Every candidate and every completed fitting seed is retained.
-Configurations, random streams, raw certificate scores, and machine-readable
-results accompany the implementation. There is no selection of favorable
-replicates for the reported aggregates.
+The experiments ask whether the confidence statements cover known risks,
+whether KAHM soft associations support accurate forecasts relative to hard
+assignments and alternative representations, whether retained blocks yield
+certified improvements, and whether the resulting bounds support useful
+accuracy decisions. The original campaigns establish the tasks and baseline
+protocols. Separate follow-ups examine KAHM input scaling
+(Section~\ref{sec:input-scaling}) and compare geometric families with equal
+preprocessing, decoder, and dictionary-size options
+(Section~\ref{sec:matched-geometry}). Every candidate and completed fitting
+seed is retained, together with the configurations, random streams, raw
+certificate scores, and machine-readable results. The aggregates include
+adverse and inconclusive outcomes.
 
 \subsection{Exact-risk calibration and small retained variation}
 

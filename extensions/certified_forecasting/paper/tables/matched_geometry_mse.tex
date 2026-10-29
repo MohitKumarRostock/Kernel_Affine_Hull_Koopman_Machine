@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+& \multicolumn{3}{c}{Block direct} & \multicolumn{3}{c}{Frobenius direct} & \multicolumn{3}{c}{Rollout} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+Task & KAHM & RBF & Affine & KAHM & RBF & Affine & KAHM & RBF & Affine \\
+\midrule
+Harmonic & 0.04977 & 0.05097 & 0.05245 & 0.04767 & 0.04841 & 0.04494 & 0.05226 & 0.05238 & 0.05166 \\
+Quasiperiodic & 0.03426 & 0.03495 & 0.03474 & 0.03372 & 0.03430 & 0.02592 & 0.03922 & 0.04175 & 0.03795 \\
+Nonlinear AR & 0.00456 & 0.00469 & 0.00477 & 0.00456 & 0.00469 & 0.00477 & 0.00457 & 0.00481 & 0.00481 \\
+Logistic & 0.16548 & 0.16718 & 0.17327 & 0.16066 & 0.16129 & 0.17063 & 0.16763 & 0.16490 & 0.17774 \\
+Van der Pol & 0.05292 & 0.06182 & 0.04835 & 0.02642 & 0.03092 & 0.01303 & 0.03336 & 0.04023 & 0.01730 \\
+Duffing & 0.02482 & 0.02391 & 0.02195 & 0.02341 & 0.02121 & 0.01372 & 0.02741 & 0.02702 & 0.01523 \\
+PenDigits & 0.00514 & 0.00609 & 0.00589 & 0.00504 & 0.00609 & 0.00514 & 0.00546 & 0.00665 & 0.00554 \\
+\bottomrule
+\end{tabular}
+\caption{Absolute test MSE for all nine matched geometry--head families in the fresh follow-up. Each cell averages the predefined horizons and five fitting seeds after validation-only selection of preprocessing, history and retained dimension within that family. PenDigits additionally pools both selected coordinate losses with equal eligible-writer weights. Corresponding seed variation, per-horizon losses and exact selected candidates are retained in the repository.}
+\label{tab:matched-geometry-mse}
+\end{table}

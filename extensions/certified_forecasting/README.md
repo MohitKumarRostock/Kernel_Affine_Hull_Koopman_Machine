@@ -1,4 +1,6 @@
-# Certified geometric soft-state forecasting
+# Forecasting with Kernel Affine Hull Machines
+
+**Representation Refinement and Risk Certification**
 
 Research extension of **Prediction Limits and Koopman Closure of
 Geometry-Induced Soft State Abstractions**,
@@ -8,6 +10,20 @@ This directory contains an executable forecasting method, finite-sample
 prediction-risk certificates, complete retained experiment summaries, and
 reproduction/audit tools. The manuscript is a research draft for author review;
 this repository does not represent an accepted JMLR paper.
+
+KAHM is the central implemented representation. Its local reconstruction
+models supply soft geometric associations of a causal history, and retained
+dictionaries let the forecasting representation grow while preserving earlier
+predictors. The new forecasting procedure learns the future observed output
+directly and assesses the resulting predictor and representation class using
+independent episodes. The original KAHM reconstruction mechanism is inherited;
+the generic risk and refinement results also apply to other feature maps.
+
+The [manuscript](paper/) explains this progression and separates three
+questions: what the KAHM representation contributes, what depends on the
+forecasting head, and what the finite-sample certificates can establish.
+The [revision account](docs/MANUSCRIPT_REVISION.md) summarizes the new
+comparisons and how they strengthen the evidence for this positioning.
 
 ## Method
 
@@ -133,6 +149,45 @@ scaling settings. See the reproduction guide for subsets and score audits.
 Historical manifests remain pinned to their original source bytes; they are
 not rewritten to match the new optional API.
 
+## Matched geometry and forecasting heads
+
+The [follow-up protocol](docs/MATCHED_GEOMETRY_PROTOCOL.md) addresses the
+attribution gap in the earlier favorable KAHM Frobenius and rollout results.
+KAHM, RBF, and local affine-hull geometries each receive all three heads at
+2, 6, 14, and 30 retained features, both original histories, and the same four
+preprocessing choices. Validation selects preprocessing, history, and size
+separately within each geometry/head. Fixed-dimension comparisons additionally
+hold representation size fixed. All seven tasks and five new fitting seeds are
+retained, including unfavorable results.
+
+Reproduce the full frozen design:
+
+```bash
+python experiments/run_matched_geometry.py \
+  --output results/reproduced_matched_geometry --workers 6 \
+  --prepared data_cache/pendigits/pendigits_original.npz --freeze-only
+python experiments/run_matched_geometry.py \
+  --output results/reproduced_matched_geometry --workers 6 \
+  --prepared data_cache/pendigits/pendigits_original.npz --resume
+python experiments/analyze_matched_geometry.py \
+  --study results/reproduced_matched_geometry \
+  --output results/reproduced_matched_geometry_analysis
+```
+
+The new controls are opt-in through `"matched_geometry_heads": true` and
+`"input_scaling_by_kind": {"kahm": "minmax", "rbf": "minmax", "affine": "minmax"}`
+in configuration copies. Earlier configurations retain their original
+candidate families and numerical behavior. The reference follow-up comprises
+13,440 candidate fits. Its scalar records, all writer losses, complete score
+index, and analysis are retained in `results/matched_geometry_study/`.
+
+For each synthetic task/seed, the four complete arm families share 0.04 error
+probability, and six development-selected, within-head paired comparisons
+share 0.01. This yields a 0.05 joint event within that replicate; the event is
+not joint over every task or seed. PenDigits comparative effects are
+descriptive on the original held-out writer cohort. Equal dimensions and
+search options do not imply identical model capacity or computational cost.
+
 ## Use your own independently sampled episodes
 
 The practical example fits and exports models and a calibration decision:
@@ -162,6 +217,7 @@ choice rather than being labeled certified.
 | Norm-budget follow-up | 36 runs, 756 candidates, fresh seeds | Increasing the budget from 1 to 4 matters; moving from 4 to 16 gives little additional KAHM benefit in these settings. |
 | Van der Pol and Duffing | 6 runs, 240 candidates | Certificates refer to a bounded sensor observation; different comparison methods outperform KAHM on these examples. |
 | Original PenDigits | 240 candidates, 13 eligible held-out writers | AR and quadratic regression outperform KAHM; writer-level population bounds are too wide for useful tight tolerances. |
+| Matched geometry/head follow-up | 124 jobs, 13,440 candidates, five fresh fitting seeds | KAHM improves over the named geometry in 28 of 42 task/head comparisons and regresses in 14; nonlinear AR and PenDigits show selective gains, while the new affine oscillator controls are stronger. These are descriptive counts. |
 
 The main analysis retains 119 positive KAHM class-risk lower endpoints out of
 480 candidate–horizon statements and 72 positive certified adjacent-refinement

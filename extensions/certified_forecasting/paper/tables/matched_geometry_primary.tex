@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+& \multicolumn{2}{c}{Block direct} & \multicolumn{2}{c}{Frobenius direct} & \multicolumn{2}{c}{Rollout} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+Task & RBF & Affine & RBF & Affine & RBF & Affine \\
+\midrule
+Harmonic & $-2.4$ (5) & $-5.1$ (5) & $-1.5$ (5) & $+6.1$ (0) & $-0.2$ (3) & $+1.2$ (1) \\
+Quasiperiodic & $-2.0$ (2) & $-1.4$ (2) & $-1.7$ (3) & $+30.1$ (0) & $-6.1$ (2) & $+3.3$ (1) \\
+Nonlinear AR & $-2.7$ (5) & $-4.4$ (5) & $-2.7$ (5) & $-4.4$ (5) & $-5.0$ (5) & $-4.9$ (5) \\
+Logistic & $-1.0$ (3) & $-4.5$ (5) & $-0.4$ (2) & $-5.8$ (5) & $+1.7$ (1) & $-5.7$ (5) \\
+Van der Pol & $-14.4$ (5) & $+9.5$ (2) & $-14.5$ (3) & $+102.7$ (0) & $-17.1$ (4) & $+92.8$ (0) \\
+Duffing & $+3.8$ (3) & $+13.1$ (1) & $+10.4$ (0) & $+70.6$ (0) & $+1.4$ (3) & $+79.9$ (0) \\
+PenDigits & $-15.6$ (5) & $-12.7$ (4) & $-17.2$ (5) & $-1.9$ (4) & $-17.9$ (5) & $-1.4$ (3) \\
+\bottomrule
+\end{tabular}
+\caption{Matched geometry follow-up: percentage change in test MSE of KAHM relative to the indicated alternative, within each head. Negative values favor KAHM. Parentheses give the number of 5 fitting seeds with lower KAHM MSE. Preprocessing, history and retained dimension are selected separately for each geometry and head by validation MSE only. Percentages use ratios of MSE averaged over horizons and fitting seeds within each task; PenDigits first pools coordinate losses and equally weights eligible writers. The seeds reuse the same PenDigits cohort. These test effects are descriptive; the separate calibration comparison bounds use their declared multiplicity budget.}
+\label{tab:matched-geometry-primary}
+\end{table}

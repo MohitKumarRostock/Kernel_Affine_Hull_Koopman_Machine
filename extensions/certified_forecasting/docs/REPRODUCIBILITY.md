@@ -197,6 +197,91 @@ the completed filename. Existing archives and run directories are not
 overwritten. These storage checks do not alter any fitted prediction or
 statistical formula.
 
+## Matched geometry/head follow-up
+
+The [prospective follow-up protocol](MATCHED_GEOMETRY_PROTOCOL.md) was fixed
+before the full fits. It is motivated by the earlier missing RBF/affine
+Frobenius and rollout controls. All seven existing tasks, all four scaling
+options, three geometries, three heads, and four retained dimensions are
+included. Seeds 5701--5705 regenerate all synthetic streams and give new
+PenDigits training subsamples on the same held-out writers. The historical
+main, sensitivity, oscillator, real-data, and input-scaling records remain
+unchanged.
+
+The reference configurations are `configs/matched_geometry_main.json`,
+`configs/matched_geometry_oscillators.json`, and
+`configs/matched_geometry_pendigits.json`. Each scalar fit has 84 candidates:
+72 matched geometry/head/history/prefix candidates, four KAHM hard/duplicate
+controls, six AR/polynomial candidates, persistence, and a constant. The four
+arms contain 120 synthetic jobs plus four PenDigits cohort jobs (ten scalar
+fits each), giving 13,440 fitted candidates.
+
+Freeze and execute into a new output root:
+
+    python experiments/run_matched_geometry.py \
+      --output results/reproduced_matched_geometry --workers 6 \
+      --prepared data_cache/pendigits/pendigits_original.npz --freeze-only
+    python experiments/run_matched_geometry.py \
+      --output results/reproduced_matched_geometry --workers 6 \
+      --prepared data_cache/pendigits/pendigits_original.npz --resume
+    python experiments/analyze_matched_geometry.py \
+      --study results/reproduced_matched_geometry \
+      --output results/reproduced_matched_geometry_analysis
+
+Omitting `--freeze-only` performs the same freeze immediately before execution.
+Resume validates the immutable sources, protocol, configuration bytes, pinned
+data, and completed artifacts. It skips verified completed jobs and refuses
+to overwrite failed or partial attempts. Reduced configuration copies and
+separate development seeds can check interfaces, but they do not constitute
+the reference study or manuscript evidence.
+
+The run root retains `manifest.json`, `protocol.md`, `protocol.json`,
+`freeze_sha256.json`, `schedule.json`, all `frozen_configs/`, numerical
+integrator checks, per-job logs/status, and final completion accounting.
+Raw outputs are in `results/<mode>/<campaign>/`; synthetic system/seed
+subdirectories contain complete scores and scalar results. PenDigits stores
+all writer losses and an additional 16-family matched summary; its inherited
+12-family summary is retained with its historical scope explicitly labeled.
+
+The analysis refuses missing or duplicate tasks, seeds, modes, candidates,
+feature sizes, and coordinates. It checks identical input transforms across
+geometries, ordinary-control invariance, score archives, scalar aggregates,
+and the recorded certificate endpoints. All model choices use validation
+MSE, with the tie order fixed in the protocol. Its outputs include the full
+candidate table; selected models; all-horizon and per-horizon comparisons;
+fixed-dimension and head-selected secondary comparisons; paired seed effects;
+writer differences; and the six primary calibration comparisons per
+synthetic task/seed. The selected score index supports compact evidence
+packaging without selecting on test error.
+
+The synthetic confidence allocation differs from the earlier scaling study:
+each arm receives delta=0.01 for its full risk/refinement family, and the six
+validation-selected cross-geometry comparisons receive delta=0.01/6 each.
+The union is 0.05 for one task/seed. Fixed-dimension and head-selected
+comparisons remain descriptive. PenDigits uses delta=0.0125 per arm across
+all seeds, coordinates, candidates, and horizons, giving 0.05 across arms
+under its original conditional iid-writer assumption. It has no separate
+calibration writer cohort for the comparative effects.
+
+`scripts/package_matched_geometry.py` archives every scalar record and writer
+loss, exact frozen source, and every full-score hash. Its separate evidence
+ZIP retains the union of primary and head-selected full-precision synthetic
+scores. Archive members are re-read and verified against their original
+hashes; selected arrays are checked exactly against the full source archives.
+Full score arrays are reproducible with the runner and are excluded from Git.
+
+An additional standard-library implementation reconstructs the primary
+selections and all 42 taskwise effects without importing the runner or analyzer:
+
+    python scripts/verify_matched_summary.py \
+      --study results/reproduced_matched_geometry \
+      --analysis results/reproduced_matched_geometry_analysis \
+      --output results/reproduced_matched_geometry/independent_primary_check.json
+
+It also works on the extracted scalar/writer record archive, as explained in
+`results/matched_geometry_study/README.md`; no model fits or synthetic NPZ
+files are needed for that independent summary check.
+
 ## Independent-episode campaign
 
 The runner refuses to overwrite a completed run. Use a new destination:

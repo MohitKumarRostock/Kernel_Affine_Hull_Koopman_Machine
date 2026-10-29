@@ -142,3 +142,45 @@ arms. The original code baseline is commit
 \texttt{a8bcf6c8016499e1a4b64f7dd4196af43c60bd78}; the release retains the
 original source hashes rather than relabeling old results as outputs of the
 new optional-scaling interface.
+
+\subsection{Reproducing the matched-geometry follow-up}
+\label{app:matched-geometry}
+
+The new configurations opt into matched geometry/head families and per-geometry
+input preprocessing; the historical configurations retain their original
+candidate families. Each scalar fit in one preprocessing arm contains 72
+matched candidates and 12 additional controls. Its refinement allocation
+covers 54 adjacent-prefix horizon comparisons: three geometries, two history
+lengths, three adjacent pairs, and three horizons. The complete schedule and
+all source/configuration hashes are frozen before the full fits. The
+selection and joint confidence allocation are specified in
+Section~\ref{sec:matched-geometry} and in the retained protocol.
+
+From the extension directory, with PenDigits prepared as above, run
+\begin{verbatim}
+python experiments/run_matched_geometry.py \
+  --output results/reproduced_matched_geometry --workers 6 \
+  --freeze-only
+python experiments/run_matched_geometry.py \
+  --output results/reproduced_matched_geometry --workers 6 --resume
+python experiments/analyze_matched_geometry.py \
+  --study results/reproduced_matched_geometry \
+  --output results/reproduced_matched_geometry_analysis
+python scripts/make_matched_assets.py \
+  --analysis results/reproduced_matched_geometry_analysis
+\end{verbatim}
+The analysis checks completeness and score-archive integrity before aggregating
+the paired comparisons. It retains every selected candidate, seed effect,
+per-horizon result, and PenDigits writer comparison. The asset generator
+reads that complete analysis and performs no fitting or selection. Source
+snapshots and scalar records are retained separately from historical results;
+the earlier KAHM preprocessing comparison is not relabeled as a matched
+comparison of all geometric families.
+
+Table~\ref{tab:matched-geometry-mse} supplies the absolute error scales for the
+main relative-effect table, including every matched geometry/head family.
+The complete study retains \MatchedCandidates\ candidates; its source,
+configuration, array-integrity, and independently reconstructed score checks
+are recorded with the analysis.
+
+\input{tables/matched_geometry_mse}

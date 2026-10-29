@@ -80,7 +80,97 @@ class Candidate:
         return self.model.predict(F, horizons) if self.koopman else self.model.predict(F)
 
 
+def input_scaling_by_kind(cfg):
+    """Validate an explicit geometry-wide intervention, leaving legacy defaults intact."""
+    mapping = cfg.get("input_scaling_by_kind")
+    if mapping is None:
+        return {}
+    if not isinstance(mapping, dict) or set(mapping) - {"kahm", "rbf", "affine"}:
+        raise ValueError("input_scaling_by_kind must map known geometry names to scaling modes")
+    if any(mode not in {"standard", "minmax", "minmax_clip", "raw"}
+           for mode in mapping.values()):
+        raise ValueError("Unknown input_scaling_by_kind mode")
+    return mapping
+
+
+def matched_bank_candidates(bank, F, Fn, yf, current_y, history, cfg, geometry_seconds):
+    """Fit all three heads at every prefix of one shared, frozen geometry bank.
+
+    train_seconds measures the individual head and its feature assembly only.
+    Shared geometry fitting and both training transforms are charged exactly
+    once, on the bank's first candidate, in geometry_train_seconds. Validation
+    and held-out scoring are deliberately outside these training measurements.
+    """
+    kind, candidates, pairs = bank.kind, [], []
+    metadata = bank.input_scaling_metadata()
+    bank_id = f"{kind}_m{history}"
+
+    def append(candidate, started, head, stage=None):
+        candidate.train_seconds = time.perf_counter() - started
+        candidate.train_seconds_scope = "head fitting and candidate-specific feature assembly; shared geometry excluded"
+        candidate.geometry_bank_id = bank_id
+        candidate.geometry_train_seconds = geometry_seconds if not candidates else 0.0
+        candidate.input_scaling = metadata
+        candidate.head_type = head
+        candidate.prefix_stage = stage
+        candidates.append(candidate)
+
+    previous = None
+    for stage, block in enumerate(bank.block_slices_, 1):
+        stop, blocks = block.stop, bank.block_slices_[:stage]
+        transform = lambda x, b=bank, s=stage: b.transform(x, n_blocks=s)
+        started = time.perf_counter()
+        model = BlockBoundedRidge(cfg["alpha"], cfg["kappa"], (-1, 1),
+                                  block_slices=blocks).fit(F[:, :stop], yf)
+        name = f"{kind}_nested_m{history}_s{stage}"
+        append(Candidate(name, f"{kind}_nested", history, transform, model,
+                         stop, stop, cfg["kappa"], blocks), started, "nested", stage)
+        if previous is not None:
+            pairs.append((previous, name))
+        previous = name
+
+        started = time.perf_counter()
+        model = BoundedRidge(cfg["alpha"], cfg["kappa"], (-1, 1)).fit(F[:, :stop], yf)
+        append(Candidate(f"{kind}_frobenius_m{history}_s{stage}", f"{kind}_frobenius",
+                         history, transform, model, stop, stop, cfg["kappa"]),
+               started, "frobenius", stage)
+
+        started = time.perf_counter()
+        model = KoopmanRidge(alpha=cfg["alpha"], bounds=(-1, 1)).fit(
+            F[:, :stop], Fn[:, :stop], current_y)
+        append(Candidate(f"{kind}_koopman_m{history}_s{stage}", f"{kind}_koopman",
+                         history, transform, model, stop, stop,
+                         model.lipschitz_for(cfg["horizons"]), koopman=True),
+               started, "koopman", stage)
+
+    if kind == "kahm":
+        started = time.perf_counter()
+        first, count = bank.block_slices_[0], len(bank.block_slices_)
+        duplicate = np.tile(F[:, first], (1, count))
+        blocks = [slice(i * first.stop, (i + 1) * first.stop) for i in range(count)]
+        model = BlockBoundedRidge(0.0, cfg["kappa"], (-1, 1), block_slices=blocks).fit(duplicate, yf)
+        transform = lambda x, b=bank, n=count: np.tile(b.transform(x, n_blocks=1), (1, n))
+        append(Candidate(f"kahm_duplicate_m{history}", "kahm_duplicate", history,
+                         transform, model, duplicate.shape[1], first.stop,
+                         cfg["kappa"], blocks), started, "duplicate")
+
+        started = time.perf_counter()
+        last = bank.block_slices_[-1]
+        def hard_transform(x, b=bank, sl=last):
+            probabilities = b.transform(x)[:, sl]
+            return np.eye(probabilities.shape[1])[np.argmax(probabilities, axis=1)]
+        probabilities = F[:, last]
+        hard = np.eye(probabilities.shape[1])[np.argmax(probabilities, axis=1)]
+        model = BoundedRidge(cfg["alpha"], cfg["kappa"], (-1, 1)).fit(hard, yf)
+        append(Candidate(f"kahm_hard_m{history}", "kahm_hard", history,
+                         hard_transform, model, hard.shape[1], hard.shape[1],
+                         cfg["kappa"]), started, "hard")
+    return candidates, pairs
+
+
 def build_candidates(train, validation, cfg, seed):
+    scaling_modes = input_scaling_by_kind(cfg)
+    matched = cfg.get("matched_geometry_heads", False)
     H = cfg["horizons"]
     first = max(cfg["histories"]) - 1
     candidates, pair_names = [], []
@@ -105,9 +195,18 @@ def build_candidates(train, validation, cfg, seed):
                 seed=seed + history, omega=cfg["omega"],
                 max_fit=cfg["max_geometry_inputs"],
                 max_train_per_cluster=cfg["max_train_per_cluster"],
-                input_scaling=cfg.get("kahm_input_scaling", "standard") if kind == "kahm" else None,
+                input_scaling=scaling_modes.get(kind,
+                    cfg.get("kahm_input_scaling", "standard") if kind == "kahm" else None),
             ).fit(xf)
             F = bank.transform(xf)
+            if matched:
+                Fn = bank.transform(flat(Xnext))
+                geometry_seconds = time.perf_counter() - started
+                fitted, pairs = matched_bank_candidates(
+                    bank, F, Fn, yf, current_y, history, cfg, geometry_seconds)
+                candidates.extend(fitted)
+                pair_names.extend(pairs)
+                continue
             geometry_seconds = time.perf_counter() - started
             previous = None
             for stage, block in enumerate(bank.block_slices_, 1):
@@ -177,6 +276,9 @@ def build_candidates(train, validation, cfg, seed):
                     # inherited configurations keep their original output schema.
                     for candidate in candidates[first_kind_candidate:]:
                         candidate.input_scaling = bank.input_scaling_metadata()
+            if kind in scaling_modes:
+                for candidate in candidates[first_kind_candidate:]:
+                    candidate.input_scaling = bank.input_scaling_metadata()
 
         start_fit=time.perf_counter()
         ar = BoundedRidge(cfg["alpha"], cfg["kappa"],(-1,1)).fit(xf,yf)
@@ -202,15 +304,24 @@ def build_candidates(train, validation, cfg, seed):
 
     history=cfg["histories"][0]
     X,Y=training_arrays[history]
+    start_fit=time.perf_counter()
     candidates.append(Candidate(
         "persistence","persistence",history,lambda x:x,
         Persistence().fit(flat(X),flat(Y)),history,0,np.ones(len(H)),
     ))
+    if matched:
+        candidates[-1].train_seconds=time.perf_counter()-start_fit
+    start_fit=time.perf_counter()
     constant = BoundedRidge(cfg["alpha"],0.,(-1,1)).fit(np.zeros((len(flat(X)),1)),flat(Y))
     candidates.append(Candidate(
         "constant","constant",history,lambda x:np.zeros((len(x),1)),
         constant,1,1,0.,
     ))
+    if matched:
+        candidates[-1].train_seconds=time.perf_counter()-start_fit
+        for candidate in candidates:
+            if not hasattr(candidate, "train_seconds_scope"):
+                candidate.train_seconds_scope = "model and feature-map fitting; validation scoring excluded"
 
     for c in candidates:
         Xv,Yv=validation_arrays[c.history]
@@ -233,6 +344,10 @@ def candidate_description(c):
             desc[name.rstrip("_")]=value.item() if isinstance(value,np.generic) else value
     if hasattr(c, "input_scaling"):
         desc["input_scaling"] = c.input_scaling
+    for name in ("geometry_bank_id", "geometry_train_seconds", "train_seconds_scope",
+                 "head_type", "prefix_stage"):
+        if hasattr(c, name):
+            desc[name] = getattr(c, name)
     return desc
 
 
@@ -288,8 +403,11 @@ def run_one(cfg,system,seed,destination):
                 improvements.append({"old":old,"new":new,"horizon":h,**ci})
     selected_validation=min(results,key=lambda r:(np.mean(r["validation_mse"]),r["n_features"]))["name"]
     selections=[]
+    selection_families = ["all", "kahm_nested"]
+    if cfg.get("matched_geometry_heads", False):
+        selection_families = ["all"] + sorted({row["family"] for row in results})
     for tolerance in cfg["rmse_tolerances"]:
-        for family in ["all","kahm_nested"]:
+        for family in selection_families:
             eligible=[r for r in results if family=="all" or r["family"]==family]
             passed=[r for r in eligible if all(ci["rmse_upper"]<=tolerance for ci in r["certificates"])]
             chosen=min(passed,key=lambda r:(r["n_features"],r["history"],np.mean(r["validation_mse"]))) if passed else None

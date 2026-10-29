@@ -1,0 +1,373 @@
+{
+  "scope": "Implementation verification only; separate smoke seeds915701\u2013915703 are not manuscript accuracy evidence",
+  "tests": {
+    "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src python -m unittest discover -s tests -v",
+    "passed": 45,
+    "failed": 0,
+    "elapsed_seconds": 12.072,
+    "includes_published_default_exact_parity": true,
+    "reference_commit": "71efa873419e2b58ee89746dafd123967ff007b1"
+  },
+  "integration_smoke": {
+    "directory": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke",
+    "completion": {
+      "scheduled_jobs": 20,
+      "completed_jobs": 20,
+      "failed_jobs": 0,
+      "workers_this_execution": 4,
+      "results": [
+        {
+          "id": "minmax/main_v1/harmonic_915701",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/minmax/main_v1/harmonic_915701",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/minmax/main_v1/harmonic_915701.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "15d5ec8b9f1059d9bc4896a9ef38c2626f0ee81a27a57c4bd24c519d737f8d72",
+            "frozen_candidates.json": "2e2d726ea66847c904b3a269e4e63f2937ece6a420e4a00b55c820f67cdcc761",
+            "results.json": "ebf6e5d3a17f7189775dc2ab16be4e959aac7c7aab663943bbe4c1fd7540b95f"
+          },
+          "elapsed_seconds": 1.6935762060002162,
+          "worker_peak_rss_kib": 138120
+        },
+        {
+          "id": "minmax/main_v1/harmonic_915702",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/minmax/main_v1/harmonic_915702",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/minmax/main_v1/harmonic_915702.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "b65834858d6e67a022b3c5ec712dbea28192d79644e604e4d8a6e5c9196326c3",
+            "frozen_candidates.json": "88fa58dfdd32cbc5966215f3dfd4582100dbd8463850fb86cf20f9ed68663f9d",
+            "results.json": "9b56e5cd274516d43919c17810f4e3d66a3de89b90c21c1995b35ee51a07ca92"
+          },
+          "elapsed_seconds": 1.6732686619998276,
+          "worker_peak_rss_kib": 138232
+        },
+        {
+          "id": "minmax/oscillators_v1/vanderpol_915701",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/minmax/oscillators_v1/vanderpol_915701",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/minmax/oscillators_v1/vanderpol_915701.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "6250138d0fb4b034534600ed10b9ac6bd74bf119af5774685e8eab6da3f68b29",
+            "frozen_candidates.json": "11bacd57715bf49ec8639c6f45e6be3de49708615eda88ff518ec95293642c35",
+            "results.json": "a7ff4cada55ba438a4f32139cce782ebdeeeeed9bfa50baf85fcc6101d56860c"
+          },
+          "elapsed_seconds": 1.5607849309999438,
+          "worker_peak_rss_kib": 138468
+        },
+        {
+          "id": "minmax/oscillators_v1/vanderpol_915702",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/minmax/oscillators_v1/vanderpol_915702",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/minmax/oscillators_v1/vanderpol_915702.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "baf52f05b262f23b5b2766d5bcd0cb0594d18e998633d71cd80c50a4e47a843b",
+            "frozen_candidates.json": "32f2aef1e796d7f16cf09213b83097373723ace286c6d95c4c668dd9c9bcef4e",
+            "results.json": "14679fb056bea5a7c66f307c5a2eb5b8c8285ebfc40f115aef346d46700f5fc8"
+          },
+          "elapsed_seconds": 1.7790041960015515,
+          "worker_peak_rss_kib": 138444
+        },
+        {
+          "id": "minmax/pendigits_v1/cohort",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/minmax/pendigits_v1",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/minmax/pendigits_v1/cohort.log",
+          "status": "completed",
+          "n_candidates": 336,
+          "artifact_sha256": {
+            "config.json": "89e83fc33563cc58cbd3cb08d810c4cf9694150781ce35817af07b9236aec8c5",
+            "frozen_candidates.json": "dccd680cbe2c252ecd905cd6edeb73ce6b7d6a4dd03274a9831b57e0b603a21c",
+            "manifest.json": "37f668ced564843d1c3f7fdaa4933fa17fae5746bc736cdf3dd5ba0379bbab21",
+            "matched_summary.json": "c16ef39f68245f6d7c37f6283c5918580a5d23bc91a3b806bcdb5611ffdb247a",
+            "pendigits_table.tex": "e757bd2233ca5bdf584dffe03cebad7ed7d67e85d3de022ebcb56ab972365ae1",
+            "results.json": "d93347e6303ba12fecbfe86fbfec3efea392c81fe13bef4dcedfe1fb4e8feec2",
+            "selected_results.csv": "4f4c9c2152a9ac2845d03b5410931ec6c1d276ec311f4ca0dbd874cfbf790217",
+            "summary.json": "6cbadc47aeb57933df5aacb2fdb5eb75f5550c6786bcf114049dc4610107ef34",
+            "writer_losses.csv": "3ef32daa52f904f604bdbd4da453d95fd7d0e2ffdfd0b25238e10177740b0a75"
+          },
+          "elapsed_seconds": 29.245672569999442,
+          "worker_peak_rss_kib": 165860
+        },
+        {
+          "id": "minmax_clip/main_v1/harmonic_915701",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/minmax_clip/main_v1/harmonic_915701",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/minmax_clip/main_v1/harmonic_915701.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "1fb78776d165655c1e0637bd92c55bed95cbc18e051f0ebe98dea56ef0aa365a",
+            "frozen_candidates.json": "6df69efd42765e16b2f2d7e4d0513d6f77f486b2a69b83dcefbb234bfe64e253",
+            "results.json": "a6a119e4eb699d50c90c8c2b9e4ae0d535b21176f1d7b2064865aee67941e609"
+          },
+          "elapsed_seconds": 1.657974275000015,
+          "worker_peak_rss_kib": 139392
+        },
+        {
+          "id": "minmax_clip/main_v1/harmonic_915702",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/minmax_clip/main_v1/harmonic_915702",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/minmax_clip/main_v1/harmonic_915702.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "fd411362202dde6848ca33147be1307c0bc2d73100a7ae230e8e687c25ed1471",
+            "frozen_candidates.json": "7755084de42b1d1ffddd9b5009a13200843a2454e229e895b7ace66ee34dc23f",
+            "results.json": "27c62274a89098bf1c78f2ad7199943609565291aab2f22a891616d521503e0a"
+          },
+          "elapsed_seconds": 1.6298965790010698,
+          "worker_peak_rss_kib": 138504
+        },
+        {
+          "id": "minmax_clip/oscillators_v1/vanderpol_915701",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/minmax_clip/oscillators_v1/vanderpol_915701",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/minmax_clip/oscillators_v1/vanderpol_915701.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "8279c80fbf175f558e7c57a10c3c9418d252d4851c19c6d90898b0ccef18bad8",
+            "frozen_candidates.json": "6d3d0661ae1da570c9115d800d718123823066198dbce3b49148b0f186698851",
+            "results.json": "7534e926a99c1090b66fd221d9fc775cf4160d19d1768ba23b4f4eaea65da892"
+          },
+          "elapsed_seconds": 1.6247769850015175,
+          "worker_peak_rss_kib": 139548
+        },
+        {
+          "id": "minmax_clip/oscillators_v1/vanderpol_915702",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/minmax_clip/oscillators_v1/vanderpol_915702",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/minmax_clip/oscillators_v1/vanderpol_915702.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "0cf1f42199b88e762addf6a0fae72a65d092113f7d5ebc3c8fa6ae7aa3a25b8f",
+            "frozen_candidates.json": "8369cfbe1607d712253618c30a3793c0978d2d5225008e26828ffc3da72ec13c",
+            "results.json": "9852039355b4c99db5a2d37557b64fe9ec14719cbec7d2106e9da9296ec9a1cd"
+          },
+          "elapsed_seconds": 1.8463681989996985,
+          "worker_peak_rss_kib": 138504
+        },
+        {
+          "id": "minmax_clip/pendigits_v1/cohort",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/minmax_clip/pendigits_v1",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/minmax_clip/pendigits_v1/cohort.log",
+          "status": "completed",
+          "n_candidates": 336,
+          "artifact_sha256": {
+            "config.json": "337257a6313f08e65df6277aa58fde9f5594ad519400428ebc203705dc50fe6d",
+            "frozen_candidates.json": "96bd49bad056552a907bf780e5965a8e9a7fe80f9b6029d44b7bb0af31d60d21",
+            "manifest.json": "9af502e85c2027a278d0959d24524d062ffb76521a7b688139c9920e8f599b27",
+            "matched_summary.json": "609698399959c199de65b376a4d9f4ecbd327167ccc12606e0b0dd78c2806a60",
+            "pendigits_table.tex": "186ac4d8c35b3bdbc4738a5d902c3e9c42fa09a28d1395de6008c6fe2b64772b",
+            "results.json": "ad8e11efbdef8ae79937668a0da6c00ecd8b972384ac3d0818739fe686e5604b",
+            "selected_results.csv": "16c40899cf7b46615fac95ff0692a4deed98da8305ff4b366c863c2fbab3561a",
+            "summary.json": "0180b2806108be10e10976050589bb2756269f796acff9fc93cf79db68f0a5ef",
+            "writer_losses.csv": "39e572d2de427b30ec95336615f7bf8912d87df559a3a8dc44ebb595fe590191"
+          },
+          "elapsed_seconds": 28.368683988999692,
+          "worker_peak_rss_kib": 165768
+        },
+        {
+          "id": "raw/main_v1/harmonic_915701",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/raw/main_v1/harmonic_915701",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/raw/main_v1/harmonic_915701.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "6fcbefda9c5cb0f60f57edbc7db5617263b44b82a5de85c7d3f978f5592b521a",
+            "frozen_candidates.json": "6ada286684f0e31ac13fcffaa7466e4d9203104255fc1ce48c76aa7d700c1c0a",
+            "results.json": "ac9a71c9a725bd1039a3c480f4069611f5ce2d8c4a6b4ca886fda359164e86dd"
+          },
+          "elapsed_seconds": 1.6277375579993532,
+          "worker_peak_rss_kib": 138084
+        },
+        {
+          "id": "raw/main_v1/harmonic_915702",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/raw/main_v1/harmonic_915702",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/raw/main_v1/harmonic_915702.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "95115e90471a42ea8cafb7b6b100941ccda3cc510af8a77e37e0ca1a671a8aaf",
+            "frozen_candidates.json": "c989162df52b01e20afef7524afabe34eed9cf4492afb57b0dca113aec316a0f",
+            "results.json": "2c6262f149cd30a10390afe64ce4931813fa84c849ab60c3bf2a73c491effff0"
+          },
+          "elapsed_seconds": 1.6520986429986806,
+          "worker_peak_rss_kib": 138232
+        },
+        {
+          "id": "raw/oscillators_v1/vanderpol_915701",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/raw/oscillators_v1/vanderpol_915701",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/raw/oscillators_v1/vanderpol_915701.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "906923cdb082e42453b34980e8ce1dc328352f357e66cb632bb853277cd0bbc5",
+            "frozen_candidates.json": "5441bf683412a20bdda760092667954fcc3217532fa339fb07876ffa7d8895fc",
+            "results.json": "47d241bddbcd922f0eabdbc69e99253c7444dc8432485bd59159ae4ebc282760"
+          },
+          "elapsed_seconds": 1.8685386590004782,
+          "worker_peak_rss_kib": 138468
+        },
+        {
+          "id": "raw/oscillators_v1/vanderpol_915702",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/raw/oscillators_v1/vanderpol_915702",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/raw/oscillators_v1/vanderpol_915702.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "f253fa7767e61ed6786085a86c4cb0dff986d06e33fb46bda6f340baba7852e1",
+            "frozen_candidates.json": "f12465b19867ba53651308fb39a02c4bc7f0d004c43cde1a4e84483f188321ea",
+            "results.json": "4fecb77f7782c66d58b43b49d3f6210005a677addfa57d21af232c02390d03d1"
+          },
+          "elapsed_seconds": 1.893386328998531,
+          "worker_peak_rss_kib": 138444
+        },
+        {
+          "id": "raw/pendigits_v1/cohort",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/raw/pendigits_v1",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/raw/pendigits_v1/cohort.log",
+          "status": "completed",
+          "n_candidates": 336,
+          "artifact_sha256": {
+            "config.json": "ddcbff01b16df94707c60a2d116105ac5d9a720c0bc8b6bd19892afc3962d860",
+            "frozen_candidates.json": "67233e6946130b4db0bd07829c52c7be2d1f7fe8970b12eae11b2ebef7039c0e",
+            "manifest.json": "0483ee22d8e27dea6bfcd02f501bfab537055348f8624e17289df610777342d4",
+            "matched_summary.json": "90b1bfd97276dce04e337a49e9adc92cc06e51cf02cb39c6b822ca68721c0572",
+            "pendigits_table.tex": "648ff60fe6e06ff5a1ec1884eb3116ba4e7096738d7046b177e604dd21509f37",
+            "results.json": "c54595f9398ba9ec3affe94effbaebc5fe53561d26733a4b7c9c0e6956faf331",
+            "selected_results.csv": "59fa5b3c38fe54a375f95318c0c99822af961f8eda966f0f6516d00dcafddc35",
+            "summary.json": "9aaa021197ade9a75a9cb01f4ba2ede55fa5e41ae2435402b289db1401794259",
+            "writer_losses.csv": "1e39350bbc3822485d3fc9a073f5ee7845bc1e1762a2fd180cf597c8f71832cf"
+          },
+          "elapsed_seconds": 28.321749635000742,
+          "worker_peak_rss_kib": 165988
+        },
+        {
+          "id": "standard/main_v1/harmonic_915701",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/standard/main_v1/harmonic_915701",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/standard/main_v1/harmonic_915701.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "1c4c511d89a25ffc8e8a400d54b1b2b5d7ea4a8d4deb96b38b5404071dd42c6f",
+            "frozen_candidates.json": "88a6eef451203c3c3392a98f7bf83d4134ba9d57e649e9ff801ab7c593ebbbb5",
+            "results.json": "e9c3e7c3f22226ac78787f499ea2763fd4bfe189a4b8a3a88ba412e6884b4c9a"
+          },
+          "elapsed_seconds": 1.533518025000376,
+          "worker_peak_rss_kib": 139136
+        },
+        {
+          "id": "standard/main_v1/harmonic_915702",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/standard/main_v1/harmonic_915702",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/standard/main_v1/harmonic_915702.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "011a18c11b446fd9858f9ff73501fedbd1b1112815ef1e7a256bae2c0d577e6a",
+            "frozen_candidates.json": "33b6fb5ca00e1d9eb0f2d0e33a7b6d48b0d7d64300b3bff2f9809cd47aeb9ab4",
+            "results.json": "0a678cf68597aaaa500ddde8b5d2d9cb439f7440393bbb902869499e8b580772"
+          },
+          "elapsed_seconds": 1.7122914579995268,
+          "worker_peak_rss_kib": 137828
+        },
+        {
+          "id": "standard/oscillators_v1/vanderpol_915701",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/standard/oscillators_v1/vanderpol_915701",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/standard/oscillators_v1/vanderpol_915701.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "ee464c134c46dcbad05a3f9403c3f17f26baeb92a16de1c3952c6b3657909428",
+            "frozen_candidates.json": "852d9733cb31075a9a3fcc6e1be131764896f32c89a3abc7ab4039663b4e52bc",
+            "results.json": "7451478a02b530995602645bed399dc8b0960358b5d3a5ba519621ee9e52c898"
+          },
+          "elapsed_seconds": 1.6477330469988374,
+          "worker_peak_rss_kib": 139392
+        },
+        {
+          "id": "standard/oscillators_v1/vanderpol_915702",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/standard/oscillators_v1/vanderpol_915702",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/standard/oscillators_v1/vanderpol_915702.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "aa12b19059b5ad2c76cbcfc8d966fc9faecb36e79afa07c7ee7543e09da5fe9d",
+            "frozen_candidates.json": "d3e3966dd7dea956cb45f3eb72dc73fc31dc823431ad8da53cd121cc2f3dbb91",
+            "results.json": "49f4c3720478939076730257f835a19d31c1504fe310524b0849c17d60daaa3a"
+          },
+          "elapsed_seconds": 1.5602640159995644,
+          "worker_peak_rss_kib": 138504
+        },
+        {
+          "id": "standard/pendigits_v1/cohort",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/results/standard/pendigits_v1",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke/logs/standard/pendigits_v1/cohort.log",
+          "status": "completed",
+          "n_candidates": 336,
+          "artifact_sha256": {
+            "config.json": "f186fc2d46758dfb087fae9d9df88d88a3db9a1e1c8da8ed6b8fb272bf584de2",
+            "frozen_candidates.json": "c12fcd5bc14a7f13f84ad46337c044f031b8db3ca828fcd4306801f904997a61",
+            "manifest.json": "e2cce6833b182fd346af49017a918e3065decf3bdc210224aa02cdce50615c06",
+            "matched_summary.json": "932ecba994c2a54cb220e0af261ddd32a28c6be4e4ce1d50e80416ccecf24e0e",
+            "pendigits_table.tex": "3f2e9a223c3ef6573ab31760e237209f347f50a1c5e838c22d46f2f363c8ccfc",
+            "results.json": "471a4b29846fb5d4f67c16eb59c71f86bfde1e04b6e565317cfaa831c2cf8bf8",
+            "selected_results.csv": "361ff9e8e6fa96e27b1766b53fef20b0515608aa503040abe1da654ddc137536",
+            "summary.json": "0b8984cf7968ec0bdbfb275a6c4f80668726eb29b33955855b46c2aebd1f0259",
+            "writer_losses.csv": "acd409dbc7cebd0341a16a33269d9557781f255b5f3ca6ce15c0b4c9e05c70a1"
+          },
+          "elapsed_seconds": 28.272149818001708,
+          "worker_peak_rss_kib": 165184
+        }
+      ]
+    },
+    "independent_analysis_directory": "/workspace/scratch/3369de70587c/matched-geometry-development/smoke-analysis"
+  },
+  "full_sample_timing_smoke": {
+    "directory": "/workspace/scratch/3369de70587c/matched-geometry-development/timing_smoke",
+    "completion": {
+      "scheduled_jobs": 1,
+      "completed_jobs": 1,
+      "failed_jobs": 0,
+      "workers_this_execution": 1,
+      "results": [
+        {
+          "id": "standard/main_v1/harmonic_915703",
+          "destination": "/workspace/scratch/3369de70587c/matched-geometry-development/timing_smoke/results/standard/main_v1/harmonic_915703",
+          "log": "/workspace/scratch/3369de70587c/matched-geometry-development/timing_smoke/logs/standard/main_v1/harmonic_915703.log",
+          "status": "completed",
+          "n_candidates": 84,
+          "artifact_sha256": {
+            "episode_scores.npz": "dcd7bc591c37cb89dc8d27d25d53da11a6ed755da3633232fadb06b62044d610",
+            "frozen_candidates.json": "6811d677d35de51721cc855ecce1a37bb3e50ee4041ac045ced2ba01726ecff4",
+            "results.json": "7aa662a1fd316970ca5c50c0638feb8af5f6d31c6030095e3e26620c3d77a237"
+          },
+          "elapsed_seconds": 20.708992395000678,
+          "worker_peak_rss_kib": 306476
+        }
+      ]
+    },
+    "seed": 915703,
+    "system": "harmonic",
+    "mode": "standard",
+    "original_sample_sizes": true
+  },
+  "resume_verification": "Re-executed completed20-job smoke with --resume; all artifacts revalidated and no jobs repeated",
+  "source_sha256": {
+    "experiments/run_forecasting.py": "c7047231d46b456b394dedd40b390c648a6ad8dae06efd8363fc5e0fc13dd43f",
+    "experiments/run_matched_geometry.py": "fe2254252cbe282aad25c2ed644c3f1b502128c590eb2cbf9ad115b08e45dcf1",
+    "tests/test_matched_geometry.py": "add8ddeed82b0711841d28f079dd982be5e18f1e67527ad5d8a8d80efc21936a",
+    "configs/matched_geometry_main.json": "4005cdbc7ff1b134051e4a5a65289607fb0f5b23fbda7b9ddd52ed5755682d65",
+    "configs/matched_geometry_oscillators.json": "4a48ab3aba4da1ca5f243b30baccb1fbc32d2119b0c1690232c7c91a311947ef",
+    "configs/matched_geometry_pendigits.json": "72a0b2ad63ef44d03a56585ed4807ceda1a16a196bea9bcceb5cb0c29c62a065"
+  },
+  "default_schedule": {
+    "jobs": 124,
+    "synthetic_jobs": 120,
+    "pendigits_cohort_jobs": 4,
+    "scalar_candidates": 84,
+    "candidate_fits": 13440
+  },
+  "no_full_study_fits_by_this_agent": true
+}

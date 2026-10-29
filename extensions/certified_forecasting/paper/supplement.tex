@@ -1,0 +1,64 @@
+\documentclass[twoside,11pt]{article}
+\usepackage{xr}
+\usepackage[preprint]{jmlr2e}
+\usepackage{times}
+\usepackage{amsmath,mathtools,booktabs,microtype,enumitem}
+\usepackage{lastpage}
+\externaldocument[main-]{main}
+\hypersetup{hidelinks,
+pdftitle={Supplement: A Hierarchy of Risk Certificates for Forecasting Representations},
+pdfauthor={Mohit Kumar and Somayeh Kargaran}}
+\jmlrheading{}{2026}{1--\pageref{LastPage}}{}{}{}{Mohit Kumar and Somayeh Kargaran}
+\ShortHeadings{Risk Certificates: Experimental Supplement}{Kumar and Kargaran}
+\firstpageno{1}
+\allowdisplaybreaks
+\setlength{\emergencystretch}{1.5em}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\theequation}{S\arabic{equation}}
+
+\begin{document}
+\title{Supplement to A Hierarchy of Risk Certificates\\for Forecasting Representations}
+\author{\name Mohit Kumar \email mohit.kumar@uni-rostock.de\\
+\addr University of Rostock, Rostock, Germany\\
+Software Competence Center Hagenberg, Hagenberg, Austria
+\AND
+\name Somayeh Kargaran \email somayeh.kargaran@scch.at\\
+\addr Software Competence Center Hagenberg, Hagenberg, Austria}
+\maketitle
+
+\begin{abstract}
+This supplement preserves the complete secondary experimental exposition and
+the inherited local KAHM reconstruction equations accompanying the main
+manuscript. It includes all finite-support lower-bound comparisons, the
+explicit-feature decision control, full forecasting tables, preprocessing
+comparisons, matched geometries and decoders, and speech-energy evidence.
+Adverse and inconclusive outcomes are retained. All proofs of the main
+paper's stated results remain in the main PDF. The repository supplies frozen
+configurations, individual outcomes, exact source snapshots, and reproduction
+commands for each separately defined study.
+\end{abstract}
+
+\paragraph{Reading conventions.}
+Sections, tables, figures, and equations in this supplement have an S prefix.
+References without that prefix refer to the main paper. Historical studies
+retain their original designs and confidence allocations. Repeated fitting
+on a previously examined natural-data cohort is descriptive; it does not
+create an independent confirmation sample. The source-generation step only
+expands the retained TeX inputs and resolves cross-document references.
+
+\input{supplement_sections/01_kahm}
+\input{supplement_sections/02_witness}
+\input{supplement_sections/03_decisions}
+\input{supplement_sections/04_forecasting}
+\input{supplement_sections/05_oscillators}
+\input{supplement_sections/06_budgets}
+\input{supplement_sections/07_pendigits}
+\input{supplement_sections/08_scaling}
+\input{supplement_sections/09_matched}
+\input{supplement_sections/10_speech}
+\input{supplement_sections/11_protocols}
+
+\bibliography{references}
+\end{document}

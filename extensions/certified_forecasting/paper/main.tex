@@ -24,25 +24,27 @@ Software Competence Center Hagenberg, Hagenberg, Austria
 \maketitle
 
 \begin{abstract}
-We study lower bounds on the prediction risk achievable from a fixed
-representation with a prescribed decoder sensitivity. A pairwise obstruction
-is inexpensive to compute but can miss almost all of the optimal risk. For
-scalar targets, we introduce a hierarchy of normalized minimum-risk problems
-on blocks of observations. Its size-two member equals the pairwise witness;
-its expectations increase to the optimal Lipschitz risk under boundedness and
-compactness. Exact formulas characterize rare conflicts and noisy finite
-supports, showing why no fixed block size is universally sufficient.
-Independent-block calibration and stratification with estimated masses yield
-finite-sample lower certificates. Combined with upper risk bounds, these can
-certify the minimum feasible cost among declared representation classes.
-Experiments distinguish population improvement from finite-sample uncertainty
-and compare against full-sample empirical-minimum calibration. A controlled
-nonlinear forecasting study tests these decisions with learned
-Kernel Affine Hull Machine dictionaries and independent confirmation data.
+We study when a forecasting representation can meet an accuracy requirement
+under a prescribed decoder sensitivity. Kernel Affine Hull Machine (KAHM)
+dictionaries provide a learned, expandable setting for this general question.
+For bounded scalar targets, we construct normalized minimum-risk problems on
+blocks of observations. Their size-two member is a pairwise obstruction;
+their expectations increase to the optimal Lipschitz risk under compactness
+and unconditional iid sampling. Exact rare-conflict and noisy-support laws
+show why no fixed block size is universally sufficient. Independent-block
+calibration and estimated-mass stratification give lower risk certificates.
+Combined with fitted-risk upper bounds and retained representation classes,
+these can certify minimum feasible cost among declared alternatives.
+Experiments distinguish population slack from finite-sample uncertainty.
+Fresh calibration on forty frozen learned KAHM banks demonstrates class
+exclusion with larger blocks where pairs are inconclusive, while retaining
+cases favoring stratification and full-sample empirical minimization.
 Broader synthetic, pen-trajectory, and speech studies show task-dependent
-accuracy and sensitivity to training-fitted input scaling, including scaling
-to $[-1,1]$. The guarantees concern expected squared error under an explicit
-sampling law; informative natural-data class exclusion remains limited.
+accuracy and preprocessing effects. The guarantees concern expected squared
+error for a fixed target and evaluation law; they distinguish class-level
+limitations from fitted accuracy without identifying all limitations as
+removable representation loss. Informative natural-data class exclusion
+remains limited.
 \end{abstract}
 \begin{keywords}
 Kernel Affine Hull Machines, time-series forecasting, soft state abstraction,
@@ -56,13 +58,10 @@ representation refinement, prediction risk certification
 \input{sections/method}
 \input{sections/theory_calibration}
 \input{sections/block_experiments}
+\input{sections/comparison_summary}
 \input{sections/learned_kahm_decision}
-\input{sections/witness_experiments}
-\input{sections/decision_value}
-\input{sections/forecasting_evidence}
-\input{sections/input_scaling}
-\input{sections/matched_geometry}
-\input{sections/speech_forecasting}
+\input{sections/learned_kahm_hierarchy}
+\input{sections/forecasting_assessment}
 \input{sections/discussion}
 
 \section*{Code, data, and research transparency}
@@ -70,12 +69,16 @@ The \href{https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machin
 result summaries, and figure generators in
 \path{extensions/certified_forecasting}; editable manuscript files are in its
 \path{paper} directory. The forecasting, input-scaling, matched-geometry,
-lower-bound comparison, block-hierarchy, learned-KAHM decision, controlled decision, speech, and speech-scaling studies
+lower-bound comparison, block-hierarchy, learned-KAHM decision, learned-geometry hierarchy, controlled
+decision, speech, and speech-scaling studies
 have separate
 protocols and result directories. These provide configurations, source hashes,
 per-episode scores, and outcomes for every prescribed configuration.
 Appendix~\ref{app:protocols} specifies the forecasting configurations and
-independent sampling units. The reproduction guide is
+independent sampling units. The separately compiled supplement retains
+complete secondary experimental tables and the inherited local KAHM
+implementation details; every proof of the main results remains in this
+manuscript. The reproduction guide is
 \path{extensions/certified_forecasting/docs/REPRODUCIBILITY.md}.
 Public data are identified by source and checksum; download scripts preserve
 attribution and license information. Appendix~\ref{app:speech-protocol} describes the speech study's evaluation
@@ -87,8 +90,9 @@ retrieval, and manuscript preparation.
 
 \appendix
 \input{sections/optimization}
+\input{sections/block_optimization}
 \input{sections/witness_analysis}
-\input{sections/protocols}
+\input{sections/protocol_summary}
 \input{sections/known_risk_details}
 \bibliography{references}
 \end{document}

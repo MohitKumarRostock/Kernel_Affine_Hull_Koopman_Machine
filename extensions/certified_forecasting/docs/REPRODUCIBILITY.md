@@ -8,7 +8,9 @@ independent sampling units. This guide specifies the computational procedures
 and the evidence available for reproducing each result.
 The current manuscript is **A Hierarchy of Risk Certificates for Forecasting
 Representations**. Earlier study directories and their source identities are
-preserved; the two new studies below have separate frozen protocols.
+preserved. Each additional study has its own protocol, source snapshot, and
+confidence allocation; the [revision record](JMLR_REPRESENTATION_REVISION.md)
+explains the relationship among their scientific claims.
 
 Mean squared error (MSE) is the expected squared prediction error under the
 study's episode and forecast-origin law. Root-mean-square error (RMSE) is its
@@ -16,6 +18,24 @@ square root. An upper confidence endpoint evaluates a fitted predictor; a lower
 endpoint applies to every decoder in the stated representation class. The
 confidence allocation is stated for each study and should not be extended to
 other studies or repeated fits without an additional multiplicity argument.
+
+Reproduction and new evidence have different meanings. Replaying the same
+seeded streams checks the recorded execution. Evaluating an archived, already
+fitted bank on newly generated calibration observations supplies new evidence
+conditional on that bank; it does not constitute a new training replication.
+A follow-up may use earlier findings to choose its protocol, provided its
+representations, methods, tolerances, seeds, and confidence allocation are
+frozen before the new calibration observations are generated. The protocol
+must disclose the earlier evidence used in that design. The source and freeze
+records establish recorded execution order, not an external preregistration.
+
+Keep the complete risk specification fixed in a method comparison: observed
+target, evaluation law, feature map, metric, sensitivity budget, and decoder
+class. The hierarchy and full empirical-minimum comparator assess the full
+scalar Lipschitz class; the implemented block-affine forecaster supplies an
+upper bound for a contained family. A full-sample comparator can be expensive
+on continuous supports. Compare it at common observation budgets where run,
+and report omitted budgets as uncomputed rather than as unfavorable results.
 
 ## Reference environment
 
@@ -81,6 +101,37 @@ do not imply that a scalar-only checkout contains those arrays.
 ## Tests
 
     python -m unittest discover -s tests -v
+
+The revision passes all 65 tests discovered by that command. The new sparse
+block-solver checks are four plain test functions, so run them separately:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=src python - <<'PY'
+import runpy
+from threadpoolctl import threadpool_limits
+
+namespace = runpy.run_path("tests/test_sparse_block_witness.py")
+with threadpool_limits(limits=1):
+    for name, function in sorted(namespace.items()):
+        if name.startswith("test_") and callable(function):
+            function()
+            print(name, "PASS")
+PY
+```
+
+All four pass. They check closed-form pair solutions, collapsed and nearly
+collapsed features, comparison with an independent dense program, the maximum
+feature-block metric, and validity of early-stopped lower values.
+
+The seven mathematical witness-comparison tests also pass:
+
+```bash
+python -m unittest discover -s experiments/witness_comparison -p 'test_*.py' -v
+```
+
+These three commands run 76 checks in total: 65 standard tests, four sparse
+solver functions, and seven witness-comparison tests. The first discovery
+command by itself runs only the 65 standard tests.
 
 The tests check the original KAHM execution path, stable normalization,
 decoder feasibility and optimality diagnostics, affine Koopman composition,
@@ -635,12 +686,26 @@ selection and mean-effect summaries. Neither reconstructs missing full synthetic
 score archives. The [verification archive](ARCHIVE_INDEX.md) identifies the source versions
 and scope of the available reconstruction checks.
 
-With latexmk, pdfLaTeX, BibTeX, and the packages loaded by paper/main.tex:
+With Python 3.9 or later, latexmk, pdfLaTeX, BibTeX, and the packages loaded by
+`paper/main.tex` and `paper/supplement.tex`, run from the extension directory:
 
-    cd paper
-    latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+    python scripts/build_manuscript.py
 
-The compiled PDF is distributed as paper/main.pdf relative to the extension directory.
+This regenerates `paper/supplement_sections/` from the retained detailed
+sources, expands their table inputs, and resolves references to the main
+paper. It builds the main paper before the supplement and rejects unresolved
+references, duplicate labels, and overfull boxes. Use `--prepare-only` to
+regenerate the supplement sources without compiling. The separate manuscript
+source package includes the same script beside `main.tex`; in that package,
+run `python build_manuscript.py`.
+
+The main manuscript and experimental supplement are distributed as
+`paper/main.pdf` and `paper/supplement.pdf`, relative to the extension
+directory. Build the main manuscript first because the supplement reads its
+cross-reference file. All proofs of the main paper's stated results remain
+in the main PDF. The supplement preserves the secondary experiment details
+and inherited KAHM reconstruction calculations; moving them does not change
+the original study records or their confidence scopes.
 The table and figure generators derive manuscript assets from the recorded
 results. Their inputs identify the numerical evidence supporting each
 reported comparison.
@@ -763,6 +828,118 @@ post-calibration packaging-only maintenance. Models, designs, seeds,
 tolerances, and sample sizes were unchanged. The exact executed runner remains
 inside the source snapshot. Replaying the fixed streams checks reproducibility;
 it does not constitute another independent experiment.
+
+## Hierarchy on frozen learned KAHM representations
+
+The [learned-representation hierarchy protocol](../experiments/learned_kahm_hierarchy/protocol.md)
+uses all forty banks from `results/learned_kahm_decision_v1/` and newly drawn
+calibration streams. It evaluates observation block sizes 2, 4, 8, and 16 at
+256, 1,024, and 4,096 observations, together with both learned-partition pair
+bounds. Full empirical minimization uses all 256 observations at that budget;
+it is uncomputed at the larger budgets. Its normalization is SSE/256, whereas
+the hierarchy uses SSE/(`b-1`). The common targets, metrics, and sensitivity
+budget are unchanged.
+
+All four new block methods use KL inversion, including the size-two pair
+member. The earlier learned-KAHM decision study used empirical Bernstein
+lower corrections. Comparing the two studies' decision frequencies therefore
+mixes calibration method, fresh sample realization, and confidence allocation;
+it cannot isolate a block-size effect. Block-size conclusions use comparisons
+within this new study.
+
+All 1,760 endpoints share one 0.05 allocation, including 240 fitted upper
+endpoints, 960 block endpoints, 480 stratified endpoints, and 80 empirical
+minima. Conditioning on the archived banks permits fresh calibration after
+earlier findings informed the new protocol. The new execution does not supply
+forty new representation-learning repetitions. Both development-only solver
+benchmarks, the resulting solver choice, and the full-ERM budget limit are
+disclosed in the protocol.
+
+Reproduce the frozen design in a new output directory:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=src \
+  python experiments/learned_kahm_hierarchy/run.py freeze \
+  --output results/reproduced_learned_kahm_hierarchy
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=src \
+  python experiments/learned_kahm_hierarchy/run.py calibrate \
+  --output results/reproduced_learned_kahm_hierarchy
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+  python verification/jmlr_representation_revision/independent_hierarchy_audit.py \
+  --results results/reproduced_learned_kahm_hierarchy \
+  --output verification/reproduced_learned_kahm_hierarchy.json
+```
+
+For an independent audit of the retained evidence, first restore its two
+large gzip evidence files from the exact byte parts distributed in Git:
+
+```bash
+python scripts/restore_hierarchy_payloads.py
+```
+
+The default input is `results/learned_kahm_hierarchy_v1/archive_parts/`, and
+the default destination is its parent result directory. Parts are at most
+8 MiB each. The helper verifies every part and each reconstructed original
+against SHA-256 hashes before installing it; it leaves matching existing
+originals intact and refuses conflicting files. `--output-dir PATH` restores
+elsewhere, and `--archive-dir PATH` selects a different parts directory. This
+distribution step preserves the exact frozen gzip bytes and changes no
+observations, certificates, source freeze, or scientific results. A new study
+run writes its evidence files directly and does not need this restoration.
+
+Then change the auditor's `--results` to `results/learned_kahm_hierarchy_v1`
+and choose a new audit output path. The
+auditor imports no project code: it reconstructs features from the portable
+KAHM banks, replays all fresh draws, evaluates every signed-edge dual and
+primal in extended precision, and recomputes the confidence endpoints,
+stratum-mass linear programs, and final decisions. It does not rerun or trust
+the study's optimizer. Nonconverged solves retain valid feasible-dual lower
+values and their actual gaps; a tolerance failure is not grounds for removing
+the observation block.
+
+The retained numerical audit passed 3,626,324 scalar checks covering all 40
+banks, 80 selected heads, 163,840 observations, 143,440 optimization programs,
+480 mass linear programs, 1,760 endpoints, and 880 decisions. Its largest
+confidence-endpoint discrepancy is approximately `1.003e-12`. All 379
+stopping-limit solves are retained; the recorded maximum normalized gap is
+`6.409599374516499e-7`, and no arithmetic fallback was used. This floating-point
+audit does not provide formal interval arithmetic.
+
+The exact scores on disjoint observation blocks are independent. Computed
+dual values lie below those scores pointwise, so their empirical mean is no
+larger. Monotonicity of the KL lower endpoint in that mean preserves validity
+even if numerical batching or fallback rules couple the approximate outputs.
+No independence claim for coupled numerical solver outputs is needed.
+
+`samples.jsonl.gz` stores the complete fresh histories, targets, features,
+predictions, and partitions. `qp_certificates.jsonl.gz` retains every primal
+and signed dual. Restore these two files as above before running any retained
+record audit or asset command that reads them. These portable evidence files,
+the frozen protocol, source
+snapshot, endpoint CSV, and decision CSV accompany the retained study.
+Feature evaluation, batch optimization at 4,096 observations, and full-ERM
+optimization at 256 observations have separate timing rows. Their timings do
+not support a comparison at equal sample sizes.
+
+The retained v1 execution has a documented terminal source-check exception.
+A separate dense development process appended rows to an auxiliary benchmark
+log after its snapshot was frozen. All executable dependencies, the protocol,
+the banks, and the already-saved numerical outputs were unchanged. The
+original and completed logs remain in `ancillary_log_incident/`, and
+`provenance_incident.json` records the mistaken early-stop disclosure and the
+inventory-only finalization. No calibration rerun or result selection was
+performed. The lingering development process may have affected wall times.
+An independent provenance audit of this particular retained exception is:
+
+```bash
+python verification/jmlr_representation_revision/independent_provenance_audit.py \
+  --results results/learned_kahm_hierarchy_v1 \
+  --output verification/learned_kahm_hierarchy_provenance_recheck.json
+```
+
+That exception-specific command is not needed for a fresh reproduction that
+completes all source checks normally. Neither freeze records nor the audit
+are external timestamp attestations.
 
 ## General lower-certificate comparison
 

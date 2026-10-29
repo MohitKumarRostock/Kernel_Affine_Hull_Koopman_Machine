@@ -43,6 +43,22 @@ regimes, every trial, all four sample sizes, and the entire certificate family.
 These are controlled mechanism results; natural-data lower certificates retain
 their reported limitations.
 
+The [learned-geometry hierarchy study](extensions/certified_forecasting/experiments/learned_kahm_hierarchy/)
+connects the new theory to all forty archived learned KAHM banks using fresh
+independent calibration episodes. On the independent-future control, blocks
+of eight or sixteen observations exclude both declared classes for all twenty
+banks at 1,024 episodes, while unconditional pairs do not. Full-sample empirical
+minimization is stronger at the matched 256-episode size. The study retains
+all 1,760 endpoints, optimization gaps, and unresolved cases under one 0.05
+failure allocation. Its conclusions are conditional on fixed fitted banks;
+they do not establish that noise can be repaired by changing representations.
+
+The main paper keeps all theorem proofs. A separately compiled
+[experimental supplement](extensions/certified_forecasting/paper/supplement.pdf)
+retains complete secondary tables and implementation details. The
+[revision record](extensions/certified_forecasting/docs/JMLR_REPRESENTATION_REVISION.md)
+explains the scientific changes, evidence, and verification scope.
+
 Use the extension's own [reproduction guide](extensions/certified_forecasting/docs/REPRODUCIBILITY.md)
 for its Linux/Python environment and experiment commands. The parent KAHKM
 study and its reference environment below retain their original provenance.

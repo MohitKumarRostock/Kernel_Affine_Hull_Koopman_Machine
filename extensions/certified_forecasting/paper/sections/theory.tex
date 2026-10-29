@@ -1,13 +1,10 @@
 \section{Pairwise obstructions and their limitations}
 \label{sec:theory}
 
-This section establishes lower bounds on the risk achievable from a fixed
-representation, upper bounds for fitted forecasts, and conditions for
-representation refinement. All results refer to the same distribution of
-histories and observed forecasting targets. In particular, they do not require
-that the histories form a Markov state, that the trajectory distribution is
-stationary, or that the learned coordinates satisfy an exact linear evolution
-equation.
+This section defines the representation risk and derives its pairwise
+obstruction. All comparisons use the same distribution of histories and
+observed forecasting targets. The histories need not form a Markov state,
+and neither stationarity nor exact linear feature evolution is assumed.
 
 \subsection{A directly estimable pairwise obstruction}
 
@@ -38,6 +35,32 @@ a lower bound on its optimal risk therefore also applies to that family.
 When the representation and pseudometric are clear, we abbreviate
 $R^*_\kappa(\Gamma,d)$ to $R^*_\kappa$ and similarly suppress the
 arguments of the witness defined below.
+
+\paragraph{What the oracle risk measures.}
+For $\mathbb E\|Y\|_2^2<\infty$, write
+$M_X=\mathbb E[Y\mid X]$ and $M_U=\mathbb E[Y\mid U]$.
+The standard orthogonality of conditional expectation gives
+\begin{equation}
+\begin{split}
+ R^*_\kappa(\Gamma,d)
+ ={}&\underbrace{\mathbb E\|Y-M_X\|_2^2}_{\text{irreducible history risk}}
+   +\underbrace{\mathbb E\|M_X-M_U\|_2^2}_{\text{representation information loss}}\\
+ &+\underbrace{\inf_{g\in\mathcal G_\kappa(d)}
+       \mathbb E\|M_U-g(U)\|_2^2}_{\text{sensitivity approximation}}.
+\end{split}
+\label{eq:risk-decomposition}
+\end{equation}
+Indeed, $U$ is measurable with respect to $X$, so
+$\mathbb E[M_X\mid U]=M_U$. For every finite-risk $g$, the three
+terms in $Y-g(U)=(Y-M_X)+(M_X-M_U)+(M_U-g(U))$ are pairwise
+orthogonal in $L^2$. Expanding and taking the infimum proves the identity;
+constant decoders ensure that this infimum is finite. This standard
+decomposition is not a new result. It shows why a positive risk lower bound
+alone cannot distinguish information loss from future noise or a restrictive
+budget. Its information-loss term concerns the conditional mean under squared
+error, not full conditional-distribution or Markov sufficiency. Restricting
+the decoder further to a restricted affine family can add another approximation
+gap, as the example at the end of this section demonstrates.
 
 Any training-fitted preprocessing is part of $\Gamma$. The population
 results below do not require the input coordinates to lie in $[-1,1]$.

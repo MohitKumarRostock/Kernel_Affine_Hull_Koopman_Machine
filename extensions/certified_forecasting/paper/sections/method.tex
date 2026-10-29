@@ -70,56 +70,17 @@ $d_x$. Each group has $J_{bc}\geq1$ local KAHM reconstruction models, fitted
 using its training histories
 \citep{kumar2024kahm,kumar2025collaborative,kumar2026limits}.
 
-For one such local model, suppress the indices $(b,c,j)$ and write its
-$N_{\rm loc}\geq2$ reference histories as
-$z_1,\ldots,z_{N_{\rm loc}}\in\mathbb R^{d_x}$, with at least one direction of
-nonzero empirical variance. The fitted linear encoding
-$P\in\mathbb R^{r\times d_x}$ maps histories to
-$r\geq1$ principal-component coordinates. The encoding retains only principal-component directions with positive empirical
-variance. Let $\Sigma\in\mathbb R^{r\times r}$ be the resulting nonsingular
-sample covariance of the encoded references. The Gaussian
-kernel, its reference Gram matrix, and its query vector are
-\begin{align*}
- k(\xi,\xi')&=\exp\!\left\{-\frac{(\xi-\xi')^\top\Sigma^{-1}
-                                  (\xi-\xi')}{2r}\right\},\\
- K_{i\ell}&=k(Pz_i,Pz_\ell),\qquad
- k_x=(k(Pz_i,Pz(x)))_{i=1}^{N_{\rm loc}}.
-\end{align*}
-Here $\xi,\xi'\in\mathbb R^r$. For the local regularization parameter
-$\eta>0$, kernel regression gives
-$h(x)=(K+\eta I_{N_{\rm loc}})^{-1}k_x\in\mathbb R^{N_{\rm loc}}$.
-Its coordinate $h_i$ uses regression targets equal to one at reference $i$
-and zero at the other references. The reconstruction and its normalizer are
-\begin{align*}
- s(x)&=\sum_{i=1}^{N_{\rm loc}}h_i(x),\qquad
- \widetilde s(x)=
- \begin{cases}s(x),&s(x)\ne0,\\1,&s(x)=0,\end{cases}\\
- \widehat z(x)&=\sum_{i=1}^{N_{\rm loc}}
-                   \frac{h_i(x)}{\widetilde s(x)}z_i.
-\end{align*}
-The local regularization parameter also depends on the preprocessed values.
-Collect the reference histories in the matrix
-$Z=[z_1,\ldots,z_{N_{\rm loc}}]$ of size $d_x\times N_{\rm loc}$,
-and let $v_z=\|Z\|_{\rm F}^2/(d_xN_{\rm loc})$. Starting at
-$\eta_0=5v_z/2$, the implementation computes
-\[
- B_k=(K+\eta_k I_{N_{\rm loc}})^{-1},\qquad
- \eta_{k+1}=2v_z+
-       \frac{\|Z-ZKB_k\|_{\rm F}^2}{d_xN_{\rm loc}}.
-\]
-It stops when $|\eta_{k+1}-\eta_k|\leq10^{-3}$ or after 100 iterations,
-and retains the last computed $B_k$; thus $\eta=\eta_k$ in the query map
-above. Nonzero empirical variation implies $v_z>0$, so every inverse uses
-positive regularization. This parameter is separate from the
-forecast-decoder ridge parameter below.
-When $s(x)\ne0$, the reconstruction coefficients sum to one and may be signed,
-so $\widehat z(x)$ is an affine combination of reference histories. The
-zero-sum convention defines the implementation at all queries but need not
-preserve this affine-combination property.
+Each local model maps a preprocessed query to a reconstruction
+$\widehat z_{bcj}(x)$ using regularized kernel regression on its reference
+histories. The encoding, covariance-normalized Gaussian kernel, regularizer,
+and reference histories are all fitted on training data. The reconstruction is
+an affine combination of local references when its coefficient normalizer is
+nonzero; the implementation has an explicit convention at a zero normalizer.
+Supplement Section~S1 gives the complete inherited reconstruction equations and
+numerical rules. The risk results below apply to the fixed map produced by
+these rules and do not require its coefficients to be nonnegative.
 
-Restoring the indices, let $\widehat z_{bcj}(x)$ denote the reconstruction
-from local model $j$ of group $c$ in block $b$. Its folding score combines
-reconstruction error and angular discrepancy
+The folding score combines reconstruction error and angular discrepancy
 \citep[Section~3.3]{kumar2026limits}. Define
 \[
  e_{bcj}(x)=1-\exp\{-\|z(x)-\widehat z_{bcj}(x)\|_2\},
@@ -158,19 +119,11 @@ Then $\Phi_b(x)$ lies in the probability simplex
                                     \ \mathbf1_{C_b}^\top v=1\}.
 \]
 The coordinates express relative reconstruction affinity and need not be
-calibrated probabilities. To evaluate \eqref{eq:soft-features} stably, set
-$\ell_{bc}(x)=\omega\log(1-T_{bc}(x)+\tau)$ and
-$\ell_b^{\max}(x)=\max_c\ell_{bc}(x)$, then compute
-\[
- \Phi_{bc}(x)=
- \frac{\exp(\ell_{bc}(x)-\ell_b^{\max}(x))}
-      {\sum_{r=1}^{C_b}\exp(\ell_{br}(x)-\ell_b^{\max}(x))}.
-\]
-Subtracting the maximum leaves the normalized weights unchanged and makes
-at least one exponent equal to zero. Consequently, the denominator is at
-least one in exact arithmetic, even when all unnormalized affinities are
-small. This preserves relative affinities without a small-denominator
-replacement by uniform weights.
+calibrated probabilities. We evaluate these weights in log space: with
+$\ell_{bc}=\omega\log(1-T_{bc}+\tau)$, subtract
+$\max_c\ell_{bc}$ before exponentiation and normalization. This leaves the
+relative affinities unchanged and avoids replacing small summed affinities
+by uniform weights.
 
 The forecasting method combines these reconstruction features with retained
 blocks, a constrained output decoder, and independent calibration. In the
@@ -203,6 +156,20 @@ A \emph{prefix} means these first $s$ blocks. Their cluster partitions need
 not be nested: preserving earlier forecasts requires retaining the earlier
 coordinate functions, not their partitions. The experiments append blocks of
 sizes $2,4,8,16$, giving prefix dimensions $2,6,14,30$.
+
+
+\paragraph{Connection to the general hierarchy.}
+For fixed learned blocks, the ambient product of simplices is compact under
+$\rho_s(u,v)=\max_{b\leq s}\|u_b-v_b\|_2$, with diameter at most
+$\sqrt2$ independently of $s$. Thus Theorem~\ref{thm:block-hierarchy}
+applies directly to any bounded scalar observed target and unconditional iid
+calibration observations from this representation. No continuity of the map
+from histories to affinities is required. This is an instantiation of the
+general result; the same conclusion holds for other fixed simplex-valued
+feature blocks. Increasing the number $s$ of dictionary blocks changes the
+representation class, whereas increasing the observation-block size in
+Section~\ref{sec:block-witness} strengthens its population lower information
+while holding that representation fixed.
 
 \subsection{A constrained multihorizon decoder}
 

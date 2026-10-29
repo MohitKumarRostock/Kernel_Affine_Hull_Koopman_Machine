@@ -1,19 +1,22 @@
 # A Hierarchy of Risk Certificates for Forecasting Representations
 
-**Kernel Affine Hull Machine forecasting and general representation analysis**
+**Assessing and refining forecasting representations, with KAHM as the main implemented example**
 
 Research extension of **Prediction Limits and Koopman Closure of
 Geometry-Induced Soft State Abstractions**,
 [arXiv:2609.32652v3](https://arxiv.org/abs/2609.32652v3).
 
-This directory contains an executable forecasting method, finite-sample
-prediction-risk certificates, complete experiment summaries, and reproducibility
-utilities. The [manuscript](paper/) develops the mathematical results, specifies
-their assumptions, and reports the empirical comparisons.
+This directory studies a representation-design question: when can independent
+data establish that no decoder within a stated sensitivity budget can meet a
+forecasting tolerance, and when is a more costly representation justified?
+It contains an executable forecasting method, finite-sample prediction-risk
+certificates, complete experiment summaries, and reproducibility utilities.
+The [manuscript](paper/) develops the mathematical results, specifies their
+assumptions, and reports the empirical comparisons.
 The software and supporting evidence are maintained as a reusable research
 resource, independently of the manuscript's publication venue.
 
-KAHM is the central implemented representation. Its local reconstruction
+KAHM is the principal implemented representation. Its local reconstruction
 models supply soft geometric associations of a causal history, and retained
 dictionaries let the forecasting representation grow while preserving earlier
 predictors. The forecasting procedure learns the future observed output
@@ -21,12 +24,40 @@ directly and assesses the resulting predictor and representation class using
 independent episodes. The original KAHM reconstruction mechanism is inherited;
 the generic risk and refinement results also apply to other feature maps.
 
+The main analytical contribution is a centered hierarchy of scalar Lipschitz
+minimum-risk problems: pairs are its first member, larger blocks impose joint
+prediction compatibility, and their population expectations converge under the
+stated compactness and boundedness conditions. The inherited KAHM models make
+the representation question concrete; the hierarchy does not require their
+reconstruction formula. Established concentration, empirical-minimum, and
+group-norm methods support the construction. The
+[revision and contribution map](docs/JMLR_REPRESENTATION_REVISION.md) separates
+these ingredients and identifies the evidence for each claim.
+
 The analysis separates the contribution of the geometric representation, the
 choice of forecasting decoder, and the information supplied by finite-sample
 certificates. The [scientific study guide](docs/STUDY_GUIDE.md) explains the
 prediction task, the meaning of each certificate, and the evidence addressing
 these three questions. The [implementation guide](IMPLEMENTATION_NOTES.md)
 defines the feature and decoder notation used by the software.
+
+## What is being certified?
+
+A certificate refers to the full specification
+`(observed target, evaluation law, frozen representation, feature metric,
+sensitivity budget, decoder class)`. The observed future signal and sampling
+law stay fixed when representations are compared. Forecasting each
+representation's own future coordinates would instead change the task.
+
+For retained KAHM blocks, the implemented affine decoder's sum-of-block-norms
+budget implies Lipschitz sensitivity under the maximum block distance. The
+full Lipschitz class is generally larger than that affine class. A lower bound
+for the larger class also excludes the smaller class, but convergence to the
+Lipschitz optimum need not recover the affine optimum. A fitted affine model's
+upper bound remains a separate piece of evidence. A certificate excludes a
+specified risk tolerance within this complete specification; it does not
+establish information loss for unrestricted decoders or identify whether the
+remaining error comes from representation collapse or future noise.
 
 ## Method
 
@@ -88,6 +119,17 @@ conflicts or noise on many separated inputs. Zero observed coverage failures
 in this benchmark is a numerical check, not a proof or a guarantee for a new
 data-generating law. The theorem supplies the guarantee under its assumptions.
 
+Two different uses of *block* occur here:
+
+| Quantity increased | What changes | Population conclusion |
+|---|---|---|
+| Observation block size `b` | More calibration observations enter one constrained minimum; representation and decoder class stay fixed | The expected witness increases toward the same Lipschitz optimum under the theorem's conditions |
+| Retained feature-block count | More learned coordinate functions enter the representation under the same block-norm budget | The feasible predictor class contains its predecessor, so its optimal risk cannot increase |
+
+Neither conclusion orders independently fitted models or finite-sample
+confidence endpoints. The first concerns information used to assess one
+class; the second concerns a change to the class being assessed.
+
 ## Assumptions and statistical interpretation
 
 - Calibration episodes are independent draws from the stated deployment
@@ -133,6 +175,11 @@ export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
 export PYTHONPATH=src
 python -m unittest discover -s tests -v
 ```
+
+The revision passes 65 tests in this suite, seven mathematical witness-comparison
+tests, and four sparse-solver function tests: 76 checks in total. The
+[reproduction guide](docs/REPRODUCIBILITY.md#tests) gives the two additional
+commands; the discovery command above runs only the 65 standard tests.
 
 The reference environment is Python 3.12 on Linux. The requirements file pins
 the main numerical libraries used for the retained results. Other platforms
@@ -267,6 +314,13 @@ are not external preregistrations.
   Learned history-only partitions support minimum-cost or joint-infeasibility
   statements under one confidence event covering the complete study. All
   small-sample failures and optimizer gaps are retained.
+- [Hierarchy on learned KAHM representations](experiments/learned_kahm_hierarchy/):
+  fresh calibration conditional on those forty frozen banks, with four block
+  sizes, learned stratified pairs, and a full empirical-minimum comparator at
+  the common budget of 256 observations. The new protocol jointly allocates
+  failure probability across all 1,760 endpoints. It connects the general
+  hierarchy to learned geometry without counting reused banks as new training
+  replications; full empirical minimization is uncomputed at larger budgets.
 - [Decision value](experiments/decision_value/): positive-tolerance exclusions,
   minimum-cost certificates, and an irreducible control, including the
   small-sample disadvantage of stratification.
@@ -313,6 +367,7 @@ choice rather than being labeled certified.
 | Two-atom calibration | 28,800 trials | One observed joint certificate violation. The centered comparator in this experiment does not use the known zero input variance in the collapsed case; the eight-law comparison includes a range-aware comparator. |
 | Centered block hierarchy | Eight laws, 800 independent streams, 14,400 endpoints | Larger blocks recover population obstructions but may worsen calibrated endpoints; the full-sample comparator often remains stronger. Every endpoint and 45,579 optimization certificates are independently audited. |
 | Learned KAHM class decisions | Forty fresh regime/trial instances, 240 fits, eighty selected heads | At 4,096 episodes, stratification certifies minimum cost six in 20/20 repairable trials and joint infeasibility in 20/20 irreducible trials. All trials at 256 episodes are unresolved; the whole study shares one 0.05 allocation. |
+| Hierarchy on learned KAHM | Forty archived banks, 163,840 fresh observations, 1,760 joint endpoints | At 1,024 observations, blocks of size 8 or 16 exclude both irreducible classes in 20/20 cases, whereas pairs exclude both in 0/20. Full empirical minimization already excludes both in 20/20 at the shared 256-observation budget. All 143,440 optimization brackets and 880 decisions are independently reconstructed. |
 | General lower-bound comparison | Eight laws, 9,600 trials, 76,800 endpoints | Empirical-minimum calibration is often tighter. Stratification recovers some population obstructions but can worsen others; all adverse outcomes are retained. |
 | Positive-tolerance decision study | 200 independent regime/repetition instances, 600 fits | Stratified bounds certify minimum cost or joint infeasibility among three declared classes at large sample sizes. Upper-only selection returns the same accepted predictor. |
 | Speech energy | 7,178 clips, 1,630 recording identifiers, 978 calibration groups, three fits | Six learned families certify the all-horizon 18 dB resolution under the stated sampling assumption; tighter tolerances remain unresolved. Conventional regressors are more accurate than KAHM. |
@@ -336,6 +391,23 @@ records; the statistical interpretation still depends on the stated sampling
 and independence assumptions. The [verification archive](docs/ARCHIVE_INDEX.md) identifies the numerical
 checks, their source versions, and their scope.
 
+The new hierarchy study also passes independent numerical and provenance
+audits. Its 3,626,324 scalar checks cover all new observations, 143,440
+optimization programs, 480 mass linear programs, 1,760 endpoints, and 880
+decisions, with a maximum confidence-endpoint discrepancy of approximately
+`1.003e-12`. All 379 optimization stopping-limit cases remain in the results;
+their largest normalized bracket gap is approximately `6.41e-7`. The
+[revision record](docs/JMLR_REPRESENTATION_REVISION.md) documents the auxiliary
+development-log change detected after calibration, preservation of all
+executable sources and outputs, and the resulting limit on timing claims.
+
+Before auditing the new study's retained records, run
+`python scripts/restore_hierarchy_payloads.py` from this extension directory.
+Its two large gzip evidence files are distributed as exact byte parts of at
+most 8 MiB. The helper verifies each part and the reconstructed original
+SHA-256 hashes. This restores the frozen files without altering their contents;
+fresh experiment runs write these files directly.
+
 ## Files and provenance
 
 - `src/certified_forecasting/`: features, convex decoders, bounded episode
@@ -357,7 +429,11 @@ checked into Git. They are reproducibly regenerated by the supplied runners;
 the scaling follow-up also supplies a separate primary-evidence package with
 the validation-selected soft KAHM scores. The complete scaling archive index
 records the hashes of all full score files. The editable manuscript is in
-`paper/`, together with a compiled PDF and build instructions.
+`paper/`, together with a 50-page main PDF, a 23-page experimental supplement,
+and build instructions. All proofs remain in the main PDF. From this extension
+directory, `python scripts/build_manuscript.py` regenerates the supplement
+from retained sources and builds both documents with cross-reference and
+layout checks.
 Exact-risk trial rows are retained as `trials.csv.gz`.
 
 Original code inherits the parent repository's MIT license. Original generated

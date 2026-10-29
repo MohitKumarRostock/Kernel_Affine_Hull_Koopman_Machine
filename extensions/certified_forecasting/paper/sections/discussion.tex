@@ -1,57 +1,50 @@
 \section{Discussion and limitations}
 \label{sec:discussion}
 
-\paragraph{What a lower certificate adds.}
-An upper certificate establishes that a fitted forecast meets a tolerance.
-A lower certificate can exclude every decoder in a specified sensitivity
-class. Together they can identify the minimum feasible representation cost
-among predefined alternatives, even when upper-only selection returns the
-same predictor. The learned-KAHM decision study connects this distinction to
-fitted geometric representations on fresh independent episodes. Its
-constructed mechanism isolates a recoverable forecasting signal and an
-independent-future control; it does not
-establish how often such decisions can be resolved on naturally acquired
-data. Costs refer to the declared feature counts, not globally optimal
-forecasting complexity or runtime.
+\paragraph{What is certified about a representation.}
+Lower and upper risk bounds can establish both that a fitted forecast meets a
+tolerance and that every cheaper declared class fails it. This identifies
+minimum feasible representation cost even when upper-only selection returns
+the same predictor. The conclusion concerns a representation, metric,
+sensitivity budget, and evaluation law jointly. As
+\eqref{eq:risk-decomposition} shows, it does not identify information loss
+separately from irreducible noise or sensitivity restrictions. The learned-KAHM
+study demonstrates these decisions on a recoverable signal and an independent
+future control; their prevalence on naturally acquired data remains open.
+Costs count declared features, not globally optimal forecasting complexity
+or runtime.
 
 \paragraph{Population slack and calibration precision.}
-Proposition~\ref{prop:witness-slack} identifies two sources of pair-witness
-slack: a nonzero conditional residual mean and a loose geometric inequality
-for paired residuals. The block hierarchy supplies a systematic route beyond
-the information in individual pairs. Its monotonicity concerns population
-expectations. Convergence to the common decoder's optimal risk requires
+Pairwise slack reflects conditional residual means and loose geometric
+inequalities (Proposition~\ref{prop:witness-slack}). Our consistency result assumes
 unconditional iid draws, bounded scalar targets, and compact representation
-support. Conditional blocks instead approach an average of conditional oracle
-risks, which can be smaller than the best risk of one shared decoder. A larger
-block leaves fewer
-independent scores and costs more to optimize. It can therefore have a weaker
-finite-sample endpoint despite a larger population expectation. The
-empirical-minimum comparator remains an important alternative; the hierarchy
-does not establish universal statistical or computational superiority. The
-block benchmark studies finite-support distributions, while the learned-KAHM
-decision study uses stratified pair certificates. The latter therefore tests
-class exclusion with learned geometry, rather than a finite-sample advantage
-for larger blocks on that geometry.
+support; conditional blocks can approach a smaller average of conditional
+optima. Larger blocks leave fewer independent scores, so finite-sample
+endpoints need not improve.
 
-Stratification addresses a different issue by changing which observations
-are compared while preserving the marginal risk. It can recover rare
-obstructions, but it can also remove informative comparisons or leave too
-few observations in a stratum. Estimated masses add uncertainty. Neither a
-zero pair obstruction nor an unresolved block certificate establishes
-representation adequacy. Furthermore, a sharp bound for the full Lipschitz
-class can remain loose for a restricted affine decoder family.
+Fresh calibration conditional on 40 frozen KAHM banks connects the hierarchy
+to learned geometry (Section~\ref{sec:learned-kahm-hierarchy}). In the
+independent-future control, $b=8,16$ exclude both classes at $n=1024$ for every
+control bank while pairs do not. All lower methods assess the same scalar Lipschitz
+class. At that size stratification gives larger mean endpoints; full-sample empirical
+minimization resolves every control at $n=256$, its only tested sample size.
+Larger blocks add no cost decision in the repairable regime. The new study
+uses KL lower means, whereas the earlier pair study uses empirical Bernstein;
+cross-study differences do not isolate block size. These are conditional
+evaluations of fixed banks, not new training repetitions or natural-data
+evidence. Stratification can also remove useful contrasts, and a sharp
+Lipschitz bound can remain loose for the affine readout. Zero or unresolved
+lower bounds establish neither class adequacy nor predictive sufficiency.
 
 \paragraph{What refinement guarantees.}
-Appending feature blocks preserves earlier feasible forecasts. Exact
-duplication leaves the block-norm class unchanged, although it can change a
-ridge-regularized fit. These class properties do not force independently
-fitted predictors to improve. Residual correlation supplies a sufficient
-improvement condition when coefficient budget remains available; a separate
-result gives a necessary representation-distance expansion for a requested
-tolerance. Neither result guarantees that unsupervised clustering discovers
-a sufficient state. The experiments freeze their candidate families before
-calibration. Sequential refinement using fresh evaluation blocks remains
-untested.
+Retaining old blocks preserves earlier feasible forecasts, and exact
+duplication leaves the block-norm class unchanged. A ridge-regularized fit may
+still change. Neither nesting nor a reduced obstruction guarantees improvement
+of a fitted predictor. Residual correlation gives a sufficient population
+condition when budget remains, while the distance-expansion result is
+necessary. Neither guarantees that unsupervised KAHM clustering discovers a
+sufficient state. The experiments freeze candidates before calibration;
+sequential refinement with fresh evaluation blocks remains untested.
 
 \paragraph{Sampling populations and adaptation.}
 Synthetic episodes are independently generated. PenDigits supplies only 13
@@ -89,13 +82,12 @@ feature count alone does not determine computational cost.
 
 \section{Conclusion}
 
-Pairwise obstructions are the first member of a hierarchy of class-wide risk
-lower bounds. Larger blocks reduce population slack under the stated
-conditions, while calibration exposes the cost of estimating those bounds
-from finite independent data. Conditional pairing and retained feature blocks
-provide complementary control over representation comparisons. Together with
-fitted-risk upper bounds, these tools can certify achievable accuracy,
-exclude inadequate classes, and resolve a declared minimum-cost decision.
-The learned-KAHM study demonstrates that mechanism in a controlled setting;
-the broader experiments identify task-dependent accuracy, scaling effects,
-and unresolved decisions that remain part of the method's scope.
+Assessing a forecasting representation requires distinguishing the performance
+of a fitted decoder from the risk of its entire declared class. The normalized
+block hierarchy connects a pairwise obstruction to optimal scalar Lipschitz
+risk under the stated conditions. Calibration, stratification, and retained
+feature blocks turn this lower information into accuracy and minimum-cost
+decisions. Learned KAHM dictionaries provide a concrete implementation;
+the guarantees are general. Their usefulness depends on population slack,
+independent sample size, and computational cost, while the experiments retain
+task-dependent accuracy and unresolved decisions as part of the evidence.

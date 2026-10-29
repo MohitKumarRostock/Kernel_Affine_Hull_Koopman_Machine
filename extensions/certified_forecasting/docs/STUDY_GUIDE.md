@@ -10,6 +10,13 @@ The [reproduction guide](REPRODUCIBILITY.md) provides executable commands;
 the [implementation guide](../IMPLEMENTATION_NOTES.md) defines the feature and
 decoder calculations.
 
+The hierarchy is a general result about scalar Lipschitz prediction; KAHM
+provides the main learned representation on which to examine its practical
+meaning. The reconstruction model itself is inherited. The
+[contribution and evidence map](JMLR_REPRESENTATION_REVISION.md) distinguishes
+the new analytical questions, established ingredients, and the scope of the
+learned-representation studies.
+
 ## Prediction task and risk
 
 A causal history contains only observations available at the forecast origin.
@@ -36,6 +43,30 @@ $\|g(u)-g(v)\|_2\leq\kappa d(u,v)$ for all feature values $u,v$ in its
 domain. This Lipschitz constraint limits how much predictions can change as
 features change. The optimal class risk is
 $R^*=\inf_g R(g\circ\Gamma)$, where the infimum is over that stated class.
+
+The scientific object is therefore the tuple
+$(Y,\mathbb P,\Gamma,d,\kappa,\mathcal G)$: observed target, evaluation law,
+frozen representation, metric, sensitivity budget, and decoder family.
+Changing one component changes the risk question. In particular, scaling the
+features while keeping the same numerical $\kappa$ can change the admissible
+predictor class. Scaling is not an innocuous relabeling of an otherwise fixed
+certificate. It must be selected on development data or included explicitly
+in the simultaneously calibrated candidate family.
+
+The affine models used for fitted forecasts obey the block-norm budget and
+are contained in the corresponding full Lipschitz class. Their optimal risk
+can exceed the Lipschitz optimum:
+
+$$
+R^*_{\rm Lip}\leq R^*_{\rm affine}\leq R(\widehat f).
+$$
+
+Thus a lower certificate for $R^*_{\rm Lip}$ is also a valid lower certificate
+for $R^*_{\rm affine}$, whereas consistency of the block hierarchy concerns
+$R^*_{\rm Lip}$. A gap between a lower bound and a fitted forecast's upper
+bound can include both certificate slack and a genuine difference between
+the decoder classes, as well as estimation or fitting error. It should not
+automatically be attributed to a poor representation.
 
 ## Meaning of the certificates
 
@@ -111,7 +142,22 @@ separated-input noise examples also show that every fixed block size can be
 arbitrarily loose across distributions. The practical choice is a tradeoff
 between population information, independent sample count, and optimization.
 
+The population hierarchy, its finite-sample endpoints, and a representation
+decision are distinct claims. A larger block may raise the population witness
+but lower its confidence endpoint because fewer independent blocks remain.
+Even a higher lower endpoint changes a decision only if it crosses the
+prespecified tolerance. Decision rates should consequently be accompanied by
+the actual endpoints, observation budgets, optimization gaps, and unresolved
+outcomes.
+
 ## Representation refinement and cost
+
+Observation blocks and feature blocks play different roles. Increasing the
+observation block size `b` strengthens a population witness for one fixed
+representation. Appending a feature block instead changes the representation
+and can reduce its optimal achievable risk. These are different monotonicity
+statements; one does not imply the other, and neither orders finite-sample
+confidence endpoints.
 
 The KAHM construction appends fitted feature blocks while retaining all earlier
 coordinate functions. A decoder is constrained by the sum of the Frobenius
@@ -135,6 +181,14 @@ tolerance is infeasible within the family. In these studies, cost is the
 number of retained feature coordinates. It is not measured fitting time,
 inference time, or memory usage.
 
+Neither nesting nor an observed improvement proves that KAHM clustering
+discovers a predictive state. In a repairable mechanism, adding a block can
+retain distinctions that the cheaper representation suppresses. In an
+independent-future control, a positive minimum risk is caused by unpredictable
+future variation even if the full history is retained. The control therefore
+tests the meaning of a risk certificate; it is not evidence that KAHM has
+discarded recoverable information.
+
 ## Experiments and independent sampling units
 
 | Study | Design and independent unit | Scientific role |
@@ -143,6 +197,7 @@ inference time, or memory usage.
 | [Finite-law witness comparison](../experiments/witness_comparison/) | Eight laws, four sample sizes, 300 independent calibration samples per law and size | Separates population looseness from finite-sample calibration penalties for the same scalar Lipschitz class. |
 | [Centered block hierarchy](../experiments/block_hierarchy/) | The same eight declared laws; 100 independent streams per law, three nested sample sizes, five block sizes, and a full-sample comparator | Tests the population/statistical tradeoff with 14,400 independently audited endpoints; it is a theoretical follow-up, not a new application population. |
 | [Learned KAHM class decisions](../experiments/learned_kahm_decision/) | Twenty fresh independent trials in each of two continuous synthetic regimes; forty fitted KAHM banks | Tests whether learned geometry and learned partitions can support minimum-cost and joint-infeasibility certificates. |
+| [Hierarchy on learned KAHM representations](../experiments/learned_kahm_hierarchy/) | New independent calibration on all forty archived banks; four block sizes and two learned partitions; full empirical minimization at 256 observations | Connects the hierarchy to learned geometry with one joint allocation over 1,760 endpoints; it reuses the trained representations and does not add training replications. |
 | [Representation-cost decisions](../experiments/decision_value/) | Independent complete episodes; 100 repetitions in each of two controlled regimes | Tests minimum-cost certification and exclusion of every prescribed class. |
 | [Synthetic forecasting](REPRODUCIBILITY.md#independent-episode-campaign) | Independently initialized episodes from four main laws and two oscillator laws | Evaluates forecasting and risk certification under specified bounded observation processes. |
 | [Input scaling](../results/input_scaling_study/) | Paired preprocessing arms; fresh synthetic confirmation and repeated fits on a fixed pen-writing cohort | Measures the dependence of KAHM performance on the input transformation. |
@@ -243,6 +298,49 @@ replay are retained. These are constructed mechanism demonstrations, not
 estimates of success frequency on natural forecasting tasks or claims of KAHM
 accuracy superiority. Scaling remains a training-fitted model choice, with
 its comparison selected on development data and frozen before calibration.
+
+### The hierarchy on learned KAHM geometry
+
+The [hierarchy follow-up](../experiments/learned_kahm_hierarchy/) reuses all
+forty frozen banks and eighty selected heads, then generates 4,096 new
+independent episodes per bank. It compares block sizes 2, 4, 8, and 16,
+learned stratified pairs, and full empirical minimization on the same
+256-observation sample where that comparator is computed. Larger full-ERM
+budgets remain uncomputed. Every one of the 1,760 endpoints participates in a
+single 0.05 allocation. These are fresh calibration results conditional on
+the existing banks, not additional learning repetitions.
+
+| Decision and sample size | Pair (`b=2`) | `b=4` | `b=8` | `b=16` | Stratified pair | Full empirical minimum |
+|---|---:|---:|---:|---:|---:|---:|
+| Minimum cost six, repairable, 256 | 0/20 | 0/20 | 0/20 | 0/20 | 0/20 | 0/20 |
+| Minimum cost six, repairable, 1,024 | 20/20 | 20/20 | 20/20 | 20/20 | 20/20 | Uncomputed |
+| Minimum cost six, repairable, 4,096 | 20/20 | 20/20 | 20/20 | 20/20 | 20/20 | Uncomputed |
+| Both classes excluded, irreducible, 256 | 0/20 | 0/20 | 0/20 | 0/20 | 0/20 | 20/20 |
+| Both classes excluded, irreducible, 1,024 | 0/20 | 0/20 | 20/20 | 20/20 | 20/20 | Uncomputed |
+| Both classes excluded, irreducible, 4,096 | 0/20 | 20/20 | 20/20 | 20/20 | 20/20 | Uncomputed |
+
+Larger blocks therefore add decision-relevant information on the learned
+geometry in this independent-future control. They do not universally
+outperform empirical minimization: that comparator resolves all twenty
+irreducible cases at the smallest shared sample budget. Nor are blocks
+universally needed for the repairable decision; within the new study,
+ordinary pairs already suffice at 1,024 observations.
+
+All lower block methods, including pairs, use KL inversion here. The earlier
+learned-decision study used empirical Bernstein lower corrections. Differences
+between those studies cannot be attributed to block size alone. The
+[independent audit](../verification/jmlr_representation_revision/independent_hierarchy_audit.json)
+passed its reconstruction of every new observation, KAHM feature, selected
+prediction, optimization bracket, confidence endpoint, and decision. It checks
+143,440 optimization programs, 480 mass linear programs, 1,760 endpoints, and
+880 decisions; the largest confidence-endpoint discrepancy is approximately
+`1.003e-12`. It retains 379
+optimization stopping-limit cases; the largest normalized gap is
+`6.41e-7`. The
+[provenance audit](../verification/jmlr_representation_revision/independent_provenance_audit.json)
+also passed its checks of the disclosed auxiliary-log exception. Neither audit establishes a
+new natural-data sampling assumption or turns the constructed examples into
+evidence of universal KAHM accuracy.
 
 ### Earlier explicit-feature cost benchmark
 

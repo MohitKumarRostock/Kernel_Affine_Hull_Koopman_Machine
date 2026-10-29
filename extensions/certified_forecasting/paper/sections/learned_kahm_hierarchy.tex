@@ -1,0 +1,77 @@
+\section{The block hierarchy on learned KAHM geometry}
+\label{sec:learned-kahm-hierarchy}
+
+The preceding learned-representation study evaluates pair certificates.
+We now apply the larger-block hierarchy to the same collection of fitted
+geometries, using fresh independent calibration episodes. This directly tests
+whether joint consistency among more than two observations changes a
+class-level decision on learned KAHM features.
+
+\paragraph{Frozen representations and new observations.}
+All 40 archived feature banks and 80 validation-selected decoders from
+Section~\ref{sec:learned-kahm-decision} are retained, with no refitting or
+selection of favorable banks. The observed target laws, training-fitted
+scalers, maximum-block metric, budget $\kappa=2$, costs $2,6$, and MSE
+tolerance $0.10$ are unchanged. The new numeric seed rule and complete
+configuration are frozen before drawing any new calibration episodes.
+Each bank receives 4096 independent observations, with nested prefixes
+$n\in\{256,1024,4096\}$. The conclusions are conditional on this fixed
+bank collection; these are not new independent training repetitions.
+
+At each sample size, we compare disjoint observation blocks of
+$b\in\{2,4,8,16\}$, both learned history partitions, and the fitted-model
+upper bound. Full-sample empirical-minimum calibration uses all observations
+at $n=256$; it is not computed at the two larger sizes. Every lower method
+uses the same scalar Lipschitz class. The block and stratified mean bounds use
+KL calibration; the upper endpoints use empirical Bernstein. The 1760
+endpoints share one failure probability $0.05$, with equal allocation
+$0.05/1760$ per endpoint and the stated subdivision for each stratified
+bound's mass and conditional-mean intervals. Taking maxima over the frozen
+methods is covered by this event. The earlier learned-pair study used
+empirical Bernstein lower means, so cross-study changes cannot be attributed
+to block size alone.
+
+\input{tables/learned_kahm_hierarchy}
+
+\paragraph{What larger blocks add.}
+In the independent-future control at $n=1024$, blocks of sizes eight and
+sixteen exclude both classes for all 20 banks, whereas pairs and size-four
+blocks do so for none. For the six-coordinate class, mean lower endpoints
+are $0.04575$, $0.08829$, $0.13100$, and $0.14615$ as block size increases;
+the last two cross the tolerance. At $n=4096$, size-four blocks also exclude
+both classes for every bank, while pairs still do not. This supplies a
+learned-geometry example in which the hierarchy changes a decision under
+matched calibration. The obstruction here includes independent future noise;
+it is not evidence that a better KAHM representation could remove that noise.
+
+The stronger alternatives and unfavorable cases are retained.
+Estimated-mass stratification excludes both classes in all 20 control banks
+at $n=1024$ and $4096$, and its mean six-coordinate endpoint is larger than
+any tested block endpoint. Full-sample empirical minimization already excludes
+both classes for every control bank at $n=256$, where none of the block
+methods resolves joint infeasibility. In the repairable regime, all block
+sizes, including pairs, certify minimum cost six for all banks at $n=1024$
+and $4096$; larger blocks add no cost decision there. No fitted forecast
+passes at $n=256$. Larger blocks also need not give a larger finite-sample
+endpoint: for the repairable cost-two class at $n=1024$, the mean falls
+from $0.20819$ at $b=8$ to $0.18430$ at $b=16$.
+
+\paragraph{Numerical and reproducibility scope.}
+The signed-edge solver in Appendix~\ref{app:block-solver} retains feasible
+dual lower values even at the iteration limit. Across 143440 programs,
+379 miss the prescribed normalized gap threshold $10^{-7}$; all remain in
+the results. The largest recorded gap is $6.41\times10^{-7}$ and the largest
+primal feasibility residual is $2.18\times10^{-16}$. These are floating-point
+checks, not interval-arithmetic proofs. Complete observations, signed duals,
+primal vectors, endpoints, and decisions are archived. Independent replay
+without project imports reproduces all 1760 endpoints and 880 decisions;
+the largest endpoint discrepancy is $1.01\times10^{-12}$.
+
+A final provenance check detected late writes to an auxiliary development
+benchmark log by a concurrent development process. The frozen log and its
+later version are both preserved. Every executable dependency, protocol,
+frozen model, and confirmatory numerical record was unchanged; final summary
+generation used the already completed records without resampling. Timings are
+retained as execution diagnostics and may include that contention. They do
+not establish a runtime advantage, and the full-sample comparator's limited
+sample-size grid does not establish scalability beyond $n=256$.

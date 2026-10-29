@@ -19,6 +19,7 @@ so that the development and verification history remains traceable.
 |---|---|
 | [Centered block protocol](../experiments/block_hierarchy/protocol.md) and [frozen evidence](../results/block_hierarchy_v1/) | All eight laws, 800 independent streams, 14,400 endpoints, raw categorical observations, primal/dual evidence, analytic hierarchy formulas, and predraw source snapshot. |
 | [Learned KAHM protocol](../experiments/learned_kahm_decision/protocol.json) and [frozen evidence](../results/learned_kahm_decision_v1/) | Forty learned banks, 240 candidate fits, eighty selected heads, all trial outcomes, and one joint confidence allocation over regimes, trials, sample sizes, and bounds. Safe JSON preserves the complete numerical banks for replay. |
+| [Hierarchy on learned KAHM protocol](../experiments/learned_kahm_hierarchy/protocol.json) and [frozen evidence](../results/learned_kahm_hierarchy_v1/) | Fresh calibration conditional on all forty archived banks, four observation block sizes, both learned partitions, and full empirical minimization at the shared 256-observation budget; one joint allocation over 1,760 endpoints. Complete numerical observations and feasible-dual records are retained. |
 | [Witness protocol](../experiments/witness_comparison/protocol.md) and [source record](../results/witness_comparison/SOURCE_AND_AUDIT.md) | Predraw design, source hashes, all simulated trials, and the provenance of derived analyses. The experiment README is included in the frozen source manifest. |
 | [Decision protocol](../experiments/decision_value/protocol.json) and [results](../results/decision_value/README.md) | The controlled episode law, confidence allocation, complete outcomes, and source/model freezes. |
 | [Speech protocol](../experiments/speech_forecasting/protocol.md) and [evaluation provenance](../experiments/speech_forecasting/README.md#evaluation-order-and-source-provenance) | Group allocation, observable, candidate design, and the original execution and strict-order replay. |
@@ -58,6 +59,33 @@ identifies later packaging-only changes; AST checks show that every data,
 fitting, selection, and calibration function is unchanged. These records
 supplement the exact execution snapshot and do not replace historical evidence.
 
+The new learned-representation hierarchy has a
+[numerical audit](../verification/jmlr_representation_revision/independent_hierarchy_audit.json)
+and a separate
+[provenance audit](../verification/jmlr_representation_revision/independent_provenance_audit.json).
+Both audits passed. The numerical audit reconstructs all 40 banks, 80 selected
+heads, 163,840 fresh observations, 143,440 optimization programs, 480 mass
+linear programs, 1,760 endpoints, and 880 decisions. Its 3,626,324 floating-point
+scalar checks have a maximum confidence-endpoint discrepancy of approximately
+`1.003e-12`. All 379 optimization stopping-limit cases are retained, with a
+maximum normalized bracket gap of approximately `6.41e-7`.
+The latter checks a terminal source-check exception: an auxiliary development
+log gained eight rows while every executable, frozen configuration, model,
+and completed numerical output remained unchanged. Both log versions and
+the correction to the earlier development-process description are retained
+in the study's `ancillary_log_incident/` and `provenance_incident.json`.
+The completion inventory was reconstructed from saved records without
+rerunning calibration. Timings may include contention from the development
+process and are not isolated computational benchmarks.
+
+The two largest gzip evidence files are distributed as exact byte parts in
+`results/learned_kahm_hierarchy_v1/archive_parts/`. From the extension root,
+run `python scripts/restore_hierarchy_payloads.py` before auditing those
+records. The helper checks each part and each reconstructed original against
+SHA-256 hashes; the restored files have the original frozen bytes. This is a
+distribution change and does not replace or revise the source freeze or
+numerical records.
+
 ## Scaling and portable reproduction checks
 
 The [speech scaling study](../experiments/speech_scaling/) has its own protocol,
@@ -74,6 +102,7 @@ and table reconstructions, and checks of this manuscript edition.
 
 | Record | Scope |
 |---|---|
+| [Representation-focused revision](JMLR_REPRESENTATION_REVISION.md) | Scientific contribution map, relation to the prior KAHM prediction-limit paper, fixed risk specification, and the evidence boundaries of the learned-representation follow-up. |
 | [Scientific verification](SCIENTIFIC_VERIFICATION.md) | Mathematical, implementation, empirical-arithmetic, and literature checks for the identified versions. |
 | [Theory review](THEORY_AUDIT.md) | Proof and notation checks, assumptions, and limitations recorded during theoretical review. |
 | [Literature review](LITERATURE_AUDIT.md) | Source retrieval and attribution assessment at the recorded review date. |

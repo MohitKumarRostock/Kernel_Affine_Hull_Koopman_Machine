@@ -1,9 +1,9 @@
 \subsection{Independently initialized Van der Pol and Duffing episodes}
 \label{sec:oscillators}
 
-To connect the forecasting experiment to the nonlinear oscillators studied by
-\citet{kumar2026limits}, we apply the same frozen learning and certification
-procedure to independently initialized Van der Pol and forced Duffing episodes.
+We apply the same frozen procedure to independently initialized Van der Pol
+and forced Duffing episodes, connecting the experiment to
+\citet{kumar2026limits}.
 Let $x(t)$ denote physical position, $v(t)$ velocity, and $t$ continuous time;
 a dot denotes differentiation with respect to $t$. The dynamics are
 \begin{align*}
@@ -26,31 +26,27 @@ observations at interval $0.1$. The observed scalar signal is
 \]
 Here $j$ is the discrete observation index, $\tanh$ is the hyperbolic tangent,
 and $\operatorname{Unif}[a,b]$ denotes the uniform distribution on $[a,b]$.
-The observation noises $\eta_j$ are independent and identically distributed
-(iid). Forecasts target future values of this sensor, whose known range lies
-inside $[-0.97,0.97]$; the certificates use the conservative range $[-1,1]$.
-Thus errors are measured in sensor-output units. The bounds do not concern
-unobserved physical position or velocity. Neither stationarity nor independence
-of windows within an episode is required.
+The noises $\eta_j$ are independent and identically distributed (iid).
+Certificates use the conservative range $[-1,1]$ for the sensor, whose range
+lies inside $[-0.97,0.97]$. They concern sensor-output error, not physical
+position or velocity, and require neither stationarity nor independent
+within-episode windows.
 
 Each system has three new complete fitting repetitions, using 128 training,
 512 validation, 4096 calibration, and 2048 test episodes. Histories, the
 40-candidate family, coefficient budget, and per-repetition joint confidence
 allocation are unchanged from the main experiment. Horizons $1,4,12$ now
-correspond to $0.1,0.4,1.2$ time units. The oscillator driver supplies the new
-generator to the unchanged forecasting procedure; its source hash and those
-of all imported implementations are retained. Within each family, we select
-the candidate minimizing validation MSE averaged over the horizons, before
-calibration or test evaluation. Every fitted candidate and its episode scores
-are retained.
+correspond to $0.1,0.4,1.2$ time units. Selection within each family minimizes
+validation MSE averaged over horizons before calibration or testing. The
+unchanged forecasting procedure receives the new generator; all candidates,
+episode scores, and implementation hashes are retained.
 
-A numerical consistency check was specified before these runs. Sixteen fixed
-initializations, with identical forcing phases and observation noise, were
-integrated at step sizes $0.025$ and $0.0125$. The maximum differences in sensor
-values were $1.69\times10^{-6}$ for Van der Pol and $3.49\times10^{-6}$ for
-Duffing, both below the fixed $10^{-3}$ threshold. This half-step check assesses
-the numerical sampling procedure; it is not a rigorous global bound on the
-error of continuous-time integration.
+The prespecified half-step check compares 16 fixed initializations with
+identical phases and observation noise at step sizes $0.025$ and $0.0125$.
+Maximum sensor differences, $1.69\times10^{-6}$ for Van der Pol and
+$3.49\times10^{-6}$ for Duffing, are below the fixed $10^{-3}$ threshold.
+This assesses numerical consistency, without rigorously bounding global
+continuous-time integration error.
 
 \begin{table}[t]
 \centering\small
@@ -84,9 +80,7 @@ eligible, the $0.35$ requirement is certified in every repetition of both
 systems. No candidate certifies the all-horizon $0.20$ requirement in this
 follow-up. Adjacent KAHM refinements have strictly positive certified
 improvement in 43 of 54 Van der Pol comparisons and ten of 54 Duffing
-comparisons, using the same per-repetition allocation for multiple comparisons
-as before. These outcomes separately describe accuracy, improvement, and
-unresolved requirements.
+comparisons, with the same per-repetition confidence allocation.
 
 All six scheduled runs completed, retaining 240 fitted candidates. An
 independent score audit reconstructs their 1440 one-sided risk endpoints and

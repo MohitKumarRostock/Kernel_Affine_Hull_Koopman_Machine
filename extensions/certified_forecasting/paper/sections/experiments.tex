@@ -4,21 +4,19 @@
 We assess calibration against analytically known risks, forecasting accuracy
 across representations, certified improvements from additional blocks, and
 accuracy decisions based on the risk bounds.
-The original experiments establish the tasks and baseline protocols. Separate
-follow-ups examine KAHM input scaling (Section~\ref{sec:input-scaling}) and
-compare geometric families with equal preprocessing, decoder, and
-dictionary-size options (Section~\ref{sec:matched-geometry}). The release retains
-every candidate and completed fitting repetition, its configuration and random
-streams, and the scores used to calculate the certificates. All summaries
-include unfavorable and inconclusive outcomes. Throughout this section, MSE
+Follow-ups examine input scaling (Section~\ref{sec:input-scaling}) and geometric
+families with matched preprocessing, decoders, and dictionary-size options
+(Section~\ref{sec:matched-geometry}). The release retains every completed fit,
+candidate, configuration, random stream, and certificate score, including
+unfavorable and inconclusive outcomes. Throughout this section, MSE
 denotes mean squared prediction error and RMSE its square root. A test RMSE
 estimates population RMSE; a certified upper RMSE endpoint is the square root
 of an upper risk bound.
 
 \subsection{Exact-risk calibration and small retained variation}
 
-The controlled experiment has two possible input values, called atoms. The
-first has probability $1-p$, target $-1$, and representation
+The controlled experiment has two possible input values, called atoms. The first has probability
+$1-p$, target $-1$, and representation
 $u_0=((1+a)/2,(1-a)/2)$; the second has probability $p$, target $1$, and
 representation $u_1=((1-a)/2,(1+a)/2)$. Here $a\in[0,1]$ controls how much
 the representation separates the atoms: $\|u_1-u_0\|_2=\sqrt2a$.
@@ -36,15 +34,13 @@ The parameter grid is
 p\in\{.2,.5\},\qquad a\in\{0,.2,.6,1\},\qquad
 \kappa\in\{.5,1,2\}.
 \]
-The calibration sample contains $n\in\{64,256,1024,4096\}$ independent
-observations. There are 300 independent repetitions per parameter combination,
-for 28,800 trials in total. One pairwise lower bound exceeds its exact minimum
-risk; the centered lower and fitted upper bounds have no violations in this
-campaign. Thus 28,799 of the 28,800 trials satisfy all three reported
-inequalities. These frequencies describe a Monte Carlo check of the specified
-configurations. They neither prove the coverage theorem nor provide a
-simultaneous confidence statement over all trials. The released records
-include the single violation.
+Calibration uses $n\in\{64,256,1024,4096\}$ independent observations and
+300 independent repetitions per parameter combination, totaling 28,800 trials.
+One pairwise lower bound exceeds its exact minimum risk; the centered lower
+and fitted upper bounds have no violations. Thus 28,799 trials satisfy all
+three inequalities. This finite-grid Monte Carlo check neither proves general
+coverage nor provides simultaneous confidence across trials. The single
+violation is retained.
 
 \begin{figure}[t]
 \centering\includegraphics[width=\linewidth]{figures/known_risk.pdf}
@@ -97,11 +93,9 @@ retained KAHM, radial-basis-function (RBF), and local affine-hull features;
 hard KAHM state assignments; ordinary Frobenius-budget and exact-duplicate
 ablations; ridge autoregression (AR); direct quadratic regression; affine
 feature-transition rollouts on KAHM and polynomial dictionaries; persistence;
-and a constant model. The RBF and affine-hull alternatives use different
-geometric constructions from KAHM. A common numerical norm budget across
-feature maps does not make their statistical capacities identical. These fixed
-configurations test the procedure and its limitations; they do not establish
-the best accuracy achievable through extensive tuning of each method.
+and a constant model. Equal numerical norm budgets do not give different feature maps identical
+statistical capacities. These fixed configurations assess the procedure;
+they do not establish the best accuracy attainable by extensive tuning.
 
 The joint failure-probability budget is $0.05$ per repetition. We allocate
 $0.04$ to the $2\times40\times3$ one-sided risk bounds: one lower and one upper
@@ -141,11 +135,10 @@ every repetition. No candidate certifies the $0.50$ all-horizon requirement
 for the logistic task. This decision is unresolved: it does not establish
 that every candidate's true RMSE exceeds $0.50$.
 
-The upper bounds can be conservative even with thousands of episodes. For
-example, the selected harmonic quadratic model has mean horizon-one test RMSE
-$0.0311$ but mean upper RMSE endpoint $0.1497$. The bound resolves some
-requested tolerances and leaves others undecided. Coverage alone does not
-describe whether a certificate can resolve a practical accuracy requirement.
+Even with thousands of episodes, the selected harmonic quadratic model has
+mean horizon-one test RMSE $0.0311$ but mean upper RMSE endpoint $0.1497$.
+These bounds resolve some tolerances and leave others undecided; coverage
+alone does not establish practical usefulness.
 
 \begin{figure}[t]
 \centering\includegraphics[width=\linewidth]{figures/refinement.pdf}
@@ -158,29 +151,24 @@ every separately fitted model improves.}
 \label{fig:refinement}
 \end{figure}
 
-Across the 480 KAHM candidate--horizon statements, 119 have a positive lower
-endpoint. On the reported confidence event, a positive endpoint excludes zero
-population risk for the corresponding sensitivity-bounded class. A zero
-endpoint leaves the class's adequacy unresolved. Figure~\ref{fig:refinement}
-shows how retaining more blocks changes the obstruction and fitted error.
-The metric always takes the maximum distance across retained blocks, and the
-budget remains $\kappa=4$. Adding a block can change this distance, but the
-comparison uses the same metric construction and budget at every stage.
-Neither a geometric change nor a lower training error guarantees a useful
-reduction in population risk.
+Of 480 KAHM candidate--horizon statements, 119 have positive lower endpoints,
+excluding zero risk for their sensitivity-bounded classes on the reported
+confidence event. Zero endpoints leave adequacy unresolved.
+Figure~\ref{fig:refinement} compares prefixes using the maximum distance
+across retained blocks and budget $\kappa=4$. Added blocks can change these
+distances; neither that change nor lower training error guarantees lower
+population risk.
 
 \input{tables/improvements}
 
-The paired comparison certifies positive risk reduction in 72 of the 360
-adjacent KAHM refinement statements, under the per-repetition joint event.
-Table~\ref{tab:improvements} retains the inconclusive comparisons. The nonlinear
-AR generator has no certified adjacent-prefix gain in this study, even though
-its fitted models meet useful overall accuracy tolerances. An inconclusive refinement comparison does not contradict the separate
-accuracy certificate: meeting a tolerance and improving on a previous
-predictor are different claims.
+Paired comparisons certify 72 of 360 adjacent KAHM refinements under the
+per-repetition joint event (Table~\ref{tab:improvements}); the remainder are
+inconclusive. Nonlinear AR has no certified adjacent-prefix gain despite
+meeting useful accuracy tolerances. Meeting a tolerance and improving on a
+previous predictor require different certificates.
 
 \begin{figure}[t]
-\centering\includegraphics[width=.76\linewidth]{figures/duplicate_invariance.pdf}
+\centering\includegraphics[width=\linewidth]{figures/duplicate_invariance.pdf}
 \caption{Exact two-atom counterexample at budget one. Copying a two-coordinate
 feature block permits zero error under an ordinary Frobenius constraint,
 although the observations contain the same information. The sum-of-block-norms
@@ -205,8 +193,6 @@ solver is below $10^{-7}$. An independent audit reconstructs all 4800 one-sided
 risk endpoints and all 360 improvement bounds from the saved double-precision
 episode scores, with maximum discrepancy zero. A fresh replay of the first
 harmonic run matches every non-timing result and all 120 retained score arrays
-exactly, including 983,040 scalar entries. These checks establish numerical
-reproducibility for the audited calculations. They do not replace the
-probability arguments or formally verify floating-point arithmetic. The release
-archives source and configuration hashes, failed-run accounting, and
-verification output.
+exactly, including 983,040 scalar entries. These numerical checks neither replace probability arguments nor formally
+verify floating-point arithmetic. Source and configuration hashes, failed-run
+accounting, and verification output are archived.

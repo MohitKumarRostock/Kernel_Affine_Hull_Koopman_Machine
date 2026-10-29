@@ -36,8 +36,9 @@ def savefig(fig,name):
 
 def main():
     for p in [TABLE,FIG,OUT]:p.mkdir(parents=True,exist_ok=True)
-    plt.rcParams.update({"font.size":10,"axes.titlesize":11,"axes.labelsize":10,
-                         "legend.fontsize":9,"pdf.fonttype":42,"ps.fonttype":42,
+    plt.rcParams.update({"font.size":10,"axes.titlesize":10.5,"axes.labelsize":10,
+                         "xtick.labelsize":9.5,"ytick.labelsize":9.5,
+                         "legend.fontsize":9.5,"pdf.fonttype":42,"ps.fonttype":42,
                          "axes.spines.top":False,"axes.spines.right":False})
     runs=[json.loads(p.read_text()) for p in sorted((ROOT/"results/main_v1").glob("*/results.json"))]
     if len(runs)!=20:raise RuntimeError("Expected all 20 frozen main runs")
@@ -102,7 +103,7 @@ def main():
     known_path=ROOT/"results/known_risk_v1/trials.csv"
     known=pd.read_csv(known_path if known_path.exists() else known_path.with_suffix(".csv.gz"))
     exact=known[(known.p==.5)&(known.kappa==1.)]
-    fig,axes=plt.subplots(1,2,figsize=(10.8,3.5),sharey=True)
+    fig,axes=plt.subplots(1,2,figsize=(6,3.1),sharey=True)
     for ax,a in zip(axes,[0.,.6]):
         z=exact[exact.softness==a]
         means=z.groupby("n")[["pair_lower","centered_lower","fitted_upper","oracle_mse"]].mean()
@@ -113,12 +114,14 @@ def main():
             ax.plot(n,means[col],label=label,color=color,marker=mark,linewidth=1.8)
         ax.axhline(means.oracle_mse.iloc[0],color=COLORS["risk"],linestyle="--",label="Exact oracle risk")
         ax.set_xscale("log",base=2);ax.set_xticks(n,labels=[str(i) for i in n]);ax.grid(alpha=.18)
-        ax.set_xlabel("Independent calibration observations")
-        ax.set_title("Collapsed map (a = 0)" if a==0 else "Partially separated map (a = 0.6)")
-    axes[0].set_ylabel("Mean squared error");axes[1].legend(loc="upper right")
-    fig.tight_layout();savefig(fig,"known_risk")
+        ax.set_xlabel("Calibration observations")
+        ax.set_title("Collapsed ($a=0$)" if a==0 else "Partially separated ($a=0.6$)")
+    axes[0].set_ylabel("Mean squared error")
+    handles,labels=axes[0].get_legend_handles_labels()
+    fig.legend(handles,labels,loc="lower center",ncol=2,frameon=False)
+    fig.tight_layout(rect=(0,0.17,1,1));savefig(fig,"known_risk")
 
-    fig,axes=plt.subplots(2,2,figsize=(10.8,7.2),sharex=True)
+    fig,axes=plt.subplots(2,2,figsize=(6,4.8),sharex=True)
     for ax,sys in zip(axes.flat,SYSTEMS):
         z=all_rows[(all_rows.system==sys)&(all_rows.family=="kahm_nested")&(all_rows.history==12)&(all_rows.horizon==4)]
         means=z.groupby("n_features")[["rmse_lower","test_rmse","rmse_upper"]].mean()
@@ -128,15 +131,16 @@ def main():
             ax.plot(means.index,means[col],label=label,color=color,marker=mark,linewidth=1.7)
         ax.set_title(LABELS[sys]);ax.set_xticks([2,6,14,30]);ax.set_ylim(bottom=0);ax.grid(alpha=.18)
         ax.set_ylabel("RMSE, horizon 4")
-    for ax in axes[-1,:]:ax.set_xlabel("Retained KAHM coordinates")
-    axes[0,0].legend(loc="best");fig.tight_layout();savefig(fig,"refinement")
+    for ax in axes[-1,:]:ax.set_xlabel("Retained coordinates")
+    handles,labels=axes[0,0].get_legend_handles_labels()
+    fig.legend(handles,labels,loc="lower center",ncol=3,frameon=False)
+    fig.tight_layout(rect=(0,0.065,1,1));savefig(fig,"refinement")
 
-    # Nontechnical-looking metric diagram unnecessary; this exact counterexample
-    # directly visualizes artificial norm relaxation under duplication.
+    # Exact risks illustrate the effect of duplicating one feature block.
     copies=np.arange(1,9)
     euclid=np.maximum(2-np.sqrt(2*copies),0)**2/4
     block=np.full_like(copies,(2-np.sqrt(2))**2/4,dtype=float)
-    fig,ax=plt.subplots(figsize=(6.4,3.1))
+    fig,ax=plt.subplots(figsize=(6,2.8))
     ax.plot(copies,euclid,"o-",color=COLORS["center"],label="Ordinary Frobenius budget")
     ax.plot(copies,block,"s-",color=COLORS["pair"],label="Sum of block norms")
     ax.set(xlabel="Number of exact copies of the same block",ylabel="Exact minimum MSE",xticks=copies)

@@ -63,7 +63,7 @@ def mse_table(model_rows):
               if r["analysis"] == "primary" and r["horizon"] == "all"}
     if len(lookup) != len(TASKS) * len(HEADS) * 3:
         raise ValueError("Incomplete absolute MSE table")
-    out = [r"\begin{table}[t]", r"\centering", r"\scriptsize", r"\setlength{\tabcolsep}{3pt}",
+    out = [r"\begin{table}[t]", r"\centering", r"\footnotesize", r"\setlength{\tabcolsep}{3pt}",
            r"\begin{tabular}{lrrrrrrrrr}", r"\toprule",
            r"& \multicolumn{3}{c}{Block direct} & \multicolumn{3}{c}{Frobenius direct} & \multicolumn{3}{c}{Rollout} \\",
            r"\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}",
@@ -84,13 +84,13 @@ def dimension_figure(comparisons, destination):
     dimensions = (2, 6, 14, 30)
     if len(lookup) != len(TASKS) * len(HEADS) * len(dimensions) * 2:
         raise ValueError("Incomplete fixed-dimension figure")
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8,
-                         "axes.titlesize": 9, "axes.labelsize": 8,
-                         "xtick.labelsize": 8, "ytick.labelsize": 8,
+    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 9.5,
+                         "axes.titlesize": 10, "axes.labelsize": 9.5,
+                         "xtick.labelsize": 9.5, "ytick.labelsize": 9.5,
                          "pdf.fonttype": 42, "ps.fonttype": 42})
-    # At the JMLR six-inch text width this leaves about one inch for a caption
-    # within the 8.5-inch text height, while the smallest type remains >7 pt.
-    fig, axes = plt.subplots(len(TASKS), len(HEADS), figsize=(6.6, 8.2), sharex=True, sharey="row")
+    # Full-width inclusion in JMLR preserves the source font sizes and leaves
+    # space for the caption within the 8.5-inch text height.
+    fig, axes = plt.subplots(len(TASKS), len(HEADS), figsize=(6, 7.3), sharex=True, sharey="row")
     for ri, task in enumerate(TASKS):
         for ci, head in enumerate(HEADS):
             ax = axes[ri, ci]
@@ -109,15 +109,18 @@ def dimension_figure(comparisons, destination):
             if ri == 0:
                 ax.set_title(HEAD_LABELS[ci], pad=6)
             if ci == 0:
-                ax.set_ylabel(LABELS[task] + "\nMSE change (%)", labelpad=7)
+                ax.set_ylabel(LABELS[task], labelpad=5)
             if ri == len(TASKS) - 1:
                 ax.set_xlabel("Retained features")
     handles, labels = axes[0, 0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.56, 1.0),
-               ncol=2, frameon=False, fontsize=8)
-    fig.subplots_adjust(left=0.15, right=0.987, top=0.947, bottom=0.055, hspace=0.36, wspace=0.12)
+               ncol=2, frameon=False, fontsize=9.5)
+    fig.text(0.018, 0.5, "MSE change (%)", rotation=90,
+             ha="center", va="center", fontsize=9.5)
+    fig.subplots_adjust(left=0.185, right=0.985, top=0.938, bottom=0.065, hspace=0.4, wspace=0.13)
     fig.savefig(destination, metadata={"Title": "Matched KAHM geometry: complete fixed-dimension effects",
-                                       "Subject": "Validation-selected history and preprocessing at each fixed retained dimension; descriptive test effects"})
+                                       "Subject": "Validation-selected history and preprocessing at each fixed retained dimension; descriptive test effects",
+                                       "CreationDate": None, "ModDate": None})
     plt.close(fig)
 
 

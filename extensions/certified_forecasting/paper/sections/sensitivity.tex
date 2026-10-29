@@ -1,33 +1,27 @@
 \subsection{Sensitivity to the coefficient budget}
 \label{sec:budget-sensitivity}
 
-The coefficient budget $\kappa$ defines the prediction class being evaluated.
-Its numerical value is not directly comparable across different feature maps,
-and an unfavorable result at one budget does not establish unavoidable
-representation error at every larger budget. We therefore conducted a follow-up
-after inspecting the main experiment, using new development, calibration, and
-test random streams. This study was not specified before the main results
-were seen.
+The coefficient budget $\kappa$ defines the prediction class; its numerical
+value is not directly comparable across feature maps. An unfavorable result
+at one budget does not establish impossibility at larger budgets. This
+follow-up was designed after inspecting the main results and uses new
+development, calibration, and test random streams.
 
-The follow-up fixes history length $m=12$ and compares
-$\kappa\in\{1,4,16\}$ on all four main systems, using three new seeds,
-2701--2703. All other simulation, fitting, geometry, and sample-count settings
-are unchanged: each repetition uses 128 training, 512 validation, 4,096
-calibration, and 2,048 test episodes. Restricting the study to one history
-length leaves 21 frozen candidates per budget. Within each system and seed,
-all budgets use the same random streams, data, and geometric feature blocks;
-only the coefficient constraint changes. The study contains 36 runs and
-756 fitted models.
+We fix $m=12$ and compare $\kappa\in\{1,4,16\}$ on all four main systems
+with new seeds 2701--2703. Other settings are unchanged, including 128 training,
+512 validation, 4,096 calibration, and 2,048 test episodes per repetition.
+Each budget has 21 frozen candidates. Within each system and seed, budgets
+share data streams and geometric blocks; only the coefficient constraint
+changes. The study comprises 36 runs and 756 models.
 
 For each system, seed, and budget, we select the retained KAHM prefix by mean
 validation MSE over the three horizons. No budget is selected using test error.
 We allocate failure probability $0.05/3$ to each budget's complete family of
 risk bounds and paired comparisons. A union bound gives joint confidence at
 least 0.95 across the three budgets within each system--seed repetition.
-This confidence statement does not extend jointly across all twelve
-system--seed repetitions. Table~\ref{tab:budget} reports test RMSE for the
-validation-selected KAHM predictor and counts repetitions in which its upper
-bounds certify RMSE at most 0.35 at all three horizons.
+This event does not extend jointly across all twelve system--seed repetitions.
+Table~\ref{tab:budget} reports test errors and all-horizon certification
+counts at tolerance 0.35 for the validation-selected predictors.
 
 \begin{table}[t]
   \centering
@@ -47,17 +41,15 @@ Increasing the budget from 1 to 4 materially improves fitted KAHM prediction.
 On the harmonic system, mean one-step RMSE decreases from 0.3737 to 0.1414;
 on the nonlinear autoregression, it decreases from 0.1059 to 0.0670. On the
 quasiperiodic system, the number of validation-selected models certified at
-tolerance 0.35 increases from zero to three out of three. The budget therefore
-affects both predictive accuracy and the certification decision.
+tolerance 0.35 increases from zero to three out of three. Thus the budget affects accuracy and certification.
 
 Increasing the budget from 4 to 16 produces much smaller changes. Harmonic
 horizon-12 RMSE changes from 0.3900 to 0.3875, and none of those KAHM models
 passes the all-horizon 0.35 criterion. Quasiperiodic and nonlinear-AR results
 are unchanged at the displayed precision. Logistic horizon-12 RMSE remains
-approximately 0.5044, with no successful all-horizon certification. These
-outcomes do not establish impossibility for richer geometries or larger
-budgets. They show that increasing the budget alone to 16 does not resolve
-the remaining limitations of this configuration.
+approximately 0.5044, with no successful all-horizon certification. Thus increasing the budget alone to 16 leaves limitations in this
+configuration, without establishing impossibility for richer geometries
+or larger budgets.
 
 The autoregressive and quadratic baselines fitted at the same numerical budgets
 are retained in the released results. On the harmonic system at $\kappa=16$,
@@ -65,13 +57,12 @@ their mean horizon-12 RMSEs are 0.2377 and 0.2375, respectively, and both certif
 all three repetitions at tolerance 0.35. On the nonlinear autoregression at
 $\kappa=4$, KAHM has smaller horizon-12 RMSE (0.0746) than the autoregressive
 (0.0800) and quadratic (0.0809) baselines, while its one-step error is larger.
-The comparison depends on the task and horizon. Equal numerical budgets do
-not imply equal effective capacity when the feature metrics differ.
+These task- and horizon-specific comparisons retain the feature-dependent
+capacity caveat above.
 
 Every run retains its candidate descriptions, calibration losses, pair scores,
 and test losses. An independent reconstruction audit passed for all 36 runs,
 recomputing 2,268 candidate--horizon certificates and 324 paired improvement
 bounds. All recorded constrained optimizations converged with reported gaps
 below $10^{-7}$. The use of common random streams across budgets was also
-verified. These checks support the reported numerical calculations and confidence
-allocation. The follow-up design remains conditional on the earlier findings.
+verified. The checks support the numerical calculations and confidence allocation.

@@ -76,18 +76,8 @@ Our confidence statements concern expected squared error. They do not provide
 prediction intervals or conditional coverage for every observed history.
 
 \paragraph{Scope of the extension.}
-The contribution connects three elements: loss of predictive distinguishability
-in a representation, a lower risk bound that can exclude a prediction class,
-and refinement that preserves the previous forecasting class. Soft gating and
-residual fitting have long histories
+Soft gating and residual fitting have long histories
 \citep{jordan1994experts,buhlmann2003boosting}. The block norm used here is also
 an instance of the established group-norm and multiple-kernel-learning framework
 \citep{bach2008group}. Its role is to maintain a comparable coefficient budget
 as geometric blocks are added, including exact duplicates.
-
-Our experiments compare representations under a common observed forecasting
-target and calibration protocol, with feature count as the representation-size
-measure. A lower bound above
-the desired error tolerance rules out the specified prediction class. A zero
-lower bound leaves its adequacy unresolved, and a positive lower bound alone
-does not show that a proposed refinement will improve prediction.

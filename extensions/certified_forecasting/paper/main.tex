@@ -1,8 +1,9 @@
 \documentclass[twoside,11pt]{article}
 \usepackage[preprint]{jmlr2e}
+\usepackage{times}
 \usepackage{amsmath,mathtools,booktabs,microtype,enumitem}
 \usepackage{lastpage}
-\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue,
+\hypersetup{hidelinks,
 pdftitle={Forecasting with Kernel Affine Hull Machines: Representation Refinement and Risk Certification},
 pdfauthor={Mohit Kumar and Somayeh Kargaran},
 pdfsubject={KAHM forecasting, representation refinement, and finite-sample risk certification}}
@@ -24,27 +25,24 @@ Software Competence Center Hagenberg, Hagenberg, Austria
 
 \begin{abstract}
 Kernel Affine Hull Machines (KAHMs) represent data through local geometric
-reconstruction models. We turn their soft associations into forecasts of the
-observed signal and assess whether those forecasts meet a specified error
-tolerance. The learner retains dictionary blocks and fits constrained
-multihorizon decoders. Bounding the sum of block coefficient norms preserves
-earlier predictors when a block is added and prevents exact duplication from
-enlarging the feasible class. We derive a population risk lower bound from
-pairs whose target separation exceeds the separation permitted by the decoder's
-Lipschitz budget. This pairwise obstruction is exact for a distribution supported
-on two points and is at least as large as a conditional root-variance bound
-under the same pairing law. Calibration on independent episodes combines the
-obstruction with fitted-risk upper bounds and paired improvement comparisons,
-and reports an unresolved decision when accuracy cannot be certified. The
-theory also applies to other fixed representations. Experiments include a
-known-risk benchmark, six synthetic dynamics, and pen trajectories separated
-by writer. Matched RBF and affine-hull controls show KAHM gains on nonlinear
-autoregression and pen trajectories, while affine-hull alternatives perform
-better on the oscillators. Preprocessing comparisons retain both gains and
-regressions across repeated fits. Follow-up comparisons on the same writer
-cohort are descriptive. Few independent evaluation units can leave
-the bounds uninformative. The guarantees concern expected squared error
-under a specified episode and forecast-origin law.
+reconstruction. We use their soft associations to forecast observed signals
+and assess accuracy against a specified error tolerance. Retaining dictionary
+blocks under a bound on the sum of block Frobenius norms preserves earlier predictors and
+prevents duplication from enlarging the feasible class. We derive a population
+risk lower bound from pairs whose target separation exceeds that allowed by
+the decoder's Lipschitz budget. This pairwise obstruction is exact for a
+distribution supported on two points and dominates a conditional root-variance
+bound under the same pairing law. Calibration on independent episodes combines
+this obstruction with fitted-risk upper bounds and paired improvement
+comparisons, allowing unresolved accuracy decisions. The theory extends to
+other fixed representations. Experiments cover a known-risk benchmark, six
+synthetic dynamics, and writer-separated pen trajectories. Matched controls
+show KAHM gains on nonlinear autoregression and pen trajectories, while
+affine-hull alternatives perform better on oscillators. Preprocessing produces
+both gains and regressions. Follow-ups on the same writer cohort are
+descriptive. The guarantees concern expected squared error under a specified
+episode and forecast-origin law; few independent evaluation units can leave
+the bounds uninformative.
 \end{abstract}
 \begin{keywords}
 Kernel Affine Hull Machines, time-series forecasting, soft state abstraction,

@@ -12,8 +12,32 @@ From the directory containing main.tex, run:
     latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 
 The build requires pdflatex, BibTeX, amsmath, mathtools, enumitem, microtype,
-booktabs, and lastpage. The included JMLR style is unchanged from
+booktabs, lastpage, and the standard PSNFSS times package. The included JMLR style is unchanged from
 https://github.com/JmlrOrg/jmlr-style-file.
+
+JMLR FORMAT AND LENGTH
+
+The current PDF has 49 pages, including appendices and references. Its abstract
+contains 187 whitespace-delimited words, or 194 when hyphenated terms are split.
+The class remains article with twoside,11pt, as in the official JMLR sample.
+Times Roman text follows JMLR's formatting guide. The style's six-inch text
+width and 8.5-inch text height, body size, and spacing are unchanged. The
+official preprint package option suppresses unassigned journal and editor
+metadata; it does not reduce body size or margins. Hyperlinks remain active
+with their colors and borders hidden. Publication metadata can be supplied
+and the preprint option removed when the journal assigns those details.
+
+The shorter version consolidates repeated exposition while preserving all
+proofs, notation, experimental values, citations, and scientific limitations.
+All four data figures use labels of at least nine points at their printed
+size, and the dense matched-MSE table uses nine-point text. Funding and
+competing-interest declarations, corresponding-author details, coauthor
+approval, and cover-letter statements still require the authors' information.
+
+Official guidance:
+https://jmlr.org/author-info.html
+https://www.jmlr.org/format/format.html
+https://github.com/JmlrOrg/jmlr-style-file/blob/master/sample.tex
 
 IMPLEMENTATION AND EXPERIMENTS
 
@@ -40,6 +64,7 @@ To reproduce the matched geometry--decoder study:
     python experiments/run_matched_geometry.py --output results/reproduced_matched_geometry --workers 6 --freeze-only
     python experiments/run_matched_geometry.py --output results/reproduced_matched_geometry --workers 6 --resume
     python experiments/analyze_matched_geometry.py --study results/reproduced_matched_geometry --output results/reproduced_matched_geometry_analysis
+    python scripts/make_matched_assets.py --analysis results/reproduced_matched_geometry_analysis
 
 All reproduction commands use new output directories. The frozen configurations
 and manifests identify the parameters and source revisions of the retained runs.
@@ -53,9 +78,11 @@ complete retained analyses, without fitting models:
     python scripts/make_matched_assets.py --analysis results/matched_geometry_study/analysis
 
 Their command-line options accept alternative analysis directories. Numerical
-table entries and supplied figure assets are unchanged by this revision. The
-oscillator table explicitly labels the mean of the square-root upper endpoints;
-the matched-dimension figure describes percentage changes in MSE.
+table entries remain unchanged. Figure typography and dimensions were revised
+for readability; all 85 plotted line series and their axis scales and limits
+agree exactly with the preceding version. The oscillator table explicitly
+labels the mean of the square-root upper endpoints; the matched-dimension
+figure describes percentage changes in MSE.
 
 REVISION AND VERIFICATION RECORD
 
@@ -66,3 +93,6 @@ manuscript. The repository's docs/SCIENTIFIC_VERIFICATION.md identifies
 the checked proofs, statistical formulas, numerical records, tests, and limits
 of the verification. The verification reconstructs retained evidence and does
 not claim that every production experiment was rerun.
+The shorter edition adds review/LENGTH_AND_FORMAT_REVISION.txt and associated
+integrity and plot-series records. The earlier verification records describe
+the preceding scientific revision and remain unchanged.

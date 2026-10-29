@@ -1,19 +1,15 @@
 \subsection{Writer-disjoint forecasting of original pen trajectories}
 \label{sec:pendigits}
 
-We evaluate the same forecasting implementations on original PenDigits
-trajectories \citep{alpaydin1996pendigits}. This experiment measures accuracy
-on recorded human movement and illustrates the distinction between many
-observations and many independent sampling units. It does not establish that
-the dataset satisfies the independent-episode assumption of the risk theorem.
+We evaluate the same forecasters on original PenDigits trajectories
+\citep{alpaydin1996pendigits}. Few writer groups are available, and the
+risk theorem's independent-episode assumption is unverified.
 
 \paragraph{Data and causal inputs.}
-The University of California, Irvine (UCI) archive contains original,
-unnormalized pen locations sampled over time, as well as a commonly used table
-of eight spatially resampled locations per digit. We use the original UNIPEN
-records. The table's normalization and resampling depend on the completed
-character and are therefore unsuitable as causal inputs to this forecasting
-task. The acquisition protocol specifies coordinates in $[0,500]^2$ and a
+The University of California, Irvine (UCI) archive provides original
+time-sampled pen locations and a table of eight spatially resampled locations
+per digit. We use the original, unnormalized UNIPEN records because the
+table's whole-character preprocessing is unsuitable for causal forecasting. The acquisition protocol specifies coordinates in $[0,500]^2$ and a
 nominal sampling interval of $100$ ms. Each recorded coordinate $z$ is
 transformed to $z/250-1$, and scalar predictions are clipped to $[-1,1]$.
 We check every source coordinate against the declared acquisition range.
@@ -23,21 +19,19 @@ The documented source split contains 7,494 digit records from 30 development
 writers and 3,498 records from 14 different test writers. We infer writer
 identity from the second integer in each UNIPEN \texttt{COMMENT} field: its
 range and the approximately 250 records per identifier match the documented
-writer counts. The source text does not explicitly define these fields, so
-this inference is recorded in the data provenance. Identifiers include the
-source-split label to avoid confusing writers across files. Pen-up gaps are
+writer counts. Because the source does not define these fields explicitly, writer identity
+remains an inference. Identifiers include their source split. Pen-up gaps are
 not treated as ordinary time steps.
 
 We retain a digit's first pen-down stroke only if it contains at least 32
 samples, and then use its first 32 points. This leaves 1,751 test digits from
 13 eligible test writers; one of the original 14 writers has no qualifying
-first stroke. The target population is therefore restricted to this
-eligible-stroke protocol and writers with at least one eligible stroke.
-Because eligibility depends on completed stroke length, the task is
-retrospective and does not cover every newly started online stroke. No loss
+first stroke. The population is restricted to writers with eligible strokes. Eligibility
+depends on completed stroke length, making this a retrospective task that
+does not cover every newly started stroke. No loss
 is assigned to the excluded writer. The eligible-writer count was corrected
 from 14 to 13 before test scoring; the fixed eligibility rule was unchanged.
-The original check and correction are documented with the released results.
+The released records document the correction.
 
 \paragraph{Development and evaluation.}
 Within the development file, the first 24 writer identifiers are used for
@@ -47,8 +41,7 @@ All 717 eligible strokes from the validation writers are used for selection.
 The two coordinates are modeled separately, each from its own scalar history.
 History lengths are $m\in\{4,8\}$, and forecast horizons are
 $\mathcal H=\{1,2,4\}$ samples. The common zero-based forecast origins are
-$7,11,15,19,23,27$. Every model therefore predicts the same targets using only
-observations available at the forecast origin.
+$7,11,15,19,23,27$. All models use causal histories and the same target origins.
 
 For each coordinate and seed, the candidate family contains 40 models:
 the three soft geometric feature families at four cumulative stages and two
@@ -59,7 +52,7 @@ $\kappa=4$, ridge coefficient $\lambda=10^{-4}$, and affinity exponent
 $\omega=16$. We select one model per family by validation MSE, weighting
 writers equally and averaging over the three horizons. All six
 coordinate--seed families and their selections are frozen before test scoring.
-Every fitted candidate is retained, including those not selected for the table.
+Unselected candidates are also retained.
 
 Within each writer, we average squared loss over origins and then eligible
 digits. The cohort MSE gives each eligible writer equal weight. Let
@@ -70,9 +63,8 @@ RMSE in a repetition is
  \left(\frac{\widehat R_{1,r,h}+\widehat R_{2,r,h}}{2}\right)^{1/2}.
 \]
 Table~\ref{tab:pendigits} reports its mean and sample standard deviation over
-the three development seeds. These standard deviations measure sensitivity
-to fitting randomness on the same test cohort; they are not confidence
-intervals based on independent test cohorts. A normalized RMSE of 0.01
+the three development seeds. These deviations measure fitting variability on the same test cohort,
+not uncertainty across independent cohorts. A normalized RMSE of 0.01
 corresponds to 2.5 acquisition pixels.
 
 \begin{table}[t]
@@ -95,12 +87,10 @@ horizons. Its mean RMSEs are 0.00768, 0.01777, and 0.05184, compared with
 0.04661, 0.06686, and 0.11269 for the KAHM block predictor. Ridge
 autoregression also outperforms the KAHM block predictor. Relative to
 persistence, KAHM is worse at one step and better at two and four steps.
-These results do not support general forecasting superiority of KAHM geometry.
-The retained-block and ordinary Frobenius fits have effectively identical
-errors here. The recorded block-norm sums for the selected retained-block
-fits are strictly below $\kappa=4$, consistent with an inactive block constraint.
-Different constraint definitions therefore need not produce a detectable
-change in this experiment.
+These results do not establish general KAHM superiority. Retained-block
+and ordinary Frobenius errors are effectively identical; the selected
+retained-block norm sums are below $\kappa=4$, consistent with an inactive
+constraint.
 
 For completeness, we calculate upper bounds under an additional sampling
 assumption: eligible writer records are iid from a common writer population

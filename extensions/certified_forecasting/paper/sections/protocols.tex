@@ -177,8 +177,8 @@ From the extension directory, run
 \begin{verbatim}
 export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
 export PYTHONPATH=src
-python experiments/run_forecasting.py --config configs/main_v1.json \
-  --output results/reproduced_main
+python experiments/run_forecasting.py \
+  --config configs/main_v1.json --output results/reproduced_main
 python experiments/run_known_risk.py \
   --output results/reproduced_known_risk
 python experiments/prepare_pendigits.py
@@ -236,19 +236,13 @@ The primary, fixed-dimension, and validation-selected-head summaries are
 in \path{taskwise_comparisons.csv}. The retained analysis directory is
 \path{results/matched_geometry_study/analysis}.
 
-From the extension directory, with PenDigits prepared as above, run
-\begin{verbatim}
-python experiments/run_matched_geometry.py \
-  --output results/reproduced_matched_geometry --workers 6 \
-  --freeze-only
-python experiments/run_matched_geometry.py \
-  --output results/reproduced_matched_geometry --workers 6 --resume
-python experiments/analyze_matched_geometry.py \
-  --study results/reproduced_matched_geometry \
-  --output results/reproduced_matched_geometry_analysis
-python scripts/make_matched_assets.py \
-  --analysis results/reproduced_matched_geometry_analysis
-\end{verbatim}
+With PenDigits prepared as above, the reproduction sequence freezes the
+schedule and then resumes fitting with
+\path{experiments/run_matched_geometry.py}. It aggregates the results with
+\path{experiments/analyze_matched_geometry.py} and creates manuscript assets
+with \path{scripts/make_matched_assets.py}. Complete commands are provided in
+the source package's \path{README_BUILD.txt} and the repository reproduction
+guide.
 The analysis checks completeness and score-archive integrity before aggregating
 paired comparisons. It retains every selected candidate, per-seed effect,
 per-horizon result, and PenDigits writer comparison. The asset generator reads

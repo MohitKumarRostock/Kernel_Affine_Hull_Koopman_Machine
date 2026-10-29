@@ -17,6 +17,34 @@ checks. It is not a machine-checked proof, a complete rerun of every production
 experiment, or an exhaustive novelty assessment. The detailed records are in
 [`verification/readability_scientific_revision/`](../verification/readability_scientific_revision/).
 
+## Subsequent length and formatting revision
+
+The edition following commit `5300c4833ed849e712f30609eb257e570d064d3b`
+shortens the abstract to 187 words and the complete PDF to 49 pages, including
+appendices and references. Splitting hyphenated abstract terms gives 194 words.
+It retains the official `article` class with `twoside,11pt` and the unchanged
+JMLR style, uses Times Roman text as recommended by the journal, and preserves
+the style's text dimensions and spacing. The official `preprint` option
+suppresses unassigned publication metadata without changing the body font size
+or text dimensions.
+
+Repeated exposition was consolidated. The theory, notation, method,
+optimization appendix, and exact-risk appendix remain byte-identical to the
+scientifically reviewed version. All labels, references, citations, and
+numerical table entries remain intact. No experiment was refitted for these
+editorial changes, and the experimental implementation is unchanged.
+The appendix retains the matched-study protocol and reproduction sequence;
+its duplicate shell commands are consolidated in `paper/README_BUILD.txt`.
+
+Figure labels were enlarged to at least nine points at their final printed
+size. Executing the previous and revised asset generators on identical inputs
+confirmed exact equality of every plotted coordinate, axis scale, and axis
+limit: four figures, 28 axes, 85 line series, and 302 coordinate pairs. The
+dense matched-MSE table uses nine-point text. The revised PDF builds without
+undefined citations/references, overfull boxes, or oversized floats. The
+corresponding records are in
+[`verification/length_format_revision/`](../verification/length_format_revision/).
+
 ## Scientific corrections
 
 ### Calibration reuse and the scope of confidence statements
@@ -187,12 +215,14 @@ definitions. Public documentation uses scientific exposition in place of
 internal review instructions. Necessary scientific qualifications and the
 disclosure of AI assistance are retained.
 
-All original numerical table entries and supplied figure assets are preserved.
-Historical configurations, scalar results, score indices, source snapshots,
-and frozen protocols remain unchanged. Caption generators reproduce the
-revised scientific interpretation. The LaTeX manuscript builds to 53 pages
-without undefined citations or references, overfull boxes, or oversized floats;
-all pages were rendered for layout inspection.
+All original numerical table entries are preserved. The initial scientific
+revision also preserved the supplied figure files and produced a 53-page PDF;
+its integrity record documents that edition. The subsequent 49-page edition
+changes figure typography while preserving every plotted value, as verified
+above. Historical configurations, scalar results, score indices, source
+snapshots, and frozen protocols remain unchanged. Caption generators
+reproduce the revised scientific interpretation, and all pages of the current
+PDF were rendered for layout inspection.
 
 The evidence supports the stated conditional mathematical results and the
 reported empirical comparisons. It does not establish universal superiority of

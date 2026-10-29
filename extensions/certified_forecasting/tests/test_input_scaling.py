@@ -109,6 +109,31 @@ class InputScalingTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             NestedSoftFeatures(input_scaling="minmax").input_scaling_metadata()
 
+    def test_nonfinite_and_zero_dimension_inputs_are_rejected(self):
+        for mode in ("standard", "raw", "minmax", "minmax_clip"):
+            for X in (np.empty((5, 0)), np.full((5, 2), np.nan),
+                      np.full((5, 2), np.inf), np.full((5, 2), -np.inf)):
+                with self.subTest(mode=mode, shape=X.shape), self.assertRaises(ValueError):
+                    NestedSoftFeatures((2,), input_scaling=mode).fit(X)
+            with patch("certified_forecasting.features._KAHMBlock", RecordingBlock):
+                bank = NestedSoftFeatures((2,), input_scaling=mode).fit(
+                    np.arange(12, dtype=float).reshape(6, 2))
+            frozen = bank.input_scaling_metadata()
+            for value in (np.nan, np.inf, -np.inf):
+                with self.assertRaises(ValueError):
+                    bank.transform([[value, 0.]])
+                self.assertEqual(bank.input_scaling_metadata(), frozen)
+
+    def test_finite_inputs_that_overflow_preprocessing_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "parameters must be finite"):
+            NestedSoftFeatures((2,), input_scaling="standard").fit(
+                np.full((5, 2), 1e308))
+        X = np.array([[-1e-10, 0.], [1e-10, 1.], [-1e-10, 0.], [1e-10, 1.]])
+        with patch("certified_forecasting.features._KAHMBlock", RecordingBlock):
+            bank = NestedSoftFeatures((2,), input_scaling="standard").fit(X)
+        with self.assertRaisesRegex(ValueError, "Scaled inputs must be finite"):
+            bank.transform([[1e308, 0.]])
+
     def test_config_intervention_only_affects_kahm_and_opt_in_metadata(self):
         experiments = Path(__file__).resolve().parents[1] / "experiments"
         if str(experiments) not in sys.path:

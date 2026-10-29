@@ -69,3 +69,19 @@ by horizon and for all horizons together. It also reports lower endpoints
 for full-family and KAHM-only validation winners. No models are refitted and
 no sample-size curve is inferred from aggregate moments. All campaign
 summaries remain descriptive over their original repetition-level events.
+
+## Auditing a fresh checkout
+
+Generated NPZ state archives are omitted from Git. Reconstruct the exact
+original streams from their frozen seeds and validate their original hashes:
+
+```bash
+python experiments/decision_value/reproduce_states.py \
+  --results results/decision_value/fresh --output verification/decision_streams
+PYTHONPATH=src python experiments/decision_value/verify.py \
+  --results results/decision_value/fresh --state-directory verification/decision_streams \
+  --output verification/decision_audit.json
+```
+
+Both output paths must be new. These commands reproduce the original streams
+and audit the committed evidence without refitting or changing the study.

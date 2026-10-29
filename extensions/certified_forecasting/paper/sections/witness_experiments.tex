@@ -8,7 +8,8 @@ They include deterministic and noisy targets, histories assigned identical
 features despite different targets, rare conflicting targets, and a case in
 which affine decoders are less expressive than general Lipschitz decoders.
 For every method, $R^*$ is the minimum MSE over the same full scalar
-$1$-Lipschitz class with outputs in $[-1,1]$. These explicit representations isolate the behavior of the certificates;
+$1$-Lipschitz class with outputs in $[-1,1]$. These explicit representations
+isolate the behavior of the certificates;
 they do not measure the forecasting accuracy of learned KAHM features.
 
 \input{tables/witness_laws}
@@ -52,8 +53,9 @@ partition need not help.
 
 Empirical minimization gives the largest mean endpoint on most richer laws;
 the pair bound is larger on the partially separated two-atom and three-point
-laws at $n=4096$. Accounting for a known representation range substantially improves centered
-calibration when the representation is constant. The two-atom comparison in Section~\ref{sec:experiments}
+laws at $n=4096$. Accounting for a known representation range substantially
+improves centered calibration when the representation is constant.
+The two-atom comparison in Section~\ref{sec:experiments}
 quantifies how treating a known zero variance as unknown can weaken a centered
 endpoint. Consequently, the relative performance of pairwise and centered
 certificates depends on the estimator and the structural information supplied
@@ -64,7 +66,8 @@ to it.
 \includegraphics[width=\linewidth]{figures/witness_sample_size.pdf}
 \caption{Mean lower endpoints over all 300 repetitions at each calibration
 size for every prespecified law. Dashed lines show minimum population MSE.
-Each method has its own $95\%$ one-sided confidence statement. The result archive provides endpoint quantiles, Monte Carlo confidence
+Each method has its own $95\%$ one-sided confidence statement. The result
+archive provides endpoint quantiles, Monte Carlo confidence
 intervals, secondary methods, and all individual trials.}
 \label{fig:witness-sample-size}
 \end{figure}
@@ -83,8 +86,8 @@ information.
 
 All four primary methods have zero observed coverage violations across the
 prespecified grid. This simulation does not prove coverage; each law--size
-cell has only 300 repetitions, and the result archive gives binomial Monte Carlo confidence intervals. Reconstruction of all 76,800 primary and secondary endpoints
-agrees within $1.12\times10^{-16}$. At $n=4096$, medians across the eight
+cell has only 300 repetitions, and the result archive gives binomial Monte
+Carlo confidence intervals. At $n=4096$, medians across the eight
 law-wise median computation times are $31.3$, $34.7$, $265.4$, and $165.0$
 $\mu$s for pair EB, centered, empirical minimum, and stratified EB,
 respectively. These single-machine measurements use a precomputed finite-support

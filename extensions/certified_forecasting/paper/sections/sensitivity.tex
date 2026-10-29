@@ -2,9 +2,11 @@
 \label{sec:budget-sensitivity}
 
 The budget $\kappa$ defines a feature-dependent class; equal numerical budgets
-do not imply equal capacity across representations. To assess sensitivity to this choice, a separate experiment uses fresh
-development, calibration, and test streams with seeds 2701--2703, $m=12$, and $\kappa\in\{1,4,16\}$ on all four main systems.
-Other settings match Section~\ref{sec:experiments}. The design comprises 36 runs and 756 fitted models, with 21 candidates per
+do not imply equal capacity across representations. To assess sensitivity to
+this choice, a separate experiment uses fresh development, calibration, and
+test streams with seeds 2701--2703, $m=12$, and $\kappa\in\{1,4,16\}$ on all
+four main systems. Other settings match Section~\ref{sec:experiments}. The
+design comprises 36 runs and 756 fitted models, with 21 candidates per
 budget and system--seed combination. Budgets share streams and geometry
 within each system--seed repetition. Validation selects a KAHM prefix
 separately at each budget. Allocating $0.05/3$ to each budget's risk and
@@ -35,6 +37,5 @@ This does not establish impossibility at larger budgets or richer geometries.
 At $\kappa=16$, harmonic AR and quadratic baselines achieve horizon-12 RMSEs
 $0.2377$ and $0.2375$ and certify $0.35$ in all three fits. On nonlinear
 autoregression at $\kappa=4$, KAHM has lower horizon-12 RMSE ($0.0746$ versus
-$0.0800$ and $0.0809$) but higher one-step error. Independent reconstruction confirms the 2,268 candidate--horizon certificates
-and 324 paired improvement bounds. Every constrained fit has a first-order
-optimality gap below $10^{-7}$.
+$0.0800$ and $0.0809$) but higher one-step error. Every constrained fit has
+a first-order optimality gap below $10^{-7}$.

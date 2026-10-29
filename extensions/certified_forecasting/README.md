@@ -133,9 +133,10 @@ The [reproduction guide](docs/REPRODUCIBILITY.md) gives exact follow-up,
 audit, figure-generation, and user-data commands. Runners refuse to overwrite
 retained runs. Failures are recorded instead of silently removed.
 
-## Optional KAHM input scaling
+## Choosing KAHM input scaling
 
-The input-scaling study evaluates a task-dependent modeling choice. Min–max preprocessing
+Input preprocessing is part of the fitted representation. The input-scaling
+study evaluates a task-dependent modeling choice. Min–max preprocessing
 improves the soft KAHM PenDigits forecaster, including new fitting seeds on the
 same held-out writers, but some synthetic settings and hard KAHM assignments
 regress. The default is training mean/standard-deviation standardization.
@@ -154,8 +155,11 @@ including unfavorable results and the fixed-cohort limitation.
 
 When `input_scaling` is omitted, the `standardize` flag determines the map. All
 min/max parameters use training histories only, before geometry subsampling;
-training-constant coordinates map to zero. Targets and error units are
-unchanged. Experiment configs can opt in using `"kahm_input_scaling": "minmax"`;
+training-constant coordinates map to zero, including when a held-out input
+varies along that coordinate. Targets and error units are unchanged. Choose
+the scaling mode on development data and freeze it before independent
+calibration. Comparing several preprocessing modes on calibration requires
+a simultaneous confidence allocation over those modes. Experiment configs can opt in using `"kahm_input_scaling": "minmax"`;
 this affects only KAHM and its dependent variants. The standalone example
 accepts `--kahm-input-scaling minmax`.
 
@@ -172,6 +176,15 @@ candidates and failures, and uses separate processes with explicit per-job
 scaling settings. See the reproduction guide for subsets and score audits.
 The source hashes in each manifest identify the implementation used for that
 execution; reproducing an archived run requires its recorded source version.
+
+The [speech scaling comparison](experiments/speech_scaling/) extends all four
+preprocessing modes to the speech-energy task with 2,688 paired candidate fits.
+Min–max KAHM reduces mean MSE by 1.41% relative to standardized KAHM, while raw
+KAHM inputs perform better still. The same comparison slightly improves RBF
+features and slightly worsens affine-hull features. These are descriptive
+comparisons on the earlier speech cohort; they do not receive new population
+confidence guarantees. The study retains every validation candidate, frozen
+scaler, selected-model group loss, and an exact source snapshot.
 
 ## Matched geometry and forecasting heads
 

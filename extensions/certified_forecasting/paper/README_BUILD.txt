@@ -23,12 +23,14 @@ option, 11-point text, and the standard JMLR text dimensions.
 
 MANUSCRIPT
 
-The manuscript has 53 pages, including appendices and references. Its abstract
-has 189 whitespace-delimited words. The paper studies pairwise and stratified
+The manuscript has 55 pages, including appendices and references. Its abstract
+has 191 whitespace-delimited words. The paper studies pairwise and stratified
 risk lower bounds, upper bounds for fitted forecasts, representation refinement,
 and minimum feasible representation cost. Numerical evidence includes
 finite-support certificate comparisons, a controlled decision experiment,
-synthetic forecasting, pen trajectories, and speech energy.
+synthetic forecasting, pen trajectories, speech energy, and a four-arm
+speech input-scaling comparison. The complete proofs and experimental
+specifications are included in the same PDF.
 
 RESEARCH SOFTWARE AND DATA
 

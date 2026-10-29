@@ -46,7 +46,9 @@ was `9.911812667750958e-11` and every coefficient budget was feasible.
   before generation of calibration observations.
 - `fresh/development_states.npz`, `repairable_calibration_states.npz`, and
   `irreducible_calibration_states.npz`: all training, validation, and calibration
-  atom indices. These compact arrays reconstruct every history and target.
+  atom indices. These generated arrays reconstruct every history and target.
+  They are omitted from Git; `experiments/decision_value/reproduce_states.py`
+  recreates them from the committed seeds and checks their original hashes.
 - `fresh/frozen_models.json`: all fitted coefficients, population and
   development risks, optimization gaps, and seeds.
 - `fresh/population_oracle.json`: complete finite-support enumeration,

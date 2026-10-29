@@ -73,11 +73,10 @@ matching minimum training risks within their solver gaps. The main duplicate
 candidate uses zero ridge, whereas primary models use $10^{-4}$; their fitted
 errors are therefore not evidence for ridge-estimator invariance.
 All 800 main-study candidates completed; the constrained block fits have
-recorded first-order optimality gaps below $10^{-7}$. Independent reconstruction
-from the stored scores agrees with all 4800 one-sided endpoints and 360
-improvement bounds. These checks establish numerical consistency with the
-specified formulas; statistical validity additionally requires the sampling
-assumptions in Section~\ref{sec:theory}.
+recorded first-order optimality gaps below $10^{-7}$. These numerical
+optimization guarantees are separate from the risk guarantees, which require
+the sampling assumptions in Section~\ref{sec:theory}. Appendix~\ref{app:protocols}
+describes reproduction of the fitted models and confidence endpoints.
 
 \paragraph{Calibration on a two-atom distribution.}
 A separate benchmark contains 28,800 trials with analytically known class

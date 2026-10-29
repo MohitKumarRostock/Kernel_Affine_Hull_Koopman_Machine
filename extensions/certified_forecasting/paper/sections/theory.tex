@@ -39,6 +39,15 @@ When the representation and pseudometric are clear, we abbreviate
 $R^*_\kappa(\Gamma,d)$ to $R^*_\kappa$ and similarly suppress the
 arguments of the witness defined below.
 
+Any training-fitted preprocessing is part of $\Gamma$. The population
+results below do not require the input coordinates to lie in $[-1,1]$.
+For the finite-sample certificates, the deterministic range assumption
+concerns the target and prediction loss. A common value of $\kappa$ across
+preprocessing choices limits sensitivity in each resulting feature metric;
+it does not impose a common Lipschitz constant in the original input units.
+Each choice therefore specifies its own representation class and must be
+frozen before calibration.
+
 To define the pairwise statistic, first draw a conditioning variable $A$.
 Then draw $(X,Y)$ and $(X',Y')$ independently from the same conditional law
 given $A$, and set $U=\Gamma(X)$ and $U'=\Gamma(X')$. Each copy must have

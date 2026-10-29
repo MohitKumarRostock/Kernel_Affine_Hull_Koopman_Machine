@@ -39,9 +39,8 @@ preserves earlier predictors without enlarging the class when a block is
 duplicated. Experiments compare the pairwise certificate with variance-based
 bounds and bounds obtained by minimizing empirical risk; the latter are often
 tighter. A controlled forecasting experiment demonstrates cost and infeasibility
-decisions, although substantial calibration samples are required. Applications
-include six synthetic systems, pen trajectories, and speech energy. KAHM
-performance depends on the task and decoder. All guarantees concern expected
+decisions, although substantial calibration samples are required. Applications to six synthetic systems, pen trajectories, and speech energy
+show that KAHM performance depends on preprocessing, task, and decoder. All guarantees concern expected
 squared error under an explicit sampling law.
 \end{abstract}
 \begin{keywords}
@@ -69,15 +68,16 @@ The \href{https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machin
 result summaries, and figure generators in
 \path{extensions/certified_forecasting}; editable manuscript files are in its
 \path{paper} directory. The forecasting, input-scaling, matched-geometry,
-lower-bound comparison, controlled decision, and speech studies have separate
+lower-bound comparison, controlled decision, speech, and speech-scaling studies
+have separate
 protocols and result directories. These provide configurations, source hashes,
 per-episode scores, and outcomes for every prescribed configuration.
 Appendix~\ref{app:protocols} specifies the forecasting configurations and
 independent sampling units. The reproduction guide is
 \path{extensions/certified_forecasting/docs/REPRODUCIBILITY.md}.
 Public data are identified by source and checksum; download scripts preserve
-attribution and license information. Section~\ref{sec:speech} describes the
-speech study's evaluation order and its implications for interpretation.
+attribution and license information. Appendix~\ref{app:speech-protocol} describes the speech study's evaluation
+order and its implications for interpretation.
 
 \paragraph{Use of AI tools.}
 AI tools assisted with derivation exploration, implementation, literature

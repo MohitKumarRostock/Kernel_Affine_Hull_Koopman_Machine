@@ -29,6 +29,18 @@ a manifest continue to identify the files used for that execution. Readers
 reproducing an archived execution should restore the corresponding source
 version or snapshot as specified in the reproduction guide.
 
+## Scaling and portable reproduction checks
+
+The [speech scaling study](../experiments/speech_scaling/) has its own protocol,
+development freeze, complete candidate records, compressed group losses,
+full-model replay, portable audit, and exact execution-source snapshot in
+`results/speech_scaling_v1/`. Its comparisons are descriptive on the reused
+speech cohort. The [independent audit](../verification/scaling_complete_review/)
+also reconstructs the table without importing the study's calculation code.
+That directory records the corrected aggregation scope of the PenDigits
+scaling claim, a deterministic KAHM scaling-mechanism check, retained-endpoint
+and table reconstructions, and checks of this manuscript edition.
+
 ## Version-specific scientific review records
 
 | Record | Scope |

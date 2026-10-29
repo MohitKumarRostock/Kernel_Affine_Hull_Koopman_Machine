@@ -45,7 +45,7 @@ resolvable. Fitting and calibration must use the same implemented map.
 
 By default, histories are standardized using training-input means and standard
 deviations. Optional preprocessing uses training extrema or leaves histories
-unscaled, as specified in the [scaling overview](README.md#optional-kahm-input-scaling).
+unscaled, as specified in the [scaling overview](README.md#choosing-kahm-input-scaling).
 Each block has its own seeded clustering. The default geometry fit uses at most
 2,500 training histories, at most 48 KAHM reference points per cluster, and at
 most two principal directions. Decoder fitting can use all training histories.
@@ -57,6 +57,57 @@ k-means clusters. Its score combines a normalized reconstruction residual with
 a local distance penalty. The `rbf` comparator forms normalized Gaussian
 associations from distances to k-means centers. Both are separate geometric
 feature maps with their own model definitions.
+
+## Input preprocessing and scale sensitivity
+
+For a coordinate $j$, let $a_j$ and $b_j$ be its minimum and maximum over
+training histories. The `minmax` map is
+
+$$
+z_j(x)=2\frac{x_j-a_j}{b_j-a_j}-1
+$$
+
+when $b_j>a_j$. A coordinate that is constant in training maps to zero for
+all later inputs, so later variation in that coordinate is discarded. The
+scaler is fitted before any geometry subsampling. Validation, calibration,
+and test histories never update it. The extrema, constant-coordinate mask,
+and mode are stored with the fitted feature bank.
+
+This affine map places the training values in $[-1,1]$. A new value outside
+the training range remains outside that interval. `minmax_clip` additionally
+clips transformed queries, producing a different feature map. `standard`
+uses training means and standard deviations; `raw` leaves inputs unchanged.
+All four modes leave the forecasting target and error units unchanged.
+
+Scaling affects more than a kernel bandwidth. The KAHM reconstruction uses a
+local regularization parameter determined from the squared magnitudes of the
+preprocessed reference histories. Its folding score combines
+$1-\exp(-\|z-\widehat z\|_2)$ with the angle between $z$ and $\widehat z$.
+Uniform rescaling changes the first term, translation generally changes the
+angle, and unequal coordinate scales can change both. Preprocessing can also
+change clustering and retained principal directions. Covariance normalization
+of the Gaussian kernel therefore does not make the complete representation
+scale invariant. The manuscript gives the local regularization recurrence.
+
+The deterministic mechanism diagnostic runs from the extension root:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+  python scripts/check_scaling_mechanism.py \
+  --output verification/reproduced_scaling_mechanism.json
+```
+
+For its fixed reference cloud, multiplying inputs by 0.5 or 2 preserves the
+Gram matrix to numerical tolerance but changes regularization, reconstruction,
+and folding scores. This diagnoses a mechanism; forecasting benefit requires
+a paired task-specific experiment.
+
+For deployment, choose preprocessing using development data, then freeze it
+with the representation before independent calibration. If several frozen
+preprocessing arms are compared using calibration, their endpoints must share
+the declared failure budget. A fixed feature-space coefficient budget does not
+mean equal sensitivity in the original history coordinates across scalers.
+The risk bounds require known target-loss bounds, not training input extrema.
 
 ## Retained blocks and the decoder class
 

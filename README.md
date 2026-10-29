@@ -22,6 +22,11 @@ explains the questions, independent sampling units, and interpretation of each
 experiment. The comparisons report both improvements and deteriorations, along
 with inconclusive certification outcomes.
 
+The speech input-scaling comparison evaluates standardization, raw histories,
+and training-only scaling to [-1,+1], with and without query clipping. It
+reports all preprocessing arms and retains complete paired group scores;
+preprocessing is treated as a model choice determined using development data.
+
 Use the extension's own [reproduction guide](extensions/certified_forecasting/docs/REPRODUCIBILITY.md)
 for its Linux/Python environment and experiment commands. The parent KAHKM
 study and its reference environment below retain their original provenance.

@@ -3,8 +3,9 @@
 
 \paragraph{Decisions in the KAHM forecasting studies.}
 The main synthetic, oscillator, and coefficient-budget studies contain 62
-fitting runs (Section~\ref{sec:experiments}). We distinguish exclusion of a
-candidate's decoder class from the behavior of a model selected by validation. Among the 800 main-study candidates, the all-horizon decisions at
+fitting runs (Sections~\ref{sec:experiments}--\ref{sec:budget-sensitivity}).
+We distinguish exclusion of a candidate's decoder class from the behavior
+of a model selected by validation. Among the 800 main-study candidates, the all-horizon decisions at
 RMSE tolerance $0.35$ are 301 accepted, 24 excluded, and 475 unresolved;
 the corresponding oscillator counts are 55, 30, and 155 among 240 candidates.
 Nevertheless, all 186 horizon-specific lower endpoints of the 62 models
@@ -18,24 +19,26 @@ The protocol is specified before calibration observations are generated.
 Each independent episode supplies one history $X=(Z,S)$ and one scalar future
 $Y$. The indicator $S$ equals one with probability $0.2$ and zero otherwise,
 and $Z,R,N$ are mutually independent random signs, each taking $-1$ and $1$
-with equal probability, independently of $S$. We consider two regimes, called repairable and irreducible because the final
+with equal probability, independently of $S$. We consider two regimes, called
+repairable and irreducible because the final
 representation can remove the signal uncertainty only in the first:
 \[
   Y=0.8SZ+0.1N \quad\text{(repairable)},\qquad
   Y=0.8SR+0.1N \quad\text{(irreducible)}.
 \]
 The three entries of $(Z,S,Y)$ occur in temporal order, and the forecast is
-made after observing $Z$ and $S$, before observing $Y$. The target range is $[-0.9,0.9]$. We append the simplex
+made after observing $Z$ and $S$, before observing $Y$. The target range is
+$[-0.9,0.9]$. We append the simplex
 blocks
 \[
  (1),\qquad (1-S,S),\qquad
  \bigl((1+SZ)/2,(1-SZ)/2\bigr)
 \]
-under the common coefficient budget $\kappa=2$. The first block has one coordinate; the first two have three coordinates in
+under the common coefficient budget $\kappa=2$. The first block has one
+coordinate; the first two have three coordinates in
 total; and all three have five. These coordinate counts define the costs
-$1,3,5$ of the three representation classes. These are explicit
-representations for testing the general theorem; their costs refer only to
-the three prescribed classes.
+$1,3,5$ of the three representation classes. These explicit representations
+test the general theorem; they are not fitted KAHM dictionaries.
 
 At costs $1$, $3$, and $5$, the exact minimum MSEs in the repairable regime
 are $0.138$, $0.138$, and $0.01$. They all equal $0.138$ in the irreducible
@@ -53,12 +56,14 @@ in addition to finite-sample uncertainty.
 Each of 100 independent repetitions per regime uses 2,048 training episodes,
 1,024 validation episodes, and nested calibration samples of
 $256,1024,4096,16384,65536$ episodes. All three decoders are fitted with zero
-ridge penalty and frozen before calibration. The RMSE tolerance $0.30$ corresponds to an MSE threshold of $0.09$. We compare
-three decision rules: accepting when the validation MSE is at most $0.09$,
-accepting when the calibrated upper risk bound is at most $0.09$, and combining
-the same upper bound with unconditional or stratified lower certificates.
+ridge penalty and frozen before calibration. The RMSE tolerance $0.30$
+corresponds to an MSE threshold of $0.09$. We compare validation-only
+acceptance at this threshold, calibrated upper-bound acceptance, and two
+extensions of the latter rule using either unconditional or stratified
+lower certificates.
 Validation-only acceptance is a descriptive reference rule without a population
-confidence guarantee. The two predefined partitions use the history labels $S$ and $(S,Z)$; neither
+confidence guarantee. The two predefined partitions use the history labels
+$S$ and $(S,Z)$; neither
 partition uses the future target. For the latter method, we estimate
 stratum masses and take the maximum of the two separately budgeted endpoints
 from Theorem~\ref{thm:stratified-certificate}. One failure budget $0.05$ per

@@ -201,6 +201,46 @@ The certificate evaluates this fitted forecast directly and requires no
 spectral-stability assumption, exact feature closure, or approximation to the
 trajectory distribution.
 
+\subsection{Speech model grid and evaluation order}
+\label{app:speech-protocol}
+
+The prespecified speech study uses fitting seeds $8601,8602,8603$ and history
+lengths $m\in\{4,12\}$. Each of the KAHM, RBF, and affine-hull families uses
+the four retained prefixes, two preprocessing choices (standardization and
+raw inputs), budgets $\kappa\in\{1,4\}$, and ridge coefficients
+$\lambda\in\{10^{-4},10^{-2}\}$. For RBF and affine-hull features, an
+additional multiplier $\rho\in\{0.25,1,4\}$ changes the association weights
+to values proportional to $\exp(-\rho a_c(\xi))$, with $a_c$ defined above.
+KAHM retains affinity exponent $16$, at most 1600 geometry-training histories,
+and at most 24 reference points per local model. The resulting candidate
+counts are 64 for KAHM and 192 for each geometric comparator.
+
+Linear and quadratic regression use training-standardized histories, with
+ridge coefficients $\lambda$ in $\{10^{-6},10^{-4},10^{-2},10^{-1}\}$.
+Gaussian-kernel regression
+uses the same standardization and a 128-landmark Nystr\"om approximation to
+$k(z,z')=\exp(-\gamma\|z-z'\|_2^2)$. Its kernel parameter is
+$\gamma=r/d_{
+m med}$, where $r\in\{0.25,1,4\}$ and $d_{
+m med}$ is the
+median positive squared distance in a seeded subsample of 512 training rows;
+the implementation sets $d_{
+m med}=1$ if all those distances vanish. The
+kernel ridge grid is $\{10^{-4},10^{-2},10^{-1}\}$. All three regression
+heads have an unpenalized intercept and no coefficient-norm constraint.
+Together with two history-specific instances each of persistence and the
+constant predictor, these grids give 486 candidates per fit. All predictions
+are clipped to the fixed target interval $[0,1]$.
+
+Every model and selection rule is fixed before held-out scoring. The first
+execution evaluated calibration and test losses consecutively for each model,
+whereas the prescribed order completes all calibration calculations before
+test scoring. Repeating the calculations in the prescribed order gives
+identical selected predictors, group losses, and confidence endpoints; no
+choice depends on the intervening test losses. The two executions therefore
+represent one study. The source versions, evaluation-order records, and
+independent reconstruction are retained in the repository.
+
 \subsection{Reproduction and study provenance}
 
 The repository provides configurations, source hashes, candidate definitions,

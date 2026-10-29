@@ -741,3 +741,67 @@ indexing, equal group weighting, and KL inversion. They are included in the
 standard `python -m unittest discover -s tests -v` suite. The experiment
 runners write to their specified output directories and preserve the archived
 experimental records.
+
+## Speech input scaling on a fixed cohort
+
+The [speech scaling protocol](../experiments/speech_scaling/protocol.md)
+uses the earlier speech group split and all three fitting seeds. It compares
+all four preprocessing modes for all three geometric families with identical
+training rows and paired geometry subsamples. Selection is within each arm
+using validation loss; all 36 models are frozen before test scoring. This
+follow-up is descriptive because the same cohort has already been examined.
+Calibration groups are not scored and no new confidence bounds are computed.
+
+From the extension root, use the same official archive and checksum as the
+speech forecasting study:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=src \
+  python experiments/speech_scaling/run_study.py \
+  --archive data_cache/speech/mini_speech_commands.zip \
+  --output results/reproduced_speech_scaling
+PYTHONPATH=src python experiments/speech_scaling/verify_study.py \
+  --results results/reproduced_speech_scaling
+python experiments/speech_scaling/make_assets.py \
+  --results results/reproduced_speech_scaling
+```
+
+The source snapshot in `results/speech_scaling_v1/source_snapshot.tar.gz`
+contains the exact execution sources; its member hashes match the source
+freezes. The retained compressed group losses and development records support
+an audit without downloading audio or loading serialized models:
+
+```bash
+PYTHONPATH=src python experiments/speech_scaling/verify_study.py \
+  --results results/speech_scaling_v1 --portable
+python verification/scaling_complete_review/speech_scaling_independent_audit.py \
+  --portable --output verification/reproduced_speech_scaling_independent.json
+```
+
+The second audit imports neither the runner nor its verifier and reconstructs
+every displayed scaling-table value. Source snapshots and historical manifests
+identify their respective executions; later documentation edits do not change
+those identities.
+
+## Reconstructing the controlled decision streams
+
+The numeric NPZ streams from the decision experiment are reproducible outputs
+omitted by the repository's binary-file rules. The frozen seeds and original
+archive hashes are committed. Restore the exact streams to a new directory
+without refitting models:
+
+```bash
+python experiments/decision_value/reproduce_states.py \
+  --results results/decision_value/fresh \
+  --output verification/reproduced_decision_states
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=src \
+  python experiments/decision_value/verify.py \
+  --results results/decision_value/fresh \
+  --state-directory verification/reproduced_decision_states \
+  --output verification/reproduced_decision_audit.json
+```
+
+Reconstruction requires every archive to match its original SHA-256. The
+verifier then checks all frozen models, scores, mass linear programs, and
+reported cost decisions using those streams. A replay reproduces the original
+study; it does not constitute a new empirical replication.

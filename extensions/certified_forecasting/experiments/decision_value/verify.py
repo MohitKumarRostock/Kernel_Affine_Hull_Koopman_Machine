@@ -119,14 +119,20 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--results", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--state-directory", type=Path,
+                        help="Directory containing hash-verified original or reconstructed NPZ streams.")
     args = parser.parse_args()
     folder = args.results
+    states_folder = args.state_directory if args.state_directory is not None else folder
+    if args.output.exists():
+        parser.error("Choose a new verification output file.")
     config = json.loads((folder/"protocol.json").read_text())
     models = json.loads((folder/"frozen_models.json").read_text())
     recorded_oracle = json.loads((folder/"population_oracle.json").read_text())
     summary = json.loads((folder/"summary.json").read_text())
     for entry in summary["files"]:
-        actual = hashlib.sha256((folder/entry["path"]).read_bytes()).hexdigest()
+        parent = states_folder if entry["path"].endswith(".npz") else folder
+        actual = hashlib.sha256((parent/entry["path"]).read_bytes()).hexdigest()
         if actual != entry["sha256"]:
             raise AssertionError("Retained output hash mismatch: "+entry["path"])
     freeze = json.loads((folder/"precalibration_manifest.json").read_text())
@@ -137,8 +143,8 @@ def main():
         raise AssertionError("Invalid freeze chronology")
     close(config["upper_budget"]+config["unconditional_lower_budget"]+
           config["stratified_lower_budget"], config["confidence_delta"], "total failure budget")
-    development = np.load(folder/"development_states.npz", allow_pickle=False)
-    calibration = {name: np.load(folder/(name+"_calibration_states.npz"), allow_pickle=False)["states"]
+    development = np.load(states_folder/"development_states.npz", allow_pickle=False)
+    calibration = {name: np.load(states_folder/(name+"_calibration_states.npz"), allow_pickle=False)["states"]
                    for name in config["regimes"]}
     atoms = {name: atom_table(config, name) for name in config["regimes"]}
     lookup = {}

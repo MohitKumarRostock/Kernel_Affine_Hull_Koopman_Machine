@@ -19,7 +19,7 @@ from sklearn.cluster import KMeans
 
 def _matrix(X):
     X = np.asarray(X, dtype=np.float64)
-    if X.ndim != 2 or X.shape[0] < 1 or not np.isfinite(X).all():
+    if X.ndim != 2 or min(X.shape) < 1 or not np.isfinite(X).all():
         raise ValueError("Expected a nonempty finite matrix with samples in rows.")
     return X
 
@@ -198,8 +198,11 @@ class NestedSoftFeatures:
             raise ValueError("input_scaling must be standard, raw, minmax, minmax_clip, or None.")
         self.n_features_in_ = X.shape[1]
         standard = self.input_scaling_ == "standard"
-        self.mean_ = X.mean(axis=0) if standard else np.zeros(X.shape[1])
-        self.scale_ = X.std(axis=0) if standard else np.ones(X.shape[1])
+        with np.errstate(over="ignore", invalid="ignore"):
+            self.mean_ = X.mean(axis=0) if standard else np.zeros(X.shape[1])
+            self.scale_ = X.std(axis=0) if standard else np.ones(X.shape[1])
+        if not np.isfinite(self.mean_).all() or not np.isfinite(self.scale_).all():
+            raise ValueError("Training centering and scaling parameters must be finite.")
         self.scale_ = np.where(self.scale_ > 1e-12, self.scale_, 1.0)
         if self.input_scaling_ in ("minmax", "minmax_clip"):
             self.input_min_, self.input_max_ = X.min(axis=0), X.max(axis=0)
@@ -243,7 +246,11 @@ class NestedSoftFeatures:
                 raise ValueError("Scaled inputs must be finite.")
             if clip and mode == "minmax_clip":
                 X = np.clip(X, -1.0, 1.0)
-        return (X - self.mean_) / self.scale_
+        with np.errstate(over="ignore", invalid="ignore", divide="ignore"):
+            scaled = (X - self.mean_) / self.scale_
+        if not np.isfinite(scaled).all():
+            raise ValueError("Scaled inputs must be finite.")
+        return scaled
 
     def input_scaling_metadata(self):
         """JSON-safe frozen input-map parameters; no held-out statistics."""

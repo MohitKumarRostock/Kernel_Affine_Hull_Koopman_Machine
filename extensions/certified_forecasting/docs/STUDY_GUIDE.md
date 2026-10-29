@@ -117,6 +117,17 @@ inference time, or memory usage.
 | [Pen trajectories](PENDIGITS_PROVENANCE.md) | Thirteen eligible held-out writer groups, inferred from source metadata | Describes forecasting on the evaluated writer cohort and the limits of small-group calibration. |
 | [Speech energy](../experiments/speech_forecasting/) | Disjoint recording-identifier bundles; 978 calibration and 245 test bundles | Evaluates upper-risk calibration under an explicit independent, identically distributed group-record assumption. |
 
+The [speech preprocessing follow-up](../experiments/speech_scaling/) compares
+standardization, raw inputs, training min–max scaling, and clipped min–max
+scaling on the same earlier recording cohort. It fits 2,688 candidates and
+selects 36 models using validation data. All-horizon mean KAHM MSE decreases
+from 0.022570 under standardization to 0.022251 under min–max scaling; raw
+inputs give 0.021800. The min–max improvement occurs in all three fitting
+repetitions. RBF changes by -0.76% and affine-hull features by +0.24% relative
+to their corresponding standardized arms. Conventional speech regressors
+remain more accurate. No new confidence or certification claim is made for
+these descriptive comparisons.
+
 Overlapping windows within an episode are not independent calibration samples.
 Repeated fits on the same real-data cohort do not create new independent
 writers or recording groups. The confidence allocations therefore use episodes

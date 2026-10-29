@@ -1,8 +1,18 @@
 # Reproducing the certified forecasting experiments
 
 The commands below are run from **extensions/certified_forecasting** inside
-the complete parent repository. The KAHM feature construction imports the
-inherited reconstruction implementation from the repository root.
+the complete parent repository. KAHM feature construction imports the
+reconstruction implementation from the repository root. The
+[scientific study guide](STUDY_GUIDE.md) explains the questions, estimands, and
+independent sampling units. This guide specifies the computational procedures
+and the evidence available for reproducing each result.
+
+Mean squared error (MSE) is the expected squared prediction error under the
+study's episode and forecast-origin law. Root-mean-square error (RMSE) is its
+square root. An upper confidence endpoint evaluates a fitted predictor; a lower
+endpoint applies to every decoder in the stated representation class. The
+confidence allocation is stated for each study and should not be extended to
+other studies or repeated fits without an additional multiplicity argument.
 
 ## Reference environment
 
@@ -35,7 +45,7 @@ Synthetic experiments need no downloaded datasets. PenDigits preparation
 requires network access on the first run and either the gzip executable or
 the optional Python package unlzw3.
 
-## Retained experiments
+## Forecasting and two-atom experiments
 
 | Experiment | Configuration | Retained results | Evaluation |
 |---|---|---|---|
@@ -192,10 +202,11 @@ frozen scaler together with the fitted model.
 
 The original retained campaign manifests refer to source commit
 `a8bcf6c8016499e1a4b64f7dd4196af43c60bd78`. Audit those historical source hashes
-in a separate checkout of that commit. Adding optional scaling and safer
-archive publication changes source bytes even though default numerical
-behavior is preserved. Historical manifests must not be rewritten to match
-the newer implementation; new runs retain their own source/config hashes.
+in a separate checkout of that commit. The source version in a manifest is part of an experiment's identity.
+Implementations with different optional preprocessing or archive-writing code
+have different hashes even when their default numerical behavior agrees.
+Every execution therefore records its own source and configuration hashes;
+archived manifests continue to identify the sources used for those runs.
 
 Each forecasting NPZ archive is written through a temporary file,
 flushes and fsyncs it, then atomically renames it. A completed `results.json`
@@ -205,16 +216,15 @@ the completed filename. Existing archives and run directories are not
 overwritten. These storage checks do not alter any fitted prediction or
 statistical formula.
 
-## Matched geometry/head follow-up
+## Matched geometry and decoder comparison
 
 The [matched-comparison protocol](MATCHED_GEOMETRY_PROTOCOL.md) was specified
-before fitting. It adds RBF and affine-hull controls with Frobenius-constrained
-and iterated decoders to the earlier comparison. All seven existing tasks, all four scaling
-options, three geometries, three heads, and four retained dimensions are
-included. Seeds 5701--5705 regenerate all synthetic streams and give new
-PenDigits training subsamples on the same held-out writers. The historical
-main, sensitivity, oscillator, real-data, and input-scaling records remain
-unchanged.
+before fitting. It compares KAHM, radial basis function (RBF), and local
+affine-hull features under three decoders: direct prediction with a sum of
+block Frobenius norms, direct prediction with an overall Frobenius norm, and
+iterated affine feature-transition prediction. The design includes seven
+tasks, four preprocessing options, and four retained feature dimensions. Seeds 5701--5705 regenerate all synthetic streams and give new
+PenDigits training subsamples on the same held-out writers. Each study has its own result directory and source manifest.
 
 The reference configurations are `configs/matched_geometry_main.json`,
 `configs/matched_geometry_oscillators.json`, and
@@ -277,6 +287,31 @@ ZIP retains the union of primary and head-selected full-precision synthetic
 scores. Archive members are re-read and verified against their original
 hashes; selected arrays are checked exactly against the full source archives.
 Full score arrays are reproducible with the runner and are excluded from Git.
+
+For exact fitting-source reproduction, the archived snapshot preserves both
+parent helper modules and the required extension ancestry. With the reference
+Python environment activated, run from the extension directory:
+
+```bash
+matched_snapshot_dir="$(mktemp -d)"
+tar -xzf results/matched_geometry_study/source_snapshot.tar.gz \
+  -C "$matched_snapshot_dir"
+cd "$matched_snapshot_dir/extensions/certified_forecasting"
+export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
+export PYTHONPATH=src
+python experiments/prepare_pendigits.py --output-dir data_cache/pendigits
+python experiments/run_matched_geometry.py \
+  --output results/reproduced_matched_geometry --workers 6 \
+  --prepared data_cache/pendigits/pendigits_original.npz
+python experiments/analyze_matched_geometry.py \
+  --study results/reproduced_matched_geometry \
+  --output results/reproduced_matched_geometry_analysis
+```
+
+The snapshot contains the recorded fitting and analysis sources, not Git
+history. Its documented source/configuration hashes identify the computation.
+A resumed execution must use those same sources; an edited source tree requires
+a separate output directory and its own manifest.
 
 An additional standard-library implementation reconstructs the primary
 selections and all 42 taskwise effects without importing the runner or analyzer:
@@ -356,13 +391,45 @@ recomputing those moments requires the episode-score audit below.
 
 ## Episode-score audit and deterministic replay
 
-The original full-score audit requires the complete episode-score archives
-and source files matching the campaign manifest. Historical source checks
-refer to commit `a8bcf6c8016499e1a4b64f7dd4196af43c60bd78`; later editorial or
-implementation changes intentionally produce different file hashes. The
-following commands assume that the required archives and matching source
-snapshot have been restored. They are not full-score checks of the scalar-only
-Git checkout.
+The full-score audit requires complete episode-score archives and source files
+matching the campaign manifest. The main-campaign source checks refer to commit
+`a8bcf6c8016499e1a4b64f7dd4196af43c60bd78`. They compare file bytes, including
+comments and docstrings, with the recorded SHA-256 values. A documentation-only
+edit inside a Python source file therefore changes its identity even when the
+executable calculations are unchanged. Do not replace a recorded hash with
+the hash of a different source version or disable the check.
+
+To reproduce and verify the main campaign with its recorded source version,
+activate the reference Python environment described above, then run the
+following from the **repository root**. The fetch obtains the exact commit
+when it is absent from a shallow clone; the separate worktree preserves the
+current checkout.
+
+```bash
+git fetch origin a8bcf6c8016499e1a4b64f7dd4196af43c60bd78
+forecast_replay_parent="$(mktemp -d)"
+git worktree add --detach "$forecast_replay_parent/reference" \
+  a8bcf6c8016499e1a4b64f7dd4196af43c60bd78
+cd "$forecast_replay_parent/reference/extensions/certified_forecasting"
+export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
+export PYTHONPATH=src
+python experiments/run_forecasting.py \
+  --config configs/main_v1.json --output results/reproduced_main_v1
+python scripts/audit_results.py \
+  --campaign results/reproduced_main_v1 --config configs/main_v1.json \
+  --output results/reproduced_main_v1_check.json
+```
+
+This procedure generates and verifies a replay under the archived source.
+Auditing the original result directory additionally requires its complete
+`episode_scores.npz` files. Restoring a source checkout does not supply arrays
+excluded from Git. For other campaigns, use the source commit or snapshot
+identified by that campaign's own manifest; the main-campaign commit is not a
+universal source version for all studies.
+
+The commands below assume that the original full-score archives and matching
+source files have been restored. They are not full-score checks of a
+scalar-only checkout.
 
 Audit the original main campaign:
 
@@ -562,8 +629,8 @@ The first reconstructs the original empirical tables, exact-risk benchmark,
 writer aggregation, and confidence arithmetic from saved sufficient statistics.
 The second reads the scaling record archives directly and reconstructs model
 selection and mean-effect summaries. Neither reconstructs missing full synthetic
-score archives. The [scientific verification report](SCIENTIFIC_VERIFICATION.md)
-records the checks performed for the revised manuscript.
+score archives. The [verification archive](ARCHIVE_INDEX.md) identifies the source versions
+and scope of the available reconstruction checks.
 
 With latexmk, pdfLaTeX, BibTeX, and the packages loaded by paper/main.tex:
 
@@ -605,16 +672,17 @@ python experiments/witness_comparison/analyze.py \
 
 The analysis exports every trial and secondary method. Its checks reconstruct
 76,800 endpoints and verify guarded primal/dual optimization brackets. The
-retained source/protocol and subsequent analysis-only corrections are described
+source versions, protocol hash, and reporting provenance are documented
 in `results/witness_comparison/SOURCE_AND_AUDIT.md`. Numerical brackets are
 checked in floating point, not formal interval arithmetic. Each method has a
 separate 0.05 failure budget; the comparison is not one joint 95% statement
 across methods or simulated trials.
 
-## Positive-tolerance class decisions
+## Representation-cost decisions at a positive error tolerance
 
-The controlled decision study has three predefined retained classes, costs
-1/3/5, and a common sensitivity budget. It compares upper-only acceptance with
+The controlled decision study compares three representation classes with
+costs 1, 3, and 5, measured by feature-coordinate count, under a common
+sensitivity budget. It compares upper-only acceptance with
 ordinary or stratified lower calibration under one allocated event covering
 all five sample sizes, both partitions, and all prefixes within a repetition.
 
@@ -670,5 +738,6 @@ identifiers do not create additional independent calibration groups.
 
 The focused speech tests check frame causality, known output bounds, history
 indexing, equal group weighting, and KL inversion. They are included in the
-standard `python -m unittest discover -s tests -v` suite. The new experiment
-runners do not modify the historical forecasting implementations or records.
+standard `python -m unittest discover -s tests -v` suite. The experiment
+runners write to their specified output directories and preserve the archived
+experimental records.

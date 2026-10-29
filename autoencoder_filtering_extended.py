@@ -51,7 +51,7 @@ def autoencoder_filtering_extended(y_data_new, AE, distance_type):
             weights = Kxa @ AE["B"]  # (N_chunk, N_train)
 
             sum_weights = weights.sum(axis=1, keepdims=True)  # (N_chunk, 1)
-            # Avoid division by zero: if sum_weights == 0, keep the row as zeros.
+            # A zero normalizer is replaced by one, leaving that weight row unnormalized.
             sum_weights_safe = sum_weights.copy()
             sum_weights_safe[sum_weights_safe == 0] = 1.0
             weights = weights / sum_weights_safe
@@ -67,7 +67,7 @@ def autoencoder_filtering_extended(y_data_new, AE, distance_type):
 
         weights = Kxa @ AE["B"]  # (N_new, N_train)
         sum_weights = weights.sum(axis=1, keepdims=True)  # (N_new, 1)
-        # Avoid division by zero: if sum_weights == 0, keep the row as zeros.
+        # A zero normalizer is replaced by one, leaving that weight row unnormalized.
         sum_weights_safe = sum_weights.copy()
         sum_weights_safe[sum_weights_safe == 0] = 1.0
         weights = weights / sum_weights_safe

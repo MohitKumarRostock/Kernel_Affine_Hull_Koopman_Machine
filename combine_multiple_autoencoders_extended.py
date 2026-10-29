@@ -13,7 +13,7 @@ def combine_multiple_autoencoders_extended(y_data_new, AE_arr, distance_type):
     y_data_new : ndarray, shape (D, N)
         New data samples (columns are samples).
     AE_arr : list
-        List of autoencoder objects (dicts if you use the earlier `autoencoder` implementation).
+        List of autoencoder model dictionaries returned by `autoencoder`.
     distance_type : str
         Distance type passed to `autoencoder_filtering_extended`
         (e.g. 'folding', 'product', 'minimum', 'maximum', 'cosine').

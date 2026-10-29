@@ -7,7 +7,7 @@ Geometry-Induced Soft State Abstractions**,
 [arXiv:2609.32652v3](https://arxiv.org/abs/2609.32652v3).
 
 This directory contains an executable forecasting method, finite-sample
-prediction-risk certificates, retained experiment summaries, and reproducibility
+prediction-risk certificates, complete experiment summaries, and reproducibility
 utilities. The [manuscript](paper/) develops the mathematical results, specifies
 their assumptions, and reports the empirical comparisons.
 The software and supporting evidence are maintained as a reusable research
@@ -23,8 +23,10 @@ the generic risk and refinement results also apply to other feature maps.
 
 The analysis separates the contribution of the geometric representation, the
 choice of forecasting decoder, and the information supplied by finite-sample
-certificates. The [study overview](docs/MANUSCRIPT_REVISION.md) relates the
-comparisons to these three questions.
+certificates. The [scientific study guide](docs/STUDY_GUIDE.md) explains the
+prediction task, the meaning of each certificate, and the evidence addressing
+these three questions. The [implementation guide](IMPLEMENTATION_NOTES.md)
+defines the feature and decoder notation used by the software.
 
 ## Method
 
@@ -33,21 +35,25 @@ comparisons to these three questions.
    normalization.
 2. Retain dictionaries of 2, 4, 8, and 16 soft states. Their concatenated prefix
    dimensions are 2, 6, 14, and 30. Earlier coordinate functions remain fixed.
-3. Fit direct multi-horizon raw-output decoders with an unpenalized intercept,
-   known-range output clipping, and a constraint on the **sum of block
-   Frobenius norms**. An explicit convex objective gap records solver accuracy.
+3. Fit a decoder that predicts the observed output at each requested forecast
+   horizon. The decoder has an unpenalized intercept and a constraint on the
+   **sum of block Frobenius norms** of its coefficient matrices. Predictions
+   are clipped to the known target range. A computed upper bound on the
+   remaining training-objective error records solver accuracy.
 4. Freeze all candidate models. Use independent complete calibration episodes
    for an upper confidence bound on each fitted predictor's population MSE.
-5. Pair episodes disjointly at matching forecast origins. The squared positive
-   target-distance discrepancy supplies a lower bound for every decoder in a
-   specified Lipschitz class. A stratified alternative pairs within frozen
-   history groups and accounts for estimated group probabilities. The general
-   method combines class exclusions with fitted-model acceptance to bound the
-   minimum feasible representation cost among predefined classes. Equal finite
-   endpoints certify that cost; exclusion of every class certifies infeasibility.
-   Other decisions remain unresolved. The standalone example implements the
-   original common-origin certificate; the controlled decision study implements
-   the stratified and cost extensions.
+5. Form disjoint pairs of episodes and compare their targets at the same
+   forecast origins. A Lipschitz constraint limits how far apart their
+   predictions can be for a given feature distance. Target separation beyond
+   that limit gives a lower bound on prediction risk for the entire decoder
+   class. Stratified pairing makes these comparisons within groups defined
+   from histories before calibration, and accounts for uncertainty in group
+   probabilities. Combining class lower bounds with fitted-model upper bounds
+   can certify the minimum feasible representation cost among predefined
+   classes. If every class is excluded, the tolerance is infeasible within that
+   family. Otherwise the available bounds may leave the decision unresolved.
+   The standalone example implements common-origin calibration; the controlled
+   decision study also implements stratified calibration and cost decisions.
 
 The lower, upper, and improvement statements have different meanings. A zero
 lower bound does not prove a representation adequate. A large upper bound does
@@ -68,9 +74,10 @@ not invariant to duplicating coefficient blocks.
   can overlap and be arbitrarily dependent.
 - The prediction target has a known population range. Training minima/maxima
   and clipping predictions alone do not establish that range.
-- Histories, horizons, origin distribution, representation, candidates, and
-  sensitivity budgets, partitions, and concentration methods are frozen before calibration, or a separately justified
-  fresh-data adaptive protocol is used.
+- Histories, horizons, origin distribution, representations, candidates,
+  sensitivity budgets, partitions, and concentration methods are fixed before
+  calibration. An adaptive procedure instead requires a separately justified
+  protocol with fresh evaluation data.
 - The certificate concerns **expected squared error**, averaged over a new
   episode and the stated origins. It is not a conditional prediction interval
   for every future observation.
@@ -131,7 +138,7 @@ retained runs. Failures are recorded instead of silently removed.
 The input-scaling study evaluates a task-dependent modeling choice. Min–max preprocessing
 improves the soft KAHM PenDigits forecaster, including new fitting seeds on the
 same held-out writers, but some synthetic settings and hard KAHM assignments
-regress. The original default remains training mean/std standardization.
+regress. The default is training mean/standard-deviation standardization.
 The [retained comparison](results/input_scaling_study/) and
 [manuscript section](paper/sections/input_scaling.tex) report the full comparison,
 including unfavorable results and the fixed-cohort limitation.
@@ -145,7 +152,7 @@ including unfavorable results and the fixed-cohort limitation.
 | `minmax_clip` | The same fitted map, with transformed queries clipped to `[-1,1]`. |
 | `raw` | Keep the existing raw histories, which are already bounded in these experiments. |
 
-Omitting the new argument preserves the historical `standardize` flag. All
+When `input_scaling` is omitted, the `standardize` flag determines the map. All
 min/max parameters use training histories only, before geometry subsampling;
 training-constant coordinates map to zero. Targets and error units are
 unchanged. Experiment configs can opt in using `"kahm_input_scaling": "minmax"`;
@@ -163,8 +170,8 @@ python experiments/run_input_scaling.py \
 The runner freezes new config copies and source manifests, retains all
 candidates and failures, and uses separate processes with explicit per-job
 scaling settings. See the reproduction guide for subsets and score audits.
-Historical manifests remain pinned to their original source bytes; they are
-not rewritten to match the new optional API.
+The source hashes in each manifest identify the implementation used for that
+execution; reproducing an archived run requires its recorded source version.
 
 ## Matched geometry and forecasting heads
 
@@ -191,10 +198,10 @@ python experiments/analyze_matched_geometry.py \
   --output results/reproduced_matched_geometry_analysis
 ```
 
-The new controls are opt-in through `"matched_geometry_heads": true` and
+The matched candidate families are enabled by `"matched_geometry_heads": true` and
 `"input_scaling_by_kind": {"kahm": "minmax", "rbf": "minmax", "affine": "minmax"}`
 in configuration copies. Earlier configurations retain their original
-candidate families and numerical behavior. The reference follow-up comprises
+candidate families and numerical behavior. The matched study comprises
 13,440 candidate fits. Its scalar records, all writer losses, complete score
 index, and analysis are retained in `results/matched_geometry_study/`.
 
@@ -206,11 +213,12 @@ not joint over every task or seed. PenDigits comparative effects are
 descriptive on the original held-out writer cohort. Equal dimensions and
 search options do not imply identical model capacity or computational cost.
 
-## General certificate and second-domain studies
+## Certificate comparisons, cost decisions, and speech forecasting
 
-Three separate, reproducible studies strengthen the mathematical and empirical
-assessment. Their protocols are recorded before their new calibration draws;
-these archived specifications are not external preregistrations.
+Three studies evaluate lower-bound accuracy, representation-cost decisions,
+and speech-energy forecasting. Their protocols specify the designs before
+calibration observations are drawn or inspected. These archived specifications
+are not external preregistrations.
 
 - [Witness comparison](experiments/witness_comparison/): range-aware centered,
   disjoint-pair, certified empirical-minimum, and estimated-mass stratified
@@ -224,12 +232,15 @@ these archived specifications are not external preregistrations.
   a frozen upper-calibration protocol. The initial scoring-order deviation and
   identical strict-order replay are retained explicitly.
 
-The new concentration comparators use established bounded-loss inequalities;
-they are not claimed as new concentration theory. The paired Lipschitz
-regression argument has a close antecedent in Akash et al. (2021). The added
-analysis concerns witness slack, conditional pairing with estimated masses,
-compatible-stratum sharpness, and decisions obtained by combining upper and
-lower certificates. See the [literature account](docs/LITERATURE_AUDIT.md).
+The concentration comparators use established bounded-loss inequalities.
+The paired Lipschitz regression argument has a close antecedent in Akash et al.
+(2021). The manuscript analyzes the difference between the pairwise bound and
+the minimum achievable risk, conditional pairing with estimated group masses,
+and decisions obtained by combining upper and lower certificates. It also
+identifies when conditional bounds are sharp and their optimal decoders can
+be combined into one globally admissible decoder. The manuscript's
+[related-work section](paper/sections/related_work.tex) gives the literature
+context.
 
 ## Use your own independently sampled episodes
 
@@ -253,17 +264,17 @@ choice rather than being labeled certified.
 
 ## Experimental evidence
 
-| Study | Retained scope | Main finding |
+| Study | Experimental scope | Main finding |
 |---|---|---|
-| Original known-risk calibration | 28,800 two-atom trials | One observed joint certificate violation. Its centered comparator underused known range information; the stronger comparison below corrects this limitation. |
+| Two-atom calibration | 28,800 trials | One observed joint certificate violation. The centered comparator in this experiment does not use the known zero input variance in the collapsed case; the eight-law comparison includes a range-aware comparator. |
 | General lower-bound comparison | Eight laws, 9,600 trials, 76,800 endpoints | Empirical-minimum calibration is often tighter. Stratification recovers some population obstructions but can worsen others; all adverse outcomes are retained. |
 | Positive-tolerance decision study | 200 independent regime/repetition instances, 600 fits | Stratified bounds certify minimum cost or joint infeasibility among three declared classes at large sample sizes. Upper-only selection returns the same accepted predictor. |
 | Speech energy | 7,178 clips, 1,630 recording identifiers, 978 calibration groups, three fits | Six learned families certify the all-horizon 18 dB resolution under the stated sampling assumption; tighter tolerances remain unresolved. Conventional regressors are more accurate than KAHM. |
 | Main dynamics | 20 complete runs, 800 candidates | Useful all-horizon KAHM certificates on some tasks, unresolved decisions on others; several simpler baselines are more accurate. |
-| Norm-budget follow-up | 36 runs, 756 candidates, fresh seeds | Increasing the budget from 1 to 4 matters; moving from 4 to 16 gives little additional KAHM benefit in these settings. |
+| Norm-budget sensitivity | 36 runs, 756 candidates, fresh seeds | Increasing the budget from 1 to 4 matters; moving from 4 to 16 gives little additional KAHM benefit in these settings. |
 | Van der Pol and Duffing | 6 runs, 240 candidates | Certificates refer to a bounded sensor observation; different comparison methods outperform KAHM on these examples. |
 | Original PenDigits | 240 candidates, 13 eligible held-out writers | AR and quadratic regression outperform KAHM; writer-level population bounds are too wide for useful tight tolerances. |
-| Matched geometry/head follow-up | 124 jobs, 13,440 candidates, five fresh fitting seeds | KAHM improves over the named geometry in 28 of 42 task/head comparisons and regresses in 14; nonlinear AR and PenDigits show selective gains, while the new affine oscillator controls are stronger. These are descriptive counts. |
+| Matched geometry/decoder comparison | 124 jobs, 13,440 candidates, five fresh fitting seeds | KAHM improves over the named geometry in 28 of 42 task/head comparisons and regresses in 14; nonlinear AR and PenDigits show selective gains, while affine-hull controls are stronger on the oscillator tasks. These are descriptive counts. |
 
 The main analysis retains 119 positive KAHM class-risk lower endpoints out of
 480 candidate–horizon statements and 72 positive certified adjacent-refinement
@@ -276,8 +287,8 @@ harmonic replay matched every non-timing JSON result and every value in 120
 score arrays exactly. Additional audit reports cover the sensitivity and
 oscillator studies. These numerical checks assess implementation and retained
 records; the statistical interpretation still depends on the stated sampling
-and independence assumptions. The [scientific verification report](docs/SCIENTIFIC_VERIFICATION.md)
-records the subsequent proof, implementation, and numerical consistency checks.
+and independence assumptions. The [verification archive](docs/ARCHIVE_INDEX.md) identifies the numerical
+checks, their source versions, and their scope.
 
 ## Files and provenance
 
@@ -292,7 +303,8 @@ records the subsequent proof, implementation, and numerical consistency checks.
 - `tests/`: mathematical invariants, causal indexing, budget/metric matching,
   optimization checks, and defensive input validation.
 - `examples/`: an end-to-end fit, certify, save, and predict interface.
-- `docs/`: mathematical details, related literature, data provenance, and reproduction procedures.
+- `docs/`: the scientific study guide, implementation context, data provenance,
+  reproduction procedures, and an index of version-specific verification records.
 
 Large generated `episode_scores.npz` files and downloaded source data are not
 checked into Git. They are reproducibly regenerated by the supplied runners;
@@ -304,5 +316,6 @@ Exact-risk trial rows are retained as `trials.csv.gz`.
 
 Original code inherits the parent repository's MIT license. Original generated
 research results inherit its CC BY 4.0 terms. PenDigits and Speech Commands
-retain their separately cited CC BY 4.0 licenses. The [related-literature account](docs/LITERATURE_AUDIT.md)
-identifies the inherited statistical tools and the scope of the extension.
+retain their separately cited CC BY 4.0 licenses. The manuscript's
+[related-work section](paper/sections/related_work.tex) distinguishes the
+inherited statistical tools from the representation analysis developed here.

@@ -1,133 +1,235 @@
 # Feature construction and numerical methods
 
-## Relationship to the original implementation
+This guide defines the representation and decoder implemented in
+`src/certified_forecasting/`. The [manuscript](paper/) gives the statistical
+results and proofs; the [reproduction guide](docs/REPRODUCIBILITY.md) specifies
+the study configurations and commands. Training-objective accuracy and
+population prediction risk are different quantities, and the software records
+a separate diagnostic for each.
 
-The primary `NestedSoftFeatures(kind="kahm")` feature bank calls the parent
-repository's `train_kahm_state_regime_abstraction` and
-`kahm_folding_distance_matrix`. It does not replace the KAHM reconstruction
-mechanism with nearest-centroid or PCA features. By default, inputs are
-standardized using training-input means and standard deviations. Optional
-preprocessing uses training extrema or leaves the histories unscaled, as
-specified in the [method overview](README.md#optional-kahm-input-scaling).
-Each retained block is trained
-with its own seeded state-space clustering. At most 2,500 training histories
-are used to construct the geometry by default; decoder training can use all
-training histories. Each cluster uses at most 48 KAHM training prototypes by
-default, with at most two retained principal directions. These limits are
-configurable, deterministic computational choices, not statistical assumptions.
+## KAHM features and stable normalization
 
-Associations are evaluated by subtracting `logsumexp` from
-`omega * log(1 - clip(folding_score, 0, 1) + tau)`. This implements the paper's
-normalization in real arithmetic. It deliberately removes the legacy rule that
-replaces a small positive denominator with a uniform vector. Models must be
-fitted and certified using this implemented map; old fitted coefficients and
-old certificates cannot be transferred to it unchanged.
+`NestedSoftFeatures(kind="kahm")` calls the parent repository's
+`train_kahm_state_regime_abstraction` and `kahm_folding_distance_matrix`.
+These functions fit local Kernel Affine Hull Machine (KAHM) reconstruction
+models and evaluate their geometric discrepancy scores. They require the
+extension to remain inside the complete parent repository.
 
-The `affine` comparator fits local PCA affine subspaces to k-means clusters and
-combines a normalized reconstruction residual with a local distance penalty.
-The `rbf` comparator uses normalized Gaussian distances to k-means centers.
-These comparators are distinct geometric feature maps and are not called KAHM.
+Let $x$ be a causal observation history. In dictionary block $b$, let $C_b$ be
+the number of reference groups and let $T_{bc}(x)\in[0,1]$ be the folding
+score for group $c\in\{1,\ldots,C_b\}$. A smaller score indicates a closer
+reconstruction match. For an exponent $\omega>0$ and offset $\tau>0$, the
+soft association with group $c$ is
 
-## Retained feature blocks and nested decoder classes
+$$
+\Phi_{bc}(x)=
+\frac{(1-T_{bc}(x)+\tau)^\omega}
+     {\sum_{r=1}^{C_b}(1-T_{br}(x)+\tau)^\omega}.
+$$
 
-For fitted simplex blocks Phi_1,...,Phi_J, the stage-j feature vector is their
-concatenation `(Phi_1,...,Phi_j)`. Every old coordinate remains unchanged; the
-concatenation is a product of simplices, not a single simplex. An old decoder
-embeds into the next stage by appending zero coefficient rows. Its predictions,
-intercept, and sum of block Frobenius norms are unchanged. Thus fixed-budget
-decoder classes are nested. The primary `BlockBoundedRidge` constrains the sum
-of block norms. Duplicating an existing block does not enlarge this predictor
-class: coefficients on identical blocks can be merged without increasing their
-sum of norms. An ordinary overall Frobenius constraint lacks this protection,
-because spreading coefficients over repeated blocks lowers that norm.
+The vector $\Phi_b(x)=(\Phi_{b1}(x),\ldots,\Phi_{bC_b}(x))^\top$ has
+nonnegative entries summing to one. These entries are relative reconstruction
+affinities; they are not calibrated class probabilities. The default exponent
+is 16 and the default offset is $10^{-6}$.
 
-Separately refitting a higher-resolution map or using a different history length
-does not have this nesting guarantee. Appending blocks does not promise better
-out-of-sample prediction. A squared-Frobenius ridge penalty can still favor
-spreading coefficients over duplicates, even under the block constraint;
-invariance is asserted for the feasible predictor class, not the fitted
-penalized estimator.
+For numerical evaluation, `stable_associations` clips the supplied scores to
+$[0,1]$, computes
+$\ell_{bc}=\omega\log(1-T_{bc}(x)+\tau)$, and returns
+$\exp(\ell_{bc}-\operatorname{logsumexp}_r\ell_{br})$.
+Here $\operatorname{logsumexp}_r\ell_{br}=\log\sum_r\exp(\ell_{br})$,
+evaluated by subtracting the largest log weight before exponentiation.
+This expression is algebraically equal to the normalized affinities above.
+Replacing a small positive denominator by uniform weights would define a
+different feature map even when the relative weights are numerically
+resolvable. Fitting and calibration must use the same implemented map.
 
-## Decoder and numerical optimization
+By default, histories are standardized using training-input means and standard
+deviations. Optional preprocessing uses training extrema or leaves histories
+unscaled, as specified in the [scaling overview](README.md#optional-kahm-input-scaling).
+Each block has its own seeded clustering. The default geometry fit uses at most
+2,500 training histories, at most 48 KAHM reference points per cluster, and at
+most two principal directions. Decoder fitting can use all training histories.
+The configuration records these computational limits; they are not assumptions
+of the statistical certificates.
 
-Let `N` be the number of training histories, `p` the number of retained feature
-coordinates, and `q` the number of joint target coordinates. The feature matrix
-`X` has shape `(N, p)`, the response matrix `Y` has shape `(N, q)`, the
-coefficient matrix `W` has shape `(p, q)`, and the intercept `b` has length `q`.
-`W_s` consists of the rows associated with feature block `s`; `1` is the
-length-`N` vector of ones and `||.||_F` denotes the Frobenius norm.
-The primary `BlockBoundedRidge` solves
+The `affine` comparator fits local principal-component affine subspaces to
+k-means clusters. Its score combines a normalized reconstruction residual with
+a local distance penalty. The `rbf` comparator forms normalized Gaussian
+associations from distances to k-means centers. Both are separate geometric
+feature maps with their own model definitions.
 
-    min_{W,b: sum_s ||W_s||_F <= kappa}
-        (1/N) ||Y - X W - 1 b^T||_F^2 + alpha ||W||_F^2.
+## Retained blocks and the decoder class
 
-Here `kappa` is the coefficient budget and `alpha` is the ridge coefficient
-denoted by `lambda` in the manuscript. The loss sums over target coordinates
-and horizons and averages over training rows.
+At stage $s$, the representation retains the first $s$ fitted feature blocks:
 
-After eliminating the unpenalized intercept by centering, monotone-restarted
-FISTA minimizes this convex quadratic. Its projection first projects the
-vector of block norms onto an l1 ball and then rescales each coefficient block.
-The returned Frank-Wolfe gap upper-bounds regularized objective suboptimality.
-Iteration count, objective, gap, and convergence status are retained. The
-matching input metric is the maximum Euclidean distance over feature blocks.
-The per-horizon Lipschitz bound is the sum of the relevant block column norms.
+$$
+\Gamma_s(x)=(\Phi_1(x)^\top,\ldots,\Phi_s(x)^\top)^\top,
+\qquad p_s=\sum_{b=1}^s C_b.
+$$
 
-The `BoundedRidge` ablation solves
+Thus $p_s$ is the total number of feature coordinates. Each block separately
+sums to one; the stack belongs to a product of simplices. Appending a block
+leaves all earlier coordinate functions unchanged, even when the blocks were
+constructed from different cluster partitions.
 
-    min_{W,b: ||W||_F <= kappa}
-        (1/N) ||Y - X W - 1 b^T||_F^2 + alpha ||W||_F^2.
+A decoder with intercept $a\in\mathbb R^q$ and coefficient blocks
+$W_b\in\mathbb R^{C_b\times q}$ predicts
+$a+\sum_{b=1}^s W_b^\top\Phi_b(x)$ before clipping. The number $q$ is the
+number of jointly predicted target coordinates, including all forecast
+horizons. The constraint is $\sum_b\|W_b\|_{\rm F}\leq\kappa$, where
+$\|\cdot\|_{\rm F}$ is the square root of the sum of squared matrix entries
+and $\kappa\geq0$ is the coefficient budget.
 
-The intercept is eliminated by centering the training feature and target
-matrices. Eigendecomposition of the feature covariance produces ridge
-solutions. If the unconstrained ridge solution exceeds the norm budget, a
-scalar additional Lagrange multiplier is found by bisection. The norm budget
-is joint across all forecast horizons; each individual column has Euclidean
-norm at most that budget. `lipschitz_[h]` stores the actual coefficient norm of
-the fitted horizon-h decoder. The final forecast clips to task-defined target
-bounds. Euclidean projection onto an interval or box is nonexpansive and cannot
-increase squared error for an in-box target.
+An earlier decoder is feasible after a block is appended: assign the new block
+zero coefficients and retain its intercept and other coefficients. Its
+predictions and budget usage are unchanged. If a block is duplicated exactly,
+its two coefficient matrices can instead be merged by addition. The triangle
+inequality shows that merging cannot increase the sum of block norms.
+Consequently, exact duplication leaves the feasible predictor class unchanged.
 
-The primary direct multi-horizon forecast uses the observed history only and
-predicts each raw future target. It is not an iterated learned Koopman matrix.
-`KoopmanRidge` supplies an actual iterated baseline: it separately fits an affine
-feature transition and a current-observation decoder, composes the transition
-for each requested horizon, and clips only the final raw output. Effective
-horizon coefficient matrices and their Euclidean Lipschitz bounds are exposed.
-The empirical transition fit does not establish exact Koopman closure. Direct
-quadratic regression and polynomial feature rollout are separate comparison
-methods in the experimental results.
+The feature-space metric and its induced distance on histories are
 
-## Synthetic episode laws
+$$
+\rho_s(u,v)=\max_{1\leq b\leq s}\|u_b-v_b\|_2,
+\qquad d_s(x,x')=\rho_s(\Gamma_s(x),\Gamma_s(x')).
+$$
 
-The four generators have scalar outputs in the known interval [-1,1].
-`harmonic` and `quasiperiodic` actually have the tighter absolute bound 0.88;
-using [-1,1] remains valid. Innovation and observation noise are uniform and
-bounded. No empirical target maximum is used as a population bound. Random
-initial conditions, parameters, phases, and innovations are independent across
-episodes. Within-episode windows may overlap and are dependent.
+Here $u=(u_1,\ldots,u_s)$ and $v=(v_1,\ldots,v_s)$ are stacked feature
+vectors, with $u_b,v_b\in\mathbb R^{C_b}$, and $\|\cdot\|_2$ is the
+Euclidean norm. The distance between two unclipped predictions is at most
+$\kappa d_s(x,x')$ by the
+triangle inequality and the block-norm constraint. Clipping to a known output
+box cannot increase this distance.
 
-Histories are ordered oldest to newest. All target horizons for a candidate
-share the same valid origin set. To compare history lengths on an identical
-risk target, supply a common `first_origin` at least as large as the maximum
-history length minus one. The certification unit is an independent episode,
-not an individual overlapping window. Stationarity is not required when new
-episodes use exactly the same finite-episode sampling law and origin protocol.
+Separately refitting an entire higher-resolution map or changing the history
+length does not preserve the same coordinate functions and therefore does not
+establish this nesting property. Nesting also concerns the feasible class,
+not the risks of separately fitted estimators. A squared Frobenius ridge
+penalty can decrease when coefficients are spread over duplicates, so the
+penalized fit need not be duplication invariant.
 
-## Implementation checks
+## Convex decoder fitting
 
-The unit-test suite checks: actual original-KAHM fitting and evaluation;
-simplex normalization and retained coordinates; a numerical underflow case
-that formerly gave a spurious uniform vector; decoder norm feasibility and
-first-order optimality; nonexpansive output clipping; zero-padding of a decoder;
-causal history indexing and common origin support; bounded seeded episode
-generation; and persistence using only the latest observation. Additional tests
-verify a known block-ball projection, agreement of the one-block solver with
-the exact constrained ridge solution, the reported optimization gap, duplicate
-block merging, the block-maximum Lipschitz bound, and agreement of composed
-Koopman forecasts with explicit affine rollout. The complete suite also checks
-preprocessing, model-selection rules, retained score archives, and calibration
-formulas. The [verification report](docs/SCIENTIFIC_VERIFICATION.md) gives the
-executed checks and their results. Simulation-based coverage assessment and
-empirical result reconstruction are reported separately from these tests.
+Let $N$ be the number of training histories, let
+$F\in\mathbb R^{N\times p_s}$ contain the feature vectors as rows, and let
+$\mathsf Y\in\mathbb R^{N\times q}$ contain the joint targets as rows.
+Write $W\in\mathbb R^{p_s\times q}$ for the stack of the row blocks $W_b$,
+$a\in\mathbb R^q$ for the intercept, and $\mathbf1_N$ for the length-$N$
+vector of ones. These are the training conventions used in the manuscript.
+`BlockBoundedRidge` solves
 
+$$
+\min_{W,a}\;
+\frac1N\|\mathsf Y-FW-\mathbf1_Na^\top\|_{\rm F}^2
++\lambda\|W\|_{\rm F}^2
+\quad\text{subject to}\quad
+\sum_{b=1}^s\|W_b\|_{\rm F}\leq\kappa.
+$$
+
+The ridge coefficient $\lambda\geq0$ is named `alpha` in the implementation.
+The loss sums over target coordinates and horizons and averages over training
+rows; it is not additionally divided by $q$. The intercept is unconstrained
+and unpenalized. Training rows may be dependent because minimizing this finite
+objective does not require a statistical independence assumption.
+
+Centering the feature and target matrices eliminates the intercept. Let
+$F_c$ and $\mathsf Y_c$ be the centered matrices. The reduced objective is
+$J(W)=N^{-1}\|\mathsf Y_c-F_cW\|_{\rm F}^2+\lambda\|W\|_{\rm F}^2$,
+and its gradient is
+$G(W)=2F_c^\top(F_cW-\mathsf Y_c)/N+2\lambda W$.
+The solver uses accelerated projected gradient steps with monotone restarts,
+based on the fast iterative shrinkage-thresholding algorithm (FISTA).
+
+Projection onto the feasible set first computes each coefficient block's
+Frobenius norm. If their sum exceeds $\kappa$, it finds a nonnegative threshold
+$\theta$ for which
+$\sum_b(\|W_b\|_{\rm F}-\theta)_+=\kappa$, where
+$(v)_+=\max\{v,0\}$. A nonzero block is then multiplied by
+$(1-\theta/\|W_b\|_{\rm F})_+$; a zero block remains zero.
+Feasible inputs require no change, and a zero budget gives the zero coefficient
+matrix.
+
+For a feasible iterate, the recorded Frank--Wolfe gap is
+
+$$
+\mathcal D(W)=\langle G(W),W\rangle_{\rm F}
++\kappa\max_b\|G_b(W)\|_{\rm F}.
+$$
+
+Here $G_b(W)$ is the gradient block associated with $W_b$, and
+$\langle A,B\rangle_{\rm F}=\sum_{i,j}A_{ij}B_{ij}$ is the Frobenius inner
+product. Convexity gives $0\leq J(W)-J^*\leq\mathcal D(W)$, where $J^*$ is
+the minimum feasible objective value. Iteration count, objective value, gap,
+and convergence status are recorded. These are floating-point diagnostics,
+not interval-arithmetic guarantees.
+
+The implementation stores a sensitivity bound for each scalar target in
+`lipschitz_[j]`: it is the sum of the Euclidean norms of the corresponding
+coefficient column across blocks. Here `j` is the zero-based column position
+in the ordered target vector, rather than the numerical forecast horizon. The certificate for a returned predictor
+requires its actual sensitivity to satisfy the budget used for calibration;
+it does not require the training optimizer to reach its exact minimum.
+
+The final forecast projects the affine prediction onto the task's known
+output interval or box. Euclidean projection onto a box is coordinatewise
+clipping. It is nonexpansive and cannot increase squared error when the target
+lies in that box. The training objective uses the unclipped affine predictor;
+all reported forecast losses use the clipped prediction.
+
+## Alternative decoders
+
+`BoundedRidge` replaces the sum-of-block-norms constraint by
+$\|W\|_{\rm F}\leq\kappa$ while retaining the same loss, intercept, and
+ridge term. After centering, an eigendecomposition of the feature covariance
+produces the unconstrained ridge solution. If it exceeds the norm budget, a
+nonnegative additional Lagrange multiplier is found by bisection. The budget
+is joint across all target coordinates and horizons; `lipschitz_[j]` is the
+Euclidean norm of scalar target column `j`.
+
+The overall Frobenius constraint does not have the same duplication invariance
+as the block-sum constraint. Spreading one coefficient block equally across
+identical copies can reduce the overall Frobenius norm and enlarge the
+feasible predictor class.
+
+`KoopmanRidge` fits an affine feature transition and a separate decoder of the
+current observation. It composes the transition for each requested horizon
+and clips only the final observed-output prediction. The software exposes the
+effective horizon coefficient matrices and their Euclidean sensitivity
+bounds. The fitted transition does not establish exact Koopman closure.
+Direct quadratic regression and polynomial-feature rollout are separate
+comparison methods.
+
+## Synthetic episodes and causal histories
+
+The four main generators have scalar observations in the known interval
+$[-1,1]$. The `harmonic` and `quasiperiodic` generators have the tighter absolute
+bound 0.88; using $[-1,1]$ is still valid. Innovations and observation noise
+are uniformly distributed on the configured bounded intervals. No observed
+sample maximum serves as a population bound. Initial conditions, parameters,
+phases, and innovations are sampled independently across episodes. Windows
+within an episode can overlap and be dependent.
+
+Histories are ordered from oldest to newest. All horizons for one candidate
+use a common valid origin set. To compare history lengths under the same risk
+definition, use a common `first_origin` at least as large as the maximum
+history length minus one. The calibration unit is an independent episode,
+not an overlapping window. Stationarity is unnecessary when new episodes
+follow the same specified finite-episode law and origin protocol.
+
+## Numerical and implementation checks
+
+The tests cover KAHM fitting and evaluation, simplex normalization, retention
+of earlier coordinates, numerical underflow in affinity normalization,
+decoder feasibility and optimality diagnostics, output clipping, causal
+history indexing, bounded episode generation, and persistence forecasts.
+Additional tests check projection onto the block-norm constraint, agreement
+with the one-block constrained ridge solution, the optimization gap,
+duplicate-block merging, the block-maximum sensitivity bound, and equivalence
+between composed Koopman forecasts and explicit affine rollout.
+
+The suite also checks preprocessing, model selection, score-archive integrity,
+and calibration formulas. The [verification archive](docs/ARCHIVE_INDEX.md)
+identifies recorded executions and the versions to which their results apply.
+Simulation-based coverage assessment and reconstruction of experimental
+results provide separate checks; neither a unit-test pass nor numerical
+reconstruction establishes the statistical sampling assumptions.

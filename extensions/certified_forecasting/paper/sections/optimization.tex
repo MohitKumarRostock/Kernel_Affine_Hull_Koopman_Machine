@@ -19,13 +19,13 @@ finite objective requires no independence assumption on its rows.
 With intercept $a\in\mathbb R^q$ and coefficient matrix
 $W\in\mathbb R^{p_s\times q}$, solve
 \begin{equation}
- \min_{W,a}\frac1N\|\mathsf Y-\boldsymbol1a^\top-FW\|_{\rm F}^2
+ \min_{W,a}\frac1N\|\mathsf Y-\mathbf1_Na^\top-FW\|_{\rm F}^2
                        +\lambda\|W\|_{\rm F}^2
  \quad\text{subject to}\quad
        \sum_{b=1}^s\|W_b\|_{\rm F}\leq\kappa.
  \label{eq:training-program}
 \end{equation}
-Here $\boldsymbol1\in\mathbb R^N$ is the all-ones column vector,
+Here $\mathbf1_N\in\mathbb R^N$ is the all-ones column vector,
 $W_b\in\mathbb R^{C_b\times q}$ contains the rows associated with
 $F_b$, $\lambda\geq0$ is the ridge coefficient, and $\kappa\geq0$ is
 the block-norm budget. The intercept is neither penalized nor constrained.
@@ -36,12 +36,12 @@ minimizes a convex objective before clipping, not the evaluated clipped
 empirical loss.
 
 Define the row means
-$\bar F=N^{-1}\boldsymbol1^\top F$ and
-$\bar{\mathsf Y}=N^{-1}\boldsymbol1^\top\mathsf Y$, and the centered
+$\bar F=N^{-1}\mathbf1_N^\top F$ and
+$\bar{\mathsf Y}=N^{-1}\mathbf1_N^\top\mathsf Y$, and the centered
 matrices
 \[
- F_c=F-\boldsymbol1\bar F,\qquad
- \mathsf Y_c=\mathsf Y-\boldsymbol1\bar{\mathsf Y}.
+ F_c=F-\mathbf1_N\bar F,\qquad
+ \mathsf Y_c=\mathsf Y-\mathbf1_N\bar{\mathsf Y}.
 \]
 For fixed $W$, minimizing over the intercept gives
 $a^\top=\bar{\mathsf Y}-\bar F W$. Substituting this expression
@@ -80,8 +80,10 @@ have the same row-block partition as $W$. Define $a_b=\|A_b\|_{\rm F}$
 and let $\mathcal P_\kappa(A)$ denote the nearest matrix in
 $\mathcal C_\kappa$ in Frobenius norm. If
 $\sum_ba_b\leq\kappa$, then $\mathcal P_\kappa(A)=A$.
-Otherwise choose a threshold $\theta\geq0$ satisfying
-$\sum_b(a_b-\theta)_+=\kappa$. The projection is
+Otherwise, for $\kappa>0$, choose the unique threshold
+$\theta\in(0,\max_b a_b)$ satisfying
+$\sum_b(a_b-\theta)_+=\kappa$. For $\kappa=0$, take
+$\theta=\max_b a_b$. The projection is
 \begin{equation}
  \bigl[\mathcal P_\kappa(A)\bigr]_b
  =\begin{cases}
@@ -113,19 +115,26 @@ Cauchy--Schwarz gives
  \geq(v_b-a_b)^2.
 \]
 When $a_b>0$, equality is attained by taking
-$B_b=(v_b/a_b)A_b$. Thus matrix projection reduces to the scalar problem
+$B_b=(v_b/a_b)A_b$. When $a_b=0$, the squared distance is $v_b^2$
+and its optimum has $v_b=0$. Thus matrix projection reduces to the scalar problem
 \[
  \min_{v_1,\ldots,v_s\geq0}
        \sum_{b=1}^s(v_b-a_b)^2
        \quad\text{subject to}\quad\sum_{b=1}^s v_b\leq\kappa.
 \]
-If the original norms are feasible, the solution is $v_b=a_b$. Otherwise
-the constraint is active, and the Karush--Kuhn--Tucker optimality
-conditions give $v_b=(a_b-\theta)_+$, with $\theta$ chosen to make the
-sum equal to $\kappa$. Rescaling each nonzero block gives
-\eqref{eq:block-projection}; a zero block remains zero.
+If the original norms are feasible, the solution is $v_b=a_b$. If
+$\kappa=0$, the only feasible vector is zero. In the remaining case the
+budget constraint is active. A multiplier $2\theta$ for that constraint
+reduces each coordinate minimization to
+$\min_{v_b\geq0}(v_b-a_b)^2+2\theta v_b$, whose solution is
+$v_b=(a_b-\theta)_+$. The sum of these coordinates is continuous and
+strictly decreasing from $\sum_b a_b$ to zero as $\theta$ increases from
+zero to $\max_b a_b$, so the required threshold exists and is unique.
+Rescaling each nonzero block gives \eqref{eq:block-projection}.
 
-For the objective gap, convexity gives, for every feasible $V$,
+The feasible set is nonempty and compact, so continuity of $J$ ensures
+that $J^*$ is attained. For the objective gap, convexity gives, for every
+feasible $V$,
 \[
  J(W)-J(V)\leq\langle G(W),W-V\rangle_{\rm F}.
 \]
@@ -155,8 +164,9 @@ associated with the output at horizon $h$. Then
  \leq\sum_b\|W_b\|_{\rm F}\leq\kappa,
 \]
 so the joint budget also bounds each horizon decoder's sensitivity.
-For scalar outputs, $W_{b,h}$ is simply column $h$ and its Frobenius norm
-is its Euclidean norm. Although the block constraint is invariant to exact
+For scalar outputs, $W_{b,h}$ is the column corresponding to $h$ in the
+increasingly ordered horizon list, and its Frobenius norm is its Euclidean
+norm. Although the block constraint is invariant to exact
 feature duplication, the ridge term $\lambda\|W\|_{\rm F}^2$ is not:
 splitting coefficients among duplicate blocks changes that penalty.
 The duplicate-block optimization test therefore uses $\lambda=0$.

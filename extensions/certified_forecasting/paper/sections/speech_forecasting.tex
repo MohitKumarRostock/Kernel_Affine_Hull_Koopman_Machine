@@ -3,9 +3,8 @@
 
 This second real-data domain tests whether a larger number of documented
 recording groups permits useful calibration. We use the official Mini Speech
-Commands subset \citep{warden2018speech,tensorflow2026mini}, with a protocol
-fixed before downloading or inspecting its audio. All prescribed results,
-including unsuccessful tolerances, are retained.
+Commands subset \citep{warden2018speech,tensorflow2026mini}, with an eligibility rule, group split, observable, and model grid specified
+before downloading or inspecting the audio.
 
 \paragraph{Observable and sampling units.}
 Of 8000 source clips, 7178 have the prescribed mono, 16 kHz, signed 16-bit,
@@ -19,8 +18,9 @@ of distinct people. Confidence statements assume iid group-record bundles
 and independence from development data. Identifier separation supports the
 evaluation design but does not establish that population sampling assumption.
 
-Each clip is divided into 100 nonoverlapping frames of 160 samples. For frame
-$t$, let $x_{tj}$ be signed PCM sample $j$ divided by 32768. The observed
+Each clip is divided into 100 nonoverlapping frames of 160 samples. For frame $t\in\{0,\ldots,99\}$ and sample index $j\in\{1,\ldots,160\}$,
+let $x_{tj}$ be the signed pulse-code modulation (PCM) amplitude divided by
+32768. The observed
 energy is
 \[
  e_t=\frac{10\log_{10}\!\left(\max\left\{160^{-1}\sum_{j=1}^{160}
@@ -50,7 +50,7 @@ $2,6,14,30$, standardization or raw inputs, budgets $1,4$, and ridge parameters
 $10^{-4},10^{-2}$. RBF and affine affinity multipliers are $0.25,1,4$;
 KAHM uses its inherited reconstruction. Linear and quadratic regressions
 receive four ridge values; Gaussian-kernel regression uses 128 Nystr\"om
-landmarks and three bandwidth and ridge values. The repository protocol
+landmarks, with three bandwidth choices and three ridge values. The repository protocol
 specifies the complete grids. Every family has both histories. Selection
 minimizes validation MSE across horizons; all 24 selected models are frozen
 before held-out losses are evaluated.
@@ -60,10 +60,13 @@ $[0,1]$ per identifier. The bounded-mean relative-entropy upper bound in
 Appendix~\ref{app:kl-calibration} uses tail probability $0.05/72$, covering
 all $3\times8\times3$ statements jointly. Prespecified tolerances of
 6, 12, and 18 dB are explicit resolution levels, not claimed application
-requirements. Test scoring follows the calibration freeze. The strict-order
-replay exactly reproduces the initial execution's selected predictions,
-group losses, and endpoints; its provenance records the initial scoring-order
-correction.
+requirements. The reported reproduction evaluates calibration losses and fixes the
+confidence endpoints before test scoring. The initial execution
+interleaved calibration and test scoring model by model, so some test losses
+were available before all calibration endpoints had been frozen. The model choices and
+calibration formulas were already fixed; rerunning the same procedure in the
+prescribed order produced identical predictions, group losses, and endpoints.
+These executions use the same data and constitute one study.
 
 \input{tables/speech_forecasting}
 
@@ -82,7 +85,6 @@ the all-horizon 6 or 12 dB criterion. Thus the larger calibration cohort can
 resolve a declared tolerance under the stated sampling model, while leaving
 tighter requirements unresolved. The experiment supports the certification
 procedure without establishing that its tolerance is sufficient for an audio
-application or that KAHM is the best forecaster. Independent verification
-reconstructs every eligible energy curve, all 88,056 group--model--horizon
-losses, and all 72 upper endpoints. Shared geometry costs and inference times
+application or that KAHM is the best forecaster. Reconstruction from the released records recovers every eligible energy curve,
+all 88,056 group--model--horizon losses, and all 72 upper endpoints. Shared geometry costs and inference times
 are archived separately and imply no general computational advantage.

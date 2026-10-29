@@ -1,15 +1,17 @@
 # Class exclusion and the minimum feasible representation cost
 
 This package evaluates whether a lower certificate can support a positive-tolerance
-class decision beyond upper-only acceptance. The fresh experiment uses explicit
-bounded representations and a constructed repeated-episode forecasting mechanism.
-It is an experiment for the general representation theorem, not a KAHM benchmark.
+class decision beyond upper-only acceptance. It uses explicit bounded
+representations and a constructed forecasting law with independent episodes.
+This controlled law tests the general representation theorem; it does not
+measure KAHM forecasting accuracy.
 
 ## Protocol and outcome
 
 The full design is fixed in `protocol.json`. Each episode has observed history
-`(Z,S)` and future `Y`, with independent `S ~ Bernoulli(0.2)` and independent
-uniform signs `Z,R,N`. The repairable regime has `Y=0.8*S*Z+0.1*N`; the
+`(Z,S)` and future `Y`. Here `S ~ Bernoulli(0.2)` takes value one with
+probability 0.2, and `Z`, `R`, and `N` are mutually independent signs, each
+uniform on `{-1,1}` and independent of `S`. The repairable regime has `Y=0.8*S*Z+0.1*N`; the
 irreducible regime has `Y=0.8*S*R+0.1*N`. Successive retained simplex blocks
 have coordinate costs 1, 3, and 5 and share the coefficient budget 2. Their
 exact optimal MSEs are respectively `(0.138,0.138,0.01)` and
@@ -31,8 +33,8 @@ maximum of the two lower endpoints is therefore a declared simultaneous
 comparison, not a partition chosen without multiplicity correction.
 
 Upper-only acceptance and acceptance supplemented by either lower bound use
-the same fitted model and upper endpoint. The added decision is minimum-cost
-certification among the three prescribed classes, or exclusion of all three.
+the same fitted model and upper endpoint. Lower calibration can additionally
+certify minimum cost among the three prescribed classes, or exclude all three.
 It is not a claim of a different selected predictor or a measured saving in
 fitting time. The full run includes the unfavorable small-sample comparison:
 ordinary pairing excludes the constant class at 4,096 episodes when stratified
@@ -51,7 +53,7 @@ python experiments/decision_value/make_assets.py
 
 The runner refuses to overwrite an existing output directory. The asset
 generator reads the retained `results/decision_value/fresh` records and writes
-only the manuscript's `decision_` table and figure assets. All fresh simulated
+only the manuscript's `decision_` table and figure assets. All simulated
 states, fitted coefficients, conditional sufficient statistics, probability
 intervals, endpoints, and decisions are retained. The verifier does not import
 the runner or the certificate implementation. It reconstructs every endpoint,

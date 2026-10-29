@@ -1,9 +1,11 @@
 # Decision-value study: retained results
 
-The fresh experiment evaluates class exclusion at RMSE tolerance 0.30 for
-three predefined representation costs, 1, 3, and 5. The two constructed
-regimes respectively permit repair by the last retained block and contain
-irreducible noise. The exact class-optimal MSEs are `(0.138,0.138,0.01)`
+The experiment evaluates class exclusion at root-mean-square error (RMSE)
+tolerance 0.30 for three predefined representation costs, 1, 3, and 5, measured
+by feature-coordinate count. In the repairable regime, the last feature block
+reveals predictive information absent from the earlier blocks. In the
+irreducible regime, the remaining target uncertainty cannot be removed by any
+of the three representations. The exact class-optimal MSEs are `(0.138,0.138,0.01)`
 and `(0.138,0.138,0.138)`. This is evidence about the general representation
 certificate under a controlled mechanism, with no KAHM-specific performance
 claim.
@@ -21,8 +23,8 @@ were completed. Counts below are out of 100 repetitions.
 | 16,384 | 100 | 0 | 100 | 0 | 1 |
 | 65,536 | 100 | 0 | 100 | 0 | 100 |
 
-Validation accepts cost 5 in every repairable repetition. Upper calibration
-selects that same predictor from 1,024 episodes onward. Lower certification
+Validation selects the cost-5 predictor in every repairable repetition.
+Upper calibration certifies that same predictor from 1,024 episodes onward. Lower certification
 adds a class-level conclusion: both cheaper classes are inadequate, so cost
 5 is minimal within the prescribed family. All irreducible upper decisions
 remain unresolved. At 4,096 episodes, ordinary pairing excludes the constant
@@ -62,7 +64,12 @@ was `9.911812667750958e-11` and every coefficient budget was feasible.
   streams. The verifier checks the LP with vertex enumeration rather than the
   runner's greedy algorithm.
 
-The uint8 state index is
+Each simulated state contains a Bernoulli variable `S` with probability 0.2
+of value one, and three mutually independent uniform signs `Z`, `R`, and `N`,
+independent of `S`. A uniform sign takes values -1 and 1 with equal probability.
+The observed history is `(Z,S)`. The future target is `0.8*S*Z + 0.1*N` in the
+repairable regime and `0.8*S*R + 0.1*N` in the irreducible regime. The unsigned
+8-bit integer (`uint8`) state index stored in the archives is
 `8*S + 4*((Z+1)/2) + 2*((R+1)/2) + (N+1)/2`. Calibration archive rows are the
 100 repetitions in increasing seed order. Each smaller calibration sample
 is the declared initial segment of that row. Known population masses and

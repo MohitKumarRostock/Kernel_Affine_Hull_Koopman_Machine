@@ -2,11 +2,11 @@
 \label{sec:input-scaling}
 \input{tables/input_scaling_numbers}
 
-The original experiments standardize histories using training means and
-standard deviations. To test scale sensitivity, we compare this with training
-min--max scaling, its clipped version, and raw histories. If $a_j,b_j$ are the
-minimum and maximum of coordinate $j$ over all training histories, the primary
-alternative is
+The forecasting experiments in Section~\ref{sec:experiments} standardize
+histories using training means and standard deviations. To test scale sensitivity, we compare this with training
+min--max scaling, its clipped version, and raw histories. For a history vector $x$ and coordinate index $j$, let $a_j$ and $b_j$ be
+the minimum and maximum of that coordinate over all training histories. The
+primary alternative transforms the coordinate to
 \begin{equation}
  z_j(x)=\begin{cases}2(x_j-a_j)/(b_j-a_j)-1,&b_j>a_j,\\0,&b_j=a_j.\end{cases}
  \label{eq:input-minmax}
@@ -19,8 +19,9 @@ fixed. History and prefix selection use validation MSE within each arm;
 test errors do not select an arm.
 
 The first comparison reuses every original fitting seed and budget condition.
-Its hypothesis followed inspection of those results, so its calibration
-endpoints are nominal. A fixed confirmation protocol uses new seeds
+Because this comparison was designed after inspecting the corresponding
+results, its calibration endpoints do not carry a confirmatory confidence
+guarantee for the subsequent choice of preprocessing. A fixed confirmation protocol uses new seeds
 $4701$--$4703$ on all six synthetic systems, with fresh development,
 calibration, and test episodes. PenDigits instead uses new training subsamples
 on the same writer cohort; those comparisons remain descriptive.
@@ -58,10 +59,8 @@ horizon-specific, uncertainty, diagnostic-arm, and budget tables remain in the
 reproducible result archive. At tolerances $0.20,0.35,0.50$, primary scaling
 leaves the all-horizon upper-certification counts unchanged in every reported
 synthetic condition. The allocations cover statements within each arm, not
-selection across arms. Fresh synthetic calibration supports those within-arm
-claims; neither reused original streams nor new PenDigits fitting seeds supply
-fresh calibration populations. Four truncated scaling score archives were
-exactly regenerated with the original source and seeds, with damaged-file
-hashes and replay checks retained. The results support task- and
-architecture-dependent preprocessing, not a universal benefit from bounded
-inputs.
+selection across arms. Fresh synthetic calibration supports those within-arm claims. Reusing the
+main-study streams or changing fitting seeds on the same PenDigits cohort
+does not supply an independent calibration sample for the additional
+preprocessing choices. The results indicate that the effect of preprocessing
+depends on both the task and the forecasting architecture.

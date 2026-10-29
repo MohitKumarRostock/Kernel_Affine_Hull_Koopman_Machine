@@ -1,0 +1,54 @@
+# Experimental provenance and verification archive
+
+The scientific descriptions of the method and experiments are in the
+[study guide](STUDY_GUIDE.md), [implementation guide](../IMPLEMENTATION_NOTES.md),
+[reproduction guide](REPRODUCIBILITY.md), and [manuscript](../paper/).
+The records indexed here establish which source versions, protocols, and
+numerical checks support particular executions.
+
+An archived record applies to the source version, data, and outputs identified
+by its hashes or commit identifiers. Its page counts, test counts, and
+byte-equality statements describe that recorded version. They should not be
+interpreted as measurements of every subsequent manuscript or software
+version. Historical review accounts preserve their contemporaneous language
+so that the development and verification history remains traceable.
+
+## Experimental protocols and source records
+
+| Record | Scope |
+|---|---|
+| [Witness protocol](../experiments/witness_comparison/protocol.md) and [source record](../results/witness_comparison/SOURCE_AND_AUDIT.md) | Predraw design, source hashes, all simulated trials, and the provenance of derived analyses. The experiment README is included in the frozen source manifest. |
+| [Decision protocol](../experiments/decision_value/protocol.json) and [results](../results/decision_value/README.md) | The controlled episode law, confidence allocation, complete outcomes, and source/model freezes. |
+| [Speech protocol](../experiments/speech_forecasting/protocol.md) and [evaluation provenance](../experiments/speech_forecasting/README.md#evaluation-order-and-source-provenance) | Group allocation, observable, candidate design, and the original execution and strict-order replay. |
+| [Scaling protocols](../results/input_scaling_study/protocols/) and [study records](../results/input_scaling_study/README.md) | Original-seed and confirmation designs, source snapshots, complete records, and score-archive repair provenance. |
+| [Matched-geometry frozen protocol](../results/matched_geometry_study/protocol.md) and [design explanation](MATCHED_GEOMETRY_PROTOCOL.md) | Full task and candidate grid, source identities, confidence allocation, and evaluation-cohort limitations. |
+
+Protocols, raw observations, numerical results, manifests, source snapshots,
+and verification logs are preserved as execution records. The source hashes in
+a manifest continue to identify the files used for that execution. Readers
+reproducing an archived execution should restore the corresponding source
+version or snapshot as specified in the reproduction guide.
+
+## Version-specific scientific review records
+
+| Record | Scope |
+|---|---|
+| [Scientific verification](SCIENTIFIC_VERIFICATION.md) | Mathematical, implementation, empirical-arithmetic, and literature checks for the identified versions. |
+| [Theory review](THEORY_AUDIT.md) | Proof and notation checks, assumptions, and limitations recorded during theoretical review. |
+| [Literature review](LITERATURE_AUDIT.md) | Source retrieval and attribution assessment at the recorded review date. |
+| [Manuscript scope review](MANUSCRIPT_SCOPE_AUDIT.md) | Interpretation of the initial forecasting, input-scaling, and matched-geometry studies. |
+| [Scientific extension record](SUBSTANTIVE_REVISION.md) | Changes relative to the identified predecessor commit, together with checks and numerical outcomes. |
+| [Earlier study overview](MANUSCRIPT_REVISION.md) | A version-specific scientific overview retained for provenance; the current reader-facing overview is the study guide. |
+| [Readability verification](../verification/readability_scientific_revision/) | Test, arithmetic, source-identity, and layout checks for the associated edition. |
+| [Length and format verification](../verification/length_format_revision/) | Layout and asset checks for the associated edition. |
+| [Scientific-extension verification](../verification/substantive_revision/) | Test logs, endpoint reconstructions, empirical summaries, and PDF checks for the associated edition. |
+
+## Interpretation of verification
+
+A source hash identifies bytes; it does not establish mathematical correctness.
+An independently reconstructed endpoint checks the numerical calculation
+conditional on the stored losses or moments. A deterministic replay additionally
+checks a specified data-generation and fitting execution. Monte Carlo coverage
+frequencies describe the finite set of simulated conditions and have simulation
+uncertainty. Each form of evidence has its stated scope, and none establishes
+unverified population sampling assumptions.

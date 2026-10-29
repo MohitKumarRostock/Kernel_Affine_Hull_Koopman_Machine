@@ -1,13 +1,15 @@
 \section{Lower-bound comparisons beyond two atoms}
 \label{sec:witness-comparison}
 
-The two-atom law in Proposition~\ref{prop:two-atom} has an exact population witness. We now
-separate population slack from calibration error on eight fixed finite laws
-(Table~\ref{tab:witness-laws}), including deterministic targets, noise,
-partial collapse, rare conflicts, and an affine--Lipschitz class mismatch.
+The two-atom law in Proposition~\ref{prop:two-atom} has an exact population
+witness. To distinguish a loose population bound from finite-sample uncertainty,
+we evaluate eight finite-support distributions (Table~\ref{tab:witness-laws}).
+They include deterministic and noisy targets, histories assigned identical
+features despite different targets, rare conflicting targets, and a case in
+which affine decoders are less expressive than general Lipschitz decoders.
 For every method, $R^*$ is the minimum MSE over the same full scalar
-$1$-Lipschitz class with outputs in $[-1,1]$. This is a certificate comparison,
-not another KAHM forecasting benchmark.
+$1$-Lipschitz class with outputs in $[-1,1]$. These explicit representations isolate the behavior of the certificates;
+they do not measure the forecasting accuracy of learned KAHM features.
 
 \input{tables/witness_laws}
 
@@ -16,17 +18,18 @@ The protocol was recorded before sampling. Each law uses 300 independent
 calibration samples at each $n\in\{64,256,1024,4096\}$, totaling 9,600 trials.
 The four primary methods share each sample and each receive a separate
 one-sided failure probability $0.05$; no joint $95\%$ event across methods
-is asserted. We compare the original disjoint-pair empirical Bernstein (EB)
-bound, the range-aware centered bound in
+is asserted. We compare the disjoint-pair empirical Bernstein (EB) bound in
+Theorem~\ref{thm:episode-certificate}, the range-aware centered bound in
 Appendix~\ref{app:centered-range-aware}, the dual-certified empirical risk
 minimization (ERM) bound with Kullback--Leibler (KL) correction in
 \eqref{eq:erm-kl-lower}, and the
 stratified certificate in Theorem~\ref{thm:stratified-certificate}.
-Primary stratification estimates its masses; it does not receive their true
-values. Primary pair methods retain the generic score range $[0,2]$.
+The primary stratified method estimates the stratum probabilities from the
+calibration data. Both primary pairwise methods use the generic score range
+$[0,2]$, obtained from a target diameter of two.
 Prespecified secondary analyses tighten this range using the known support,
 use known stratum masses, or replace the empirical-minimum correction by
-Hoeffding's bound. All are retained.
+Hoeffding's bound. The result archive includes every secondary analysis.
 
 The empirical and population optimization programs use the full Lipschitz
 class, with global extension from the finite support. Feasible primal and dual
@@ -49,21 +52,20 @@ partition need not help.
 
 Empirical minimization gives the largest mean endpoint on most richer laws;
 the pair bound is larger on the partially separated two-atom and three-point
-laws at $n=4096$. The centered comparator is substantially more competitive
-than the earlier variance correction on a collapsed representation. For the
-earlier setting $n=4096$ and $\eta=.05/3$, using its known zero input variance
-already gives the analytic expectation lower bound $0.90306$ for the old
-centered endpoint, compared with the originally reported mean $0.5327$.
-Thus that earlier gap partly reflects unused structural information; it does
-not establish a general advantage over centered certification.
+laws at $n=4096$. Accounting for a known representation range substantially improves centered
+calibration when the representation is constant. The two-atom comparison in Section~\ref{sec:experiments}
+quantifies how treating a known zero variance as unknown can weaken a centered
+endpoint. Consequently, the relative performance of pairwise and centered
+certificates depends on the estimator and the structural information supplied
+to it.
 
 \begin{figure}[p]
 \centering
 \includegraphics[width=\linewidth]{figures/witness_sample_size.pdf}
 \caption{Mean lower endpoints over all 300 repetitions at each calibration
 size for every prespecified law. Dashed lines show minimum population MSE.
-Each method has its own $95\%$ one-sided confidence statement. Quantiles,
-Monte Carlo uncertainty, secondary methods, and every trial are retained.}
+Each method has its own $95\%$ one-sided confidence statement. The result archive provides endpoint quantiles, Monte Carlo confidence
+intervals, secondary methods, and all individual trials.}
 \label{fig:witness-sample-size}
 \end{figure}
 
@@ -81,8 +83,7 @@ information.
 
 All four primary methods have zero observed coverage violations across the
 prespecified grid. This simulation does not prove coverage; each law--size
-cell has only 300 repetitions, and the release gives binomial Monte Carlo
-intervals. Reconstruction of all 76,800 primary and secondary endpoints
+cell has only 300 repetitions, and the result archive gives binomial Monte Carlo confidence intervals. Reconstruction of all 76,800 primary and secondary endpoints
 agrees within $1.12\times10^{-16}$. At $n=4096$, medians across the eight
 law-wise median computation times are $31.3$, $34.7$, $265.4$, and $165.0$
 $\mu$s for pair EB, centered, empirical minimum, and stratified EB,

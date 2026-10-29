@@ -24,25 +24,25 @@ Software Competence Center Hagenberg, Hagenberg, Austria
 \maketitle
 
 \begin{abstract}
-Can a representation support a prescribed forecasting accuracy, and is a
-more expensive representation necessary? We study these questions using
-Kernel Affine Hull Machine (KAHM) features and sensitivity-constrained decoders.
-A pairwise lower bound measures target separations that exceed the decoder's
-Lipschitz budget. We characterize its slack, establish sharp cases, and exhibit
-arbitrarily loose cases. Stratifying pairs while preserving the marginal risk
-can recover missed obstructions. Finite-sample bounds account for estimated
-stratum masses and combine with fitted-risk upper bounds to certify acceptance,
-exclusion, or minimum feasible representation cost among predefined classes.
-Retained feature blocks with a sum-of-block-norms budget preserve earlier
-predictors and prevent exact duplication from enlarging the class. Experiments
-compare the witness with range-aware variance and empirical-minimum-risk bounds;
-the latter is often tighter. A controlled forecasting study demonstrates
-additional cost and infeasibility decisions, with substantial sample requirements.
-Six synthetic systems, pen trajectories, and speech energy
-illustrate the forecasting procedure. KAHM gains depend on the task and decoder;
-conventional regressors remain stronger on several tasks. Speech calibration
-certifies selected tolerances under an explicit independent-group assumption.
-All guarantees concern expected squared error under a specified evaluation law.
+We study whether a fixed representation can support a prescribed forecasting
+accuracy and whether a more costly representation is necessary. Our approach
+combines Kernel Affine Hull Machine (KAHM) features with decoders whose
+sensitivity is bounded. A pairwise lower bound detects target separations that
+exceed the permitted separation between predictions. We characterize when this
+bound is exact and construct distributions for which it is arbitrarily loose.
+Pairing within predefined strata can improve the bound while preserving the
+population risk being evaluated. Finite-sample certificates account for
+estimated stratum probabilities and combine with upper risk bounds to accept
+fitted forecasts, exclude decoder classes, or certify minimum feasible
+representation cost. Appending feature blocks under a sum-of-block-norms budget
+preserves earlier predictors without enlarging the class when a block is
+duplicated. Experiments compare the pairwise certificate with variance-based
+bounds and bounds obtained by minimizing empirical risk; the latter are often
+tighter. A controlled forecasting experiment demonstrates cost and infeasibility
+decisions, although substantial calibration samples are required. Applications
+include six synthetic systems, pen trajectories, and speech energy. KAHM
+performance depends on the task and decoder. All guarantees concern expected
+squared error under an explicit sampling law.
 \end{abstract}
 \begin{keywords}
 Kernel Affine Hull Machines, time-series forecasting, soft state abstraction,
@@ -68,14 +68,16 @@ representation refinement, prediction risk certification
 The \href{https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/certified-soft-state-forecasting/extensions/certified_forecasting}{accompanying repository} provides the implementation, frozen configurations,
 result summaries, and figure generators in
 \path{extensions/certified_forecasting}; editable manuscript files are in its
-\path{paper} directory. The original forecasting, scaling, matched-geometry,
-witness-comparison, decision-value, and speech experiments have separate
-protocols and evidence directories. These record configurations, source hashes,
-retained scores, all prescribed outcomes, and verification replays. The speech
-archive records an evaluation-order correction and an identical strict-order
-replay. Appendix~\ref{app:protocols} specifies the forecasting configurations
-and independent sampling units. Public data are identified by source and
-checksum; download scripts preserve attribution and license information.
+\path{paper} directory. The forecasting, input-scaling, matched-geometry,
+lower-bound comparison, controlled decision, and speech studies have separate
+protocols and result directories. These provide configurations, source hashes,
+per-episode scores, and outcomes for every prescribed configuration.
+Appendix~\ref{app:protocols} specifies the forecasting configurations and
+independent sampling units. The reproduction guide is
+\path{extensions/certified_forecasting/docs/REPRODUCIBILITY.md}.
+Public data are identified by source and checksum; download scripts preserve
+attribution and license information. Section~\ref{sec:speech} describes the
+speech study's evaluation order and its implications for interpretation.
 
 \paragraph{Use of AI tools.}
 AI tools assisted with derivation exploration, implementation, literature

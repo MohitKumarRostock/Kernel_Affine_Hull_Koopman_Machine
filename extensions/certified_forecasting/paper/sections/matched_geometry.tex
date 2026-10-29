@@ -4,8 +4,10 @@
 
 \paragraph{Design.}
 To separate representation and decoder effects, we compare KAHM, RBF, and
-affine-hull geometry with three prediction heads: block direct
-\eqref{eq:training-objective}, ordinary Frobenius direct, and feature rollout.
+affine-hull geometry with three decoders: direct fitting under the block-norm
+budget in \eqref{eq:training-objective}, direct fitting under an ordinary
+Frobenius-norm budget, and feature rollout. We use \emph{head} as a short name
+for these decoder choices.
 Every geometry--head pair receives the same prefix dimensions $2,6,14,30$,
 two history lengths, and four preprocessing options. Training, horizons,
 origins, regularization, and geometry subsampling follow the original study.
@@ -38,12 +40,12 @@ guarantee, even under an iid-writer assumption.
 \input{tables/matched_geometry_combined}
 
 \paragraph{Results and their limits.}
-All \MatchedCandidates\ candidates completed. Table~\ref{tab:matched-geometry-primary}
+All \MatchedCandidates\ candidate fits completed. Table~\ref{tab:matched-geometry-primary}
 combines absolute MSE, its variation across fits, relative changes, and paired
-seed signs for all \MatchedComparisons\ contrasts. KAHM improves in
-\MatchedImproved\ and worsens in \MatchedDegraded; these contrasts share
-models and tasks and are not independent evidence for universal superiority.
-On nonlinear AR, KAHM beats both geometric alternatives under every head and
+seed signs for all \MatchedComparisons\ contrasts. KAHM has a lower mean MSE in \MatchedImproved\ contrasts and a higher mean MSE
+in \MatchedDegraded. These contrasts share models and tasks, so their signs
+cannot be treated as independent observations.
+On nonlinear AR, KAHM has lower MSE than both geometric alternatives under every head and
 seed. Its block-direct MSE $0.00456$ also improves on ridge AR $0.00511$ and
 quadratic regression $0.00523$.
 
@@ -56,16 +58,17 @@ for ridge AR and $0.00102$ for quadratic regression.
 
 On Van der Pol, KAHM improves on RBF by $14.4$--$17.1\%$, but exceeds affine
 MSE by $9.5\%$, $102.7\%$, and $92.8\%$ across the heads. Corresponding
-Duffing excesses are $13.1\%$, $70.6\%$, and $79.9\%$. Affine geometry
-beats KAHM under Frobenius and rollout heads in every seed on both oscillators.
+Duffing excesses are $13.1\%$, $70.6\%$, and $79.9\%$. Affine geometry has lower MSE than KAHM under Frobenius and rollout heads in
+every seed on both oscillators.
 Mean effects can also oppose most paired signs: favorable quasiperiodic
 block-direct means occur with lower KAHM loss in only two of five seeds.
 
 The complete fixed-dimension curves are released as
 \path{paper/figures/matched_geometry_dimensions.pdf}, generated from all
-fixed-dimension records. PenDigits KAHM beats RBF at every dimension and head;
-its ranking against affine geometry changes with dimension. Nonlinear-AR KAHM
-beats both at 14 and 30 features, with mixed smaller-dictionary effects.
+fixed-dimension records. On PenDigits, KAHM has lower mean MSE than RBF at every dimension and head;
+its ranking against affine geometry changes with dimension. On nonlinear AR,
+KAHM has lower mean MSE than both alternatives at 14 and 30 features, whereas
+the ranking varies at smaller dimensions.
 Because histories and preprocessing are reselected, these comparisons are
 not tests of nesting for fixed blocks.
 

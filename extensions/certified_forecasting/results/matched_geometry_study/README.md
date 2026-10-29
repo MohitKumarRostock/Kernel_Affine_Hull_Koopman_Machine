@@ -1,18 +1,20 @@
 # Matched KAHM geometry and forecasting-head study
 
-This follow-up supplies RBF and affine-hull controls for Frobenius-direct
-prediction and feature rollout. All three geometries receive the same head, history,
-retained-size, and preprocessing choices. Validation selects the models;
-test results do not determine any model choice.
+This study compares Kernel Affine Hull Machine (KAHM), radial basis function
+(RBF), and local affine-hull representations under three forecasting decoders:
+direct prediction with a sum of block Frobenius norms, direct prediction with
+an overall Frobenius norm, and affine feature-transition rollout. Every
+geometry has the same choices of decoder, history length, feature count, and
+preprocessing. Model selection uses validation error only.
 
 The complete frozen schedule finished successfully: **124 jobs and 13,440
 candidate fits**, with zero failures. It covers all seven original tasks,
-five new fitting seeds (5701--5705), all four preprocessing modes, three
+five fitting seeds (5701--5705), all four preprocessing modes, three
 heads, and retained dimensions 2, 6, 14, and 30. The
 [original protocol](protocol.md) preserves the design and confidence allocation.
-The [current statistical interpretation](../../docs/MATCHED_GEOMETRY_PROTOCOL.md)
-clarifies the implications of reusing the PenDigits cohort; the frozen protocol
-remains unchanged.
+The [design and statistical interpretation](../../docs/MATCHED_GEOMETRY_PROTOCOL.md)
+specify the sampling units, confidence allocation, and limits imposed by
+reuse of the PenDigits cohort.
 
 ## Results
 
@@ -23,7 +25,7 @@ not 42 independent replications.
 On nonlinear AR, all six comparisons favor KAHM in all five repetitions.
 On PenDigits, the reduction against RBF is 15.6--17.9% across the three
 heads, with improvements in every repetition. The block-direct comparison
-against affine geometry improves by 12.7% on average. The new affine heads
+against affine geometry improves by 12.7% on average. The affine-hull decoders
 perform substantially better than KAHM on the oscillator tasks. Quadratic
 and AR controls remain more accurate than KAHM on PenDigits.
 
@@ -38,8 +40,9 @@ upper endpoints are nominal: a new confidence interpretation would require
 both iid writer sampling and a study design independent of the evaluation
 writer outcomes, neither of which is established for this follow-up.
 
-See the [scientific interpretation](../../docs/MANUSCRIPT_REVISION.md) for the full
-primary comparison table and its interpretation.
+The [scientific study guide](../../docs/STUDY_GUIDE.md) relates these results
+to the representation and certification questions. The complete primary
+comparison is in [taskwise_comparisons.csv](analysis/taskwise_comparisons.csv).
 
 ## Retained files
 

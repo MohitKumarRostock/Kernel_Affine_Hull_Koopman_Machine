@@ -10,7 +10,7 @@ Example (from the extension directory)::
       --minmax-replay REPLAY/minmax_full/harmonic_1701 \
       --output REPLAY/production_replay.json
 
-Only elapsed timing and the explicitly added min-max scaler metadata are
+Only elapsed timing and explicitly recorded min-max scaler metadata are
 excluded. Every scientific JSON value and every float64 score must agree
 exactly; no numerical tolerance is used.
 """

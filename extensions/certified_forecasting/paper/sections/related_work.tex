@@ -3,7 +3,8 @@
 
 \paragraph{Geometric representations and Koopman prediction.}
 KAHMs learn reconstruction models in reproducing kernel Hilbert spaces
-\citep{kumar2024kahm,kumar2025collaborative}; this construction is inherited.
+(RKHSs) \citep{kumar2024kahm,kumar2025collaborative}. We use these established
+reconstruction models to construct forecasting features.
 Soft state aggregation \citep{singh1994soft}, approximate state abstraction
 \citep{abel2016abstraction}, and task-oriented latent transition models
 \citep{gelada2019deepmdp} likewise distinguish a representation from its
@@ -21,13 +22,13 @@ while preserving a common target and sampling law.
 \citet{kumar2026limits} study norm-bounded linear prediction of successor soft
 coordinates, centered lower certificates, empirical-risk-based alternatives,
 fitted-risk upper bounds, and independent-trajectory evaluation. We use their
-KAHM reconstruction and sampling principle. The present extensions are the
-positive-part pair witness for observed outputs, its exact slack and
-stratification analysis, duplication-invariant retained classes, and
-minimum-feasible-cost certificates. Neither independent-episode calibration
-nor combining an upper bound with a prescribed tolerance is claimed as new.
-The empirical comparison includes a certified empirical-minimum alternative
-rather than only the earlier centered implementation.
+KAHM reconstruction and sampling principle. Our analysis concerns observed-output error and a positive-part pair witness.
+It characterizes the witness's slack, studies stratification, and derives cost
+certificates for classes that preserve earlier feature blocks. The class is
+unchanged when an existing block is duplicated. Independent-episode calibration
+and acceptance based on an upper risk bound are established components of this
+framework. Our experiments compare both centered lower bounds and lower bounds
+obtained by certified empirical-risk minimization.
 
 \paragraph{Pairwise bounds and Lipschitz regression.}
 \citet{akash2021inverse} derive a Lipschitz-constrained mean squared error (MSE) bound

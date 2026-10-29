@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Independently reconstruct the revised absolute-error and variability tables.
+"""Independently reconstruct the absolute-error and fitting-variability tables.
 
 The verifier uses retained selected-model records and the standard library;
-it does not import either table generator. Historical episode-level and new
-speech-loss audits are separate checks of those records.
+it does not import either table generator. Episode-score and speech-loss
+verification provide separate checks of the underlying records.
 """
 import argparse
 from collections import defaultdict

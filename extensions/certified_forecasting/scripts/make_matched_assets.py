@@ -52,7 +52,7 @@ def primary_table(comparisons, n_seeds):
                 cells.append(f"${change:+.1f}$ ({wins})")
         out.append(LABELS[task] + " & " + " & ".join(cells) + r" \\")
     out += [r"\bottomrule", r"\end{tabular}",
-            r"\caption{Matched geometry follow-up: percentage change in test MSE of KAHM relative to the indicated alternative, within each head. Negative values favor KAHM. Parentheses give the number of " + str(n_seeds) +
+            r"\caption{Matched geometry comparison: percentage change in test MSE of KAHM relative to the indicated alternative, within each head. Negative values favor KAHM. Parentheses give the number of " + str(n_seeds) +
             r" fitting seeds with lower KAHM MSE. Preprocessing, history and retained dimension are selected separately for each geometry and head by validation MSE only. Percentages use ratios of MSE averaged over horizons and fitting seeds within each task; PenDigits first pools coordinate losses and equally weights eligible writers. Synthetic calibration comparisons use new episodes and a separate multiplicity allocation. The PenDigits comparisons reuse the same cohort. All test effects in this table are descriptive.}",
             r"\label{tab:matched-geometry-primary}", r"\end{table}", ""]
     return "\n".join(out)
@@ -73,7 +73,7 @@ def mse_table(model_rows):
                  for head in HEADS for geometry in ("kahm", "rbf", "affine")]
         out.append(LABELS[task] + " & " + " & ".join(cells) + r" \\")
     out += [r"\bottomrule", r"\end{tabular}",
-            r"\caption{Absolute test MSE for all nine matched geometry--head families in the follow-up. Each cell averages the predefined horizons and five fitting seeds after validation-only selection of preprocessing, history and retained dimension within that family. PenDigits additionally pools both selected coordinate losses with equal eligible-writer weights on the same evaluation cohort. Corresponding seed variation, per-horizon losses and exact selected candidates are retained in the repository.}",
+            r"\caption{Absolute test MSE for all nine matched geometry--head families in the matched comparison. Each cell averages the predefined horizons and five fitting seeds after validation-only selection of preprocessing, history and retained dimension within that family. PenDigits additionally pools both selected coordinate losses with equal eligible-writer weights on the same evaluation cohort. Corresponding seed variation, per-horizon losses and exact selected candidates are retained in the repository.}",
             r"\label{tab:matched-geometry-mse}", r"\end{table}", ""]
     return "\n".join(out)
 
@@ -180,7 +180,7 @@ def main():
               "MatchedCalComparisons": summary["n_calibration_comparisons"],
               "MatchedCalCertified": summary["n_positive_calibration_lower_bounds"]}
     (tables / "matched_geometry_numbers.tex").write_text(
-        "% Generated from the complete audited matched-geometry follow-up.\n" +
+        "% Generated from the complete matched-geometry analysis.\n" +
         "\n".join("\\newcommand{\\" + key + "}{" + f"{value:,}".replace(",", "{,}") + "}" for key, value in values.items()) + "\n")
     dimension_figure(comparisons, figures / "matched_geometry_dimensions.pdf")
     print(json.dumps({"tables": ["matched_geometry_primary.tex", "matched_geometry_mse.tex", "matched_geometry_numbers.tex"],

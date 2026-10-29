@@ -13,9 +13,10 @@ created by reuse of the PenDigits evaluation cohort.
 
 The study compares KAHM, radial basis function (RBF), and local affine-hull
 features under the same prediction architectures and model-selection
-opportunities. It addresses the absence of RBF and affine-hull Frobenius and
-rollout controls in the earlier experiments. The task panel is unchanged;
-no additional real acquisition domain is introduced.
+opportunities. Crossing all three geometries with all three decoders distinguishes the
+contribution of feature construction from the contribution of the decoder.
+The task panel contains six synthetic systems and the PenDigits acquisition
+domain.
 
 ## Design
 
@@ -114,9 +115,10 @@ confidence interpretation would require both independently and identically
 distributed evaluation writers and model-family specification independent of
 their evaluation losses. Writer sampling is unverified, and the follow-up
 design was informed by earlier results on the same cohort. These endpoints are
-therefore nominal calculations, not new confirmatory population guarantees.
-Paired writer comparisons remain descriptive. This qualification does not
-change any retained numerical endpoint or the fresh-synthetic guarantee.
+therefore nominal calculations rather than confirmatory population guarantees.
+Paired writer comparisons describe the evaluated cohort. The synthetic
+comparisons have the separate sampling design and confidence allocation stated
+above.
 
 ## Evidence and reproducibility
 

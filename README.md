@@ -14,13 +14,13 @@ develops KAHM soft representations for direct prediction of future observed
 outputs, retained representation refinement, and prediction-risk certification.
 Its [editable manuscript](extensions/certified_forecasting/paper/) is titled
 **Certifying Prediction Limits and Representation Refinement with Kernel
-Affine Hull Machines**. The extension includes the original studies, a complete
-input-scaling investigation, and a matched geometry--decoder study designed to
-identify when the KAHM representation contributes to forecasting performance.
-It also includes general lower-certificate comparisons, stratified
-minimum-cost decisions, and recording-group speech-energy forecasting.
-The reported accuracy comparisons include stronger alternatives and unresolved
-certification outcomes.
+Affine Hull Machines**. Its studies evaluate synthetic dynamics, pen
+trajectories, and speech energy; compare input scaling and geometric
+representations under matched decoder choices; and assess lower risk bounds
+and minimum feasible representation cost. The [scientific study guide](extensions/certified_forecasting/docs/STUDY_GUIDE.md)
+explains the questions, independent sampling units, and interpretation of each
+experiment. The comparisons report both improvements and deteriorations, along
+with inconclusive certification outcomes.
 
 Use the extension's own [reproduction guide](extensions/certified_forecasting/docs/REPRODUCIBILITY.md)
 for its Linux/Python environment and experiment commands. The parent KAHKM
@@ -60,7 +60,7 @@ Verify it with:
 
 ### Canonical derived-result generators
 
-Composite or newly canonicalized reported artifacts can be regenerated with:
+The reported composite tables and figures can be regenerated with:
 
 ```bash
 .venv-arm64/bin/python scripts/generate_selection_table.py

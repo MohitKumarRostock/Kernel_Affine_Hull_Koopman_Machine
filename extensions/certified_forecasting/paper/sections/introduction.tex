@@ -1,12 +1,15 @@
 \section{Introduction}
 \label{sec:introduction}
 
-A representation can fit observed trajectories well while discarding distinctions
-needed to predict their futures. This creates two different questions: does a
-particular fitted forecast meet an error tolerance, and can any decoder with a
-specified sensitivity meet it using that representation? We address both for
-expected squared error on a fixed observed signal. Keeping this target and its
-evaluation law fixed makes comparisons meaningful when dictionaries change.
+A forecasting representation maps an observed history to features, and a
+decoder maps those features to future observations. A representation can
+reconstruct past observations accurately while discarding distinctions needed
+to predict their futures. This raises two questions: does a fitted forecast
+meet an error tolerance, and can any decoder with a specified sensitivity meet
+it using that representation? We address both for expected squared error on a
+fixed observed signal. We call a statistically valid bound used to answer one
+of these questions a \emph{risk certificate}. Comparisons between
+representations use the same target and evaluation distribution.
 
 Kernel Affine Hull Machines (KAHMs) provide our principal application. Their
 local reconstruction models produce soft associations between a history and
@@ -15,13 +18,16 @@ maps these associations to future observations. We retain the reconstruction
 mechanism of \citet{kumar2026limits}, who analyze prediction of successor soft
 coordinates and independent-trajectory evaluation. We instead study observed
 outputs, general sensitivity-constrained decoders, and the cost of refining a
-representation. No exact Koopman closure, Markov state, or sufficient learned
-state is assumed.
+representation. The analysis does not require the feature vector to evolve through an exact
+linear transition, to be a Markov state, or to preserve all predictive
+information in the history.
 
 The lower certificate starts from a simple obstruction. If two targets are
 farther apart than the decoder's Lipschitz constraint allows their predictions
-to be, their prediction errors cannot both be small. We average the squared
-positive excess separation over conditionally independent pairs. Related
+to be, their prediction errors cannot both be small. We call this discrepancy a \emph{pairwise obstruction}: it is the excess
+target separation beyond what the sensitivity budget permits. Averaging its
+squared positive part over conditionally independent pairs gives a population
+lower bound, which we call a \emph{witness}. Related
 pairwise Lipschitz regression arguments are established
 \citep{akash2021inverse}; our analysis identifies the resulting witness's
 slack, its dependence on the pairing law, and finite-sample decisions under a
@@ -57,7 +63,8 @@ with matched geometric controls and conventional regression baselines.
 \end{enumerate}
 
 The empirical findings delimit the claims. Empirical-minimum calibration is
-often tighter than the pairwise certificate; stratification can help or hurt.
+often tighter than the pairwise certificate, and stratification can improve
+or weaken a lower bound.
 KAHM accuracy gains depend on the task and decoder. Informative real-data
 certification requires many defensible independent groups and a stated sampling
 assumption. The guarantees concern expected risk under that evaluation law,

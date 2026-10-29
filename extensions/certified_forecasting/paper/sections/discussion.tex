@@ -12,24 +12,25 @@ specified classes and costs; they do not establish globally optimal forecasting
 complexity or runtime.
 
 \paragraph{Population slack and statistical precision.}
-The witness can lose information through averaging residuals and through
-geometric slack, as quantified by Proposition~\ref{prop:witness-slack}.
+Proposition~\ref{prop:witness-slack} identifies two gaps between the witness
+and a decoder's risk: a nonzero conditional residual mean and a loose
+geometric inequality for paired residuals.
 Stratification can repair particular losses but changes the distribution of
 compared pairs and reduces their counts. It can therefore lower either the
-population witness or its finite-sample endpoint. The strengthened benchmark
-finds that empirical-minimum calibration is often tighter, at greater
-optimization cost. The pair witness remains a simple computable certificate,
-not a universally optimal lower bound. Its control of the full Lipschitz
+population witness or its finite-sample endpoint. The finite-support comparison finds that calibration based on the minimum
+empirical risk is often tighter and requires more optimization. The pair witness is inexpensive to evaluate, but it need not approximate the
+optimal risk closely. Its control of the full Lipschitz
 class can also be less informative than a bound tailored to the fitted affine
 subclass. Zero obstruction never certifies representation adequacy.
 
 \paragraph{Scope of refinement.}
-Appending retained blocks preserves old feasible forecasts and avoids capacity
-inflation from exact copies. It does not force independently fitted models to
+Appending feature blocks preserves every earlier feasible forecast. Under the
+block-norm budget, appending an exact copy of a block leaves the class unchanged. It does not force independently fitted models to
 improve, and a ridge penalty can change under duplication even when the class
-does not. Residual correlation with budget slack gives a sufficient improving
-direction; distance expansion supplies a necessary condition for meeting a
-tolerance. Neither proves that unsupervised geometric clustering will discover
+does not. When some coefficient budget remains unused, correlation between a new feature
+block and the prediction residual supplies a sufficient condition for a risk
+reduction. A separate result gives a necessary amount of representation-distance
+expansion for attaining a requested tolerance. Neither proves that unsupervised geometric clustering will discover
 a sufficient state. Experiments freeze candidate families before calibration;
 sequential refinement on fresh evaluation blocks is a theoretical extension
 that remains untested.
@@ -76,9 +77,10 @@ implementation; no general speed advantage is inferred.
 
 Pairwise prediction obstructions, stratified calibration, and fitted-risk
 upper bounds can separate achievable accuracy from representation limitations.
-Retained block classes make refinement comparable, and their joint bounds can
-certify minimum feasible cost among declared alternatives. Exact examples and
-stronger baselines expose the witness's limitations as well as its uses.
+Retaining feature blocks under a common sensitivity budget makes representation
+refinements comparable. Joint lower and upper bounds can certify the minimum
+feasible cost among declared alternatives. Exact examples and comparison
+bounds identify both the uses and the limitations of the pairwise witness.
 Forecasting experiments demonstrate informative and unresolved decisions,
 task-dependent KAHM accuracy, and the importance of defensible independent
 sampling units. These qualifications are part of the certificate's meaning.

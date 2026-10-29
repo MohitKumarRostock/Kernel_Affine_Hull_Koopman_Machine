@@ -81,7 +81,7 @@ class Candidate:
 
 
 def input_scaling_by_kind(cfg):
-    """Validate an explicit geometry-wide intervention, leaving legacy defaults intact."""
+    """Validate the optional preprocessing map for each geometric feature family."""
     mapping = cfg.get("input_scaling_by_kind")
     if mapping is None:
         return {}
@@ -272,8 +272,8 @@ def build_candidates(train, validation, cfg, seed):
                     train_seconds=geometry_seconds+time.perf_counter()-start_fit,
                 ))
                 if "kahm_input_scaling" in cfg:
-                    # Explicit new configurations retain the frozen scaler;
-                    # inherited configurations keep their original output schema.
+                    # Record the fitted scaler when this option is explicit.
+                    # Configurations without the key omit scaler metadata.
                     for candidate in candidates[first_kind_candidate:]:
                         candidate.input_scaling = bank.input_scaling_metadata()
             if kind in scaling_modes:
@@ -361,7 +361,7 @@ def run_one(cfg,system,seed,destination):
     candidates,pair_names=build_candidates(train,validation,cfg,seed)
     description=[candidate_description(c) for c in candidates]
     write_json(destination/"frozen_candidates.json",description)
-    # Only now are calibration and test episodes generated.
+    # Generate calibration and test episodes after freezing every candidate.
     calibration=make_episodes(system,cfg["n_calibration"],cfg["episode_length"],streams["calibration"])
     test=make_episodes(system,cfg["n_test"],cfg["episode_length"],streams["test"])
     H=cfg["horizons"]

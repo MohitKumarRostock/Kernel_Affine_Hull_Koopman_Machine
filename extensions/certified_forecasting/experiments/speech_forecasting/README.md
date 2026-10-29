@@ -6,7 +6,7 @@ recording identifiers, a causal frame-energy observable, eight model families,
 and a protocol fixed before downloading or inspecting the audio. The protocol
 is an archived specification, not an external preregistration.
 
-The retained population contains 7,178 eligible one-second clips from 1,630
+The evaluated cohort contains 7,178 eligible one-second clips from 1,630
 identifiers. The fixed split has 244 training, 163 validation, 978 calibration,
 and 245 test identifiers. All clips from one identifier remain together.
 Source identifiers can denote recording sessions and do not prove distinct
@@ -14,9 +14,10 @@ human identity. Population confidence statements assume iid group-record
 bundles; source curation and duration eligibility define a retrospective
 released-clip population.
 
-The observable is frame power in dB relative to full scale, floored at -60 dB
-and represented in [0,1]. Frames are nonoverlapping 10 ms intervals and are
-observed at their end. Predictions concern 10, 40, and 120 ms horizons, without
+The observable is frame power in decibels (dB) relative to full scale,
+floored at -60 dB and linearly mapped to [0,1]. Full scale refers to unit
+amplitude after dividing the signed 16-bit audio samples by 32,768. Frames
+are nonoverlapping 10 ms intervals and become available at their end. Predictions concern 10, 40, and 120 ms horizons, without
 normalization using future utterance statistics. A normalized RMSE multiplied
 by 60 is RMSE in dB for this floored observable.
 
@@ -45,20 +46,21 @@ The expected archive SHA-256 is
 The runner refuses an existing output directory. It freezes all 24
 validation-selected models before evaluation, writes a calibration freeze
 before test scoring, and records every selected outcome. Its 72 upper
-statements share one failure budget 0.05. Tolerances of 6, 12, and 18 dB
+risk bounds cover 3 fitting seeds, 8 model families, and 3 horizons, with a
+total failure probability of 0.05. Each endpoint receives probability 0.05/72. Tolerances of 6, 12, and 18 dB
 are stated resolution levels, not application requirements.
 
 The independent verifier accepts the provider archive, initial result
 directory, and strict-order replay directory; use
 `python experiments/speech_forecasting/verify_study.py --help` for its options.
 It independently reconstructs the observable, model losses, selection minima,
-KL endpoints, and replay equivalence. The focused tests run with:
+Kullback--Leibler (KL) upper endpoints, and replay equivalence. The focused tests run with:
 
 ```bash
 PYTHONPATH=src python -m unittest discover -s tests -p test_speech_forecasting.py -v
 ```
 
-## Retained evidence and scoring-order correction
+## Evaluation order and source provenance
 
 `results/speech_forecasting_v1/` retains the first execution. All models were
 already frozen before held-out losses were evaluated, but calibration and test

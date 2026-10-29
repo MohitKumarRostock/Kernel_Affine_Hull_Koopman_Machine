@@ -7,8 +7,8 @@ population truth. Let $Z\in\{0,1\}$ be a Bernoulli state with
 $\Pr(Z=1)=p\in(0,1)$, and let the scalar target be $Y=2Z-1$.
 For a representation-separation parameter $a\in[0,1]$, use
 \[
- \Phi_a(0)=\left((1+a)/2,(1-a)/2\right),\qquad
- \Phi_a(1)=\left((1-a)/2,(1+a)/2\right).
+ \Phi_a(0)=\left((1+a)/2,(1-a)/2\right)^\top,\qquad
+ \Phi_a(1)=\left((1-a)/2,(1+a)/2\right)^\top.
 \]
 Both vectors lie in the two-coordinate probability simplex. Their Euclidean
 distance is $\sqrt2a$, whereas the target separation is $2$. For sensitivity
@@ -35,7 +35,7 @@ $2-c=\min\{2,\kappa\sqrt2a\}$. The affine construction in
 Proposition~\ref{prop:two-atom} therefore realizes them within the budget;
 when $a=0$, the two values coincide. If one state is absent from training,
 \eqref{eq:two-atom-fit} selects one feasible empirical minimizer using the
-predeclared support. This fixes an otherwise ambiguous prediction at the
+predeclared support. This convention specifies the prediction even at an
 unobserved state.
 
 Conditional on the training sample, state $0$ has prediction error
@@ -56,8 +56,9 @@ fitted-risk and centered statistics. The reported calibration sizes are all
 even.
 
 \paragraph{The centered comparator.}
-For comparison, use the raw-target Euclidean version of the earlier
-centered certificate with one reference class. Let $Z_1,\ldots,Z_n$
+For comparison, apply a centered certificate based on the target and
+representation variances, with Euclidean distance and a single reference
+class. Let $Z_1,\ldots,Z_n$
 be independent calibration states, with $n\geq4$, and
 $\bar z=n^{-1}\sum_{i=1}^nZ_i$ their empirical frequency. The output and
 representation variances, computed with denominator $n$, are
@@ -90,7 +91,7 @@ $4/n$. The bounded-differences inequality therefore gives
 \[
  \widehat s-\mathbb E\widehat s\leq4\sqrt{r/2}
 \]
-with failure probability at most $\eta/2$. On that event,
+with probability at least $1-\eta/2$. On this confidence event,
 $V_\eta\leq\sigma^2$.
 Second, changing one observation changes $\widehat t$ by at most $2/n$,
 so the same inequality gives
@@ -104,7 +105,7 @@ $\mathbb E\widehat t=(1-1/n)\tau^2$ and $\tau^2\leq1$,
           \leq\widehat t+\sqrt{2r}+1/n.
 \]
 Capping the right side at one remains valid because $\tau^2\leq1$.
-A union bound now gives $V_\eta\leq\sigma^2$ and
+A union bound gives $V_\eta\leq\sigma^2$ and
 $T_\eta\geq\tau^2$ jointly with probability at least $1-\eta$.
 The expression in \eqref{eq:centered-comparator} increases with its first
 variance argument and decreases with its second. Hence it is no larger

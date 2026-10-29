@@ -230,7 +230,7 @@ def verify_score_archive(destination, record, cfg):
 
 
 def complete_pendigits_summary(destination):
-    """Summarize every new family without changing the historical PenDigits runner."""
+    """Summarize all validation-selected model families with pooled coordinate errors."""
     record = json.loads((destination / "results.json").read_text())
     cfg = record["configuration"]
     selected = [row for row in record["results"] if row["selected_before_test"]]

@@ -64,18 +64,48 @@ every group, while a hard assignment retains only the selected group. These
 geometric choices need not preserve all information relevant to forecasting.
 
 For block $b$, partition the training histories into $C_b\geq1$ reference
-groups, indexed by $c=1,\ldots,C_b$, and fit their KAHM reconstruction models
-as in \citet{kumar2024kahm,kumar2025collaborative,kumar2026limits}.
-Let $\mathcal X$ be the history domain. The resulting score
-$T_{bc}:\mathcal X\to[0,1]$ measures reconstruction discrepancy, with smaller
-values indicating a closer match. It is a geometric score, not a class
-probability.
+groups, indexed by $c=1,\ldots,C_b$. Let $\mathcal X$ be the history domain
+and let $z(x)\in\mathbb R^{d_x}$ be the preprocessed history, with dimension
+$d_x$. Each group has $J_{bc}\geq1$ local KAHM reconstruction models, fitted
+using its training histories
+\citep{kumar2024kahm,kumar2025collaborative,kumar2026limits}.
 
-The folding score combines reconstruction error and angular discrepancy
-\citep[Section~3.3]{kumar2026limits}. Let $z(x)\in\mathbb R^{d_x}$ be the preprocessed history, where $d_x$
-is its dimension, and let
-$\widehat z_{bcj}(x)$, $j=1,\ldots,J_{bc}$, be the reconstructions supplied by
-the $J_{bc}\geq1$ inherited local models for group $c$ in block $b$. Write
+For one such local model, suppress the indices $(b,c,j)$ and write its
+$N_{\rm loc}\geq2$ reference histories as
+$z_1,\ldots,z_{N_{\rm loc}}\in\mathbb R^{d_x}$. The fitted linear encoding $P\in\mathbb R^{r\times d_x}$ maps histories to
+$r\geq1$ principal-component coordinates. The encoding retains only principal-component directions with positive empirical
+variance. Let $\Sigma\in\mathbb R^{r\times r}$ be the resulting nonsingular
+sample covariance of the encoded references. The Gaussian
+kernel, its reference Gram matrix, and its query vector are
+\begin{align*}
+ k(\xi,\xi')&=\exp\!\left\{-\frac{(\xi-\xi')^\top\Sigma^{-1}
+                                  (\xi-\xi')}{2r}\right\},\\
+ K_{i\ell}&=k(Pz_i,Pz_\ell),\qquad
+ k_x=(k(Pz_i,Pz(x)))_{i=1}^{N_{\rm loc}}.
+\end{align*}
+Here $\xi,\xi'\in\mathbb R^r$. For the local regularization parameter
+$\eta>0$, kernel regression gives
+$h(x)=(K+\eta I_{N_{\rm loc}})^{-1}k_x\in\mathbb R^{N_{\rm loc}}$.
+Its coordinate $h_i$ uses regression targets equal to one at reference $i$
+and zero at the other references. The reconstruction and its normalizer are
+\begin{align*}
+ s(x)&=\sum_{i=1}^{N_{\rm loc}}h_i(x),\qquad
+ \widetilde s(x)=
+ \begin{cases}s(x),&s(x)\ne0,\\1,&s(x)=0,\end{cases}\\
+ \widehat z(x)&=\sum_{i=1}^{N_{\rm loc}}
+                   \frac{h_i(x)}{\widetilde s(x)}z_i.
+\end{align*}
+The training algorithm determines the reference subset, $P$, $\Sigma$, and
+$\eta$; $\eta$ is separate from the forecast-decoder ridge parameter below.
+When $s(x)\ne0$, the reconstruction coefficients sum to one and may be signed,
+so $\widehat z(x)$ is an affine combination of reference histories. The
+zero-sum convention defines the implementation at all queries but need not
+preserve this affine-combination property.
+
+Restoring the indices, let $\widehat z_{bcj}(x)$ denote the reconstruction
+from local model $j$ of group $c$ in block $b$. Its folding score combines
+reconstruction error and angular discrepancy
+\citep[Section~3.3]{kumar2026limits}. Define
 \[
  e_{bcj}(x)=1-\exp\{-\|z(x)-\widehat z_{bcj}(x)\|_2\},
  \qquad
@@ -91,9 +121,10 @@ score is
  T_{bc}(x)=\min_{1\leq j\leq J_{bc}}
             \left\{\frac{e_{bcj}(x)^2+\theta_{bcj}(x)^2}{2}\right\}^{1/2}.
 \]
-Thus both discrepancy terms and the resulting score lie in $[0,1]$.
-The inherited reconstruction training is unchanged; this formula specifies
-how its outputs become the scores used by the forecasting representation.
+Thus $T_{bc}:\mathcal X\to[0,1]$ is a geometric discrepancy score: smaller
+values indicate a closer reconstruction match. It is not a class probability.
+Taking the minimum allows any local model within the group to provide the
+match.
 
 Fix an exponent $\omega>0$ and offset $\tau>0$. The exponent controls the
 contrast between affinities, and the offset keeps them positive. The reported
@@ -120,16 +151,16 @@ $\ell_b^{\max}(x)=\max_c\ell_{bc}(x)$, then compute
  \frac{\exp(\ell_{bc}(x)-\ell_b^{\max}(x))}
       {\sum_{r=1}^{C_b}\exp(\ell_{br}(x)-\ell_b^{\max}(x))}.
 \]
-Subtracting the maximum leaves the normalized weights unchanged. Replacing a
-small denominator by uniform weights would change the representation, even
-when relative weights remain numerically resolvable. A retained unit test
-illustrates this issue: the direct powered affinities sum to less than
-$10^{-12}$, yet one normalized association is essentially one.
+Subtracting the maximum leaves the normalized weights unchanged and makes
+at least one exponent equal to zero. Consequently, the denominator is at
+least one in exact arithmetic, even when all unnormalized affinities are
+small. This preserves relative affinities without a small-denominator
+replacement by uniform weights.
 
-The experiment manifest records source hashes for the inherited training and
-folding routines. The forecasting contribution is the retained representation,
-constrained output decoder, and calibration procedure. In the original
-experiments, histories are standardized using training means and variances.
+The forecasting method combines these reconstruction features with retained
+blocks, a constrained output decoder, and independent calibration. In the
+main experiments, histories are standardized using training means and
+standard deviations.
 Section~\ref{sec:input-scaling} separately compares training-based range
 scaling and bounded raw histories. The input subsample and the maximum number
 of local training points are fixed by each configuration. Once fitted, the
@@ -148,9 +179,10 @@ sizes $2,4,8,16$, giving prefix dimensions $2,6,14,30$.
 
 \subsection{A constrained multihorizon decoder}
 
-Let $N$ be the number of training histories. Form the response matrix
-$\mathsf Y\in\mathbb R^{N\times q}$ with joint targets as rows, and the
-feature matrix $F=[F_1,\ldots,F_s]\in\mathbb R^{N\times p_s}$, where
+Let $(x_i,Y_i)$, $i=1,\ldots,N$, be the training histories and their joint
+targets. Form the response matrix $\mathsf Y\in\mathbb R^{N\times q}$
+with row $i$ equal to $Y_i^\top$, and the feature matrix
+$F=[F_1,\ldots,F_s]\in\mathbb R^{N\times p_s}$, where
 row $i$ of $F_b\in\mathbb R^{N\times C_b}$ is
 $\Phi_b(x_i)^\top$. Fit an intercept $a\in\mathbb R^q$ and coefficient
 matrix $W\in\mathbb R^{p_s\times q}$ by solving
@@ -174,9 +206,8 @@ target, the reported prediction is
 \]
 The objective in \eqref{eq:training-objective} fits the unprojected affine
 predictor; clipping is applied at prediction time and included in every
-reported loss. Section~\ref{sec:theory} writes the same affine map as
-$a+\sum_b W_b\Phi_b(x)$, using the transposed block convention
-$W_b\in\mathbb R^{q\times C_b}$ to simplify its proofs.
+reported loss. Throughout the paper, the same affine map is written as
+$a+\sum_b W_b^\top\Phi_b(x)$, with $W_b\in\mathbb R^{C_b\times q}$.
 
 Centering the training matrices eliminates the intercept. Projected accelerated
 gradient then solves the constrained quadratic. Each projection computes the
@@ -192,9 +223,9 @@ The ridge term regularizes fitting, whereas the block constraint defines the
 feasible sensitivity class. Exact block duplication leaves that class unchanged,
 but distributing coefficients across duplicates can reduce the squared
 Frobenius ridge penalty. The replication results therefore concern feasible
-prediction classes and their population obstruction. The separate numerical
-test of duplicate-block optimum risks sets $\lambda=0$ and checks agreement
-within the reported optimization gaps.
+prediction classes and their population obstruction. The duplicate-block
+experiment uses $\lambda=0$ to compare these feasible classes without changing
+the fitting penalty.
 
 \subsection{Calibration and model selection}
 
@@ -217,14 +248,14 @@ candidate-cost rule.
 for their retained prefixes. Fit comparison models on the same observed targets.
 \item Freeze all candidates, preprocessing choices, sensitivity budgets,
 history-based strata, costs, concentration bounds, and proposed comparisons.
+Allocate $\delta$ across the risk bounds, stratum-mass intervals, alternative
+partitions, and improvement comparisons.
 \item On $n\geq4$ independent calibration episodes, compute one mean squared loss per
 episode and horizon. Compute obstruction scores using disjoint episode pairs
 at matching origins. For stratified calibration, use one prespecified origin
 per independent episode (or a justified episode-level stratum), pair within
 strata, and estimate their masses and confidence intervals.
-\item Allocate $\delta$ across risk bounds, mass intervals, alternative
-partitions, and improvement comparisons.
-Compute simultaneous lower endpoints $L_{jh}$ and upper endpoints $U_{jh}$
+\item Compute simultaneous lower endpoints $L_{jh}$ and upper endpoints $U_{jh}$
 for candidate $j$ at horizon $h$.
 \item Accept a fitted candidate when $U_{jh}\leq\epsilon_h^2$ for every
 required horizon; exclude its representation class when

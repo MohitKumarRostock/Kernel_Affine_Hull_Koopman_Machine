@@ -14,8 +14,12 @@ identity matrix, and $\ell$th coordinate vector, respectively, with the
 ambient dimension specified by context.
 
 For a real number $z$, $z_+=\max\{z,0\}$ is its positive part.
-Logarithms are natural; $\lfloor z\rfloor$ is the largest integer not exceeding $z$. We write $\mathbb E$ and $\Pr$ for expectation
-and probability under the specified sampling law. For a square-integrable
+Logarithms are natural, and $\lfloor z\rfloor$ is the largest integer not
+exceeding $z$. For a finite set $S$, $|S|$ denotes its cardinality; for an
+event $E$, $\mathbf1_E$ is one on $E$ and zero otherwise. We write
+$\mathbb E$ and $\Pr$ for expectation and probability under the specified
+sampling law, and $\operatorname{Var}(V)=\mathbb E(V-\mathbb EV)^2$
+for the variance of a real random variable $V$. For a square-integrable
 random scalar or vector $V$, $\|V\|_{L^2}=(\mathbb E\|V\|_2^2)^{1/2}$;
 for scalars, the norm inside the expectation is absolute value.
 An overbar denotes a sample average, and a hat denotes a fitted or
@@ -40,6 +44,7 @@ $x_t$, $m$ & Causal history and number of observed time steps in it. \\
 $\mathcal H$, $H$, $q$ & Set of forecast horizons, its size, and target dimension; for a joint forecast, $q=d_yH$. \\
 $\Phi_b$, $C_b$ & Feature block $b$ and its number of coordinates. \\
 $\Gamma_s$, $p_s$ & Stack of the first $s$ feature blocks and total dimension $p_s=\sum_{b=1}^s C_b$. \\
+$a$, $W_b$ & Decoder intercept in $\mathbb R^q$ and block coefficients in $\mathbb R^{C_b\times q}$; predictions use $W_b^\top\Phi_b$. \\
 $\kappa$, $\lambda$ & Decoder sensitivity budget and ridge regularization parameter. \\
 $R(f)$, $R^*$ & Population mean squared error of a fitted forecast and infimum over a stated decoder class. \\
 $W_{\kappa,A}$ & Population pairwise obstruction, using budget $\kappa$ and conditioning variable $A$; distinct from coefficient matrices $W_b$. \\

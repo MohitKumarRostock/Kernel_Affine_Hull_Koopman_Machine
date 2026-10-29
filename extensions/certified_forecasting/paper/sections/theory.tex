@@ -4,8 +4,10 @@
 This section establishes lower bounds on the risk achievable from a fixed
 representation, upper bounds for fitted forecasts, and conditions for
 representation refinement. All results refer to the same distribution of
-histories and raw forecasting targets. They require neither a Markov assumption,
-an invariant distribution, nor exact Koopman closure.
+histories and observed forecasting targets. In particular, they do not require
+that the histories form a Markov state, that the trajectory distribution is
+stationary, or that the learned coordinates satisfy an exact linear evolution
+equation.
 
 \subsection{A directly estimable pairwise obstruction}
 
@@ -33,6 +35,9 @@ $R(f)=\mathbb E\|Y-f(X)\|_2^2$. The representation, pseudometric, and
 budget are fixed before the calibration data are observed. The class
 $\mathcal G_\kappa(d)$ may contain more decoders than the fitted family;
 a lower bound on its optimal risk therefore also applies to that family.
+When the representation and pseudometric are clear, we abbreviate
+$R^*_\kappa(\Gamma,d)$ to $R^*_\kappa$ and similarly suppress the
+arguments of the witness defined below.
 
 To define the pairwise statistic, first draw a conditioning variable $A$.
 Then draw $(X,Y)$ and $(X',Y')$ independently from the same conditional law
@@ -59,8 +64,9 @@ Assume $\mathbb E\|Y\|_2^2<\infty$. Then
  R^*_\kappa(\Gamma,d)\geq W_{\kappa,A}(\Gamma,d).
  \label{eq:pair-population}
 \end{equation}
-For a Euclidean representation space with
-$d(u,v)=\|u-v\|_2$, assume also $\mathbb E\|U\|_2^2<\infty$. Define
+For a representation space $\mathcal U\subseteq\mathbb R^p$ with
+$d(u,v)=\|u-v\|_2$, where $p$ is its ambient dimension, assume also
+$\mathbb E\|U\|_2^2<\infty$. Define
 \[
  \sigma_{Y\mid A}^2=\mathbb E\|Y-\mathbb E[Y\mid A]\|_2^2,
  \qquad
@@ -126,12 +132,13 @@ $v=(\|Y-Y'\|_2-\kappa d(U,U'))_+$. Then
    +\frac12\mathbb E\bigl[\|r-r'\|_2^2-v^2\bigr].
  \label{eq:witness-slack}
 \end{equation}
-Both terms are nonnegative. Consequently, $g$ attains the witness if and
-only if its conditional residual mean is zero and
-$\|r-r'\|_2=v$ almost surely. Whenever $r\ne r'$, the latter condition
-requires saturation of the Lipschitz constraint and alignment of
-$r-r'$ with $g(U)-g(U')$ in the same direction, allowing a zero decoder
-difference.
+Both terms are nonnegative. Consequently, $g$ attains the witness, meaning
+$R(g\circ\Gamma)=W_{\kappa,A}$, if and only if
+$\mathbb E[r\mid A]=0$ almost surely and
+$\|r-r'\|_2=v$ almost surely. Whenever $r\ne r'$, the latter condition requires
+$\|g(U)-g(U')\|_2=\kappa d(U,U')$. It also requires the decoder
+difference to be a nonnegative scalar multiple of the residual difference;
+the scalar may be zero.
 \end{proposition}
 
 \begin{proof}
@@ -153,7 +160,8 @@ they establish no new minimax estimation rate. Taking a square root of a risk
 bound can still produce slow convergence near zero. Moreover,
 \eqref{eq:pair-dominance} compares certificates under a common pairing law.
 It does not compare pairing at a common time origin with conditioning on a
-different grouping, such as a reference-class label $c(X)$.
+different grouping, such as a reference-class label $c(X)$, where $c$
+assigns a history to a group.
 
 \begin{proposition}[Exactness on a two-atom law]
 \label{prop:two-atom}
@@ -200,16 +208,22 @@ segment joining $y_0$ and $y_1$. Projection onto the stated convex set
 fixes them and is nonexpansive, meaning that it cannot increase distances.
 \end{proof}
 
-Exactness also holds on continuous supports. If $U=T\in\mathbb R$,
-$Y=b+\lambda T v$ with $b,v\in\mathbb R^q$, $\|v\|_2=1$,
-$\lambda\geq0$, and
-$\operatorname{Var}(T)=\mathbb E(T-\mathbb ET)^2<\infty$, then
-unconditioned pairing with $d(t,t')=|t-t'|$ gives
-$W_\kappa=R^*_\kappa=(\lambda-\kappa)_+^2\operatorname{Var}(T)$.
-The affine decoder
-$g(t)=b+\lambda\mathbb E[T]v+
-\min\{\lambda,\kappa\}(t-\mathbb E[T])v$ attains it.
-Thus the alignment condition is not restricted to two-point distributions.
+Exactness also holds on continuous supports. Let $T$ be a square-integrable
+real random variable, set $U=T$ and $Y=b+\beta Tv$, and assume
+$b,v\in\mathbb R^q$, $\|v\|_2=1$, and $\beta\geq0$.
+Here $\beta$ is the target's slope, and
+$\operatorname{Var}(T)=\mathbb E(T-\mathbb ET)^2$.
+For independent $T,T'$ and $d(t,t')=|t-t'|$, the pair discrepancy is
+$(\beta-\kappa)_+|T-T'|$. Since
+$\mathbb E(T-T')^2=2\operatorname{Var}(T)$, its witness is
+$(\beta-\kappa)_+^2\operatorname{Var}(T)$. The affine decoder
+\[
+ g(t)=b+\beta\mathbb E[T]v+
+       \min\{\beta,\kappa\}(t-\mathbb E[T])v
+\]
+has Lipschitz constant at most $\kappa$ and residual
+$(\beta-\kappa)_+(T-\mathbb ET)v$. Its risk equals the witness, so
+$W_\kappa=R^*_\kappa$ also in this continuous-support example.
 
 \paragraph{Two sources of population looseness.}
 Even with independent unconditioned pairs, the witness need not approximate
@@ -217,10 +231,14 @@ the optimum by a fixed relative factor. Let $\kappa=1$ and let $(U,Y)$
 take values $(3,0),(0,-1),(1,1)$ with probabilities
 $1-2\varepsilon,\varepsilon,\varepsilon$, where
 $0<\varepsilon<1/2$. Only the two rare atoms have a positive discrepancy,
-so $W_\kappa=\varepsilon^2$. The values
-$g(0)=-1/2$, $g(1)=1/2$, $g(3)=0$ admit a $1$-Lipschitz extension and
-attain risk $\varepsilon/2$. The two rare predictions must differ by at most
-one, so their weighted risk cannot be smaller. Thus
+so $W_\kappa=\varepsilon^2$. The fitted values
+$g(0)=-1/2$, $g(1)=1/2$, and $g(3)=0$ attain risk $\varepsilon/2$.
+Linear interpolation between these points, with constant values outside
+$[0,3]$, defines a $1$-Lipschitz decoder. Conversely, any admissible fitted
+values $v_0=g(0)$ and $v_1=g(1)$ satisfy $|v_1-v_0|\leq1$.
+The minimum of $(-1-v_0)^2+(1-v_1)^2$ under this constraint is $1/2$,
+attained at $v_0=-1/2$ and $v_1=1/2$. The two rare atoms alone therefore
+contribute at least $\varepsilon/2$ to every decoder's risk. Thus
 $R^*_\kappa=\varepsilon/2$ and
 $W_\kappa/R^*_\kappa=2\varepsilon$ can approach zero. The same example
 lies in $\Delta_2$ after mapping $u$ to $(u/3,1-u/3)$ and setting
@@ -228,14 +246,20 @@ $\kappa=3/\sqrt2$. Stratification below replaces the quadratic probability
 of encountering this rare pair by the probability of its stratum.
 
 A separate gap comes from comparing the fitted affine family with all
-Lipschitz decoders. For equally likely $x\in\{-1,0,1\}$, take
-$\Phi(x)=((x+1)/2,(1-x)/2)$, $Y=x^2$, and $\kappa=\sqrt2$.
-The target is Lipschitz on this support, so $W_\kappa=R^*_\kappa=0$.
-Every clipped scalar affine decoder is monotone in $x$, however, and has
-MSE at least $1/6$: either the first two or the last two target values
-violate its monotonicity, and pooling that pair costs $1/2$ before averaging
-over the three atoms. The unprojected affine optimum is the constant
-$2/3$, with MSE $2/9$. More calibration cannot remove this class difference.
+Lipschitz decoders. For equally likely $X\in\{-1,0,1\}$, take
+$\Phi(x)=((x+1)/2,(1-x)/2)^\top$, $Y=X^2$, and $\kappa=\sqrt2$,
+with Euclidean distance between feature vectors.
+The target satisfies the Lipschitz inequalities on this support and has a
+scalar Lipschitz extension, so $W_\kappa=R^*_\kappa=0$.
+An affine function of $\Phi(x)$ is affine in $x$; clipping it to $[0,1]$
+preserves monotonicity. A nondecreasing forecast cannot fit the target pair
+$(1,0)$ at $x=-1,0$: its minimum sum of squared errors on that pair is
+$1/2$, attained when both fitted values are $1/2$. A nonincreasing forecast
+has the same obstruction on the target pair $(0,1)$ at $x=0,1$.
+Averaging over the three atoms gives MSE at least $1/6$ for every clipped
+affine forecast. The unprojected affine optimum is the constant $2/3$,
+with MSE $2/9$. Thus a sharp lower bound for all Lipschitz decoders need
+not describe the optimum of a restricted affine family.
 
 \subsection{Independent episodes, dependent observations within episodes}
 
@@ -296,14 +320,14 @@ $W_{jh}=\mathbb E Q_{r,jh}$. This is exactly the witness in
 sampled common origin: conditional on that origin, the two histories and
 targets come from independent episodes.
 
-For independent, identically distributed scalar observations
+For $N\geq2$ independent, identically distributed scalar observations
 $V=(V_1,\ldots,V_N)$ in a known interval of length $b\geq0$, define the
 sample mean and unbiased sample variance by
 \[
  \bar V=\frac1N\sum_{i=1}^N V_i,
  \qquad s_V^2=\frac1{N-1}\sum_{i=1}^N(V_i-\bar V)^2.
 \]
-For $N\geq2$ and a failure probability $\alpha\in(0,1)$, use the
+For a failure probability $\alpha\in(0,1)$, use the
 empirical Bernstein radius
 \begin{equation}
  \operatorname{rad}_{\rm EB}(V;b,\alpha)
@@ -383,7 +407,8 @@ A partition can concentrate pairs on distinctions that unconditional pairing
 rarely encounters. Condition on the development data throughout this
 construction, so the representation, metric, and budget are fixed.
 Fix a measurable map
-$c:\mathcal X\to\{1,\ldots,M\}$ using development data only, and write
+$c:\mathcal X\to\{1,\ldots,M\}$, with $M\geq1$, using development
+data only, and write
 $\pi_a=\Pr\{c(X)=a\}$. For each positive-mass stratum, let $W_a$ be
 the witness from two independent draws conditional on $c(X)=a$.
 Set $W_a=0$ when $\pi_a=0$. The stratified witness is
@@ -394,7 +419,7 @@ Set $W_a=0$ when $\pi_a=0$. The stratified witness is
 This is Theorem~\ref{thm:pair-obstruction} with $A=c(X)$; weighting by
 the population masses preserves the original target law.
 
-To estimate it, use $n$ independent, identically distributed observations
+To estimate it, use $n\geq1$ independent, identically distributed observations
 $(X_i,Y_i)$ from that law.
 For each independent trajectory, draw one origin independently from the
 prespecified common origin law. This produces independent observations under
@@ -404,8 +429,10 @@ all prescribed origins within each episode; a union bound does not require
 independence between that bound and the stratified statistic.
 Let $N_a=\sum_i\mathbf1\{c(X_i)=a\}$, where $\mathbf1\{\cdot\}$
 denotes an indicator, and set $K_a=\lfloor N_a/2\rfloor$.
-Write $(U_{a,k},Y_{a,k})$, $k=1,\ldots,N_a$, for the stratum observations
-in their original sample-index order. Their $K_a$ disjoint pair scores are
+Set $U_i=\Gamma(X_i)$ and write $(U_{a,k},Y_{a,k})$,
+$k=1,\ldots,N_a$, for the observations in stratum $a$, listed in their
+original sample-index order. For $r=1,\ldots,K_a$, their disjoint pair
+scores are
 \[
  Q_{a,r}=\frac12\left(\|Y_{a,2r-1}-Y_{a,2r}\|_2
       -\kappa d(U_{a,2r-1},U_{a,2r})\right)_+^2.
@@ -427,7 +454,8 @@ Here $\bar Q_a$ is the mean of the $K_a$ scores. Define
  p_a^-=(N_a/n-t_p)_+,\qquad
  p_a^+=\min\{1,N_a/n+t_p\},
 \]
-and the confidence set, with $\Delta_M$ the probability simplex,
+and the confidence set, with
+$\Delta_M=\{p\in[0,1]^M:\sum_{a=1}^M p_a=1\}$ the probability simplex,
 $\mathcal P=\{p\in\Delta_M:p_a^-\leq p_a\leq p_a^+
 \text{ for every }a\}$. Then
 \begin{equation}
@@ -447,8 +475,11 @@ $\ell_a\leq W_a$ is at most $\beta_a$. Sparse strata satisfy it
 deterministically. Averaging over the labels and taking a union bound gives
 all score inequalities with failure probability at most $\sum_a\beta_a$;
 there is no additional union over possible counts.
-Two-sided Hoeffding bounds for the $M$ indicator means give
-$\pi\in\mathcal P$ with failure probability at most $\delta_p$.
+For each stratum, Hoeffding's inequality gives
+$\Pr\{|N_a/n-\pi_a|>t_p\}\leq2\exp(-2nt_p^2)=\delta_p/M$.
+A union bound over the $M$ strata therefore places
+$\pi=(\pi_1,\ldots,\pi_M)$ in $\mathcal P$ with failure probability
+at most $\delta_p$.
 On the intersection of these events,
 $\min_{p\in\mathcal P}\sum_a p_a\ell_a
 \leq\sum_a\pi_a\ell_a\leq\sum_a\pi_a W_a$.
@@ -468,7 +499,8 @@ observations.
 
 \begin{proposition}[Exactness on compatible strata]
 \label{prop:stratified-exactness}
-Suppose each positive-mass stratum either has a constant representation
+Assume $\mathbb E\|Y\|_2^2<\infty$. Suppose each positive-mass
+stratum either has a constant representation
 $U=u_a$ or a joint law supported on two values of $(U,Y)$.
 In the first case let its optimal prediction be
 $\mu_a=\mathbb E[Y\mid c(X)=a]$; in the second use the fitted values
@@ -486,13 +518,19 @@ $W_a=\mathbb E[\|Y-\mu_a\|_2^2\mid c(X)=a]$ by the independent-pair
 variance identity. A two-atom stratum has the finite-support calculation of
 Proposition~\ref{prop:two-atom}. The assumed decoder attains their weighted
 sum, giving equality in \eqref{eq:stratified-witness}. For scalar prescribed
-values $v_i$ at support points $u_i$, the function
-$g(u)=\min_i\{v_i+\kappa d(u,u_i)\}$ is Lipschitz and interpolates
-them whenever all pairwise inequalities hold; necessity is immediate.
+values $v_i$ at finitely many support points $u_i$, define
+$g(u)=\min_i\{v_i+\kappa d(u,u_i)\}$. Each function in this finite
+minimum is $\kappa$-Lipschitz by the triangle inequality for $d$, and
+so is their minimum. At $u_j$, the term $i=j$ equals $v_j$ and every
+other term is at least $v_j$ by the assumed pairwise inequalities.
+Thus $g(u_j)=v_j$. Conversely, a global Lipschitz decoder necessarily
+satisfies all these pairwise inequalities.
 \end{proof}
 
-For the three-atom example, strata $\{3\}$ and $\{0,1\}$ give
-$W_{\rm str}=2\varepsilon(1/4)=\varepsilon/2=R^*_\kappa$.
+For the three-atom example, the stratum $\{3\}$ has zero witness.
+The stratum $\{0,1\}$ has mass $2\varepsilon$, and its two atoms
+are conditionally equally likely, giving conditional witness $1/4$.
+Consequently, $W_{\rm str}=2\varepsilon(1/4)=\varepsilon/2=R^*_\kappa$.
 Stratification can thus remove a population gap, rather than merely improve
 concentration. It need not improve every witness: singleton strata can remove
 all pairwise conflicts while incompatible predictions across strata still
@@ -520,14 +558,18 @@ through $\Gamma_j$, containing its fitted forecast and satisfying its stated hor
 Lipschitz budgets. Give it a fixed cost $c_j\geq0$. Let $c^*$ be the minimum
 cost of a class containing a forecast that meets every prescribed tolerance.
 The minimum of an empty set is $+\infty$.
-For any simultaneous valid lower class bounds $L_{jh}$ and upper fitted-risk
-bounds $U_{jh}$, define
+For any simultaneously valid lower bounds $L_{jh}$ on the horizon-$h$
+risk of every member of $\mathcal C_j$, and upper bounds $U_{jh}$ on
+its fitted forecast, define
 \begin{align*}
  \mathcal E&=\{j:L_{jh}>\epsilon_h^2\text{ for some }h\},&
  \mathcal A&=\{j:U_{jh}\leq\epsilon_h^2\text{ for all }h\},\\
  c_-&=\min_{j\notin\mathcal E}c_j,&
  c_+&=\min_{j\in\mathcal A}c_j.
 \end{align*}
+Thus $\mathcal E$ contains the excluded classes and $\mathcal A$ contains
+the accepted fitted candidates. The costs $c_-$ and $c_+$ refer to the
+cheapest nonexcluded class and cheapest accepted fit, respectively.
 On their joint confidence event,
 \begin{equation}
  c_-\leq c^*\leq c_+.
@@ -547,8 +589,10 @@ can further restrict $\mathcal C_j$; exclusion by its larger horizon-wise
 Lipschitz classes remains valid.
 \end{proof}
 
-Without $c_-=c_+$, selection establishes only the lowest cost among
-certified candidates. Here cost counts retained coordinates, not runtime.
+If $c_-<c_+$, a cheaper nonexcluded class may still contain an accurate
+forecast, so selection establishes only the lowest cost among certified
+candidates. In the experiments, cost counts feature coordinates rather
+than runtime.
 Also, \eqref{eq:risk-sandwich} implies
 \[
  0\leq\sqrt{R_{jh}}-\sqrt{R^*_{jh}}
@@ -568,13 +612,17 @@ is sufficient for its Hoeffding upper bound to pass that tolerance with
 probability at least $1-\alpha$. If the pair witness exceeds the tolerance
 by $\gamma$, then
 \[
- K\geq\frac{B_h^2\log(1/\alpha)}{2\gamma^2}
+ K>\frac{B_h^2\log(1/\alpha)}{2\gamma^2}
 \]
 is sufficient for the corresponding lower bound to exclude the tolerance
-with that probability. In each case the stated sample size makes the
-radius at most $\gamma/2$; a one-sided Hoeffding deviation bound controls
-the remaining $\gamma/2$. These are sufficient sample sizes, not optimal
-rates. Exclusion depends on the witness margin, rather than on an unknown
+with that probability. For acceptance, the stated sample size makes the
+radius at most $\gamma/2$. A one-sided Hoeffding event bounds the sample
+mean by the population mean plus $\gamma/2$, so the upper endpoint is
+at most the tolerance. For exclusion, the strict sample-size inequality
+makes the radius strictly smaller than $\gamma/2$. On the event $\bar Q\geq W-\gamma/2$, where $W$ is the population
+pair witness and $\bar Q$ is its sample mean, the lower endpoint is
+therefore strictly above the tolerance. Each event has probability at least $1-\alpha$.
+These are sufficient sample sizes, not optimal rates. Exclusion depends on the witness margin, rather than on an unknown
 oracle-risk margin. Choosing the smaller of separately computed Hoeffding
 and empirical Bernstein bounds requires confidence allocation to both
 bounds; otherwise the choice must be fixed in advance.
@@ -597,11 +645,10 @@ Its induced pseudometric on histories and the coefficient norm are
  \|W\|_{2,1}=\sum_{b=1}^s\|W_b\|_{\rm F}.
  \label{eq:block-geometry}
 \end{equation}
-Here $\|W\|_{2,1}$ is explicitly a sum over \emph{blocks}, not over
-individual rows. In this subsection we use column-vector decoders with
-$a\in\mathbb R^q$ and $W_b\in\mathbb R^{q\times C_b}$; these coefficient
-blocks are the transposes of the training matrices in
-\eqref{eq:training-objective}.
+Here $\|W\|_{2,1}$ is a sum over \emph{blocks}, not over individual
+rows. As in \eqref{eq:training-objective}, $a\in\mathbb R^q$ and
+$W_b\in\mathbb R^{C_b\times q}$, so the contribution of block $b$
+to a column-vector prediction is $W_b^\top\Phi_b(x)$.
 
 Let $\mathcal Y\subseteq\mathbb R^q$ be a nonempty closed convex output
 set containing $Y$ almost surely. Write
@@ -611,7 +658,7 @@ Define
 \begin{equation}
  \mathcal F_{s,\kappa}
  =\left\{x\mapsto\Pi_{\mathcal Y}\!\left(
-       a+\sum_{b=1}^sW_b\Phi_b(x)\right):
+       a+\sum_{b=1}^sW_b^\top\Phi_b(x)\right):
        a\in\mathbb R^q,\ \sum_{b=1}^s\|W_b\|_{\rm F}\leq\kappa\right\}.
  \label{eq:block-decoder}
 \end{equation}
@@ -635,7 +682,7 @@ class and the pair witness unchanged.
 For the unprojected decoder, the triangle inequality and the bound
 $\|Av\|_2\leq\|A\|_{\rm F}\|v\|_2$ give
 \[
- \left\|\sum_bW_b\bigl(\Phi_b(x)-\Phi_b(x')\bigr)\right\|_2
+ \left\|\sum_bW_b^\top\bigl(\Phi_b(x)-\Phi_b(x')\bigr)\right\|_2
  \leq\sum_b\|W_b\|_{\rm F}\|\Phi_b(x)-\Phi_b(x')\|_2
  \leq\kappa d_s(x,x').
 \]
@@ -742,38 +789,40 @@ a changed representation, or both.
 
 The preceding theorem gives a necessary geometric condition. The next
 calculation gives a sufficient population condition for one proposed
-feature block: it must correlate with the current residual, and the old
-decoder must have unused norm budget. A positive obstruction alone implies
-neither condition.
+feature block: its cross-moment with the current residual must be nonzero,
+and the old decoder must have unused norm budget. A positive obstruction
+alone implies neither condition.
 
 \begin{proposition}[Residual correlation and budget slack]
 \label{prop:residual-gain}
 Assume $\mathbb E\|Y\|_2^2<\infty$ and consider the unprojected affine
 predictor
 \[
- f_0(x)=a+\sum_{b=1}^sW_b\Phi_b(x),
+ f_0(x)=a+\sum_{b=1}^sW_b^\top\Phi_b(x),
  \qquad \sum_{b=1}^s\|W_b\|_{\rm F}<\kappa.
 \]
 Let $\psi:\mathcal X\to\mathbb R^p$ be a new feature block with
-$\mathbb E\|\psi(X)\|_2^2<\infty$. Define
+$\mathbb E\|\psi(X)\|_2^2<\infty$. This block may take general
+Euclidean values; it need not be simplex-valued. The same sum of block
+Frobenius norms constrains its coefficients. Define
 \begin{align*}
  r&=Y-f_0(X),
  &s_0&=\kappa-\sum_b\|W_b\|_{\rm F}>0,\\
- C&=\mathbb E[r\psi(X)^\top]\in\mathbb R^{q\times p},
+ C&=\mathbb E[\psi(X)r^\top]\in\mathbb R^{p\times q},
  &G&=\mathbb E[\psi(X)\psi(X)^\top]\in\mathbb R^{p\times p}.
 \end{align*}
-Here $C$ is the residual--feature cross-moment, $G$ is the feature second
+Here $C$ is the feature--residual cross-moment, $G$ is the feature second
 moment matrix, and $s_0$ is the unused budget. If $C\ne0$, let
-$a_0=\|C\|_{\rm F}^2$ and $b_0=\operatorname{tr}(CGC^\top)$, where
+$a_0=\|C\|_{\rm F}^2$ and $b_0=\operatorname{tr}(C^\top GC)$, where
 $\operatorname{tr}$ sums the diagonal entries. Then $b_0>0$, and the
 coefficient block
 \[
- V=\eta C\in\mathbb R^{q\times p},\qquad
+ V=\eta C\in\mathbb R^{p\times q},\qquad
  \eta=\min\{a_0/b_0,\ s_0/\sqrt{a_0}\}
 \]
 is feasible when appended to the old blocks. Its risk improvement is
 \begin{equation}
- R(f_0)-R(f_0+V\psi)
+ R(f_0)-R(f_0+V^\top\psi)
        =2\eta a_0-\eta^2b_0\geq\eta a_0>0.
  \label{eq:residual-gain}
 \end{equation}
@@ -783,22 +832,23 @@ least this improvement.
 \end{proposition}
 
 \begin{proof}
-The residual and the new feature block have finite second moments, so
-$C$ and $G$ are well-defined. Also,
-$b_0=\mathbb E\|C\psi(X)\|_2^2$. If $b_0=0$, then
-$C\psi(X)=0$ almost surely, implying
+The old simplex-valued blocks are bounded, so $f_0(X)$ and hence the
+residual $r$ have finite second moments. The same assumption on the new
+block makes $C$ and $G$ well-defined by the Cauchy--Schwarz inequality. Also,
+$b_0=\mathbb E\|C^\top\psi(X)\|_2^2$. If $b_0=0$, then
+$C^\top\psi(X)=0$ almost surely, implying
 \[
  \|C\|_{\rm F}^2
- =\langle C,\mathbb E[r\psi(X)^\top]\rangle_{\rm F}
- =\mathbb E[r^\top C\psi(X)]=0,
+ =\langle C,\mathbb E[\psi(X)r^\top]\rangle_{\rm F}
+ =\mathbb E[r^\top C^\top\psi(X)]=0,
 \]
 contrary to $C\ne0$. Thus $b_0>0$ and $\eta>0$.
 
-For any coefficient matrix $V$, expand
-$\|r-V\psi(X)\|_2^2$ and take expectations to obtain
+For any coefficient matrix $V\in\mathbb R^{p\times q}$, expand
+$\|r-V^\top\psi(X)\|_2^2$ and take expectations to obtain
 \[
- R(f_0+V\psi)=R(f_0)-2\langle V,C\rangle_{\rm F}
-                         +\operatorname{tr}(VGV^\top).
+ R(f_0+V^\top\psi)=R(f_0)-2\langle V,C\rangle_{\rm F}
+                         +\operatorname{tr}(V^\top GV).
 \]
 Substituting $V=\eta C$ gives the equality in
 \eqref{eq:residual-gain}. Since
@@ -840,9 +890,10 @@ a nonpositive value is inconclusive. For multiple fixed comparisons,
 allocate failure probability over the entire comparison family.
 
 Sequential refinement can also be adaptive. At stage $s$, a candidate may
-depend on all previous results, provided its evaluation episodes are fresh
-and independent conditional on that history. Choose stage failure
-probabilities $\alpha_s>0$ with $\sum_s\alpha_s\leq\delta$, and accept
+depend on all previous results. Conditional on this full past, its evaluation
+episodes must be new independent draws from the specified evaluation law.
+Choose stage failure probabilities $\alpha_s>0$ in advance, with
+$\sum_s\alpha_s\leq\delta$, and accept
 a change only when its paired lower bound is positive. Conditional validity
 at each stage and a union bound then make every accepted improvement valid
 on one event of probability at least $1-\delta$. This argument does not
@@ -852,10 +903,13 @@ Finally, a positive obstruction need not be removable by refinement. If
 $Y$ is independent of $X$ and takes values $-a$ and $a$ with equal
 probability, where $a>0$, then the minimum risk over all predictors based
 on $X$ is $a^2$. Under unconditioned independent pairing, a constant
-representation has pair witness $a^2$; no representation of the same observed history removes this
-independent future noise. Conversely, a zero witness need not imply a
-useful predictor. For identical deterministic episodes, pairing at the
-same origin yields zero target distance even when a representation loses
-all variation between origins. Obstruction, fitted risk, and inconclusive
-decisions therefore answer distinct questions and should be reported
-separately.
+representation has pair witness $a^2$; no representation of the same
+observed history removes this independent future noise. Conversely, a zero
+witness need not imply a useful predictor. For example, suppose every
+episode follows the same deterministic trajectory,
+but its target changes across forecast origins. Pairing two episodes at the
+same origin gives identical targets and hence a zero witness. A constant
+representation still cannot predict the variation across origins; its optimal
+risk is $\mathbb E\|Y-\mathbb EY\|_2^2$ under the origin law.
+Obstruction, fitted risk, and inconclusive decisions therefore answer
+distinct questions and should be reported separately.

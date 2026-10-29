@@ -116,7 +116,7 @@ def fit_export(train_path, calibration_path, output, *, history, horizons,
         frozen_record["input_scaling"] = feature.input_scaling_metadata()
     save_json(output / "frozen_candidates.json", frozen_record)
 
-    # The family above is now frozen. Calibration outcomes cannot change it.
+    # Load calibration episodes only after the candidate family is frozen.
     calibration = load_episodes(calibration_path, bounds)
     if len(calibration) < 4:
         raise ValueError("At least four independent calibration episodes are required")

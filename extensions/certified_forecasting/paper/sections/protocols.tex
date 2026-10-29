@@ -201,15 +201,16 @@ The certificate evaluates this fitted forecast directly and requires no
 spectral-stability assumption, exact feature closure, or approximation to the
 trajectory distribution.
 
-\subsection{Reproduction and follow-up protocols}
+\subsection{Reproduction and study provenance}
 
-The release retains configurations, source hashes, candidate descriptions,
-scalar records, and independent score audits. Episode-score archives support
+The repository provides configurations, source hashes, candidate definitions,
+per-episode scores, and scripts for independently reconstructing the reported
+confidence endpoints. Episode-score archives support
 reconstruction; fixed-seed runners regenerate large files omitted from the
 repository. Archived environments specify numerical-library versions;
 bitwise agreement across architectures is not assumed. Complete commands for
 all studies, asset generation, and manuscript compilation are given in
-\path{REPRODUCIBILITY.md}. Runners preserve failed attempts and refuse to
+\path{extensions/certified_forecasting/docs/REPRODUCIBILITY.md}. Runners preserve failed attempts and refuse to
 overwrite completed runs. Original-seed and confirmation input-scaling
 analyses remain separate, with the scope in Section~\ref{sec:input-scaling}.
 
@@ -221,9 +222,9 @@ The refinement allocation covers 54 adjacent-prefix horizon comparisons:
 three geometries, two histories, three adjacent prefix pairs, and three
 horizons. The complete schedule and configuration hashes precede fitting;
 Section~\ref{sec:matched-geometry} specifies selection and joint confidence
-allocation. All \MatchedCandidates\ candidates, paired seed effects,
-horizon-specific results, and PenDigits writer comparisons are retained.
+allocation. The result archive contains all \MatchedCandidates\ candidates, paired seed
+effects, horizon-specific results, and PenDigits writer comparisons.
 Table~\ref{tab:matched-geometry-primary} combines absolute errors, fitting
-variation, and relative effects. Asset generation reads the audited analysis
-without refitting or selection; original campaigns and later comparisons
-retain separate provenance.
+variation, and relative effects. The asset-generation scripts read these complete analysis records without
+refitting models or selecting configurations. Each study has a separate
+configuration and provenance record.

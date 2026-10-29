@@ -1,8 +1,8 @@
 """Geometry-induced soft states with a nested, retained feature bank.
 
 ``kind='kahm'`` calls the original repository's KAHM training and folding
-implementation.  Only the association normalization is changed to log-space.
-The ``affine`` and ``rbf`` alternatives are distinct baselines, not KAHM.
+implementation. Association weights are normalized in log space.
+The ``affine`` and ``rbf`` options define separate geometric baselines.
 All fitted transformations use development inputs only.
 """
 from __future__ import annotations

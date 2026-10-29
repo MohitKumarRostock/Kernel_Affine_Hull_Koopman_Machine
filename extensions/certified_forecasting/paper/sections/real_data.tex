@@ -13,14 +13,14 @@ Writer identifiers are inferred from the second integer in each UNIPEN
 documented 30 development and 14 test writers, but the field semantics are
 undocumented. We retain the first 32 points of a first pen-down stroke only
 if its completed length is at least 32. This leaves 1,751 test digits from
-13 eligible writers; one test writer has no qualifying stroke. The count
-was corrected from 14 to 13 before scoring, without changing eligibility.
+13 eligible writers; one of the 14 test writers has no qualifying stroke.
 The task is retrospective and restricted to writers with eligible strokes;
 it does not cover every newly started stroke.
 
 Each scalar forecast uses its own coordinate history at horizons $1,2,4$.
-All six coordinate--seed families of 40 candidates are frozen after
-validation selection and before testing. Losses average over origins and
+For each of the two coordinates and three fitting seeds, the procedure fits
+40 candidates and selects one per family by validation. All candidates and
+selection rules are frozen before testing. Losses average over origins and
 digits within writers, then equally over writers and coordinates before
 taking the square root. Table~\ref{tab:pendigits} reports the mean and sample
 standard deviation over three fitting seeds on the same test cohort;
@@ -58,6 +58,6 @@ $1.56$ certify none of the tolerances $0.2,0.35,0.5$.
 Neither the 1,751 trajectories nor their overlapping windows increase the
 independent-writer count. The experiment therefore supports descriptive
 writer-disjoint comparisons and illustrates limited certification with few
-groups. Reconstruction of all 9,360 candidate--writer--horizon losses agrees
-within $1.4\times10^{-17}$; coefficient budgets are feasible and optimization
-gaps below $10^{-7}$. These numerical checks do not establish iid sampling.
+groups. Independent reconstruction agrees with all 9,360 candidate--writer--horizon
+losses to within $1.4\times10^{-17}$. The fitted coefficient matrices satisfy
+their budgets, and their first-order optimality gaps are below $10^{-7}$. These numerical checks do not establish iid sampling.

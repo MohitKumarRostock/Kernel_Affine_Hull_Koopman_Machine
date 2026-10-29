@@ -71,7 +71,7 @@ study design requires an additional adaptive-validity argument. The current
 manuscript therefore distinguishes fresh synthetic calibration from nominal
 follow-up calculations on reused data.
 
-## Bibliographic and formatting provenance
+## Bibliographic provenance
 
 The manuscript's [bibliography](../paper/references.bib) retains journal versions
 where specified and explicit arXiv identifiers for preprints. Learn then Test
@@ -79,9 +79,3 @@ is cited as the 2025 *Annals of Applied Statistics* article, volume 19, issue 2,
 pages 1641--1662, DOI `10.1214/24-AOAS1998`. Haseli and Cortés is cited in volume
 7 (2023), pages 649--654; its DOI includes 2022 because of its earlier online
 publication. The Singh et al. entry follows the official 1994 conference year.
-
-The LaTeX style derives from the [official JMLR style repository](https://github.com/JmlrOrg/jmlr-style-file)
-and uses preprint mode. [JMLR author information](https://www.jmlr.org/author-info.html)
-and [formatting guidance](https://jmlr.org/format/format.html) are the authoritative
-submission references. The manuscript does not assign journal publication
-metadata or imply acceptance.

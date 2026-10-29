@@ -2,8 +2,9 @@ Forecasting with Kernel Affine Hull Machines:
 Representation Refinement and Risk Certification
 
 This package contains the editable LaTeX manuscript, compiled PDF, bibliography,
-tables, figures, and JMLR preprint style. The manuscript and the accompanying
-repository use the same mathematical notation and experimental definitions.
+tables, figures, and preprint formatting dependencies. The manuscript and the
+accompanying repository use the same mathematical notation and experimental
+definitions.
 
 BUILD
 
@@ -12,32 +13,28 @@ From the directory containing main.tex, run:
     latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 
 The build requires pdflatex, BibTeX, amsmath, mathtools, enumitem, microtype,
-booktabs, lastpage, and the standard PSNFSS times package. The included JMLR style is unchanged from
+booktabs, lastpage, and the standard PSNFSS times package. The bundled
+jmlr2e.sty is an unmodified third-party LaTeX dependency from
 https://github.com/JmlrOrg/jmlr-style-file.
+These dependencies apply to manuscript compilation; the software and
+experiments use the Python environment documented in the extension's
+docs/REPRODUCIBILITY.md.
 
-JMLR FORMAT AND LENGTH
+MANUSCRIPT LAYOUT
 
 The current PDF has 49 pages, including appendices and references. Its abstract
 contains 187 whitespace-delimited words, or 194 when hyphenated terms are split.
-The class remains article with twoside,11pt, as in the official JMLR sample.
-Times Roman text follows JMLR's formatting guide. The style's six-inch text
-width and 8.5-inch text height, body size, and spacing are unchanged. The
-official preprint package option suppresses unassigned journal and editor
-metadata; it does not reduce body size or margins. Hyperlinks remain active
-with their colors and borders hidden. Publication metadata can be supplied
-and the preprint option removed when the journal assigns those details.
+The current layout uses the article class with twoside,11pt, Times Roman text,
+a six-inch text width, and an 8.5-inch text height. The preprint package option
+suppresses publisher-specific metadata. Hyperlinks remain active with their
+colors and borders hidden. This layout is a presentation choice that can be
+adapted separately from the research software, experimental protocols, and
+results when a publication venue is selected.
 
 The shorter version consolidates repeated exposition while preserving all
 proofs, notation, experimental values, citations, and scientific limitations.
 All four data figures use labels of at least nine points at their printed
-size, and the dense matched-MSE table uses nine-point text. Funding and
-competing-interest declarations, corresponding-author details, coauthor
-approval, and cover-letter statements still require the authors' information.
-
-Official guidance:
-https://jmlr.org/author-info.html
-https://www.jmlr.org/format/format.html
-https://github.com/JmlrOrg/jmlr-style-file/blob/master/sample.tex
+size, and the dense matched-MSE table uses nine-point text.
 
 IMPLEMENTATION AND EXPERIMENTS
 

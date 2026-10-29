@@ -22,11 +22,11 @@ experiment, or an exhaustive novelty assessment. The detailed records are in
 The edition following commit `5300c4833ed849e712f30609eb257e570d064d3b`
 shortens the abstract to 187 words and the complete PDF to 49 pages, including
 appendices and references. Splitting hyphenated abstract terms gives 194 words.
-It retains the official `article` class with `twoside,11pt` and the unchanged
-JMLR style, uses Times Roman text as recommended by the journal, and preserves
-the style's text dimensions and spacing. The official `preprint` option
-suppresses unassigned publication metadata without changing the body font size
-or text dimensions.
+It retains the `article` class with `twoside,11pt`, the unchanged bundled
+preprint style, Times Roman text, and the previous text dimensions and spacing.
+The `preprint` option suppresses publisher-specific metadata without changing
+the body font size or text dimensions. These recorded layout properties are
+independent of the manuscript's eventual publication venue.
 
 Repeated exposition was consolidated. The theory, notation, method,
 optimization appendix, and exact-risk appendix remain byte-identical to the

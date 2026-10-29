@@ -10,6 +10,8 @@ This directory contains an executable forecasting method, finite-sample
 prediction-risk certificates, retained experiment summaries, and reproducibility
 utilities. The [manuscript](paper/) develops the mathematical results, specifies
 their assumptions, and reports the empirical comparisons.
+The software and supporting evidence are maintained as a reusable research
+resource, independently of the manuscript's publication venue.
 
 KAHM is the central implemented representation. Its local reconstruction
 models supply soft geometric associations of a causal history, and retained

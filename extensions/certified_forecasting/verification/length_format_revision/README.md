@@ -1,15 +1,18 @@
-# Manuscript length and JMLR formatting verification
+# Manuscript length, typography, and content verification
 
 Date: 29 October 2026. Comparison revision:
 `5300c4833ed849e712f30609eb257e570d064d3b`.
+Verified manuscript and plotting revision:
+`78e71f028fa0f40849251ac913c5209176cef956`.
 
 The revised manuscript contains a 187-word abstract and 49 pages, including
 appendices and references. Counting hyphenated abstract terms separately gives
-194 words. The official `article` class options remain `twoside,11pt`, and the
-JMLR style file is unchanged. Times Roman text follows the journal's formatting
-guide; text dimensions and line spacing retain their previous settings.
-The official `preprint` option suppresses publication metadata that has not
-been assigned, without changing the body font size or margins.
+194 words. The `article` class options remain `twoside,11pt`, and the bundled
+preprint style is unchanged. The document uses Times Roman text, with the
+previous text dimensions and line spacing. Preprint mode suppresses
+publisher-specific metadata without changing the body font size or margins.
+These measurements describe the verified document and are independent of its
+eventual publication venue.
 
 The revision consolidates repeated prose while retaining all definitions,
 proofs, empirical findings, adverse results, and statistical qualifications.
@@ -44,12 +47,9 @@ They remain unchanged as historical evidence. The broader verification scope
 and limitations are stated in
 [`docs/SCIENTIFIC_VERIFICATION.md`](../../docs/SCIENTIFIC_VERIFICATION.md).
 
-## Official formatting sources
+## Document dependencies
 
-- [JMLR submission instructions](https://jmlr.org/author-info.html)
-- [JMLR formatting guide](https://www.jmlr.org/format/format.html)
-- [Official sample and package options](https://github.com/JmlrOrg/jmlr-style-file/blob/master/sample.tex)
-
-The length and abstract requirements are addressed. The authors remain
-responsible for funding and competing-interest declarations, corresponding
-author details, coauthor approval, and the required cover-letter statements.
+The [manuscript build guide](../../paper/README_BUILD.txt) records the LaTeX
+dependencies and their provenance. The verification establishes the properties
+of the retained document and numerical evidence; publication decisions are
+separate from the software and reproducibility record.

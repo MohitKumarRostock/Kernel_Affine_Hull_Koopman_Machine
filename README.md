@@ -4,6 +4,9 @@ Research software and reproducibility artifacts for Kernel Affine Hull Koopman M
 
 The repository contains the KAHKM implementation, experiment runners, hyperparameter-search scripts, archived numerical outputs, figure and table generators, and provenance records used to reproduce the reported results.
 
+The software and reproducibility records are maintained independently of the
+publication venue of any accompanying manuscript.
+
 ## KAHM forecasting and risk certification
 
 The [certified forecasting extension](extensions/certified_forecasting/)

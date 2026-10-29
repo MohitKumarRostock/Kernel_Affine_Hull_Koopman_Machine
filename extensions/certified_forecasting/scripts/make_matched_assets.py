@@ -88,8 +88,8 @@ def dimension_figure(comparisons, destination):
                          "axes.titlesize": 10, "axes.labelsize": 9.5,
                          "xtick.labelsize": 9.5, "ytick.labelsize": 9.5,
                          "pdf.fonttype": 42, "ps.fonttype": 42})
-    # Full-width inclusion in JMLR preserves the source font sizes and leaves
-    # space for the caption within the 8.5-inch text height.
+    # Inclusion at a six-inch width preserves the source font sizes and leaves
+    # space for a caption within the current 8.5-inch text height.
     fig, axes = plt.subplots(len(TASKS), len(HEADS), figsize=(6, 7.3), sharex=True, sharey="row")
     for ri, task in enumerate(TASKS):
         for ci, head in enumerate(HEADS):

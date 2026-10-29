@@ -1,0 +1,2382 @@
+{
+  "study_type": "descriptive follow-up on reused groups",
+  "confidence_claims": false,
+  "calibration_evaluated": false,
+  "n_candidates": 2688,
+  "n_selected": 36,
+  "n_group_horizon_losses": 26460,
+  "results": [
+    {
+      "seed": 8601,
+      "family": "kahm",
+      "scaling": "standard",
+      "candidate": "8601_kahm_m4_standard_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.0046400016035571265,
+        0.01730971963873024,
+        0.04624107065984116
+      ],
+      "validation_mean": 0.022730263967376176,
+      "parameters": {
+        "scaling": "standard",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.026732368001830764,
+      "bank_id": "8601_kahm_m4_standard_sharp1",
+      "optimization_gap": 9.091165017764801e-08,
+      "coefficient_norm": 2.241301358607812,
+      "converged": true,
+      "test_mse": [
+        0.004645981950488251,
+        0.016515137349370615,
+        0.045908622325134034
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.25203452599816956,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "standard",
+        "clip": false,
+        "mean": [
+          0.30789771773162417,
+          0.30832993635314165,
+          0.309974711199901,
+          0.31059942676000096
+        ],
+        "scale": [
+          0.2555218432578919,
+          0.256799928401818,
+          0.2569394870256975,
+          0.2573686200609654
+        ]
+      }
+    },
+    {
+      "seed": 8601,
+      "family": "kahm",
+      "scaling": "raw",
+      "candidate": "8601_kahm_m4_raw_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004381730165582578,
+        0.017071516743440387,
+        0.045706576234149816
+      ],
+      "validation_mean": 0.022386607714390928,
+      "parameters": {
+        "scaling": "raw",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.028276994002226274,
+      "bank_id": "8601_kahm_m4_raw_sharp1",
+      "optimization_gap": 7.803961721168652e-08,
+      "coefficient_norm": 3.4348930083933906,
+      "converged": true,
+      "test_mse": [
+        0.004441224365773034,
+        0.015956764381364737,
+        0.04510589881723112
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.23751326999627054,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "raw",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "seed": 8601,
+      "family": "kahm",
+      "scaling": "minmax",
+      "candidate": "8601_kahm_m4_minmax_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004550719418750482,
+        0.017228240856256904,
+        0.04615603433598202
+      ],
+      "validation_mean": 0.02264499820366313,
+      "parameters": {
+        "scaling": "minmax",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.028778352003428154,
+      "bank_id": "8601_kahm_m4_minmax_sharp1",
+      "optimization_gap": 8.691528199388359e-08,
+      "coefficient_norm": 2.2861125762437418,
+      "converged": true,
+      "test_mse": [
+        0.004529983571531944,
+        0.016261421226969164,
+        0.04591491445051529
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.27400967300491175,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8601,
+      "family": "kahm",
+      "scaling": "minmax_clip",
+      "candidate": "8601_kahm_m4_minmax_clip_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004550719418750482,
+        0.017228240856256904,
+        0.04615603433598202
+      ],
+      "validation_mean": 0.02264499820366313,
+      "parameters": {
+        "scaling": "minmax_clip",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.032763617993623484,
+      "bank_id": "8601_kahm_m4_minmax_clip_sharp1",
+      "optimization_gap": 8.691528199388359e-08,
+      "coefficient_norm": 2.2861125762437418,
+      "converged": true,
+      "test_mse": [
+        0.004529997901850393,
+        0.016261445986318374,
+        0.045914913281397476
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.24898993100214284,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax_clip",
+        "clip": true,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8601,
+      "family": "rbf",
+      "scaling": "standard",
+      "candidate": "8601_rbf_m4_standard_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.0039566845416505216,
+        0.016457931300536882,
+        0.045473068377896435
+      ],
+      "validation_mean": 0.021962561406694614,
+      "parameters": {
+        "scaling": "standard",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.03355289099999936,
+      "bank_id": "8601_rbf_m4_standard_sharp0.25",
+      "optimization_gap": 9.670049602392311e-08,
+      "coefficient_norm": 3.6034117692739094,
+      "converged": true,
+      "test_mse": [
+        0.003983359414407108,
+        0.015382923342383352,
+        0.0449388799079057
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.04376481300278101,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "standard",
+        "clip": false,
+        "mean": [
+          0.30789771773162417,
+          0.30832993635314165,
+          0.309974711199901,
+          0.31059942676000096
+        ],
+        "scale": [
+          0.2555218432578919,
+          0.256799928401818,
+          0.2569394870256975,
+          0.2573686200609654
+        ]
+      }
+    },
+    {
+      "seed": 8601,
+      "family": "rbf",
+      "scaling": "raw",
+      "candidate": "8601_rbf_m4_raw_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.003954102524692487,
+        0.01644029222896675,
+        0.04546488732155023
+      ],
+      "validation_mean": 0.021953094025069824,
+      "parameters": {
+        "scaling": "raw",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.03176971500215586,
+      "bank_id": "8601_rbf_m4_raw_sharp0.25",
+      "optimization_gap": 9.17818170871746e-08,
+      "coefficient_norm": 3.522446209846753,
+      "converged": true,
+      "test_mse": [
+        0.003971754819130976,
+        0.015363688377598678,
+        0.04493904836177253
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.054240880999714136,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "raw",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "seed": 8601,
+      "family": "rbf",
+      "scaling": "minmax",
+      "candidate": "8601_rbf_m4_minmax_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.003960694405233783,
+        0.01641137714875042,
+        0.04534674344721731
+      ],
+      "validation_mean": 0.02190627166706717,
+      "parameters": {
+        "scaling": "minmax",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.03535149100207491,
+      "bank_id": "8601_rbf_m4_minmax_sharp0.25",
+      "optimization_gap": 6.957661125477492e-08,
+      "coefficient_norm": 3.816152894932468,
+      "converged": true,
+      "test_mse": [
+        0.003977471870184225,
+        0.01533738850791065,
+        0.04483147950618413
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.054835275004734285,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8601,
+      "family": "rbf",
+      "scaling": "minmax_clip",
+      "candidate": "8601_rbf_m4_minmax_clip_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.003960694405233783,
+        0.01641137714875042,
+        0.04534674344721731
+      ],
+      "validation_mean": 0.02190627166706717,
+      "parameters": {
+        "scaling": "minmax_clip",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.03575903700402705,
+      "bank_id": "8601_rbf_m4_minmax_clip_sharp0.25",
+      "optimization_gap": 6.957661125477492e-08,
+      "coefficient_norm": 3.816152894932468,
+      "converged": true,
+      "test_mse": [
+        0.003977456816678088,
+        0.015337344739530797,
+        0.044831467738966194
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.048954028003208805,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax_clip",
+        "clip": true,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8601,
+      "family": "affine",
+      "scaling": "standard",
+      "candidate": "8601_affine_m4_standard_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004644052923087608,
+        0.01701028119909155,
+        0.046243852390299954
+      ],
+      "validation_mean": 0.022632728837493038,
+      "parameters": {
+        "scaling": "standard",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.016492445996846072,
+      "bank_id": "8601_affine_m4_standard_sharp0.25",
+      "optimization_gap": 8.645829614674534e-08,
+      "coefficient_norm": 4.0,
+      "converged": true,
+      "test_mse": [
+        0.004406425805125571,
+        0.016007747546406503,
+        0.04538056351353996
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.07086083199828863,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "standard",
+        "clip": false,
+        "mean": [
+          0.30789771773162417,
+          0.30832993635314165,
+          0.309974711199901,
+          0.31059942676000096
+        ],
+        "scale": [
+          0.2555218432578919,
+          0.256799928401818,
+          0.2569394870256975,
+          0.2573686200609654
+        ]
+      }
+    },
+    {
+      "seed": 8601,
+      "family": "affine",
+      "scaling": "raw",
+      "candidate": "8601_affine_m4_raw_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.0048257538057948175,
+        0.01738628983214036,
+        0.04650993640084578
+      ],
+      "validation_mean": 0.022907326679593654,
+      "parameters": {
+        "scaling": "raw",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.017160166004032362,
+      "bank_id": "8601_affine_m4_raw_sharp0.25",
+      "optimization_gap": 9.148614422331645e-08,
+      "coefficient_norm": 3.9999999999999996,
+      "converged": true,
+      "test_mse": [
+        0.004815357105935843,
+        0.016466839907737552,
+        0.045596784747056356
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.06559969299996737,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "raw",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "seed": 8601,
+      "family": "affine",
+      "scaling": "minmax",
+      "candidate": "8601_affine_m4_minmax_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004808181124698535,
+        0.017403134977596067,
+        0.04682934489602939
+      ],
+      "validation_mean": 0.023013553666107998,
+      "parameters": {
+        "scaling": "minmax",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.015017516001535114,
+      "bank_id": "8601_affine_m4_minmax_sharp0.25",
+      "optimization_gap": 7.888728488763402e-08,
+      "coefficient_norm": 3.9999999999999996,
+      "converged": true,
+      "test_mse": [
+        0.004708826387910535,
+        0.016557747843522205,
+        0.046021680237409206
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.0668224140026723,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8601,
+      "family": "affine",
+      "scaling": "minmax_clip",
+      "candidate": "8601_affine_m4_minmax_clip_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004808181124698535,
+        0.017403134977596067,
+        0.04682934489602939
+      ],
+      "validation_mean": 0.023013553666107998,
+      "parameters": {
+        "scaling": "minmax_clip",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.016553679000935517,
+      "bank_id": "8601_affine_m4_minmax_clip_sharp0.25",
+      "optimization_gap": 7.888728488763402e-08,
+      "coefficient_norm": 3.9999999999999996,
+      "converged": true,
+      "test_mse": [
+        0.004708691570645231,
+        0.01655748650907539,
+        0.04602143336644471
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.06752692900045076,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax_clip",
+        "clip": true,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8602,
+      "family": "kahm",
+      "scaling": "standard",
+      "candidate": "8602_kahm_m4_standard_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.005137601540984427,
+        0.018121343929314936,
+        0.04671191907591892
+      ],
+      "validation_mean": 0.023323621515406096,
+      "parameters": {
+        "scaling": "standard",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.029217306000646204,
+      "bank_id": "8602_kahm_m4_standard_sharp1",
+      "optimization_gap": 9.673772042094853e-08,
+      "coefficient_norm": 1.9458145098878084,
+      "converged": true,
+      "test_mse": [
+        0.005062720239313436,
+        0.017025507439566438,
+        0.04614609393566464
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.21970352900098078,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "standard",
+        "clip": false,
+        "mean": [
+          0.30600803880466326,
+          0.30630309581951476,
+          0.30618100643800866,
+          0.30765917540534726
+        ],
+        "scale": [
+          0.25882309072865994,
+          0.2570414926676332,
+          0.2571240400767312,
+          0.25693992304767893
+        ]
+      }
+    },
+    {
+      "seed": 8602,
+      "family": "kahm",
+      "scaling": "raw",
+      "candidate": "8602_kahm_m4_raw_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004825132666100118,
+        0.017616963723051597,
+        0.045923513900869975
+      ],
+      "validation_mean": 0.022788536763340566,
+      "parameters": {
+        "scaling": "raw",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.03914022800017847,
+      "bank_id": "8602_kahm_m4_raw_sharp1",
+      "optimization_gap": 8.253281993354758e-08,
+      "coefficient_norm": 2.9739479726307234,
+      "converged": true,
+      "test_mse": [
+        0.004792468301855083,
+        0.01651552855751531,
+        0.045361457239176846
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.21112393999646883,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "raw",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "seed": 8602,
+      "family": "kahm",
+      "scaling": "minmax",
+      "candidate": "8602_kahm_m4_minmax_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004765046173898337,
+        0.017503069167482156,
+        0.0461143599802604
+      ],
+      "validation_mean": 0.022794158440546965,
+      "parameters": {
+        "scaling": "minmax",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.03727540600084467,
+      "bank_id": "8602_kahm_m4_minmax_sharp1",
+      "optimization_gap": 9.722416639483942e-08,
+      "coefficient_norm": 2.936471523899548,
+      "converged": true,
+      "test_mse": [
+        0.0047208174066317166,
+        0.01653764661574304,
+        0.04579022947754571
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.2201051459996961,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8602,
+      "family": "kahm",
+      "scaling": "minmax_clip",
+      "candidate": "8602_kahm_m4_minmax_clip_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004765046173898337,
+        0.017503069167482156,
+        0.0461143599802604
+      ],
+      "validation_mean": 0.022794158440546965,
+      "parameters": {
+        "scaling": "minmax_clip",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.0386338309981511,
+      "bank_id": "8602_kahm_m4_minmax_clip_sharp1",
+      "optimization_gap": 9.722416639483942e-08,
+      "coefficient_norm": 2.936471523899548,
+      "converged": true,
+      "test_mse": [
+        0.004720789912454882,
+        0.01653764544248668,
+        0.045790229956355975
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.212943031998293,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax_clip",
+        "clip": true,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8602,
+      "family": "rbf",
+      "scaling": "standard",
+      "candidate": "8602_rbf_m4_standard_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.003997585947042478,
+        0.01652992098573768,
+        0.04535146127024788
+      ],
+      "validation_mean": 0.02195965606767601,
+      "parameters": {
+        "scaling": "standard",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.032372831999964546,
+      "bank_id": "8602_rbf_m4_standard_sharp0.25",
+      "optimization_gap": 9.922301394375074e-08,
+      "coefficient_norm": 3.7923637767374756,
+      "converged": true,
+      "test_mse": [
+        0.0040202814427073635,
+        0.015483271581384376,
+        0.045002791494815016
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.04599599899665918,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "standard",
+        "clip": false,
+        "mean": [
+          0.30600803880466326,
+          0.30630309581951476,
+          0.30618100643800866,
+          0.30765917540534726
+        ],
+        "scale": [
+          0.25882309072865994,
+          0.2570414926676332,
+          0.2571240400767312,
+          0.25693992304767893
+        ]
+      }
+    },
+    {
+      "seed": 8602,
+      "family": "rbf",
+      "scaling": "raw",
+      "candidate": "8602_rbf_m4_raw_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.0040141660147849515,
+        0.016491594286963798,
+        0.04524859543087355
+      ],
+      "validation_mean": 0.021918118577540766,
+      "parameters": {
+        "scaling": "raw",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.03920505600399338,
+      "bank_id": "8602_rbf_m4_raw_sharp0.25",
+      "optimization_gap": 8.920328112922448e-08,
+      "coefficient_norm": 4.0,
+      "converged": true,
+      "test_mse": [
+        0.004023758449441949,
+        0.015443884924297649,
+        0.04494086541296592
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.04541317700204672,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "raw",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "seed": 8602,
+      "family": "rbf",
+      "scaling": "minmax",
+      "candidate": "8602_rbf_m4_minmax_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.003940870423662535,
+        0.016345922327518112,
+        0.04512080571335805
+      ],
+      "validation_mean": 0.0218025328215129,
+      "parameters": {
+        "scaling": "minmax",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.04006027799914591,
+      "bank_id": "8602_rbf_m4_minmax_sharp0.25",
+      "optimization_gap": 8.980790863732351e-08,
+      "coefficient_norm": 3.7075251838720797,
+      "converged": true,
+      "test_mse": [
+        0.003953527015513559,
+        0.015331995503912349,
+        0.04484537080719731
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.046149019995937124,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8602,
+      "family": "rbf",
+      "scaling": "minmax_clip",
+      "candidate": "8602_rbf_m4_minmax_clip_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.003940870423662535,
+        0.016345922327518112,
+        0.04512080571335805
+      ],
+      "validation_mean": 0.0218025328215129,
+      "parameters": {
+        "scaling": "minmax_clip",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.04863115100306459,
+      "bank_id": "8602_rbf_m4_minmax_clip_sharp0.25",
+      "optimization_gap": 8.980790863732351e-08,
+      "coefficient_norm": 3.7075251838720797,
+      "converged": true,
+      "test_mse": [
+        0.003953499218413654,
+        0.015331912441955782,
+        0.044845319365926097
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.04521623899927363,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax_clip",
+        "clip": true,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8602,
+      "family": "affine",
+      "scaling": "standard",
+      "candidate": "8602_affine_m4_standard_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004644196702906127,
+        0.017342750006401515,
+        0.04642130784738584
+      ],
+      "validation_mean": 0.022802751518897824,
+      "parameters": {
+        "scaling": "standard",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.015211015997920185,
+      "bank_id": "8602_affine_m4_standard_sharp0.25",
+      "optimization_gap": 9.698706066887074e-08,
+      "coefficient_norm": 3.9999999999999996,
+      "converged": true,
+      "test_mse": [
+        0.004621381696745017,
+        0.016398817392941484,
+        0.04594202224034306
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.06525269800476963,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "standard",
+        "clip": false,
+        "mean": [
+          0.30600803880466326,
+          0.30630309581951476,
+          0.30618100643800866,
+          0.30765917540534726
+        ],
+        "scale": [
+          0.25882309072865994,
+          0.2570414926676332,
+          0.2571240400767312,
+          0.25693992304767893
+        ]
+      }
+    },
+    {
+      "seed": 8602,
+      "family": "affine",
+      "scaling": "raw",
+      "candidate": "8602_affine_m4_raw_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.005972307235420607,
+        0.018785876300566842,
+        0.04719531492987295
+      ],
+      "validation_mean": 0.023984499488620133,
+      "parameters": {
+        "scaling": "raw",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.019197684996470343,
+      "bank_id": "8602_affine_m4_raw_sharp0.25",
+      "optimization_gap": 8.510209041092363e-08,
+      "coefficient_norm": 4.0,
+      "converged": true,
+      "test_mse": [
+        0.005565632126720789,
+        0.017370467788194045,
+        0.04632652769728521
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.06482884800061584,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "raw",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "seed": 8602,
+      "family": "affine",
+      "scaling": "minmax",
+      "candidate": "8602_affine_m4_minmax_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.005099086323205018,
+        0.0176979814113319,
+        0.046277172792077055
+      ],
+      "validation_mean": 0.023024746842204655,
+      "parameters": {
+        "scaling": "minmax",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.021758497998234816,
+      "bank_id": "8602_affine_m4_minmax_sharp0.25",
+      "optimization_gap": 6.958821615905136e-08,
+      "coefficient_norm": 4.0,
+      "converged": true,
+      "test_mse": [
+        0.005245345714746693,
+        0.01687788157297412,
+        0.04575334208355236
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.06768950499827042,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8602,
+      "family": "affine",
+      "scaling": "minmax_clip",
+      "candidate": "8602_affine_m4_minmax_clip_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.005099086323205018,
+        0.0176979814113319,
+        0.046277172792077055
+      ],
+      "validation_mean": 0.023024746842204655,
+      "parameters": {
+        "scaling": "minmax_clip",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.02078303299640538,
+      "bank_id": "8602_affine_m4_minmax_clip_sharp0.25",
+      "optimization_gap": 6.958821615905136e-08,
+      "coefficient_norm": 4.0,
+      "converged": true,
+      "test_mse": [
+        0.005245279467834825,
+        0.01687766730505677,
+        0.04575309980507075
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.06610596900281962,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax_clip",
+        "clip": true,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9873519941391652,
+          0.9842579301120449,
+          0.9674319053656996,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 2.302025782688766e-05,
+      "test_history_fraction_outside_training_range": 9.208103130755064e-05,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.0166399253357103
+    },
+    {
+      "seed": 8603,
+      "family": "kahm",
+      "scaling": "standard",
+      "candidate": "8603_kahm_m4_standard_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004910602653856216,
+        0.017583620728570108,
+        0.0463299945112949
+      ],
+      "validation_mean": 0.022941405964573742,
+      "parameters": {
+        "scaling": "standard",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.027817589994810987,
+      "bank_id": "8603_kahm_m4_standard_sharp1",
+      "optimization_gap": 8.958836220487223e-08,
+      "coefficient_norm": 1.8351902670515292,
+      "converged": true,
+      "test_mse": [
+        0.004968255614244319,
+        0.01662010498954323,
+        0.04623689040112826
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.19523250100610312,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "standard",
+        "clip": false,
+        "mean": [
+          0.30065467825860687,
+          0.302712692768004,
+          0.3028509994743715,
+          0.30280257067904764
+        ],
+        "scale": [
+          0.2584355227187588,
+          0.257850349149366,
+          0.25785383191670086,
+          0.2585591127135486
+        ]
+      }
+    },
+    {
+      "seed": 8603,
+      "family": "kahm",
+      "scaling": "raw",
+      "candidate": "8603_kahm_m4_raw_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004029377164267628,
+        0.016352719650370863,
+        0.04474265052423259
+      ],
+      "validation_mean": 0.021708249112957028,
+      "parameters": {
+        "scaling": "raw",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.030491253004583996,
+      "bank_id": "8603_kahm_m4_raw_sharp1",
+      "optimization_gap": 9.704586075354786e-08,
+      "coefficient_norm": 3.7125618988189157,
+      "converged": true,
+      "test_mse": [
+        0.004106654872721228,
+        0.015361604470641868,
+        0.044560265860339246
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.19906441899365745,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "raw",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "seed": 8603,
+      "family": "kahm",
+      "scaling": "minmax",
+      "candidate": "8603_kahm_m4_minmax_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004761779852372245,
+        0.017216365589815232,
+        0.045760017418902205
+      ],
+      "validation_mean": 0.02257938762036323,
+      "parameters": {
+        "scaling": "minmax",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.02410613899701275,
+      "bank_id": "8603_kahm_m4_minmax_sharp1",
+      "optimization_gap": 7.548305026228563e-08,
+      "coefficient_norm": 2.791502002210513,
+      "converged": true,
+      "test_mse": [
+        0.004855790744009695,
+        0.016268766401042186,
+        0.045381186323545056
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.1943647379957838,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 0.00014963167587476978,
+      "test_history_fraction_outside_training_range": 0.0004143646408839779,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.1121659702006066
+    },
+    {
+      "seed": 8603,
+      "family": "kahm",
+      "scaling": "minmax_clip",
+      "candidate": "8603_kahm_m4_minmax_clip_sharp1_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004761685293357903,
+        0.01721617386287901,
+        0.04576016587249506
+      ],
+      "validation_mean": 0.02257934167624399,
+      "parameters": {
+        "scaling": "minmax_clip",
+        "sharpness": 1.0,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.02199614799610572,
+      "bank_id": "8603_kahm_m4_minmax_clip_sharp1",
+      "optimization_gap": 7.548305026228563e-08,
+      "coefficient_norm": 2.791502002210513,
+      "converged": true,
+      "test_mse": [
+        0.004855756415123232,
+        0.016268670732754863,
+        0.045381084762625534
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.1886269389942754,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax_clip",
+        "clip": true,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 0.00014963167587476978,
+      "test_history_fraction_outside_training_range": 0.0004143646408839779,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.1121659702006066
+    },
+    {
+      "seed": 8603,
+      "family": "rbf",
+      "scaling": "standard",
+      "candidate": "8603_rbf_m4_standard_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.003923029707533487,
+        0.016485741371671053,
+        0.04551590167866108
+      ],
+      "validation_mean": 0.02197489091928854,
+      "parameters": {
+        "scaling": "standard",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.0526535819954006,
+      "bank_id": "8603_rbf_m4_standard_sharp0.25",
+      "optimization_gap": 8.854605930903021e-08,
+      "coefficient_norm": 3.9999999999999996,
+      "converged": true,
+      "test_mse": [
+        0.003984725527861475,
+        0.015433937113696035,
+        0.04496141122731732
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.04254345699882833,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "standard",
+        "clip": false,
+        "mean": [
+          0.30065467825860687,
+          0.302712692768004,
+          0.3028509994743715,
+          0.30280257067904764
+        ],
+        "scale": [
+          0.2584355227187588,
+          0.257850349149366,
+          0.25785383191670086,
+          0.2585591127135486
+        ]
+      }
+    },
+    {
+      "seed": 8603,
+      "family": "rbf",
+      "scaling": "raw",
+      "candidate": "8603_rbf_m4_raw_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.00392351760153896,
+        0.01648319229680787,
+        0.04551018892058561
+      ],
+      "validation_mean": 0.02197229960631081,
+      "parameters": {
+        "scaling": "raw",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.0410479470010614,
+      "bank_id": "8603_rbf_m4_raw_sharp0.25",
+      "optimization_gap": 8.51431488137425e-08,
+      "coefficient_norm": 4.0,
+      "converged": true,
+      "test_mse": [
+        0.003984177213302004,
+        0.015430022703739051,
+        0.04495326601549225
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.04251907899742946,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "raw",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "seed": 8603,
+      "family": "rbf",
+      "scaling": "minmax",
+      "candidate": "8603_rbf_m4_minmax_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.003803604252168904,
+        0.016102225608660092,
+        0.04495259978385979
+      ],
+      "validation_mean": 0.0216194765482296,
+      "parameters": {
+        "scaling": "minmax",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.04650526800105581,
+      "bank_id": "8603_rbf_m4_minmax_sharp0.25",
+      "optimization_gap": 8.941915977003605e-08,
+      "coefficient_norm": 4.0,
+      "converged": true,
+      "test_mse": [
+        0.0038574310519076675,
+        0.015097836542121023,
+        0.044499660387890404
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.04384505500638625,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 0.00014963167587476978,
+      "test_history_fraction_outside_training_range": 0.0004143646408839779,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.1121659702006066
+    },
+    {
+      "seed": 8603,
+      "family": "rbf",
+      "scaling": "minmax_clip",
+      "candidate": "8603_rbf_m4_minmax_clip_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.003803516159328298,
+        0.016102059101744382,
+        0.04495253562774849
+      ],
+      "validation_mean": 0.021619370296273723,
+      "parameters": {
+        "scaling": "minmax_clip",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.04824763500073459,
+      "bank_id": "8603_rbf_m4_minmax_clip_sharp0.25",
+      "optimization_gap": 8.941915977003605e-08,
+      "coefficient_norm": 4.0,
+      "converged": true,
+      "test_mse": [
+        0.003857291212451172,
+        0.015097678405026705,
+        0.04449956447377602
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.04753302300377982,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax_clip",
+        "clip": true,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 0.00014963167587476978,
+      "test_history_fraction_outside_training_range": 0.0004143646408839779,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.1121659702006066
+    },
+    {
+      "seed": 8603,
+      "family": "affine",
+      "scaling": "standard",
+      "candidate": "8603_affine_m12_standard_sharp0.25_s4_k4_a0.0001",
+      "history": 12,
+      "features": 30,
+      "validation_mse": [
+        0.00638659576759549,
+        0.018879394058466194,
+        0.04540537555265134
+      ],
+      "validation_mean": 0.02355712179290434,
+      "parameters": {
+        "scaling": "standard",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.011650458996882662,
+      "bank_id": "8603_affine_m12_standard_sharp0.25",
+      "optimization_gap": 6.495689505205127e-08,
+      "coefficient_norm": 4.0,
+      "converged": true,
+      "test_mse": [
+        0.006323527281824813,
+        0.017998228340097105,
+        0.045358270858831956
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.09042226200108416,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "standard",
+        "clip": false,
+        "mean": [
+          0.2995258867028247,
+          0.2991732479776451,
+          0.30125195698092727,
+          0.30143008501110663,
+          0.3002557761376615,
+          0.2997775738094205,
+          0.299209656385748,
+          0.30032424096306926,
+          0.30065467825860687,
+          0.302712692768004,
+          0.3028509994743715,
+          0.30280257067904764
+        ],
+        "scale": [
+          0.2627849327980875,
+          0.26145906342070707,
+          0.26058633267647463,
+          0.2600080219071295,
+          0.25941145596116655,
+          0.2589837674615741,
+          0.2576813087413109,
+          0.2581982037435868,
+          0.2584355227187588,
+          0.257850349149366,
+          0.25785383191670086,
+          0.2585591127135486
+        ]
+      }
+    },
+    {
+      "seed": 8603,
+      "family": "affine",
+      "scaling": "raw",
+      "candidate": "8603_affine_m12_raw_sharp0.25_s4_k4_a0.0001",
+      "history": 12,
+      "features": 30,
+      "validation_mse": [
+        0.00653102868282493,
+        0.018936780853330615,
+        0.0455974821153461
+      ],
+      "validation_mean": 0.023688430550500548,
+      "parameters": {
+        "scaling": "raw",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.019557314000849146,
+      "bank_id": "8603_affine_m12_raw_sharp0.25",
+      "optimization_gap": 8.349717712662248e-08,
+      "coefficient_norm": 3.9999999999999996,
+      "converged": true,
+      "test_mse": [
+        0.006655433295551158,
+        0.01837058794087989,
+        0.045790679681515074
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.08980718300153967,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "raw",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "seed": 8603,
+      "family": "affine",
+      "scaling": "minmax",
+      "candidate": "8603_affine_m4_minmax_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.004658153886771485,
+        0.017411443443452246,
+        0.047036240253011466
+      ],
+      "validation_mean": 0.023035279194411732,
+      "parameters": {
+        "scaling": "minmax",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.015097124996827915,
+      "bank_id": "8603_affine_m4_minmax_sharp0.25",
+      "optimization_gap": 4.297010637750991e-08,
+      "coefficient_norm": 3.9999999999999996,
+      "converged": true,
+      "test_mse": [
+        0.004705673122866195,
+        0.016663535744501152,
+        0.046385802229954934
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.0679387170021073,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax",
+        "clip": false,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 0.00014963167587476978,
+      "test_history_fraction_outside_training_range": 0.0004143646408839779,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.1121659702006066
+    },
+    {
+      "seed": 8603,
+      "family": "affine",
+      "scaling": "minmax_clip",
+      "candidate": "8603_affine_m4_minmax_clip_sharp0.25_s4_k4_a0.0001",
+      "history": 4,
+      "features": 30,
+      "validation_mse": [
+        0.0046584120855257,
+        0.017411600763612166,
+        0.04703557024473409
+      ],
+      "validation_mean": 0.02303519436462399,
+      "parameters": {
+        "scaling": "minmax_clip",
+        "sharpness": 0.25,
+        "stage": 4,
+        "kappa": 4.0,
+        "alpha": 0.0001
+      },
+      "head_fit_seconds": 0.015297726000426337,
+      "bank_id": "8603_affine_m4_minmax_clip_sharp0.25",
+      "optimization_gap": 4.297010637750991e-08,
+      "coefficient_norm": 3.9999999999999996,
+      "converged": true,
+      "test_mse": [
+        0.004705511578321236,
+        0.016663445691888688,
+        0.04638610934664742
+      ],
+      "test_groups": 245,
+      "test_prediction_seconds": 0.06607824799721129,
+      "test_prediction_rows": 21720,
+      "input_scaling": {
+        "mode": "minmax_clip",
+        "clip": true,
+        "mean": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "training_min": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "training_max": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "training_range": [
+          0.9426974394212778,
+          0.95349175612746,
+          0.9632039228942496,
+          0.9827270429697432
+        ],
+        "constant_features": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "constant_feature_policy": "map to zero",
+        "formula": "2*(x-training_min)/training_range-1"
+      },
+      "test_coordinate_fraction_outside_training_range": 0.00014963167587476978,
+      "test_history_fraction_outside_training_range": 0.0004143646408839779,
+      "test_unclipped_min": -1.0,
+      "test_unclipped_max": 1.1121659702006066
+    }
+  ]
+}

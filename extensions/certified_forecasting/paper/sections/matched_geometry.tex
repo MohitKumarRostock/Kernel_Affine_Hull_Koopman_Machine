@@ -1,0 +1,82 @@
+\section{A matched comparison of geometric representations}
+\label{sec:matched-geometry}
+\input{tables/matched_geometry_numbers}
+
+\paragraph{Design.}
+To separate representation and decoder effects, we compare KAHM, RBF, and
+affine-hull geometry with three decoders: direct fitting under the block-norm
+budget in \eqref{eq:training-objective}, direct fitting under an ordinary
+Frobenius-norm budget, and feature rollout. We use \emph{head} as a short name
+for these decoder choices.
+Every geometry--head pair receives the same prefix dimensions $2,6,14,30$,
+two history lengths, and four preprocessing options. Training, horizons,
+origins, regularization, and geometry subsampling follow the original study.
+Equal numerical budgets and feature counts do not imply equal statistical
+capacity or computational cost.
+
+Five seeds, $5701$--$5705$, generate fresh episodes for all six synthetic
+tasks. PenDigits uses new fitting randomness within the same development and
+held-out writer cohorts. Before calibration, each geometry--head pair selects
+preprocessing, history, and dimension by validation MSE across horizons, with
+ties resolved by feature count, history, preprocessing order, and name.
+PenDigits selects coordinates separately, then averages their losses and
+horizons within each writer, giving the 13 writers equal weight. Its seed
+variation describes repeated fitting on that cohort.
+
+\paragraph{Confidence accounting.}
+Within each synthetic task and seed, the four preprocessing arms receive
+$0.01$ each: $0.008$ for candidate risk bounds and $0.002$ for refinement
+comparisons. The remaining $0.01$ is divided among six primary geometry
+comparisons. For each, the alternative's loss minus KAHM's loss is averaged
+within each independent calibration episode over horizons. These differences
+lie in $[-4,4]$; the paired empirical Bernstein bound
+\eqref{eq:paired-improvement} uses range length $8$ and tail probability
+$0.01/6$. The total event has confidence at least $95\%$ within that
+synthetic task--seed combination. Fixed-dimension and head-selected analyses
+are descriptive. PenDigits was examined in earlier studies, so its follow-up
+endpoints and paired writer effects provide no new confirmatory population
+guarantee, even under an iid-writer assumption.
+
+\input{tables/matched_geometry_combined}
+
+\paragraph{Results and their limits.}
+All \MatchedCandidates\ candidate fits completed. Table~\ref{tab:matched-geometry-primary}
+combines absolute MSE, its variation across fits, relative changes, and paired
+seed signs for all \MatchedComparisons\ contrasts. KAHM has a lower mean MSE
+in \MatchedImproved\ contrasts and a higher mean MSE
+in \MatchedDegraded. These contrasts share models and tasks, so their signs
+cannot be treated as independent observations.
+On nonlinear AR, KAHM has lower MSE than both geometric alternatives under every head and
+seed. Its block-direct MSE $0.00456$ also improves on ridge AR $0.00511$ and
+quadratic regression $0.00523$.
+
+On PenDigits, KAHM reduces MSE relative to RBF by $15.6\%$, $17.2\%$, and
+$17.9\%$ across the three heads, with lower loss in all five seeds. Its
+reductions relative to affine geometry are $12.7\%$, $1.9\%$, and $1.4\%$,
+with four, four, and three favorable seeds. Conventional regressors remain
+stronger: Frobenius-direct KAHM MSE is $0.00504$, compared with $0.00184$
+for ridge AR and $0.00102$ for quadratic regression.
+
+On Van der Pol, KAHM improves on RBF by $14.4$--$17.1\%$, but exceeds affine
+MSE by $9.5\%$, $102.7\%$, and $92.8\%$ across the heads. Corresponding
+Duffing excesses are $13.1\%$, $70.6\%$, and $79.9\%$. Affine geometry has
+lower MSE than KAHM under Frobenius and rollout heads in
+every seed on both oscillators.
+Mean effects can also oppose most paired signs: favorable quasiperiodic
+block-direct means occur with lower KAHM loss in only two of five seeds.
+
+The complete fixed-dimension curves are released as
+\path{paper/figures/matched_geometry_dimensions.pdf}, generated from all
+fixed-dimension records. On PenDigits, KAHM has lower mean MSE than RBF at
+every dimension and head;
+its ranking against affine geometry changes with dimension. On nonlinear AR,
+KAHM has lower mean MSE than both alternatives at 14 and 30 features, whereas
+the ranking varies at smaller dimensions.
+Because histories and preprocessing are reselected, these comparisons are
+not tests of nesting for fixed blocks.
+
+Only one of the 180 planned synthetic improvement comparisons is certified:
+Van der Pol seed 5703, KAHM rollout versus RBF rollout, with lower MSE-improvement
+endpoint $0.00107$. All others remain inconclusive. This statement concerns
+two fitted predictors within the declared event; it is distinct from the
+descriptive mean effects and implies no population comparison on PenDigits.

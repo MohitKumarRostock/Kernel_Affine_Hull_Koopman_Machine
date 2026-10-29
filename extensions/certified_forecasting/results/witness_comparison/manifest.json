@@ -1,0 +1,279 @@
+{
+  "created_utc": "2026-10-29T16:41:21.826058+00:00",
+  "configuration": {
+    "seed_entropy": 202610290731,
+    "calibration_sizes": [
+      64,
+      256,
+      1024,
+      4096
+    ],
+    "repetitions": 300,
+    "eta_per_method": 0.05,
+    "joint_confidence_across_methods": false,
+    "tolerances_rmse": [
+      0.1,
+      0.25,
+      0.5
+    ],
+    "primary_methods": [
+      "pair_eb",
+      "centered_range",
+      "erm_kl",
+      "stratified_eb"
+    ],
+    "all_methods": [
+      "pair_eb",
+      "centered_range",
+      "erm_kl",
+      "stratified_eb",
+      "pair_support_eb",
+      "stratified_support_eb",
+      "stratified_knownmass_support_eb",
+      "erm_hoeffding"
+    ],
+    "laws": [
+      {
+        "name": "collapsed_binary",
+        "u": [
+          0.0,
+          0.0
+        ],
+        "y": [
+          -1.0,
+          1.0
+        ],
+        "probabilities": [
+          0.5,
+          0.5
+        ],
+        "strata": [
+          0,
+          0
+        ],
+        "kappa": 1.0
+      },
+      {
+        "name": "two_atom_partial",
+        "u": [
+          -0.42426406871192845,
+          0.42426406871192845
+        ],
+        "y": [
+          -1.0,
+          1.0
+        ],
+        "probabilities": [
+          0.5,
+          0.5
+        ],
+        "strata": [
+          0,
+          0
+        ],
+        "kappa": 1.0
+      },
+      {
+        "name": "three_point_v",
+        "u": [
+          -1.0,
+          0.0,
+          1.0
+        ],
+        "y": [
+          1.0,
+          -1.0,
+          1.0
+        ],
+        "probabilities": [
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333
+        ],
+        "strata": [
+          0,
+          0,
+          1
+        ],
+        "kappa": 1.0
+      },
+      {
+        "name": "five_point_zigzag",
+        "u": [
+          -1.0,
+          -0.5,
+          0.0,
+          0.5,
+          1.0
+        ],
+        "y": [
+          -1.0,
+          1.0,
+          -1.0,
+          1.0,
+          -1.0
+        ],
+        "probabilities": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "strata": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "kappa": 1.0
+      },
+      {
+        "name": "partial_collapse",
+        "u": [
+          -1.0,
+          -1.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0
+        ],
+        "y": [
+          -1.0,
+          0.2,
+          -0.2,
+          0.2,
+          -0.2,
+          1.0
+        ],
+        "probabilities": [
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666
+        ],
+        "strata": [
+          0,
+          0,
+          1,
+          1,
+          2,
+          2
+        ],
+        "kappa": 1.0
+      },
+      {
+        "name": "noisy_affine",
+        "u": [
+          -1.0,
+          -1.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0
+        ],
+        "y": [
+          -1.0,
+          0.0,
+          -0.5,
+          0.5,
+          0.0,
+          1.0
+        ],
+        "probabilities": [
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666
+        ],
+        "strata": [
+          0,
+          0,
+          1,
+          1,
+          2,
+          2
+        ],
+        "kappa": 1.0
+      },
+      {
+        "name": "rare_conflict",
+        "u": [
+          3.0,
+          0.0,
+          1.0
+        ],
+        "y": [
+          0.0,
+          -1.0,
+          1.0
+        ],
+        "probabilities": [
+          0.9,
+          0.05,
+          0.05
+        ],
+        "strata": [
+          0,
+          1,
+          1
+        ],
+        "kappa": 1.0
+      },
+      {
+        "name": "affine_mismatch",
+        "u": [
+          -1.0,
+          0.0,
+          1.0
+        ],
+        "y": [
+          -0.5,
+          0.5,
+          -0.5
+        ],
+        "probabilities": [
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333
+        ],
+        "strata": [
+          0,
+          0,
+          0
+        ],
+        "kappa": 1.0
+      }
+    ]
+  },
+  "source_sha256": {
+    "experiments/witness_comparison/README.md": "0a8ab6dfdb1731d192e073bc1fb81210aa4071a40498e2f40d5804662b58acec",
+    "experiments/witness_comparison/analyze.py": "2310cfadbfe4f1cbd2fc1268ab85a36a48d1405006150da2c2f0aad197c94a12",
+    "experiments/witness_comparison/core.py": "d371981afa931067439ee3f249c931992f0eaf7a10e56b71076ff421f0b6c32b",
+    "experiments/witness_comparison/protocol.md": "03609bea294099ac1fc169383e139667b21a78f375369fc58b371cc7f5c1cb63",
+    "experiments/witness_comparison/run.py": "e5254ab7dc243c92724077eae51e71aab696d265640bd4f573a68357294f45e1",
+    "experiments/witness_comparison/test_core.py": "a33b9cd75750fbbb615b0d2665d555caa3142581220ebf196ee7782cf00833d1"
+  },
+  "base_git_commit": "c15a7526f64b4b47ac09998548a6beee1f763c22",
+  "environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "machine": "x86_64",
+    "cpu_count": 9,
+    "thread_environment": {
+      "OPENBLAS_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": null
+    }
+  },
+  "confidence_scope": "95% separately for each one-sided method in each fixed law/size/trial; no joint 95% assertion across methods or trials.",
+  "timing_scope": "Certificate computation after sample generation/representation lookup; ERM methods both include the same measured QP cost."
+}

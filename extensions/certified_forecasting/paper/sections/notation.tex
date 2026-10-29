@@ -1,0 +1,47 @@
+\subsection{Notation and basic conventions}
+\label{sec:notation}
+
+Vectors are columns unless used as data-matrix rows. We write $\|\cdot\|_2$,
+$\|\cdot\|_{\rm F}$, and $\|\cdot\|_{\rm op}$ for Euclidean, Frobenius,
+and operator norms. Matrix inner products are
+$\langle M,N\rangle_{\rm F}=\operatorname{tr}(M^\top N)$.
+Logarithms are natural; $z_+=\max\{z,0\}$;
+$\|V\|_{L^2}=(\mathbb E\|V\|_2^2)^{1/2}$.
+The projection $\Pi_{\mathcal Y}$ onto a nonempty closed convex output
+set is nonexpansive; for a box it clips coordinates. All random variables
+and prediction maps are measurable.
+
+Table~\ref{tab:notation} collects the main quantities. The forecasting
+construction and the statistical statements below give their precise domains
+and sampling assumptions.
+
+\begin{table}[t]
+\centering\small
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}p{0.26\linewidth}p{0.69\linewidth}@{}}
+\toprule
+Symbol & Meaning \\
+\midrule
+$y_t$, $d_y$ & Observation at time $t$ and its dimension. \\
+$x_t$, $m$ & Causal history and number of observed time steps in it. \\
+$\mathcal H$, $H$, $q$ & Set of forecast horizons, its size, and target dimension; for a joint forecast, $q=d_yH$. \\
+$\Phi_b$, $C_b$ & Feature block $b$ and its number of coordinates. \\
+$\Gamma_s$, $p_s$ & Stack of the first $s$ feature blocks and total dimension $p_s=\sum_{b=1}^s C_b$. \\
+$a$, $W_b$ & Decoder intercept in $\mathbb R^q$ and block coefficients in $\mathbb R^{C_b\times q}$; predictions use $W_b^\top\Phi_b$. \\
+$\kappa$, $\lambda$ & Decoder sensitivity budget and ridge regularization parameter. \\
+$R(f)$, $R^*$ & Population mean squared error of a fitted forecast and infimum over a stated decoder class. \\
+$W_{\kappa,A}$ & Population pairwise obstruction, using budget $\kappa$ and conditioning variable $A$; distinct from coefficient matrices $W_b$. \\
+$T_b$, $\mathcal{W}_b$, $B_b^{\rm blk}$ & Scalar block score for $b$ observations, its expectation, and its deterministic range bound; $\mathcal{W}_b$ is distinct from the coefficient matrix $W_b$. \\
+$n$, $K$ & Number of calibration episodes and number $K=\lfloor n/2\rfloor$ of disjoint episode pairs. \\
+$Z_{i,jh}$, $Q_{r,jh}$ & Loss of candidate $j$ at horizon $h$ on episode $i$, and obstruction score on pair $r$. \\
+$L_{jh}$, $U_{jh}$ & Lower obstruction endpoint and upper fitted-risk endpoint; the unindexed $U=\Gamma(X)$ instead denotes a random representation. \\
+$D_h$, $B_h$ & Diameter of the known horizon-$h$ output set and squared-loss bound $B_h=D_h^2$. \\
+$c(X)$, $\pi_a$, $N_a$, $K_a$ & Frozen stratum label, population stratum mass, sample count, and within-stratum pair count. \\
+$W_{\rm str}$, $L_{\rm str}$, $\mathcal P$ & Stratified population witness, its lower endpoint, and the confidence set for stratum masses. \\
+$c_j$, $c_-$, $c_+$, $c^*$ & Declared class cost, lower and upper certified cost endpoints, and minimum feasible cost. \\
+$\epsilon_h$, $\delta$, $\alpha$ & Requested RMSE tolerance, total failure probability, and failure probability allocated to one confidence statement. \\
+\bottomrule
+\end{tabular}
+\caption{Recurring notation. Mean squared error (MSE) is an expected squared Euclidean error; root-mean-square error (RMSE) is its square root. Experiment-specific coordinate averaging is stated separately.}
+\label{tab:notation}
+\end{table}

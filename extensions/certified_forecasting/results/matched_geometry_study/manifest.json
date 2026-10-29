@@ -1,0 +1,1159 @@
+{
+  "schema": "kahm-matched-geometry-study-v1",
+  "frozen_utc": "2026-10-29T08:29:44.802084+00:00",
+  "base_git_commit": "71efa873419e2b58ee89746dafd123967ff007b1",
+  "source_sha256": {
+    "src/certified_forecasting/__init__.py": "85f475fd0437b5d2a0b6c941f2b9200c63bcd4808d2ccdb5d2e0c2b0c9e3625f",
+    "src/certified_forecasting/certificates.py": "c00fce7093f7f87de3786fb8943897cfb71706805e40d4fb587d0a13fe49ceca",
+    "src/certified_forecasting/data.py": "ad886cd556e605a26ccf15589e6dbec9106fbcfa45522be3bf99edc1b2ea0b29",
+    "src/certified_forecasting/features.py": "c797da39f406efb2d8e0ad0e8cbce3a27ef0e180ed71db041ec10bd609417ebc",
+    "src/certified_forecasting/models.py": "e62847297e3191572890b206dbad7916a7fecf579316bc441f96255d949112a7",
+    "experiments/analyze_matched_geometry.py": "295bf9363f158df1811036bf8c14c9f01c5f3c2c4a2771c151c64e6bd3208e46",
+    "experiments/prepare_pendigits.py": "d103c4d67827bf49af1266e7e25a1edb66d05a942e09a1fe8eb2d07324951632",
+    "experiments/run_forecasting.py": "c7047231d46b456b394dedd40b390c648a6ad8dae06efd8363fc5e0fc13dd43f",
+    "experiments/run_input_scaling.py": "72f3de423d66d2f7a5fe1ef2bb1a8df88cd099a1211bfc28a06afb44d18eac35",
+    "experiments/run_known_risk.py": "0e7976a59593ef9676f62bf83d93289bf370e71a29177647765f67ff3a484405",
+    "experiments/run_matched_geometry.py": "fe2254252cbe282aad25c2ed644c3f1b502128c590eb2cbf9ad115b08e45dcf1",
+    "experiments/run_oscillators.py": "45d2ce0de82c00ba5f4fcde31e5a475915e28ad0891065e44ceb3a8ecfa78801",
+    "experiments/run_pendigits.py": "6a750a11b6a2a1543aa4ec4e7fa78541270dd2439923c8f2269bede81f828bb4",
+    "experiments/run_sensitivity.py": "d14bc9359fd20ec30032c371ac362f30afe0edfe2047660c5fc547d1097eec1e",
+    "parent/autoencoder.py": "b9f0cd1f6989511f5677efdc8f54d844ce1f13c9360f00850133400c8c289180",
+    "parent/autoencoder_filtering_extended.py": "9f14f41fe5a1934b25d79305593b8a225af09650535259af8a17291a4e822152",
+    "parent/combine_multiple_autoencoders_extended.py": "f04539f5bbf1f6551c06c37745951a5e1cf6b0a94d1be544b490d3191cc4d851",
+    "parent/dim_reduce.py": "b6fb4ab1d77a48d5e4fee55aefcbe18adb7f6ee17e93180fbd5451feeb96f036",
+    "parent/distance_matrix.py": "d241f1b323cdffbdec65ffc193fc6bf368d98b29a5f7d58e55300c721d1de50a",
+    "parent/experiment_01_duffing_kahkm.py": "457de42ce068597b69a9bc001b6b5a3f814b6172d97aaff595abefb076d9f8e0",
+    "parent/experiment_02_duffing_sensitivity.py": "eb8700f7c9dc11337ab0b1e4e551a508d91710614d1c97f0a10ed37e83683462",
+    "parent/experiment_03_duffing_multistep.py": "f6ae04bdcd3ab19615f71af934b938fbd37f9d5f9a85bc1adb5b29502ac7a28e",
+    "parent/experiment_04_duffing_projection_diagnostics.py": "8a500a9d5bc62c3650da82b3054e4e1ae1dc18570c5686bdf187cc83803b69fa",
+    "parent/experiment_05_duffing_closure_estimators.py": "a7a25c78f5c42642fdc61cfc814aa000ae93bf7e32dbbcb005540ad64a01aa19",
+    "parent/experiment_06_duffing_abstraction_ablation.py": "a9a10b88fd72d998ac3d928e358790c2955996ee2b54977d92528de3917e6a52",
+    "parent/experiment_07_vanderpol_abstraction_ablation.py": "2c1c4438ccc6c80444cf017f0c7c809fa628ae13b11b39e7eec4babad7e69bee",
+    "parent/experiment_08_vanderpol_projection_diagnostics.py": "baa191a8d0c7df39073393364f6cb41d80084047cc3482d9d2b0ad1ee6e42756",
+    "parent/experiment_09_vanderpol_sensitivity.py": "fbb6d7958ec62f3c00d4ab6448c6583fe56435c37e951fcf79076850d5cc32da",
+    "parent/experiment_10_vanderpol_tuned_ablation.py": "0476c93f34bbe8d87e7eaa77dbde6c761c268563d83d0b55de9ad307b5c5931f",
+    "parent/experiment_11_sample_size_sensitivity.py": "7b04822f97817b320990b6f122126ce32674a991b1c48458f4088071f8890330",
+    "parent/experiment_12_noise_robustness.py": "486fce2d066a44371b4265eae89220e5dfcf43f91744f22a3794df9c25e1de64",
+    "parent/experiment_13_unseen_trajectory_generalization.py": "f56cf7e327d4c5468c2b65401c0991ca00e3e74e31ffa89debb20412a73b90eb",
+    "parent/experiment_14_training_trajectory_count.py": "da9f559c9c7d5b388bd5139c406c8aaa7f650fa1ed2636a9a4342c929c159e79",
+    "parent/experiment_15_external_koopman_baselines.py": "88f3b59ad224d17250dd765ec14e66c2730ca04332197a7a155aaf132c5a3d82",
+    "parent/experiment_16_ai_classic_control_closed_loop_pylance_clean.py": "445a339f9106cf06098a00406e896a5782cee6887e1bd2dd294685a0846de8b7",
+    "parent/experiment_16a_ai_hyperparameter_sensitivity_pylance_clean.py": "4d46ccaf3369d407022df9c9de6561a32067466ea77936a9180046ebb0126951",
+    "parent/experiment_17_ai_regime_interpretability_pylance_clean.py": "3ee00c5121db275ae1b6627533ef4476ed0a7e190979a90355153905c14d5c9e",
+    "parent/experiment_18_acrobot_sequential_decision_pylance_clean.py": "1de478d9949146b5357ab7a5dda7ace4eccbbe7d907600ca89af57ebac74e885",
+    "parent/experiment_19_residual_verified_kahkm_spectra.py": "efd5b565240209e1cf9bedf97bc75773ce40ab9c9548e3839b1e6f0f5b68905a",
+    "parent/kernel_affine_hull_koopman_machines.py": "ab679750bd566d61cb9e5a896d4f3da5b981bf7abcda442a3557de21d5ecc618",
+    "parent/kernel_regularized_least_squares.py": "566433afa74cf8e8c4798e3c5cec23ea0d1f2acee4b77546317aa5cbd2df59bf",
+    "parent/kxa_matrix.py": "00a614f6c39922adbba0ab988e9465684ea96e566e7f1a9fa897c1676adaff82",
+    "parent/kxx_matrix.py": "6a11db30dee4c630930303361c94138ca7e58fc2818d22df31f72631c4a553d3",
+    "parent/parallel_autoencoders.py": "8b58ca25b1df13c8dacdccb23b413cc7769e520720f7a087c11d8fa6e95c20cb",
+    "parent/run_exp09_vanderpol_tuning.py": "8cfdca8eef89a20a83653c0036e08dba643b2493847c580054edc0d448c31731",
+    "parent/run_exp12_vanderpol_noise_aware_tuning.py": "721fc6f15d9fc73afebfa472fe39f736e095dfa0e785cac45eb6b29b1c974f30",
+    "parent/run_exp13_vanderpol_tuned_trajectory_generalization.py": "264adaea107df6c1db078e3dec2dc2fd8fc3ecedf2bbf44356ed0c655ba83466",
+    "parent/run_exp15_duffing_tuned_external_baselines.py": "6e81c396150789871b46225fa8112eccac3fa5293992fa5935bf62965401476f",
+    "parent/run_exp15_vanderpol_tuned_external_baselines.py": "fb6548c4517b623de9a79aff73acd088c063ca5ba7d0131e9a24ddf6feff8921",
+    "parent/run_exp16_tuned.py": "0fa70b287e29c4ce075c3c97e880f64302789ff46f10ae6d67d3d6cdc4b7d627",
+    "parent/run_exp17_tuned_interpretability.py": "4f804b01af0059ea00fb2a1d96fd37006986886fa6bcd1de1f2eed7915046307",
+    "parent/run_exp18_acrobot_selected_3seed_validation.py": "267c2e3206c9386378465d862364071db0f7e912220294d0744638b80473dea2",
+    "parent/run_exp18_acrobot_tuning_pylance_clean.py": "51deb74063fe5fea71ea9caae313ccfa522c195a88ddcebeb031ef1da17f62c0",
+    "parent/run_exp_duffing_tuning.py": "b6beaefb5db274fd9402b1fa8d8cf7bd56e400f00ac4e38169d945801b98e2b2",
+    "parent/run_limited_sweep.py": "bb69ca007e8ea8a1065240d1bfe7c44ca429bcc2ea7c690979063f0d1e6ced62",
+    "parent/run_limited_sweep_fast.py": "58fd79820050541a3e6787e1ea79d3cc2cb75d9d616f6e08ad7d4ceeba2d0599",
+    "parent/step_02_generate_table3_duffing.py": "1d9f1848bb6e6d9f71768ed8282dfed10696e3dd91f467eac4517383a35048ff",
+    "parent/step_03_generate_table4_vanderpol.py": "63df822decf8da89c9db9699d248ddaf63d4215fa17c5cd9de712cb59fa2223f",
+    "parent/step_04_generate_table5_projection.py": "c7ee72311763dcedc902d837f153541606ff3a7c4b3836d18d627472f77045f2",
+    "parent/step_05_generate_table6_estimators.py": "94f2e375d59c24aa41f9cd54acfa572c9c121d18707238bc5259a652a53e3553",
+    "parent/step_06_generate_table7_ablation.py": "db42764407970b8673ac665458bc7f69a76aea715acbabb9dfc93a8682d10219",
+    "parent/step_07_generate_table8_noise_aware.py": "c9fad3018fb803eae92314fca66561c57979937b6eaf07b51d4f7acbac012aeb",
+    "parent/step_08_generate_table9_tuned_trajectory.py": "bf92eaca40be4f8c7fc0d8018f53bc7b465af688004784316adcc91f46ee540d",
+    "parent/step_09_generate_table10_external_baselines.py": "1d82e53b736cdf589a69259aa9bd33fc85fa46868e05f9cdc1fb1b65c1b72953",
+    "parent/step_10_generate_table11_classic_control.py": "8014731d4344e559c53cf54c4056b9a9520f188a39b915700746fe5966d4fd3e",
+    "parent/step_11_generate_table12_interpretability.py": "503c5dc17e895a4d5563751930f7bf55f1c07a829871d7dd4fc45d28ac62eebb",
+    "parent/step_12_generate_table13_acrobot_TUNED_VALIDATION_PIPELINE_V3.py": "28935ed87c42fa52b5ab0a9835cde756e831f01cc08b34014066be3132d54b1d",
+    "parent/step_13_generate_table14_acrobot_SELECTED_3SEED_VALIDATION.py": "4b751efbd31117799152d40a8a19b60d83cfa50ade9bde11090a48ba279b5d31",
+    "parent/step_14_generate_table15_residual_spectra.py": "b5b3fcb3cac3c2b3a5649a857c799cac55ef0b15b1977dde0e33834c5e2d8644",
+    "parent/step_15_generate_figure1_duffing_ablation.py": "df2ead16a853701274a6a8f160ff3988087f3ad6909f11c6275219eb7d14681f",
+    "parent/step_15_generate_figure1_duffing_ablation_CLEAN_LOWER_RIGHT.py": "4d5473ec8ce5540d0a7381e046658ba43a4ae0bc71d586c7334491b24cc63953",
+    "parent/step_16_generate_figure2_vanderpol_ablation.py": "3a6b76fac7375fc35565ff479c110008fa018f4355a7daada439fdc355bf0a45",
+    "parent/step_17_generate_figure3_noise_robustness_CLEAN_LOWER_RIGHT.py": "f172fa64417532759e2e643ba4656f74e02e5f44b57629f10f598a8da4ebb5d7",
+    "parent/step_18_generate_figure4_train_count.py": "4e77ddcf1131feb77bb21e06947e8b92f5fbfbbe97928cb278f20245f88eddd4",
+    "parent/step_19_generate_figure5_external_duffing.py": "c461062be82d244b1d93adb1ba966b7017a0aa09cc114c404cf050d2744bb39f",
+    "parent/step_20_generate_figure6_external_vanderpol.py": "69b697e6d87e5296dc1fe2ba398abc6c94b5ca1d0a581b1d1c7a8bed0cdde4e9",
+    "parent/step_21_generate_figure7_ai_cluster_sensitivity.py": "d54f0575a057e849075d960b7d963a4feb69bd38b00795773c4898917d7aef38",
+    "parent/step_22_generate_figure8_mountaincar_interpretability.py": "dc541b1318785545ffd9d9cf0dd49621b90df4342fe0b65fbc92c072bdd0d856",
+    "parent/step_23_generate_figure9_acrobot_interpretability.py": "ac51763e128e31af9ded2e7dad0bb0249012db929c20fe5e2392f61952a9d8d5",
+    "parent/tune_kahkm_fast.py": "938d20064eaf69b3f1037565779037efdd78c075511a71c389b5a4432d47e48d"
+  },
+  "protocol_sha256": "4a16cd2fd55df1ef85fa2b6ad91066fcd6187426ede293e32447b1851e34fe8f",
+  "machine_protocol_sha256": "ae70145b5ac71caea3fa944fae6ae66193bd8d46e8a37e340e972fe1e7bb9529",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "numpy": "2.3.5",
+  "scipy": "1.17.0",
+  "sklearn": "1.8.0",
+  "workers_at_freeze": 6,
+  "planned": [
+    {
+      "campaign": "main_v1",
+      "mode": "standard",
+      "configuration": {
+        "campaign": "matched_geometry_main",
+        "systems": [
+          "harmonic",
+          "quasiperiodic",
+          "nonlinear_ar",
+          "logistic"
+        ],
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "n_train": 128,
+        "n_validation": 512,
+        "n_calibration": 4096,
+        "n_test": 2048,
+        "episode_length": 72,
+        "histories": [
+          4,
+          12
+        ],
+        "horizons": [
+          1,
+          4,
+          12
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.01,
+        "risk_delta_fraction": 0.8,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "certificate_method": "bernstein",
+        "save_episode_scores": true,
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "standard",
+          "rbf": "standard",
+          "affine": "standard"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_main.json",
+      "source_config_sha256": "4005cdbc7ff1b134051e4a5a65289607fb0f5b23fbda7b9ddd52ed5755682d65",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "main_v1",
+      "mode": "minmax",
+      "configuration": {
+        "campaign": "matched_geometry_main",
+        "systems": [
+          "harmonic",
+          "quasiperiodic",
+          "nonlinear_ar",
+          "logistic"
+        ],
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "n_train": 128,
+        "n_validation": 512,
+        "n_calibration": 4096,
+        "n_test": 2048,
+        "episode_length": 72,
+        "histories": [
+          4,
+          12
+        ],
+        "horizons": [
+          1,
+          4,
+          12
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.01,
+        "risk_delta_fraction": 0.8,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "certificate_method": "bernstein",
+        "save_episode_scores": true,
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "minmax",
+          "rbf": "minmax",
+          "affine": "minmax"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_main.json",
+      "source_config_sha256": "4005cdbc7ff1b134051e4a5a65289607fb0f5b23fbda7b9ddd52ed5755682d65",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "main_v1",
+      "mode": "minmax_clip",
+      "configuration": {
+        "campaign": "matched_geometry_main",
+        "systems": [
+          "harmonic",
+          "quasiperiodic",
+          "nonlinear_ar",
+          "logistic"
+        ],
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "n_train": 128,
+        "n_validation": 512,
+        "n_calibration": 4096,
+        "n_test": 2048,
+        "episode_length": 72,
+        "histories": [
+          4,
+          12
+        ],
+        "horizons": [
+          1,
+          4,
+          12
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.01,
+        "risk_delta_fraction": 0.8,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "certificate_method": "bernstein",
+        "save_episode_scores": true,
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "minmax_clip",
+          "rbf": "minmax_clip",
+          "affine": "minmax_clip"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_main.json",
+      "source_config_sha256": "4005cdbc7ff1b134051e4a5a65289607fb0f5b23fbda7b9ddd52ed5755682d65",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "main_v1",
+      "mode": "raw",
+      "configuration": {
+        "campaign": "matched_geometry_main",
+        "systems": [
+          "harmonic",
+          "quasiperiodic",
+          "nonlinear_ar",
+          "logistic"
+        ],
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "n_train": 128,
+        "n_validation": 512,
+        "n_calibration": 4096,
+        "n_test": 2048,
+        "episode_length": 72,
+        "histories": [
+          4,
+          12
+        ],
+        "horizons": [
+          1,
+          4,
+          12
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.01,
+        "risk_delta_fraction": 0.8,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "certificate_method": "bernstein",
+        "save_episode_scores": true,
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "raw",
+          "rbf": "raw",
+          "affine": "raw"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_main.json",
+      "source_config_sha256": "4005cdbc7ff1b134051e4a5a65289607fb0f5b23fbda7b9ddd52ed5755682d65",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "oscillators_v1",
+      "mode": "standard",
+      "configuration": {
+        "campaign": "matched_geometry_oscillators",
+        "systems": [
+          "vanderpol",
+          "duffing"
+        ],
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "n_train": 128,
+        "n_validation": 512,
+        "n_calibration": 4096,
+        "n_test": 2048,
+        "episode_length": 72,
+        "histories": [
+          4,
+          12
+        ],
+        "horizons": [
+          1,
+          4,
+          12
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.01,
+        "risk_delta_fraction": 0.8,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "certificate_method": "bernstein",
+        "save_episode_scores": true,
+        "generator": {
+          "integrator": "vectorized classical RK4, float64",
+          "dt": 0.025,
+          "observation_interval": 0.1,
+          "burn_time": 10.0,
+          "initial_position_range": [
+            -2.0,
+            2.0
+          ],
+          "initial_velocity_range": [
+            -2.0,
+            2.0
+          ],
+          "duffing_phase_range": [
+            0.0,
+            6.283185307179586
+          ],
+          "vanderpol_mu": 1.0,
+          "duffing_damping": 0.2,
+          "duffing_forcing_amplitude": 0.3,
+          "duffing_forcing_frequency": 1.2,
+          "sensor": "0.95*tanh(position) + independent Uniform[-0.02,0.02]",
+          "known_sensor_bounds": [
+            -1.0,
+            1.0
+          ],
+          "numerical_check_seed": 8675309,
+          "numerical_check_episodes": 16,
+          "numerical_check_max_sensor_difference": 0.001
+        },
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "standard",
+          "rbf": "standard",
+          "affine": "standard"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_oscillators.json",
+      "source_config_sha256": "4a48ab3aba4da1ca5f243b30baccb1fbc32d2119b0c1690232c7c91a311947ef",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "oscillators_v1",
+      "mode": "minmax",
+      "configuration": {
+        "campaign": "matched_geometry_oscillators",
+        "systems": [
+          "vanderpol",
+          "duffing"
+        ],
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "n_train": 128,
+        "n_validation": 512,
+        "n_calibration": 4096,
+        "n_test": 2048,
+        "episode_length": 72,
+        "histories": [
+          4,
+          12
+        ],
+        "horizons": [
+          1,
+          4,
+          12
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.01,
+        "risk_delta_fraction": 0.8,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "certificate_method": "bernstein",
+        "save_episode_scores": true,
+        "generator": {
+          "integrator": "vectorized classical RK4, float64",
+          "dt": 0.025,
+          "observation_interval": 0.1,
+          "burn_time": 10.0,
+          "initial_position_range": [
+            -2.0,
+            2.0
+          ],
+          "initial_velocity_range": [
+            -2.0,
+            2.0
+          ],
+          "duffing_phase_range": [
+            0.0,
+            6.283185307179586
+          ],
+          "vanderpol_mu": 1.0,
+          "duffing_damping": 0.2,
+          "duffing_forcing_amplitude": 0.3,
+          "duffing_forcing_frequency": 1.2,
+          "sensor": "0.95*tanh(position) + independent Uniform[-0.02,0.02]",
+          "known_sensor_bounds": [
+            -1.0,
+            1.0
+          ],
+          "numerical_check_seed": 8675309,
+          "numerical_check_episodes": 16,
+          "numerical_check_max_sensor_difference": 0.001
+        },
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "minmax",
+          "rbf": "minmax",
+          "affine": "minmax"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_oscillators.json",
+      "source_config_sha256": "4a48ab3aba4da1ca5f243b30baccb1fbc32d2119b0c1690232c7c91a311947ef",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "oscillators_v1",
+      "mode": "minmax_clip",
+      "configuration": {
+        "campaign": "matched_geometry_oscillators",
+        "systems": [
+          "vanderpol",
+          "duffing"
+        ],
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "n_train": 128,
+        "n_validation": 512,
+        "n_calibration": 4096,
+        "n_test": 2048,
+        "episode_length": 72,
+        "histories": [
+          4,
+          12
+        ],
+        "horizons": [
+          1,
+          4,
+          12
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.01,
+        "risk_delta_fraction": 0.8,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "certificate_method": "bernstein",
+        "save_episode_scores": true,
+        "generator": {
+          "integrator": "vectorized classical RK4, float64",
+          "dt": 0.025,
+          "observation_interval": 0.1,
+          "burn_time": 10.0,
+          "initial_position_range": [
+            -2.0,
+            2.0
+          ],
+          "initial_velocity_range": [
+            -2.0,
+            2.0
+          ],
+          "duffing_phase_range": [
+            0.0,
+            6.283185307179586
+          ],
+          "vanderpol_mu": 1.0,
+          "duffing_damping": 0.2,
+          "duffing_forcing_amplitude": 0.3,
+          "duffing_forcing_frequency": 1.2,
+          "sensor": "0.95*tanh(position) + independent Uniform[-0.02,0.02]",
+          "known_sensor_bounds": [
+            -1.0,
+            1.0
+          ],
+          "numerical_check_seed": 8675309,
+          "numerical_check_episodes": 16,
+          "numerical_check_max_sensor_difference": 0.001
+        },
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "minmax_clip",
+          "rbf": "minmax_clip",
+          "affine": "minmax_clip"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_oscillators.json",
+      "source_config_sha256": "4a48ab3aba4da1ca5f243b30baccb1fbc32d2119b0c1690232c7c91a311947ef",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "oscillators_v1",
+      "mode": "raw",
+      "configuration": {
+        "campaign": "matched_geometry_oscillators",
+        "systems": [
+          "vanderpol",
+          "duffing"
+        ],
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "n_train": 128,
+        "n_validation": 512,
+        "n_calibration": 4096,
+        "n_test": 2048,
+        "episode_length": 72,
+        "histories": [
+          4,
+          12
+        ],
+        "horizons": [
+          1,
+          4,
+          12
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.01,
+        "risk_delta_fraction": 0.8,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "certificate_method": "bernstein",
+        "save_episode_scores": true,
+        "generator": {
+          "integrator": "vectorized classical RK4, float64",
+          "dt": 0.025,
+          "observation_interval": 0.1,
+          "burn_time": 10.0,
+          "initial_position_range": [
+            -2.0,
+            2.0
+          ],
+          "initial_velocity_range": [
+            -2.0,
+            2.0
+          ],
+          "duffing_phase_range": [
+            0.0,
+            6.283185307179586
+          ],
+          "vanderpol_mu": 1.0,
+          "duffing_damping": 0.2,
+          "duffing_forcing_amplitude": 0.3,
+          "duffing_forcing_frequency": 1.2,
+          "sensor": "0.95*tanh(position) + independent Uniform[-0.02,0.02]",
+          "known_sensor_bounds": [
+            -1.0,
+            1.0
+          ],
+          "numerical_check_seed": 8675309,
+          "numerical_check_episodes": 16,
+          "numerical_check_max_sensor_difference": 0.001
+        },
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "raw",
+          "rbf": "raw",
+          "affine": "raw"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_oscillators.json",
+      "source_config_sha256": "4a48ab3aba4da1ca5f243b30baccb1fbc32d2119b0c1690232c7c91a311947ef",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "pendigits_v1",
+      "mode": "standard",
+      "configuration": {
+        "campaign": "matched_geometry_pendigits",
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "coordinates": [
+          0,
+          1
+        ],
+        "first_stroke_only": true,
+        "episode_length": 32,
+        "train_writer_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24
+        ],
+        "validation_writer_ids": [
+          25,
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "training_strokes_per_writer": 20,
+        "histories": [
+          4,
+          8
+        ],
+        "horizons": [
+          1,
+          2,
+          4
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.0125,
+        "bound_method": "hoeffding",
+        "scalar_squared_loss_bound": 4.0,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "standard",
+          "rbf": "standard",
+          "affine": "standard"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_pendigits.json",
+      "source_config_sha256": "72a0b2ad63ef44d03a56585ed4807ceda1a16a196bea9bcceb5cb0c29c62a065",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "pendigits_v1",
+      "mode": "minmax",
+      "configuration": {
+        "campaign": "matched_geometry_pendigits",
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "coordinates": [
+          0,
+          1
+        ],
+        "first_stroke_only": true,
+        "episode_length": 32,
+        "train_writer_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24
+        ],
+        "validation_writer_ids": [
+          25,
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "training_strokes_per_writer": 20,
+        "histories": [
+          4,
+          8
+        ],
+        "horizons": [
+          1,
+          2,
+          4
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.0125,
+        "bound_method": "hoeffding",
+        "scalar_squared_loss_bound": 4.0,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "minmax",
+          "rbf": "minmax",
+          "affine": "minmax"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_pendigits.json",
+      "source_config_sha256": "72a0b2ad63ef44d03a56585ed4807ceda1a16a196bea9bcceb5cb0c29c62a065",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "pendigits_v1",
+      "mode": "minmax_clip",
+      "configuration": {
+        "campaign": "matched_geometry_pendigits",
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "coordinates": [
+          0,
+          1
+        ],
+        "first_stroke_only": true,
+        "episode_length": 32,
+        "train_writer_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24
+        ],
+        "validation_writer_ids": [
+          25,
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "training_strokes_per_writer": 20,
+        "histories": [
+          4,
+          8
+        ],
+        "horizons": [
+          1,
+          2,
+          4
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.0125,
+        "bound_method": "hoeffding",
+        "scalar_squared_loss_bound": 4.0,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "minmax_clip",
+          "rbf": "minmax_clip",
+          "affine": "minmax_clip"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_pendigits.json",
+      "source_config_sha256": "72a0b2ad63ef44d03a56585ed4807ceda1a16a196bea9bcceb5cb0c29c62a065",
+      "matches_reference_config": true
+    },
+    {
+      "campaign": "pendigits_v1",
+      "mode": "raw",
+      "configuration": {
+        "campaign": "matched_geometry_pendigits",
+        "seeds": [
+          5701,
+          5702,
+          5703,
+          5704,
+          5705
+        ],
+        "coordinates": [
+          0,
+          1
+        ],
+        "first_stroke_only": true,
+        "episode_length": 32,
+        "train_writer_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24
+        ],
+        "validation_writer_ids": [
+          25,
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "training_strokes_per_writer": 20,
+        "histories": [
+          4,
+          8
+        ],
+        "horizons": [
+          1,
+          2,
+          4
+        ],
+        "origin_stride": 4,
+        "cluster_counts": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "feature_kinds": [
+          "kahm",
+          "rbf",
+          "affine"
+        ],
+        "kappa": 4.0,
+        "alpha": 0.0001,
+        "omega": 16.0,
+        "max_geometry_inputs": 1600,
+        "max_train_per_cluster": 24,
+        "delta": 0.0125,
+        "bound_method": "hoeffding",
+        "scalar_squared_loss_bound": 4.0,
+        "rmse_tolerances": [
+          0.2,
+          0.35,
+          0.5
+        ],
+        "matched_geometry_heads": true,
+        "input_scaling_by_kind": {
+          "kahm": "raw",
+          "rbf": "raw",
+          "affine": "raw"
+        }
+      },
+      "source_config": "/workspace/scratch/3369de70587c/kahm-strengthen/extensions/certified_forecasting/configs/matched_geometry_pendigits.json",
+      "source_config_sha256": "72a0b2ad63ef44d03a56585ed4807ceda1a16a196bea9bcceb5cb0c29c62a065",
+      "matches_reference_config": true
+    }
+  ],
+  "prepared_path": "/workspace/scratch/3369de70587c/scaling-investigation/data_cache/pendigits/pendigits_original.npz",
+  "native_pendigits_summary_scope": "Historical 12-family summary; matched_summary.json and raw result/CSV records include all 16 families",
+  "prepared_pendigits": {
+    "sha256": "320aceb0f7f473f8eb21efe6f20bbf87a62f729e0523ba7a60885b073d1e45c2",
+    "manifest_sha256": "6fe436540cf341e7cc9f0f013a62105d992fb0b52987b891a10aeda10b797509"
+  }
+}

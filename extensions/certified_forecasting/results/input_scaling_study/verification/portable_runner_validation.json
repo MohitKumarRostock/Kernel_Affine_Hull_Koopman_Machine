@@ -1,0 +1,48 @@
+{
+  "unit_tests_passed": 33,
+  "full_default_schedule_jobs": {
+    "original": 252,
+    "confirmation": 76
+  },
+  "route_smoke": {
+    "completed_jobs": 20,
+    "failed_jobs": 0,
+    "phases": [
+      "original",
+      "confirmation"
+    ],
+    "campaigns": [
+      "main_v1",
+      "oscillators_v1",
+      "pendigits_v1"
+    ],
+    "modes": [
+      "standard",
+      "minmax_clip"
+    ],
+    "valid_npz_archives": 16,
+    "score_arrays_fully_read": 720,
+    "score_values_checked": 15360,
+    "non_kahm_scalars_exact_between_arms": 558
+  },
+  "final_guard_checks": {
+    "prepared_data_hash_guard_passed_on_real_pendigits": true,
+    "duplicate_schedule_rejected_before_fitting": true,
+    "existing_output_root_rejected": true,
+    "ordinary_job_failure_preserved_with_other_job_completed": true
+  },
+  "atomic_archive_unit_checks": [
+    "complete roundtrip",
+    "refuse overwrite",
+    "partial write retained only under temporary filename"
+  ],
+  "reference_configs_unchanged": true,
+  "source_sha256": {
+    "README.md": "0a96f4475dffbf5c82946aed67978a59d8cbdab967d6f420ef097b02cf97cee2",
+    "docs/REPRODUCIBILITY.md": "5cc1c087738770169769ebc9ffaee9e07c46c39510993454c67720046268b4b7",
+    "experiments/run_input_scaling.py": "72f3de423d66d2f7a5fe1ef2bb1a8df88cd099a1211bfc28a06afb44d18eac35",
+    "experiments/run_forecasting.py": "25a5f65771de71c7bcead267da8b616c5edab9f602ec997c93b74551f11dbfe8",
+    "tests/test_score_archives.py": "86f58bff0fa763236dab76f87e735f483c6c47fad574e39a0771b2556e51dbac"
+  },
+  "note": "Reduced smoke runs are interface/storage evidence, not manuscript accuracy results. Each run retains its executed source hashes; final scheduling/data guards were checked separately after route smoke."
+}

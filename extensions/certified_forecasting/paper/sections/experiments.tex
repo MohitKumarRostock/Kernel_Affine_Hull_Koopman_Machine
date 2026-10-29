@@ -1,0 +1,93 @@
+\section{KAHM forecasting on bounded synthetic systems}
+\label{sec:experiments}
+
+The preceding studies test the general risk certificates. This section applies
+the KAHM learner to four bounded forecasting systems. The comparison includes
+all prescribed configurations. Empirical test error describes performance on
+a held-out sample; a certified risk endpoint bounds the corresponding
+population expectation under the stated sampling assumptions.
+
+\subsection{Protocol and predictive accuracy}
+
+Four generators produce independent length-72 episodes: a noisy harmonic
+oscillator, a quasiperiodic signal, nonlinear autoregression with bounded
+innovations, and a logistic map with an episode-specific parameter. Their
+observations lie in $[-1,1]$ by construction
+(Appendix~\ref{app:protocols}). Each of five fitting repetitions uses 128
+training, 512 validation, 4096 calibration, and 2048 test episodes. Histories
+have lengths $m\in\{4,12\}$, horizons are $\{1,4,12\}$, and the 13 common
+zero-based origins are $11,15,\ldots,59$. Within-episode windows may be
+dependent. Geometry is relearned in each repetition, with budget $\kappa=4$,
+ridge coefficient $10^{-4}$, affinity exponent $16$, and prefix dimensions
+$2,6,14,30$. Geometry fitting uses at most 1600 histories and 24 local points.
+
+Each repetition freezes 40 candidates: retained KAHM, RBF, and affine-hull
+features; hard KAHM assignments; ordinary Frobenius-budget and exact-duplicate
+ablations; ridge autoregression (AR); quadratic regression; KAHM and polynomial
+feature rollouts; persistence; and a constant model. One candidate per family
+is selected by validation MSE across horizons. These specified configurations
+assess the procedure, rather than the best possible tuning of each family.
+
+The failure budget $0.05$ per repetition allocates $0.04$ across
+$2\times40\times3$ one-sided risk bounds and $0.01$ across 18 adjacent-prefix
+improvement comparisons. Upper bounds use 4096 episode losses; lower bounds
+use 2048 disjoint episode pairs. The 13 origins do not increase these independent
+sample sizes. The joint event is per complete repetition, not across all runs.
+
+\input{tables/forecast_results}
+
+Table~\ref{tab:forecast} includes variation across the five fits. KAHM improves
+substantially over long-horizon persistence on the periodic generators, but
+quadratic and autoregressive models are stronger there. On nonlinear AR,
+KAHM horizon-12 RMSE is $0.0743$, compared with $0.0802$ for ridge AR and
+$0.0813$ for quadratic regression; the latter families are better at horizon
+one. Direct KAHM fitting improves on feature rollout at horizon 12 on the two
+periodic generators. The independently initialized oscillators in Section~\ref{sec:oscillators}
+show that direct fitting does not always outperform feature rollout.
+
+\subsection{Acceptance, exclusion, and fitted refinement}
+
+\input{tables/certified_selection}
+
+The retained KAHM family certifies the all-horizon RMSE requirement $0.20$
+for every nonlinear-AR repetition, $0.35$ for every quasiperiodic repetition,
+and $0.50$ for every harmonic repetition. Allowing all families also certifies
+$0.35$ on harmonic data. No candidate certifies $0.50$ on the logistic task;
+this is unresolved, not evidence that all true risks exceed the threshold.
+Even the selected harmonic quadratic model's mean one-step test RMSE $0.0311$
+corresponds to a mean upper endpoint $0.1497$, illustrating the precision cost.
+
+Of 480 retained-KAHM candidate--horizon statements, 119 have positive lower
+endpoints. Only two exclude RMSE $0.35$, and none excludes $0.50$; positive
+endpoints alone are not enough for a useful positive-tolerance decision.
+Section~\ref{sec:decision-value} compares the acceptance, exclusion, and
+unresolved decisions across the forecasting studies.
+Paired comparisons certify 72 of 360 adjacent-prefix improvements. Nonlinear
+AR has no certified adjacent-prefix gain despite meeting useful tolerances.
+The complete refinement curves and system-specific counts are retained in
+the repository; nesting a class does not guarantee improvement of each fit.
+
+Exact duplication is already covered analytically by
+Theorem~\ref{thm:replication-invariance}. Zero-ridge numerical checks reproduce
+matching minimum training risks within their solver gaps. The main duplicate
+candidate uses zero ridge, whereas primary models use $10^{-4}$; their fitted
+errors are therefore not evidence for ridge-estimator invariance.
+All 800 main-study candidates completed; the constrained block fits have
+recorded first-order optimality gaps below $10^{-7}$. These numerical
+optimization guarantees are separate from the risk guarantees, which require
+the sampling assumptions in Section~\ref{sec:theory}. Appendix~\ref{app:protocols}
+describes reproduction of the fitted models and confidence endpoints.
+
+\paragraph{Calibration on a two-atom distribution.}
+A separate benchmark contains 28,800 trials with analytically known class
+and fitted risks (Appendix~\ref{app:known-risk}). One pairwise lower endpoint
+exceeds its true risk; no centered lower or fitted upper endpoint does.
+The centered estimator in this benchmark estimates representation variance
+even when that variance is known to be zero. At full collapse and $n=4096$,
+its mean lower endpoint is $0.5327$. Substituting the known zero variance while
+keeping the same target correction gives a lower bound of approximately
+$0.9031$ on the expected endpoint; the pairwise method has mean endpoint $0.9177$. Thus part of the
+observed difference is caused by unused structural information. The
+$n^{-1/4}$ correction of this centered estimator is not a limitation of all
+centered methods. Section~\ref{sec:witness-comparison} compares a method based
+on direct standard-deviation concentration and a certified empirical minimum.

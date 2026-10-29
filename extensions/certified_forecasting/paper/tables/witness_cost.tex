@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lrrr}
+\toprule
+Method & Violations / 9600 & Median cost ($\mu$s) & Law-wise median range ($\mu$s) \\
+\midrule
+Pair EB & 0 & 31.3 & 29.3--33.1 \\
+Centered & 0 & 34.7 & 32.9--38.2 \\
+Empirical minimum & 0 & 265.4 & 110.0--507.0 \\
+Stratified EB & 0 & 165.0 & 91.1--204.5 \\
+\bottomrule
+\end{tabular}
+\caption{Coverage violations pooled over the prespecified eight laws and four calibration sizes, and certificate-only computation at $n=4096$. The cost column is the median of the eight law-wise median times; the range shows those medians. Timing starts after sample generation and representation lookup and includes optimization for ERM. It excludes feature learning. These single-machine measurements are descriptive; pooled coverage does not establish coverage uniformly over unseen laws.}
+\label{tab:witness-cost}
+\end{table}

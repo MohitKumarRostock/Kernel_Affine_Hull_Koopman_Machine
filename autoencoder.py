@@ -8,7 +8,7 @@ def autoencoder(y_data: np.ndarray, subspace_dim: int, min_range: float = 1e-3):
         subspace_dim = N - 1
 
     # initial projection
-    from dim_reduce import dim_reduce  # import where you actually have it
+    from dim_reduce import dim_reduce
     y_data_n_subspace, PC = dim_reduce(y_data, subspace_dim)
 
     # shrink subspace_dim if range too small
@@ -19,14 +19,12 @@ def autoencoder(y_data: np.ndarray, subspace_dim: int, min_range: float = 1e-3):
         subspace_dim -= 1
         y_data_n_subspace, PC = dim_reduce(y_data, subspace_dim)
 
-    # --- FIX IS HERE ---
-    # cov(AE.y_data_n_subspace') in MATLAB → covariance of rows (features)
+    # Estimate covariance across the projected feature coordinates.
     cov_matrix = np.cov(y_data_n_subspace.T, rowvar=False, bias=False)
     cov_matrix = np.atleast_2d(cov_matrix)   # ensure 2D even when 1D subspace
 
-    # you can keep inv, or for safety use pinv:
+    # The Gaussian metric uses the inverse projected covariance.
     weights_matrix = np.linalg.inv(cov_matrix)
-    # weights_matrix = np.linalg.pinv(cov_matrix)  # <- safer alternative
 
     kerneltype = "Gaussian"
 

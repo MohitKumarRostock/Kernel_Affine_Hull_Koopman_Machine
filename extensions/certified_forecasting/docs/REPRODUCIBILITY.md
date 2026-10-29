@@ -586,3 +586,89 @@ The independent-episode theorem does not automatically certify an arbitrary
 single dependent series or distribution shift. Numerical-library changes may
 slightly alter the reused KAHM solver's fitted values. Recompute certificates
 for the actual fitted predictor and deployment sampling law.
+
+## General lower-certificate comparison
+
+The eight-law comparison uses fresh iid calibration draws and the same full
+scalar Lipschitz class for every primary method. Its protocol distinguishes
+population slack, finite-sample correction, positive-tolerance exclusion, and
+certificate-only computation. Run the analytic/numerical checks and a fresh
+study with:
+
+```bash
+python -m unittest discover -s experiments/witness_comparison -p 'test_*.py' -v
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python experiments/witness_comparison/run.py \
+  --output results/reproduced_witness_comparison
+python experiments/witness_comparison/analyze.py \
+  --results results/reproduced_witness_comparison --paper paper
+```
+
+The analysis exports every trial and secondary method. Its checks reconstruct
+76,800 endpoints and verify guarded primal/dual optimization brackets. The
+retained source/protocol and subsequent analysis-only corrections are described
+in `results/witness_comparison/SOURCE_AND_AUDIT.md`. Numerical brackets are
+checked in floating point, not formal interval arithmetic. Each method has a
+separate 0.05 failure budget; the comparison is not one joint 95% statement
+across methods or simulated trials.
+
+## Positive-tolerance class decisions
+
+The controlled decision study has three predefined retained classes, costs
+1/3/5, and a common sensitivity budget. It compares upper-only acceptance with
+ordinary or stratified lower calibration under one allocated event covering
+all five sample sizes, both partitions, and all prefixes within a repetition.
+
+```bash
+python experiments/decision_value/audit_existing.py \
+  --output results/reproduced_decision_existing_audit
+python experiments/decision_value/run.py \
+  --output results/reproduced_decision_value
+python experiments/decision_value/verify.py \
+  --results results/reproduced_decision_value \
+  --output verification/reproduced_decision_value.json
+python experiments/decision_value/make_assets.py
+```
+
+The independent verifier reconstructs streams and endpoints, enumerates the
+finite population and mass-polytope vertices, and checks every fit. The asset
+generator reads the retained `results/decision_value/fresh` archive; its source
+states that fixed input explicitly. These constructed representations test the
+general theorem and do not constitute an additional KAHM accuracy benchmark.
+The release includes their compact simulated-state and coefficient archives.
+
+## Speech energy and strict-order verification replay
+
+The [speech study instructions](../experiments/speech_forecasting/README.md)
+provide the official data URL, checksum, complete execution commands, and
+source attribution. The audio archive is external; derived energy, split
+identifiers, development records, selected predictors, and all group losses
+are retained. Both the original execution and strict-order replay are one
+study, with unchanged models and outcomes.
+
+To verify the retained results independently after downloading the archive:
+
+```bash
+PYTHONPATH=src OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+  python experiments/speech_forecasting/verify_study.py \
+  --archive data_cache/speech/mini_speech_commands.zip \
+  --results results/speech_forecasting_v1 \
+  --replay-results results/speech_forecasting_v1_replay \
+  --output verification/reproduced_speech_audit.json
+python experiments/speech_forecasting/analyze.py \
+  --results results/speech_forecasting_v1_replay \
+  --output results/reproduced_speech_analysis --paper paper
+```
+
+The first execution froze every development selection before held-out scoring
+but interleaved calibration and test evaluation by model. The replay follows
+the specified order: all development, all calibration, then all testing. It
+reproduces every selected predictor value, group loss, and non-timing result.
+The audit records the deviation and verifies equivalence rather than treating
+the replay as independent evidence. All 72 upper bounds share one 0.05 budget
+under the stated iid group-record assumption. Repeated fits on the same
+identifiers do not create additional independent calibration groups.
+
+The focused speech tests check frame causality, known output bounds, history
+indexing, equal group weighting, and KL inversion. They are included in the
+standard `python -m unittest discover -s tests -v` suite. The new experiment
+runners do not modify the historical forecasting implementations or records.

@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "raw_audio_clips_recomputed": 7178,
+  "excluded_clips": 822,
+  "unique_recording_identifiers": 1630,
+  "split_group_counts": {
+    "calibration": 978,
+    "test": 245,
+    "train": 244,
+    "validation": 163
+  },
+  "selected_models_verified": 24,
+  "candidates_per_seed": 486,
+  "per_identifier_horizon_losses_recomputed": 88056,
+  "KL_upper_endpoints_verified": 72,
+  "all_model_selections_match_frozen_validation_minima": true,
+  "all_geometric_norm_constraints_feasible": true,
+  "same_identifier_never_crosses_split": true,
+  "bounded_causal_frame_observable_verified": true,
+  "replay_losses_and_non_timing_results_identical": true,
+  "replay_all_saved_predictor_values_identical": true,
+  "original_chronology_deviation": "Calibration/test evaluated sequentially within each already-frozen model, before all calibration calculations were complete. Model independence remains valid; replay freezes all calibration calculations before any test scoring.",
+  "scope": "Released provider-trimmed exact-one-second clips; identifiers are recording-group/session proxies, not biometric identity proof. IID common-population recording bundles remain a modeling assumption.",
+  "audit_source": {
+    "path": "experiments/speech_forecasting/verify_study.py",
+    "sha256": "f3e8b45d395608b5146f2402cbb16f7f7371e3251833b9a29b77afd724aacc7b"
+  }
+}

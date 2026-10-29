@@ -22,6 +22,7 @@ import csv
 import gzip
 import json
 import math
+import re
 import statistics as st
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--root', type=Path, default=Path(__file__).resolve().parents[1], help='Extension root containing results/ and paper/')
@@ -56,7 +57,8 @@ def table_rows(name):
     rows = []
     for line in (TABLE / name).read_text().splitlines():
         if '&' in line and (not line.lstrip().startswith('\\')):
-            rows.append([p.strip().rstrip('\\').strip() for p in line.split('&')])
+            line = re.sub(r'\\\\(?:\[[^]]*\])?\s*$', '', line)
+            rows.append([p.strip() for p in line.split('&')])
     return rows
 MAIN = readruns('main_v1')
 OSC = readruns('oscillators_v1')
@@ -72,7 +74,13 @@ for row in table_rows('forecast_results.tex'):
     vals = []
     for sys in ['harmonic', 'quasiperiodic', 'nonlinear_ar', 'logistic']:
         selected = [choose(r['results'], fams[row[0]], False) for r in MAIN if r['system'] == sys]
-        vals += [f"{st.fmean((math.sqrt(c['test_mse'][h]) for c in selected)):.3f}" for h in [0, 2]]
+        for h in [0, 2]:
+            rmse = [math.sqrt(c['test_mse'][h]) for c in selected]
+            if row[1].startswith(r'\shortstack'):
+                vals.append(r'\shortstack[r]{' + f'{st.fmean(rmse):.3f}'
+                            + r'\\(' + f'{st.stdev(rmse):.3f}' + r')}')
+            else:
+                vals.append(f'{st.fmean(rmse):.3f}')
     chk(row[1:] == vals, f'Forecast table: {row[0]}')
 for row in table_rows('certified_selection.tex'):
     sys = next((s for s, l in label.items() if l == row[0]), None)

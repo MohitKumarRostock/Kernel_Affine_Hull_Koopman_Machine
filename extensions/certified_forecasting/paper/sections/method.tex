@@ -215,19 +215,25 @@ $\epsilon_h\geq0$, total failure probability $\delta\in(0,1)$, and a
 candidate-cost rule.
 \item Use development data to fit geometric blocks and constrained decoders
 for their retained prefixes. Fit comparison models on the same observed targets.
-\item Freeze all candidates, preprocessing choices, sensitivity budgets, and
-proposed pairs of forecasts to compare.
+\item Freeze all candidates, preprocessing choices, sensitivity budgets,
+history-based strata, costs, concentration bounds, and proposed comparisons.
 \item On $n\geq4$ independent calibration episodes, compute one mean squared loss per
-episode and horizon. Form disjoint episode pairs and compute obstruction scores
-at matching origins.
-\item Allocate $\delta$ across all risk bounds and improvement comparisons.
+episode and horizon. Compute obstruction scores using disjoint episode pairs
+at matching origins. For stratified calibration, use one prespecified origin
+per independent episode (or a justified episode-level stratum), pair within
+strata, and estimate their masses and confidence intervals.
+\item Allocate $\delta$ across risk bounds, mass intervals, alternative
+partitions, and improvement comparisons.
 Compute simultaneous lower endpoints $L_{jh}$ and upper endpoints $U_{jh}$
 for candidate $j$ at horizon $h$.
-\item Return the least costly candidate satisfying
-$U_{jh}\leq\epsilon_h^2$ at every required horizon. Report a class as excluded
-at horizon $h$ when $L_{jh}>\epsilon_h^2$. Mark a candidate--horizon
-combination inconclusive when neither acceptance nor exclusion applies.
-If no candidate passes every horizon, return an unresolved decision.
+\item Accept a fitted candidate when $U_{jh}\leq\epsilon_h^2$ for every
+required horizon; exclude its representation class when
+$L_{jh}>\epsilon_h^2$ for any horizon. Return the least costly accepted
+candidate, if one exists, and the cost interval between the cheapest
+nonexcluded class and the cheapest accepted fit.
+\item Equal finite cost endpoints certify minimum feasible cost among the
+declared classes. Exclusion of every class certifies infeasibility within that
+family. Otherwise report the unresolved accuracy or cost decision explicitly.
 \end{enumerate}
 \end{minipage}}
 \caption{Forecasting and certification for a finite family fixed before calibration.

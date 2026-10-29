@@ -13,10 +13,14 @@ The [certified forecasting extension](extensions/certified_forecasting/)
 develops KAHM soft representations for direct prediction of future observed
 outputs, retained representation refinement, and prediction-risk certification.
 Its [editable manuscript](extensions/certified_forecasting/paper/) is titled
-**Forecasting with Kernel Affine Hull Machines: Representation Refinement and
-Risk Certification**. The extension includes the original studies, a complete
+**Certifying Prediction Limits and Representation Refinement with Kernel
+Affine Hull Machines**. The extension includes the original studies, a complete
 input-scaling investigation, and a matched geometry--decoder study designed to
 identify when the KAHM representation contributes to forecasting performance.
+It also includes general lower-certificate comparisons, stratified
+minimum-cost decisions, and recording-group speech-energy forecasting.
+The reported accuracy comparisons include stronger alternatives and unresolved
+certification outcomes.
 
 Use the extension's own [reproduction guide](extensions/certified_forecasting/docs/REPRODUCIBILITY.md)
 for its Linux/Python environment and experiment commands. The parent KAHKM

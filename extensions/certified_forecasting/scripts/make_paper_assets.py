@@ -66,15 +66,16 @@ def main():
     g=selected.groupby(["system","family","horizon"]).agg(mean=("test_rmse","mean"),sd=("test_rmse","std"),upper=("rmse_upper","mean"))
     g.to_csv(OUT/"forecast_summary.csv")
 
-    lines=[r"\begin{table}[t]",r"\centering\small",r"\setlength{\tabcolsep}{4pt}",
+    lines=[r"\begin{table}[t]",r"\centering\small",r"\setlength{\tabcolsep}{3pt}",
            r"\begin{tabular}{lrrrrrrrr}",r"\toprule",
            r"& \multicolumn{2}{c}{Harmonic} & \multicolumn{2}{c}{Quasiperiodic} & \multicolumn{2}{c}{Nonlinear AR} & \multicolumn{2}{c}{Logistic}\\",
            r"Method & $h=1$ & $h=12$ & $h=1$ & $h=12$ & $h=1$ & $h=12$ & $h=1$ & $h=12$\\",r"\midrule"]
     for fam in FAMILIES:
-        vals=[g.loc[(sys,fam,h),"mean"] for sys in SYSTEMS for h in [1,12]]
-        lines.append(NAMES[fam]+" & "+" & ".join(f"{v:.3f}" for v in vals)+r"\\")
+        vals=[g.loc[(sys,fam,h)] for sys in SYSTEMS for h in [1,12]]
+        cells=[r"\shortstack[r]{"+f"{v['mean']:.3f}"+r"\\("+f"{v['sd']:.3f}"+r")}" for v in vals]
+        lines.append(NAMES[fam]+" & "+" & ".join(cells)+r"\\[2pt]")
     lines.extend([r"\bottomrule",r"\end{tabular}",
-       r"\caption{Independent-test RMSE, averaged over five complete fitting seeds. One candidate per family is selected using development validation error averaged over all three horizons, before calibration or test scoring. The full archive includes $h=4$, seed variability, every candidate, and all confidence endpoints. These means are descriptive estimates, not population-risk certificates.}",
+       r"\caption{Independent-test RMSE: mean over five complete fitting repetitions, with sample standard deviation below in parentheses. One candidate per family is selected by validation MSE across all three horizons before calibration or test scoring. The archive includes $h=4$, all candidates, and every confidence endpoint. Fitting variation differs from uncertainty conditional on a fitted model; these test errors are descriptive estimates.}",
        r"\label{tab:forecast}",r"\end{table}"])
     (TABLE/"forecast_results.tex").write_text("\n".join(lines)+"\n")
 

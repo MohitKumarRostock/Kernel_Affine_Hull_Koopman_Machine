@@ -1,115 +1,84 @@
 \section{Discussion and limitations}
 \label{sec:discussion}
 
-\paragraph{Contribution to KAHM forecasting.}
-The procedure combines KAHM reconstruction features with a common observed
-prediction target, a constrained decoder class, and calibrated accuracy
-decisions. Retaining feature blocks preserves earlier predictors as the
-representation grows. The matched study finds consistent KAHM gains on the
-nonlinear autoregressive task and against RBF geometry on the fixed PenDigits
-cohort. Affine-hull geometry with Frobenius-constrained or rollout decoders is
-stronger on the oscillators. The usefulness of KAHM geometry therefore depends
-on the task, decoder, and retained resolution. The reconstruction algorithm
-is inherited; the certification theory applies to each representation under
-its stated assumptions.
+\paragraph{What the certificates add.}
+Upper calibration answers whether a fitted forecast meets a tolerance. Lower
+calibration can exclude every decoder in a specified sensitivity class.
+Combining the two can certify the minimum feasible representation cost among
+predefined classes, even when upper-only selection returns the same predictor.
+The controlled decision experiment demonstrates this distinction, including a
+case in which all declared classes are excluded. These conclusions concern
+specified classes and costs; they do not establish globally optimal forecasting
+complexity or runtime.
 
-\paragraph{Three distinct uses of calibration.}
-Validation error ranks fitted candidates. Calibration adds an upper confidence
-bound that can certify a population error tolerance, a lower bound that can
-exclude that tolerance for an entire sensitivity-constrained decoder class,
-and a paired comparison that can certify improvement between two fitted
-models. Each answers a different question. Acceptance supports the requested
-mean squared error under the evaluation law. Exclusion can motivate changing
-the representation or budget. A gap between the bounds can reflect uncertainty
-or a loose population obstruction and need not identify a defect in fitting.
+\paragraph{Population slack and statistical precision.}
+The witness can lose information through averaging residuals and through
+geometric slack, as quantified by Proposition~\ref{prop:witness-slack}.
+Stratification can repair particular losses but changes the distribution of
+compared pairs and reduces their counts. It can therefore lower either the
+population witness or its finite-sample endpoint. The strengthened benchmark
+finds that empirical-minimum calibration is often tighter, at greater
+optimization cost. The pair witness remains a simple computable certificate,
+not a universally optimal lower bound. Its control of the full Lipschitz
+class can also be less informative than a bound tailored to the fitted affine
+subclass. Zero obstruction never certifies representation adequacy.
 
-\paragraph{Limits of refinement guarantees.}
-The method learns reconstruction models and constrained decoders, then selects
-among retained dictionary prefixes. It does not prove that geometric clustering
-discovers a sufficient state. Residual correlation with a new feature block,
-together with unused coefficient budget, gives a sufficient population
-condition for one improving direction. Distance expansion gives a necessary
-condition for meeting a target accuracy. Neither result guarantees that an
-arbitrary split will help. The experiments evaluate fixed candidate families;
-sequential refinement with fresh evaluation blocks is a theoretical extension
-that was not tested here.
+\paragraph{Scope of refinement.}
+Appending retained blocks preserves old feasible forecasts and avoids capacity
+inflation from exact copies. It does not force independently fitted models to
+improve, and a ridge penalty can change under duplication even when the class
+does not. Residual correlation with budget slack gives a sufficient improving
+direction; distance expansion supplies a necessary condition for meeting a
+tolerance. Neither proves that unsupervised geometric clustering will discover
+a sufficient state. Experiments freeze candidate families before calibration;
+sequential refinement on fresh evaluation blocks is a theoretical extension
+that remains untested.
 
-\paragraph{Restricted classes and loose lower bounds.}
-Excluding all $\kappa$-Lipschitz decoders of one representation does not exclude
-predictors with greater sensitivity, longer histories, or additional observations.
-The pairwise obstruction can also be zero when the best risk in the class is
-positive. Pairing only at a common origin, for example, can miss information
-loss that occurs across origins. A different, class-conditioned pairing law
-may yield a more informative bound, but requires its own sampling protocol.
-Zero obstruction is therefore neither a certificate of adequacy nor a feature
-learning objective in this study.
+\paragraph{Independent groups and evaluation populations.}
+Synthetic episodes are independently generated. PenDigits has only 13 eligible
+held-out writer identifiers, whose interpretation is inferred from source
+fields; its generic endpoints are uninformative. Speech supplies documented
+recording identifiers and 978 calibration groups, allowing informative upper
+bounds under the explicit iid group-record assumption. Source identifiers and
+a disjoint split do not by themselves establish random population sampling.
+Both real-data tasks restrict eligibility using completed recordings; the
+speech source additionally applies clip selection and quality screening.
+Their risks concern those retrospective acquisition populations. They do not
+transfer automatically to continuously arriving speech or every newly started
+pen stroke. Repeated fitting seeds on one cohort measure fitting variation,
+not new independent cohorts.
 
-\paragraph{Independent units and statistical precision.}
-Independent episodes are appropriate for independently initialized simulations
-and can be appropriate for separate experimental runs. A chronological split
-of one long record does not itself supply independent episodes. Extending the
-certificate to a dependent series requires quantitative assumptions and a
-justified correction for dependence both within calibration and between
-training and calibration. An informal autocorrelation estimate or chosen
-``effective sample size'' does not supply that correction. The PenDigits study
-illustrates another limitation: many strokes and time points can still provide
-few defensible independent writer-level units. With so few units, valid
-conservative bounds may fail to certify a useful tolerance.
+\paragraph{Bounds, adaptation, and distribution shift.}
+The target ranges follow from the synthetic observation laws, the PenDigits
+acquisition box, or the fixed speech-energy transformation. Clipping predictions
+alone would not bound squared error for an unbounded target. The certificates
+do not transfer across changes in dynamics, sensors, noise, or origin laws.
+The original-seed scaling follow-up reuses calibration after the earlier
+results motivated its design; its endpoints are nominal. Fresh synthetic
+confirmation, matched-geometry, and speech studies use the stated independent
+calibration splits. PenDigits follow-ups reuse the examined writer cohort and
+remain descriptive. Confidence allocations are stated for each study rather
+than pooled into one campaign-wide claim.
 
-\paragraph{Target bounds and distribution shift.}
-The synthetic output ranges follow from the task definitions. PenDigits uses
-the acquisition box and a fixed linear scale, without normalizing a completed
-trajectory by its future extrema. For unbounded targets, the present
-bounded-loss certificate needs a different tail assumption or an explicitly
-capped loss; clipping predictions alone does not bound the error. Calibration
-under one episode law does not certify performance after changes in dynamics,
-noise, acquisition, or origin selection. These requirements apply to all
-comparison methods.
-
-\paragraph{Preprocessing as a model choice.}
-Training-based range scaling can improve retained soft KAHM forecasts,
-including across repeated fits on the fixed PenDigits cohort
-(Section~\ref{sec:input-scaling}). The same study finds regressions on other
-tasks and with hard assignments. Preprocessing should therefore be an explicit,
-validated choice. These results do not justify replacing standardization
-throughout the original experiments or assuming that bounded inputs improve
-the geometry. Certification after choosing among preprocessing options must
-also account for the enlarged family of candidate statements.
-
-\paragraph{Follow-up design and calibration reuse.}
-The original-seed preprocessing comparison reuses calibration episodes after
-earlier results motivated the follow-up. Its computed endpoints are therefore
-nominal summaries; fixing the rerun configuration does not establish independence
-from previously observed calibration results. The synthetic confirmation and
-matched-geometry experiments use new calibration episodes. Their confidence
-statements apply within each declared task and fitting repetition, under the
-specified allocation of failure probability. PenDigits follow-ups instead
-reuse the previously examined writer cohort. These comparisons are descriptive;
-an independent-writer sampling assumption alone does not justify confidence
-claims after adapting the study to that cohort.
-
-\paragraph{Experimental and computational scope.}
-The study covers controlled dynamics and one real acquisition domain.
-The matched comparisons use specified implementations and shared selection
-grids; separate tuning for each family could change their ranking. They do
-not establish an accuracy frontier against broadly tuned neural forecasters.
-Feature dimension measures representation size, not runtime. The prototype
-recomputes some shared transforms, so its candidate-level training times do
-not provide a fair speed comparison. Archived execution times and environments
-document the experiments rather than establish deployment-speed advantages.
+\paragraph{Accuracy and computational scope.}
+The matched controls support KAHM gains on nonlinear autoregression and against
+RBF geometry on the fixed PenDigits cohort. Affine-hull alternatives are
+stronger on the oscillators, while autoregressive, quadratic, and kernel
+regression outperform KAHM on speech. Scaling yields both gains and regressions.
+These results support the general certification framework and selected KAHM
+applications, not universal KAHM superiority. Comparisons use declared
+implementations and validation grids and do not establish an accuracy frontier
+against broadly tuned neural forecasters. Feature counts measure representation
+size. Recorded execution times depend on hardware, shared preprocessing, and
+implementation; no general speed advantage is inferred.
 
 \section{Conclusion}
 
-KAHM soft associations can support forecasts of the observed signal and
-finite-sample statements about their expected squared error. Retained
-dictionaries with a block coefficient budget preserve earlier predictors and
-prevent duplication from artificially enlarging the class. The pairwise
-obstruction, fitted-risk upper bound, and paired improvement bound distinguish
-representation limits from the performance of learned forecasts. The analysis
-also supports comparisons with other geometric dictionaries.
-
-The experiments show favorable KAHM comparisons on nonlinear autoregression
-and pen trajectories, alongside stronger oscillator alternatives, preprocessing
-regressions, and unresolved accuracy decisions. Informative certification
-requires credible target bounds, an appropriate evaluation law, and enough
-independent observations at the episode level.
+Pairwise prediction obstructions, stratified calibration, and fitted-risk
+upper bounds can separate achievable accuracy from representation limitations.
+Retained block classes make refinement comparable, and their joint bounds can
+certify minimum feasible cost among declared alternatives. Exact examples and
+stronger baselines expose the witness's limitations as well as its uses.
+Forecasting experiments demonstrate informative and unresolved decisions,
+task-dependent KAHM accuracy, and the importance of defensible independent
+sampling units. These qualifications are part of the certificate's meaning.

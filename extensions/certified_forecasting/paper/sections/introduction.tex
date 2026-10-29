@@ -1,86 +1,64 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Kernel Affine Hull Machines (KAHMs) use geometric reconstruction models in
-reproducing kernel Hilbert spaces to describe data
-\citep{kumar2024kahm,kumar2025collaborative}. For a time-series history, each
-local model measures reconstruction quality relative to a learned reference
-group. Normalizing these measurements gives a vector of soft associations.
-A decoder, also called a prediction head, maps that vector to future observed
-values. The central question is whether the representation retains the
-distinctions needed for forecasting. Similar associations can conceal different
-futures, and fitting a larger dictionary need not improve predictions.
+A representation can fit observed trajectories well while discarding distinctions
+needed to predict their futures. This creates two different questions: does a
+particular fitted forecast meet an error tolerance, and can any decoder with a
+specified sensitivity meet it using that representation? We address both for
+expected squared error on a fixed observed signal. Keeping this target and its
+evaluation law fixed makes comparisons meaningful when dictionaries change.
 
-Neither good reconstruction nor accurate prediction of the feature coordinates
-settles this question. The coordinate target changes with the dictionary, and
-an almost constant representation can be easy to predict while losing useful
-information. We therefore use the future observed signal as the common target
-throughout learning, refinement, and evaluation. For each forecast horizon
-$h$ and requested root-mean-square error (RMSE) tolerance $\epsilon_h\geq0$,
-we ask two questions: does a fitted forecast meet the tolerance, and can
-\emph{any} decoder with a prescribed sensitivity meet it using this
-representation? Both questions concern the same distribution of new
-trajectories and forecast origins.
+Kernel Affine Hull Machines (KAHMs) provide our principal application. Their
+local reconstruction models produce soft associations between a history and
+learned reference groups \citep{kumar2024kahm,kumar2025collaborative}. A decoder
+maps these associations to future observations. We retain the reconstruction
+mechanism of \citet{kumar2026limits}, who analyze prediction of successor soft
+coordinates and independent-trajectory evaluation. We instead study observed
+outputs, general sensitivity-constrained decoders, and the cost of refining a
+representation. No exact Koopman closure, Markov state, or sufficient learned
+state is assumed.
 
-This work extends KAHM forecasting from geometric representations and prediction
-limits to an implemented learning and certification procedure.
-\citet{kumar2026limits} study norm-bounded linear prediction of successor soft
-coordinates, distinguish exact Koopman closure from empirical fitting, and
-provide KAHM constructions, fitted-risk upper bounds, and independent-trajectory
-evaluation. We retain their reconstruction mechanism and independent sampling
-principle. Our extensions are a common observed-output target, a directly
-estimable lower bound for Lipschitz decoders, a refinement rule that preserves
-earlier forecasts, and calibrated decisions about accuracy and fitted
-improvements. Here a Lipschitz constraint limits how much a decoder's output
-can change relative to the distance between its inputs. Exact Koopman closure,
-by contrast, would require one matrix to propagate the feature coordinates
-exactly throughout the domain; we make no such assumption.
+The lower certificate starts from a simple obstruction. If two targets are
+farther apart than the decoder's Lipschitz constraint allows their predictions
+to be, their prediction errors cannot both be small. We average the squared
+positive excess separation over conditionally independent pairs. Related
+pairwise Lipschitz regression arguments are established
+\citep{akash2021inverse}; our analysis identifies the resulting witness's
+slack, its dependence on the pairing law, and finite-sample decisions under a
+fixed marginal risk. The witness is sharp for some distributions and can be
+arbitrarily loose for others. This limitation motivates stratified pairing:
+concentrate comparisons within predefined groups, then reweight by their
+population masses. Estimating these masses adds uncertainty that must enter
+the certificate.
 
-The lower bound has a geometric interpretation. Suppose two future targets
-are farther apart than the decoder's sensitivity allows their predictions
-to be. The two prediction errors then cannot both be small. Averaging the
-squared excess separation over conditionally independent pairs gives a
-population risk lower bound, which we call the \emph{pairwise obstruction}.
-The conditioning rule matters: pairing trajectories at a common forecast
-origin and pairing histories within a reference class generally produce
-different bounds. Comparisons between bounds must use the same rule.
+Upper and lower certificates have complementary decision value. An upper
+bound can certify a fitted model's accuracy. Lower bounds can exclude cheaper
+representation classes, making it possible to certify the minimum feasible
+cost among predefined alternatives, or their joint infeasibility. This is a
+stronger conclusion than selecting the cheapest fitted model whose upper
+bound passes. It does not require the selected predictor itself to change.
 
-Refinement also needs a consistent definition of model capacity. Replacing
-a dictionary can remove earlier predictors. We instead append feature blocks,
-bound the sum of their coefficient norms, and measure input separation by the
-largest distance across blocks. Setting new coefficients to zero preserves
-any old forecast. Duplicate blocks can be merged without increasing the norm
-budget, so duplication alone changes neither the feasible prediction class
-nor the pairwise obstruction. A different block can improve the geometry;
-its benefit to a fitted forecast is evaluated separately on independent data.
-
-The paper makes four contributions.
-\begin{enumerate}[leftmargin=*,itemsep=3pt]
-\item \textbf{A KAHM forecasting procedure.} Stable soft associations, retained
-dictionaries, and constrained multihorizon decoders predict the observed
-signal. Candidates are fixed before calibration, and the procedure reports
-an unresolved decision when it cannot certify the requested accuracy.
-\item \textbf{Matched lower and upper risk bounds.} A pairwise obstruction
-applies to arbitrary Lipschitz decoders. We compare it with a conditional
-variance bound, show exactness for a distribution supported on two points,
-and combine it with fitted-risk upper bounds from independent episodes.
-\item \textbf{Comparable refinement.} We prove nesting and duplication
-invariance of the feasible classes, and a necessary amount of distance
-expansion for a refinement to meet an error tolerance. Paired losses test
-whether particular fitted refinements improve risk.
-\item \textbf{Empirical assessment.} Experiments vary soft versus hard
-associations, direct prediction versus feature rollout, dictionary size,
-coefficient budget, and input preprocessing. A matched comparison evaluates
-KAHM, radial basis function (RBF), and affine-hull geometry with three decoder
-types on all seven tasks, using common preprocessing and dictionary-size
-options. The analysis separates accuracy, representation size, usefulness of
-certificates, and variation across fitting repetitions, reporting both gains
-and regressions.
+Our contributions are as follows.
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item \textbf{Witness analysis and stratified certification.} We give an exact
+slack decomposition, sharp continuous and discrete cases, and counterexamples
+to universal tightness. A stratified certificate accounts for random stratum
+counts and estimated masses while retaining the original population risk.
+\item \textbf{Refinement and decision guarantees.} Retaining feature blocks
+under a sum-of-block-norms budget preserves earlier predictors and makes exact
+duplication immaterial to the feasible class. Simultaneous lower and upper
+bounds yield accuracy, improvement, and minimum-cost statements.
+\item \textbf{Controlled comparisons and forecasting evidence.} A fixed
+benchmark compares the witness with a range-aware centered bound and a
+certified empirical-minimum-risk bound for the same Lipschitz class. A separate
+experiment isolates decisions enabled by lower calibration. KAHM applications
+cover six synthetic systems, original pen trajectories, and speech energy,
+with matched geometric controls and conventional regression baselines.
 \end{enumerate}
 
-KAHMs supply the main representation, but the risk and refinement results
-apply to other fixed representations under the stated assumptions. The
-guarantees concern expected squared error for a new episode and a specified
-origin law. They do not establish that the features form a sufficient state,
-give conditional prediction-interval coverage, or apply automatically to
-overlapping windows from a single dependent trajectory.
+The empirical findings delimit the claims. Empirical-minimum calibration is
+often tighter than the pairwise certificate; stratification can help or hurt.
+KAHM accuracy gains depend on the task and decoder. Informative real-data
+certification requires many defensible independent groups and a stated sampling
+assumption. The guarantees concern expected risk under that evaluation law,
+not prediction-interval coverage for every individual history.

@@ -1,83 +1,65 @@
 \section{Related work}
 \label{sec:related}
 
-\paragraph{KAHMs and soft geometric representations.}
-KAHMs construct geometric reconstruction models in reproducing kernel Hilbert
-spaces (RKHSs) \citep{kumar2024kahm,kumar2025collaborative}. We use their
-reconstruction affinities as soft dictionary coordinates for forecasting the
-observed signal. The reconstruction algorithm is inherited; our development
-concerns constrained output decoders, refinement with a comparable prediction
-budget, and decisions based on risk bounds. Soft state aggregation and its
-adaptive construction predate modern representation learning
-\citep{singh1994soft}. Approximate state abstractions provide guarantees for
-decision quality in reinforcement learning \citep{abel2016abstraction}, and
-latent transition models can be learned through prediction objectives relevant
-to the task \citep{gelada2019deepmdp}. In our comparisons, the observed-output
-target and its evaluation law remain fixed as the representation changes.
+\paragraph{Geometric representations and Koopman prediction.}
+KAHMs learn reconstruction models in reproducing kernel Hilbert spaces
+\citep{kumar2024kahm,kumar2025collaborative}; this construction is inherited.
+Soft state aggregation \citep{singh1994soft}, approximate state abstraction
+\citep{abel2016abstraction}, and task-oriented latent transition models
+\citep{gelada2019deepmdp} likewise distinguish a representation from its
+predictive use. Extended dynamic mode decomposition approximates Koopman
+operators on finite dictionaries \citep{williams2015edmd}; learned dictionaries
+\citep{li2017dictionary} and RKHS regression bounds \citep{kostic2022regression}
+provide related forecasting frameworks. Basis-invariant consistency diagnostics
+\citep{haseli2023consistency}, multistep projection-error guarantees and
+refinement \citep{conradie2026trustworthy}, and residual-based dictionary
+learning \citep{coote2026residual} address dictionary quality. Our decisions
+instead compare expected observed-output error with a declared tolerance
+while preserving a common target and sampling law.
 
-\paragraph{Koopman regression and learned dictionaries.}
-Extended dynamic mode decomposition approximates the Koopman operator on a
-finite dictionary of functions \citep{williams2015edmd}. Jointly learning the
-dictionary and its propagation model is also established
-\citep{li2017dictionary}. \citet{kostic2022regression} formulate RKHS Koopman
-estimation as regression and give finite-sample bounds for independent and
-mixing data. A coordinate-space residual depends on the chosen basis;
-\citet{haseli2023consistency} develop a basis-invariant consistency index with
-a prediction-error interpretation. More recently,
-\citet{conradie2026trustworthy} combine invariance diagnostics, multistep
-projection-error bounds, and dictionary refinement, while
-\citet{coote2026residual} learn dictionaries using spectral residuals and
-conditioning penalties. These studies establish forecasting guarantees and
-refinement methods for learned dictionaries. Our focus is a finite-sample
-statistical decision about a fixed observed-output target: certify a fitted
-forecast, exclude an entire class of decoders with a prescribed Lipschitz
-budget, and preserve admissible forecasts when refining the representation.
+\paragraph{Closest KAHM prediction-limit analysis.}
+\citet{kumar2026limits} study norm-bounded linear prediction of successor soft
+coordinates, centered lower certificates, empirical-risk-based alternatives,
+fitted-risk upper bounds, and independent-trajectory evaluation. We use their
+KAHM reconstruction and sampling principle. The present extensions are the
+positive-part pair witness for observed outputs, its exact slack and
+stratification analysis, duplication-invariant retained classes, and
+minimum-feasible-cost certificates. Neither independent-episode calibration
+nor combining an upper bound with a prescribed tolerance is claimed as new.
+The empirical comparison includes a certified empirical-minimum alternative
+rather than only the earlier centered implementation.
 
-\paragraph{Lower bounds and model invalidation.}
-\citet{kumar2026limits} give lower confidence bounds for norm-bounded linear
-prediction of soft successor coordinates. Their bounds compare within-class
-successor variation with retained input variation. We extend the target and
-predictor class and study a pairwise lower-bound statistic, called a
-\emph{witness}, that avoids separately estimating and subtracting two
-root-variance quantities. The prior paper also supplies upper risk bounds for
-fitted models and evaluates them on independent trajectories. We inherit that
-sampling principle. The extensions here are a pairwise witness for the observed
-forecasting target, refinement geometry, and an implemented selection procedure.
+\paragraph{Pairwise bounds and Lipschitz regression.}
+\citet{akash2021inverse} derive a Lipschitz-constrained mean squared error (MSE) bound
+using paired residuals and target separation. Their argument is a close
+antecedent to the geometric step in our witness; our contribution concerns
+its conditional positive-part form, sharpness and slack, and statistically
+valid stratification under the unchanged marginal risk. Finite-support
+Lipschitz regression can be posed as a constrained optimization problem
+\citep{gottlieb2017regression}; we use this class directly for an empirical-minimum
+comparator. Model-class falsification \citep{muller2025falsification} and
+minimal-empirical-risk bounds \citep{wu2026minimal} provide broader context.
+The Gamma test uses local pair differences to estimate regression noise
+\citep{evans2002gamma}. Lipschitz set-membership identification
+\citep{milanese2004setmembership}, trajectory invalidation
+\citep{jin2020invalidation}, and corruption-robust prediction ranges
+\citep{blum2026reliable} concern related feasibility questions with different
+sampling and error criteria.
 
-More broadly, \citet{muller2025falsification} study bounds on the best risk in a
-model class, and \citet{wu2026minimal} give non-asymptotic bounds in terms of
-minimal empirical risk. Our contribution concerns the pairwise statistic and
-its implications for a specified representation and sensitivity budget.
-Pairwise differences also underlie the Gamma test for noise
-variance in smooth regression \citep{evans2002gamma}. Lipschitz regularity has
-long been used in set-membership identification \citep{milanese2004setmembership}
-and in trajectory invalidation through data-driven abstractions
-\citep{jin2020invalidation}. \citet{blum2026reliable} use pairwise Lipschitz
-violations to compute prediction ranges robust to a bounded number of corrupted
-observations. Those guarantees concern feasible functions or interpolation
-under adversarial corruption. Our target is a lower confidence bound on
-population mean squared forecasting error.
+\paragraph{Calibration, refinement, and dependence.}
+We use classical bounded-mean inequalities \citep{hoeffding1963} and empirical
+Bernstein and standard-deviation bounds \citep{maurer2009empirical}. The
+simultaneous testing principle follows Learn then Test
+\citep{angelopoulos2025ltt}. Our group norm is established in group selection
+and multiple-kernel learning \citep{bach2008group}; here its max-block dual
+metric gives a comparable sensitivity budget as dictionaries grow. Soft gating
+and residual fitting also have established precedents
+\citep{jordan1994experts,buhlmann2003boosting}. The additional cost conclusion
+comes from jointly excluding cheaper classes and accepting a fitted model.
 
-\paragraph{Risk calibration and temporal dependence.}
-Our concentration arguments use classical bounded-mean inequalities
-\citep{hoeffding1963} and empirical Bernstein bounds
-\citep{maurer2009empirical}. Learn then Test formulates predictive risk control
-as multiple testing \citep{angelopoulos2025ltt}. We use this principle to select
-among models fixed before calibration and apply a union bound over the finite
-candidate family. Non-asymptotic forecasting guarantees also exist for
-standard statistical models \citep{mcdonald2017forecasting}.
-
-Our principal experimental protocol uses independent episodes, while permitting
-dependent observations within an episode. A calibration split from a single
-dependent series does not itself restore independence. Concentration and
-decoupling arguments then require additional assumptions, as illustrated by
-\citet{oliveira2024conformal} in the distinct setting of conformal coverage.
-Our confidence statements concern expected squared error. They do not provide
-prediction intervals or conditional coverage for every observed history.
-
-\paragraph{Scope of the extension.}
-Soft gating and residual fitting have long histories
-\citep{jordan1994experts,buhlmann2003boosting}. The block norm used here is also
-an instance of the established group-norm and multiple-kernel-learning framework
-\citep{bach2008group}. Its role is to maintain a comparable coefficient budget
-as geometric blocks are added, including exact duplicates.
+Within-episode dependence is allowed because concentration is applied to
+independent episode summaries. A chronological split of one dependent record
+does not provide that independence. Forecasting bounds under other sampling
+assumptions \citep{mcdonald2017forecasting} and dependence-aware conformal
+analysis \citep{oliveira2024conformal} illustrate the additional conditions
+needed; their guarantees are not consequences of the present theorem.

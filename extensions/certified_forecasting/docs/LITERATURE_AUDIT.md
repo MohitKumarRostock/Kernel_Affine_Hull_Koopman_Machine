@@ -12,26 +12,40 @@ learning (Singh et al., 1994). The local KAHM reconstruction models are inherite
 from Kumar et al. (2024, 2025). Learned Koopman dictionaries, operator regression,
 forecasting error bounds, and dictionary refinement also have established
 literatures. Bounded-loss risk calibration, empirical Bernstein concentration,
-multiple testing, residual fitting, soft gates, and group-norm regularization
-are used here as existing tools.
+direct standard-deviation concentration, multiple testing, residual fitting,
+soft gates, and group-norm regularization are used here as existing tools.
+Paired-residual arguments for Lipschitz representation error and finite
+quadratic programs for scalar Lipschitz regression also have direct
+antecedents.
 
 The manuscript studies their connection to a specific forecasting problem:
-a pairwise lower bound on population squared-error risk under a fixed
-representation and Lipschitz budget; direct calibration of that lower-bound
-statistic; necessary geometric change for successful refinement; and retained
-blocks that preserve the feasible forecast class, including under exact
-duplication. The finite-family decision distinguishes acceptance, exclusion,
-and inconclusive outcomes for the same observed-output target.
+a conditional pairwise lower bound on population squared-error risk under a
+fixed representation and Lipschitz budget; its exact slack decomposition;
+stratification with estimated probability weights and random within-stratum
+sample counts; and the compatibility needed for conditional optima to attain
+the global optimum. The refinement results identify necessary geometric
+change and retain earlier prediction classes, including under exact block
+duplication. Simultaneous class exclusions and fitted-risk upper bounds also
+give an interval for minimum feasible cost within the specified candidate
+family. These statements concern the same observed-output target and
+marginal evaluation law.
 
 The elementary pairwise inequality is not presented as a priority claim or a
-new concentration theorem. Its consequences, the specified learning procedure,
-and the empirical behavior of the resulting decisions form the contribution.
+new concentration theorem. Stratification uses established concentration and
+union bounds; relative-entropy inversion and empirical-minimum calibration are
+comparison tools rather than new statistical inequalities. The contribution
+is the stated collection of geometric results, calibrated decisions, and
+empirical evaluation, with the limits of each claim made explicit.
 
 ## Closely related primary sources
 
 | Primary source | Relevant established result | Relationship to this manuscript |
 |---|---|---|
-| [Kumar and Kargaran (2026), v3](https://arxiv.org/abs/2609.32652v3) | Soft geometric coordinates, norm-bounded linear prediction limits, fitted-model upper risk bounds, and independent-trajectory extensions | The observed-output pair witness, retained refinement geometry, and implemented selection procedure extend these ingredients. |
+| [Akash et al. (2021)](https://ojs.aaai.org/index.php/AAAI/article/view/16815) | Lemma 2 bounds scalar prediction MSE for Lipschitz decoders from inverse contrastive loss using a paired-residual argument | This is a close antecedent of the representation-error principle; the manuscript compares the population expressions explicitly before developing conditional and stratified calibration. |
+| [Gottlieb, Kontorovich, and Krauthgamer (2017)](https://www.wisdom.weizmann.ac.il/~robi/papers/GKK-MetricRegression-ITIT17-AuthorVersion.pdf) | Section III-A formulates finite scalar Lipschitz regression with pairwise constraints, including a quadratic program for squared loss | The empirical-minimum comparator uses this established structure and a Lagrangian dual lower value; it is not introduced as a new regression formulation. |
+| [Kumar and Kargaran (2026), v3](https://arxiv.org/abs/2609.32652v3) | Soft geometric coordinates, norm-bounded linear prediction limits, fitted-model upper risk bounds, independent-trajectory extensions, and empirical-minimum comparisons in Section 2.5 | The conditional observed-output witness, stratified calibration, retained refinement geometry, and cost decisions extend these ingredients. |
+| [Maurer and Pontil (2009)](https://arxiv.org/pdf/0907.3740) | Theorem 4 gives the empirical Bernstein mean bound; Theorem 10 gives direct sample-standard-deviation concentration | Both are attributed tools. The stronger centered comparator uses Theorem 10 and known support information, so an indirect square-root correction is not treated as unavoidable. |
+| [Hoeffding (1963)](https://www.tandfonline.com/doi/abs/10.1080/01621459.1963.10500830) | Exponential inequalities for sums of bounded random variables | The relative-entropy mean endpoints and empirical-minimum lower endpoint are obtained from the established exponential chord argument and Chernoff inversion. |
 | [Conradie et al. (2026)](https://arxiv.org/abs/2603.15091) | Invariance diagnostics, multistep projection-error bounds, principal-angle methods, and dictionary refinement | These concern Koopman approximation and projection errors; the present certificates target finite-sample expected forecasting loss under a specified episode law. |
 | [Coote and Colbrook (2026)](https://arxiv.org/abs/2606.29083) | Dictionary learning using residual dynamic mode decomposition spectral errors and a conditioning penalty | Spectral residual control differs from statistical certification of population mean squared error. |
 | [Kostic et al. (2022)](https://proceedings.neurips.cc/paper_files/paper/2022/hash/196c4e02b7464c554f0f5646af5d502e-Abstract-Conference.html) | RKHS Koopman regression and learning bounds for independent and mixing observations | The held-out episode procedure evaluates fixed models without replacing their operator-estimation analysis. |
@@ -49,13 +63,58 @@ Bach were checked during the 29 October revision. Their stated scopes support
 the distinctions above. The bibliography preserves publication status: the
 2026 arXiv works cited as preprints are not described as accepted journal papers.
 
+### The closest paired-residual antecedent
+
+Akash et al.'s [Lemma 2 and Appendix 7.3](https://arxiv.org/pdf/2102.08343)
+consider recovering a continuous scalar nuisance variable by a Lipschitz decoder. To
+compare under the same iid pair law, let the scalar target $Y$ have finite
+second moment, take $\kappa>0$, set
+$F=\{|Y-Y'|>a\}$ for $a>0$, write $\rho=\Pr(F)$, and suppose
+$M=\mathbb E[\mathbf1_Fd(U,U')^2]\leq\varepsilon$. Their
+inverse-contrastive-loss hypothesis implies this bound on $M$. With
+$v=(|Y-Y'|-\kappa d(U,U'))_+$, the restricted $L^2$ triangle inequality
+gives
+
+$$
+W_\kappa\geq\frac12\|\mathbf1_Fv\|_{L^2}^2
+\geq\frac12(a\sqrt\rho-\kappa\sqrt M)_+^2
+\geq\frac12(a\sqrt\rho-\kappa\sqrt\varepsilon)_+^2.
+$$
+
+In the positive regime $\varepsilon<a^2\rho^2/\kappa^2$, this is at
+least their displayed bound $(a\rho-\kappa\sqrt\varepsilon)^2/4$.
+This comparison credits the earlier principle and states the relation between
+the two population expressions. It does not compare confidence corrections,
+sampling designs, or all possible finite-sample procedures. The present
+conditional-pair construction and estimated-mass stratified certificate are
+analyzed separately; no global priority or statistical-dominance claim follows
+from this inequality.
+
 ## Statistical interpretation
 
 The population pair witness dominates the stated root-variance obstruction
 under the same conditional pairing law. This does not imply uniform domination
-of every finite-sample centered confidence bound. A necessary amount of metric
-expansion also does not guarantee a successful learned refinement; irreducible
-future noise may prevent it.
+of every finite-sample centered confidence bound. The updated comparison uses
+known support widths, exact zero variance for a structurally constant
+representation, and allocated direct-standard-deviation bounds. The retained
+two-atom results with the earlier comparator are reported as historical
+measurements rather than evidence against this stronger procedure.
+
+The pair witness can be arbitrarily small relative to optimal risk on a
+bounded three-atom law. Estimated-mass stratification can remove that
+population gap for a compatible partition, but need not improve every
+distribution or every finite-sample endpoint. Increasing the number of strata
+can discard informative cross-stratum pairs and leave too few independent
+pairs within each group. The broader Lipschitz optimum also need not equal the
+optimum of a fitted clipped-affine family. These are distinct limits on what
+more calibration data can resolve.
+
+A necessary amount of metric expansion does not guarantee a successful learned
+refinement; irreducible future noise may prevent it. Minimum feasible cost is
+certified only when the lower and upper cost endpoints coincide, or when all
+cheaper classes are excluded and an accepted model supplies the corresponding
+upper endpoint. Otherwise the selected model is only the least costly
+certified candidate.
 
 A risk bound requires the target, evaluation law, metric, and sensitivity class
 to be aligned. Population optima over nested classes need not translate into
@@ -69,7 +128,9 @@ Calibration must also be independent of model-family construction. Reusing
 calibration streams or a previously examined writer cohort after changing the
 study design requires an additional adaptive-validity argument. The current
 manuscript therefore distinguishes fresh synthetic calibration from nominal
-follow-up calculations on reused data.
+follow-up calculations on reused data. Each additional experiment records its
+own frozen protocol and independent sampling unit; those records do not
+retroactively validate an earlier adaptive reuse of calibration data.
 
 ## Bibliographic provenance
 
@@ -79,3 +140,9 @@ is cited as the 2025 *Annals of Applied Statistics* article, volume 19, issue 2,
 pages 1641--1662, DOI `10.1214/24-AOAS1998`. Haseli and Cortés is cited in volume
 7 (2023), pages 649--654; its DOI includes 2022 because of its earlier online
 publication. The Singh et al. entry follows the official 1994 conference year.
+Akash et al. is the 2021 AAAI article, volume 35, issue 8, pages 6582--6591,
+DOI `10.1609/aaai.v35i8.16815`. Gottlieb et al. is the 2017 journal version
+in *IEEE Transactions on Information Theory*, volume 63, issue 8, pages
+4838--4849, DOI `10.1109/TIT.2017.2713820`; its earlier arXiv posting does not
+change the journal publication year. Their primary articles were checked
+directly during the additional theory revision.

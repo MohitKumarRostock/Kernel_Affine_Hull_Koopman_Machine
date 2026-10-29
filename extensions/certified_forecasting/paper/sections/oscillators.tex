@@ -1,90 +1,41 @@
 \subsection{Independently initialized Van der Pol and Duffing episodes}
 \label{sec:oscillators}
 
-We apply the same frozen procedure to independently initialized Van der Pol
-and forced Duffing episodes, connecting the experiment to
-\citet{kumar2026limits}.
-Let $x(t)$ denote physical position, $v(t)$ velocity, and $t$ continuous time;
-a dot denotes differentiation with respect to $t$. The dynamics are
-\begin{align*}
- \dot x&=v,&
- \dot v&=(1-x^2)v-x
- &&\text{(Van der Pol)},\\
- \dot x&=v,&
- \dot v&=-0.2v+x-x^3+0.3\cos(1.2t+\varphi)
- &&\text{(Duffing)}.
-\end{align*}
-Initial position and velocity are independent and uniform on $[-2,2]$.
-For Duffing, the forcing phase $\varphi$ is independently uniform on
-$[0,2\pi]$ in each episode. We integrate with classical fourth-order
-Runge--Kutta at step size $0.025$, discard ten time units, and sample 72
-observations at interval $0.1$. The observed scalar signal is
-\[
- y_j=0.95\tanh(x(10+0.1j))+\eta_j,\qquad
- \eta_j\stackrel{\mathrm{iid}}{\sim}\operatorname{Unif}[-0.02,0.02],
- \qquad j=0,\ldots,71.
-\]
-Here $j$ is the discrete observation index, $\tanh$ is the hyperbolic tangent,
-and $\operatorname{Unif}[a,b]$ denotes the uniform distribution on $[a,b]$.
-The noises $\eta_j$ are independent and identically distributed (iid).
-Certificates use the conservative range $[-1,1]$ for the sensor, whose range
-lies inside $[-0.97,0.97]$. They concern sensor-output error, not physical
-position or velocity, and require neither stationarity nor independent
-within-episode windows.
-
-Each system has three new complete fitting repetitions, using 128 training,
-512 validation, 4096 calibration, and 2048 test episodes. Histories, the
-40-candidate family, coefficient budget, and per-repetition joint confidence
-allocation are unchanged from the main experiment. Horizons $1,4,12$ now
-correspond to $0.1,0.4,1.2$ time units. Selection within each family minimizes
-validation MSE averaged over horizons before calibration or testing. The
-unchanged forecasting procedure receives the new generator; all candidates,
-episode scores, and implementation hashes are retained.
-
-The prespecified half-step check compares 16 fixed initializations with
-identical phases and observation noise at step sizes $0.025$ and $0.0125$.
-Maximum sensor differences, $1.69\times10^{-6}$ for Van der Pol and
-$3.49\times10^{-6}$ for Duffing, are below the fixed $10^{-3}$ threshold.
-This assesses numerical consistency, without rigorously bounding global
-continuous-time integration error.
+We apply the frozen 40-candidate procedure to independently initialized
+Van der Pol and forced Duffing episodes, connecting the experiment to
+\citet{kumar2026limits}. Each system has three new complete fits with the
+sample sizes and confidence allocation of Section~\ref{sec:experiments}.
+The bounded position sensor, dynamics, and numerical checks are specified in
+Appendix~\ref{app:oscillator-protocol}. Horizons $1,4,12$ correspond to
+$0.1,0.4,1.2$ time units. Certificates concern sensor-output error under the
+independent-episode numerical law; they require neither stationarity nor
+independent within-episode windows and do not certify physical-state error.
 
 \begin{table}[t]
 \centering\small
 \setlength{\tabcolsep}{3pt}
 \input{tables/oscillators_table}
-\caption{Independent-test sensor RMSE, reported as mean $\pm$ sample standard
-deviation over three complete fitting repetitions. One candidate per family
-is selected using validation data. The last column is
-$3^{-1}\sum_{r=1}^3\sqrt{U_{r,12}}$, where $U_{r,12}$ is the horizon-12
-upper MSE endpoint for the selected candidate in repetition $r$. This average
-summarizes individual certificates; it is not a calibrated guarantee for an
-ensemble. All individual certificates and all 40 candidates per repetition
-are archived.}
+\caption{Independent-test sensor RMSE, mean $\pm$ sample standard deviation
+over three complete fits, with validation selection within each family.
+The last column averages the selected models' individual horizon-12
+upper-RMSE endpoints; this descriptive average gives no ensemble guarantee.
+All 40 candidates per repetition are archived.}
 \label{tab:oscillators}
 \end{table}
 
-Table~\ref{tab:oscillators} shows substantial long-horizon improvement over
-persistence for retained KAHM models. Mean horizon-12 RMSE is $0.3814$ versus
-$0.8677$ on Van der Pol, and $0.2499$ versus $0.3185$ on Duffing. Other models
-perform better on these tasks: local affine-hull blocks achieve $0.2990$ on
-Van der Pol, and direct quadratic regression achieves $0.1369$ on Duffing.
-Iterated KAHM has lower mean horizon-12 error than direct KAHM on Van der Pol
-($0.3408$ versus $0.3814$), whereas direct KAHM performs better on Duffing
-($0.2499$ versus $0.2686$). The earlier advantage of direct fitting on the
-periodic generators therefore does not extend to every nonlinear oscillator.
+Retained KAHM improves horizon-12 RMSE over persistence on Van der Pol
+($0.3814$ versus $0.8677$) and Duffing ($0.2499$ versus $0.3185$), but other
+models perform better: affine-hull blocks achieve $0.2990$ on Van der Pol,
+and quadratic regression achieves $0.1369$ on Duffing
+(Table~\ref{tab:oscillators}). Iterated KAHM achieves $0.3408$ on Van der Pol
+and $0.2686$ on Duffing, so direct fitting outperforms iteration only on the
+latter system.
 
-The retained KAHM family certifies the all-horizon RMSE requirement $0.35$ in
-all three Duffing repetitions. On Van der Pol, it certifies $0.50$ in all three
-repetitions but does not certify $0.35$. When all comparison families are
-eligible, the $0.35$ requirement is certified in every repetition of both
-systems. No candidate certifies the all-horizon $0.20$ requirement in this
-follow-up. Adjacent KAHM refinements have strictly positive certified
-improvement in 43 of 54 Van der Pol comparisons and ten of 54 Duffing
-comparisons, with the same per-repetition confidence allocation.
-
-All six scheduled runs completed, retaining 240 fitted candidates. An
-independent score audit reconstructs their 1440 one-sided risk endpoints and
-108 paired improvement bounds with zero numerical discrepancy. The probability
-guarantees apply to the specified bounded sensor and independent-episode
-numerical law. They do not transfer directly to errors in physical state
-measured under another observation protocol.
+Retained KAHM certifies all-horizon RMSE $0.35$ in all three Duffing fits
+and $0.50$, but not $0.35$, in all three Van der Pol fits. Allowing all
+comparison families certifies $0.35$ in every fit of both systems; none
+certifies $0.20$. Adjacent KAHM refinements have positive certified improvement
+in 43 of 54 Van der Pol comparisons and 10 of 54 Duffing comparisons.
+All six scheduled runs completed. An independent score audit reconstructs
+the 240 candidates' 1440 one-sided risk endpoints and 108 paired improvement
+bounds with zero numerical discrepancy.

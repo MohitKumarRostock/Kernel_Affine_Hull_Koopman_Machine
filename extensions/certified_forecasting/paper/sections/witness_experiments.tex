@@ -1,0 +1,94 @@
+\section{Lower-bound comparisons beyond two atoms}
+\label{sec:witness-comparison}
+
+The two-atom law in Proposition~\ref{prop:two-atom} has an exact population witness. We now
+separate population slack from calibration error on eight fixed finite laws
+(Table~\ref{tab:witness-laws}), including deterministic targets, noise,
+partial collapse, rare conflicts, and an affine--Lipschitz class mismatch.
+For every method, $R^*$ is the minimum MSE over the same full scalar
+$1$-Lipschitz class with outputs in $[-1,1]$. This is a certificate comparison,
+not another KAHM forecasting benchmark.
+
+\input{tables/witness_laws}
+
+\paragraph{Protocol and comparators.}
+The protocol was recorded before sampling. Each law uses 300 independent
+calibration samples at each $n\in\{64,256,1024,4096\}$, totaling 9,600 trials.
+The four primary methods share each sample and each receive a separate
+one-sided failure probability $0.05$; no joint $95\%$ event across methods
+is asserted. We compare the original disjoint-pair empirical Bernstein (EB)
+bound, the range-aware centered bound in
+Appendix~\ref{app:centered-range-aware}, the dual-certified empirical risk
+minimization (ERM) bound with Kullback--Leibler (KL) correction in
+\eqref{eq:erm-kl-lower}, and the
+stratified certificate in Theorem~\ref{thm:stratified-certificate}.
+Primary stratification estimates its masses; it does not receive their true
+values. Primary pair methods retain the generic score range $[0,2]$.
+Prespecified secondary analyses tighten this range using the known support,
+use known stratum masses, or replace the empirical-minimum correction by
+Hoeffding's bound. All are retained.
+
+The empirical and population optimization programs use the full Lipschitz
+class, with global extension from the finite support. Feasible primal and dual
+values bracket each optimum; the largest empirical gap is
+$4.01\times10^{-11}$. Analytic checks cover all eight population optima.
+An unprojected affine optimum is never used as a Lipschitz lower bound: in the
+mismatch law, the former is $2/9$ and the latter is zero.
+
+\input{tables/witness_comparison}
+
+\paragraph{Population slack and finite-sample cost.}
+Table~\ref{tab:witness-comparison} reports population quantities separately
+from mean calibrated endpoints. On partial collapse, stratification raises
+the population witness from $0.0867$ to the exact minimum $0.2533$.
+At $n=4096$, its mean endpoint is $0.1772$, compared with $0.0646$ for
+unconditional pairing and $0.2178$ for empirical minimization. Stratification
+also improves the five-point and noisy-affine witnesses. It worsens the
+three-point witness, from $0.2222$ to $0.1667$, demonstrating that a fixed
+partition need not help.
+
+Empirical minimization gives the largest mean endpoint on most richer laws;
+the pair bound is larger on the partially separated two-atom and three-point
+laws at $n=4096$. The centered comparator is substantially more competitive
+than the earlier variance correction on a collapsed representation. For the
+earlier setting $n=4096$ and $\eta=.05/3$, using its known zero input variance
+already gives the analytic expectation lower bound $0.90306$ for the old
+centered endpoint, compared with the originally reported mean $0.5327$.
+Thus that earlier gap partly reflects unused structural information; it does
+not establish a general advantage over centered certification.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth]{figures/witness_sample_size.pdf}
+\caption{Mean lower endpoints over all 300 repetitions at each calibration
+size for every prespecified law. Dashed lines show minimum population MSE.
+Each method has its own $95\%$ one-sided confidence statement. Quantiles,
+Monte Carlo uncertainty, secondary methods, and every trial are retained.}
+\label{fig:witness-sample-size}
+\end{figure}
+
+\paragraph{Positive tolerances, coverage, and computation.}
+The fixed RMSE tolerances are $0.10$, $0.25$, and $0.50$ for every law.
+On partial collapse at $n=4096$, unconditional pairing excludes tolerance
+$0.25$ in 211 of 300 trials; empirical minimization and primary stratification
+both exclude it in all 300. Rare conflicts remain difficult: their exact
+risk is $0.025$, but unconditional pairing and primary stratification never
+exclude tolerance $0.10$ at this sample size. Empirical minimization excludes
+it in all 300 trials. Tightening the stratified score range using the known
+support raises its exclusion count to 284; additionally supplying known masses
+raises it to 300. The gain therefore depends on both pairing and available
+information.
+
+All four primary methods have zero observed coverage violations across the
+prespecified grid. This simulation does not prove coverage; each law--size
+cell has only 300 repetitions, and the release gives binomial Monte Carlo
+intervals. Reconstruction of all 76,800 primary and secondary endpoints
+agrees within $1.12\times10^{-16}$. At $n=4096$, medians across the eight
+law-wise median computation times are $31.3$, $34.7$, $265.4$, and $165.0$
+$\mu$s for pair EB, centered, empirical minimum, and stratified EB,
+respectively. These single-machine measurements use a precomputed finite-support
+pair-score table and include sample statistics, confidence corrections, and
+ERM optimization after representation lookup. They exclude feature learning
+and do not establish a computational advantage on large continuous supports.
+The frozen protocol, sufficient statistics, dual certificates, and complete
+analysis are in \path{results/witness_comparison}.

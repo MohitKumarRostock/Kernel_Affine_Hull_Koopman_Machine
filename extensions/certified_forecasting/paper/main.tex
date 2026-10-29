@@ -4,17 +4,17 @@
 \usepackage{amsmath,mathtools,booktabs,microtype,enumitem}
 \usepackage{lastpage}
 \hypersetup{hidelinks,
-pdftitle={Forecasting with Kernel Affine Hull Machines: Representation Refinement and Risk Certification},
+pdftitle={Certifying Prediction Limits and Representation Refinement with Kernel Affine Hull Machines},
 pdfauthor={Mohit Kumar and Somayeh Kargaran},
 pdfsubject={KAHM forecasting, representation refinement, and finite-sample risk certification}}
 \jmlrheading{}{2026}{1--\pageref{LastPage}}{}{}{}{Mohit Kumar and Somayeh Kargaran}
-\ShortHeadings{Forecasting with Kernel Affine Hull Machines}{Kumar and Kargaran}
+\ShortHeadings{Prediction Limits and Representation Refinement}{Kumar and Kargaran}
 \firstpageno{1}
 \allowdisplaybreaks
 \setlength{\emergencystretch}{1.5em}
 
 \begin{document}
-\title{Forecasting with Kernel Affine Hull Machines:\\Representation Refinement and Risk Certification}
+\title{Certifying Prediction Limits and Representation Refinement\\with Kernel Affine Hull Machines}
 \author{\name Mohit Kumar \email mohit.kumar@uni-rostock.de\\
 \addr University of Rostock, Rostock, Germany\\
 Software Competence Center Hagenberg, Hagenberg, Austria
@@ -24,25 +24,25 @@ Software Competence Center Hagenberg, Hagenberg, Austria
 \maketitle
 
 \begin{abstract}
-Kernel Affine Hull Machines (KAHMs) represent data through local geometric
-reconstruction. We use their soft associations to forecast observed signals
-and assess accuracy against a specified error tolerance. Retaining dictionary
-blocks under a bound on the sum of block Frobenius norms preserves earlier predictors and
-prevents duplication from enlarging the feasible class. We derive a population
-risk lower bound from pairs whose target separation exceeds that allowed by
-the decoder's Lipschitz budget. This pairwise obstruction is exact for a
-distribution supported on two points and dominates a conditional root-variance
-bound under the same pairing law. Calibration on independent episodes combines
-this obstruction with fitted-risk upper bounds and paired improvement
-comparisons, allowing unresolved accuracy decisions. The theory extends to
-other fixed representations. Experiments cover a known-risk benchmark, six
-synthetic dynamics, and writer-separated pen trajectories. Matched controls
-show KAHM gains on nonlinear autoregression and pen trajectories, while
-affine-hull alternatives perform better on oscillators. Preprocessing produces
-both gains and regressions. Follow-ups on the same writer cohort are
-descriptive. The guarantees concern expected squared error under a specified
-episode and forecast-origin law; few independent evaluation units can leave
-the bounds uninformative.
+Can a representation support a prescribed forecasting accuracy, and is a
+more expensive representation necessary? We study these questions using
+Kernel Affine Hull Machine (KAHM) features and sensitivity-constrained decoders.
+A pairwise lower bound measures target separations that exceed the decoder's
+Lipschitz budget. We characterize its slack, establish sharp cases, and exhibit
+arbitrarily loose cases. Stratifying pairs while preserving the marginal risk
+can recover missed obstructions. Finite-sample bounds account for estimated
+stratum masses and combine with fitted-risk upper bounds to certify acceptance,
+exclusion, or minimum feasible representation cost among predefined classes.
+Retained feature blocks with a sum-of-block-norms budget preserve earlier
+predictors and prevent exact duplication from enlarging the class. Experiments
+compare the witness with range-aware variance and empirical-minimum-risk bounds;
+the latter is often tighter. A controlled forecasting study demonstrates
+additional cost and infeasibility decisions, with substantial sample requirements.
+Six synthetic systems, pen trajectories, and speech energy
+illustrate the forecasting procedure. KAHM gains depend on the task and decoder;
+conventional regressors remain stronger on several tasks. Speech calibration
+certifies selected tolerances under an explicit independent-group assumption.
+All guarantees concern expected squared error under a specified evaluation law.
 \end{abstract}
 \begin{keywords}
 Kernel Affine Hull Machines, time-series forecasting, soft state abstraction,
@@ -53,25 +53,29 @@ representation refinement, prediction risk certification
 \input{sections/related_work}
 \input{sections/method}
 \input{sections/theory}
+\input{sections/witness_experiments}
+\input{sections/decision_value}
 \input{sections/experiments}
 \input{sections/oscillators}
 \input{sections/sensitivity}
 \input{sections/real_data}
 \input{sections/input_scaling}
 \input{sections/matched_geometry}
+\input{sections/speech_forecasting}
 \input{sections/discussion}
 
 \section*{Code, data, and research transparency}
 The \href{https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/certified-soft-state-forecasting/extensions/certified_forecasting}{accompanying repository} provides the implementation, frozen configurations,
 result summaries, and figure generators in
 \path{extensions/certified_forecasting}; editable manuscript files are in its
-\path{paper} directory. The original experiments, input-scaling follow-up, and
-matched geometry--decoder comparison are archived separately. Their records
-include configurations, source hashes, and documented exact replays of damaged
-score archives in the scaling study. The evidence packages identify retained
-score arrays, and fixed-seed runners regenerate the full episode-level
-archives. Appendix~\ref{app:protocols} specifies the experimental
-configurations and independent sampling units.
+\path{paper} directory. The original forecasting, scaling, matched-geometry,
+witness-comparison, decision-value, and speech experiments have separate
+protocols and evidence directories. These record configurations, source hashes,
+retained scores, all prescribed outcomes, and verification replays. The speech
+archive records an evaluation-order correction and an identical strict-order
+replay. Appendix~\ref{app:protocols} specifies the forecasting configurations
+and independent sampling units. Public data are identified by source and
+checksum; download scripts preserve attribution and license information.
 
 \paragraph{Use of AI tools.}
 AI tools assisted with derivation exploration, implementation, literature
@@ -79,6 +83,7 @@ retrieval, and manuscript preparation.
 
 \appendix
 \input{sections/optimization}
+\input{sections/witness_analysis}
 \input{sections/protocols}
 \input{sections/known_risk_details}
 \bibliography{references}

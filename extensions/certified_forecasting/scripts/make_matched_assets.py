@@ -78,6 +78,37 @@ def mse_table(model_rows):
     return "\n".join(out)
 
 
+def combined_table(comparisons, model_rows):
+    """Report absolute errors, fitting variation, and relative effects together."""
+    models = {(r["task"], r["head"], r["geometry"]): r for r in model_rows
+              if r["analysis"] == "primary" and r["horizon"] == "all"}
+    effects = {(r["task"], r["head"], r["alternative"]): r for r in comparisons
+               if r["analysis"] == "primary" and r["horizon"] == "all"}
+    if len(models) != 63 or len(effects) != 42:
+        raise ValueError("Incomplete primary comparison records")
+    out = [r"\begin{table}[t]", r"\centering\small", r"\setlength{\tabcolsep}{3pt}",
+           r"\begin{tabular}{llrrrrr}", r"\toprule",
+           r"& & \multicolumn{3}{c}{MSE $\times 10^3$: mean (SD)} & \multicolumn{2}{c}{KAHM change (wins)}\\",
+           r"Task & Head & KAHM & RBF & Affine & vs. RBF & vs. Affine\\", r"\midrule"]
+    for task in TASKS:
+        for hi, head in enumerate(HEADS):
+            cells = []
+            for geometry in ("kahm", "rbf", "affine"):
+                row = models[(task, head, geometry)]
+                cells.append(f"{1000*float(row['mse_mean']):.2f} ({1000*float(row['mse_seed_sd']):.2f})")
+            for alternative in ("rbf", "affine"):
+                row = effects[(task, head, alternative)]
+                cells.append(f"{float(row['relative_mse_change_percent']):+.1f}\\% ({int(row['n_seeds_improved'])})")
+            head_label = ("Block", "Frobenius", "Rollout")[hi]
+            out.append((LABELS[task] if hi == 0 else "") + " & " + head_label + " & " + " & ".join(cells) + r"\\")
+        if task != TASKS[-1]:
+            out.append(r"\addlinespace[3pt]")
+    out += [r"\bottomrule", r"\end{tabular}",
+            r"\caption{Matched geometry comparison after validation-only selection from identical preprocessing, history, and dimension options. Absolute all-horizon test MSE and its sample standard deviation across five fitting repetitions are scaled by $10^3$. Relative changes use ratios of mean MSEs; negative values favor KAHM. Wins count repetitions with lower KAHM MSE out of five. PenDigits averages both coordinates and weights the same 13 writers equally. Every effect is descriptive; calibrated comparisons are reported separately.}",
+            r"\label{tab:matched-geometry-primary}", r"\label{tab:matched-geometry-mse}", r"\end{table}", ""]
+    return "\n".join(out)
+
+
 def dimension_figure(comparisons, destination):
     lookup = {(r["task"], r["head"], int(r["dimension"]), r["alternative"]): r for r in comparisons
               if r["analysis"] == "fixed_dimension" and r["horizon"] == "all"}
@@ -141,6 +172,7 @@ def main():
     figures.mkdir(parents=True, exist_ok=True)
     (tables / "matched_geometry_primary.tex").write_text(primary_table(comparisons, len(audit["seeds"])))
     (tables / "matched_geometry_mse.tex").write_text(mse_table(model_rows))
+    (tables / "matched_geometry_combined.tex").write_text(combined_table(comparisons, model_rows))
     values = {"MatchedCandidates": summary["n_candidates"],
               "MatchedComparisons": summary["n_primary_taskwise_comparisons"],
               "MatchedImproved": summary["n_primary_mean_improved"],

@@ -1,161 +1,76 @@
-\section{A matched comparison of KAHM and alternative geometries}
+\section{A matched comparison of geometric representations}
 \label{sec:matched-geometry}
-
 \input{tables/matched_geometry_numbers}
 
-The preceding experiments do not fully separate geometry and decoder effects:
-the KAHM Frobenius-budget and rollout families lack corresponding radial basis
-function (RBF) and affine-hull controls. We compare all three geometries with
-identical decoder choices and validation opportunities on all seven tasks.
-The protocol was specified before fitting, informed by the earlier experiments.
+\paragraph{Design.}
+To separate representation and decoder effects, we compare KAHM, RBF, and
+affine-hull geometry with three prediction heads: block direct
+\eqref{eq:training-objective}, ordinary Frobenius direct, and feature rollout.
+Every geometry--head pair receives the same prefix dimensions $2,6,14,30$,
+two history lengths, and four preprocessing options. Training, horizons,
+origins, regularization, and geometry subsampling follow the original study.
+Equal numerical budgets and feature counts do not imply equal statistical
+capacity or computational cost.
 
-\subsection{Design and validation selection}
+Five seeds, $5701$--$5705$, generate fresh episodes for all six synthetic
+tasks. PenDigits uses new fitting randomness within the same development and
+held-out writer cohorts. Before calibration, each geometry--head pair selects
+preprocessing, history, and dimension by validation MSE across horizons, with
+ties resolved by feature count, history, preprocessing order, and name.
+PenDigits selects coordinates separately, then averages their losses and
+horizons within each writer, giving the 13 writers equal weight. Its seed
+variation describes repeated fitting on that cohort.
 
-Each geometry is paired with three prediction architectures, referred to as
-\emph{heads} in the tables. \emph{Block direct} predicts the requested horizons
-under the sum-of-block-Frobenius-norms constraint in
-\eqref{eq:training-objective}. \emph{Frobenius direct} uses a single Frobenius
-norm constraint on the concatenated coefficient matrix. \emph{Rollout} fits an
-affine transition between feature vectors, iterates this transition, and
-decodes the resulting vector into the observed signal
-(Appendix~\ref{app:protocols}). Every geometry--head pair has access to the four
-retained dimensions $2,6,14,30$, both history lengths, and all four preprocessing
-options from Section~\ref{sec:input-scaling}. Unlike the preceding scaling
-study, this comparison varies preprocessing for KAHM, RBF, and affine-hull
-features alike.
+\paragraph{Confidence accounting.}
+Within each synthetic task and seed, the four preprocessing arms receive
+$0.01$ each: $0.008$ for candidate risk bounds and $0.002$ for refinement
+comparisons. The remaining $0.01$ is divided among six primary geometry
+comparisons. For each, the alternative's loss minus KAHM's loss is averaged
+within each independent calibration episode over horizons. These differences
+lie in $[-4,4]$; the paired empirical Bernstein bound
+\eqref{eq:paired-improvement} uses range length $8$ and tail probability
+$0.01/6$. The total event has confidence at least $95\%$ within that
+synthetic task--seed combination. Fixed-dimension and head-selected analyses
+are descriptive. PenDigits was examined in earlier studies, so its follow-up
+endpoints and paired writer effects provide no new confirmatory population
+guarantee, even under an iid-writer assumption.
 
-Training data, horizons, origins, regularization, geometry subsampling, and
-target units follow the original configurations. Direct heads share a numerical
-coefficient budget, which does not make feature maps statistically equivalent.
-Rollout sensitivity budgets use the fitted transition and output decoder.
-Equal feature counts need not imply equal runtime or kernel-evaluation cost.
+\input{tables/matched_geometry_combined}
 
-The five fitting seeds $5701$--$5705$ generate new training, validation,
-calibration, and test episodes for every synthetic task. PenDigits uses new
-training-stroke subsamples and geometry-fitting randomness within the same
-development and held-out writer cohorts, measuring fitting variation without
-new test writers.
+\paragraph{Results and their limits.}
+All \MatchedCandidates\ candidates completed. Table~\ref{tab:matched-geometry-primary}
+combines absolute MSE, its variation across fits, relative changes, and paired
+seed signs for all \MatchedComparisons\ contrasts. KAHM improves in
+\MatchedImproved\ and worsens in \MatchedDegraded; these contrasts share
+models and tasks and are not independent evidence for universal superiority.
+On nonlinear AR, KAHM beats both geometric alternatives under every head and
+seed. Its block-direct MSE $0.00456$ also improves on ridge AR $0.00511$ and
+quadratic regression $0.00523$.
 
-For each task, seed, geometry, and head, the primary analysis selects
-preprocessing, history length, and retained dimension by mean validation MSE
-across horizons. Ties are resolved by feature count, history length,
-preprocessing order (standardization, min--max, clipped min--max, raw), and
-candidate name. This gives six primary comparisons per task and seed: KAHM
-against each of the two alternative geometries under each of the three heads.
-The selected dimension, history, and preprocessing can differ between
-geometries, but the available choices are identical.
+On PenDigits, KAHM reduces MSE relative to RBF by $15.6\%$, $17.2\%$, and
+$17.9\%$ across the three heads, with lower loss in all five seeds. Its
+reductions relative to affine geometry are $12.7\%$, $1.9\%$, and $1.4\%$,
+with four, four, and three favorable seeds. Conventional regressors remain
+stronger: Frobenius-direct KAHM MSE is $0.00504$, compared with $0.00184$
+for ridge AR and $0.00102$ for quadratic regression.
 
-The descriptive outcome is test MSE averaged over horizons; percentage changes
-use ratios of seed-averaged MSEs, not means of seed-specific percentages. Every
-paired seed effect is retained; tasks are not pooled. Additional curves fix
-the dimension and select history length and preprocessing by validation.
-A secondary analysis also selects the head by validation; it appears in
-\path{taskwise_comparisons.csv}, in rows marked
-\texttt{analysis=head\_selected} and \texttt{horizon=all};
-Appendix~\ref{app:matched-geometry} gives the analysis directory.
+On Van der Pol, KAHM improves on RBF by $14.4$--$17.1\%$, but exceeds affine
+MSE by $9.5\%$, $102.7\%$, and $92.8\%$ across the heads. Corresponding
+Duffing excesses are $13.1\%$, $70.6\%$, and $79.9\%$. Affine geometry
+beats KAHM under Frobenius and rollout heads in every seed on both oscillators.
+Mean effects can also oppose most paired signs: favorable quasiperiodic
+block-direct means occur with lower KAHM loss in only two of five seeds.
 
-PenDigits selects each coordinate's predictor separately and weights validation
-writers equally. After selection, coordinate losses and horizon losses are
-averaged within each held-out writer, and the 13 writers receive equal weight.
-Repeated fitting seeds do not provide additional independent writers.
+The complete fixed-dimension curves are released as
+\path{paper/figures/matched_geometry_dimensions.pdf}, generated from all
+fixed-dimension records. PenDigits KAHM beats RBF at every dimension and head;
+its ranking against affine geometry changes with dimension. Nonlinear-AR KAHM
+beats both at 14 and 30 features, with mixed smaller-dictionary effects.
+Because histories and preprocessing are reselected, these comparisons are
+not tests of nesting for fixed blocks.
 
-\subsection{Confidence accounting and interpretation}
-
-For each synthetic task and seed, each arm receives failure budget $0.01$:
-the inherited $80/20$ allocation assigns $0.008$ to fixed candidate risk bounds
-and $0.002$ to refinement comparisons. A union bound over four arms uses $0.04$;
-the remaining $0.01$ is divided equally among the six primary geometry
-comparisons.
-
-For each primary comparison, we subtract KAHM squared loss from the
-alternative's squared loss and average the difference over horizons within
-each independent calibration episode. The resulting episode averages lie in
-$[-4,4]$. Applying the paired empirical Bernstein bound
-\eqref{eq:paired-improvement}, with range length $8$ and failure probability
-$0.01/6$, gives a lower confidence bound on the alternative's risk minus KAHM's
-risk. A positive lower endpoint certifies lower risk for that fitted KAHM
-predictor. All validation selection occurs before calibration and uses
-independent development data.
-
-This allocation gives a simultaneous $95\%$ event within each synthetic
-task--seed combination, not across tasks, seeds, or earlier campaigns.
-Fixed-dimension and head-selected comparisons remain descriptive; an
-inconclusive improvement certificate does not establish equal risks.
-
-PenDigits retains nominal writer-level upper endpoints with failure budget
-$0.0125$ per
-preprocessing arm, allocated jointly over candidates, coordinates, fitting
-seeds, and horizons. The allocations sum to
-$0.05$. A joint confidence interpretation requires both independent and
-identically distributed writers and candidate specification independent of
-the writer losses used for calibration. The first assumption remains unverified;
-the second is not established for this follow-up because the design was
-informed by earlier results on the same cohort. Consequently, these endpoints
-do not provide a new confirmatory population guarantee. No additional
-independent writer cohort is available for the geometry comparisons, and
-paired writer differences remain descriptive.
-
-\subsection{Geometry, prediction architecture, and task interact}
-
-\input{tables/matched_geometry_primary}
-
-All scheduled fits completed, yielding \MatchedCandidates\ retained candidates.
-Table~\ref{tab:matched-geometry-primary} reports all \MatchedComparisons\ primary
-task--head--alternative contrasts: KAHM has lower mean test MSE in
-\MatchedImproved\ and higher mean test MSE in \MatchedDegraded. These contrasts
-share tasks and fitted models; they are not independent evidence for a
-universally preferred geometry. Table~\ref{tab:matched-geometry-mse} gives
-absolute errors for all nine geometry--head families.
-
-On nonlinear AR, KAHM improves on both geometric alternatives under every head
-in all five fitting seeds. Its block-direct mean MSE is $0.00456$, compared
-with $0.00511$ for ridge AR and $0.00523$ for quadratic regression. On PenDigits,
-the KAHM reductions relative to RBF are $15.6\%$, $17.2\%$, and $17.9\%$ for
-block direct, Frobenius direct, and rollout, respectively, with lower loss in
-all five seeds. The corresponding mean reductions relative to affine-hull
-features are $12.7\%$, $1.9\%$, and $1.4\%$, with four, four, and three favorable
-seeds. This advantage is specific to the geometric comparison. PenDigits
-Frobenius-direct KAHM MSE is $0.00504$, while ridge AR and quadratic regression
-achieve smaller MSEs of $0.00184$ and $0.00102$.
-
-The oscillator controls limit how much of an accuracy gain can be attributed
-to KAHM geometry. On Van der Pol, KAHM mean MSE is $14.4$--$17.1\%$ lower than
-RBF across the three heads, yet exceeds affine-hull MSE by $9.5\%$, $102.7\%$,
-and $92.8\%$, respectively. On Duffing, the corresponding excesses over
-affine-hull MSE are $13.1\%$, $70.6\%$, and $79.9\%$. The affine-hull advantage
-under Frobenius-direct and rollout heads occurs in every fitting seed on both
-oscillators. A gain from changing a KAHM decoder or its preprocessing therefore
-does not by itself establish a benefit of KAHM geometry. Mean effects can also
-disagree with most seed-specific effects: the favorable quasiperiodic
-block-direct means against both alternatives occur with lower KAHM loss in
-only two of five seeds.
-
-\begin{figure}[p]
-\centering
-\includegraphics[width=\linewidth]{figures/matched_geometry_dimensions.pdf}
-\caption{Percentage change in mean all-horizon test MSE at each fixed retained
-dimension: $100(\mathrm{MSE}_{\rm KAHM}/\mathrm{MSE}_{\rm alternative}-1)$,
-where each MSE is averaged over five fitting seeds. Negative values favor
-KAHM. History length and preprocessing are selected by validation at each
-point. PenDigits first averages coordinate losses and weights writers equally.}
-\label{fig:matched-geometry-dimensions}
-\end{figure}
-
-Figure~\ref{fig:matched-geometry-dimensions} reports every fixed-dimension
-comparison. On PenDigits, KAHM has lower mean MSE than RBF at all four
-dimensions under each head, so the advantage cannot be explained solely by a
-larger selected feature count. Its ranking against affine-hull features changes
-with dimension. On nonlinear AR, all three KAHM heads improve on both
-alternatives at dimensions 14 and 30, while the smaller dictionaries have
-mixed effects. Theorem~\ref{thm:replication-invariance} concerns population
-optima for fixed retained blocks. These curves also reselect history length and
-preprocessing at each dimension and therefore do not test that theorem.
-
-Only \MatchedCalCertified\ of the \MatchedCalComparisons\ planned synthetic
-calibration comparisons has a positive improvement lower endpoint: Van der
-Pol, seed 5703, KAHM rollout versus RBF rollout, with a lower bound of
-$0.00107$ on the all-horizon MSE reduction. The other 179 comparisons remain
-inconclusive. This positive statement concerns those two fitted predictors
-within the declared simultaneous event for that repetition. It is distinct
-from the descriptive test-effect table and gives no population comparison
-for PenDigits.
+Only one of the 180 planned synthetic improvement comparisons is certified:
+Van der Pol seed 5703, KAHM rollout versus RBF rollout, with lower MSE-improvement
+endpoint $0.00107$. All others remain inconclusive. This statement concerns
+two fitted predictors within the declared event; it is distinct from the
+descriptive mean effects and implies no population comparison on PenDigits.

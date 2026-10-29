@@ -1,4 +1,4 @@
-\section{Synthetic protocols, comparison models, and reproduction}
+\section{Experimental protocols and comparison models}
 \label{app:protocols}
 
 \subsection{Episode laws}
@@ -56,29 +56,71 @@ distribution is needed. Each generator has its own observation scale and
 horizon interpretation; we do not average errors across generators as if they
 were a common physical measure.
 
+\subsection{Oscillator protocol}
+\label{app:oscillator-protocol}
+
+For continuous time $t$, position $x(t)$ and velocity $v(t)$ satisfy
+\begin{align*}
+ \dot x&=v,& \dot v&=(1-x^2)v-x &&\text{(Van der Pol)},\\
+ \dot x&=v,& \dot v&=-0.2v+x-x^3+0.3\cos(1.2t+\varphi)
+ &&\text{(Duffing)},
+\end{align*}
+where dots denote time derivatives. Initial position and velocity are
+independent $\operatorname{Unif}[-2,2]$ draws; Duffing phase
+$\varphi\sim\operatorname{Unif}[0,2\pi]$ is also independent per episode.
+Fourth-order Runge--Kutta uses step $0.025$ and discards ten time units.
+The 72 sensor observations are
+\[
+ y_j=0.95\tanh(x(10+0.1j))+\eta_j,\qquad
+ \eta_j\stackrel{\mathrm{iid}}{\sim}\operatorname{Unif}[-0.02,0.02],
+ \quad j=0,\ldots,71.
+\]
+Their range $[-0.97,0.97]$ lies within the certificate range $[-1,1]$.
+A prespecified half-step check on 16 fixed initializations, with phases and
+noise shared between steps $0.025$ and $0.0125$, gives maximum sensor
+changes $1.69\times10^{-6}$ (Van der Pol) and $3.49\times10^{-6}$ (Duffing),
+below $10^{-3}$. This checks numerical consistency without a rigorous
+continuous-time integration-error bound.
+
+\subsection{PenDigits acquisition and development}
+\label{app:pendigits-protocol}
+
+The original UNIPEN files contain 7,494 development and 3,498 test digits,
+with nominal $100$ ms sampling. Every coordinate is checked against the
+acquisition range $[0,500]$; no stroke centering, alignment, or resampling is
+applied, and pen-up gaps are excluded. Writer identifiers include the source
+split; approximately 250 records per identifier support the inference
+described in Section~\ref{sec:pendigits}.
+
+The first 24 development writers supply training and the remaining six
+validation. Each of three seeds selects 20 eligible strokes per training
+writer (480 total); validation uses all 717 eligible strokes. Histories have
+lengths $m\in\{4,8\}$, common zero-based origins $7,11,15,19,23,27$, and
+horizons $1,2,4$. The 40-candidate family follows the main comparison design,
+with successive block sizes $2,4,8,16$, $\kappa=4$, ridge $\lambda=10^{-4}$,
+and affinity exponent $\omega=16$. Validation weights writers equally and
+averages MSE over horizons. Normalized RMSE $0.01$ equals 2.5 acquisition pixels.
+For the additional iid-writer calculation, two coordinates, three fits,
+40 candidates, and three horizons give 720 one-sided statements. With
+13 writers, the Hoeffding addition is
+$4\sqrt{\log(720/0.05)/(2\cdot13)}=2.42741$.
+
 \subsection{Random streams and configuration}
 
-The main fitting seeds are $1701,\ldots,1705$. For a numerical seed $s$, the
-four NumPy generator seeds are $100s+11$ for training, $100s+23$ for validation,
-$100s+47$ for calibration, and $100s+89$ for testing. These specify separate
-pseudorandom streams. Reusing the same seed conventions across generators
-supports reproducible comparisons; a within-run confidence guarantee does not
-require independence across benchmark conditions. Clustering receives an
-offset determined by the training seed and history length, and each retained
-block receives its own deterministic offset. The archived environment records
-the library versions and default bit generators used for all random draws.
-
-Geometry construction can use a fixed seeded subset of at most 1600 training
-rows. The decoder uses all 1664 rows, obtained from 128 episodes and 13 origins
-per episode. These rows may overlap: the finite optimization objective does
-not require independent training rows. Validation and test losses weight
-episodes equally and origins equally within each episode. All models use the
-same origin sets, and validation selection averages MSE over all three horizons.
+Main fitting seeds are $1701,\ldots,1705$. For seed $s$, separate NumPy
+streams use $100s+11$, $100s+23$, $100s+47$, and $100s+89$ for training,
+validation, calibration, and testing. Clustering and retained blocks receive
+deterministic offsets from the training seed and history length. Archived
+configurations specify these offsets and random-generator versions.
+Geometry uses at most 1600 training rows; decoders use all 1664 rows
+(128 episodes, 13 common origins). Overlapping training rows are permitted.
+Validation and test losses weight episodes equally and origins equally
+within episodes; selection averages MSE over the three horizons.
 
 \subsection{Comparison definitions}
 
-The RBF and affine-hull comparators use the same type of $k$-means
-partition, with five initializations and at most 150 iterations. Here $k$ is
+In the main synthetic campaigns, RBF and affine-hull comparators use
+the same type of $k$-means partition, with five initializations and at most 150 iterations. Here $k$ is
 the number of coordinates in the block. To define their scores, suppress the
 block index. Let $\xi\in\mathbb R^{d_x}$ be a preprocessed history, where
 $d_x$ is its input dimension. For cluster $c\in\{1,\ldots,k\}$, let
@@ -123,12 +165,9 @@ coordinates are
  \Phi_c(\xi)=\frac{\exp(-a_c(\xi))}
                    {\sum_{j=1}^k\exp(-a_j(\xi))}.
 \]
-The implementation evaluates this normalization in log space. Its optional
-score multiplier is fixed at one in the reported experiments. These formulas
-and numerical conventions are implemented in
-\path{src/certified_forecasting/features.py} and are unchanged from the
-original code baseline \texttt{a8bcf6c8016499e1a4b64f7dd4196af43c60bd78}.
-Both geometric alternatives use the same retained-block decoder.
+Normalization is evaluated in log space. The score multiplier is one in
+the original synthetic campaigns; subsequent studies specify their expanded
+grids. Both alternatives use the retained-block decoder.
 
 Hard KAHM states replace the final block by a one-hot vector: its largest
 coordinate becomes one and all others become zero. Ridge AR uses the original
@@ -162,99 +201,29 @@ The certificate evaluates this fitted forecast directly and requires no
 spectral-stability assumption, exact feature closure, or approximation to the
 trajectory distribution.
 
-\subsection{Reproducing the retained results}
+\subsection{Reproduction and follow-up protocols}
 
-The code release provides the main configurations, source hashes,
-per-repetition candidate descriptions, certificate endpoints, scalar trial
-records, and generated tables. Double-precision per-episode score archives
-allow independent reconstruction of each confidence calculation. The full
-evidence package retains the original archives; fixed-seed runners regenerate
-any large archives omitted from the code repository. A deterministic replay
-was checked for one complete main experiment, and a score audit covers the
-entire retained main campaign.
+The release retains configurations, source hashes, candidate descriptions,
+scalar records, and independent score audits. Episode-score archives support
+reconstruction; fixed-seed runners regenerate large files omitted from the
+repository. Archived environments specify numerical-library versions;
+bitwise agreement across architectures is not assumed. Complete commands for
+all studies, asset generation, and manuscript compilation are given in
+\path{REPRODUCIBILITY.md}. Runners preserve failed attempts and refuse to
+overwrite completed runs. Original-seed and confirmation input-scaling
+analyses remain separate, with the scope in Section~\ref{sec:input-scaling}.
 
-From the extension directory, run
-\begin{verbatim}
-export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
-export PYTHONPATH=src
-python experiments/run_forecasting.py \
-  --config configs/main_v1.json --output results/reproduced_main
-python experiments/run_known_risk.py \
-  --output results/reproduced_known_risk
-python experiments/prepare_pendigits.py
-python experiments/run_pendigits.py --help
-python -m unittest discover -s tests -v
-\end{verbatim}
-The documentation supplies exact commands for comparing reproduced and retained
-results, running the real-data and follow-up studies, generating figures, and
-building the manuscript. Reference package versions are NumPy 2.3.5,
-SciPy 1.17.0, scikit-learn 1.8.0, Matplotlib 3.10.8, pandas 2.2.3, and
-joblib 1.5.3. Bitwise reproducibility across numerical libraries or architectures
-is not assumed. The runner refuses to overwrite an existing run and records
-exceptions instead of silently omitting failed attempts.
-
-\subsection{Reproducing the input-scaling follow-up}
-
-The original numerical campaigns remain the reference experiments. The
-separate input-scaling study retains its original-seed and confirmation
-analyses in \path{results/input_scaling_study/analysis_original} and
-\path{results/input_scaling_study/analysis_confirmation}, respectively.
-Its study directory contains frozen protocols, per-seed comparisons, source
-provenance, and score-archive repair records. From the extension directory,
-run the full four-arm schedule and generate its manuscript tables with
-\begin{verbatim}
-python experiments/prepare_pendigits.py
-python experiments/run_input_scaling.py \
-  --output results/reproduced_input_scaling --workers 4
-python scripts/make_scaling_assets.py
-\end{verbatim}
-The runner uses a new output directory and freezes both phase schedules before
-execution. Its \texttt{--phases}, \texttt{--campaigns}, and \texttt{--modes}
-options restrict a reproduction to specified parts of the study. By default,
-the asset generator reads the released audited comparison CSVs; alternative
-analysis directories can be supplied through \texttt{--analysis} and
-\texttt{--confirmation}. It does not refit models or select preprocessing
-arms. The original code baseline is commit
-\texttt{a8bcf6c8016499e1a4b64f7dd4196af43c60bd78}. The release retains the
-original source hashes, so historical results remain distinguishable from
-outputs of the new optional-scaling interface.
-
-\subsection{Reproducing the matched-geometry follow-up}
+\subsection{Matched-geometry protocol}
 \label{app:matched-geometry}
 
-The new configurations enable matched combinations of geometric representations
-and decoders, with per-geometry input preprocessing; historical configurations
-retain their original candidate families. Each scalar fit in one preprocessing
-arm contains 72 matched candidates and 12 additional controls. The refinement
-allocation covers 54 adjacent-prefix horizon comparisons: three geometries,
-two history lengths, three adjacent prefix pairs, and three horizons. The
-complete schedule and source/configuration hashes are frozen before the full
-fits. Section~\ref{sec:matched-geometry} and the retained protocol specify the
-selection rules and joint confidence allocation.
-
-The primary, fixed-dimension, and validation-selected-head summaries are
-in \path{taskwise_comparisons.csv}. The retained analysis directory is
-\path{results/matched_geometry_study/analysis}.
-
-With PenDigits prepared as above, the reproduction sequence freezes the
-schedule and then resumes fitting with
-\path{experiments/run_matched_geometry.py}. It aggregates the results with
-\path{experiments/analyze_matched_geometry.py} and creates manuscript assets
-with \path{scripts/make_matched_assets.py}. Complete commands are provided in
-the source package's \path{README_BUILD.txt} and the repository reproduction
-guide.
-The analysis checks completeness and score-archive integrity before aggregating
-paired comparisons. It retains every selected candidate, per-seed effect,
-per-horizon result, and PenDigits writer comparison. The asset generator reads
-the complete analysis without fitting or selection. Source snapshots and
-scalar records are stored separately from historical results. The earlier
-KAHM preprocessing comparison remains a distinct experiment from the matched
-comparison of all geometric families.
-
-Table~\ref{tab:matched-geometry-mse} gives the absolute MSEs corresponding to
-the relative effects in the main results, including every matched
-geometry--decoder family. The complete study retains \MatchedCandidates\
-candidates. Source, configuration, array-integrity, and independently
-reconstructed score checks are recorded with the analysis.
-
-\input{tables/matched_geometry_mse}
+Each preprocessing arm has 72 matched scalar candidates and 12 controls.
+The refinement allocation covers 54 adjacent-prefix horizon comparisons:
+three geometries, two histories, three adjacent prefix pairs, and three
+horizons. The complete schedule and configuration hashes precede fitting;
+Section~\ref{sec:matched-geometry} specifies selection and joint confidence
+allocation. All \MatchedCandidates\ candidates, paired seed effects,
+horizon-specific results, and PenDigits writer comparisons are retained.
+Table~\ref{tab:matched-geometry-primary} combines absolute errors, fitting
+variation, and relative effects. Asset generation reads the audited analysis
+without refitting or selection; original campaigns and later comparisons
+retain separate provenance.

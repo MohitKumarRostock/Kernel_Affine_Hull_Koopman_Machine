@@ -1,121 +1,63 @@
 \subsection{Writer-disjoint forecasting of original pen trajectories}
 \label{sec:pendigits}
 
-We evaluate the same forecasters on original PenDigits trajectories
-\citep{alpaydin1996pendigits}. Few writer groups are available, and the
-risk theorem's independent-episode assumption is unverified.
+We use the original, unnormalized PenDigits trajectories
+\citep{alpaydin1996pendigits}; the archive's spatially resampled table uses
+whole-character preprocessing unsuitable for causal forecasting. The known
+coordinate range $[0,500]^2$ permits transforming each coordinate $z$ to
+$z/250-1$ and clipping predictions to $[-1,1]$, without stroke-specific normalization.
+Acquisition and development details are in Appendix~\ref{app:pendigits-protocol}.
 
-\paragraph{Data and causal inputs.}
-The University of California, Irvine (UCI) archive provides original
-time-sampled pen locations and a table of eight spatially resampled locations
-per digit. We use the original, unnormalized UNIPEN records because the
-table's whole-character preprocessing is unsuitable for causal forecasting. The acquisition protocol specifies coordinates in $[0,500]^2$ and a
-nominal sampling interval of $100$ ms. Each recorded coordinate $z$ is
-transformed to $z/250-1$, and scalar predictions are clipped to $[-1,1]$.
-We check every source coordinate against the declared acquisition range.
-There is no per-stroke centering, alignment, normalization, or resampling.
+Writer identifiers are inferred from the second integer in each UNIPEN
+\texttt{COMMENT} field: their ranges and record counts agree with the
+documented 30 development and 14 test writers, but the field semantics are
+undocumented. We retain the first 32 points of a first pen-down stroke only
+if its completed length is at least 32. This leaves 1,751 test digits from
+13 eligible writers; one test writer has no qualifying stroke. The count
+was corrected from 14 to 13 before scoring, without changing eligibility.
+The task is retrospective and restricted to writers with eligible strokes;
+it does not cover every newly started stroke.
 
-The documented source split contains 7,494 digit records from 30 development
-writers and 3,498 records from 14 different test writers. We infer writer
-identity from the second integer in each UNIPEN \texttt{COMMENT} field: its
-range and the approximately 250 records per identifier match the documented
-writer counts. Because the source does not define these fields explicitly, writer identity
-remains an inference. Identifiers include their source split. Pen-up gaps are
-not treated as ordinary time steps.
-
-We retain a digit's first pen-down stroke only if it contains at least 32
-samples, and then use its first 32 points. This leaves 1,751 test digits from
-13 eligible test writers; one of the original 14 writers has no qualifying
-first stroke. The population is restricted to writers with eligible strokes. Eligibility
-depends on completed stroke length, making this a retrospective task that
-does not cover every newly started stroke. No loss
-is assigned to the excluded writer. The eligible-writer count was corrected
-from 14 to 13 before test scoring; the fixed eligibility rule was unchanged.
-The released records document the correction.
-
-\paragraph{Development and evaluation.}
-Within the development file, the first 24 writer identifiers are used for
-training and the remaining six for validation. Each of three fixed seeds
-selects 20 eligible strokes per training writer, for 480 training strokes.
-All 717 eligible strokes from the validation writers are used for selection.
-The two coordinates are modeled separately, each from its own scalar history.
-History lengths are $m\in\{4,8\}$, and forecast horizons are
-$\mathcal H=\{1,2,4\}$ samples. The common zero-based forecast origins are
-$7,11,15,19,23,27$. All models use causal histories and the same target origins.
-
-For each coordinate and seed, the candidate family contains 40 models:
-the three soft geometric feature families at four cumulative stages and two
-history lengths; the KAHM ablations and feature-transition (Koopman) rollouts;
-autoregressive and quadratic baselines; persistence; and a constant model.
-Successive geometric block sizes are 2, 4, 8, and 16. Other settings are
-$\kappa=4$, ridge coefficient $\lambda=10^{-4}$, and affinity exponent
-$\omega=16$. We select one model per family by validation MSE, weighting
-writers equally and averaging over the three horizons. All six
-coordinate--seed families and their selections are frozen before test scoring.
-Unselected candidates are also retained.
-
-Within each writer, we average squared loss over origins and then eligible
-digits. The cohort MSE gives each eligible writer equal weight. Let
-$\widehat R_{c,r,h}$ denote this test MSE for coordinate $c\in\{1,2\}$,
-fitting repetition $r\in\{1,2,3\}$, and horizon $h$. The coordinate-pooled
-RMSE in a repetition is
-\[
- \left(\frac{\widehat R_{1,r,h}+\widehat R_{2,r,h}}{2}\right)^{1/2}.
-\]
-Table~\ref{tab:pendigits} reports its mean and sample standard deviation over
-the three development seeds. These deviations measure fitting variability on the same test cohort,
-not uncertainty across independent cohorts. A normalized RMSE of 0.01
-corresponds to 2.5 acquisition pixels.
+Each scalar forecast uses its own coordinate history at horizons $1,2,4$.
+All six coordinate--seed families of 40 candidates are frozen after
+validation selection and before testing. Losses average over origins and
+digits within writers, then equally over writers and coordinates before
+taking the square root. Table~\ref{tab:pendigits} reports the mean and sample
+standard deviation over three fitting seeds on the same test cohort;
+the deviations measure fitting variability, not variation across independent
+writer cohorts.
 
 \begin{table}[t]
   \centering
   \small
   \setlength{\tabcolsep}{3pt}
   \input{tables/pendigits_results.tex}
-  \caption{Original PenDigits forecasting on 1,751 eligible digits from 13
-  held-out writers. Entries are coordinate-pooled RMSE, reported as mean
-  $\pm$ sample standard deviation over three fitting seeds. ``Features'' is
-  the mean retained feature count for the validation-selected models. Each
-  scalar forecast uses only its own coordinate's history. All model selections
-  precede test scoring.}
+  \caption{Original PenDigits forecasting on 1,751 eligible digits from
+  13 held-out writers. Coordinate-pooled test RMSE is mean $\pm$ sample
+  standard deviation over three fitting seeds. ``Features'' is the mean
+  retained count for validation-selected models. Each scalar forecast uses
+  only its own coordinate's history; all selections precede test scoring.}
   \label{tab:pendigits}
 \end{table}
 
-\paragraph{Findings and limits.}
-Quadratic regression is the most accurate reported family at all three
-horizons. Its mean RMSEs are 0.00768, 0.01777, and 0.05184, compared with
-0.04661, 0.06686, and 0.11269 for the KAHM block predictor. Ridge
-autoregression also outperforms the KAHM block predictor. Relative to
-persistence, KAHM is worse at one step and better at two and four steps.
-These results do not establish general KAHM superiority. Retained-block
-and ordinary Frobenius errors are effectively identical; the selected
-retained-block norm sums are below $\kappa=4$, consistent with an inactive
-constraint.
+Quadratic regression is most accurate at every horizon: its mean RMSEs are
+$0.00768$, $0.01777$, and $0.05184$, compared with $0.04661$, $0.06686$,
+and $0.11269$ for retained KAHM.
+Ridge AR also outperforms KAHM. Compared with persistence, KAHM is worse at
+one step and better at two and four steps. Retained-block and ordinary
+Frobenius errors are effectively identical; selected block-norm sums below
+$\kappa=4$ are consistent with an inactive constraint.
 
-For completeness, we calculate upper bounds under an additional sampling
-assumption: eligible writer records are iid from a common writer population
-and independent of development records. The data documentation does not
-establish this assumption. Each writer-averaged scalar loss lies in $[0,4]$.
-Allocating total failure probability $0.05$ over two coordinates, three seeds,
-40 candidates, and three horizons gives $2\cdot3\cdot40\cdot3=720$ one-sided
-bounds. With 13 independent writers, the predeclared Hoeffding addition to
-each empirical MSE is
-\[
-  4\sqrt{\frac{\log(720/0.05)}{2\cdot13}}=2.42741.
-\]
-Each resulting upper MSE bound is clipped at 4. Combining the two coordinate
-bounds by the same averaging-and-square-root rule gives upper pooled-RMSE
-endpoints of approximately 1.56, far above the observed errors and the
-reported tolerances of 0.2, 0.35, and 0.5. None of these tolerances is certified.
-The 1,751 trajectories and their overlapping prediction windows do not supply
-1,751 independent writers. This experiment therefore provides descriptive
-evidence about writer-disjoint forecasting and demonstrates the limited
-usefulness of generic population certificates with few independent groups.
-
-The release includes the official download URL and archive hash, parser,
-length-filter accounting, training-record identifiers, frozen model descriptions,
-and all 9,360 candidate--writer--horizon losses. Recomputing the cohort MSEs
-from the exported losses agrees to within $1.4\times10^{-17}$. All recorded
-block-norm budgets are feasible, and all reported optimization gaps are below
-$10^{-7}$. These checks verify the reported numerical calculation; they do not
-establish the iid-writer assumption.
+Population bounds additionally assume eligible writer records are iid from
+a common population and independent of development; the documentation does
+not establish this assumption. Writer-averaged scalar losses lie in $[0,4]$.
+The prescribed $0.05$ allocation over 720 one-sided statements adds
+$2.42741$ to each empirical MSE, clipping upper endpoints at 4
+(Appendix~\ref{app:pendigits-protocol}). Pooled upper-RMSE endpoints near
+$1.56$ certify none of the tolerances $0.2,0.35,0.5$.
+Neither the 1,751 trajectories nor their overlapping windows increase the
+independent-writer count. The experiment therefore supports descriptive
+writer-disjoint comparisons and illustrates limited certification with few
+groups. Reconstruction of all 9,360 candidate--writer--horizon losses agrees
+within $1.4\times10^{-17}$; coefficient budgets are feasible and optimization
+gaps below $10^{-7}$. These numerical checks do not establish iid sampling.

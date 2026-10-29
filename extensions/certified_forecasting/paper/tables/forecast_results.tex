@@ -1,22 +1,22 @@
 \begin{table}[t]
 \centering\small
-\setlength{\tabcolsep}{4pt}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{lrrrrrrrr}
 \toprule
 & \multicolumn{2}{c}{Harmonic} & \multicolumn{2}{c}{Quasiperiodic} & \multicolumn{2}{c}{Nonlinear AR} & \multicolumn{2}{c}{Logistic}\\
 Method & $h=1$ & $h=12$ & $h=1$ & $h=12$ & $h=1$ & $h=12$ & $h=1$ & $h=12$\\
 \midrule
-KAHM blocks & 0.070 & 0.346 & 0.078 & 0.284 & 0.054 & 0.074 & 0.176 & 0.511\\
-RBF blocks & 0.068 & 0.351 & 0.068 & 0.287 & 0.057 & 0.074 & 0.172 & 0.512\\
-Affine-hull blocks & 0.072 & 0.357 & 0.110 & 0.275 & 0.059 & 0.074 & 0.156 & 0.509\\
-Hard KAHM states & 0.097 & 0.358 & 0.127 & 0.300 & 0.062 & 0.074 & 0.235 & 0.512\\
-Ridge AR & 0.038 & 0.281 & 0.033 & 0.259 & 0.047 & 0.080 & 0.409 & 0.507\\
-Quadratic regression & 0.031 & 0.243 & 0.030 & 0.246 & 0.047 & 0.081 & 0.010 & 0.508\\
-KAHM rollout & 0.070 & 0.358 & 0.079 & 0.319 & 0.055 & 0.074 & 0.174 & 0.524\\
-Polynomial rollout & 0.030 & 0.297 & 0.030 & 0.288 & 0.047 & 0.084 & 0.010 & 0.502\\
-Persistence & 0.125 & 1.085 & 0.084 & 0.743 & 0.055 & 0.103 & 0.931 & 0.661\\
+KAHM blocks & \shortstack[r]{0.070\\(0.001)} & \shortstack[r]{0.346\\(0.006)} & \shortstack[r]{0.078\\(0.003)} & \shortstack[r]{0.284\\(0.004)} & \shortstack[r]{0.054\\(0.001)} & \shortstack[r]{0.074\\(0.001)} & \shortstack[r]{0.176\\(0.018)} & \shortstack[r]{0.511\\(0.001)}\\[2pt]
+RBF blocks & \shortstack[r]{0.068\\(0.001)} & \shortstack[r]{0.351\\(0.003)} & \shortstack[r]{0.068\\(0.005)} & \shortstack[r]{0.287\\(0.004)} & \shortstack[r]{0.057\\(0.001)} & \shortstack[r]{0.074\\(0.001)} & \shortstack[r]{0.172\\(0.012)} & \shortstack[r]{0.512\\(0.001)}\\[2pt]
+Affine-hull blocks & \shortstack[r]{0.072\\(0.003)} & \shortstack[r]{0.357\\(0.004)} & \shortstack[r]{0.110\\(0.007)} & \shortstack[r]{0.275\\(0.006)} & \shortstack[r]{0.059\\(0.003)} & \shortstack[r]{0.074\\(0.001)} & \shortstack[r]{0.156\\(0.014)} & \shortstack[r]{0.509\\(0.001)}\\[2pt]
+Hard KAHM states & \shortstack[r]{0.097\\(0.003)} & \shortstack[r]{0.358\\(0.003)} & \shortstack[r]{0.127\\(0.002)} & \shortstack[r]{0.300\\(0.006)} & \shortstack[r]{0.062\\(0.001)} & \shortstack[r]{0.074\\(0.001)} & \shortstack[r]{0.235\\(0.005)} & \shortstack[r]{0.512\\(0.001)}\\[2pt]
+Ridge AR & \shortstack[r]{0.038\\(0.000)} & \shortstack[r]{0.281\\(0.004)} & \shortstack[r]{0.033\\(0.000)} & \shortstack[r]{0.259\\(0.002)} & \shortstack[r]{0.047\\(0.000)} & \shortstack[r]{0.080\\(0.001)} & \shortstack[r]{0.409\\(0.002)} & \shortstack[r]{0.507\\(0.002)}\\[2pt]
+Quadratic regression & \shortstack[r]{0.031\\(0.000)} & \shortstack[r]{0.243\\(0.003)} & \shortstack[r]{0.030\\(0.000)} & \shortstack[r]{0.246\\(0.002)} & \shortstack[r]{0.047\\(0.000)} & \shortstack[r]{0.081\\(0.001)} & \shortstack[r]{0.010\\(0.000)} & \shortstack[r]{0.508\\(0.003)}\\[2pt]
+KAHM rollout & \shortstack[r]{0.070\\(0.002)} & \shortstack[r]{0.358\\(0.004)} & \shortstack[r]{0.079\\(0.004)} & \shortstack[r]{0.319\\(0.011)} & \shortstack[r]{0.055\\(0.001)} & \shortstack[r]{0.074\\(0.001)} & \shortstack[r]{0.174\\(0.018)} & \shortstack[r]{0.524\\(0.004)}\\[2pt]
+Polynomial rollout & \shortstack[r]{0.030\\(0.000)} & \shortstack[r]{0.297\\(0.010)} & \shortstack[r]{0.030\\(0.000)} & \shortstack[r]{0.288\\(0.004)} & \shortstack[r]{0.047\\(0.000)} & \shortstack[r]{0.084\\(0.003)} & \shortstack[r]{0.010\\(0.000)} & \shortstack[r]{0.502\\(0.004)}\\[2pt]
+Persistence & \shortstack[r]{0.125\\(0.000)} & \shortstack[r]{1.085\\(0.004)} & \shortstack[r]{0.084\\(0.000)} & \shortstack[r]{0.743\\(0.004)} & \shortstack[r]{0.055\\(0.000)} & \shortstack[r]{0.103\\(0.001)} & \shortstack[r]{0.931\\(0.006)} & \shortstack[r]{0.661\\(0.006)}\\[2pt]
 \bottomrule
 \end{tabular}
-\caption{Independent-test RMSE, averaged over five complete fitting seeds. One candidate per family is selected using development validation error averaged over all three horizons, before calibration or test scoring. The full archive includes $h=4$, seed variability, every candidate, and all confidence endpoints. These means are descriptive estimates, not population-risk certificates.}
+\caption{Independent-test RMSE: mean over five complete fitting repetitions, with sample standard deviation below in parentheses. One candidate per family is selected by validation MSE across all three horizons before calibration or test scoring. The archive includes $h=4$, all candidates, and every confidence endpoint. Fitting variation differs from uncertainty conditional on a fitted model; these test errors are descriptive estimates.}
 \label{tab:forecast}
 \end{table}

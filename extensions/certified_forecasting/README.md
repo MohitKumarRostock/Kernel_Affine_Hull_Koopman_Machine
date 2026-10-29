@@ -1,6 +1,6 @@
-# Forecasting with Kernel Affine Hull Machines
+# Prediction-limit certificates and representation refinement
 
-**Representation Refinement and Risk Certification**
+**Kernel Affine Hull Machine forecasting and general representation analysis**
 
 Research extension of **Prediction Limits and Koopman Closure of
 Geometry-Induced Soft State Abstractions**,
@@ -16,7 +16,7 @@ resource, independently of the manuscript's publication venue.
 KAHM is the central implemented representation. Its local reconstruction
 models supply soft geometric associations of a causal history, and retained
 dictionaries let the forecasting representation grow while preserving earlier
-predictors. The new forecasting procedure learns the future observed output
+predictors. The forecasting procedure learns the future observed output
 directly and assesses the resulting predictor and representation class using
 independent episodes. The original KAHM reconstruction mechanism is inherited;
 the generic risk and refinement results also apply to other feature maps.
@@ -40,9 +40,14 @@ comparisons to these three questions.
    for an upper confidence bound on each fitted predictor's population MSE.
 5. Pair episodes disjointly at matching forecast origins. The squared positive
    target-distance discrepancy supplies a lower bound for every decoder in a
-   specified Lipschitz class. Select the least-dimensional candidate whose
-   simultaneous upper bounds meet all requested tolerances, or return
-   `unresolved`.
+   specified Lipschitz class. A stratified alternative pairs within frozen
+   history groups and accounts for estimated group probabilities. The general
+   method combines class exclusions with fitted-model acceptance to bound the
+   minimum feasible representation cost among predefined classes. Equal finite
+   endpoints certify that cost; exclusion of every class certifies infeasibility.
+   Other decisions remain unresolved. The standalone example implements the
+   original common-origin certificate; the controlled decision study implements
+   the stratified and cost extensions.
 
 The lower, upper, and improvement statements have different meanings. A zero
 lower bound does not prove a representation adequate. A large upper bound does
@@ -64,7 +69,7 @@ not invariant to duplicating coefficient blocks.
 - The prediction target has a known population range. Training minima/maxima
   and clipping predictions alone do not establish that range.
 - Histories, horizons, origin distribution, representation, candidates, and
-  sensitivity budgets are frozen before calibration, or a separately justified
+  sensitivity budgets, partitions, and concentration methods are frozen before calibration, or a separately justified
   fresh-data adaptive protocol is used.
 - The certificate concerns **expected squared error**, averaged over a new
   episode and the stated origins. It is not a conditional prediction interval
@@ -73,7 +78,10 @@ not invariant to duplicating coefficient blocks.
 A chronological split of one dependent series does not establish these
 independence conditions. The PenDigits analysis averages within writers and
 uses writers as the possible independent units. Its small writer count yields
-wide bounds under an unverified iid-writer sampling assumption.
+wide bounds under an unverified iid-writer sampling assumption. The separate
+speech study supplies 978 calibration recording groups and informative upper
+bounds under an explicitly assumed iid group-record law. Session identifiers
+and a disjoint split do not establish population sampling or unique identity.
 
 Independence also concerns study design. Reusing calibration observations after
 they informed a follow-up does not regain a confidence guarantee by fixing the
@@ -198,6 +206,31 @@ not joint over every task or seed. PenDigits comparative effects are
 descriptive on the original held-out writer cohort. Equal dimensions and
 search options do not imply identical model capacity or computational cost.
 
+## General certificate and second-domain studies
+
+Three separate, reproducible studies strengthen the mathematical and empirical
+assessment. Their protocols are recorded before their new calibration draws;
+these archived specifications are not external preregistrations.
+
+- [Witness comparison](experiments/witness_comparison/): range-aware centered,
+  disjoint-pair, certified empirical-minimum, and estimated-mass stratified
+  bounds on the same scalar Lipschitz class. Analytic and primal/dual checks
+  distinguish population slack from finite-sample penalties.
+- [Decision value](experiments/decision_value/): positive-tolerance exclusions,
+  minimum-cost certificates, and an irreducible control, including the
+  small-sample disadvantage of stratification.
+- [Speech forecasting](experiments/speech_forecasting/): a documented group
+  split, a causal bounded observable, stronger conventional comparators, and
+  a frozen upper-calibration protocol. The initial scoring-order deviation and
+  identical strict-order replay are retained explicitly.
+
+The new concentration comparators use established bounded-loss inequalities;
+they are not claimed as new concentration theory. The paired Lipschitz
+regression argument has a close antecedent in Akash et al. (2021). The added
+analysis concerns witness slack, conditional pairing with estimated masses,
+compatible-stratum sharpness, and decisions obtained by combining upper and
+lower certificates. See the [literature account](docs/LITERATURE_AUDIT.md).
+
 ## Use your own independently sampled episodes
 
 The practical example fits and exports models and a calibration decision:
@@ -222,7 +255,10 @@ choice rather than being labeled certified.
 
 | Study | Retained scope | Main finding |
 |---|---|---|
-| Analytically known risk | 28,800 two-atom trials | One joint certificate violation; the direct pair bound can be substantially tighter than the centered comparator near collapsed input geometry. This finite simulation is not a proof of coverage. |
+| Original known-risk calibration | 28,800 two-atom trials | One observed joint certificate violation. Its centered comparator underused known range information; the stronger comparison below corrects this limitation. |
+| General lower-bound comparison | Eight laws, 9,600 trials, 76,800 endpoints | Empirical-minimum calibration is often tighter. Stratification recovers some population obstructions but can worsen others; all adverse outcomes are retained. |
+| Positive-tolerance decision study | 200 independent regime/repetition instances, 600 fits | Stratified bounds certify minimum cost or joint infeasibility among three declared classes at large sample sizes. Upper-only selection returns the same accepted predictor. |
+| Speech energy | 7,178 clips, 1,630 recording identifiers, 978 calibration groups, three fits | Six learned families certify the all-horizon 18 dB resolution under the stated sampling assumption; tighter tolerances remain unresolved. Conventional regressors are more accurate than KAHM. |
 | Main dynamics | 20 complete runs, 800 candidates | Useful all-horizon KAHM certificates on some tasks, unresolved decisions on others; several simpler baselines are more accurate. |
 | Norm-budget follow-up | 36 runs, 756 candidates, fresh seeds | Increasing the budget from 1 to 4 matters; moving from 4 to 16 gives little additional KAHM benefit in these settings. |
 | Van der Pol and Duffing | 6 runs, 240 candidates | Certificates refer to a bounded sensor observation; different comparison methods outperform KAHM on these examples. |
@@ -267,6 +303,6 @@ records the hashes of all full score files. The editable manuscript is in
 Exact-risk trial rows are retained as `trials.csv.gz`.
 
 Original code inherits the parent repository's MIT license. Original generated
-research results inherit its CC BY 4.0 terms. PenDigits retains its cited UCI
-CC BY 4.0 license. The [related-literature account](docs/LITERATURE_AUDIT.md)
+research results inherit its CC BY 4.0 terms. PenDigits and Speech Commands
+retain their separately cited CC BY 4.0 licenses. The [related-literature account](docs/LITERATURE_AUDIT.md)
 identifies the inherited statistical tools and the scope of the extension.

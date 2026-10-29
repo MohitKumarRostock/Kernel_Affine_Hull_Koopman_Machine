@@ -1,4 +1,17 @@
-# Scientific verification of the revised manuscript and implementation
+# Scientific verification of the manuscript and implementation
+
+## Current scientific extension
+
+The subsequent theory and empirical revision adds an exact witness-slack
+analysis, stratified lower bounds with estimated masses, minimum-feasible-cost
+certificates, stronger lower-bound comparisons, a controlled positive-tolerance
+decision experiment, and a second real-data domain. The current account is in
+[SUBSTANTIVE_REVISION.md](SUBSTANTIVE_REVISION.md), with machine-readable checks
+under `verification/substantive_revision/` and the three new study directories.
+The sections below preserve the earlier scientific and layout verification;
+their page counts and byte-identity statements refer to those earlier editions.
+
+## Earlier readability and scientific review
 
 Date: 29 October 2026. Repository baseline:
 `531dadef91bd467f9eeb04d5716afbb1d9fd0cbb`.

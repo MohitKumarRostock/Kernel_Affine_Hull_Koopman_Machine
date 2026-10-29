@@ -115,6 +115,36 @@ $\mathbb E b^2=2\tau_{U\mid A}^2$. Substitute these identities, square,
 and divide by two to obtain \eqref{eq:pair-dominance}.
 \end{proof}
 
+\begin{proposition}[An exact decomposition of witness slack]
+\label{prop:witness-slack}
+For any admissible decoder $g$ with finite risk, put
+$r=Y-g(U)$, $r'=Y'-g(U')$, and
+$v=(\|Y-Y'\|_2-\kappa d(U,U'))_+$. Then
+\begin{equation}
+ R(g\circ\Gamma)-W_{\kappa,A}
+ =\mathbb E\|\mathbb E[r\mid A]\|_2^2
+   +\frac12\mathbb E\bigl[\|r-r'\|_2^2-v^2\bigr].
+ \label{eq:witness-slack}
+\end{equation}
+Both terms are nonnegative. Consequently, $g$ attains the witness if and
+only if its conditional residual mean is zero and
+$\|r-r'\|_2=v$ almost surely. Whenever $r\ne r'$, the latter condition
+requires saturation of the Lipschitz constraint and alignment of
+$r-r'$ with $g(U)-g(U')$ in the same direction, allowing a zero decoder
+difference.
+\end{proposition}
+
+\begin{proof}
+Conditional independence gives
+$\frac12\mathbb E\|r-r'\|_2^2
+=R(g\circ\Gamma)-\mathbb E\|\mathbb E[r\mid A]\|_2^2$.
+Subtract the witness and use $v\leq\|r-r'\|_2$ from the preceding proof.
+Equality requires both nonnegative terms to vanish. If $r\ne r'$, it
+also requires equality in
+$\|Y-Y'\|_2\leq\|r-r'\|_2+\|g(U)-g(U')\|_2
+\leq\|r-r'\|_2+\kappa d(U,U')$, giving the stated conditions.
+\end{proof}
+
 The witness directly estimates a squared distance discrepancy. It does not
 estimate two variances separately and then subtract their square roots.
 This distinction can matter when little input variation remains in the
@@ -169,6 +199,43 @@ so it is an admissible affine decoder. Both fitted values lie on the
 segment joining $y_0$ and $y_1$. Projection onto the stated convex set
 fixes them and is nonexpansive, meaning that it cannot increase distances.
 \end{proof}
+
+Exactness also holds on continuous supports. If $U=T\in\mathbb R$,
+$Y=b+\lambda T v$ with $b,v\in\mathbb R^q$, $\|v\|_2=1$,
+$\lambda\geq0$, and
+$\operatorname{Var}(T)=\mathbb E(T-\mathbb ET)^2<\infty$, then
+unconditioned pairing with $d(t,t')=|t-t'|$ gives
+$W_\kappa=R^*_\kappa=(\lambda-\kappa)_+^2\operatorname{Var}(T)$.
+The affine decoder
+$g(t)=b+\lambda\mathbb E[T]v+
+\min\{\lambda,\kappa\}(t-\mathbb E[T])v$ attains it.
+Thus the alignment condition is not restricted to two-point distributions.
+
+\paragraph{Two sources of population looseness.}
+Even with independent unconditioned pairs, the witness need not approximate
+the optimum by a fixed relative factor. Let $\kappa=1$ and let $(U,Y)$
+take values $(3,0),(0,-1),(1,1)$ with probabilities
+$1-2\varepsilon,\varepsilon,\varepsilon$, where
+$0<\varepsilon<1/2$. Only the two rare atoms have a positive discrepancy,
+so $W_\kappa=\varepsilon^2$. The values
+$g(0)=-1/2$, $g(1)=1/2$, $g(3)=0$ admit a $1$-Lipschitz extension and
+attain risk $\varepsilon/2$. The two rare predictions must differ by at most
+one, so their weighted risk cannot be smaller. Thus
+$R^*_\kappa=\varepsilon/2$ and
+$W_\kappa/R^*_\kappa=2\varepsilon$ can approach zero. The same example
+lies in $\Delta_2$ after mapping $u$ to $(u/3,1-u/3)$ and setting
+$\kappa=3/\sqrt2$. Stratification below replaces the quadratic probability
+of encountering this rare pair by the probability of its stratum.
+
+A separate gap comes from comparing the fitted affine family with all
+Lipschitz decoders. For equally likely $x\in\{-1,0,1\}$, take
+$\Phi(x)=((x+1)/2,(1-x)/2)$, $Y=x^2$, and $\kappa=\sqrt2$.
+The target is Lipschitz on this support, so $W_\kappa=R^*_\kappa=0$.
+Every clipped scalar affine decoder is monotone in $x$, however, and has
+MSE at least $1/6$: either the first two or the last two target values
+violate its monotonicity, and pooling that pair costs $1/2$ before averaging
+over the three atoms. The unprojected affine optimum is the constant
+$2/3$, with MSE $2/9$. More calibration cannot remove this class difference.
 
 \subsection{Independent episodes, dependent observations within episodes}
 
@@ -311,6 +378,127 @@ budgets, horizons, and all baselines included in the joint guarantee must
 be fixed before calibration. They may depend on the development data
 because the theorem conditions on those data.
 
+\paragraph{Stratification under the same target law.}
+A partition can concentrate pairs on distinctions that unconditional pairing
+rarely encounters. Condition on the development data throughout this
+construction, so the representation, metric, and budget are fixed.
+Fix a measurable map
+$c:\mathcal X\to\{1,\ldots,M\}$ using development data only, and write
+$\pi_a=\Pr\{c(X)=a\}$. For each positive-mass stratum, let $W_a$ be
+the witness from two independent draws conditional on $c(X)=a$.
+Set $W_a=0$ when $\pi_a=0$. The stratified witness is
+\begin{equation}
+ W_{\rm str}=\sum_{a=1}^M\pi_a W_a\leq R^*_\kappa.
+ \label{eq:stratified-witness}
+\end{equation}
+This is Theorem~\ref{thm:pair-obstruction} with $A=c(X)$; weighting by
+the population masses preserves the original target law.
+
+To estimate it, use $n$ independent, identically distributed observations
+$(X_i,Y_i)$ from that law.
+For each independent trajectory, draw one origin independently from the
+prespecified common origin law. This produces independent observations under
+the episode--origin law. Pooling all
+dependent windows does not. The fitted-risk upper bound may still average
+all prescribed origins within each episode; a union bound does not require
+independence between that bound and the stratified statistic.
+Let $N_a=\sum_i\mathbf1\{c(X_i)=a\}$, where $\mathbf1\{\cdot\}$
+denotes an indicator, and set $K_a=\lfloor N_a/2\rfloor$.
+Write $(U_{a,k},Y_{a,k})$, $k=1,\ldots,N_a$, for the stratum observations
+in their original sample-index order. Their $K_a$ disjoint pair scores are
+\[
+ Q_{a,r}=\frac12\left(\|Y_{a,2r-1}-Y_{a,2r}\|_2
+      -\kappa d(U_{a,2r-1},U_{a,2r})\right)_+^2.
+\]
+Assume the target set has squared diameter $B<\infty$, so
+$0\leq Q_{a,r}\leq B/2$.
+
+\begin{theorem}[A stratified lower certificate with estimated masses]
+\label{thm:stratified-certificate}
+Fix $\delta_p,\beta_1,\ldots,\beta_M\in(0,1)$ with
+$\delta_p+\sum_a\beta_a<1$. If $K_a<2$, set $\ell_a=0$; otherwise set
+\[
+ \ell_a=\max\{0,\bar Q_a-
+       \operatorname{rad}_{\rm EB}(Q_{a,\cdot};B/2,\beta_a)\}.
+\]
+Here $\bar Q_a$ is the mean of the $K_a$ scores. Define
+\[
+ t_p=\sqrt{\frac{\log(2M/\delta_p)}{2n}},\qquad
+ p_a^-=(N_a/n-t_p)_+,\qquad
+ p_a^+=\min\{1,N_a/n+t_p\},
+\]
+and the confidence set, with $\Delta_M$ the probability simplex,
+$\mathcal P=\{p\in\Delta_M:p_a^-\leq p_a\leq p_a^+
+\text{ for every }a\}$. Then
+\begin{equation}
+ L_{\rm str}:=\min_{p\in\mathcal P}\sum_a p_a\ell_a
+ \ \leq\ W_{\rm str}\ \leq\ R^*_\kappa
+ \label{eq:stratified-certificate}
+\end{equation}
+with probability at least $1-\delta_p-\sum_a\beta_a$.
+\end{theorem}
+
+\begin{proof}
+Condition on the complete stratum-label vector. The observations in each
+stratum are independent draws from its conditional law; their disjoint pair
+scores are therefore independent and identically distributed. For every
+realized count with $K_a\geq2$, the conditional failure probability of
+$\ell_a\leq W_a$ is at most $\beta_a$. Sparse strata satisfy it
+deterministically. Averaging over the labels and taking a union bound gives
+all score inequalities with failure probability at most $\sum_a\beta_a$;
+there is no additional union over possible counts.
+Two-sided Hoeffding bounds for the $M$ indicator means give
+$\pi\in\mathcal P$ with failure probability at most $\delta_p$.
+On the intersection of these events,
+$\min_{p\in\mathcal P}\sum_a p_a\ell_a
+\leq\sum_a\pi_a\ell_a\leq\sum_a\pi_a W_a$.
+No independence between masses and score bounds is used.
+\end{proof}
+
+The set $\mathcal P$ is nonempty because it contains $(N_a/n)_a$.
+Its linear minimum is computed by starting at $p^-$ and assigning the
+remaining mass, up to each upper bound, in increasing order of $\ell_a$.
+Known population masses instead give $L_{\rm str}=\sum_a\pi_a\ell_a$
+with no mass-estimation allocation. For several frozen partitions or
+candidate--horizon combinations, allocate failure probability over their
+score events and mass events before taking the largest lower endpoint.
+A shared partition needs only one mass event. Sparse strata contribute no
+positive evidence; stratification does not increase the number of independent
+observations.
+
+\begin{proposition}[Exactness on compatible strata]
+\label{prop:stratified-exactness}
+Suppose each positive-mass stratum either has a constant representation
+$U=u_a$ or a joint law supported on two values of $(U,Y)$.
+In the first case let its optimal prediction be
+$\mu_a=\mathbb E[Y\mid c(X)=a]$; in the second use the fitted values
+from Proposition~\ref{prop:two-atom}, with $b=d(u_0,u_1)$ in that
+construction. If a single global
+$\kappa$-Lipschitz decoder realizes all these values, then
+$W_{\rm str}=R^*_\kappa$. For scalar targets on finite support, global
+compatibility is equivalent to the pairwise Lipschitz inequalities between
+all the proposed fitted values, including values from different strata.
+\end{proposition}
+
+\begin{proof}
+A constant representation gives
+$W_a=\mathbb E[\|Y-\mu_a\|_2^2\mid c(X)=a]$ by the independent-pair
+variance identity. A two-atom stratum has the finite-support calculation of
+Proposition~\ref{prop:two-atom}. The assumed decoder attains their weighted
+sum, giving equality in \eqref{eq:stratified-witness}. For scalar prescribed
+values $v_i$ at support points $u_i$, the function
+$g(u)=\min_i\{v_i+\kappa d(u,u_i)\}$ is Lipschitz and interpolates
+them whenever all pairwise inequalities hold; necessity is immediate.
+\end{proof}
+
+For the three-atom example, strata $\{3\}$ and $\{0,1\}$ give
+$W_{\rm str}=2\varepsilon(1/4)=\varepsilon/2=R^*_\kappa$.
+Stratification can thus remove a population gap, rather than merely improve
+concentration. It need not improve every witness: singleton strata can remove
+all pairwise conflicts while incompatible predictions across strata still
+force positive global risk. Conditional optima cannot be combined without
+the global compatibility condition.
+
 \begin{corollary}[Acceptance, exclusion, and inconclusive decisions]
 \label{cor:decisions}
 Let $\epsilon_h\geq0$ be a prespecified root-mean-square error (RMSE)
@@ -325,8 +513,42 @@ guarantees. In particular, one may minimize a predeclared cost over the
 certified candidates and abstain if there are none.
 \end{corollary}
 
-The selected candidate has the lowest cost among those certified by the
-data. Other candidates may meet the tolerance without being certified.
+\begin{corollary}[A certificate of minimum feasible cost]
+\label{cor:cost-optimality}
+Let candidate $j$ represent a class $\mathcal C_j$ of multihorizon forecasts
+through $\Gamma_j$, containing its fitted forecast and satisfying its stated horizon-specific
+Lipschitz budgets. Give it a fixed cost $c_j\geq0$. Let $c^*$ be the minimum
+cost of a class containing a forecast that meets every prescribed tolerance.
+The minimum of an empty set is $+\infty$.
+For any simultaneous valid lower class bounds $L_{jh}$ and upper fitted-risk
+bounds $U_{jh}$, define
+\begin{align*}
+ \mathcal E&=\{j:L_{jh}>\epsilon_h^2\text{ for some }h\},&
+ \mathcal A&=\{j:U_{jh}\leq\epsilon_h^2\text{ for all }h\},\\
+ c_-&=\min_{j\notin\mathcal E}c_j,&
+ c_+&=\min_{j\in\mathcal A}c_j.
+\end{align*}
+On their joint confidence event,
+\begin{equation}
+ c_-\leq c^*\leq c_+.
+ \label{eq:cost-interval}
+\end{equation}
+If $c_-=c_+<\infty$, a least-cost accepted forecast has minimum feasible
+cost among the specified classes. If every class is excluded, the tolerance
+requirements are infeasible within their union.
+\end{corollary}
+
+\begin{proof}
+Every accepted fitted forecast meets the tolerances. Every class containing
+a forecast that meets them is nonexcluded, since one violated horizon lower
+bound would rule out that forecast. These two inclusions give
+\eqref{eq:cost-interval} and both conclusions. A joint coefficient budget
+can further restrict $\mathcal C_j$; exclusion by its larger horizon-wise
+Lipschitz classes remains valid.
+\end{proof}
+
+Without $c_-=c_+$, selection establishes only the lowest cost among
+certified candidates. Here cost counts retained coordinates, not runtime.
 Also, \eqref{eq:risk-sandwich} implies
 \[
  0\leq\sqrt{R_{jh}}-\sqrt{R^*_{jh}}

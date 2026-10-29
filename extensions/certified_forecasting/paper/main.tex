@@ -4,17 +4,17 @@
 \usepackage{amsmath,mathtools,booktabs,microtype,enumitem}
 \usepackage{lastpage}
 \hypersetup{hidelinks,
-pdftitle={Certifying Prediction Limits and Representation Refinement with Kernel Affine Hull Machines},
+pdftitle={A Hierarchy of Risk Certificates for Forecasting Representations},
 pdfauthor={Mohit Kumar and Somayeh Kargaran},
 pdfsubject={KAHM forecasting, representation refinement, and finite-sample risk certification}}
 \jmlrheading{}{2026}{1--\pageref{LastPage}}{}{}{}{Mohit Kumar and Somayeh Kargaran}
-\ShortHeadings{Prediction Limits and Representation Refinement}{Kumar and Kargaran}
+\ShortHeadings{A Hierarchy of Risk Certificates}{Kumar and Kargaran}
 \firstpageno{1}
 \allowdisplaybreaks
 \setlength{\emergencystretch}{1.5em}
 
 \begin{document}
-\title{Certifying Prediction Limits and Representation Refinement\\with Kernel Affine Hull Machines}
+\title{A Hierarchy of Risk Certificates\\for Forecasting Representations}
 \author{\name Mohit Kumar \email mohit.kumar@uni-rostock.de\\
 \addr University of Rostock, Rostock, Germany\\
 Software Competence Center Hagenberg, Hagenberg, Austria
@@ -24,24 +24,25 @@ Software Competence Center Hagenberg, Hagenberg, Austria
 \maketitle
 
 \begin{abstract}
-We study whether a fixed representation can support a prescribed forecasting
-accuracy and whether a more costly representation is necessary. Our approach
-combines Kernel Affine Hull Machine (KAHM) features with decoders whose
-sensitivity is bounded. A pairwise lower bound detects target separations that
-exceed the permitted separation between predictions. We characterize when this
-bound is exact and construct distributions for which it is arbitrarily loose.
-Pairing within predefined strata can improve the bound while preserving the
-population risk being evaluated. Finite-sample certificates account for
-estimated stratum probabilities and combine with upper risk bounds to accept
-fitted forecasts, exclude decoder classes, or certify minimum feasible
-representation cost. Appending feature blocks under a sum-of-block-norms budget
-preserves earlier predictors without enlarging the class when a block is
-duplicated. Experiments compare the pairwise certificate with variance-based
-bounds and bounds obtained by minimizing empirical risk; the latter are often
-tighter. A controlled forecasting experiment demonstrates cost and infeasibility
-decisions, although substantial calibration samples are required. Applications to six synthetic systems, pen trajectories, and speech energy
-show that KAHM performance depends on preprocessing, task, and decoder. All guarantees concern expected
-squared error under an explicit sampling law.
+We study lower bounds on the prediction risk achievable from a fixed
+representation with a prescribed decoder sensitivity. A pairwise obstruction
+is inexpensive to compute but can miss almost all of the optimal risk. For
+scalar targets, we introduce a hierarchy of normalized minimum-risk problems
+on blocks of observations. Its size-two member equals the pairwise witness;
+its expectations increase to the optimal Lipschitz risk under boundedness and
+compactness. Exact formulas characterize rare conflicts and noisy finite
+supports, showing why no fixed block size is universally sufficient.
+Independent-block calibration and stratification with estimated masses yield
+finite-sample lower certificates. Combined with upper risk bounds, these can
+certify the minimum feasible cost among declared representation classes.
+Experiments distinguish population improvement from finite-sample uncertainty
+and compare against full-sample empirical-minimum calibration. A controlled
+nonlinear forecasting study tests these decisions with learned
+Kernel Affine Hull Machine dictionaries and independent confirmation data.
+Broader synthetic, pen-trajectory, and speech studies show task-dependent
+accuracy and sensitivity to training-fitted input scaling, including scaling
+to $[-1,1]$. The guarantees concern expected squared error under an explicit
+sampling law; informative natural-data class exclusion remains limited.
 \end{abstract}
 \begin{keywords}
 Kernel Affine Hull Machines, time-series forecasting, soft state abstraction,
@@ -50,14 +51,15 @@ representation refinement, prediction risk certification
 
 \input{sections/introduction}
 \input{sections/related_work}
-\input{sections/method}
 \input{sections/theory}
+\input{sections/block_witness}
+\input{sections/method}
+\input{sections/theory_calibration}
+\input{sections/block_experiments}
+\input{sections/learned_kahm_decision}
 \input{sections/witness_experiments}
 \input{sections/decision_value}
-\input{sections/experiments}
-\input{sections/oscillators}
-\input{sections/sensitivity}
-\input{sections/real_data}
+\input{sections/forecasting_evidence}
 \input{sections/input_scaling}
 \input{sections/matched_geometry}
 \input{sections/speech_forecasting}
@@ -68,7 +70,7 @@ The \href{https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machin
 result summaries, and figure generators in
 \path{extensions/certified_forecasting}; editable manuscript files are in its
 \path{paper} directory. The forecasting, input-scaling, matched-geometry,
-lower-bound comparison, controlled decision, speech, and speech-scaling studies
+lower-bound comparison, block-hierarchy, learned-KAHM decision, controlled decision, speech, and speech-scaling studies
 have separate
 protocols and result directories. These provide configurations, source hashes,
 per-episode scores, and outcomes for every prescribed configuration.

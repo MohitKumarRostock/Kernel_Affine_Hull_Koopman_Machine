@@ -1,32 +1,15 @@
 \subsection{Notation and basic conventions}
 \label{sec:notation}
 
-Vectors are columns unless they appear as rows of a data matrix; $v^\top$
-denotes transpose. For a vector $v$, $\|v\|_2$ is its Euclidean norm and
-$\|v\|_1=\sum_\ell|v_\ell|$. For a matrix $M$,
-$\|M\|_{\rm F}=(\sum_{k,\ell}M_{k\ell}^2)^{1/2}$ is its Frobenius norm
-and $\|M\|_{\rm op}=\sup_{\|v\|_2=1}\|Mv\|_2$ is its operator norm.
-We use $\langle u,v\rangle=u^\top v$ and
-$\langle M,N\rangle_{\rm F}=\operatorname{tr}(M^\top N)$ for vector and
-matrix inner products; $\operatorname{tr}$ sums diagonal entries.
-The symbols $\mathbf1_N$, $I_N$, and $e_\ell$ denote the all-ones vector,
-identity matrix, and $\ell$th coordinate vector, respectively, with the
-ambient dimension specified by context.
-
-For a real number $z$, $z_+=\max\{z,0\}$ is its positive part.
-Logarithms are natural, and $\lfloor z\rfloor$ is the largest integer not
-exceeding $z$. For a finite set $S$, $|S|$ denotes its cardinality; for an
-event $E$, $\mathbf1_E$ is one on $E$ and zero otherwise. We write
-$\mathbb E$ and $\Pr$ for expectation and probability under the specified
-sampling law, and $\operatorname{Var}(V)=\mathbb E(V-\mathbb EV)^2$
-for the variance of a real random variable $V$. For a square-integrable
-random scalar or vector $V$, $\|V\|_{L^2}=(\mathbb E\|V\|_2^2)^{1/2}$;
-for scalars, the norm inside the expectation is absolute value.
-An overbar denotes a sample average, and a hat denotes a fitted or
-estimated quantity. The projection $\Pi_{\mathcal Y}(v)$ is the closest
-point to $v$ in a nonempty closed convex set $\mathcal Y$ in Euclidean
-distance. For a box, this operation clips each coordinate to its allowed
-interval. All random variables and prediction maps are measurable.
+Vectors are columns unless used as data-matrix rows. We write $\|\cdot\|_2$,
+$\|\cdot\|_{\rm F}$, and $\|\cdot\|_{\rm op}$ for Euclidean, Frobenius,
+and operator norms. Matrix inner products are
+$\langle M,N\rangle_{\rm F}=\operatorname{tr}(M^\top N)$.
+Logarithms are natural; $z_+=\max\{z,0\}$;
+$\|V\|_{L^2}=(\mathbb E\|V\|_2^2)^{1/2}$.
+The projection $\Pi_{\mathcal Y}$ onto a nonempty closed convex output
+set is nonexpansive; for a box it clips coordinates. All random variables
+and prediction maps are measurable.
 
 Table~\ref{tab:notation} collects the main quantities. The forecasting
 construction and the statistical statements below give their precise domains
@@ -48,6 +31,7 @@ $a$, $W_b$ & Decoder intercept in $\mathbb R^q$ and block coefficients in $\math
 $\kappa$, $\lambda$ & Decoder sensitivity budget and ridge regularization parameter. \\
 $R(f)$, $R^*$ & Population mean squared error of a fitted forecast and infimum over a stated decoder class. \\
 $W_{\kappa,A}$ & Population pairwise obstruction, using budget $\kappa$ and conditioning variable $A$; distinct from coefficient matrices $W_b$. \\
+$T_b$, $\mathcal{W}_b$, $B_b^{\rm blk}$ & Scalar block score for $b$ observations, its expectation, and its deterministic range bound; $\mathcal{W}_b$ is distinct from the coefficient matrix $W_b$. \\
 $n$, $K$ & Number of calibration episodes and number $K=\lfloor n/2\rfloor$ of disjoint episode pairs. \\
 $Z_{i,jh}$, $Q_{r,jh}$ & Loss of candidate $j$ at horizon $h$ on episode $i$, and obstruction score on pair $r$. \\
 $L_{jh}$, $U_{jh}$ & Lower obstruction endpoint and upper fitted-risk endpoint; the unindexed $U=\Gamma(X)$ instead denotes a random representation. \\

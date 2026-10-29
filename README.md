@@ -13,8 +13,14 @@ The [certified forecasting extension](extensions/certified_forecasting/)
 develops KAHM soft representations for direct prediction of future observed
 outputs, retained representation refinement, and prediction-risk certification.
 Its [editable manuscript](extensions/certified_forecasting/paper/) is titled
-**Certifying Prediction Limits and Representation Refinement with Kernel
-Affine Hull Machines**. Its studies evaluate synthetic dynamics, pen
+**A Hierarchy of Risk Certificates for Forecasting Representations**.
+For bounded scalar targets, centered Lipschitz regression on independent
+blocks connects the pair obstruction to a monotone population hierarchy that
+converges to optimal class risk on compact metric representation spaces.
+Larger blocks need not improve finite-sample endpoints; fixed block sizes
+can remain arbitrarily loose. An independently audited eight-law benchmark
+retains every block size and the often stronger full-sample comparator.
+Its application studies evaluate synthetic dynamics, pen
 trajectories, and speech energy; compare input scaling and geometric
 representations under matched decoder choices; and assess lower risk bounds
 and minimum feasible representation cost. The [scientific study guide](extensions/certified_forecasting/docs/STUDY_GUIDE.md)
@@ -26,6 +32,16 @@ The speech input-scaling comparison evaluates standardization, raw histories,
 and training-only scaling to [-1,+1], with and without query clipping. It
 reports all preprocessing arms and retains complete paired group scores;
 preprocessing is treated as a model choice determined using development data.
+
+A new [learned-KAHM decision study](extensions/certified_forecasting/experiments/learned_kahm_decision/)
+fits the actual KAHM implementation on fresh continuous synthetic histories.
+At 4,096 independent calibration episodes, stratified lower certificates
+establish minimum feasible cost in all twenty repairable trials and exclude
+both declared classes in all twenty irreducible trials. All trials at 256
+episodes remain unresolved. A single 0.05 failure allocation covers both
+regimes, every trial, all four sample sizes, and the entire certificate family.
+These are controlled mechanism results; natural-data lower certificates retain
+their reported limitations.
 
 Use the extension's own [reproduction guide](extensions/certified_forecasting/docs/REPRODUCIBILITY.md)
 for its Linux/Python environment and experiment commands. The parent KAHKM

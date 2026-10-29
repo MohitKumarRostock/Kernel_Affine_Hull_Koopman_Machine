@@ -1,86 +1,101 @@
 \section{Discussion and limitations}
 \label{sec:discussion}
 
-\paragraph{What the certificates add.}
-Upper calibration answers whether a fitted forecast meets a tolerance. Lower
-calibration can exclude every decoder in a specified sensitivity class.
-Combining the two can certify the minimum feasible representation cost among
-predefined classes, even when upper-only selection returns the same predictor.
-The controlled decision experiment demonstrates this distinction, including a
-case in which all declared classes are excluded. These conclusions concern
-specified classes and costs; they do not establish globally optimal forecasting
-complexity or runtime.
+\paragraph{What a lower certificate adds.}
+An upper certificate establishes that a fitted forecast meets a tolerance.
+A lower certificate can exclude every decoder in a specified sensitivity
+class. Together they can identify the minimum feasible representation cost
+among predefined alternatives, even when upper-only selection returns the
+same predictor. The learned-KAHM decision study connects this distinction to
+fitted geometric representations on fresh independent episodes. Its
+constructed mechanism isolates a recoverable forecasting signal and an
+independent-future control; it does not
+establish how often such decisions can be resolved on naturally acquired
+data. Costs refer to the declared feature counts, not globally optimal
+forecasting complexity or runtime.
 
-\paragraph{Population slack and statistical precision.}
-Proposition~\ref{prop:witness-slack} identifies two gaps between the witness
-and a decoder's risk: a nonzero conditional residual mean and a loose
-geometric inequality for paired residuals.
-Stratification can repair particular losses but changes the distribution of
-compared pairs and reduces their counts. It can therefore lower either the
-population witness or its finite-sample endpoint. The finite-support comparison finds that calibration based on the minimum
-empirical risk is often tighter and requires more optimization. The pair witness is inexpensive to evaluate, but it need not approximate the
-optimal risk closely. Its control of the full Lipschitz
-class can also be less informative than a bound tailored to the fitted affine
-subclass. Zero obstruction never certifies representation adequacy.
+\paragraph{Population slack and calibration precision.}
+Proposition~\ref{prop:witness-slack} identifies two sources of pair-witness
+slack: a nonzero conditional residual mean and a loose geometric inequality
+for paired residuals. The block hierarchy supplies a systematic route beyond
+the information in individual pairs. Its monotonicity concerns population
+expectations. Convergence to the common decoder's optimal risk requires
+unconditional iid draws, bounded scalar targets, and compact representation
+support. Conditional blocks instead approach an average of conditional oracle
+risks, which can be smaller than the best risk of one shared decoder. A larger
+block leaves fewer
+independent scores and costs more to optimize. It can therefore have a weaker
+finite-sample endpoint despite a larger population expectation. The
+empirical-minimum comparator remains an important alternative; the hierarchy
+does not establish universal statistical or computational superiority. The
+block benchmark studies finite-support distributions, while the learned-KAHM
+decision study uses stratified pair certificates. The latter therefore tests
+class exclusion with learned geometry, rather than a finite-sample advantage
+for larger blocks on that geometry.
 
-\paragraph{Scope of refinement.}
-Appending feature blocks preserves every earlier feasible forecast. Under the
-block-norm budget, appending an exact copy of a block leaves the class unchanged. It does not force independently fitted models to
-improve, and a ridge penalty can change under duplication even when the class
-does not. When some coefficient budget remains unused, correlation between a new feature
-block and the prediction residual supplies a sufficient condition for a risk
-reduction. A separate result gives a necessary amount of representation-distance
-expansion for attaining a requested tolerance. Neither proves that unsupervised geometric clustering will discover
-a sufficient state. Experiments freeze candidate families before calibration;
-sequential refinement on fresh evaluation blocks is a theoretical extension
-that remains untested.
+Stratification addresses a different issue by changing which observations
+are compared while preserving the marginal risk. It can recover rare
+obstructions, but it can also remove informative comparisons or leave too
+few observations in a stratum. Estimated masses add uncertainty. Neither a
+zero pair obstruction nor an unresolved block certificate establishes
+representation adequacy. Furthermore, a sharp bound for the full Lipschitz
+class can remain loose for a restricted affine decoder family.
 
-\paragraph{Independent groups and evaluation populations.}
-Synthetic episodes are independently generated. PenDigits has only 13 eligible
-held-out writer identifiers, whose interpretation is inferred from source
-fields; its generic endpoints are uninformative. Speech supplies documented
-recording identifiers and 978 calibration groups, allowing informative upper
-bounds under the explicit iid group-record assumption. Source identifiers and
-a disjoint split do not by themselves establish random population sampling.
-Both real-data tasks restrict eligibility using completed recordings; the
-speech source additionally applies clip selection and quality screening.
-Their risks concern those retrospective acquisition populations. They do not
-transfer automatically to continuously arriving speech or every newly started
-pen stroke. Repeated fitting seeds on one cohort measure fitting variation,
-not new independent cohorts.
+\paragraph{What refinement guarantees.}
+Appending feature blocks preserves earlier feasible forecasts. Exact
+duplication leaves the block-norm class unchanged, although it can change a
+ridge-regularized fit. These class properties do not force independently
+fitted predictors to improve. Residual correlation supplies a sufficient
+improvement condition when coefficient budget remains available; a separate
+result gives a necessary representation-distance expansion for a requested
+tolerance. Neither result guarantees that unsupervised clustering discovers
+a sufficient state. The experiments freeze their candidate families before
+calibration. Sequential refinement using fresh evaluation blocks remains
+untested.
 
-\paragraph{Bounds, adaptation, and distribution shift.}
-The target ranges follow from the synthetic observation laws, the PenDigits
-acquisition box, or the fixed speech-energy transformation. Clipping predictions
-alone would not bound squared error for an unbounded target. The certificates
-do not transfer across changes in dynamics, sensors, noise, or origin laws.
-The original-seed scaling follow-up reuses calibration after the earlier
-results motivated its design; its endpoints are nominal. Fresh synthetic
-confirmation, matched-geometry, and speech studies use the stated independent
-calibration splits. PenDigits follow-ups reuse the examined writer cohort and
-remain descriptive. Confidence allocations are stated for each study rather
-than pooled into one campaign-wide claim.
+\paragraph{Sampling populations and adaptation.}
+Synthetic episodes are independently generated. PenDigits supplies only 13
+eligible held-out writer identifiers, inferred from source fields; its
+generic endpoints are uninformative. Speech supplies documented recording
+identifiers and 978 calibration groups, permitting informative upper bounds
+under the explicit iid group-record assumption. Source identifiers and
+disjoint splits do not establish random population sampling. Eligibility
+rules based on completed recordings and source quality screening further
+restrict both real-data populations. Repeated fitting seeds on the same
+cohort measure fitting variation, not independent population replications.
 
-\paragraph{Accuracy and computational scope.}
-The matched controls support KAHM gains on nonlinear autoregression and against
-RBF geometry on the fixed PenDigits cohort. Affine-hull alternatives are
-stronger on the oscillators, while autoregressive, quadratic, and kernel
-regression outperform KAHM on speech. Scaling yields both gains and regressions.
-These results support the general certification framework and selected KAHM
-applications, not universal KAHM superiority. Comparisons use declared
-implementations and validation grids and do not establish an accuracy frontier
-against broadly tuned neural forecasters. Feature counts measure representation
-size. Recorded execution times depend on hardware, shared preprocessing, and
-implementation; no general speed advantage is inferred.
+Target ranges follow from the synthetic laws, the PenDigits acquisition box,
+or the fixed speech-energy transformation. Clipping predictions cannot bound
+loss for an unbounded target. The certificates do not transfer across
+changes in dynamics, sensors, noise, or origin laws. Original-seed scaling
+follow-ups reuse previously examined calibration, and their endpoints are
+nominal. Fresh synthetic studies use the stated independent streams;
+PenDigits and speech scaling follow-ups on examined cohorts remain
+descriptive. Confidence allocations cover each declared study, not the
+entire research campaign.
+
+\paragraph{Accuracy and preprocessing.}
+The matched comparisons support KAHM gains on nonlinear autoregression and
+against RBF geometry on the fixed PenDigits cohort. Affine-hull alternatives
+are stronger on the oscillators, while autoregressive, quadratic, and kernel
+regressors outperform KAHM on speech. Scaling to $[-1,1]$ improves some tasks
+and worsens others. It must be treated as a development-selected model choice,
+with training extrema frozen before calibration; clipping future inputs is
+a distinct representation. These experiments assess the stated certificate
+framework and forecasting implementations. They establish neither universal
+KAHM superiority nor an accuracy frontier against broadly tuned neural
+forecasters. Execution times depend on hardware and implementation, and
+feature count alone does not determine computational cost.
 
 \section{Conclusion}
 
-Pairwise prediction obstructions, stratified calibration, and fitted-risk
-upper bounds can separate achievable accuracy from representation limitations.
-Retaining feature blocks under a common sensitivity budget makes representation
-refinements comparable. Joint lower and upper bounds can certify the minimum
-feasible cost among declared alternatives. Exact examples and comparison
-bounds identify both the uses and the limitations of the pairwise witness.
-Forecasting experiments demonstrate informative and unresolved decisions,
-task-dependent KAHM accuracy, and the importance of defensible independent
-sampling units. These qualifications are part of the certificate's meaning.
+Pairwise obstructions are the first member of a hierarchy of class-wide risk
+lower bounds. Larger blocks reduce population slack under the stated
+conditions, while calibration exposes the cost of estimating those bounds
+from finite independent data. Conditional pairing and retained feature blocks
+provide complementary control over representation comparisons. Together with
+fitted-risk upper bounds, these tools can certify achievable accuracy,
+exclude inadequate classes, and resolve a declared minimum-cost decision.
+The learned-KAHM study demonstrates that mechanism in a controlled setting;
+the broader experiments identify task-dependent accuracy, scaling effects,
+and unresolved decisions that remain part of the method's scope.

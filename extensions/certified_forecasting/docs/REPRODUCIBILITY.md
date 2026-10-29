@@ -6,6 +6,9 @@ reconstruction implementation from the repository root. The
 [scientific study guide](STUDY_GUIDE.md) explains the questions, estimands, and
 independent sampling units. This guide specifies the computational procedures
 and the evidence available for reproducing each result.
+The current manuscript is **A Hierarchy of Risk Certificates for Forecasting
+Representations**. Earlier study directories and their source identities are
+preserved; the two new studies below have separate frozen protocols.
 
 Mean squared error (MSE) is the expected squared prediction error under the
 study's episode and forecast-origin law. Root-mean-square error (RMSE) is its
@@ -653,6 +656,113 @@ The independent-episode theorem does not automatically certify an arbitrary
 single dependent series or distribution shift. Numerical-library changes may
 slightly alter the reused KAHM solver's fitted values. Recompute certificates
 for the actual fitted predictor and deployment sampling law.
+
+## Centered scalar block hierarchy
+
+The [frozen block protocol](../experiments/block_hierarchy/protocol.md) evaluates
+all eight earlier declared finite-support laws with fresh iid streams, block
+sizes 2, 4, 8, 16, and 32, and nested sample sizes 256, 1,024, and 4,096. A
+full-sample empirical-minimum lower certificate remains an explicit comparator.
+The eighteen method/sample-size endpoints share 0.05 failure probability
+within each law/repetition; the event is not joint over all 800 streams.
+
+Run the solver tests and reproduce the complete fixed-seed benchmark in a new
+directory:
+
+```bash
+python -m unittest discover -s tests -p 'test_block_witness.py' -v
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=src \
+  python experiments/block_hierarchy/run.py \
+  --output results/reproduced_block_hierarchy
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+  python experiments/block_hierarchy/verify.py \
+  --results results/reproduced_block_hierarchy \
+  --output verification/reproduced_block_hierarchy.json
+python experiments/block_hierarchy/make_assets.py \
+  --results results/reproduced_block_hierarchy
+```
+
+To verify the retained publication evidence without running the optimizer,
+use `--results results/block_hierarchy_v1` with a new audit output path. The
+verifier imports neither the runner nor either optimization implementation.
+It reconstructs all 800 random streams, 14,400 endpoints, and 45,579 cached
+primal/dual certificates, including every adverse block-size result. Its
+archived report is `results/block_hierarchy_v1/independent_verification.json`.
+The asset generator writes its summary and table into the specified result
+directory and regenerates the corresponding manuscript table and figure.
+
+The theory concerns centered scalar Lipschitz fits: population block witnesses
+are monotone and converge under bounded targets and compact metric support.
+Finite-sample endpoints need not increase with block size, and fixed block
+sizes can be arbitrarily loose across distributions. Numerical guards are not
+interval arithmetic. The finite-support optimization cache also prevents
+interpreting the measured runtime as a general continuous-support benchmark.
+
+## Learned KAHM representation-cost decisions
+
+The [learned-KAHM protocol](../experiments/learned_kahm_decision/protocol.md)
+separates all fitting and validation from calibration. Its twenty trials per
+regime use fresh independent synthetic episode streams, actual fitted KAHM
+blocks, training-only min–max scaling, and learned history-only partitions.
+Costs two and six share a block norm budget of two and fixed MSE tolerance
+0.10. All forty banks and eighty selected heads freeze before any calibration
+sample is generated. The complete study, including every sample-size prefix,
+shares one 0.05 failure allocation.
+
+Reproduce the fixed-seed development and calibration stages in a new directory:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=src \
+  python experiments/learned_kahm_decision/run_study.py develop \
+  --output results/reproduced_learned_kahm_decision
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=src \
+  python experiments/learned_kahm_decision/run_study.py calibrate \
+  --output results/reproduced_learned_kahm_decision
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=src \
+  python experiments/learned_kahm_decision/verify_study.py \
+  --results results/reproduced_learned_kahm_decision \
+  --output verification/reproduced_learned_kahm_decision.json
+python experiments/learned_kahm_decision/make_assets.py \
+  --results results/reproduced_learned_kahm_decision
+```
+
+The portable frozen-bank replay does not require the generated NPZ arrays,
+refitting, or pickle. Independently verify the retained original evidence:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=src \
+  python experiments/learned_kahm_decision/verify_study.py \
+  --results results/learned_kahm_decision_v1 \
+  --output verification/learned_kahm_portable_recheck.json
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+  python verification/acceptance_revision/learned_decision_independent_audit.py \
+  --results results/learned_kahm_decision_v1 \
+  --output verification/learned_kahm_algebra_recheck.json
+```
+
+The first audit imports neither the study runner nor its certificate helpers;
+it reconstructs every selected-model score and independently solves the mass
+linear programs. The second imports no project modules and independently
+reconstructs KAHM algebra, training geometry, scaler values, model selection,
+and the reported decisions. Both require new output paths. The learned-study
+asset generator writes into the chosen result directory; its generated
+`learned_kahm_decision.tex` supplies the manuscript's corresponding table.
+
+All unsuccessful outcomes remain: no trial is resolved at 256 episodes;
+at 1,024 episodes stratification certifies minimum cost in 17/20 repairable
+trials despite upper acceptance in 20/20. At 4,096 episodes it certifies
+minimum cost in 20/20 repairable trials and joint infeasibility in 20/20
+irreducible trials. Twenty-two candidate fits, including nine selected heads,
+miss the strict optimizer-gap stopping criterion while remaining feasible;
+the largest selected gap is 2.21e-9. These are controlled mechanism outcomes,
+not a natural-data accuracy comparison or an estimate of general success rate.
+
+The [study README](../experiments/learned_kahm_decision/README.md) documents the
+pre-calibration source-archive repair, preserved initial manifests, and the
+post-calibration packaging-only maintenance. Models, designs, seeds,
+tolerances, and sample sizes were unchanged. The exact executed runner remains
+inside the source snapshot. Replaying the fixed streams checks reproducibility;
+it does not constitute another independent experiment.
 
 ## General lower-certificate comparison
 

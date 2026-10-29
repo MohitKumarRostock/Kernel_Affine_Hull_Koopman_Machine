@@ -260,8 +260,8 @@ The candidate family includes history lengths, dictionary prefixes, geometric
 feature types, and baseline models. Each certificate compares a representation
 lower bound with a fitted-model upper bound for the same observed target,
 origin law, and decoder sensitivity budget. Algorithm~\ref{alg:procedure}
-summarizes the procedure; Section~\ref{sec:theory} gives the score formulas
-and their guarantees.
+summarizes the procedure; Sections~\ref{sec:block-witness} and~\ref{sec:calibration} give the score
+formulas and their guarantees.
 
 \begin{figure}[t]
 \centering
@@ -278,8 +278,9 @@ history-based strata, costs, concentration bounds, and proposed comparisons.
 Allocate $\delta$ across the risk bounds, stratum-mass intervals, alternative
 partitions, and improvement comparisons.
 \item On $n\geq4$ independent calibration episodes, compute one mean squared loss per
-episode and horizon. Compute obstruction scores using disjoint episode pairs
-at matching origins. For stratified calibration, use one prespecified origin
+episode and horizon. Compute obstruction scores using disjoint episode pairs or frozen-size
+blocks, using the declared origin sampling rule. For stratified calibration,
+use one prespecified origin
 per independent episode (or a justified episode-level stratum), pair within
 strata, and estimate their masses and confidence intervals.
 \item Compute simultaneous lower endpoints $L_{jh}$ and upper endpoints $U_{jh}$

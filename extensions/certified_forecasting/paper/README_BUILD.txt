@@ -1,5 +1,4 @@
-Certifying Prediction Limits and Representation Refinement
-with Kernel Affine Hull Machines
+A Hierarchy of Risk Certificates for Forecasting Representations
 
 PACKAGE CONTENTS
 
@@ -23,14 +22,32 @@ option, 11-point text, and the standard JMLR text dimensions.
 
 MANUSCRIPT
 
-The manuscript has 55 pages, including appendices and references. Its abstract
-has 191 whitespace-delimited words. The paper studies pairwise and stratified
-risk lower bounds, upper bounds for fitted forecasts, representation refinement,
-and minimum feasible representation cost. Numerical evidence includes
-finite-support certificate comparisons, a controlled decision experiment,
-synthetic forecasting, pen trajectories, speech energy, and a four-arm
-speech input-scaling comparison. The complete proofs and experimental
-specifications are included in the same PDF.
+The manuscript has 57 pages, including appendices and references. Its abstract
+has 181 whitespace-delimited words. Its central result is a normalized scalar
+Lipschitz block hierarchy: pairs are its first member, population expectations
+increase, and compactness and bounded targets give convergence to the optimal
+class risk. Exact examples state the limits of fixed block sizes. Independent
+block calibration, stratification, and fitted-risk upper bounds support
+representation-class decisions.
+
+New evidence includes a complete eight-law block comparison and a fresh
+learned-KAHM decision experiment with 20 independent trials per regime,
+training-only min-max preprocessing, learned partitions, and one joint failure
+allocation. The broader scaling, matched-geometry, and speech studies retain
+their adverse and inconclusive outcomes. All proofs of the stated results
+are included in the same PDF.
+
+The main text consolidates the earlier fixed-grid forecasting and explicit-
+feature decision studies. Their complete earlier text, tables, and figures
+remain in this package: sections/experiments.tex, oscillators.tex,
+sensitivity.tex, real_data.tex, and archive/decision_value_detailed.tex.
+They are supplementary source material, not additional sections of main.pdf.
+The result archives and exact reproduction commands remain public.
+
+JMLR's author guidance requires a cover-letter length justification for
+manuscripts above 50 pages. The separate revision report supplies a proposed
+justification. No formatting dimensions or font sizes were changed to reduce
+page count.
 
 RESEARCH SOFTWARE AND DATA
 

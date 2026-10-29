@@ -1,7 +1,7 @@
 # Scientific study guide
 
-The manuscript **Certifying Prediction Limits and Representation Refinement
-with Kernel Affine Hull Machines** asks three questions about forecasting:
+The manuscript **A Hierarchy of Risk Certificates for Forecasting
+Representations** asks three questions about forecasting:
 can a fitted predictor achieve a specified error tolerance, can any decoder of
 a given representation achieve it, and what is the least feasible
 representation cost among a predefined set of alternatives? This guide
@@ -80,6 +80,37 @@ probabilities are unknown, their estimation uncertainty also enters the
 lower endpoint. Stratification can expose rare conflicts but can also discard
 useful comparisons across groups or incur larger finite-sample penalties.
 
+### From pairs to centered scalar blocks
+
+For a bounded scalar target, the block score is
+
+$$
+T_b=\frac{1}{b-1}\min_{v\in\mathbb R^b}
+\sum_{i=1}^b(Y_i-v_i)^2,
+\qquad |v_i-v_j|\leq\kappa d(U_i,U_j),
+\qquad \mathcal W_b=\mathbb E T_b.
+$$
+
+The `b=2` score is exactly the pair obstruction. Joint consistency of the
+fitted values within a larger block gives an average-over-subsets inequality,
+and hence a nondecreasing sequence of population lower bounds
+$\mathcal W_2\leq\mathcal W_3\leq\cdots\leq R^*$.
+The centered normalization `b-1` uses the freedom to translate all fitted
+values together; it must not be applied indiscriminately to other optimization
+problems. With unconditional iid draws, bounded scalar targets, and a compact
+metric representation space, $\mathcal W_b$ converges to the optimal scalar
+Lipschitz risk. The argument does not claim this convergence for arbitrary
+conditional pairings, vector-valued targets, or noncompact supports.
+
+For target diameter $D$, the sharp score range is
+$0\leq T_b\leq B_b^{\rm blk}=D^2\lfloor b^2/4\rfloor/[b(b-1)]$.
+Disjoint blocks therefore admit bounded-mean calibration, but larger `b`
+leaves fewer independent scores. Neither a realized block score nor its
+finite-sample lower endpoint must increase with `b`. Exact rare-conflict and
+separated-input noise examples also show that every fixed block size can be
+arbitrarily loose across distributions. The practical choice is a tradeoff
+between population information, independent sample count, and optimization.
+
 ## Representation refinement and cost
 
 The KAHM construction appends fitted feature blocks while retaining all earlier
@@ -110,6 +141,8 @@ inference time, or memory usage.
 |---|---|---|
 | [Two-atom calibration](../configs/known_risk_v1.json) | 28,800 simulated calibration trials with analytically known risks | Checks empirical certificate behavior against exact population quantities. |
 | [Finite-law witness comparison](../experiments/witness_comparison/) | Eight laws, four sample sizes, 300 independent calibration samples per law and size | Separates population looseness from finite-sample calibration penalties for the same scalar Lipschitz class. |
+| [Centered block hierarchy](../experiments/block_hierarchy/) | The same eight declared laws; 100 independent streams per law, three nested sample sizes, five block sizes, and a full-sample comparator | Tests the population/statistical tradeoff with 14,400 independently audited endpoints; it is a theoretical follow-up, not a new application population. |
+| [Learned KAHM class decisions](../experiments/learned_kahm_decision/) | Twenty fresh independent trials in each of two continuous synthetic regimes; forty fitted KAHM banks | Tests whether learned geometry and learned partitions can support minimum-cost and joint-infeasibility certificates. |
 | [Representation-cost decisions](../experiments/decision_value/) | Independent complete episodes; 100 repetitions in each of two controlled regimes | Tests minimum-cost certification and exclusion of every prescribed class. |
 | [Synthetic forecasting](REPRODUCIBILITY.md#independent-episode-campaign) | Independently initialized episodes from four main laws and two oscillator laws | Evaluates forecasting and risk certification under specified bounded observation processes. |
 | [Input scaling](../results/input_scaling_study/) | Paired preprocessing arms; fresh synthetic confirmation and repeated fits on a fixed pen-writing cohort | Measures the dependence of KAHM performance on the input transformation. |
@@ -136,7 +169,19 @@ sizes share an event.
 
 ### Comparing lower bounds
 
-The eight-law study compares four primary methods: the disjoint-pair witness
+The new [block-hierarchy benchmark](../experiments/block_hierarchy/protocol.md)
+uses blocks of size 2, 4, 8, 16, and 32 and sample sizes 256, 1,024, and 4,096.
+Every one of eighteen method/sample-size endpoints shares a single 0.05
+allocation within a law and repetition; the confidence statement is not joint
+over all 800 streams. A separate verifier imports neither the runner nor its
+optimization implementations and reconstructs all 14,400 endpoints and
+45,579 primal/dual records. Larger blocks can improve the lower endpoint when
+pairing misses joint conflicts, but can also weaken it when the pair witness
+is already sharp. The full-sample empirical-minimum comparator is often
+tighter. Zero observed violations in this finite experiment do not replace
+the boundedness, independence, and allocation assumptions.
+
+The earlier eight-law study compares four primary methods: the disjoint-pair witness
 with an empirical Bernstein correction, a range-aware centered bound, a
 certified empirical-minimum bound with Kullback--Leibler inversion, and
 stratified calibration with estimated group probabilities. The
@@ -168,7 +213,38 @@ stratum probabilities obtain stronger results. The
 [exclusion frequencies](../results/witness_comparison/analysis/exclusion_power.csv)
 report every method, law, sample size, and tolerance.
 
-### Decisions enabled by lower calibration
+### Decisions for learned KAHM classes
+
+The [learned-KAHM study](../experiments/learned_kahm_decision/protocol.md)
+uses continuous two-lag histories and a smooth product target, plus a control
+whose future product is independent of the available history. Training-only
+min–max scaling precedes fitting the actual two- and four-cluster KAHM blocks.
+The retained class costs are two and six under a common block norm budget of
+two. All forty banks and eighty selected heads, including both learned
+argmax partitions, are frozen before calibration. No oracle labels define a
+partition. The MSE tolerance 0.10 is selected after disclosed development-only
+pilots and before every confirmatory calibration stream.
+
+At 1,024 calibration episodes, upper bounds accept the richer forecast in
+20/20 repairable trials; stratified lower bounds additionally certify minimum
+cost six in 17/20, while unconditional lower bounds do so in 0/20. At 4,096
+episodes, both lower constructions certify that minimum in 20/20 trials.
+Stratification excludes both classes in 20/20 irreducible trials at 4,096 and
+16,384 episodes; unconditional pairing never establishes joint infeasibility
+at the prescribed sizes. Every trial at 256 episodes remains unresolved.
+The four-cluster partition is unhelpful for excluding the cheaper class in
+the repairable regime, illustrating that finer conditioning can remove useful
+target contrast.
+
+One failure allocation 0.05 covers both regimes, all twenty trials, all four
+sample sizes, both classes, and all reported certificate directions jointly.
+The complete results, strict optimizer-gap failures, and portable frozen-bank
+replay are retained. These are constructed mechanism demonstrations, not
+estimates of success frequency on natural forecasting tasks or claims of KAHM
+accuracy superiority. Scaling remains a training-fitted model choice, with
+its comparison selected on development data and frozen before calibration.
+
+### Earlier explicit-feature cost benchmark
 
 The controlled decision study uses costs 1, 3, and 5 and RMSE tolerance 0.30.
 The exact class minima are $(0.138,0.138,0.01)$ in the repairable regime and

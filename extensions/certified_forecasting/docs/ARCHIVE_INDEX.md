@@ -17,6 +17,8 @@ so that the development and verification history remains traceable.
 
 | Record | Scope |
 |---|---|
+| [Centered block protocol](../experiments/block_hierarchy/protocol.md) and [frozen evidence](../results/block_hierarchy_v1/) | All eight laws, 800 independent streams, 14,400 endpoints, raw categorical observations, primal/dual evidence, analytic hierarchy formulas, and predraw source snapshot. |
+| [Learned KAHM protocol](../experiments/learned_kahm_decision/protocol.json) and [frozen evidence](../results/learned_kahm_decision_v1/) | Forty learned banks, 240 candidate fits, eighty selected heads, all trial outcomes, and one joint confidence allocation over regimes, trials, sample sizes, and bounds. Safe JSON preserves the complete numerical banks for replay. |
 | [Witness protocol](../experiments/witness_comparison/protocol.md) and [source record](../results/witness_comparison/SOURCE_AND_AUDIT.md) | Predraw design, source hashes, all simulated trials, and the provenance of derived analyses. The experiment README is included in the frozen source manifest. |
 | [Decision protocol](../experiments/decision_value/protocol.json) and [results](../results/decision_value/README.md) | The controlled episode law, confidence allocation, complete outcomes, and source/model freezes. |
 | [Speech protocol](../experiments/speech_forecasting/protocol.md) and [evaluation provenance](../experiments/speech_forecasting/README.md#evaluation-order-and-source-provenance) | Group allocation, observable, candidate design, and the original execution and strict-order replay. |
@@ -28,6 +30,33 @@ and verification logs are preserved as execution records. The source hashes in
 a manifest continue to identify the files used for that execution. Readers
 reproducing an archived execution should restore the corresponding source
 version or snapshot as specified in the reproduction guide.
+
+## Current hierarchy and learned-representation verification
+
+The current manuscript is **A Hierarchy of Risk Certificates for Forecasting
+Representations**. The [block-hierarchy verification](../experiments/block_hierarchy/VERIFICATION.md)
+reconstructs all retained observations, 45,579 empirical primal/dual programs,
+14,400 endpoints, and the analytic hierarchy table without importing the
+runner or its optimizers. The completed report is
+`results/block_hierarchy_v1/independent_verification.json`. Its confidence
+scope is eighteen endpoints within each law/repetition, not all 800 streams;
+zero observed violations are a finite numerical check.
+
+The learned-KAHM study has both a [portable arithmetic replay](../results/learned_kahm_decision_v1/verification.json)
+and a [no-project-import KAHM algebra audit](../verification/acceptance_revision/learned_decision_independent_audit.json).
+They verify learned geometry, training-only scalers, selected models, score
+reconstruction, all confidence calculations, and every reported decision.
+The study's single 0.05 allocation covers both regimes and all trials and
+sample sizes. Failed or unresolved decisions and strict optimizer-tolerance
+failures remain in the frozen evidence.
+
+The learned study's [pre-calibration repair record](../results/learned_kahm_decision_v1/precalibration_freeze_issue/repair.json)
+preserves a zero-byte source archive detected before calibration, initial source
+manifests/freezes, and explicit superseding freezes with unchanged models and
+design. The [post-run maintenance record](../results/learned_kahm_decision_v1/post_run_maintenance.json)
+identifies later packaging-only changes; AST checks show that every data,
+fitting, selection, and calibration function is unchanged. These records
+supplement the exact execution snapshot and do not replace historical evidence.
 
 ## Scaling and portable reproduction checks
 

@@ -1,4 +1,4 @@
-# Prediction-limit certificates and representation refinement
+# A Hierarchy of Risk Certificates for Forecasting Representations
 
 **Kernel Affine Hull Machine forecasting and general representation analysis**
 
@@ -66,6 +66,27 @@ This preserves every earlier predictor when a block is appended and leaves the
 class unchanged under exact feature duplication. Ordinary Euclidean/Frobenius
 stacking does not have the latter property. A squared ridge penalty itself is
 not invariant to duplicating coefficient blocks.
+
+## Centered scalar block hierarchy
+
+For a bounded scalar target, a block of `b` independent observations supplies
+the minimum residual sum of squares subject to all pairwise Lipschitz
+constraints, divided by `b-1`. Its expectation is a class-risk lower bound;
+`b=2` is exactly the pair obstruction. A pathwise average-over-subsets
+inequality makes the population witnesses nondecreasing in `b`. With
+unconditional iid observations and a compact metric representation space,
+they converge to optimal Lipschitz risk. The `b-1` normalization relies on
+translation freedom of the Lipschitz fitted values and is not a generic
+correction for arbitrary empirical-risk minimization.
+
+The [block-hierarchy study](experiments/block_hierarchy/) independently audits
+all eight declared finite-support laws, 800 streams, and 14,400 endpoints.
+It retains the full-sample empirical-minimum comparator and unfavorable block
+sizes. Population monotonicity does not order finite-sample endpoints: larger
+blocks leave fewer independent scores, and any fixed block size can miss rare
+conflicts or noise on many separated inputs. Zero observed coverage failures
+in this benchmark is a numerical check, not a proof or a guarantee for a new
+data-generating law. The theorem supplies the guarantee under its assumptions.
 
 ## Assumptions and statistical interpretation
 
@@ -228,7 +249,7 @@ search options do not imply identical model capacity or computational cost.
 
 ## Certificate comparisons, cost decisions, and speech forecasting
 
-Three studies evaluate lower-bound accuracy, representation-cost decisions,
+Complementary studies evaluate lower-bound accuracy, representation-cost decisions,
 and speech-energy forecasting. Their protocols specify the designs before
 calibration observations are drawn or inspected. These archived specifications
 are not external preregistrations.
@@ -237,6 +258,15 @@ are not external preregistrations.
   disjoint-pair, certified empirical-minimum, and estimated-mass stratified
   bounds on the same scalar Lipschitz class. Analytic and primal/dual checks
   distinguish population slack from finite-sample penalties.
+- [Block hierarchy](experiments/block_hierarchy/): the centered scalar
+  hierarchy, exact rare-conflict and input-occupancy laws, and all five block
+  sizes against the full-sample comparator. Confidence is joint across eighteen
+  endpoints within a law/repetition, not across all 800 streams.
+- [Learned KAHM decisions](experiments/learned_kahm_decision/): forty fitted
+  banks and eighty validation-selected heads, all frozen before calibration.
+  Learned history-only partitions support minimum-cost or joint-infeasibility
+  statements under one confidence event covering the complete study. All
+  small-sample failures and optimizer gaps are retained.
 - [Decision value](experiments/decision_value/): positive-tolerance exclusions,
   minimum-cost certificates, and an irreducible control, including the
   small-sample disadvantage of stratification.
@@ -247,7 +277,8 @@ are not external preregistrations.
 
 The concentration comparators use established bounded-loss inequalities.
 The paired Lipschitz regression argument has a close antecedent in Akash et al.
-(2021). The manuscript analyzes the difference between the pairwise bound and
+(2021). The centered block hierarchy extends that pair member through joint
+Lipschitz consistency. The manuscript also analyzes the difference between the pairwise bound and
 the minimum achievable risk, conditional pairing with estimated group masses,
 and decisions obtained by combining upper and lower certificates. It also
 identifies when conditional bounds are sharp and their optimal decoders can
@@ -280,6 +311,8 @@ choice rather than being labeled certified.
 | Study | Experimental scope | Main finding |
 |---|---|---|
 | Two-atom calibration | 28,800 trials | One observed joint certificate violation. The centered comparator in this experiment does not use the known zero input variance in the collapsed case; the eight-law comparison includes a range-aware comparator. |
+| Centered block hierarchy | Eight laws, 800 independent streams, 14,400 endpoints | Larger blocks recover population obstructions but may worsen calibrated endpoints; the full-sample comparator often remains stronger. Every endpoint and 45,579 optimization certificates are independently audited. |
+| Learned KAHM class decisions | Forty fresh regime/trial instances, 240 fits, eighty selected heads | At 4,096 episodes, stratification certifies minimum cost six in 20/20 repairable trials and joint infeasibility in 20/20 irreducible trials. All trials at 256 episodes are unresolved; the whole study shares one 0.05 allocation. |
 | General lower-bound comparison | Eight laws, 9,600 trials, 76,800 endpoints | Empirical-minimum calibration is often tighter. Stratification recovers some population obstructions but can worsen others; all adverse outcomes are retained. |
 | Positive-tolerance decision study | 200 independent regime/repetition instances, 600 fits | Stratified bounds certify minimum cost or joint infeasibility among three declared classes at large sample sizes. Upper-only selection returns the same accepted predictor. |
 | Speech energy | 7,178 clips, 1,630 recording identifiers, 978 calibration groups, three fits | Six learned families certify the all-horizon 18 dB resolution under the stated sampling assumption; tighter tolerances remain unresolved. Conventional regressors are more accurate than KAHM. |

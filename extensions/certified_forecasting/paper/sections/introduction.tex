@@ -1,74 +1,81 @@
 \section{Introduction}
 \label{sec:introduction}
 
-A forecasting representation maps an observed history to features, and a
-decoder maps those features to future observations. A representation can
-reconstruct past observations accurately while discarding distinctions needed
-to predict their futures. This raises two questions: does a fitted forecast
-meet an error tolerance, and can any decoder with a specified sensitivity meet
-it using that representation? We address both for expected squared error on a
-fixed observed signal. We call a statistically valid bound used to answer one
-of these questions a \emph{risk certificate}. Comparisons between
-representations use the same target and evaluation distribution.
+A forecasting representation maps an observed history to features from which a
+decoder predicts future observations. Choosing the least costly representation
+that meets an error tolerance requires two kinds of evidence: an upper risk
+bound for an accurate fitted predictor, and lower risk bounds that exclude
+cheaper representation classes. The second question concerns every admissible
+decoder, including those that have not been fitted. We study these decisions
+for expected squared error on a fixed observed signal, a declared decoder
+sensitivity budget, and a common evaluation distribution.
 
-Kernel Affine Hull Machines (KAHMs) provide our principal application. Their
-local reconstruction models produce soft associations between a history and
-learned reference groups \citep{kumar2024kahm,kumar2025collaborative}. A decoder
-maps these associations to future observations. We retain the reconstruction
-mechanism of \citet{kumar2026limits}, who analyze prediction of successor soft
-coordinates and independent-trajectory evaluation. We instead study observed
-outputs, general sensitivity-constrained decoders, and the cost of refining a
-representation. The analysis does not require the feature vector to evolve through an exact
-linear transition, to be a Markov state, or to preserve all predictive
-information in the history.
+A basic obstruction arises when two targets are farther apart than the
+sensitivity budget permits their predictions to be. Related pairwise
+Lipschitz regression arguments are established \citep{akash2021inverse}.
+Averaging the squared positive part of this discrepancy over conditionally
+independent pairs yields a risk lower bound. This inexpensive statistic can
+be exact, but it can also miss almost all of the attainable class risk.
+The central question of this paper is how to understand and reduce that
+population slack without confusing it with uncertainty from a finite
+calibration sample.
 
-The lower certificate starts from a simple obstruction. If two targets are
-farther apart than the decoder's Lipschitz constraint allows their predictions
-to be, their prediction errors cannot both be small. We call this discrepancy a \emph{pairwise obstruction}: it is the excess
-target separation beyond what the sensitivity budget permits. Averaging its
-squared positive part over conditionally independent pairs gives a population
-lower bound, which we call a \emph{witness}. Related
-pairwise Lipschitz regression arguments are established
-\citep{akash2021inverse}; our analysis identifies the resulting witness's
-slack, its dependence on the pairing law, and finite-sample decisions under a
-fixed marginal risk. The witness is sharp for some distributions and can be
-arbitrarily loose for others. This limitation motivates stratified pairing:
-concentrate comparisons within predefined groups, then reweight by their
-population masses. Estimating these masses adds uncertainty that must enter
-the certificate.
+Our main construction replaces pairs by blocks of observations. Within each
+block, we minimize squared error over predictions satisfying all pairwise
+Lipschitz constraints and normalize by one less than the block size. The
+size-two statistic is exactly the pairwise obstruction. For scalar targets,
+the expectations of these statistics form a nondecreasing hierarchy of lower
+bounds. Under unconditional iid sampling, bounded targets, and compact
+representation support, they converge to the optimal Lipschitz risk. Larger blocks capture compatibility constraints that
+individual pairs cannot express. They also require more optimization and
+leave fewer independent block scores for calibration. Population improvement
+therefore does not imply a uniformly stronger finite-sample certificate.
 
-Upper and lower certificates have complementary decision value. An upper
-bound can certify a fitted model's accuracy. Lower bounds can exclude cheaper
-representation classes, making it possible to certify the minimum feasible
-cost among predefined alternatives, or their joint infeasibility. This is a
-stronger conclusion than selecting the cheapest fitted model whose upper
-bound passes. It does not require the selected predictor itself to change.
+Conditional pairing provides a complementary way to expose an obstruction.
+Comparisons within a predefined history stratum can concentrate on distinctions
+that global pairing rarely encounters. Reweighting by stratum probabilities
+preserves the original marginal risk. We characterize the pair witness's
+slack and give sharp examples and counterexamples, then account for both
+random stratum counts and estimated masses in calibration. The concentration
+inequalities and simultaneous-selection principles used for calibration are
+established; the contribution lies in the hierarchy, its relationship to
+pairing, and the representation decisions that the resulting lower information
+can support.
 
-The concentration inequalities and simultaneous-selection principles are
-established. Our analysis concerns the conditional obstruction, the effect of
-pairing on its slack, and the representation-class decisions that valid lower
-evidence permits. Our contributions are as follows.
+Kernel Affine Hull Machines (KAHMs) provide a concrete forecasting application.
+Their established local reconstruction models yield soft associations between
+a history and reference groups
+\citep{kumar2024kahm,kumar2025collaborative,kumar2026limits}. We retain these
+models and append feature blocks under a sum-of-block-norms decoder budget.
+This preserves earlier predictors and makes exact block duplication immaterial
+to the feasible class. The analysis requires neither an exact linear feature
+evolution nor a Markov representation. Its risk concerns observed future
+outputs. Preprocessing, including training-fitted scaling to $[-1,1]$, forms
+part of the representation and is frozen before calibration.
+
+The paper makes three contributions.
 \begin{enumerate}[leftmargin=*,itemsep=2pt]
-\item \textbf{Witness analysis and stratified certification.} We give an exact
-slack decomposition, sharp continuous and discrete cases, and counterexamples
-to universal tightness. A stratified certificate accounts for random stratum
-counts and estimated masses while retaining the original population risk.
-\item \textbf{Refinement and decision guarantees.} Retaining feature blocks
-under a sum-of-block-norms budget preserves earlier predictors and makes exact
-duplication immaterial to the feasible class. Simultaneous lower and upper
-bounds yield accuracy, improvement, and minimum-cost statements.
-\item \textbf{Controlled comparisons and forecasting evidence.} A fixed
-benchmark compares the witness with a range-aware centered bound and a
-certified empirical-minimum-risk bound for the same Lipschitz class. A separate
-controlled experiment isolates decisions enabled by lower calibration. KAHM applications
-cover six synthetic systems, original pen trajectories, and speech energy,
-with matched geometric controls and conventional regression baselines.
+\item \textbf{A hierarchy and its population limits.} We connect the pair
+witness to normalized minimum-risk problems on larger blocks, establish
+monotonicity and consistency under the stated conditions, and identify exact
+and arbitrarily loose pairwise cases.
+\item \textbf{Calibration and representation decisions.} Independent block
+scores and valid stratification give class-wide lower certificates. Combined
+with fitted-risk upper bounds and retained-block geometry, they support
+accuracy, improvement, and minimum feasible cost statements for a frozen
+family of alternatives.
+\item \textbf{Tests of usefulness and failure.} Exact-risk comparisons separate
+population slack, statistical precision, and optimization cost. A controlled
+study tests class exclusion and refinement using learned KAHM dictionaries
+and fresh independent calibration episodes.
+Broader forecasting studies on six synthetic systems, pen trajectories, and
+speech energy assess accuracy, scaling, and the limits of calibration.
 \end{enumerate}
 
-The empirical findings delimit the claims. Empirical-minimum calibration is
-often tighter than the pairwise certificate, and stratification can improve
-or weaken a lower bound.
-KAHM accuracy gains depend on the task and decoder. Informative real-data
-certification requires many defensible independent groups and a stated sampling
-assumption. The guarantees concern expected risk under that evaluation law,
-not prediction-interval coverage for every individual history.
+The evidence supports a qualified use of the certificates. Empirical-minimum
+calibration is often tighter than pairwise calibration. Useful class exclusion
+on a constructed mechanism does not establish its prevalence in natural
+forecasting tasks. KAHM accuracy and the effect of input scaling depend on the
+task and decoder; conventional regressors remain stronger in several studies.
+All confidence statements concern expected risk under an explicit sampling
+law, with independent calibration units and bounded target losses.

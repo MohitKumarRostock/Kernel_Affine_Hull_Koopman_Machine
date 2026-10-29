@@ -1,52 +1,77 @@
 \section{Exact-risk benchmark and centered comparator}
 \label{app:known-risk}
 
-The controlled experiment uses a Bernoulli variable $Z$ with
-$\Pr(Z=1)=p$, target $Y=2Z-1$, and a two-coordinate simplex map
+This benchmark has an analytically known optimal risk and fitted-model risk,
+so certificate coverage can be checked without using a test estimate as
+population truth. Let $Z\in\{0,1\}$ be a Bernoulli state with
+$\Pr(Z=1)=p\in(0,1)$, and let the scalar target be $Y=2Z-1$.
+For a representation-separation parameter $a\in[0,1]$, use
 \[
  \Phi_a(0)=\left((1+a)/2,(1-a)/2\right),\qquad
- \Phi_a(1)=\left((1-a)/2,(1+a)/2\right),\qquad 0\leq a\leq1.
+ \Phi_a(1)=\left((1-a)/2,(1+a)/2\right).
 \]
-The representation distance is $\sqrt2a$.  Write
-$c=(2-\kappa\sqrt2a)_+$.  Proposition~\ref{prop:two-atom} gives the
-exact minimum MSE $R^*=p(1-p)c^2$.  The target values, representation
-family, and support are specified by the benchmark design.  They are
-not inferred using calibration outcomes.
+Both vectors lie in the two-coordinate probability simplex. Their Euclidean
+distance is $\sqrt2a$, whereas the target separation is $2$. For sensitivity
+budget $\kappa\geq0$, define the unexplained separation
+$c=(2-\kappa\sqrt2a)_+$. Proposition~\ref{prop:two-atom} then gives
+\[
+ R^*=p(1-p)c^2.
+\]
+Here $R^*$ denotes the minimum MSE over the benchmark's constrained
+predictors. The two target values, representation family, and support are
+specified in advance by the benchmark design.
 
-An independent training sample yields an empirical frequency $\widehat p$.
-The chosen constrained empirical minimizer predicts
+An independent training sample gives the empirical frequency
+$\widehat p$ of state $1$. We choose the constrained empirical-risk
+minimizer whose predictions at the two states are
 \begin{equation}
  \widehat f(0)=-1+\widehat p c,
  \qquad
  \widehat f(1)=1-(1-\widehat p)c.
  \label{eq:two-atom-fit}
 \end{equation}
-These values are in $[-1,1]$ and separated by
-$2-c=\min\{2,\kappa\sqrt2a\}$, so an affine decoder realizes them
-within the budget.  If one atom is absent from training, the formula
-fixes one feasible empirical-risk minimizer using the benchmark's
-predeclared support; this is a tie convention.  The fitted population
-risk can be computed without a test-set estimate:
+These values lie in $[-1,1]$ and have separation
+$2-c=\min\{2,\kappa\sqrt2a\}$. The affine construction in
+Proposition~\ref{prop:two-atom} therefore realizes them within the budget;
+when $a=0$, the two values coincide. If one state is absent from training,
+\eqref{eq:two-atom-fit} selects one feasible empirical minimizer using the
+predeclared support. This fixes an otherwise ambiguous prediction at the
+unobserved state.
+
+Conditional on the training sample, state $0$ has prediction error
+$-\widehat p c$, and state $1$ has error $(1-\widehat p)c$.
+Consequently the exact fitted population risk is
 \begin{equation}
  R(\widehat f)
  =c^2\{(1-p)\widehat p^2+p(1-\widehat p)^2\}
  =R^*+c^2(\widehat p-p)^2.
  \label{eq:two-atom-fitted-risk}
 \end{equation}
-The pair witness equals $c^2/2$ on unequal calibration atoms and zero
-otherwise; its expectation is exactly $R^*$.  This verifies coverage
-against known population risks, rather than treating a finite test
-estimate as ground truth.
+For an independent pair of calibration states, the witness score equals
+$c^2/2$ when the states differ and zero otherwise. The mismatch probability
+is $2p(1-p)$, so the expected score is exactly $R^*$. With $n$ calibration
+observations, the pair lower bound uses $\lfloor n/2\rfloor$ disjoint
+pairs. An odd final observation is excluded from pairing but remains in the
+fitted-risk and centered statistics. The reported calibration sizes are all
+even.
 
-For comparison, use a single reference class and the raw-target
-Euclidean version of the earlier centered certificate.  If $\bar z$
-is the calibration frequency in $n$ independent observations, its
-empirical centered output and input variances are
+\paragraph{The centered comparator.}
+For comparison, use the raw-target Euclidean version of the earlier
+centered certificate with one reference class. Let $Z_1,\ldots,Z_n$
+be independent calibration states, with $n\geq4$, and
+$\bar z=n^{-1}\sum_{i=1}^nZ_i$ their empirical frequency. The output and
+representation variances, computed with denominator $n$, are
 \[
  \widehat s=4\bar z(1-\bar z),\qquad
  \widehat t=2a^2\bar z(1-\bar z).
 \]
-For a failure probability $\eta$, define
+Their population counterparts are
+$\sigma^2=4p(1-p)$ and $\tau^2=2a^2p(1-p)$.
+The population centered bound is
+$(\sigma-\kappa\tau)_+^2\leq R^*$, using nonnegative square roots.
+In this two-state benchmark the inequality is an equality.
+
+For a failure probability $\eta\in(0,1)$, define
 \begin{align}
  r&=\log(2/\eta)/n,\nonumber\\
  V_\eta&=(\widehat s-4\sqrt{r/2})_+,\nonumber\\
@@ -54,23 +79,43 @@ For a failure probability $\eta$, define
  L^{\rm ctr}_\eta&=(\sqrt{V_\eta}-\kappa\sqrt{T_\eta})_+^2.
  \label{eq:centered-comparator}
 \end{align}
-Then $L^{\rm ctr}_\eta\leq R^*$ with probability at least $1-\eta$.
-For completeness, the output sample variance has expectation at most
-the population variance and changes by at most $4/n$ when one
-observation changes.  Bounded differences therefore gives the lower
-correction in $V_\eta$ at failure probability $\eta/2$.  The input
-sample variance changes by at most $2/n$; its downward bias is
-$\tau^2/n\leq1/n$, since a simplex-valued vector has total variance
-at most one.  Bounded differences and the bias correction give
-$T_\eta\geq\tau^2$ at failure probability $\eta/2$.  The union bound
-and the centered population inequality prove the claim.  The constant
-one here is the conservative general simplex-variance bound, not the
-sharpest possible two-coordinate bound.
+Here $V_\eta$ is a lower bound on $\sigma^2$, $T_\eta$ is an upper
+bound on $\tau^2$, and the superscript ``ctr'' identifies the centered
+risk bound. We show that $L^{\rm ctr}_\eta\leq R^*$ with probability
+at least $1-\eta$.
 
-In each trial the fitted upper bound, the pair lower bound, and the
-centered lower bound are each assigned failure probability $\delta/3$.
-The two internal tails in \eqref{eq:centered-comparator} together use
-one such allocation.  Thus the three reported directions have a joint
-confidence guarantee within a trial.  There is no asserted global
-$1-\delta$ event across all Monte Carlo trials, all grid conditions,
-or all separately reported experiments.
+First, $\mathbb E\widehat s=(1-1/n)\sigma^2\leq\sigma^2$, and
+changing one calibration observation changes $\widehat s$ by at most
+$4/n$. The bounded-differences inequality therefore gives
+\[
+ \widehat s-\mathbb E\widehat s\leq4\sqrt{r/2}
+\]
+with failure probability at most $\eta/2$. On that event,
+$V_\eta\leq\sigma^2$.
+Second, changing one observation changes $\widehat t$ by at most $2/n$,
+so the same inequality gives
+\[
+ \mathbb E\widehat t-\widehat t\leq\sqrt{2r}
+\]
+with failure probability at most $\eta/2$. Since
+$\mathbb E\widehat t=(1-1/n)\tau^2$ and $\tau^2\leq1$,
+\[
+ \tau^2\leq\widehat t+\sqrt{2r}+\tau^2/n
+          \leq\widehat t+\sqrt{2r}+1/n.
+\]
+Capping the right side at one remains valid because $\tau^2\leq1$.
+A union bound now gives $V_\eta\leq\sigma^2$ and
+$T_\eta\geq\tau^2$ jointly with probability at least $1-\eta$.
+The expression in \eqref{eq:centered-comparator} increases with its first
+variance argument and decreases with its second. Hence it is no larger
+than $(\sigma-\kappa\tau)_+^2\leq R^*$ on that event. The constant
+one is the general simplex-variance bound; it is conservative for this
+two-coordinate example.
+
+In each Monte Carlo trial, the fitted-risk upper bound, pair-witness lower
+bound, and centered lower bound each receive failure probability $\delta/3$.
+For the centered bound, setting $\eta=\delta/3$ splits that allocation
+between its two internal variance bounds. The three reported directions
+therefore hold jointly with probability at least $1-\delta$ within a
+trial. No joint $1-\delta$ event is asserted across all trials, grid
+conditions, or separately reported experiments.

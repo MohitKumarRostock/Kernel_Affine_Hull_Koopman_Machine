@@ -16,10 +16,33 @@ import numpy as np
 from certified_forecasting.certificates import mean_interval
 
 
+def two_atom_pair_scores(states, deficit):
+    """One score per disjoint pair of independent binary calibration states.
+
+    The score is ``deficit**2 / 2`` for unequal states and zero otherwise.
+    An odd final observation is excluded from pairing but remains available
+    for the fitted-risk and centered bounds. At least two independent pairs
+    are required by the empirical Bernstein radius.
+    """
+    z = np.asarray(states)
+    if z.ndim != 1 or z.size < 4:
+        raise ValueError("At least four independent calibration states are required")
+    if not np.all((z == 0) | (z == 1)):
+        raise ValueError("Calibration states must be binary")
+    deficit = float(deficit)
+    if not np.isfinite(deficit) or not 0.0 <= deficit <= 2.0:
+        raise ValueError("The unexplained target separation must lie in [0, 2]")
+    end = 2 * (z.size // 2)
+    return (z[:end:2] != z[1:end:2]).astype(float) * deficit**2 / 2.0
+
+
 def run(config,output):
     cfg=json.loads(config.read_text())
     if output.exists():
         raise RuntimeError(f"Refusing to overwrite {output}")
+    for n in cfg["calibration_sizes"]:
+        if isinstance(n, bool) or not isinstance(n, int) or n < 4:
+            raise ValueError("Calibration sizes must be integers of at least four")
     output.mkdir(parents=True)
     rng=np.random.default_rng(cfg["seed"])
     rows=[]
@@ -42,7 +65,7 @@ def run(config,output):
                         truth=(1-p)*(pred0+1.)**2+p*(pred1-1.)**2
                         z=rng.binomial(1,p,n)
                         loss=np.where(z==0,(pred0+1.)**2,(pred1-1.)**2)
-                        q=(z[::2]!=z[1::2]).astype(float)*deficit**2/2.
+                        q=two_atom_pair_scores(z, deficit)
                         # Three reported directions: fitted UCB, pair LCB,
                         # centered LCB. Give each delta/3 for joint coverage.
                         tail=cfg["delta"]/3.
@@ -71,7 +94,7 @@ def run(config,output):
              "runner_sha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
              "n_trials":len(rows),"elapsed_seconds":time.perf_counter()-start,
              "failure_counts":{k:sum(1-r[k] for r in rows) for k in ["pair_valid","centered_valid","upper_valid","joint_valid"]},
-             "confidence_scope":"Within each trial, three directions have jointly at least95% confidence. No global confidence across trials is asserted.",
+             "confidence_scope":f"Within each trial, the three reported one-sided bounds have joint confidence at least {100.0 * (1.0 - cfg['delta']):.6g}%. No joint guarantee across trials is asserted.",
              "monte_carlo_scope":"Only these finite two-atom configurations; empirical coverage is not a proof of the theorem."}
     (output/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
     print(json.dumps(summary,indent=2))

@@ -24,7 +24,7 @@ def make_episodes(system, n_episodes, length, seed):
     quasiperiodic: two cosines with amplitudes .55 and .30, independent phases,
       base frequency U[.10,.22], incommensurate ratio sqrt(2), plus U[-.03,.03].
     nonlinear_ar: y[t+1] = tanh(1.25*y[t] - .65*y[t-1] + .25*sin(3*y[t])
-      + U[-.10,.10]); initial values U[-.8,.8], 80 burn-in transitions.
+      + U[-.10,.10]); initial values U[-.8,.8], first 80 stored values discarded.
     logistic: u[t+1]=r*u[t]*(1-u[t]), r~U[3.65,3.95], u[0]~U[.05,.95],
       40 burn-in transitions; y=2u-1. The random parameter is per episode.
 

@@ -155,7 +155,7 @@ class BlockBoundedRidge:
     the constrained *predictor class*, since their coefficients can be merged.
 
     A squared-Frobenius ridge penalty is not invariant to duplicate blocks;
-    predictor-class invariance should not be confused with estimator invariance.
+    predictor-class invariance does not imply estimator invariance.
     The returned Frank-Wolfe gap upper-bounds regularized objective suboptimality
     at the final feasible iterate. Certification of prediction risk remains
     valid even if a requested numerical optimization tolerance is not reached.

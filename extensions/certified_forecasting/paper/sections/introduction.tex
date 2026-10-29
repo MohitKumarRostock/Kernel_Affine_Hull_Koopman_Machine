@@ -1,83 +1,86 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Kernel Affine Hull Machines (KAHMs) describe data using geometric reconstruction
-models in reproducing kernel Hilbert spaces
-\citep{kumar2024kahm,kumar2025collaborative}. Applied to time-series histories,
-their reconstruction affinities give soft associations with learned reference
-groups. This offers a concrete way to build a forecasting representation:
-local models describe the histories, their associations form a dictionary, and
-a decoder predicts the observed future signal. The central question is whether
-that geometry preserves distinctions that matter for prediction. Histories
-with almost identical associations may have different futures, and a larger
-dictionary need not improve a forecast learned from finite data.
+Kernel Affine Hull Machines (KAHMs) use geometric reconstruction models in
+reproducing kernel Hilbert spaces to describe data
+\citep{kumar2024kahm,kumar2025collaborative}. For a time-series history, each
+local model measures reconstruction quality relative to a learned reference
+group. Normalizing these measurements gives a vector of soft associations.
+A decoder, also called a prediction head, maps that vector to future observed
+values. The central question is whether the representation retains the
+distinctions needed for forecasting. Similar associations can conceal different
+futures, and fitting a larger dictionary need not improve predictions.
 
-Reconstruction quality and prediction of the soft coordinates do not answer
-that question. A coordinate-space objective changes when the dictionary changes;
-even a collapsed representation can have a small latent prediction error. We
-therefore keep the future observed output as the target throughout learning,
-refinement, and evaluation. For horizon $h$ and tolerance $\epsilon_h$, we ask
-whether a fitted KAHM forecast has population root-mean-square error at most
-$\epsilon_h$, and whether the representation can support that accuracy within
-a prescribed decoder sensitivity class. Both questions refer to the same law
-for new trajectories and forecast origins.
+Neither good reconstruction nor accurate prediction of the feature coordinates
+settles this question. The coordinate target changes with the dictionary, and
+an almost constant representation can be easy to predict while losing useful
+information. We therefore use the future observed signal as the common target
+throughout learning, refinement, and evaluation. For each forecast horizon
+$h$ and requested root-mean-square error (RMSE) tolerance $\epsilon_h\geq0$,
+we ask two questions: does a fitted forecast meet the tolerance, and can
+\emph{any} decoder with a prescribed sensitivity meet it using this
+representation? Both questions concern the same distribution of new
+trajectories and forecast origins.
 
-This paper extends the KAHM research program from geometric modeling and
-soft-state prediction limits to an implemented forecasting procedure.
+This work extends KAHM forecasting from geometric representations and prediction
+limits to an implemented learning and certification procedure.
 \citet{kumar2026limits} study norm-bounded linear prediction of successor soft
-coordinates, separate exact Koopman closure from empirical fitting, and give
-KAHM constructions. That work also includes fitted-model upper risk bounds and
-independent-trajectory evaluation. We retain the KAHM reconstruction mechanism
-and that sampling principle. The extensions here are a fixed raw-output
-prediction task, a directly estimable pairwise obstruction for Lipschitz
-decoders, refinement that preserves earlier forecasts, and a calibrated
-decision procedure for fitted accuracy and actual refinement gains.
+coordinates, distinguish exact Koopman closure from empirical fitting, and
+provide KAHM constructions, fitted-risk upper bounds, and independent-trajectory
+evaluation. We retain their reconstruction mechanism and independent sampling
+principle. Our extensions are a common observed-output target, a directly
+estimable lower bound for Lipschitz decoders, a refinement rule that preserves
+earlier forecasts, and calibrated decisions about accuracy and fitted
+improvements. Here a Lipschitz constraint limits how much a decoder's output
+can change relative to the distance between its inputs. Exact Koopman closure,
+by contrast, would require one matrix to propagate the feature coordinates
+exactly throughout the domain; we make no such assumption.
 
-The obstruction has a simple geometric interpretation. If two future targets
-are separated by more than the decoder's sensitivity times the distance between
-their representations, the two prediction errors cannot both be small.
-Averaging a squared positive-part discrepancy over conditionally independent
-copies lower-bounds prediction risk. Its comparison with a variance obstruction
-uses the same pairing law: pairing at a common forecast origin and pairing
-within a reference class are different constructions.
+The lower bound has a geometric interpretation. Suppose two future targets
+are farther apart than the decoder's sensitivity allows their predictions
+to be. The two prediction errors then cannot both be small. Averaging the
+squared excess separation over conditionally independent pairs gives a
+population risk lower bound, which we call the \emph{pairwise obstruction}.
+The conditioning rule matters: pairing trajectories at a common forecast
+origin and pairing histories within a reference class generally produce
+different bounds. Comparisons between bounds must use the same rule.
 
-Refinement also requires a consistent meaning of model capacity. Replacing a
-KAHM dictionary need not retain its earlier predictors. We instead append
-dictionary blocks, use a sum of block coefficient norms, and match that budget
-to the maximum distance across blocks. An old forecast remains feasible by
-setting new coefficients to zero. Exact duplicates can be merged without
-increasing the budget, so replication alone cannot improve the population
-optimum or the obstruction. A genuinely new block may help, and its fitted
-benefit is assessed separately on independent data.
+Refinement also needs a consistent definition of model capacity. Replacing
+a dictionary can remove earlier predictors. We instead append feature blocks,
+bound the sum of their coefficient norms, and measure input separation by the
+largest distance across blocks. Setting new coefficients to zero preserves
+any old forecast. Duplicate blocks can be merged without increasing the norm
+budget, so duplication alone changes neither the feasible prediction class
+nor the pairwise obstruction. A different block can improve the geometry;
+its benefit to a fitted forecast is evaluated separately on independent data.
 
-The contributions are as follows.
+The paper makes four contributions.
 \begin{enumerate}[leftmargin=*,itemsep=3pt]
-\item \textbf{A KAHM forecasting learner.} We combine stable soft reconstruction
-affinities, retained KAHM dictionaries, and convex constrained multihorizon
-decoders to predict the original output. The complete procedure freezes its
-candidates before calibration and can return an unresolved accuracy decision.
-\item \textbf{Matched lower and upper risk statements.} We derive a pairwise
-obstruction for arbitrary Lipschitz decoders, establish its relation to a
-conditional variance bound and its exactness on a two-atom law, and combine it
-with fitted-risk certificates for independent episodes.
-\item \textbf{Comparable refinement.} We establish nested, replication-invariant
-prediction classes and a necessary amount of geometric change for a refinement
-to meet a tolerance. Paired losses assess actual fitted improvements; the
-population nesting result does not guarantee that every fitted refinement helps.
-\item \textbf{An empirical assessment of KAHM design choices.} Retained
-experiments compare soft and hard associations, direct prediction and feature
-rollout, dictionary sizes, decoder budgets, and input preprocessing. The study
-adds matched KAHM, RBF, and affine-hull comparisons across three heads with
-equal preprocessing and dictionary-size options on all seven tasks. It
-separates accuracy, representation cost, certificate usefulness, and variation
-across fitting repetitions, retaining gains and regressions.
+\item \textbf{A KAHM forecasting procedure.} Stable soft associations, retained
+dictionaries, and constrained multihorizon decoders predict the observed
+signal. Candidates are fixed before calibration, and the procedure reports
+an unresolved decision when it cannot certify the requested accuracy.
+\item \textbf{Matched lower and upper risk bounds.} A pairwise obstruction
+applies to arbitrary Lipschitz decoders. We compare it with a conditional
+variance bound, show exactness for a distribution supported on two points,
+and combine it with fitted-risk upper bounds from independent episodes.
+\item \textbf{Comparable refinement.} We prove nesting and duplication
+invariance of the feasible classes, and a necessary amount of distance
+expansion for a refinement to meet an error tolerance. Paired losses test
+whether particular fitted refinements improve risk.
+\item \textbf{Empirical assessment.} Experiments vary soft versus hard
+associations, direct prediction versus feature rollout, dictionary size,
+coefficient budget, and input preprocessing. A matched comparison evaluates
+KAHM, radial basis function (RBF), and affine-hull geometry with three decoder
+types on all seven tasks, using common preprocessing and dictionary-size
+options. The analysis separates accuracy, representation size, usefulness of
+certificates, and variation across fitting repetitions, reporting both gains
+and regressions.
 \end{enumerate}
 
-KAHMs provide the principal geometric construction; the risk and refinement
-arguments apply more generally to representations satisfying the stated
-assumptions. This permits comparison with alternative geometric dictionaries
-under a common forecasting and evaluation procedure. The guarantee concerns
-expected squared error for a new episode and a prescribed origin law. It does
-not assert sufficient-state discovery, exact Koopman closure, conditional
-prediction-interval coverage, or validity for arbitrary windows from a single
-dependent trajectory.
+KAHMs supply the main representation, but the risk and refinement results
+apply to other fixed representations under the stated assumptions. The
+guarantees concern expected squared error for a new episode and a specified
+origin law. They do not establish that the features form a sufficient state,
+give conditional prediction-interval coverage, or apply automatically to
+overlapping windows from a single dependent trajectory.

@@ -1,6 +1,6 @@
 # KAHM input-scaling investigation
 
-This directory preserves the complete comparison of the manuscript's KAHM input standardization against training-fitted scaling to `[-1, 1]`. The supported change is **optional preprocessing plus a complete, task-dependent ablation**. Standardization remains the default. Min–max scaling improves soft KAHM forecasts on several tasks, including a repeated approximately 20% PenDigits MSE reduction, but worsens logistic and Van der Pol forecasts. The decision and its qualifications are recorded in [report_decision.json](report_decision.json).
+This study compares training-mean/standard-deviation preprocessing with training-fitted range scaling to `[-1, 1]` for KAHM features. Min–max scaling improves soft KAHM forecasts on several tasks, including an approximately 20% PenDigits MSE reduction across both fitting-seed sets, but worsens logistic and Van der Pol forecasts. Standardization remains the reference default, and scaling alternatives are explicit options. The retained [study summary](report_decision.json) records the complete outcomes.
 
 ## Intervention and primary outcome
 
@@ -27,7 +27,30 @@ Relative MSE changes below are `(minmax / standard - 1) × 100`; negative values
 | Duffing | −7.072% | −7.294% | 3/3 |
 | PenDigits | −19.787% | −19.650% | 3/3 |
 
-Clipped min–max gives essentially the same main pattern; `raw` is a separately reported diagnostic. Improvements in the mean do not imply improvement at every horizon or for every KAHM variant. In particular, hard KAHM assignment worsens on PenDigits, and the soft model still trails stronger autoregressive/quadratic baselines there. Existing all-horizon certificate success counts are unchanged between `standard` and `minmax`; see [certification_comparison.csv](certification_comparison.csv).
+Clipped min–max gives essentially the same main pattern; `raw` is a separately reported diagnostic. Improvements in the mean do not imply improvement at every horizon or for every KAHM variant. In particular, hard KAHM assignment worsens on PenDigits, and the soft model still trails stronger autoregressive/quadratic baselines there. The counts of repetitions whose upper endpoints meet the all-horizon tolerances are unchanged between `standard` and `minmax`; see [certification_comparison.csv](certification_comparison.csv). Their statistical interpretation depends on which evaluation streams are used, as described below.
+
+## Calibration scope
+
+The original-seed replay was designed after inspection of the earlier study
+and reuses its calibration and test streams. It is a matched descriptive
+comparison. Fixing a new arm before rerunning those streams does not establish
+independence from previously observed outcomes, so the replayed new-arm
+endpoints are nominal calculations without an additional adaptive-validity
+argument.
+
+The synthetic confirmation uses new training, validation, calibration, and
+test episodes for seeds 4701--4703. Its existing confidence allocations apply
+within each prespecified arm and repetition; they do not provide a joint event
+for searching across four preprocessing arms. Cross-arm improvements remain
+descriptive. Conditional test-episode standard errors summarize finite-episode
+variation for fixed models and do not include variation across independent fits.
+
+Both PenDigits phases reuse the same 13 eligible held-out writers. New fitting
+subsamples provide no new test cohort. A population confidence interpretation
+would require iid writers and a study design independent of the evaluation
+writer outcomes; neither is established for this follow-up. The retained
+writer-level upper endpoints are therefore nominal, and writer differences
+are descriptive. These qualifications leave all numerical records unchanged.
 
 ## Exact provenance and counts
 
@@ -43,7 +66,7 @@ The frozen investigation adapter SHA-256 is:
 a4b3487c392b96ac528e09e7e3cdf7767f647909739d3d76886ee3198b4dde95
 ```
 
-The matched protocol was frozen before the new scaling comparisons, after the earlier manuscript and results had been inspected. It is a follow-up, not an externally preregistered original experiment. Its [protocol](protocols/protocol.json), [fresh synthetic protocol](protocols/confirmation_protocol.json), and [fresh-fitting PenDigits protocol](protocols/pendigits_confirmation_protocol.json) retain the precise designs. Per-run manifests record actual source, configuration, adapter, and protocol hashes and software versions. Exact original investigation scripts and configurations are copied unchanged into [input_scaling_replay](../../experiments/input_scaling_replay/); its [source snapshot manifest](../../experiments/input_scaling_replay/source_snapshot_manifest.json) verifies 25 files.
+The paired scaling protocol was fixed before the new scaling comparisons, after the earlier manuscript and results had been inspected. It is a follow-up, not an externally preregistered original experiment. Its [protocol](protocols/protocol.json), [fresh synthetic protocol](protocols/confirmation_protocol.json), and [fresh-fitting PenDigits protocol](protocols/pendigits_confirmation_protocol.json) retain the precise designs. Per-run manifests record actual source, configuration, adapter, and protocol hashes and software versions. Exact original investigation scripts and configurations are copied unchanged into [input_scaling_replay](../../experiments/input_scaling_replay/); its [source snapshot manifest](../../experiments/input_scaling_replay/source_snapshot_manifest.json) verifies 25 files.
 
 | Schedule component | Seeds / design | Recorded evaluations across four arms |
 |---|---|---:|
@@ -75,7 +98,7 @@ Both [analysis_original](analysis_original/) and [analysis_confirmation](analysi
 
 Original analysis retains 24,432 candidate–horizon rows; confirmation retains 11,520. The manuscript's generated scaling tables are [primary](../../paper/tables/input_scaling_primary.tex), [PenDigits](../../paper/tables/input_scaling_pendigits.tex), [diagnostics](../../paper/tables/input_scaling_diagnostics.tex), [budget sensitivity](../../paper/tables/input_scaling_sensitivity.tex), and [uncertainty](../../paper/tables/input_scaling_uncertainty.tex). [Numeric macros](../../paper/tables/input_scaling_numbers.tex) and the [asset manifest](../../paper/tables/input_scaling_assets_manifest.json) connect prose/table values to their source analyses. Historical experiment tables are preserved.
 
-The synthetic normal intervals in these CSVs are unadjusted Monte Carlo intervals **conditional on fitted models**. They do not include training randomness and are not the manuscript's finite-sample risk certificates. Fitting-seed variation is reported separately. PenDigits writer effects are descriptive; no iid-writer population interval is asserted. Original risk allocations apply within each frozen arm and replicate, not simultaneously across four arms, all tasks, or all fitting seeds.
+The synthetic normal intervals in these CSVs are unadjusted Monte Carlo calculations for fixed fitted models. They omit training randomness and are separate from the finite-sample risk certificates. For the original-seed replay, reuse after earlier inspection also limits a repeated-sampling confidence interpretation; the recorded calculations are descriptive. Fitting-seed variation is reported separately. PenDigits writer effects are descriptive. Fresh-synthetic risk allocations apply within each prespecified arm and repetition, not simultaneously across four arms, all tasks, or all fitting seeds.
 
 ## Complete records and separately supplied primary scores
 
@@ -156,7 +179,7 @@ python analyze_comparison.py --results-root confirmation_results \
   --skip-original-replay --output confirmation_analysis
 ```
 
-Reference numerical-library versions are recorded; bitwise equality on arbitrary architectures is not promised. The legacy scripts refuse overwrites, preserve failures, and must remain unchanged for source-hash checks. Dataset preparation verifies the pinned UCI archive; downloaded data are not stored in this evidence directory.
+Reference numerical-library versions are recorded; bitwise equality on arbitrary architectures is not promised. The archived scripts refuse overwrites and preserve failures; their unchanged bytes provide the source-hash reference for historical reproduction. Dataset preparation verifies the pinned UCI archive; downloaded data are not stored in this evidence directory.
 
 To regenerate manuscript tables or the standalone report from the committed analyses, run from the extension directory:
 

@@ -1,102 +1,125 @@
-# Manuscript scope and implementation audit
+# Scientific scope and implementation consistency
 
-Reviewed text-only on 28 October 2026. No generated manuscript artifacts were
-compiled or changed during this audit. Files examined: `main.tex`, introduction,
-related work, method, theory, experiments, real data, discussion, protocols,
-optimization, exact-risk details, and budget-sensitivity sections. Implementation
-checks included feature maps, constrained decoders, certificates, forecasting
-selection, and the known-risk runner.
+The initial review on 28 October 2026 covered the original forecasting
+campaign, exact-risk benchmark, PenDigits evaluation, and budget sensitivity.
+The 29 October revision also examined input scaling and matched geometry,
+using the retained configurations, scalar records, selection code, certificate
+code, and primary references. The checks below distinguish mathematical
+assumptions, reconstructed empirical quantities, and limits of interpretation.
 
-## Findings requiring wording alignment
+## Method and theory
 
-1. **Artifact distribution:** the initial main-file provenance paragraph said that
-   the per-episode archives and manuscript generators were all distributed in the
-   accompanying repository directory. The intended release separates the public
-   code/result JSON from the larger evidence archive and the author-review
-   manuscript package. The wording must match that actual split. The protocol
-   appendix already accommodates separately archived score files correctly.
-2. **Computational comparison:** the initial related-work ending described
-   comparisons with a fixed computational budget. The implemented study fixes
-   configurations and transparently reports feature counts, but does not establish
-   equal runtime/compute budgets across all methods. Replace that phrase with
-   transparent representation-cost and computational accounting.
-3. **Prior-paper credit:** the predecessor already includes a fitted-risk upper
-   certificate (Remark 5.14) and independent-trajectory extensions (Appendix H).
-   Explicitly credit these to avoid implying that upper-risk calibration or the
-   episode aggregation idea is newly introduced here. The pairwise witness,
-   retained-class refinement analysis, and implemented selection framework are
-   the specific extension under study.
+The prediction target is the observed future signal under the task's fixed
+transformation. Direct multihorizon prediction and iterated feature-transition
+baselines are evaluated on this same target. Neither a Markov assumption nor
+exact Koopman closure is required for the episode-level certificate.
 
-These findings were sent to the main manuscript owner; this audit does not itself
-edit the manuscript sections that owner is updating.
+The retained representation is a product of probability simplices. Refinement
+keeps the actual earlier coordinate functions, rather than requiring nested
+cluster partitions. The sum of block Frobenius norms is paired with the maximum
+Euclidean distance across blocks. This establishes nested feasible forecast
+classes and invariance to exact duplicate blocks. It does not establish
+monotone risk for separately fitted finite-sample predictors. The quadratic
+ridge penalty can change under duplication; the unregularized numerical
+comparison therefore uses zero ridge.
 
-## Mathematical and implementation alignment checked
+The pairwise lower bound and fitted-model upper bound concern the same target,
+origin law, metric, and sensitivity budget. A positive lower endpoint excludes
+only the stated restricted class. A zero endpoint is inconclusive. The
+necessary metric-expansion inequality is not a sufficient learning rule, and
+future noise may make an obstruction irreducible.
 
-- Main method correctly states that the target is raw future observations and
-  that the implementation is direct multihorizon prediction, with iterated
-  Koopman-style feature models kept as separate baselines.
-- The retained feature vector is explicitly a product of simplices. Coordinate
-  functions are retained exactly; no unsupported nested-partition claim appears.
-- The block-sum Frobenius constraint and block-maximum input metric match the
-  implementation. Matrix orientation is explicitly reconciled between row-wise
-  training notation and column-vector theorem notation.
-- Duplication invariance is limited to feasible classes, their population
-  optima, and the pair witness. The method and experiments correctly disclose
-  that quadratic ridge regularization can change under replication, and that
-  the duplicate candidate uses a different zero-ridge fitting convention.
-- The main experiment does not claim that every new block improves a learned
-  predictor. It retains inconclusive adjacent comparisons and explicitly
-  separates fixed-family experiments from optional sequential refinement.
-- Common forecast origins across history lengths are correctly stated and match
-  the runner. Independent-unit counts are episodes/pairs, not overlapping rows.
-- Main-family counts agree: 40 candidates, three horizons, 20 learning runs,
-  800 fits, 4800 selected one-sided risk endpoints, 480 KAHM candidate/horizon
-  lower statements, and 360 adjacent KAHM comparisons.
-- Failure allocation agrees with the code: 0.04 across 240 main risk tails and
-  0.01 across 18 paired-improvement tails in each complete run.
-- Known-risk exact oracle and fitted risks match the implementation. Its three
-  directions share 0.05 within each trial; no global confidence across all
-  Monte Carlo trials is claimed. The one observed violation is retained.
-- Bounded simulation outputs follow from the stated definitions. No Gaussian
-  innovation is silently treated as bounded, and the range assumption is not
-  estimated from observed extrema.
-- Numerical optimization gaps are correctly separated from statistical risk
-  certificates and are not represented as formal floating-point verification.
-- The code's candidate-cost rule is feature count, then history length, then
-  validation MSE, matching the method. It is not claimed to measure runtime.
-- Main empirical conclusions are task dependent and acknowledge stronger AR and
-  polynomial results, including the real-data results.
+Optimization gaps concern the finite regularized training objective. They are
+floating-point numerical checks, not interval-arithmetic proofs and not
+population-risk certificates. Statistical validity requires the returned
+predictor to satisfy its stated sensitivity budget, rather than to attain a
+global training optimum.
 
-## Real-data scope
+## Independent units and calibration
 
-The real-data section is appropriately conservative: it uses original raw
-coordinates, documents inferred writer IDs and the reduced eligible-writer
-count, states that iid writer sampling is unverified, reports the very loose
-conditional Hoeffding bounds, and does not count individual strokes as
-independent writers. Seed variation on the same cohort is explicitly not a
-test-population confidence interval. The coordinate-pooled RMSE calculation and
-its 720-statement confidence allocation agree with the runner.
+Common forecast origins are used across history lengths. Overlapping training
+windows may be dependent because the finite optimization objective does not
+assume independent rows. Confidence calculations use one average loss per
+independent episode and one obstruction score per disjoint episode pair.
+
+A calibration family must be specified independently of its evaluation data.
+A finite-family multiplicity allocation does not establish this independence.
+The campaigns therefore have different inferential scopes:
+
+| Campaign | Evaluation data | Interpretation |
+|---|---|---|
+| Original synthetic forecasting | Separate development, calibration, and test episode streams | Within-run risk and refinement guarantees under the specified episode law |
+| Original budget sensitivity | New streams, shared across three prespecified budgets within a repetition | Allocation `0.05/3` per budget family; no simultaneous claim across all task--seed repetitions |
+| Original-seed scaling replay | Previously used calibration and test streams | Matched descriptive comparison; new-arm endpoints are nominal without a separate independence or adaptive-validity argument |
+| Synthetic scaling confirmation, seeds 4701--4703 | New development, calibration, and test episodes | Stated within-arm guarantees; no joint guarantee for searching across four arms |
+| Matched synthetic geometry, seeds 5701--5705 | New development, calibration, and test episodes | Joint 95% event within one task--seed combination, including four arm families and six primary comparisons |
+| PenDigits follow-ups | New fitting randomness, same eligible held-out writer cohort | Descriptive cohort comparisons and nominal writer-level endpoints; additional fitting seeds are not new population samples |
+
+The conditional PenDigits formula additionally assumes iid writer sampling,
+which the source dataset does not establish. For follow-ups informed by earlier
+results on the same writers, independence of design from evaluation outcomes
+is also unestablished. These qualifications are separate from whether the
+arithmetic endpoints are reproduced exactly.
+
+## Empirical counts and reconstruction
+
+The original main campaign contains 40 candidates, three horizons, and 20
+complete learning runs: 800 fits, 4800 one-sided risk endpoints, 480 KAHM
+candidate--horizon lower statements, and 360 adjacent-prefix comparisons.
+Within each run, the failure budget is 0.04 for 240 risk tails and 0.01 for
+18 paired-improvement tails.
+
+The matched follow-up contains 13,440 candidates in 124 completed jobs. Primary
+selection uses 32 alternatives per geometry--architecture family, with the
+same choices available to all three geometries. Percentage effects use ratios
+of mean MSEs across fitting seeds. The independent standard-library verifier
+reconstructs all 360 selected coordinate-level models and all 42 primary
+contrasts from raw scalar records; the maximum discrepancy is below 4.3e-14.
+The [verification record](../results/matched_geometry_study/verification/independent_primary_verification.json)
+and [study README](../results/matched_geometry_study/README.md) give the evidence
+and reproduction command.
+
+An independent reconstruction of the scaling records checked 8,144 original
+and 3,840 confirmation candidate records. It reproduced 3,264 original and
+1,152 confirmation validation-selected models exactly, including 9,792 and
+3,456 horizon rows. All 285 original and 105 confirmation taskwise mean-effect
+rows agreed within 1.6e-13. This check verifies selection and mean aggregation;
+it does not rerun fitting or reconstruct every full-score confidence interval.
+
+The exact-risk benchmark compares against analytically known oracle and fitted
+risks and retains the observed coverage violation. Its three confidence
+directions share 0.05 within a trial. There is no asserted global event across
+all Monte Carlo trials or benchmark conditions.
+
+## PenDigits population and outcome definitions
+
+PenDigits uses original acquisition coordinates and documents inferred writer
+identifiers. The eligible cohort contains 13 held-out writers. Losses are
+averaged within writers, then equally across writers; coordinate MSE is pooled
+before taking its square root. Fitting-seed standard deviations measure
+variation on that same cohort, not uncertainty across independently sampled
+writer populations.
 
 The length restriction defines a retrospective eligible-stroke population.
-Eligibility of a newly started stroke is not generally known online before it
-reaches the required length. The existing restricted-population language is
-therefore important and should not be removed or converted into an unrestricted
-online deployment claim. The writer identifier remains a documented inference,
-not a source field whose meaning has independently been established.
+Eligibility of a newly started stroke is generally unknown before it reaches
+the required length. The results therefore do not establish an unrestricted
+online prediction guarantee. The writer identifier remains a documented
+inference rather than a source field with independently established meaning.
 
-## Follow-up sensitivity scope
+## Contribution and evidence scope
 
-The budget-sensitivity section correctly labels the campaign as a follow-up
-designed after observing the main results, uses new development/calibration/test
-streams, holds data and feature dictionaries fixed across budgets within each
-replicate, and allocates 0.05/3 to each of the three budget families. No global
-confidence across all system/seed repetitions is asserted. Its conclusions are
-limited to the tested budgets and fixed dictionary family.
+The predecessor already supplies fitted-risk upper bounds and independent-
+trajectory extensions. The [literature review](LITERATURE_AUDIT.md) credits
+these ingredients and distinguishes the pairwise observed-output witness,
+retained refinement geometry, and implemented finite-family selection.
 
-## Overall conclusion
+Feature count is a representation-size proxy. The experiments do not establish
+equal runtime, storage, or statistical capacity across all methods. Relative
+KAHM gains against geometric controls coexist with stronger affine-hull results
+on oscillators and stronger autoregressive/quadratic predictors on PenDigits.
 
-No concrete mathematical contradiction was found between the assembled method,
-the theorems, and the implementation in the reviewed files. The principal
-remaining changes are accurate distribution/provenance wording and explicit
-credit for inherited upper-risk/episode ingredients. This is a targeted audit,
-not exhaustive formal verification or a claim of publication acceptance.
+Code and scalar summaries are distributed in the repository; some full score
+archives are supplied separately or regenerated from frozen runners. The study
+READMEs identify these components without treating an index of hashes as the
+full archive. Historical protocols and numerical records remain unchanged;
+current documentation states the revised interpretation of reused data.

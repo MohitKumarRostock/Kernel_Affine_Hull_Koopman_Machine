@@ -1,15 +1,18 @@
-# Forecasting implementation notes
+# Feature construction and numerical methods
 
 ## Relationship to the original implementation
 
 The primary `NestedSoftFeatures(kind="kahm")` feature bank calls the parent
 repository's `train_kahm_state_regime_abstraction` and
 `kahm_folding_distance_matrix`. It does not replace the KAHM reconstruction
-mechanism with nearest-centroid or PCA features. Inputs are standardized using
-development-input means and standard deviations. Each retained block is trained
-with its own seeded state-space clustering. At most 2,500 development histories
+mechanism with nearest-centroid or PCA features. By default, inputs are
+standardized using training-input means and standard deviations. Optional
+preprocessing uses training extrema or leaves the histories unscaled, as
+specified in the [method overview](README.md#optional-kahm-input-scaling).
+Each retained block is trained
+with its own seeded state-space clustering. At most 2,500 training histories
 are used to construct the geometry by default; decoder training can use all
-development histories. Each cluster uses at most 48 KAHM training prototypes by
+training histories. Each cluster uses at most 48 KAHM training prototypes by
 default, with at most two retained principal directions. These limits are
 configurable, deterministic computational choices, not statistical assumptions.
 
@@ -25,7 +28,7 @@ combines a normalized reconstruction residual with a local distance penalty.
 The `rbf` comparator uses normalized Gaussian distances to k-means centers.
 These comparators are distinct geometric feature maps and are not called KAHM.
 
-## What is nested
+## Retained feature blocks and nested decoder classes
 
 For fitted simplex blocks Phi_1,...,Phi_J, the stage-j feature vector is their
 concatenation `(Phi_1,...,Phi_j)`. Every old coordinate remains unchanged; the
@@ -47,10 +50,20 @@ penalized estimator.
 
 ## Decoder and numerical optimization
 
+Let `N` be the number of training histories, `p` the number of retained feature
+coordinates, and `q` the number of joint target coordinates. The feature matrix
+`X` has shape `(N, p)`, the response matrix `Y` has shape `(N, q)`, the
+coefficient matrix `W` has shape `(p, q)`, and the intercept `b` has length `q`.
+`W_s` consists of the rows associated with feature block `s`; `1` is the
+length-`N` vector of ones and `||.||_F` denotes the Frobenius norm.
 The primary `BlockBoundedRidge` solves
 
     min_{W,b: sum_s ||W_s||_F <= kappa}
-        (1/n) ||Y - X W - 1 b^T||_F^2 + alpha ||W||_F^2.
+        (1/N) ||Y - X W - 1 b^T||_F^2 + alpha ||W||_F^2.
+
+Here `kappa` is the coefficient budget and `alpha` is the ridge coefficient
+denoted by `lambda` in the manuscript. The loss sums over target coordinates
+and horizons and averages over training rows.
 
 After eliminating the unpenalized intercept by centering, monotone-restarted
 FISTA minimizes this convex quadratic. Its projection first projects the
@@ -63,9 +76,9 @@ The per-horizon Lipschitz bound is the sum of the relevant block column norms.
 The `BoundedRidge` ablation solves
 
     min_{W,b: ||W||_F <= kappa}
-        (1/n) ||Y - X W - 1 b^T||_F^2 + alpha ||W||_F^2.
+        (1/N) ||Y - X W - 1 b^T||_F^2 + alpha ||W||_F^2.
 
-The intercept is eliminated by centering the development feature and target
+The intercept is eliminated by centering the training feature and target
 matrices. Eigendecomposition of the feature covariance produces ridge
 solutions. If the unconstrained ridge solution exceeds the norm budget, a
 scalar additional Lagrange multiplier is found by bisection. The norm budget
@@ -81,9 +94,9 @@ predicts each raw future target. It is not an iterated learned Koopman matrix.
 feature transition and a current-observation decoder, composes the transition
 for each requested horizon, and clips only the final raw output. Effective
 horizon coefficient matrices and their Euclidean Lipschitz bounds are exposed.
-No exact closure claim follows from this empirical transition fit. The direct
-polynomial comparator and iterated polynomial comparator must be named
-separately in experimental reporting.
+The empirical transition fit does not establish exact Koopman closure. Direct
+quadratic regression and polynomial feature rollout are separate comparison
+methods in the experimental results.
 
 ## Synthetic episode laws
 
@@ -101,7 +114,7 @@ history length minus one. The certification unit is an independent episode,
 not an individual overlapping window. Stationarity is not required when new
 episodes use exactly the same finite-episode sampling law and origin protocol.
 
-## Validation performed
+## Implementation checks
 
 The unit-test suite checks: actual original-KAHM fitting and evaluation;
 simplex normalization and retained coordinates; a numerical underflow case
@@ -112,7 +125,9 @@ generation; and persistence using only the latest observation. Additional tests
 verify a known block-ball projection, agreement of the one-block solver with
 the exact constrained ridge solution, the reported optimization gap, duplicate
 block merging, the block-maximum Lipschitz bound, and agreement of composed
-Koopman forecasts with explicit affine rollout. All thirteen model/protocol
-tests passed on the available Linux/Python environment. Experiment-level
-validation, coverage evaluation, and result generation are handled separately.
+Koopman forecasts with explicit affine rollout. The complete suite also checks
+preprocessing, model-selection rules, retained score archives, and calibration
+formulas. The [verification report](docs/SCIENTIFIC_VERIFICATION.md) gives the
+executed checks and their results. Simulation-based coverage assessment and
+empirical result reconstruction are reported separately from these tests.
 

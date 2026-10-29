@@ -1,7 +1,7 @@
 # Matched KAHM geometry and forecasting-head study
 
-This prospective follow-up supplies the missing RBF and affine-hull Frobenius
-and rollout controls. All three geometries receive the same head, history,
+This follow-up supplies RBF and affine-hull controls for Frobenius-direct
+prediction and feature rollout. All three geometries receive the same head, history,
 retained-size, and preprocessing choices. Validation selects the models;
 test results do not determine any model choice.
 
@@ -9,9 +9,12 @@ The complete frozen schedule finished successfully: **124 jobs and 13,440
 candidate fits**, with zero failures. It covers all seven original tasks,
 five new fitting seeds (5701--5705), all four preprocessing modes, three
 heads, and retained dimensions 2, 6, 14, and 30. The
-[protocol](protocol.md) states the design and confidence allocation.
+[original protocol](protocol.md) preserves the design and confidence allocation.
+The [current statistical interpretation](../../docs/MATCHED_GEOMETRY_PROTOCOL.md)
+clarifies the implications of reusing the PenDigits cohort; the frozen protocol
+remains unchanged.
 
-## What was learned
+## Results
 
 KAHM has lower mean MSE in 28 of the 42 task/head/alternative comparisons,
 and higher mean MSE in 14. These are related descriptive comparisons,
@@ -28,10 +31,14 @@ Only one of 180 prespecified calibration comparisons certifies a positive
 KAHM improvement: Van der Pol, seed 5703, rollout versus RBF, with MSE
 improvement lower endpoint 0.00107100848. All other improvement statements
 remain unresolved. The confidence event is joint within one synthetic
-task/seed; it is not joint across all tasks or seeds. PenDigits comparisons
-reuse the same held-out writers and remain descriptive.
+task/seed; it is not joint across all tasks or seeds. These synthetic
+comparisons use newly generated calibration episodes. PenDigits comparisons
+reuse the same held-out writers and remain descriptive. Its writer-level
+upper endpoints are nominal: a new confidence interpretation would require
+both iid writer sampling and a study design independent of the evaluation
+writer outcomes, neither of which is established for this follow-up.
 
-See the [revision account](../../docs/MANUSCRIPT_REVISION.md) for the full
+See the [scientific interpretation](../../docs/MANUSCRIPT_REVISION.md) for the full
 primary comparison table and its interpretation.
 
 ## Retained files
@@ -58,7 +65,8 @@ primary comparison table and its interpretation.
   compact evidence ZIP, retaining 270 selected synthetic models, 810 arrays,
   and 6,635,520 float64 values exactly as stored in the full source archives.
 
-The full analysis checked 30,240 arrays containing 247,726,080 values and
+The retained full-analysis record documents checks of 30,240 arrays containing
+247,726,080 values and
 131,040 PenDigits writer-loss values. A separate standard-library script
 reconstructed all 360 primary choices and all 42 effects from the raw
 records; identities matched exactly and numerical differences were below

@@ -7,9 +7,9 @@ Geometry-Induced Soft State Abstractions**,
 [arXiv:2609.32652v3](https://arxiv.org/abs/2609.32652v3).
 
 This directory contains an executable forecasting method, finite-sample
-prediction-risk certificates, complete retained experiment summaries, and
-reproduction/audit tools. The manuscript is a research draft for author review;
-this repository does not represent an accepted JMLR paper.
+prediction-risk certificates, retained experiment summaries, and reproducibility
+utilities. The [manuscript](paper/) develops the mathematical results, specifies
+their assumptions, and reports the empirical comparisons.
 
 KAHM is the central implemented representation. Its local reconstruction
 models supply soft geometric associations of a causal history, and retained
@@ -19,11 +19,10 @@ directly and assesses the resulting predictor and representation class using
 independent episodes. The original KAHM reconstruction mechanism is inherited;
 the generic risk and refinement results also apply to other feature maps.
 
-The [manuscript](paper/) explains this progression and separates three
-questions: what the KAHM representation contributes, what depends on the
-forecasting head, and what the finite-sample certificates can establish.
-The [revision account](docs/MANUSCRIPT_REVISION.md) summarizes the new
-comparisons and how they strengthen the evidence for this positioning.
+The analysis separates the contribution of the geometric representation, the
+choice of forecasting decoder, and the information supplied by finite-sample
+certificates. The [study overview](docs/MANUSCRIPT_REVISION.md) relates the
+comparisons to these three questions.
 
 ## Method
 
@@ -50,12 +49,12 @@ a proposed refinement will help; paired episode-loss comparisons check actual
 improvement separately.
 
 The block norm matches the maximum Euclidean distance across feature blocks.
-This preserves the prediction class when a block is appended and leaves the
+This preserves every earlier predictor when a block is appended and leaves the
 class unchanged under exact feature duplication. Ordinary Euclidean/Frobenius
 stacking does not have the latter property. A squared ridge penalty itself is
 not invariant to duplicating coefficient blocks.
 
-## What the guarantee assumes
+## Assumptions and statistical interpretation
 
 - Calibration episodes are independent draws from the stated deployment
   episode law and independent of model construction. Windows inside an episode
@@ -69,9 +68,17 @@ not invariant to duplicating coefficient blocks.
   episode and the stated origins. It is not a conditional prediction interval
   for every future observation.
 
-A chronological split of one dependent series is not sufficient. The real
-PenDigits analysis explicitly avoids treating strokes or windows as independent
-writers; its small writer count yields weak assumption-based bounds.
+A chronological split of one dependent series does not establish these
+independence conditions. The PenDigits analysis averages within writers and
+uses writers as the possible independent units. Its small writer count yields
+wide bounds under an unverified iid-writer sampling assumption.
+
+Independence also concerns study design. Reusing calibration observations after
+they informed a follow-up does not regain a confidence guarantee by fixing the
+new configuration before rerunning it. The original-seed scaling follow-up and
+the repeated PenDigits comparisons report descriptive endpoints. Fresh
+synthetic confirmation and matched-geometry experiments use new calibration
+episodes; their confidence allocations are specified separately.
 
 ## Install and run
 
@@ -111,7 +118,7 @@ retained runs. Failures are recorded instead of silently removed.
 
 ## Optional KAHM input scaling
 
-The input-scaling study is a task-dependent ablation. Min–max preprocessing
+The input-scaling study evaluates a task-dependent modeling choice. Min–max preprocessing
 improves the soft KAHM PenDigits forecaster, including new fitting seeds on the
 same held-out writers, but some synthetic settings and hard KAHM assignments
 regress. The original default remains training mean/std standardization.
@@ -151,8 +158,8 @@ not rewritten to match the new optional API.
 
 ## Matched geometry and forecasting heads
 
-The [follow-up protocol](docs/MATCHED_GEOMETRY_PROTOCOL.md) addresses the
-attribution gap in the earlier favorable KAHM Frobenius and rollout results.
+The [study protocol](docs/MATCHED_GEOMETRY_PROTOCOL.md) separates geometric
+representation effects from the choice of Frobenius-constrained or rollout decoder.
 KAHM, RBF, and local affine-hull geometries each receive all three heads at
 2, 6, 14, and 30 retained features, both original histories, and the same four
 preprocessing choices. Validation selects preprocessing, history, and size
@@ -183,7 +190,8 @@ index, and analysis are retained in `results/matched_geometry_study/`.
 
 For each synthetic task/seed, the four complete arm families share 0.04 error
 probability, and six development-selected, within-head paired comparisons
-share 0.01. This yields a 0.05 joint event within that replicate; the event is
+share 0.01. This yields a joint confidence event of probability at least 0.95
+within that replicate; the event is
 not joint over every task or seed. PenDigits comparative effects are
 descriptive on the original held-out writer cohort. Equal dimensions and
 search options do not imply identical model capacity or computational cost.
@@ -208,7 +216,7 @@ candidate descriptions, full calibration scores, and the confidence report.
 An unresolved result is preserved; prediction then requires an explicit model
 choice rather than being labeled certified.
 
-## Actual retained evidence
+## Experimental evidence
 
 | Study | Retained scope | Main finding |
 |---|---|---|
@@ -224,12 +232,14 @@ The main analysis retains 119 positive KAHM class-risk lower endpoints out of
 comparisons out of 360. Confidence is joint **within the declared replicate**,
 not automatically over every benchmark and repetition in the paper.
 
-An independent audit reconstructed all 4,800 main one-sided endpoints and all
+The archived independent audit reconstructed all 4,800 main one-sided endpoints and all
 360 main paired comparisons with zero numerical discrepancy. A complete
 harmonic replay matched every non-timing JSON result and every value in 120
 score arrays exactly. Additional audit reports cover the sensitivity and
-oscillator studies. These numerical checks do not replace the theorem's
-assumptions or independent scientific review.
+oscillator studies. These numerical checks assess implementation and retained
+records; the statistical interpretation still depends on the stated sampling
+and independence assumptions. The [scientific verification report](docs/SCIENTIFIC_VERIFICATION.md)
+records the subsequent proof, implementation, and numerical consistency checks.
 
 ## Files and provenance
 
@@ -244,17 +254,17 @@ assumptions or independent scientific review.
 - `tests/`: mathematical invariants, causal indexing, budget/metric matching,
   optimization checks, and defensive input validation.
 - `examples/`: an end-to-end fit, certify, save, and predict interface.
-- `docs/`: theory, literature, data provenance, and reproducibility notes.
+- `docs/`: mathematical details, related literature, data provenance, and reproduction procedures.
 
 Large generated `episode_scores.npz` files and downloaded source data are not
 checked into Git. They are reproducibly regenerated by the supplied runners;
 the scaling follow-up also supplies a separate primary-evidence package with
 the validation-selected soft KAHM scores. The complete scaling archive index
 records the hashes of all full score files. The editable manuscript is in
-`paper/` for author review.
+`paper/`, together with a compiled PDF and build instructions.
 Exact-risk trial rows are retained as `trials.csv.gz`.
 
 Original code inherits the parent repository's MIT license. Original generated
 research results inherit its CC BY 4.0 terms. PenDigits retains its cited UCI
-CC BY 4.0 license. The literature audit separates inherited statistical tools
-from the proposed extension and makes no first-in-literature or acceptance claim.
+CC BY 4.0 license. The [related-literature account](docs/LITERATURE_AUDIT.md)
+identifies the inherited statistical tools and the scope of the extension.

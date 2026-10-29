@@ -12,7 +12,7 @@ outputs, retained representation refinement, and prediction-risk certification.
 Its [editable manuscript](extensions/certified_forecasting/paper/) is titled
 **Forecasting with Kernel Affine Hull Machines: Representation Refinement and
 Risk Certification**. The extension includes the original studies, a complete
-input-scaling investigation, and a matched geometry/head follow-up designed to
+input-scaling investigation, and a matched geometry--decoder study designed to
 identify when the KAHM representation contributes to forecasting performance.
 
 Use the extension's own [reproduction guide](extensions/certified_forecasting/docs/REPRODUCIBILITY.md)
@@ -66,22 +66,20 @@ Other reported tables and figures use the corresponding `step_*` generators and 
 
 ## Reproducibility evidence
 
-For a reviewer-facing summary of the current evidence state, see:
+The reproducibility evidence is documented in:
 
-- `reproduction/REPRODUCIBILITY_EVIDENCE.md` — consolidated evidence summary and claim boundaries.
+- `reproduction/REPRODUCIBILITY_EVIDENCE.md` — consolidated evidence and its scope.
 - `reproduction/reproducibility_evidence.json` — machine-readable form of the same summary.
 - `reproduction/raw_data/DATASET_CARD.md` — canonical raw scientific input package.
 - `reproduction/run_accounting/README.md` — historical run-accounting audit.
 - `reproduction/prospective_campaigns/duffing_reference_27/README.md` — prospective 27-job Duffing reference rerun.
 
-The historical audit and prospective gap-closing campaign are intentionally
-kept separate. The historical run-accounting audit preserves the original
-Duffing reference-search gap, while the prospective campaign records all 27
-scheduled attempts and their exit statuses from a frozen clean commit.
-
-The repository does not claim that every failed attempt from every historical
-campaign was preserved when the available historical evidence does not support
-that stronger statement.
+The historical Duffing reference archive contains 18 of the 27 scheduled jobs.
+A separate prospective campaign records all 27 attempts and their exit statuses
+from a fixed source commit. These later results establish the reproducibility
+of the complete grid; the historical archive remains incomplete. Execution
+ledgers covering every failed attempt are available for the prospective campaign
+but not for all historical campaigns.
 
 ## Repository organization
 
@@ -106,7 +104,9 @@ Third-party dependencies and any separately identified third-party material rema
 
 Citation metadata is provided in `CITATION.cff`.
 
-A persistent archival identifier such as a DOI should be cited once an immutable archival release is available. Until then, cite the repository and associated research work using the metadata in `CITATION.cff`.
+`CITATION.cff` identifies the repository and associated research work. It does
+not currently specify an archival DOI; the commit identifier distinguishes the
+software revision used in a study.
 
 ## Repository
 

@@ -1,23 +1,23 @@
-# Reproducing the certified forecasting extension
+# Reproducing the certified forecasting experiments
 
-Run commands from **extensions/certified_forecasting** inside the complete
-parent repository. KAHM features import the original implementation from that
-repository; copying only the extension directory is insufficient.
+The commands below are run from **extensions/certified_forecasting** inside
+the complete parent repository. The KAHM feature construction imports the
+inherited reconstruction implementation from the repository root.
 
 ## Reference environment
 
 Retained runs used Linux x86-64, Python 3.12.14, NumPy 2.3.5, SciPy 1.17.0,
-scikit-learn 1.8.0, Matplotlib 3.10.8, and joblib 1.5.3. Exact platform and
-Python build strings are in the campaign manifests. These are observed
-versions, not a promise of bitwise equivalence across operating systems or
-BLAS implementations.
+scikit-learn 1.8.0, Matplotlib 3.10.8, pandas 2.2.3, and joblib 1.5.3.
+The campaign manifests record exact platform and Python build strings.
+Bitwise equivalence across operating systems or BLAS implementations is not
+assumed.
 
 Create an isolated environment:
 
     python3.12 -m venv .venv
     . .venv/bin/activate
     python -m pip install --upgrade pip
-    python -m pip install numpy==2.3.5 scipy==1.17.0 scikit-learn==1.8.0 matplotlib==3.10.8 joblib==1.5.3
+    python -m pip install -r requirements-reference.txt
     python -m pip install -e . --no-deps
 
 Alternatively, installing the extension without the no-dependencies option
@@ -43,17 +43,27 @@ the optional Python package unlzw3.
 | Independent synthetic episodes | configs/main_v1.json | results/main_v1/ | Four laws, five learning repetitions, 40 candidates, three horizons |
 | Nonlinear oscillator follow-up | configs/oscillators_v1.json | results/oscillators_v1/ | Independently initialized Van der Pol and Duffing episodes, three repetitions each |
 | Original PenDigits trajectories | configs/pendigits_v1.json | results/pendigits_v1b/ | Two coordinates and three seeds; writer-disjoint development and evaluation |
+| Coefficient-budget sensitivity | configs/sensitivity_v1_k1.json, sensitivity_v1_k4.json, sensitivity_v1_k16.json | results/sensitivity_v1_k1/, sensitivity_v1_k4/, sensitivity_v1_k16/ | Four systems, three seeds, three budgets; common random numbers across budgets |
 
-Development smoke outputs are not manuscript evidence. The first PenDigits
-attempt, results/pendigits_v1/, failed an eligibility check before test
-prediction and is preserved as run-accounting evidence. The successful
-correction is explained in results/pendigits_v1b/RUN_NOTES.md. It does not
-change the forecast protocol or tune a parameter using test error.
+Reduced development runs check implementation and are excluded from the
+reported results. The first PenDigits execution, `results/pendigits_v1/`,
+stopped at an eligibility check before test prediction. Its records and the
+correction to the eligible-writer count are documented in
+`results/pendigits_v1b/RUN_NOTES.md`. The eligibility rule and forecast
+protocol were unchanged, and the correction used no test loss.
 
-The optional results/reproduction_check/ directory contains a duplicate run
-used to verify deterministic reproduction. Its large duplicate score arrays
-are not needed in the publication package; the retained audit records the
-comparison.
+The optional `results/reproduction_check/` directory contains the duplicate
+run used for the archived deterministic-replay check. The audit records the
+comparison and its array counts; duplicate arrays are excluded from Git.
+
+The repository contains scalar results, candidate descriptions, writer losses,
+and compressed two-atom trial records. These support independent checks of
+selection, table aggregation, and confidence arithmetic from saved moments.
+A full episode-score audit additionally requires the corresponding NPZ
+archives, which are excluded from Git. Regenerating these archives requires
+the specified source snapshot and numerical environment. The archived audit
+reports describe checks performed when the full arrays were available; they
+do not imply that a scalar-only checkout contains those arrays.
 
 ## Tests
 
@@ -70,8 +80,9 @@ mathematical proofs.
 
 ## KAHM input-scaling comparison
 
-Scaling is optional and task dependent. The original configs and default
-mean/std preprocessing are unchanged. The comparison retains four fixed arms:
+The input-scaling study compares four specified preprocessing arms while
+retaining the original training mean/standard-deviation configuration as its
+reference:
 
 | Mode | Geometry input | Behavior beyond training extrema |
 |---|---|---|
@@ -91,10 +102,9 @@ The primary comparison is the validation-selected `kahm_nested` forecaster
 with `minmax` versus `standard`. Histories and stages are selected separately
 within each arm using the original validation criterion; the scaling arm is
 not selected using test errors. Strictly bounded `minmax_clip` and already
-bounded `raw` are separate diagnostic arms. The full ablation includes
-regressions, including the PenDigits hard-assignment variant. The favorable
-soft-KAHM PenDigits result does not imply a universal default or a new writer
-population guarantee.
+bounded `raw` are separate diagnostic arms. All outcomes are included, including deteriorations for the PenDigits
+hard-assignment variant. The PenDigits soft-feature result is specific to the
+reported task and held-out cohort.
 
 After preparing the pinned PenDigits data, reproduce both schedules into a
 new study root:
@@ -103,17 +113,17 @@ new study root:
       --output results/reproduced_input_scaling --workers 4 \
       --prepared data_cache/pendigits/pendigits_original.npz
 
-The default original phase runs all main, oscillator, three norm-budget, and
-PenDigits configurations in all four arms. The confirmation phase runs main,
+The original-seed phase evaluates the main, oscillator, three coefficient-budget,
+and PenDigits configurations in all four arms. The confirmation phase runs main,
 oscillator, and PenDigits configurations with fitting seeds 4701, 4702, and
 4703. Synthetic confirmation regenerates all four episode streams with the
 inherited offsets. PenDigits confirmation changes training-stroke subsampling
 and geometry randomness while reusing the original training, validation and
-held-out writers: it is fitting-seed confirmation on a fixed cohort. The
+held-out writers: its repeated fits assess fitting variability on a fixed cohort. The
 analytic two-atom and exact duplication illustrations fit no KAHM input
 geometry and are not part of the scaling intervention.
 
-Useful subsets are:
+The following commands reproduce specified subsets:
 
     python experiments/run_input_scaling.py \
       --output results/reproduced_scaling_main \
@@ -129,9 +139,8 @@ Useful subsets are:
 Norm-budget sensitivity is in the original phase only; phase/campaign
 selections are intersected with the fixed schedules. `--modes` selects a
 predeclared subset of the four arms. `--config-dir` can point to separate
-config copies for small interface checks; such a reduced run is not the
-retained manuscript experiment, and the manifest records whether its base
-configs match the reference bytes.
+config copies for small interface checks; reduced runs serve as implementation checks. The manifest records whether
+their base configurations match the reference bytes.
 
 The output layout is:
 
@@ -149,8 +158,7 @@ The output layout is:
   accounting. Failed runs retain partial artifacts and exception records.
 
 Every output root must be a new path. The runner uses separate processes and
-passes the scaling mode through each job's config; it does not replace a
-global feature class. The original oscillator generator is temporarily
+passes the scaling mode through each job's configuration. The original oscillator generator is temporarily
 installed within its process and restored after that job. All oscillator arms
 also retain the matched half-step consistency check.
 
@@ -189,7 +197,7 @@ archive publication changes source bytes even though default numerical
 behavior is preserved. Historical manifests must not be rewritten to match
 the newer implementation; new runs retain their own source/config hashes.
 
-Production forecasting now writes each NPZ archive through a temporary file,
+Each forecasting NPZ archive is written through a temporary file,
 flushes and fsyncs it, then atomically renames it. A completed `results.json`
 is published after its requested archive. An interrupted write leaves its
 temporary file for diagnosis rather than exposing a truncated archive under
@@ -199,9 +207,9 @@ statistical formula.
 
 ## Matched geometry/head follow-up
 
-The [prospective follow-up protocol](MATCHED_GEOMETRY_PROTOCOL.md) was fixed
-before the full fits. It is motivated by the earlier missing RBF/affine
-Frobenius and rollout controls. All seven existing tasks, all four scaling
+The [matched-comparison protocol](MATCHED_GEOMETRY_PROTOCOL.md) was specified
+before fitting. It adds RBF and affine-hull controls with Frobenius-constrained
+and iterated decoders to the earlier comparison. All seven existing tasks, all four scaling
 options, three geometries, three heads, and four retained dimensions are
 included. Seeds 5701--5705 regenerate all synthetic streams and give new
 PenDigits training subsamples on the same held-out writers. The historical
@@ -232,8 +240,8 @@ Omitting `--freeze-only` performs the same freeze immediately before execution.
 Resume validates the immutable sources, protocol, configuration bytes, pinned
 data, and completed artifacts. It skips verified completed jobs and refuses
 to overwrite failed or partial attempts. Reduced configuration copies and
-separate development seeds can check interfaces, but they do not constitute
-the reference study or manuscript evidence.
+separate development seeds support implementation checks and are excluded
+from the reference results.
 
 The run root retains `manifest.json`, `protocol.md`, `protocol.json`,
 `freeze_sha256.json`, `schedule.json`, all `frozen_configs/`, numerical
@@ -251,8 +259,8 @@ MSE, with the tie order fixed in the protocol. Its outputs include the full
 candidate table; selected models; all-horizon and per-horizon comparisons;
 fixed-dimension and head-selected secondary comparisons; paired seed effects;
 writer differences; and the six primary calibration comparisons per
-synthetic task/seed. The selected score index supports compact evidence
-packaging without selecting on test error.
+synthetic task/seed. The selected-score index identifies the full-precision arrays used for these
+comparisons; selection depends only on validation data.
 
 The synthetic confidence allocation differs from the earlier scaling study:
 each arm receives delta=0.01 for its full risk/refinement family, and the six
@@ -284,7 +292,7 @@ files are needed for that independent summary check.
 
 ## Independent-episode campaign
 
-The runner refuses to overwrite a completed run. Use a new destination:
+The runner preserves completed experiments by requiring a new destination:
 
     python experiments/run_forecasting.py \
       --config configs/main_v1.json \
@@ -319,7 +327,7 @@ including the actual KAHM implementation. A source or configuration change
 requires a new campaign directory. Training, validation, calibration, and test
 seed domains are recorded separately.
 
-All candidates share physical targets and origin support. Overlapping windows
+All candidates use the same observed targets and forecast-origin set. Overlapping windows
 are dependent. The confidence sample size is 4,096 independent calibration
 episodes or 2,048 disjoint episode pairs, never the number of windows.
 
@@ -328,9 +336,35 @@ paired refinements within a replicate. It does not simultaneously cover all
 20 experiment repetitions. Finite test-set estimates are descriptive accuracy
 measurements; agreement with an upper bound is not a population-coverage test.
 
-## Audit results and compare a full replay
+## Independent checks from the scalar records
 
-Audit the retained main campaign:
+The standard-library verifier reconstructs all original empirical table rows,
+validation-selected model choices, PenDigits writer aggregation and coordinate
+pooling, the two-atom minimum-risk formula, and confidence arithmetic from the
+saved sufficient statistics:
+
+    python scripts/verify_retained_statistics.py \
+      --output verification/retained_statistics.json
+
+The output path must be new and outside `results/`, preserving the archived
+experimental records. `--root` optionally selects another extension checkout;
+`--paper` selects a separate manuscript directory. The JSON report includes
+input hashes, the verifier hash, arithmetic discrepancies, table checks, and
+explicit verification limits. This check requires no fitting or synthetic NPZ
+archives. It verifies the reported arithmetic conditional on the saved moments;
+recomputing those moments requires the episode-score audit below.
+
+## Episode-score audit and deterministic replay
+
+The original full-score audit requires the complete episode-score archives
+and source files matching the campaign manifest. Historical source checks
+refer to commit `a8bcf6c8016499e1a4b64f7dd4196af43c60bd78`; later editorial or
+implementation changes intentionally produce different file hashes. The
+following commands assume that the required archives and matching source
+snapshot have been restored. They are not full-score checks of the scalar-only
+Git checkout.
+
+Audit the original main campaign:
 
     python scripts/audit_results.py \
       --campaign results/main_v1 \
@@ -363,7 +397,8 @@ The retained results/audits/main_v1_audit.json reports:
 
 Timing fields are excluded from replay comparisons. Norm checks use retained
 diagnostics; complete coefficient fits are independently repeated only for
-the replayed run. The audit does not establish novelty or prove theorems.
+the replayed run. The audit verifies recorded numerical calculations and provenance; theorem
+validity and scientific novelty require separate assessment.
 
 ## Nonlinear oscillator follow-up
 
@@ -371,8 +406,8 @@ the replayed run. The audit does not establish novelty or prove theorems.
       --config configs/oscillators_v1.json \
       --output results/reproduced_oscillators_v1
 
-The harness explicitly supplies its oscillator generator to the unchanged
-main forecasting runner. Its manifest hashes both scripts and the imported
+The oscillator driver supplies its generator to the shared forecasting
+procedure. Its manifest hashes both scripts and the imported
 implementations. Van der Pol and forced Duffing states are initialized
 independently, integrated with RK4 at step 0.025, burned in for ten time units,
 and observed every 0.1 time unit. The bounded sensor is
@@ -403,7 +438,8 @@ with zero discrepancy in the confidence formulas.
       --config configs/known_risk_v1.json \
       --output results/reproduced_known_risk_v1
 
-Every trial is retained in trials.csv. Oracle and fitted population risks
+Every trial is retained in `trials.csv`, compressed as `trials.csv.gz` in the
+repository. Minimum achievable and fitted population risks
 are analytic for the specified two-atom law, allowing actual certificate
 failure counts without a finite test-set proxy. Confidence is joint over the
 three reported directions within each trial, not all Monte Carlo trials.
@@ -454,7 +490,7 @@ Source: E. Alpaydin and F. Alimoglu (1996), Pen-Based Recognition of Handwritten
 Digits, UCI Machine Learning Repository,
 [DOI 10.24432/C5MG6K](https://doi.org/10.24432/C5MG6K), CC BY 4.0.
 
-## Fit and certify your own episode data
+## Applying the procedure to new episode data
 
 The standalone example accepts numeric NPZ files with an array named episodes,
 shaped (number of episodes, time points, 1). Each calibration row must be an
@@ -503,10 +539,9 @@ length) in a separate NPZ file, ordered oldest-to-newest:
       --histories /absolute/path/to/query_histories.npz \
       --output results/new_forecasts.npz
 
-If calibration was unresolved, prediction requires an explicit stage choice,
-for example adding the stage argument with value 4. This makes an uncertified
-forecast at the requested tolerance; it does not silently promote that stage
-to certified status. Even a certified stage has a population mean-error
+If calibration is unresolved, prediction requires an explicit stage choice,
+for example adding `--stage 4`. The chosen forecast then has no certificate
+at the requested tolerance. Even a certified stage has a population mean-error
 guarantee, not a per-query prediction interval.
 
 The Python functions fit_export, load_model, and predict_history are also
@@ -515,14 +550,30 @@ otherwise trust: loading an untrusted pickle can execute arbitrary code.
 
 ## Manuscript
 
+The independent scalar-record checks can also be run without fitting models:
+
+```bash
+python scripts/verify_retained_statistics.py --output verification/retained_statistics.json
+python scripts/verify_scaling_statistics.py --output verification/scaling_statistics.json
+```
+
+Both commands require new output paths and preserve the archived results.
+The first reconstructs the original empirical tables, exact-risk benchmark,
+writer aggregation, and confidence arithmetic from saved sufficient statistics.
+The second reads the scaling record archives directly and reconstructs model
+selection and mean-effect summaries. Neither reconstructs missing full synthetic
+score archives. The [scientific verification report](SCIENTIFIC_VERIFICATION.md)
+records the checks performed for the revised manuscript.
+
 With latexmk, pdfLaTeX, BibTeX, and the packages loaded by paper/main.tex:
 
     cd paper
     latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 
-The generated PDF is paper/main.pdf relative to the extension directory.
-Tables and claims must remain traceable to the retained results. Hand-editing
-a table does not replace regenerating its source calculation.
+The compiled PDF is distributed as paper/main.pdf relative to the extension directory.
+The table and figure generators derive manuscript assets from the recorded
+results. Their inputs identify the numerical evidence supporting each
+reported comparison.
 
 ## Practical limits
 

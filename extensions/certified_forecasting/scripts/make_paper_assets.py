@@ -40,7 +40,7 @@ def main():
                          "legend.fontsize":9,"pdf.fonttype":42,"ps.fonttype":42,
                          "axes.spines.top":False,"axes.spines.right":False})
     runs=[json.loads(p.read_text()) for p in sorted((ROOT/"results/main_v1").glob("*/results.json"))]
-    if len(runs)!=20:raise RuntimeError("Expected all20 frozen main runs")
+    if len(runs)!=20:raise RuntimeError("Expected all 20 frozen main runs")
     selected=[]
     all_rows=[]
     for r in runs:
@@ -161,7 +161,7 @@ def main():
              "largest_numerical_optimization_gap":maxgap,
              "main_total_seconds":sum(r["elapsed_seconds"] for r in runs),
              "known_risk_trials":len(known),"known_risk_joint_failures":int((known.joint_valid==0).sum()),
-             "confidence_scope":"Per frozen replicate, not globally over all20 experiments"}
+             "confidence_scope":"Joint within each frozen replicate; no simultaneous statement over all 20 experiments"}
     (OUT/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
     print(json.dumps(summary,indent=2))
 

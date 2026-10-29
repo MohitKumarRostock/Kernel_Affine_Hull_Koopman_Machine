@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Writer-disjoint raw PenDigits forecasting, including an honest bound caveat.
+"""Writer-disjoint PenDigits forecasting with writer-level risk summaries.
 
 Run from the extension root, after prepare_pendigits.py, with PYTHONPATH=src.
-All six coordinate/seed families are fitted, selected using development writers,
+All configured coordinate/seed families are fitted, selected using development writers,
 and recorded before the held-out writers are scored. We report empirical
-writer-balanced cohort errors. The additional Hoeffding bounds are *conditional
-on an iid-writer sampling assumption*, not a property established by the dataset.
-The population certificate is deliberately not computed as if windows or strokes
-were independent writers.
+writer-balanced cohort errors. The additional Hoeffding bounds require both
+iid writer sampling and a model family independent of the evaluation cohort.
+The dataset does not establish the sampling assumption. Follow-up designs that
+reuse an examined cohort have descriptive endpoints unless their adaptivity is
+separately accounted for. Writers, rather than strokes or windows, are the
+units used in the concentration calculation.
 """
 
 from __future__ import annotations

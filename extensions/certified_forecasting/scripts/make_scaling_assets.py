@@ -104,7 +104,7 @@ def create_assets(analysis, confirmation, output):
         r"original oscillators and PenDigits have three. All new-seed comparisons have three. "
         r"Synthetic confirmation uses new development, calibration, and test episodes. PenDigits confirmation uses new "
         r"training subsamples and the same held-out writer cohort, with coordinate MSE pooled before averaging horizons. "
-        r"Original tables remain unchanged; no average across different task units is taken.", "tab:input-scaling-primary")
+        r"Original-seed results reuse previously evaluated streams and are descriptive. No average across different task units is taken.", "tab:input-scaling-primary")
     write_table(output, "input_scaling_primary.tex", lines)
 
     lines = table_start("lrrrr", spacing="5pt")
@@ -117,10 +117,10 @@ def create_assets(analysis, confirmation, output):
             values.extend(signed_percent(comparison(rows, campaign, system, mode)) for mode in ("minmax_clip", "raw"))
         lines.append(" & ".join(values) + r"\\")
     lines += table_end(
-        r"Predeclared diagnostic arms, reported as percent change in all-horizon test MSE relative to standardization "
+        r"Diagnostic preprocessing arms, reported as percent change in all-horizon test MSE relative to standardization "
         r"for the retained KAHM family. Negative values denote improvement. Clipped min--max fixes all query inputs "
         r"inside $[-1,1]$; raw histories use the task's existing bounded observations without standardization. "
-        r"All rows and all arms are retained. These test comparisons are not used to choose a preprocessing arm per task. "
+        r"These test comparisons are descriptive and are not used to choose a preprocessing arm per task. "
         r"New-seed PenDigits results use the same writer cohort.", "tab:input-scaling-diagnostics")
     write_table(output, "input_scaling_diagnostics.tex", lines)
 
@@ -140,7 +140,7 @@ def create_assets(analysis, confirmation, output):
         r"MSE for training min--max scaling relative to standardization, plus the number of improving fitting seeds. "
         r"Every stage is selected by mean validation MSE within its arm and budget. "
         r"Negative values denote improvement. This comparison reuses the original sensitivity streams and is "
-        r"reported separately from the fresh six-system confirmation.", "tab:input-scaling-budget")
+        r"descriptive; the six-system confirmation uses new synthetic episodes.", "tab:input-scaling-budget")
     write_table(output, "input_scaling_sensitivity.tex", lines)
 
     lines = table_start("llrrr", spacing="4pt")
@@ -182,7 +182,7 @@ def create_assets(analysis, confirmation, output):
         r"$\mathrm{SE}_{\rm ep}$ measures paired test-episode Monte Carlo uncertainty of the mean difference, "
         r"conditional on the fitted, validation-selected models. It does not measure training variability. "
         r"No iid-writer SE is assigned to the fixed PenDigits cohort. "
-        r"Neither column is a finite-sample certificate of an algorithm-level gain.", "tab:input-scaling-uncertainty")
+        r"Original-seed quantities reuse previously evaluated streams and are descriptive. Neither column is a finite-sample certificate of an algorithm-level gain.", "tab:input-scaling-uncertainty")
     write_table(output, "input_scaling_uncertainty.tex", lines)
 
     macros = []

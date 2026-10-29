@@ -125,7 +125,7 @@ def page_frame(canvas, doc):
     canvas.line(45, height - 39, width - 45, height - 39)
     canvas.setFont("DejaVu", 7.4)
     canvas.setFillColor(GRAY)
-    canvas.drawString(45, height - 30, "RESEARCH NOTE  /  KAHM INPUT SCALING")
+    canvas.drawString(45, height - 30, "SCIENTIFIC REPORT  /  KAHM INPUT SCALING")
     canvas.drawRightString(width - 45, height - 30, "29 October 2026")
     canvas.drawString(45, 27, "Paired preprocessing investigation | original targets and evaluation units preserved")
     canvas.drawRightString(width - 45, 27, str(doc.page))
@@ -137,7 +137,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--study-root", type=Path, default=ROOT)
     parser.add_argument("--output", type=Path, default=OUT)
-    parser.add_argument("--decision", type=Path, help="Optional disposition/interpretation JSON")
+    parser.add_argument("--decision", type=Path, help="Optional interpretation JSON")
     args = parser.parse_args()
     ROOT, OUT = args.study_root, args.output
     OUT.mkdir(parents=True, exist_ok=True)
@@ -155,9 +155,11 @@ def main():
     story = []
 
     # Page 1: decision and complete primary outcomes.
-    story += [body("Does [-1, 1] input scaling improve KAHM forecasting?", "Title"),
+    story += [body("Input scaling and KAHM forecasting", "Title"),
               body(escape(decision["lead"]), "Lead"),
-              body(escape(decision["action"])), Spacer(1, 8)]
+              body(escape(decision["action"]) if args.decision else
+                   "Input scaling has task-dependent effects. The study compares explicit preprocessing options "
+                   "while retaining standardization as the reference default."), Spacer(1, 8)]
     story.append(body("Primary KAHM block forecaster: original matched experiments", "Heading"))
     data = [["Task", "Standard MSE", "Min-max MSE", "MSE change", "Seeds improved"]]
     for s in TASKS:
@@ -176,7 +178,7 @@ def main():
               PageBreak()]
 
     # Page 2: intervention and experimental controls.
-    story += [body("What was changed, and what was held fixed", "Title"),
+    story += [body("Experimental design", "Title"),
               body("The original histories are already bounded by the task definitions. The manuscript's implementation "
                    "then standardizes every history coordinate using its training mean and standard deviation before "
                    "building geometric dictionaries. The intervention changes the input to KAHM itself; the future "
@@ -234,12 +236,10 @@ def main():
 
     # Page 4: confirmation.
     story += [body("Fresh-seed confirmation", "Title"),
-              body("The original matched comparison reuses the manuscript's recorded random streams. To check "
-                   "whether the result survives new data and new fits, a separate campaign froze all four arms and "
-                   "three unused fitting seeds before generating its evaluation data. The simulator definitions, "
-                   "candidate models, and sample sizes were unchanged. A separately frozen PenDigits follow-up "
-                   "uses the same new fitting seeds to draw new training-stroke subsamples, with the original validation "
-                   "and held-out writers retained."),
+              body("The original comparison reuses previously evaluated streams. The confirmation fixes four "
+                   "preprocessing arms and three unused fitting seeds before generating new synthetic episodes. "
+                   "Simulators, candidate models, and sample sizes remain unchanged. PenDigits uses new "
+                   "training-stroke subsamples but the same validation and held-out writers."),
               body(escape(decision["confirmation_interpretation"])), Spacer(1, 6)]
     data = [["Task", "Standard MSE", "Min-max MSE", "MSE change", "Seeds improved"]]
     for s in TASKS:
@@ -260,15 +260,15 @@ def main():
                    "These alternatives were fixed before confirmation; no test-set search for a preferred scaling "
                    "variant was performed. PenDigits confirmation concerns fitting variability on the same writer cohort, "
                    "not generalization to a second cohort.", "Small"),
-              body("How uncertainty is represented", "Heading"),
-              body("Every fitting-seed effect and its sign are retained in the evidence tables. Paired episode "
-                   "differences quantify Monte Carlo uncertainty conditional on each fitted model. Those conditional "
-                   "intervals do not account for the randomness of learning a new model. The separate between-seed "
-                   "variation must therefore remain visible. Three confirmation fits per task give useful replication "
-                   "evidence, but cannot establish that an improvement occurs on every future fit or dataset."),
-              body("The manuscript's finite-sample risk endpoints are recomputed for each arm's frozen family. "
-                   "Their original failure allocations are not one simultaneous guarantee over all scaling arms, "
-                   "tasks, and repetitions. Comparative test-error summaries are kept distinct from those certificates."),
+              body("Uncertainty and calibration", "Heading"),
+              body("The tables retain every fitting-seed effect. Paired-episode intervals describe Monte Carlo "
+                   "variation for fixed models; they omit the randomness of fitting a new model. Between-seed "
+                   "variation is reported separately. Three confirmation fits per task do not establish a "
+                   "gain on every future fit or dataset."),
+              body("Fresh synthetic calibration supports the stated within-arm risk guarantees, without a joint "
+                   "guarantee across scaling arms, tasks, or repetitions. Replayed original-stream endpoints are "
+                   "nominal because the follow-up was informed by earlier results. Reused PenDigits writers "
+                   "likewise do not supply new confirmatory calibration. Cross-arm test effects are descriptive."),
               PageBreak()]
 
     # Page 5: sensitivity and ablations, including all regressions.
@@ -299,10 +299,12 @@ def main():
             vals.append(f"{sum(fnum(r, 'mse_difference_alternative_minus_standard') < 0 for r in rr.values())}/{len(rr)} tasks")
         data.append([label, *vals])
     story += [table(data, [178, 109, 109, 109]), Spacer(1, 8),
-              body(escape(decision["limitations_by_task"])), PageBreak()]
+              body(escape(decision["limitations_by_task"]).replace(
+                  "identical success counts at every existing all-horizon certificate tolerance",
+                  "identical upper-endpoint acceptance counts at every recorded all-horizon tolerance")), PageBreak()]
 
     # Page 6: mechanism, validation, provenance and interpretation.
-    story += [body("Why scaling matters, and how the results were checked", "Title"),
+    story += [body("Mechanism and reproducibility", "Title"),
               body("Scale changes the fitted KAHM, even when covariance normalization preserves the Gaussian "
                    "Gram matrix. The inherited local solver initializes its regularization using the mean squared "
                    "magnitude of its reconstruction inputs and updates it using reconstruction error. The folding "
@@ -314,23 +316,27 @@ def main():
                    "rescaling but different regularization and folding values. Forecasting conclusions come from "
                    "the complete paired experiments, not that illustrative check."),
               body("Verification", "Heading"),
-              body(escape(decision["verification_summary"])),
+              body(escape(decision["verification_summary"]).replace(
+                  "All 33 production tests pass.",
+                  "The retained original verification records 33 passing production tests.")),
               body("The reference source commit is <font name='DejaVuMono' size='8'>" + SHA + "</font>. "
                    "The prepared PenDigits data exactly match the original recorded SHA-256. Every run retains "
                    "its configuration, source and intervention hashes, all candidate summaries, frozen validation "
                    "decisions, and full double-precision loss arrays. No failed attempt is silently removed."),
-              body("Repository and manuscript disposition", "Heading"),
-              body(escape(decision["repository_disposition"])),
+              body("Data and reproducibility", "Heading"),
+              body(escape(decision["repository_disposition"]) if args.decision else
+                   "The repository contains the comparison summaries, source snapshots, and reproduction scripts. "
+                   "Full score archives are indexed by hash; selected-model arrays and repair records are "
+                   "retained in the separate evidence package."),
               body("Interpretive limits", "Heading"),
-              body("This is a follow-up to an already available draft. The original-stream replay is a matched "
-                   "descriptive comparison, and the new simulation seeds provide fresh confirmation. PenDigits "
-                   "remains a fixed, writer-disjoint cohort of 13 eligible writers; its documentation does not establish "
-                   "independent random sampling of a writer population. Training-seed repetitions do not create new "
-                   "writer cohorts. All performance claims concern the supplied tasks and fixed hyperparameters; "
-                   "stronger autoregressive or polynomial comparators can remain more accurate."),
+              body("The original-stream replay is descriptive; new simulation seeds provide fresh synthetic evaluation. "
+                   "PenDigits reuses 13 eligible held-out writers. A population confidence claim would require "
+                   "iid writers and a study design independent of their evaluation losses, neither established "
+                   "here. Training seeds do not create new writer cohorts. Conclusions concern the specified "
+                   "tasks and configurations; autoregressive or polynomial models can remain more accurate."),
               body("Sources and reproducibility references", "Heading")]
     references = [
-        ("1", "Supplied research draft, 28 October 2026: methods, experiment protocols, real-data evaluation, and retained tables.", None),
+        ("1", "Original forecasting manuscript, 28 October 2026: methods, protocols, PenDigits evaluation, and retained tables.", None),
         ("2", "Original geometric feature preprocessing and retained dictionaries.", f"{BASE}/blob/{SHA}/extensions/certified_forecasting/src/certified_forecasting/features.py"),
         ("3", "Inherited KAHM regularization implementation.", f"{BASE}/blob/{SHA}/kernel_regularized_least_squares.py"),
         ("4", "Inherited KAHM reconstruction and folding score.", f"{BASE}/blob/{SHA}/autoencoder_filtering_extended.py"),
@@ -347,7 +353,7 @@ def main():
     doc = SimpleDocTemplate(str(path), pagesize=A4, rightMargin=45, leftMargin=45,
                             topMargin=52, bottomMargin=43,
                             title="KAHM input scaling: paired replication and fresh confirmation",
-                            author="Research investigation prepared for the manuscript authors")
+                            author="KAHM forecasting study")
     doc.build(story, onFirstPage=page_frame, onLaterPages=page_frame)
     print(path)
 

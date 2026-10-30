@@ -1,0 +1,226 @@
+name: Forecasting utility evidence and public research release
+
+on:
+  push:
+    paths:
+      - 'extensions/forecasting_utility/**'
+      - 'extensions/tmlr_integration/**'
+      - 'examples/forecasting_utility.py'
+      - '.github/workflows/forecasting-utility.yml'
+  pull_request:
+    paths:
+      - 'extensions/forecasting_utility/**'
+      - 'extensions/tmlr_integration/**'
+      - 'examples/forecasting_utility.py'
+      - '.github/workflows/forecasting-utility.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: forecasting-utility-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+  NUMEXPR_NUM_THREADS: '1'
+  PYTHONDONTWRITEBYTECODE: '1'
+  MPLBACKEND: Agg
+
+jobs:
+  evidence-manuscript-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: extensions/forecasting_utility/requirements.txt
+      - name: Install the pinned study environment and engineering test runner
+        run: python -m pip install -r extensions/forecasting_utility/requirements.txt pytest==9.2.0
+      - name: Run the 23 toy engineering tests
+        run: >-
+          python -m pytest extensions/forecasting_utility/test_models.py
+          extensions/forecasting_utility/test_protocol.py -q
+      - name: Restore the complete saved extension outcomes
+        run: python -m extensions.forecasting_utility.reference restore
+      - name: Verify all 168 attempts, 1,336 forecasts, eight model failures and four policy failures
+        run: python -m extensions.tmlr_integration.package_utility audit
+      - name: Independently recompute raw prediction losses, split pairing, intervals and source weights
+        run: python -m extensions.forecasting_utility.independent_audit
+      - name: Rebuild the extension manuscript tables and figures from saved evidence
+        run: python extensions/tmlr_integration/build_utility_assets.py
+      - name: Install the manuscript compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended latexmk lmodern poppler-utils
+      - name: Compile and check the complete research manuscript
+        working-directory: extensions/tmlr_integration/manuscript
+        run: |
+          mkdir -p "$RUNNER_TEMP/kahm-utility-tex"
+          latexmk -pdf -interaction=nonstopmode -halt-on-error -output-directory="$RUNNER_TEMP/kahm-utility-tex" main.tex
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import re
+          log = (Path(os.environ['RUNNER_TEMP']) / 'kahm-utility-tex/main.log').read_text()
+          if re.search(r'There were undefined (references|citations)|(?:LaTeX|Package natbib) Warning:.*undefined|Overfull \\[hv]box', log):
+              raise SystemExit('Unresolved references/citations or overflowing manuscript content')
+          if not (Path(os.environ['RUNNER_TEMP']) / 'kahm-utility-tex/main.pdf').is_file():
+              raise SystemExit('Compiled manuscript is missing')
+          PY
+      - name: Build the new-extension public release and verify both inventories
+        run: |
+          python -m extensions.tmlr_integration.package_utility build --pdf "$RUNNER_TEMP/kahm-utility-tex/main.pdf" --output "$RUNNER_TEMP/kahm-utility-release"
+          python -m extensions.tmlr_integration.package_utility verify "$RUNNER_TEMP/kahm-utility-release/KAHM_Forecasting_Utility_Manuscript_Source.zip"
+          python -m extensions.tmlr_integration.package_utility verify "$RUNNER_TEMP/kahm-utility-release/KAHM_Forecasting_Utility_Reproduction.zip"
+      - name: Audit and compile the extracted standalone ZIPs
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import re
+          import subprocess
+          import sys
+          import zipfile
+          temporary = Path(os.environ['RUNNER_TEMP'])
+          release = temporary / 'kahm-utility-release'
+          source = temporary / 'kahm-utility-source'
+          reproduction = temporary / 'kahm-utility-reproduction'
+          for name, directory in [('KAHM_Forecasting_Utility_Manuscript_Source.zip', source),
+                                  ('KAHM_Forecasting_Utility_Reproduction.zip', reproduction)]:
+              directory.mkdir(exist_ok=False)
+              with zipfile.ZipFile(release / name) as archive:
+                  archive.extractall(directory)
+          environment = dict(os.environ)
+          environment.pop('PYTHONPATH', None)
+          for command in [
+              [sys.executable, '-m', 'extensions.tmlr_integration.package_utility', 'audit'],
+              [sys.executable, '-m', 'extensions.forecasting_utility.independent_audit'],
+              [sys.executable, '-m', 'pytest', 'extensions/forecasting_utility/test_models.py',
+               'extensions/forecasting_utility/test_protocol.py', '-q'],
+          ]:
+              subprocess.run(command, cwd=reproduction, env=environment, check=True)
+          compiled = temporary / 'kahm-utility-source-tex'
+          compiled.mkdir(exist_ok=False)
+          subprocess.run(['latexmk', '-pdf', '-interaction=nonstopmode', '-halt-on-error',
+                          '-output-directory=' + str(compiled), 'main.tex'], cwd=source,
+                         env=environment, check=True)
+          log = (compiled / 'main.log').read_text()
+          if re.search(r'There were undefined (references|citations)|(?:LaTeX|Package natbib) Warning:.*undefined|Overfull \\[hv]box', log):
+              raise SystemExit('Standalone source has unresolved references/citations or overflowing content')
+          original_text = subprocess.check_output(['pdftotext', '-layout',
+                            str(release / 'KAHM_Forecasting_Utility_Manuscript.pdf'), '-'])
+          rebuilt_text = subprocess.check_output(['pdftotext', '-layout', str(compiled / 'main.pdf'), '-'])
+          if original_text != rebuilt_text:
+              raise SystemExit('Standalone source recompilation differs from the delivered PDF text')
+          PY
+      - name: Upload the manuscript, editable sources, reproduction bundle, and hashes
+        uses: actions/upload-artifact@v7
+        with:
+          name: kahm-forecasting-utility-research-release
+          path: ${{ runner.temp }}/kahm-utility-release/*
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+  public-research-release:
+    needs: evidence-manuscript-release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/research/kahm-forecasting-utility'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: forecasting-utility-v0.1.0
+    steps:
+      - name: Download only this run's verified release artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: kahm-forecasting-utility-research-release
+          path: ${{ runner.temp }}/kahm-utility-release
+          digest-mismatch: error
+      - name: Verify downloaded deliverable hashes
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          directory = Path(os.environ['RUNNER_TEMP']) / 'kahm-utility-release'
+          manifest = json.loads((directory / 'RELEASE_MANIFEST.json').read_text())
+          expected = {'KAHM_Forecasting_Utility_Manuscript.pdf',
+                      'KAHM_Forecasting_Utility_Manuscript_Source.zip',
+                      'KAHM_Forecasting_Utility_Reproduction.zip'}
+          if set(manifest['artifacts']) != expected:
+              raise SystemExit('Release manifest has an unexpected artifact roster')
+          for name, entry in manifest['artifacts'].items():
+              content = (directory / name).read_bytes()
+              if len(content) != entry['bytes'] or hashlib.sha256(content).hexdigest() != entry['sha256']:
+                  raise SystemExit('Downloaded release artifact differs from its verified manifest')
+          PY
+      - name: Publish the immutable research version without replacing any existing release
+        run: |
+          tag_object="$(gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/$RELEASE_TAG" --jq '.[] | select(.ref == "refs/tags/forecasting-utility-v0.1.0") | .object.sha')"
+          existing_release="$(gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[] | select(.tag_name == "forecasting-utility-v0.1.0") | .id')"
+          if [ -n "$tag_object" ]; then
+            tag_commit="$(gh api "repos/$GITHUB_REPOSITORY/commits/$RELEASE_TAG" --jq '.sha')"
+            if [ "$tag_commit" != "$GITHUB_SHA" ]; then
+              echo "Existing $RELEASE_TAG targets a different commit; the immutable version is preserved."
+              exit 1
+            fi
+          fi
+          if [ -n "$existing_release" ]; then
+            if [ -z "$tag_object" ]; then
+              echo "Existing release has no matching tag; refusing to alter it."
+              exit 1
+            fi
+            is_draft="$(gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq '.isDraft')"
+            if [ "$is_draft" != "false" ]; then
+              echo "An existing draft is preserved; this job never edits an existing release."
+              exit 1
+            fi
+            echo "Existing $RELEASE_TAG already targets this exact commit; leaving its assets unchanged."
+            exit 0
+          fi
+          cat > "$RUNNER_TEMP/kahm-utility-release-notes.md" <<'NOTES'
+          # KAHM forecasting utility — unsubmitted research draft
+
+          This public research release contains the compiled manuscript, complete
+          editable LaTeX sources, and a standalone reproduction bundle for the new
+          forecasting-utility extension. It is not a journal submission or acceptance.
+
+          The prospective public execution checkpoint and scientific freeze precede
+          the study run. All 168 tasks were attempted; 166 succeeded for every method.
+          The artifact retains 1,336 successful method forecasts, eight model-fit
+          failures, and four dependent policy failures on the two capacities of one
+          Car Parts series. No failed fit was replaced or rerun.
+
+          The complete 144-task synthetic factorial is reported. Archive comparisons
+          on 22 tasks with common support are explicitly diagnostic; separate
+          full-roster baseline and coverage tables retain all 24 archive attempts.
+          Solar Weekly contains aggregated simulated NREL data. The four archive
+          collections do not support claims about independent random domains.
+
+          Read extensions/forecasting_utility/REPORTING_AMENDMENT.md, the protocol,
+          and the reproduction README for the exact
+          reporting scope, audit commands, timing interpretation, and limitations.
+          RELEASE_MANIFEST.json records the byte counts and SHA-256 checksums of all
+          three deliverables. Original historical studies remain in the repository.
+          NOTES
+          gh release create "$RELEASE_TAG" \
+            "$RUNNER_TEMP/kahm-utility-release/KAHM_Forecasting_Utility_Manuscript.pdf" \
+            "$RUNNER_TEMP/kahm-utility-release/KAHM_Forecasting_Utility_Manuscript_Source.zip" \
+            "$RUNNER_TEMP/kahm-utility-release/KAHM_Forecasting_Utility_Reproduction.zip" \
+            "$RUNNER_TEMP/kahm-utility-release/RELEASE_MANIFEST.json" \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "KAHM Forecasting Utility v0.1.0 — Research Draft" \
+            --notes-file "$RUNNER_TEMP/kahm-utility-release-notes.md" --prerelease --latest=false

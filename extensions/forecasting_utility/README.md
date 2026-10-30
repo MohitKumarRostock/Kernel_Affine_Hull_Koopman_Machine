@@ -1,7 +1,9 @@
 # When do KAHM features help forecasting?
 
-**Checkpoint status:** scientific execution inputs are frozen; the complete
-outcomes and revised manuscript will be published in a subsequent commit.
+**Status:** all 168 scheduled tasks have been attempted and independently
+accounted for. There are 166 fully completed tasks, 1,336 successful standalone
+forecasts, eight geometric fit failures, and four dependent policy failures.
+The manuscript remains an unsubmitted research draft.
 
 This extension studies the empirical utility of Kernel Affine Hull Machine
 (KAHM) features for time-series forecasting. It preserves a selected raw-history
@@ -12,6 +14,50 @@ coefficient to zero returns the raw forecast exactly.
 Baseline availability is an architectural property. Whether validation selects
 a useful correction is an empirical question; zero remains available without
 guaranteeing that the selected predictor improves on a future test set.
+
+## Recorded findings
+
+The complete synthetic factorial finds a positive additive-KAHM versus raw-RBF
+contrast in five of the twelve cells under the declared family-adjusted Student
+intervals. Simpler geometric corrections have lower mean errors in the Van der
+Pol and Duffing cells. Preserving a raw forecast does not by itself establish
+a KAHM-specific advantage.
+
+The geometric procedures fail on two capacity settings of one Car Parts series:
+23 training windows contain only seven distinct histories, while the fixed
+bank requests eight nonempty clusters. Those failures remain in the study.
+Full-24-task KAHM and geometry-policy means are **undefined**.
+
+The following table is a **post-hoc common-support diagnostic on 22 tasks and
+11 series**, with equal weight to each of four archive collections. It has a
+different scope from the full planned roster. Timing is the mean measured
+model pipeline, including selection and serialization, on the recorded host.
+
+| Procedure | Scaled test MSE | Model pipeline (ms) |
+|---|---:|---:|
+| Seasonal naive / persistence | 1.2062 | 1.20 |
+| Raw ridge | 0.8466 | 1.52 |
+| Raw RBF | 9.1730 | 3.75 |
+| Concatenated KAHM | 1.2111 | 69.14 |
+| Additive KAHM | 9.1443 | 49.81 |
+| Additive affine | 9.3312 | 36.86 |
+| Additive locality | 9.5624 | 37.86 |
+| Fixed histogram boosting | 10.3174 | 638.04 |
+| All-geometry 5% policy | 9.2624 | 86.85 |
+| KAHM 5% validation policy | 9.2460 | 46.67 |
+
+On this diagnostic support, additive KAHM reduces the raw-RBF mean error by
+about 0.31% while using about 13.29 times its measured model-pipeline time.
+Raw ridge has much lower mean error and cost. Source-wise results expose the
+large COVID Deaths contribution to the RBF and tree averages. These results
+support conditional representation evaluation; they do not justify general
+KAHM adoption.
+
+See [the reporting amendment](REPORTING_AMENDMENT.md),
+[audited summary](reports/summary.json), and
+[synthetic primary contrasts](reports/synthetic_primary_contrasts.csv).
+Full-roster baseline results and method coverage are retained separately from
+the common-support table. No failed fit was replaced, repaired, or rerun.
 
 ## Research design
 
@@ -71,17 +117,21 @@ prediction = correction.predict(X_test)
 
 ## Audit the saved study
 
-The reference archive retains every final prediction, not only aggregate
+The reference archive retains every successful final prediction, not only aggregate
 tables. Restore it and recompute the recorded errors and summaries without
 refitting a forecasting model:
 
 ```bash
 python -m extensions.forecasting_utility.reference restore
-python -m extensions.forecasting_utility.analysis \
+python -m extensions.forecasting_utility.reporting \
   --run-dir extensions/forecasting_utility/results/utility_v1
 ```
 
-The audit verifies the exact task roster, saved targets and predictions,
+The reporting command verifies complete accounting while preserving the original
+analyzer's `complete: false` status for model failures. Running the frozen
+`analysis` command directly returns exit code 1 for that truthful status; it
+must not be interpreted as an unverified prediction record. The audit verifies
+the exact task roster, saved targets and predictions,
 selected validation settings, split hashes, charged computation nodes, and
 gamma-zero equality. Synthetic confidence intervals use 12 complete
 repetitions, with a Bonferroni adjustment across the 24 primary contrasts and
@@ -101,7 +151,7 @@ Run the frozen study into a new output directory:
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
   python -m extensions.forecasting_utility.experiment \
   --phase all --output-dir /tmp/kahm-utility-rerun
-python -m extensions.forecasting_utility.analysis \
+python -m extensions.forecasting_utility.reporting \
   --run-dir /tmp/kahm-utility-rerun
 ```
 
@@ -147,4 +197,4 @@ Code inherits the repository's MIT license. Original research outputs inherit
 its CC BY 4.0 terms. Third-party data and source files retain their own notices
 and attribution. See [LICENSE](../../LICENSE), [DATA_LICENSE](../../DATA_LICENSE),
 and the pinned dataset metadata. Repository citation information is provided
-in [CITATION.cff](../../CITATION.cff); there is no invented DOI or publication claim.
+in [CITATION.cff](CITATION.cff); there is no invented DOI or publication claim.

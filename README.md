@@ -1,5 +1,18 @@
 # Kernel Affine Hull Koopman Machine
 
+## KAHM time-series research
+
+The new [forecasting research guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-forecasting-utility/TIME_SERIES_RESEARCH.md) asks when KAHM features help a finite predictor and whether their added cost is justified.
+
+- [Study, code, and recorded findings](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-forecasting-utility/extensions/forecasting_utility)
+- [Revised manuscript and reproducibility release](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/releases/tag/forecasting-utility-v0.1.0)
+- [Small chronological forecasting example](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-forecasting-utility/examples/forecasting_utility.py)
+- [Installable KAHM classification entry point](https://github.com/MohitKumarRostock/KAHM)
+
+The research draft preserves favorable and unfavorable results, including geometric fitting failures. Its archive comparison on common support is explicitly descriptive. The manuscript has not been submitted.
+
+## Original Koopman-machine software
+
 Research software and reproducibility artifacts for Kernel Affine Hull Koopman Machine (KAHKM) experiments.
 
 The repository contains the KAHKM implementation, experiment runners, hyperparameter-search scripts, archived numerical outputs, figure and table generators, and provenance records used to reproduce the reported results.

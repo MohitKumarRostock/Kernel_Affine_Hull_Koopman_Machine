@@ -87,6 +87,36 @@ class ReviewIntegrityTests(unittest.TestCase):
         self.assertEqual(result["status"], "passed")
         self.assertEqual(len(result["retained_attribution"]), 1)
 
+    def test_in_place_bibtex_output_does_not_change_source_export(self):
+        identity = "Example" + " Person"
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            manuscript = root / package.RELATIVE / "manuscript"
+            manuscript.mkdir(parents=True)
+            inputs = {
+                "main.tex": "\\documentclass{article}\n\\usepackage{tmlr}\n",
+                "references.bib": "@article{prior, author = {" + identity + "}, title = {Prior work}}\n",
+                "tmlr.sty": "% Test style input\n",
+                "tmlr.bst": "% Test BibTeX style input\n",
+                "fancyhdr.sty": "% Test header input\n",
+                "LICENSE_TMLR.txt": "Test fixture license\n",
+            }
+            for name, text in inputs.items():
+                (manuscript / name).write_text(text)
+            before = package.manuscript_payload(root)
+            bibliography_output = ("\\bibitem{prior} " + identity + ". Prior work.\n").encode()
+            (manuscript / "main.bbl").write_bytes(bibliography_output)
+            after = package.manuscript_payload(root)
+            self.assertEqual(after, before)
+            self.assertIn("references.bib", after)
+            self.assertIn("tmlr.bst", after)
+            exported = package.with_manifest(after, "manuscript-source", {}, [identity])
+            package.verify_files(exported)
+            # Generated bibliography output is excluded, not granted an
+            # attribution exemption that could hide arbitrary author metadata.
+            with self.assertRaisesRegex(ValueError, "identity"):
+                package.audit_anonymity({"main.bbl": bibliography_output}, [identity])
+
     def test_exact_inventory_prevents_hidden_metadata(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

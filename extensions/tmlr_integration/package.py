@@ -210,7 +210,10 @@ def manuscript_payload(repository: Path) -> dict[str, bytes]:
             continue
         if path.name in {"main.pdf", "BUILD_CHECK.json"} or path.suffix in SKIP_SUFFIXES:
             continue
-        if path.suffix in {".tex", ".bib", ".sty", ".bst", ".bbl", ".txt", ".md", ".json", ".csv"} or ("generated" in relative.parts and path.suffix in {".pdf", ".png", ".eps", ".svg"}):
+        # BibTeX's .bbl is a build byproduct, regenerated from the required
+        # .bib/.bst sources. Exclude it so an in-place compilation cannot alter
+        # the exported source set or require a broader identity-scan exception.
+        if path.suffix in {".tex", ".bib", ".sty", ".bst", ".txt", ".md", ".json", ".csv"} or ("generated" in relative.parts and path.suffix in {".pdf", ".png", ".eps", ".svg"}):
             files[relative.as_posix()] = read_source(root, relative)
     for name in ("main.tex", "references.bib", "tmlr.sty", "tmlr.bst", "fancyhdr.sty", "LICENSE_TMLR.txt"):
         if name not in files:

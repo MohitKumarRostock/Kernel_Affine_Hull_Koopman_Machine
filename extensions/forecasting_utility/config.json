@@ -1,0 +1,159 @@
+{
+  "alphas": [
+    0.01,
+    1.0,
+    100.0
+  ],
+  "bandwidth_multiplier": 1.0,
+  "gammas": [
+    0.0,
+    0.25,
+    0.5,
+    1.0
+  ],
+  "geometry": {
+    "cluster_counts": [
+      2,
+      4,
+      8
+    ],
+    "max_fit": 512,
+    "max_refs": 24,
+    "omega": 16.0,
+    "rank": 2,
+    "tau": 1e-06
+  },
+  "hist_gradient": {
+    "early_stopping": false,
+    "l2_regularization": 0.01,
+    "max_iter": 100,
+    "max_leaf_nodes": 15,
+    "min_samples_leaf": 5
+  },
+  "interpretation": "Fresh controlled repetitions and four newly reserved archive source collections, including aggregated simulated NREL Solar Weekly. Archive windows, series, and capacities are nested descriptive observations, not independent source replications.",
+  "landmarks": [
+    16,
+    64
+  ],
+  "methods": [
+    "naive",
+    "raw_ridge",
+    "raw_rbf",
+    "concat_kahm",
+    "add_kahm",
+    "add_affine",
+    "add_locality",
+    "hist_gradient"
+  ],
+  "natural": {
+    "max_eval_windows": 64,
+    "max_series_per_source": 3,
+    "max_train_windows": 512,
+    "minimum_train_windows": 16,
+    "refit": "After validation selection, refit on complete targets before the test boundary, with the same cap512; fit preprocessing afresh on those inputs.",
+    "seed": 71,
+    "selection_salt": "forecasting-utility-natural-v1",
+    "sources": [
+      {
+        "context": 28,
+        "family_id": "australian_weather",
+        "frequency": "daily",
+        "horizon": 7,
+        "record_id": 4654822,
+        "seasonal_period": 7,
+        "source_id": "weather_daily"
+      },
+      {
+        "context": 6,
+        "family_id": "nrel_solar",
+        "frequency": "weekly",
+        "horizon": 2,
+        "record_id": 4656151,
+        "seasonal_period": 52,
+        "source_id": "solar_weekly"
+      },
+      {
+        "context": 28,
+        "family_id": "jhu_covid_deaths",
+        "frequency": "daily",
+        "horizon": 7,
+        "record_id": 4656009,
+        "seasonal_period": 7,
+        "source_id": "covid_deaths_daily"
+      },
+      {
+        "context": 6,
+        "family_id": "car_parts_sales",
+        "frequency": "monthly",
+        "horizon": 2,
+        "record_id": 4656022,
+        "seasonal_period": 12,
+        "source_id": "car_parts_monthly"
+      }
+    ],
+    "split_fractions": [
+      0.6,
+      0.2,
+      0.2
+    ]
+  },
+  "policies": {
+    "utility_geometry_5pct": [
+      "raw_rbf",
+      "add_kahm",
+      "add_affine",
+      "add_locality"
+    ],
+    "utility_kahm_5pct": [
+      "raw_rbf",
+      "add_kahm"
+    ]
+  },
+  "policy_ties": "Best correction in declared KAHM, affine, locality order; choose correction only if validation MSE is at least 5% below raw and raw MSE > 0.",
+  "query_mode": "stable",
+  "resources": {
+    "blas_threads": 1,
+    "paid_compute": false,
+    "workers": 1
+  },
+  "schema_version": 1,
+  "study_id": "forecasting-utility-v1",
+  "synthetic": {
+    "history": 12,
+    "horizons": [
+      1,
+      4,
+      12
+    ],
+    "laws": [
+      "nonlinear_ar",
+      "vanderpol",
+      "duffing"
+    ],
+    "refit": "No final refit: retain the validation-selected model fitted on the N training episodes only; validation episodes are never added.",
+    "repetition_seeds": [
+      9100,
+      9101,
+      9102,
+      9103,
+      9104,
+      9105,
+      9106,
+      9107,
+      9108,
+      9109,
+      9110,
+      9111
+    ],
+    "seed_derivation": "SeedSequence([repetition_seed, law_index, split_index, 731]).generate_state(1)[0]; split_index train=0, validation=1, test=2",
+    "stride": 4,
+    "test_episodes": 128,
+    "training_episodes": [
+      32,
+      128
+    ],
+    "training_nesting": "Generate 128 training episodes and take the first N complete episodes; validation and test identical across N and M within a repetition/law.",
+    "validation_episodes": 64
+  },
+  "utility_relative_validation_improvement": 0.05
+}

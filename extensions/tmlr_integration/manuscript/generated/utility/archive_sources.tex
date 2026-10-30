@@ -1,0 +1,22 @@
+% Generated from the audited forecasting-utility extension; no model fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Post-hoc matched-success scaled MSE by new archive source, averaging capacities within series and then series. The 22 configurations contain three Weather, three Solar, three COVID, and two Car Parts series; the failed Car Parts series is excluded only from this diagnostic. Solar Weekly has simulation provenance. All procedures and both frozen policies are shown.}
+\label{tab:utility-archive-sources}
+\begin{tabular}{lrrrr}
+\toprule
+Procedure & Weather & Solar & COVID & Car Parts \\
+\midrule
+Raw ridge & 0.3363 & 2.1992 & 0.6404 & 0.2106 \\
+Raw RBF & 0.3181 & 3.0358 & 33.1371 & 0.2010 \\
+Concatenated KAHM & 0.3178 & 2.9745 & 1.3490 & 0.2031 \\
+Additive KAHM & 0.3213 & 3.0358 & 33.0164 & 0.2038 \\
+Additive affine & 0.3189 & 3.0358 & 33.7662 & 0.2038 \\
+Additive locality & 0.3189 & 2.9891 & 34.3905 & 0.5510 \\
+Persistence / seasonal naive & 0.5793 & 1.4511 & 2.4268 & 0.3676 \\
+Histogram gradient boosting & 0.4482 & 1.9788 & 38.5859 & 0.2567 \\
+KAHM 5\% rule & 0.3213 & 3.0358 & 33.4246 & 0.2024 \\
+All-geometry 5\% rule & 0.3192 & 2.9891 & 33.1917 & 0.5496 \\
+\bottomrule
+\end{tabular}
+\end{table}

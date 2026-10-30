@@ -1,0 +1,22 @@
+% Generated from the audited forecasting-utility extension; no model fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Post-hoc common-support archive resource components, in source-balanced mean seconds per successful task. Model wall time is the main cost measure; preparation-plus-model adds common data preparation. Downloads, imports, artifact I/O, and research analysis remain outside these model measurements. The node-based policy totals charge shared work once. Model KiB describe actual stored state, not minimal storage. These diagnostic averages do not remove failed-attempt records from the artifact.}
+\label{tab:utility-cost-detail}
+\begin{tabular}{lrrrrr}
+\toprule
+Procedure & Model wall & Model CPU & Prep. & Prep. + model & Model KiB \\
+\midrule
+Raw ridge & 0.0015 & 0.0015 & 0.0018 & 0.0033 & 3.5 \\
+Raw RBF & 0.0037 & 0.0038 & 0.0018 & 0.0055 & 17.9 \\
+Concatenated KAHM & 0.0691 & 0.0691 & 0.0018 & 0.0709 & 102.3 \\
+Additive KAHM & 0.0498 & 0.0498 & 0.0018 & 0.0516 & 55.6 \\
+Additive affine & 0.0369 & 0.0369 & 0.0018 & 0.0386 & 40.7 \\
+Additive locality & 0.0379 & 0.0379 & 0.0018 & 0.0396 & 45.1 \\
+Persistence / seasonal naive & 0.0012 & 0.0012 & 0.0018 & 0.0030 & 0.1 \\
+Histogram gradient boosting & 0.6380 & 0.6378 & 0.0018 & 0.6398 & 616.0 \\
+KAHM 5\% rule & 0.0467 & 0.0467 & 0.0018 & 0.0484 & 48.0 \\
+All-geometry 5\% rule & 0.0869 & 0.0869 & 0.0018 & 0.0886 & 39.0 \\
+\bottomrule
+\end{tabular}
+\end{table}

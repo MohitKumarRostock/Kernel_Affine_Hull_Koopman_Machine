@@ -1,0 +1,68 @@
+\section{Post-hoc sensitivity to geometry scaling}\label{sec:scaling}
+The preceding studies fix training z-score geometry scaling. To test whether
+that choice determines their practical interpretation, a bounded follow-up
+replaces it with training min--max scaling to $[-1,1]$, without clipping future
+inputs. Raw skips and references remain standardized; all targets, splits,
+seeds, head grids, capacities, and query conventions remain fixed. The protocol
+and execution code were published before the sensitivity fits, after the
+original outcomes had been inspected. These are paired post-hoc comparisons
+on reused sources and draws, not fresh confirmation. Appendix~\ref{app:scaling}
+specifies the intervention, costs, retained evidence, and complete results.
+The frozen benefit diagnostic is not refitted or reevaluated for min--max
+geometry.
+
+\paragraph{Natural-source ranking.}
+All 208 configurations are rerun for the three raw-augmented geometric
+methods under both scalers, with unchanged raw RBF and ridge references.
+On the four formerly reserved sources, KAHM's source-balanced scaled MSE
+changes from \ScalingNaturalKahmStandardLoss{} to
+\ScalingNaturalKahmMinmaxLoss{}, an increase of
+\ScalingNaturalKahmChangePercent\% (Table~\ref{tab:scaling-natural}).
+The min--max arm remains \ScalingNaturalKahmVsRawPercent\% above raw RBF
+and \ScalingNaturalKahmVsRidgePercent\% above raw ridge. Min--max KAHM
+beats raw RBF on only Saugeen, and raw ridge has lower loss on all four
+source means. Leaving out any one family still leaves min--max KAHM
+above raw RBF. Thus this specified scaling alternative does not reverse
+the aggregate natural-data comparison.
+
+\input{generated/scaling/natural_main_table}
+
+The near-unchanged aggregate is not an equivalence guarantee. KAHM's loss
+falls by 0.15\% on Traffic and 0.86\% on Hospital, but rises by 0.90\% on
+Saugeen and 0.35\% on US births. Small-capacity loss increases by 0.99\%,
+whereas medium-capacity loss falls by 0.96\%; these settings still jointly
+vary sample and model-size caps. The original development aggregate worsens
+by 7.70\%, with heterogeneous source effects. The same intervention also
+changes the affine and locality controls; it does not isolate an effect
+of nonlinear KAHM reconstruction.
+
+In this new execution, KAHM's source-balanced mean min--max warm method time is
+\ScalingNaturalKahmMinmaxTime{} seconds per task, versus
+\ScalingNaturalKahmStandardTime{} for standardized KAHM and
+\ScalingNaturalRawTime{} for the remeasured raw RBF reference:
+ratios of \ScalingNaturalKahmCostRatioStandard{} and
+\ScalingNaturalKahmCostRatioRaw{}, respectively. These include search,
+selection cleanup, refit, forecast, and serialization. A retained Saugeen
+search/cleanup outlier contributes to the new timing aggregate. They are
+single-execution, implementation-specific observations, not an intrinsic
+computational penalty of min--max scaling or a cold-start deployment claim.
+
+\paragraph{Controlled finite-decoder comparisons.}
+All 24 original complete draws for each law and both landmark counts are
+reused. Both scaler arms retain raw, affine-local, KAHM-local, and KAHM-score
+features; a matched locality-coordinate control is explicitly added.
+Table~\ref{tab:scaling-controlled} reports every law/capacity cell, with
+all representations and paired dispersion in Appendix~\ref{app:scaling}.
+The main mean-loss ordering persists: raw RBF remains better than KAHM
+local coordinates on autoregression and Duffing, whereas KAHM local coordinates remain better
+than raw and both local controls on Van der Pol at both capacities.
+KAHM-local scaling changes range from a 0.23\% increase on Van der Pol
+at 256 landmarks to a 7.35\% reduction on Duffing at 256 landmarks.
+The latter lowers MSE from $4.0736$ to $3.7741$ in units of $10^{-3}$,
+but remains above raw ($2.8364$), min--max affine ($2.7742$), and min--max
+locality ($2.6921$). Scaling can materially change an error without reversing
+the scientific comparison. These reused-draw mean comparisons carry no
+new confirmatory confidence claim.
+
+\input{generated/scaling/controlled_main_table}
+\FloatBarrier

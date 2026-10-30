@@ -1,0 +1,61 @@
+\section{Related work}\label{sec:related}
+\paragraph{Reconstruction geometry and local prediction.}
+KAHMs were introduced for geometrically informed classification, including
+a differential-privacy application \citep{Kumar2024KAHM}, and developed for
+collaborative learning \citep{Kumar2025Collaborative}. Earlier geometric
+classification uses affine feature lines \citep{Li1999FeatureLine}; kernel
+sparse representation studies reconstruction-based codes in implicit feature
+spaces \citep{Gao2010KernelSparse}. Their original task results do not
+establish that a reconstruction score preserves the variation required by
+a different predictive target. Local coordinate coding connects localized
+representations with approximation of smooth functions \citep{Yu2009LCC}.
+Local tangent coding explicitly augments coding weights with weighted
+principal-direction displacements \citep{Yu2010LTC}, the feature form used
+here. With linear readouts this also resembles local affine experts
+\citep{Jacobs1991Experts}; our gates are fitted without outcomes.
+
+\paragraph{Target information and finite fitting.}
+Supervised dimension reduction asks which features preserve the input--target
+relationship \citep{Fukumizu2004SDR}. Predictive $\mathcal V$-information
+distinguishes information accessible to a restricted observer
+\citep{Xu2020Usable}. Our interventions and finite-decoder comparisons
+make a related distinction without estimating unrestricted Bayes risk.
+Nystr\"om approximation \citep{Williams2001Nystrom,Rudi2015Nystrom} changes
+both fitting and computation; equal requested landmark counts do not
+equate function classes, realized ranks, or costs. Retaining an affinity
+normalizer gives an elementary invertible reparameterization, not a new
+information-recovery theorem.
+
+\paragraph{Forecast evaluation and selection.}
+Residual correction and additive fitting under squared error are
+established constructions \citep{Buhlmann2003L2}. Our additive extension
+uses them to preserve a raw-history prediction pathway while isolating the
+utility of KAHM and simpler geometric corrections. Zero correction is an
+available forecast, not a guarantee that validation chooses it whenever
+augmentation would harm generalization.
+Feature-based forecast selection, ranking, and combination have substantial
+precedents \citep{Prudencio2004MetaLearning,MonteroManso2020FFORMA,
+Talagala2022FFORMPP,Talagala2023FFORMS}. Landmarking uses inexpensive
+learners to characterize a task \citep{Pfahringer2000Landmarking}; our paid
+validation probe follows that principle. The tested increment is whether
+two geometric descriptors improve a specified diagnostic beyond metadata
+and that probe. Model-selection bias \citep{Cawley2010Selection} and
+forecast-evaluation pitfalls \citep{Hewamalage2023Evaluation} motivate
+chronological splits, explicit cost scopes, and separation of development
+from reserved original sources. The Monash archive supplies the natural
+datasets \citep{Godahewa2021Monash}.
+
+\paragraph{Relationship to close prediction-limit studies.}
+\citet{KumarKargaran2026Limits} study successor soft coordinates,
+norm-bounded linear prediction certificates, and Koopman closure. A related
+unpublished manuscript \citep{Anonymous2026Certificates} develops
+observed-output risk certificates under declared decoder sensitivity.
+That manuscript also reports input-scaling ablations for earlier prediction
+architectures. The present scaling sensitivity concerns the distinct
+local-coordinate and raw-augmented pipelines evaluated here.
+Those studies share KAHM source machinery and some generator definitions;
+they already distinguish fitted accuracy from predictor-class risk.
+The present target intervention, encoding ablations, fresh capacity
+comparison, and reserved natural-source evaluation address finite fitted
+procedures. Their paired-MSE intervals and measured selection costs do not
+extend the earlier class-risk or minimum-feasible-cost certificates.

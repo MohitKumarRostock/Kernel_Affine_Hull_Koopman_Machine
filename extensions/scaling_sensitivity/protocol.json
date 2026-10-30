@@ -1,0 +1,58 @@
+{
+  "format": "bounded_scaling_sensitivity_v1",
+  "status": "fixed before sensitivity outcomes; all source datasets previously inspected",
+  "integrated_manuscript_checkpoint": "ede33f83cb2e6a5eae687282cec93c60cd31d46d",
+  "purpose": "Measure the sensitivity of the integrated paper's finite-decoder findings to replacing training z-score geometry scaling by training min-max geometry scaling. This is post-hoc sensitivity, not a new source-confirmation experiment.",
+  "scalers": ["standard", "minmax"],
+  "geometry_intervention": {
+    "standard": "Per-coordinate training mean and population standard deviation; retain each original pipeline's constant-column threshold and fallback.",
+    "minmax": "Per-coordinate training minimum and maximum mapped to [-1,1]; no clipping on validation or test. Coordinates with constant training range are zeroed in geometry queries, matching the historical controlled implementation.",
+    "fitting": "Fit scaler on the exact input training set used by that fit, before the geometry subsample. Natural validation-search and final pretest refits have separately fitted scalers. No test observations determine scaler statistics.",
+    "raw_skip_and_reference": "The full raw input block and raw reference models retain their original training standardization in both arms. Downstream feature and target standardization remain unchanged.",
+    "scope": "Change geometry scaling only. Do not insert an affine min-max transform upstream of an unchanged z-score transform, which would cancel on nonconstant coordinates. Keep all targets, target clipping rules, metric scales, query arithmetic, seeds, splits, head grids, and capacities as originally declared. Do not tune the scaler, clipping, gates, regularization grids, or a new adoption rule."
+  },
+  "natural": {
+    "original_protocol": "extensions/natural_forecasting/protocol.json",
+    "original_roster": "extensions/natural_forecasting/runs/natural_v1/task_roster.json",
+    "tasks": 208,
+    "original_development_tasks": 128,
+    "original_confirmation_tasks": 80,
+    "source_families": 8,
+    "methods_in_each_scaler_arm": ["raw_affine_rbf", "raw_locality_rbf", "raw_kahm_rbf"],
+    "fixed_reference_methods": ["raw_rbf", "raw_ridge"],
+    "standalone_method_runs": 1664,
+    "primary_estimand": "Equal-source-family hierarchical mean scaled MSE difference, minmax minus standard raw+KAHM, on the four formerly reserved source families. Report both arm means, absolute and relative change, each source mean, and leave-one-family-out aggregates. Four source families are the source-level evidence units, not 80 independent domains.",
+    "secondary_estimands": "Same summaries on the four original development sources, kept separate. Compare each fixed KAHM arm to invariant raw RBF/ridge and each same-scaler matched affine/locality control. Report capacity strata descriptively. Retain the original source/series/regime/capacity/seed aggregation hierarchy.",
+    "parity": "Rerun standard augmented methods and both raw references on all 208 tasks and compare saved predictions, selected hyperparameters, and losses with the original archived run. Do not interpret comparison results if unexplained parity failures remain.",
+    "costs": "One standalone method at a time in one benchmark worker; complete search, selected refit, prediction, serialization and cleanup measured. Record additional sensitivity diagnostics separately. Re-measure raw references in this run. Compare costs within the new execution only, with implementation and machine limitations stated.",
+    "excluded": ["local-only natural architectures", "new clipping arm", "new scaler selector", "refitted benefit diagnostic", "new source data", "new baseline grids"]
+  },
+  "controlled": {
+    "original_protocol": "extensions/predictive_geometry/study/followup_config.json",
+    "laws": ["nonlinear_ar", "vanderpol", "duffing"],
+    "complete_repetitions_per_law": 24,
+    "phase": 4,
+    "master_seed": 20261030,
+    "landmark_counts": [64, 256],
+    "features_in_each_scaler_arm": ["raw", "affine:local", "kahm:local", "kahm:scores", "locality:local"],
+    "locality_control": "Historical native-affine locality gates with the same local principal coordinates. This control was not one of the original capacity study's four representations; it is explicitly added for this fixed sensitivity comparison.",
+    "head_fits": 1440,
+    "paired_estimands": "For each of six law-by-capacity cells and each geometric representation, mean paired per-repetition MSE change from standard to minmax. Report complete-repetition dispersion and comparisons to raw and matched controls. Retain individual repetitions and episode losses; do not treat horizons or episodes as independent fitted-method repetitions.",
+    "parity": "All four original standard-arm representations must match original capacity records and predictions; raw must also agree between scaling arms. Recreate the exact original phase-4 draws, not fresh draws.",
+    "costs": "Run after natural execution finishes, one worker and one BLAS thread. Shared-bank controlled timings are execution diagnostics, not standalone deployment cost comparisons.",
+    "excluded": ["new samples", "new capacity grids", "new validation selector", "new inferential family coverage claims", "repeat branch/Airfoil studies"]
+  },
+  "analysis_rules": {
+    "inference": "Descriptive paired sensitivity on previously inspected draws and sources. No new confirmatory p-values, no simultaneous 95% superiority claims, and no best-scaler selection on these test losses.",
+    "completeness": "Retain every declared method, task, scaler, failure and warning. No stopping on favorable results and no dropping adverse sources. An implementation failure may be fixed only with an explicit logged amendment and the affected comparison rerun; no outcome-driven parameter changes.",
+    "audit": "Freeze protocol, execution sources and original scientific dependencies before experimental fits. Save natural per-origin predictions and controlled per-episode losses with full local prediction archives for independent verification. Recompute every new loss from predictions before publishing, verify target/split identity and parity, and verify original frozen study files unchanged.",
+    "reporting": "Preserve the original standardized findings as historical results. Add new results with their post-hoc scope and revise abstract, interpretation, practical conclusions and reproducibility statements according to the complete evidence. Do not rewrite old freezes or label this new domain transfer."
+  },
+  "resources": {
+    "blas_threads": 1,
+    "benchmark_workers": 1,
+    "phase_order": ["natural", "controlled"],
+    "paid_compute": false,
+    "bounded_design": "Exactly two geometry scalers and the fixed task/method counts above; no adaptive search or additional study cells."
+  }
+}

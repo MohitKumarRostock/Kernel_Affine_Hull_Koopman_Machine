@@ -1,0 +1,192 @@
+KAHM GEOMETRY STUDY: MATHEMATICAL INTERPRETATION
+Prepared before confirmation; supporting facts, not claims of novelty
+
+1. THE FIXED-INPUT TARGET-ALIGNMENT LAW
+
+Let S be equiprobable on {-1,+1}, T uniform on [-1,+1], independent, and let
+epsilon be independent with mean zero and variance sigma^2. For a>0, set
+
+  X = (T, c*cos(pi*T) + a*S),
+  Y_lambda = sqrt(1-lambda)*S + sqrt(3*lambda)*T + epsilon,
+  0 <= lambda <= 1.
+
+The signal mean is zero and its variance is
+(1-lambda)*Var(S) + 3*lambda*Var(T) = 1. Since T=X_1 and
+S=(X_2-c*cos(pi*X_1))/a, the raw-history conditional mean is
+
+  m_lambda(X) = sqrt(1-lambda)*S + sqrt(3*lambda)*T,
+
+and the raw-history Bayes MSE is exactly sigma^2 for every c,a>0,lambda.
+If |epsilon|<=b, Cauchy-Schwarz gives |Y_lambda|<=2+b uniformly in lambda.
+Changing lambda with a fixed input sample and feature bank changes predictive
+relevance without changing input geometry, signal variance, or future-noise
+variance. It can still change how easily a restricted decoder represents
+the conditional mean.
+
+If U=h(S), where h distinguishes the two regimes and retains no other
+information, then E[Y_lambda|U]=sqrt(1-lambda)*S and the Bayes MSE based on U
+is sigma^2+lambda. This is a property of that idealized encoding. It is not
+assumed to hold for a learned KAHM bank. If S is not recoverable from U,
+additional regime-information loss can occur.
+
+2. EXACT NORMALIZER RESTORATION
+
+For group scores T_c in [0,1], known omega>0 and tau>0, let
+
+  ell_c = omega*log(1-T_c+tau),
+  z = log(sum_c exp(ell_c)),
+  phi_c = exp(ell_c-z).
+
+Every phi_c is strictly positive in exact arithmetic. Therefore
+
+  ell_c = log(phi_c)+z,
+  T_c = 1+tau-exp((log(phi_c)+z)/omega).
+
+Thus (phi,z) and the complete score vector T generate the same information
+in exact arithmetic, when omega and tau are known. For multiple retained
+blocks, one normalizer is required for each separately normalized block.
+If an implementation clips T before normalization, this identity restores
+the clipped score vector, not values discarded by clipping.
+
+The identity does not imply equal performance for affine heads. The inverse
+transformation is nonlinear, so affine function classes on T and on (phi,z)
+are generally different; their Euclidean geometries and Lipschitz budgets
+also differ. Feature standardization changes these geometries again.
+
+Nor does restoration of T restore full reconstruction vectors. A scalar
+reconstruction discrepancy can already have discarded position or direction.
+Adding z cannot recover information that was absent from all scores T_c.
+Floating-point underflow and roundoff are implementation issues; use stored
+log associations and log-sum-exp to check the algebra numerically.
+
+3. SYMMETRY OF THE ACTUAL SCORE FORMULA
+
+Let Q be an orthogonal transformation of the preprocessed history space.
+Suppose each group reconstruction R_c is equivariant and group identities
+are preserved:
+
+  R_c(Qx) = Q R_c(x).
+
+For multiple local reconstructors in a group, it suffices that Q permutes
+the local reconstructors within that group while preserving their set.
+Euclidean norms and inner products are invariant under Q. Hence both
+
+  e_c(x) = 1-exp(-||x-R_c(x)||),
+  theta_c(x) = arccos(cosine(x,R_c(x)))/pi
+
+are invariant under Q, including a common invariant zero-norm convention.
+Their combined scalar score and the group's minimum over local models are
+therefore invariant. Normalized affinities and their log normalizer are
+also invariant:
+
+  T_c(Qx)=T_c(x), phi(Qx)=phi(x), z(Qx)=z(x).
+
+This result assumes equivariance of the fitted reconstructors and preservation
+of group identities. A learned finite reference bank, an asymmetric fitted
+scaler, a non-equivariant group fit, or group permutation can break these
+conditions. In particular, if Q permutes distinct groups, the affinity vector
+can be permuted rather than unchanged and may retain the relevant information.
+No universal KAHM invariance claim follows without checking these conditions.
+
+For the cosine-branch law, Q(x_1,x_2)=(-x_1,x_2) preserves the input law and
+preserves S while changing T to -T. An invariant U therefore satisfies
+E[T|U]=0. Independence and symmetry imply
+
+  R_U^Bayes = sigma^2 + lambda
+             + (1-lambda)*E[(S-E[S|U])^2].
+
+Thus R_U^Bayes >= sigma^2+lambda, with equality when U determines S.
+U may retain |T| or other even functions without recovering the missing odd
+component. This is an information-loss floor for every measurable decoder,
+not merely a failure of an affine or norm-bounded head.
+
+4. APPROXIMATE SYMMETRY AND A DECODER BUDGET
+
+Assume X and QX have the same distribution, Q is an involution (Q^2=I),
+m(X)=E[Y|X] is square integrable, and U=Gamma(X) is fixed before evaluation.
+Let d be a measurable representation pseudometric, let g be kappa-Lipschitz
+with respect to d, and put f(X)=g(Gamma(X)). Define
+
+  m_o(X) = (m(X)-m(QX))/2,
+  delta_Gamma = sqrt(E[d(Gamma(X),Gamma(QX))^2]).
+
+Assume delta_Gamma is finite. Symmetry gives an orthogonal decomposition of
+each square-integrable function into its even and odd parts. In particular,
+
+  ||m-f||_L2^2 >= ||m_o-f_o||_L2^2,
+  f_o(X) = (f(X)-f(QX))/2.
+
+The decoder budget gives ||f_o||_L2 <= kappa*delta_Gamma/2. The reverse
+triangle inequality and conditional-mean risk decomposition yield
+
+  R(f) - R_X^Bayes
+    >= (||m_o||_L2 - kappa*delta_Gamma/2)_+^2.
+
+For the cosine-branch law, ||m_o||_L2=sqrt(lambda), so
+
+  R(f) >= sigma^2 + (sqrt(lambda)-kappa*delta_Gamma/2)_+^2.
+
+This is a population inequality. An empirical estimate of delta_Gamma is
+not automatically a certified upper bound on it. Substituting an estimate
+into the right-hand side creates a descriptive diagnostic unless uncertainty
+is controlled in the correct direction. The result also requires a verified
+decoder Lipschitz constant in the exact feature metric used. Unconstrained
+ridge or a flexible fitted head is not covered by an arbitrary chosen kappa.
+If preprocessing changes the symmetry, evaluate Gamma(QX) by applying the
+raw-space Q first and then the exact frozen pipeline; do not silently assume
+that a fitted scaler commutes with Q.
+
+5. RECONSTRUCTION-TO-PREDICTION BRIDGE
+
+Let U=Gamma(X), and suppose m(x)=E[Y|X=x] is L-Lipschitz on a domain that
+contains X and a reconstruction h(U). Suppose
+
+  E||X-h(U)||^2 <= epsilon_rec^2.
+
+Conditional expectation is the best L2 predictor from U. Therefore
+
+  E||m(X)-E[m(X)|U]||^2
+    <= E||m(X)-m(h(U))||^2
+    <= L^2*epsilon_rec^2.
+
+Consequently R_U^Bayes <= R_X^Bayes + L^2*epsilon_rec^2. If h is also
+L_h-Lipschitz in the declared representation metric and kappa>=L*L_h,
+then m composed with h belongs to the kappa-Lipschitz decoder class, yielding
+
+  R_kappa^*(Gamma) <= R_X^Bayes + L^2*epsilon_rec^2.
+
+For a particular admissible affine or clipped head f, if
+||m(h(U))-f(U)||_L2 <= delta_head, then
+
+  R(f)-R_X^Bayes <= (L*epsilon_rec+delta_head)^2.
+
+The essential assumption is reconstruction through U. A KAHM reconstructor
+R_c(X) receives the original history X; a small ||X-R_c(X)|| does not prove
+that there exists an h reconstructing X from the score-only U=phi(X).
+The scalar-score stage can discard information already used successfully by
+R_c. The generic inequality is a supporting mathematical fact, not evidence
+of a KAHM-specific approximation rate or a guarantee for the fitted head.
+
+6. TARGET-RELEVANT DISTORTION WITHOUT FUTURE NOISE
+
+For independent X,X', define
+
+  D_kappa(Gamma) = 0.5*E[(|m(X)-m(X')|
+                          -kappa*d(Gamma(X),Gamma(X')))_+^2].
+
+The pairwise Lipschitz argument applied to the deterministic target m(X)
+gives R_kappa^*(Gamma)-R_X^Bayes >= D_kappa(Gamma). This separates the
+unpredictable future-noise term from the geometric conflict but still
+combines information loss and sensitivity approximation. On the controlled
+law m is known. On natural data a fitted m does not automatically make the
+plug-in quantity a valid certificate.
+
+7. INTERPRETATION OF THIS STUDY
+
+The study tests whether these mechanisms describe actual fitted banks; it
+does not assume the answer. A local-coordinate or log-normalizer advantage
+can be due to information recovery, easier affine decoding, changed scale,
+or a combination. Flexible heads, full score vectors, reflection diagnostics,
+and same-component geometric comparisons constrain those explanations.
+No result here by itself establishes a novel theorem, a sufficient state for
+arbitrary forecasting, broad KAHM superiority, or global computational optimality.

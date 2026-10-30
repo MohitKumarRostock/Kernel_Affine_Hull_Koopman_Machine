@@ -1,0 +1,127 @@
+KAHM GEOMETRY MECHANISM STUDY, VERSION 1.0
+
+Purpose
+Identify whether KAHM reconstruction, score encoding, or retention of local
+position improves prediction, conditional on a specified decoder and data law.
+This study does not reproduce the manuscript's certification experiment and
+does not estimate the optimal possible decoder risk from finite fitted models.
+
+Source and implementation
+The original KAHM autoencoder and kernel routines are pinned to repository
+commit d6d74d1953a4310b73065a556df816e5ab5e3ebc. Every vendored file was checked
+against its Git blob SHA-1 and has a recorded SHA-256. Upstream float32 reference
+conversion and the exact-zero inner-normalizer convention are preserved.
+
+All matched reconstructions share training-only input scaling, a maximum1600
+training-row geometry subsample, KMeans partitions (2,4,8 clusters), at most24
+references per cluster, local PCA basis and effective rank, folding score, and
+affinity transform. Rank is at most2 and at most input dimension minus1.
+KAHM uses its original nonlinear kernel reconstruction. Affine uses orthogonal
+projection onto the same local basis through the same reference mean. A
+centroid reconstruction is a simpler control. No primary partition uses S or
+the outcome. The native score controls reuse this shared reference geometry;
+they are not separately fitted reproductions of original native pipelines.
+
+Outer affinity weights for each block are
+  w_c=(1-T_c+tau)^omega, phi_c=w_c/sum_j w_j,
+where omega16, tau1e-6 and T is the same folding score for all geometries.
+Features include phi, phi plus one log(sum w) coordinate per block, complete
+scores, radial/angle components, phi plus standardized raw inputs, and phi plus
+gated local PCA coordinates phi_c*((z-center_c)@basis_c). The log-normalizer
+is the OUTER group-affinity normalization, not the signed kernel-reference
+normalizer inside KAHM reconstruction. phi+logZ is equivalent in information
+to scores, but not in linear expressivity or regularization.
+
+Data
+Primary forecasting settings: nonlinear AR, Van der Pol, Duffing; exact pinned
+generator laws, histories12, horizons1/4/12, episode length72, origin stride4,
+13 origins per episode,128 training,128 validation,512 test episodes.
+All origins of an episode remain in one split. Evaluation first averages
+squared losses within episode and across horizons, then across episodes.
+The RK4 generators are numerical laws, not exact continuous-time trajectories.
+
+Primary branch settings: curvature c0/1 crossed with lambda0/.5/1, train1024,
+validation512, test2048 independent points. S is equiprobable +/-1,
+T uniform[-1,1], E uniform[-.1,.1], independent.
+  X=(T,c*cos(pi*T)+.5*S)
+  m=sqrt(1-lambda)*S+sqrt(3*lambda)*T; Y=m+E.
+Signal variance1 and Bayes MSE1/300 are constant. X includes T, and S is
+recoverable from X; there is no input noise or unavoidable regime ambiguity.
+At each c and repetition the same fitted unsupervised bank and exactly the
+same train/validation/test X and noise E are reused for all lambda. Across c,
+latent samples are identical. A training-size256 nested subset is secondary.
+No branch symmetry of a learned finite bank is assumed. Reflected-input and
+nearest-neighbor diagnostics are empirical descriptions, not information-loss
+certificates. Their scales are estimated using training features only.
+
+Airfoil Self-Noise is a secondary static-regression check. Its fixed seed
+2026103007 split holds out entire groups defined by the four nonfrequency
+operating settings:64train/21validation/21test groups (905/295/303rows).
+Twenty-four fitting seeds reuse that one dataset/split; they are not24 new
+natural-data replications. Validation/test losses weight groups equally.
+No population-wide outcome bound is claimed; predictions are not clipped.
+Data provenance, license and exact group IDs are in DATA_NOTE.txt.
+
+Heads and selection
+All head standardization is training-only. Ridge minimizes mean squared loss
+plus alpha times squared coefficient norm with unpenalized intercept. Alpha
+grid1e-8,1e-6,1e-4,.001,.01,.1,1. The flexible diagnostic is a64-landmark
+Nystrom Gaussian RBF plus a linear component, bandwidth multiplier.25/1/4
+relative to the training-landmark median squared distance. Basis columns are
+standardized on training data before ridge. Landmarks are uniform training
+rows. Equal landmark indices/seeds and tuning grids are used across features.
+Forecast horizons jointly select parameters by validation MSE. The three
+branch target laws select independently. No refit incorporates validation
+observations. Known bounded targets are clipped to[-1,1] for forecasts and
+[-2.1,2.1] for branches. All feature/head combinations in pipelines() are
+retained. Raw ridge, raw quadratic ridge and raw RBF are mandatory baselines.
+
+The practical secondary validation selector chooses the lowest-validation-MSE
+complete pipeline among raw ridge/RBF and ridge on KAHM or affine phi,
+phi+logZ, local, and phi+raw (ten candidates). Its test score is evaluated
+without further selection; selections and fitted states are saved.
+
+Pilot, freeze, confirmation
+There are two pilot repetitions, using a separate SeedSequence phase code.
+The pilots check execution and set fixed practical effect margins:5% of the
+mean pilot raw-ridge test MSE for each primary setting. No confirmation points
+are generated before a dated SHA-256 freeze of code, config, analysis spec,
+source manifest, data and margins. This is a recorded internal protocol
+freeze, not a public prospective registration. All24 confirmation repetitions
+independently regenerate training, validation and test data under new phase
+seeds. Common randomness within a repetition supports paired comparisons.
+Natural-data models are also run only after freeze.
+
+Inference
+The primary family contains27 cellwise contrasts (3 in each of9 settings):
+  affine phi ridge MSE minus KAHM phi ridge MSE;
+  KAHM phi ridge MSE minus KAHM phi+logZ ridge MSE;
+  KAHM phi ridge MSE minus KAHM local ridge MSE.
+Two additional contrasts compare the first advantage at lambda0 minus lambda1
+at each curvature (train1024). All29 use two-sided paired Student t intervals
+across24 complete repetitions with Bonferroni family alpha.05, df23. They are
+parametric approximations, not the manuscript's distribution-free certificates.
+Pointwise episode/row counts are not substituted for the24 training repetitions.
+Nonsignificance is not equivalence. The fixed practical interaction margin is
+the mean of its endpoint-cell margins. ANALYSIS_SPEC.txt supplies audit details.
+Secondary models, smaller samples, horizon-specific results, diagnostics and
+Airfoil remain exploratory/descriptive unless explicitly separately qualified.
+
+Failure and audit policy
+No failed repetition is silently removed or replaced. Errors are recorded.
+An implementation correction after freeze requires an amendment, invalidation
+of affected output and regeneration; no favorable-seed substitution. Saved
+primary predictions, target/group arrays and per-unit losses support an
+independent recomputation. Saved banks and selected primary heads support
+replay. Runtime reflects shared computations and is not a fair standalone
+end-to-end benchmarking comparison. Storage counts are qualified accordingly.
+
+Interpretive limits
+Equal feature counts do not imply equal capacity. Augmentations add information
+and/or expressivity and dimensions. A finite RBF comparison cannot establish
+Bayes risk or representation sufficiency. Better reconstruction from X does
+not establish recovery from phi. Synthetic controlled evidence identifies
+mechanisms only within these data laws; one natural dataset cannot establish
+general forecasting superiority. Local coordinates and log-normalizer algebra
+are established constructions; novelty would be the KAHM-specific controlled
+attribution, supported scope and tested practical consequence.

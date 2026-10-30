@@ -1,0 +1,59 @@
+CAPACITY FOLLOW-UP, FROZEN AFTER STAGE1 AND BEFORE NEW STAGE2 DATA
+
+Reason for follow-up
+The first-stage secondary models show a promising KAHM-local+RBF result on
+Van der Pol (mean MSE0.001049 versus0.001405 affine-local and0.002978 rawRBF),
+while the same comparison does not favor KAHM on Duffing. A concrete remaining
+question is whether this is conditional on the64-landmark approximation budget.
+This follow-up is explicitly motivated by those observed results. It is not
+part of the first-stage29-comparison family or an original pre-data hypothesis.
+
+Design frozen before generating any follow-up data
+24 independent new repetitions of all three forecasting laws: nonlinear AR,
+Van der Pol and Duffing. Identical history, horizon, episodes, preprocessing,
+geometry-bank and tuning specifications to stage1. New SeedSequence phase4:
+[20261030,4,replicate,100+system_index,stream], with streams0/1/2 for splits,
+10 for geometry and11 for head landmarks. The same new splits and fitted bank
+are used by all competing models within a repetition.
+
+Features: raw; matched affine phi plus gated local PCA coordinates; matched
+KAHM phi plus gated local PCA coordinates; and KAHM full folding scores.
+Decoder: the exact existing standardized Nystrom-RBF plus linear diagnostic,
+with64 and256 training landmarks. The same training row-selection seed and
+validation tuning grids are used. Changing width also changes the sampled
+landmark set; sets need not be nested. This is an approximate decoder budget
+comparison, not a bound on the optimal raw-input prediction rule.
+
+Primary comparisons
+At each of3systems and2widths:
+  raw RBF MSE minus KAHM-local RBF MSE;
+  affine-local RBF MSE minus KAHM-local RBF MSE.
+This gives12 two-sided Bonferroni-adjusted paired t intervals across24 fresh
+repetitions (df23), family alpha.05. Five percent of the corresponding
+stage1 mean rawRBF MSE is frozen as the absolute practical margin for both
+widths. These thresholds use previous-stage data, never stage2 outcomes.
+
+KAHM-score models and horizon-specific values are secondary. Contrasting
+significance across widths does not itself prove an interaction; direct width
+response patterns are descriptive unless an interaction is separately tested.
+One secondary operational selector chooses the lowest-validation-MSE pipeline
+among all eight complete feature-by-width candidates, after each candidate's
+own validation tuning. It uses no test results. Its predictions, selected
+candidate and per-episode test losses are saved. This selector was specified
+before generating any stage2 data; it is not a member of the12 primary family.
+No claim of joint95% family coverage across both study stages is made. Both
+families rely on t approximations rather than distribution-free certificates.
+
+Integrity and scope
+followup_freeze.json records all new code/specification hashes and the original
+protocol-freeze hash. Both freeze sets are verified before execution. No stage1
+frozen file is changed. Every failed repetition is recorded and retained;
+implementation corrections require a new amendment and affected regeneration.
+Saved predictions, groups, targets and per-episode losses permit independent
+loss recomputation. Complete model sources, chosen parameters, seeds and fitted
+geometry banks permit reruns. Large fitted RBF states are not archived.
+
+The follow-up addresses finite decoder capacity as a plausible alternative
+explanation. It still concerns fixed synthetic laws, one small geometric-bank
+specification and two finite feature budgets. It does not establish superiority
+over fully tuned modern baselines, the Bayes rule, or all possible raw decoders.

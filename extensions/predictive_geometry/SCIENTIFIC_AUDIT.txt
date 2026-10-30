@@ -1,0 +1,213 @@
+INDEPENDENT SCIENTIFIC AND STATISTICAL REVIEW
+Scope: manuscript and paper-asset construction from the completed KAHM study
+Date: 2026-10-30
+
+1. REVIEW CONCLUSION
+
+The archived experiment supports a coherent, conditional research claim.
+Its controlled contribution is a reconstruction/encoding/decoder separation:
+near-exact affine reconstruction can induce an almost reflection-insensitive
+score code, while less accurate KAHM reconstruction induces useful positional
+variation. Affine locality controls and explicit local coordinates greatly
+reduce that gap. The forecasting contribution is different: a particular
+KAHM local-coordinate representation with a finite nonlinear head has a
+fresh-sample Van der Pol advantage at two tested landmark budgets. It does
+not win generally on the other laws. The paper should preserve both findings
+and their distinction.
+
+The title's word 'when' must be read as conditions observed in the declared
+experiments, not a validated diagnostic for new tasks. The manuscript now
+explicitly leaves such a predictive criterion open. The elementary supporting
+propositions explain mechanisms and scope; they are not claimed to be new
+KAHM approximation rates or unique properties of KAHM.
+
+2. SOURCE AND NUMERICAL VERIFICATION
+
+scripts/build_paper_assets.py reads archival stage1/capacity/sensitivity
+records, accepts byte-preserving JSON gzip archives, and derives its outputs.
+It independently recomputes all 29 first-stage and all 12 capacity contrasts
+from the 24 paired outcomes, including means, standard deviations, standard
+errors, t critical values, interval endpoints, practical margins, and signs.
+It checks agreement with the archived analysis rather than copying formatted
+tables. Both margin rules are checked against their declared historical data.
+
+Successful asset run verified all 41 primary contrasts and read the 168-bank
+mechanism archive. Generated claim_sheet.json retains unrounded numbers and
+source hashes; claim_numbers.tex provides convenient source-derived macros.
+caption_notes.json records exact units and interpretation for each asset.
+
+The original independent audits additionally checked saved predictions and
+grouped losses, selected ridge solutions, frozen file hashes, and fresh-split
+provenance. The numerical sensitivity audit checked all 96 outputs, the 85
+source/input hashes, and independently regenerated the kernel-normalizer
+counts. These are historical audit records, distinct from the packaging
+agent's separate fresh-rerun verification. Do not claim a new rerun passed
+until its own execution and audit output says so.
+
+The original frozen kahm_study sources and results were not modified by this
+paper-asset or appendix work.
+
+3. QUANTITATIVE CLAIMS CHECKED AGAINST ARCHIVED OUTCOMES
+
+Straight branches, within-branch target, n_train=1024:
+  affine phi + ridge mean MSE:          1.0026935882213683
+  KAHM phi + ridge mean MSE:            0.0246675711522115
+  affine locality score + ridge MSE:   0.0046409363100892
+  affine local coordinates + ridge:    0.0033334321718683
+  raw ridge mean MSE:                  0.0033298983386484
+  G = affine phi - KAHM phi:           0.9780260170691569
+  first-stage simultaneous interval:  [0.9625519713, 0.9935000629]
+  Bayes MSE for every branch law:      1/300
+
+The prespecified straight-branch interaction is
+  I0 = G(lambda0)-G(lambda1) = -0.9780391685021531,
+  interval [-0.9935121217782583, -0.9625662152260479].
+This has the opposite sign to a larger geometry advantage for regime-only
+prediction. It is not a generic KAHM failure. The curved interaction is
+  I1 = -0.0095635571969549,
+  interval [-0.0828390794820825, 0.0637119650881727],
+and its direction is unresolved.
+
+KAHM local-coordinate ridge augmentation clears the fixed practical margin
+in eight of the nine primary settings. The identity-only straight-branch
+case is a small adverse difference within the practical band. Log-normalizer
+augmentation is positive in seven settings under the primary intervals,
+with five clearing their practical margins. These are comparisons against
+KAHM phi, not tests of KAHM local superiority over affine local.
+
+First-stage Van der Pol ridge mean MSEs:
+  KAHM phi:        0.1111076771668147
+  KAHM local:      0.0144747444478840
+  affine local:    0.0115816066445389
+Thus ridge augmentation alone does not establish the later KAHM advantage.
+
+Fresh Van der Pol mean MSEs (24 new repetitions):
+  budget    raw             affine local    KAHM local
+    64      0.002858643970  0.001376729406  0.001026627245
+   256      0.001654149702  0.001078002947  0.000871969166
+
+At 256 landmarks:
+  raw - KAHM local = 0.000782180536,
+      interval [0.000754957, 0.000809404];
+  affine local - KAHM local = 0.000206033781,
+      interval [0.000180998, 0.000231069].
+Both clear the frozen margin 0.000148907271869. The two 64-landmark
+comparisons also clear that margin. The 256-landmark relative reductions
+are 47.3% and 19.1%, respectively, calculated as ratios of means without
+ratio confidence intervals. KAHM local wins all 24 paired repetitions
+against each of these two controls at each tested budget.
+
+On nonlinear AR, raw input beats KAHM local at both budgets; the affine-local
+minus KAHM-local intervals contain zero and lie inside the fixed practical
+band. On Duffing, both controls beat KAHM local at both budgets. All these
+cells remain in the same 12-comparison follow-up family.
+
+The fresh secondary validation selector chooses raw/64 on all 24 AR runs,
+KAHM-local/256 on all 24 Van der Pol runs, affine-local/256 on 23 Duffing
+runs, and raw/256 on the remaining Duffing run. It was fixed before those
+data. Selection uses validation only; these outcomes carry no additional
+primary interval claim.
+
+At Van der Pol budget 256, retained RBF-plus-linear basis dimensions are
+268 for raw, 298 for affine local, and mean 272.375 (range 261--285) for
+KAHM local. Nominal equal landmark budgets do not imply equal retained rank,
+statistical degrees of freedom, or computational cost.
+
+Reconstruction diagnostics: affine has lower best-local and affinity-weighted
+individual reconstruction MSE in each of the 24 repetitions of every one of
+the five main input-geometry settings. The straight-branch best-local means
+are about 2.16e-16 for affine versus 0.00327642 for KAHM, in squared error
+per standardized input coordinate. These diagnostics are not supervised
+endpoints. Weighted individual errors are not error of the weighted vector.
+
+Reflection: straight-branch affine phi has mean training-standardized
+per-coordinate RMS about 7.53e-9, versus about 1.4021 for KAHM phi. Both
+curved-branch codes distinguish reflection. Actual learned code differences
+are not asserted to be mathematically zero, so this is not proof of a Bayes
+information-loss floor for the floating-point affine code.
+
+Score recovery: maximum absolute inverse error is 2.7755575615628914e-16
+over training and held-out checks for three geometries in 96 branch banks.
+Van der Pol KAHM full-score/RBF64 MSE is 0.00157519198250, versus
+0.01273421474448 for the information-equivalent phi-plus-logZ/RBF64 code.
+This is a secondary finite-decoder comparison, not differing Bayes information.
+
+Post-hoc numerical sensitivity removes 99,762 exact-zero signed normalizers
+among 2,236,416 test query--local-model evaluations. These are not unique
+query counts. Of the zeros, 99,687 already had all-zero Gaussian rows.
+The local-feature mean MSE change is about 4.30e-14 at width64 and -3.03e-13
+at width256 (original minus stabilized); the largest absolute per-repetition
+MSE change is 1.69e-11. All 24 local-feature paired wins survive for both
+controls at both widths. Full-score mean MSEs change by about 0.37--0.39%,
+and some predictions change appreciably. Do not say every pipeline is
+numerically unaffected.
+
+Airfoil fixed-cohort group-weighted MSEs, in dB^2:
+  raw ridge       19.472587764
+  raw RBF64       15.68981249
+  KAHM phi ridge  31.85857476
+  KAHM local ridge 20.90402820
+  KAHM local RBF64 20.93126593
+The 24 fit seeds use the same 21 held-out setting groups. They are not
+independent natural-data population replications or a forecasting benchmark.
+
+4. MATHEMATICAL AND STATISTICAL SCOPE
+
+The methods appendix supplies proofs of the conditional-mean risk identity,
+score/log-normalizer invertibility, exact and approximate symmetry statements,
+the reconstruction-through-code upper bound, and common kernel-row scaling.
+Exact score invariance requires equivariant reconstruction and preserved
+group identities. The approximate-symmetry bound requires a declared metric,
+a known Lipschitz budget, and a population reflection discrepancy. Empirical
+diagnostics plus unconstrained fitted heads do not meet those requirements.
+
+The reconstruction upper bound needs a reconstruction h(U) through the code
+received by the predictor and a Lipschitz conditional mean on its domain.
+Small raw-query reconstruction error alone does not supply that property.
+
+The 29-family and 12-family intervals are separate. Under independent normal
+paired differences, individual t intervals have exact nominal coverage and
+Bonferroni gives family coverage at least95%. Otherwise coverage is approximate.
+No joint95% statement across both stages is warranted. Margins are study-design
+scales, not externally meaningful application thresholds. No prospective power
+calculation is claimed. Significance at one budget and not the other does not
+test a budget interaction. All target-mixture and method dependence is handled
+by pairing; overlapping windows, horizons, or repeated fits do not supply
+independent rows for primary inference. No primary pseudoreplication was found.
+
+5. MATERIAL PUBLICATION LIMITS
+
+A. The positive generalization evidence is for one specified numerical
+   forecasting law, observation function, sample-size regime, horizon set,
+   feature bank, and finite tuning grid. Natural forecasting evidence is absent.
+   Three synthetic laws are not independent representatives of all ML tasks.
+
+B. There is no validated pre-task geometric criterion predicting KAHM benefit.
+   The branch mechanism does not by itself explain the Van der Pol advantage.
+   A stronger follow-up would freeze such a predictor and test it on held-out
+   tasks with deliberately varied dynamics, sensors, noise, and sample sizes.
+
+C. The matched comparison is useful for component attribution, but not for a
+   claim against all well-tuned affine/local learning or raw-input estimators.
+   The native affine locality control itself shows the limitation. Stronger
+   raw and local model comparisons would be needed for a broad performance claim.
+
+D. The supporting mathematics is generic and elementary. Publication novelty
+   rests on the controlled KAHM investigation, adverse cases, independent
+   follow-up, and reproducible artifact; it should not be sold as a new
+   general learning principle. This review does not assert an exhaustive
+   novelty search or predict journal acceptance.
+
+E. Numerical sensitivity removes one concrete underflow explanation, not every
+   conditioning risk. Signed denominator cancellation remains a distinct issue.
+   Changes to a future deployed feature map require consistent fitting and
+   validation and should not silently replace historical results.
+
+F. Timing shares intermediate computations and is not a standalone efficiency
+   benchmark. Equal landmark counts do not establish compute fairness or a
+   performance/compute frontier. The paper appropriately avoids these claims.
+
+The manuscript is suitable as an internally reviewable research draft with
+these limits explicit. Author review remains necessary for framing, attribution,
+prior-work overlap, author metadata, and the intended submission venue. No
+additional external action or submission is implied by this audit.

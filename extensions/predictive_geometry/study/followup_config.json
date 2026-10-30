@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "phase": "capacity_confirmation",
+  "phase_code": 4,
+  "master_seed": 20261030,
+  "repetitions": 24,
+  "systems": ["nonlinear_ar", "vanderpol", "duffing"],
+  "landmark_counts": [64, 256],
+  "features": ["raw", "affine:local", "kahm:local", "kahm:scores"],
+  "validation_selector": "lowest joint-horizon validation MSE among all eight feature-by-width pipelines; secondary",
+  "base_config": "config.json",
+  "family_size": 12,
+  "family_alpha": 0.05,
+  "practical_fraction": 0.05,
+  "motivation": "Data-motivated follow-up of stage1 local-coordinate flexible-head effects, assessing dependence on the decoder landmark budget. All stage2 data are fresh."
+}

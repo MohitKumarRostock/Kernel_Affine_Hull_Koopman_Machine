@@ -1,0 +1,868 @@
+\documentclass[twoside,11pt]{article}
+\usepackage[preprint]{jmlr2e}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,mathtools,booktabs,microtype,enumitem,longtable,array}
+\usepackage{lastpage}
+\usepackage{graphicx}
+\hypersetup{hidelinks,
+  pdftitle={When Kernel Affine Hull Geometry Helps Prediction},
+  pdfauthor={Mohit Kumar and Somayeh Kargaran},
+  pdfsubject={Controlled investigation of KAHM geometry, local coordinates, and predictive performance}}
+\jmlrheading{}{2026}{1--\pageref{LastPage}}{}{}{}{Mohit Kumar and Somayeh Kargaran}
+\ShortHeadings{When KAHM Geometry Helps Prediction}{Kumar and Kargaran}
+\firstpageno{1}
+\input{generated/claim_numbers}
+\allowdisplaybreaks
+\setlength{\emergencystretch}{2em}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{18pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\MSE}{\operatorname{MSE}}
+\newcommand{\K}{\mathrm{K}}
+\newcommand{\A}{\mathrm{A}}
+\newcommand{\clip}{\operatorname{clip}}
+\newcommand{\repourl}{https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-predictive-geometry/extensions/predictive_geometry}
+
+\begin{document}
+\title{When Kernel Affine Hull Geometry Helps Prediction:\\
+Local Coordinates, Decoder Capacity, and Conditional Gains}
+\author{\name Mohit Kumar \email mohit.kumar@uni-rostock.de\\
+  \addr University of Rostock, Rostock, Germany\\
+  Software Competence Center Hagenberg, Hagenberg, Austria
+  \AND
+  \name Somayeh Kargaran \email somayeh.kargaran@scch.at\\
+  \addr Software Competence Center Hagenberg, Hagenberg, Austria}
+\maketitle
+
+\begin{abstract}
+Kernel Affine Hull Machines (KAHMs) learn nonlinear local reconstruction
+geometry, but good reconstruction need not yield a useful predictive code.
+We separate reconstruction, score encoding, and decoder capacity using
+matched local banks, controlled target variation, and reproducible forecasting
+experiments. On a straight-branch law, affine reconstruction is nearly exact
+yet its matched score code nearly suppresses a predictive reflection distinction;
+KAHM scores retain that distinction. Locality-aware affine scores and explicit
+local coordinates remove most of this gap, identifying positional information
+as the useful property rather than reconstruction accuracy alone. Adding
+affinity-gated local coordinates improves KAHM ridge prediction in eight of
+nine primary settings. A separately frozen follow-up with 24 fresh repetitions
+per forecasting law confirms a conditional KAHM benefit: with 256-landmark
+nonlinear decoders, KAHM local coordinates reduce mean Van der Pol error by
+\VDPRawWideRelativeGain\% relative to raw inputs and \VDPAffineWideRelativeGain\% relative to matched affine local
+coordinates. Both advantages exceed prespecified practical margins under
+simultaneous paired intervals. It loses to raw inputs on nonlinear
+autoregression and to both controls on Duffing. We provide a validation-selected implementation,
+numerical-stability analysis, and complete experiment scripts. The findings
+support task-dependent KAHM representations, while leaving a transferable
+criterion for their advantage open.
+\end{abstract}
+\begin{keywords}
+Kernel Affine Hull Machines, representation learning, local geometry,
+time-series forecasting, reproducible evaluation
+\end{keywords}
+
+\section{Introduction}\label{sec:intro}
+
+Kernel Affine Hull Machines (KAHMs) provide a way to learn nonlinear
+reconstruction maps from local reference sets. Their original motivation
+includes geometrically informed classification and privacy--utility tradeoffs
+\citep{Kumar2024KAHM}. A natural next question is whether this geometry helps
+prediction beyond the tasks for which it was introduced. That question needs
+more precision than a comparison of reconstruction errors or average ranks
+on a collection of datasets. A reconstruction map, the numerical code passed
+to a predictor, and the predictor itself are different objects. An advantage
+at one stage need not survive the next.
+
+Consider a local model that reconstructs every point on an affine line
+exactly. Its residual is zero everywhere on that line. The reconstruction is
+excellent, but the residual does not specify where a query lies along the
+line. If the target varies along that direction, a predictor receiving only
+the residual cannot use the information that the reconstructor itself used.
+Conversely, a less accurate nonlinear reconstruction can induce scores that
+vary with local position and are therefore useful to the prediction task.
+This observation does not establish a general preference for inaccurate
+reconstruction. It identifies a missing link: the code must preserve the
+variation relevant to the target, and the selected decoder must be able to
+use that variation.
+
+We investigate that link for KAHM representations. Our experimental question
+is: \emph{which property of KAHM geometry helps prediction, under what
+conditions, and how should that knowledge change the model?} We address it
+at two levels. A controlled branch distribution holds the input law fixed
+while changing whether the target depends on branch identity or position
+along the branch. Matched geometric banks isolate the reconstruction rule
+from reference selection, local principal directions, and score
+normalization. Forecasting experiments then test whether a practical
+representation suggested by the controlled analysis has predictive value
+under finite decoder budgets.
+
+The investigation gives a conditional positive result for KAHMs. On the
+straight-branch law, the KAHM score code preserves a reflection distinction
+that the matched affine score code nearly removes. This matters when the
+target depends on signed position. It does not arise from lower input
+reconstruction error. Adding local positional coordinates repairs the affine
+code as well, and changing the affine scoring rule also substantially reduces
+the gap. Thus the result identifies a useful property of the KAHM code in
+this comparison, rather than a property exclusive to KAHMs.
+
+The forecasting result is different and complementary. KAHM affinities with
+a linear decoder are poor on the two oscillator laws. Retaining local
+coordinates improves those representations, and a nonlinear decoder gives
+a further substantial improvement on Van der Pol. We used the first-stage
+observation to specify a separate follow-up before generating new data.
+Across 24 fresh repetitions, KAHM local-coordinate features outperform both
+raw histories and matched affine local-coordinate features on Van der Pol
+at each of two landmark budgets. The corresponding comparisons favor other
+representations on Duffing and nonlinear autoregression. The controlled
+branch mechanism therefore motivates an architectural change, while the
+forecasting study establishes its conditional utility without claiming that
+the branch mechanism completely explains the oscillator result.
+
+The paper makes three contributions.
+\begin{enumerate}[leftmargin=*,itemsep=3pt]
+\item A controlled KAHM investigation separates reconstruction fidelity,
+      information retained by score encoding, and accessibility to a chosen
+      decoder. A fixed-input target intervention and matched reconstruction
+      controls reveal a positional-information mechanism and its limits.
+\item A fresh-sample capacity study establishes a reproducible KAHM advantage
+      on a declared forecasting law, with paired comparisons, simultaneous
+      intervals, practical effect thresholds, and unfavorable results on
+      neighboring benchmark laws retained in the same analysis.
+\item An executable research artifact implements the resulting model design:
+      retain local position, allow a nonlinear decoder, and select the complete
+      representation--decoder pipeline using validation data. The artifact
+      preserves the historical results and regenerates experiments and paper
+      assets from explicit configurations.
+\end{enumerate}
+
+Local tangent features are established constructions
+\citep{Yu2009LCC,Yu2010LTC}, and the score-normalization inverse used below
+is elementary algebra. We do not present them as new learning principles.
+The contribution is their controlled use to understand KAHMs,
+the conditional empirical finding, and the tested consequence for KAHM
+model design. The supporting mathematical statements explain what the
+experiments can and cannot establish; they are not new KAHM approximation
+rates or distribution-free performance certificates.
+
+\input{related_work}
+
+\section{Separating Geometry, Encoding, and Prediction}\label{sec:method}
+
+\subsection{A shared local bank}
+
+Let $x\in\R^d$ denote an input and let $z$ be its training-standardized
+version. A bank contains three blocks with $2$, $4$, and $8$ local models.
+Within each block, training-only $k$-means defines the reference groups.
+Each local model $c$ uses at most 24 shared reference observations, their
+mean $\mu_c$, and a shared orthonormal basis $P_c$ obtained from the pinned
+KAHM implementation. The effective rank is at most two, at most $d-1$,
+and at most the number of local references minus one. For two-dimensional
+branch inputs the rank is one. Across the two main geometric alternatives,
+we keep the scaler, partitions, reference indices and values, basis,
+effective rank, score definition, and association rule fixed.
+
+The affine reconstruction is
+\begin{equation}\label{eq:affine}
+  r^{\A}_c(z)=\mu_c+P_cP_c^\top(z-\mu_c).
+\end{equation}
+The KAHM reconstruction uses the upstream regularized kernel construction.
+Writing the local reference matrix as $V_c$, the query-kernel row as $k_c(z)$,
+and the fitted regularized matrix as $B_c$, its algebra is
+\begin{equation}\label{eq:kahm}
+  a_c(z)=\frac{k_c(z)B_c}{k_c(z)B_c\boldsymbol{1}},
+  \qquad r^{\K}_c(z)=V_c^\top a_c(z)^\top.
+\end{equation}
+The weights can be signed; this is not a convex combination guarantee.
+The source implementation uses float32 reference observations and replaces
+an exactly zero denominator by one. We retain both conventions in the main
+experiments and study the zero-denominator issue separately in
+Section~\ref{sec:numerical}. The repository vendors the unchanged upstream
+autoencoder and kernel routines at an immutable source commit.
+
+This design compares reconstruction rules within a common local bank. It
+does not compare separately optimized, complete KAHM and affine learning
+systems. A centroid reconstruction and alternative native scoring formulas
+provide secondary controls. Here ``native score'' means the corresponding
+score formula evaluated on the shared references, not an independently
+tuned native pipeline.
+
+\subsection{Scores and representations}
+
+For either reconstruction, define the radial and angular components
+\begin{align}
+  q_c(z)&=1-\exp\{-\|z-r_c(z)\|_2\},\\
+  a_c^{\mathrm{ang}}(z)&=\pi^{-1}
+       \arccos\!\left(\clip\!\left(
+       \frac{\langle z,r_c(z)\rangle}
+       {\|z\|_2\|r_c(z)\|_2},-1,1\right)\right),\\
+  T_c(z)&=\frac{\sqrt{q_c(z)^2+
+                           a_c^{\mathrm{ang}}(z)^2}}{\sqrt{2}}.
+\end{align}
+When the angular denominator is zero, the cosine is set to zero, following
+the implementation. For each block, the affinity is
+\begin{equation}\label{eq:phi}
+ w_c(z)=(1-T_c(z)+\tau)^\omega,\qquad
+ Z(z)=\sum_{j\text{ in block}}w_j(z),\qquad
+ \phi_c(z)=w_c(z)/Z(z),
+\end{equation}
+with $\omega=16$ and $\tau=10^{-6}$. A block therefore produces relative
+scores, rather than preserving their absolute scale.
+
+We study several representations formed by concatenating across blocks:
+the affinities $\phi$; the affinities with one $\log Z$ per block;
+the full score vector $T$; the affinities with standardized raw inputs;
+and the local-coordinate representation
+\begin{equation}\label{eq:local}
+ \Gamma_{\mathrm{local}}(z)=
+ \left[\phi(z),\ \left\{
+       \phi_c(z)P_c^\top(z-\mu_c)
+                  \right\}_{c=1}^{14}\right].
+\end{equation}
+The latter uses the query's position in each local basis, not the
+reconstructed vector. It has the familiar form of gated local tangent
+coordinates \citep{Yu2010LTC}. Our question is how KAHM-derived gates behave
+within this construction. The same augmentation is applied to affine gates.
+Forecast inputs have dimension 12, score codes dimension 14,
+$[\phi,\log Z]$ dimension 17, and local-coordinate features dimension 42.
+These stored dimensions are not assertions of equal effective capacity.
+
+\subsection{Information preservation does not imply equal decoding difficulty}
+
+The outer normalization in Equation~\eqref{eq:phi} has a simple exact inverse
+if its normalizer is retained:
+\begin{equation}\label{eq:inverse}
+ T_c=1+\tau-
+       \exp\!\left\{\frac{\log\phi_c+\log Z}{\omega}\right\}.
+\end{equation}
+Thus $(\phi,\log Z)$ and $T$ contain the same information in exact
+arithmetic. They need not give the same fitted risk under a linear decoder,
+a finite nonlinear basis, feature standardization, or regularization. In
+particular, an improvement from $\phi$ to $[\phi,\log Z]$ cannot, by itself,
+identify whether information recovery or easier decoding caused the gain.
+The full-score control helps distinguish these possibilities. This outer
+normalizer is also distinct from the signed kernel denominator in
+Equation~\eqref{eq:kahm}.
+
+For scalar prediction, write $m(x)=\E[Y\mid X=x]$. The Bayes error using a
+representation $U=\Gamma(X)$ satisfies
+\begin{equation}\label{eq:bayes}
+ R_U^{\mathrm{Bayes}}-R_X^{\mathrm{Bayes}}
+ =\E\left[(m(X)-\E[m(X)\mid U])^2\right].
+\end{equation}
+A fitted predictor can have additional approximation, regularization,
+estimation, and selection error. We use flexible heads to probe accessibility,
+but finite-head experiments cannot identify the Bayes error in
+Equation~\eqref{eq:bayes}. Claims about a fitted pipeline are kept separate
+from claims about information loss.
+
+\section{A Controlled Test of Target-Relevant Geometry}\label{sec:controlled}
+
+\subsection{Change the target while keeping the inputs fixed}
+
+Let $S$ be uniform on $\{-1,+1\}$, let $T$ be uniform on $[-1,1]$, and let
+$\epsilon$ be uniform on $[-0.1,0.1]$, independently. The controlled law is
+\begin{equation}\label{eq:branch}
+ X=(T,c\cos(\pi T)+0.5S),\qquad
+ Y_\lambda=\sqrt{1-\lambda}\,S+\sqrt{3\lambda}\,T+\epsilon,
+\end{equation}
+where $c\in\{0,1\}$ and $\lambda\in\{0,1/2,1\}$. The input identifies both
+$T$ and $S$. The target's signal variance equals one and its Bayes MSE equals
+$1/300$ in every setting. At $\lambda=0$ the signal is branch identity;
+at $\lambda=1$ it is signed position; at $\lambda=1/2$ both matter.
+
+Within a repetition and curvature, all three targets use the same input
+samples, noise samples, and unsupervised fitted bank. Across curvatures, the
+latent samples are also shared. Consequently, varying $\lambda$ changes
+predictive relevance without changing input geometry or signal variance.
+It can still change the difficulty of representing the conditional mean
+within a particular decoder family. We therefore analyze both fixed-head
+contrasts and additional representation controls.
+
+\subsection{A reflection diagnostic and its mathematical interpretation}
+
+The transformation $Q(t,x_2)=(-t,x_2)$ preserves the branch input law.
+Its target-odd component is
+\begin{equation}
+ m_{\mathrm{odd}}(X)=\{m(X)-m(QX)\}/2=\sqrt{3\lambda}\,T,
+ \qquad \|m_{\mathrm{odd}}\|_{L^2}=\sqrt{\lambda}.
+\end{equation}
+A representation satisfying $\Gamma(QX)=\Gamma(X)$ almost surely cannot
+recover this component. Its Bayes risk is at least $1/300+\lambda$.
+This statement allows the representation to retain even functions such as
+$|T|$; it does not require the representation to be constant along a branch.
+
+For approximate symmetry, let
+$\delta_\Gamma^2=\E[d(\Gamma(X),\Gamma(QX))^2]$ in a specified feature
+metric. Any $\kappa$-Lipschitz decoder obeys the supporting inequality
+\begin{equation}\label{eq:symmetrybound}
+ R(g\circ\Gamma)-R_X^{\mathrm{Bayes}}
+ \geq\left(\|m_{\mathrm{odd}}\|_{L^2}
+                         -\kappa\delta_\Gamma/2\right)_+^2.
+\end{equation}
+The proof is an even--odd decomposition and the reverse triangle inequality;
+we include it in the appendix. The experiment measures reflection
+discrimination, but does not replace $\delta_\Gamma$ by an empirical estimate
+and assert a population certificate. The fitted heads also have no prescribed
+common Lipschitz budget. This bound supplies an interpretation of the
+controlled intervention, rather than an additional certified empirical
+result.
+
+\subsection{Why reconstruction alone is an incomplete criterion}
+
+If $m$ is $L$-Lipschitz and an input can be reconstructed as $h(U)$ from the
+\emph{predictor's code} with mean squared error at most
+$\varepsilon_{\mathrm{rec}}^2$, conditional expectation gives
+\begin{equation}\label{eq:bridge}
+ R_U^{\mathrm{Bayes}}-R_X^{\mathrm{Bayes}}
+ \leq L^2\varepsilon_{\mathrm{rec}}^2.
+\end{equation}
+This familiar argument requires reconstruction through $U$. A local
+reconstructor $r_c(X)$ receives $X$ itself. Small
+$\|X-r_c(X)\|$ does not establish the existence of $h$ when the predictor
+receives only $\phi(X)$. Further, even the existence of $h$ does not ensure
+that a restricted fitted decoder can approximate $m\circ h$ well. The
+experiment tests precisely this distinction between the geometry's use of
+an input and the final code's retention of it.
+
+\section{Experimental Design}\label{sec:design}
+
+\subsection{Data laws and independent evaluation units}
+
+The primary first-stage experiment has nine settings: six branch laws at
+training size 1,024 and three forecasting laws, namely nonlinear
+autoregression (AR), Van der Pol, and Duffing. Branch validation and test
+sizes are 512 and 2,048 points. A nested training size of 256 is secondary.
+Each forecasting repetition generates 128 training, 128 validation, and
+512 test episodes. An episode has length 72; histories have length 12;
+the prediction horizons are 1, 4, and 12; origins have stride four. Each
+episode supplies 13 origins. All origins from an episode stay in one split.
+The loss first averages squared errors across origins and horizons within
+an episode, then across episodes. The oscillator laws are the specified
+numerical generators, including their integration schemes, rather than
+claims about exact continuous-time dynamics.
+
+We additionally evaluate the UCI Airfoil Self-Noise data as a secondary
+static-regression check. Entire operating-condition groups, defined by the
+four non-frequency inputs, are held out. The fixed split has 64 training,
+21 validation, and 21 test groups, containing 905, 295, and 303 rows. Losses
+weight groups equally. The 24 fitting seeds reuse this same dataset and
+split. They measure fitting variability, not 24 independent natural-data
+replications. This dataset supplies a useful adverse result but does not
+constitute a natural forecasting evaluation.
+
+\subsection{Decoders and validation}
+
+The primary decoder is ridge regression with an unpenalized intercept.
+Training-only standardization precedes fitting, and validation selects the
+regularization parameter from seven values between $10^{-8}$ and 1.
+A nonlinear diagnostic uses a Gaussian Nystr\"om basis augmented by the
+linear input coordinates \citep{Williams2001Nystrom}. Training rows supply
+the landmarks. Three bandwidth multipliers and the same ridge grid are
+selected on validation data; the basis columns are standardized before
+ridge fitting. Thus this diagnostic is a finite RBF-plus-linear model,
+not an exact kernel-ridge estimator with its usual RKHS penalty and not
+an oracle for all possible decoders.
+
+Forecast horizons share validation-selected hyperparameters. Branch targets
+select independently. Models remain fitted on the training set: validation
+observations are not incorporated in a subsequent refit. Predictions are
+clipped to the known support, $[-1,1]$ for the forecasting generators and
+$[-2.1,2.1]$ for the branch law; Airfoil predictions are not clipped. Raw
+ridge, quadratic ridge, and raw RBF models are included as controls.
+
+\subsection{Two stages with distinct comparison families}
+
+Two pilot repetitions check execution and set practical effect margins.
+Before the first confirmation data are generated, an internal hash manifest
+records source, configurations, analysis specification, pilot records,
+and margins. This is a recorded internal freeze, not a public prospective
+registration. The first stage independently regenerates training,
+validation, and test data in each of 24 repetitions. Common randomness
+supports paired comparisons within a repetition.
+
+For each of the nine primary settings, define
+\begin{align}
+ G&=R(\phi^{\A},\mathrm{ridge})-R(\phi^{\K},\mathrm{ridge}),\\
+ N&=R(\phi^{\K},\mathrm{ridge})
+                       -R([\phi^{\K},\log Z^{\K}],\mathrm{ridge}),\\
+ L&=R(\phi^{\K},\mathrm{ridge})
+                       -R(\Gamma_{\mathrm{local}}^{\K},\mathrm{ridge}).
+\end{align}
+Positive values favor KAHM geometry, normalizer retention, and local-coordinate
+retention, respectively, in the indicated comparisons. The 27 cellwise
+contrasts plus $G(0)-G(1)$ at each curvature form a family of 29. We use
+two-sided paired $t$ intervals across 24 repetitions, with Bonferroni family
+level 0.05 and 23 degrees of freedom. A cell's practical margin is 5\% of
+the mean pilot raw-ridge MSE. These intervals are parametric approximations,
+not distribution-free certificates. A non-significant contrast is not an
+equivalence finding.
+
+The second stage was designed after observing promising first-stage
+Van der Pol results with KAHM local features and an RBF decoder. Its plan
+and practical margins were frozen before 24 fresh repetitions per
+forecasting law were generated from separate random-number streams.
+It crosses four representations---raw inputs, affine local coordinates,
+KAHM local coordinates, and KAHM scores---with 64 and 256 landmarks.
+The 12 primary contrasts compare KAHM local coordinates against raw inputs
+and affine local coordinates in each law and width. They have their own
+95\% Bonferroni family of paired $t$ intervals. The practical margin is 5\%
+of that law's first-stage mean raw-RBF MSE, fixed before the new outcomes.
+We do not assert a joint 95\% event across the two families.
+
+Matched landmark seeds and nominal widths constrain the comparison but
+do not equalize effective capacity: feature dimensions and retained
+Nystr\"om ranks can differ. Landmark sets at different widths need not be
+nested. The follow-up tests robustness across two declared finite budgets,
+not superiority over every possible raw-input predictor. All required
+repetitions completed; no failed seed was silently removed or replaced.
+
+\section{Results}\label{sec:results}
+
+\subsection{Useful positional discrimination can coexist with worse reconstruction}
+\label{sec:branchresults}
+
+Affine reconstruction has lower held-out reconstruction error in every
+repetition of each of the five main input-geometry settings: straight and
+curved branches and the three forecasting laws. This holds for both the
+best-local-model and affinity-weighted reconstruction summaries. The
+reconstruction advantage does not translate into a uniform predictive
+advantage of the affine score code.
+
+On the straight branches with the signed-position target, mean ridge MSE
+is approximately \FlatWithinAffineMSE{} for affine affinities and
+\FlatWithinKAHMMSE{} for KAHM
+affinities. The primary paired KAHM advantage is
+$\FlatWithinGeometryGain$ with simultaneous interval $[0.96255,0.99350]$. Yet the average
+best-local affine reconstruction error is approximately
+$2.16\times10^{-16}$, compared with $0.00328$ for KAHM. These reconstruction
+figures are squared Euclidean errors divided by input dimension in
+standardized input space, averaged over blocks; their role is diagnostic
+rather than an additional primary test.
+
+The reflection diagnostic explains an important part of this result.
+Using training-standardized feature coordinates, the RMS difference
+between $\phi(X)$ and $\phi(QX)$ averages about $7.5\times10^{-9}$ for
+affine scores and 1.40 for KAHM scores. The affine representation is nearly
+reflection-invariant in this setting, whereas KAHM scores distinguish
+opposite signed positions. We do not assume that a finite learned bank
+has this property in every law: on curved branches both codes substantially
+distinguish reflected queries. The diagnostic is descriptive and its
+scaling is not silently substituted into Equation~\eqref{eq:symmetrybound}.
+
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=.97\textwidth]{generated/figures/branch_alignment.pdf}
+ \caption{Target relevance changes while branch inputs, fitted banks, and
+ noise samples are held fixed within a repetition. The score-only affine
+ code performs poorly when signed position matters on straight branches.
+ Explicit local coordinates and a locality-aware affine scoring control
+ remove most of the gap. The dotted line is the Bayes MSE $1/300$.
+ The displayed mean errors summarize 24 repetitions;
+ only the declared contrasts in the text belong to the primary interval family.}
+ \label{fig:branch}
+\end{figure}
+
+\begin{table}[t]
+ \centering\small\setlength{\tabcolsep}{3pt}
+ \input{generated/tables/branch_primary}
+ \caption{The six primary branch settings at 1,024 training points:
+ mean ridge test MSE over 24 repetitions, with the primary KAHM advantage
+ $G$ and its interval from the 29-comparison family. The Bayes MSE is
+ $1/300$. The affine-locality scoring control reuses the shared references
+ and is secondary.}
+ \label{tab:branch}
+\end{table}
+
+The scoring controls are essential to interpreting the large contrast.
+A locality-aware affine score gives mean error \FlatWithinNativeAffineMSE{}, and affine local
+coordinates give 0.00333, close to the Bayes error and raw ridge. Therefore,
+the large advantage over matched affine affinities is not evidence that
+affine geometry is intrinsically unable to predict this target. It is
+evidence that a residual-based encoding can discard positional information
+and that KAHM's induced score variation can retain it. An explicit
+position-preserving code achieves the same practical purpose more directly.
+
+The primary target interaction also constrains the interpretation. On
+straight branches, $G(\lambda=0)-G(\lambda=1)=\FlatAlignmentInteraction$, with simultaneous
+interval $[-0.99351,-0.96257]$. The KAHM advantage is greater when signed
+position matters, rather than when branch identity alone matters. The
+corresponding curved-branch interaction is unresolved. These results
+disfavor a simple account in which the useful KAHM property is merely
+separation of branch regimes. The native-score controls support the more
+specific positional interpretation, although those controls were not members
+of the formal interaction contrast.
+
+\subsection{Local coordinates repair a predictive bottleneck, without making it KAHM-specific}
+\label{sec:localresults}
+
+Adding gated local coordinates to KAHM affinities improves ridge prediction
+in \LocalPracticalBenefitCount{} of the nine primary settings. In all eight, the simultaneous
+interval clears the prespecified practical margin. The exception is the
+straight-branch, identity-only target, where the small adverse difference
+is below that margin in magnitude. Adding $\log Z$ improves seven settings
+under the primary intervals, five by more than their practical margins.
+Neither intervention is a universal improvement.
+
+The three forecasting laws show the scale of the local-coordinate effect
+(Table~\ref{tab:ridge}). On Van der Pol, KAHM ridge MSE falls from \VDPPhiRidgeMSE{}
+to \VDPKAHMLocalRidgeMSE{}; on Duffing it falls from 0.05373 to 0.00756. However, affine
+local features are still better under ridge on both laws. The first-stage
+geometry contrasts alone therefore do not establish a KAHM advantage on
+the oscillators. They establish that score-only KAHM codes are an
+inadequate predictive interface for these restricted heads.
+
+\begin{table}[t]
+ \centering\small\setlength{\tabcolsep}{3pt}
+ \input{generated/tables/ridge_local}
+ \caption{All nine first-stage primary settings: mean test MSE over
+ 24 repetitions for ridge decoders. The local-coordinate improvement $L$
+ and its interval belong to the 29-comparison family. Retaining local
+ position substantially improves KAHM prediction in eight settings;
+ KAHM local coordinates do not dominate affine local coordinates.}
+ \label{tab:ridge}
+\end{table}
+
+The inverse in Equation~\eqref{eq:inverse} is verified numerically with
+maximum error about $2.8\times10^{-16}$ on the checked representations.
+Even so, the first-stage Van der Pol KAHM-score RBF error is 0.00158,
+whereas the information-equivalent $[\phi,\log Z]$ RBF error is 0.01273.
+This secondary comparison illustrates that preserving information does
+not equalize access to it under a particular finite decoder and tuning
+scheme. It also cautions against interpreting every local-coordinate gain
+as a proof of irreversible information loss in the original representation.
+
+\subsection{Fresh data confirm a conditional KAHM forecasting advantage}
+\label{sec:capacity}
+
+Table~\ref{tab:capacity} reports the second-stage comparison. On Van der Pol,
+KAHM local-coordinate features outperform both alternatives at 64 and 256
+landmarks in all 24 repetitions. At 256 landmarks, mean MSE is \VDPKAHMWideMSE{}
+for KAHM local coordinates, \VDPAffineWideMSE{} for affine local coordinates, and
+\VDPRawWideMSE{} for raw histories. The corresponding relative reductions,
+computed from the means, are \VDPAffineWideRelativeGain\% and \VDPRawWideRelativeGain\%. These percentages are
+descriptive ratios; the primary inferential quantities are paired absolute
+differences.
+
+The 256-landmark raw-minus-KAHM difference is $0.00078218$, with simultaneous
+interval $[0.00075496,0.00080940]$. The affine-minus-KAHM difference is
+$0.00020603$, with interval $[0.00018100,0.00023107]$. Both lower endpoints
+exceed the frozen practical margin $0.00014891$. The two corresponding
+64-landmark intervals also clear that margin. Thus the positive result
+survives the tested increase in nonlinear decoder budget. Increasing the
+budget improves raw and affine performance too; this is not evidence of an
+asymptotic separation between representation families.
+
+\begin{table}[t]
+ \centering\small\setlength{\tabcolsep}{3pt}
+ \input{generated/tables/capacity_primary}
+ \caption{Fresh second-stage forecasting results: mean MSE over 24 new
+ repetitions per law, with $M=64$ or $256$ RBF landmarks. All MSEs,
+ differences, and interval endpoints are multiplied by $10^3$.
+ The difference $\Delta$ is control minus KAHM-local MSE; positive favors
+ KAHM. Intervals belong to the separate 12-comparison family. The same
+ decoder family and tuning grid are used, with gains on Van der Pol
+ and losses on the other laws.}
+ \label{tab:capacity}
+\end{table}
+
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=.98\textwidth]{generated/figures/forecast_capacity.pdf}
+ \caption{Mean second-stage forecasting errors as the nominal nonlinear
+ decoder budget increases. Feature dimensions and effective Nystr\"om ranks
+ differ, so the horizontal axis is a landmark budget rather than an exactly
+ equalized model capacity. The ordering depends on the forecasting law.}
+ \label{fig:forecast}
+\end{figure}
+
+The adverse comparisons matter for the scope of the result. On nonlinear
+AR, raw histories outperform KAHM local features at both widths; the
+KAHM--affine differences are unresolved. On Duffing, both raw and affine
+local features outperform KAHM local features at both widths. At 256
+landmarks, mean Duffing MSE is about 0.002798 for affine local features and
+0.004074 for KAHM local features. All four corresponding adverse
+raw/affine comparisons have simultaneous intervals excluding zero.
+The advantage therefore does not follow from the label ``nonlinear
+oscillator'' alone.
+
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=.98\textwidth]{generated/figures/capacity_contrasts.pdf}
+ \caption{All 12 primary second-stage contrasts, each defined as comparator
+ MSE minus KAHM-local MSE. Positive values favor KAHM. Intervals use the
+ second-stage 95\% Bonferroni family across 24 paired full data-and-fit
+ repetitions. Gray bands mark the fixed $\pm$ practical margins from
+ first-stage raw-RBF errors. This family
+ is separate from the 29 first-stage contrasts.}
+ \label{fig:contrasts}
+\end{figure}
+
+These results establish the utility of the declared KAHM pipeline on the
+specified Van der Pol law and sampling design. They do not establish a
+task-independent geometric statistic that predicts the advantage. In
+particular, the straight-branch reflection experiment does not prove that
+the same symmetry explains Van der Pol. Connecting an independently
+measured geometric diagnostic to a held-out task's KAHM advantage is a
+remaining research problem.
+
+\subsection{Gaussian query underflow does not explain the local-feature advantage}
+\label{sec:numerical}
+
+The original query kernel can underflow when every Gaussian value in a
+query row becomes numerically zero. Because the kernel weights are
+normalized, multiplying a nonzero row by a common positive constant
+does not change the exact reconstruction. We therefore performed a
+post-hoc sensitivity analysis using the stable evaluation
+\begin{equation}\label{eq:stable}
+ \widetilde{k}_{cj}(z)=
+       \exp\{\ell_{cj}(z)-\max_i\ell_{ci}(z)\},
+ \qquad \ell_{cj}(z)=\log k_{cj}(z),
+\end{equation}
+while keeping the fitted references, basis, regularized matrix, and data
+unchanged. We refitted and validation-tuned the affected heads consistently
+under this query evaluation. This is a robustness analysis on reused
+second-stage Van der Pol data, not an additional independent confirmation.
+
+Across \NumericalQueryClusterCount{} test query--local-model evaluations, the
+original implementation has \NumericalOriginalZeroCount{} exactly zero weight normalizers; the stable
+evaluation has none. Despite this substantial numerical diagnostic,
+mean KAHM-local test MSE changes by less than $4\times10^{-13}$ at either
+width. Its advantage over raw and affine local features remains positive
+in all 24 repetitions at both widths. Full-score features change more:
+their mean errors improve by approximately 0.37--0.39\%, and some
+individual predictions change appreciably. We therefore do not claim that
+the numerical issue is irrelevant to every representation.
+
+\begin{table}[t]
+ \centering\small
+ \input{generated/tables/numerical_sensitivity}
+ \caption{Post-hoc Van der Pol numerical sensitivity on the same 24
+ second-stage banks and samples. Stable query evaluation removes observed
+ zero denominators while leaving local-coordinate mean MSE effectively
+ unchanged. $\Delta_r$ is the original-minus-stable MSE difference within
+ repetition $r$; wins count stable predictions beating the raw and affine
+ local controls at the same width. These comparisons are outside the two primary
+ interval families.}
+ \label{tab:numerical}
+\end{table}
+
+The practical implication is to stabilize the inner kernel evaluation and
+retain explicit diagnostics for near-zero or cancelling signed normalizers.
+Row scaling handles Gaussian underflow; it does not guarantee that signed
+weights can never cancel. The archived main results retain the original
+implementation so that the sensitivity comparison remains inspectable.
+
+\subsection{A natural-data check limits claims of general predictive superiority}
+\label{sec:airfoil}
+
+The secondary Airfoil experiment favors the raw RBF predictor
+(Table~\ref{tab:airfoil}). Its mean group-weighted MSE is \AirfoilRawRBFMSE\,dB$^2$,
+compared with \AirfoilRawRidgeMSE{} for raw ridge, 20.90 for KAHM local-coordinate ridge,
+31.86 for KAHM affinity ridge, and 34.16 for affine affinity ridge.
+The first-stage validation selector chooses raw RBF in all 24 fits.
+This is evidence against treating the KAHM construction as a default
+replacement for raw-input regression. Because all seeds share the same
+held-out operating-condition groups, their spread is not an uncertainty
+interval for generalization to arbitrary natural datasets or new group
+populations.
+
+\begin{table}[t]
+ \centering\small
+ \input{generated/tables/airfoil}
+ \caption{Secondary Airfoil static-regression results on one fixed group
+ split, averaged over 24 fitting seeds. Units are dB$^2$. These seeds do
+ not constitute independent natural-data replications, and the comparison
+ is descriptive.}
+ \label{tab:airfoil}
+\end{table}
+
+\section{How the Findings Change the Model}\label{sec:implications}
+
+\subsection{Retain local position at the predictive interface}
+
+The first change is to expose local position instead of making every
+predictor rely on normalized reconstruction scores alone. Equation~\eqref{eq:local}
+is a compact implementation of that change. It retains the interpretation
+of affinities as local gates while giving the decoder coordinates that
+vary within a local region. The branch intervention and the eight positive
+local-coordinate contrasts support this change for the studied settings.
+The affine control shows that it is a general representation principle
+whose usefulness should not be attributed solely to KAHM reconstruction.
+
+Retaining $\log Z$ is a different intervention: it recovers the score vector's
+absolute scale in exact arithmetic, but does not directly expose position.
+The two augmentations should therefore not be treated as interchangeable.
+Full scores and raw-input skips are useful controls when a score-based
+predictor underperforms, because they test different possible bottlenecks.
+
+\subsection{Select the representation together with its decoder}
+
+The second change is to evaluate a complete representation--decoder pair.
+The first-stage ridge ordering would miss the favorable Van der Pol
+KAHM-local result available to the nonlinear head. Conversely, the existence
+of that favorable pair does not justify choosing it on Duffing or AR.
+The implemented second-stage selector considers the eight combinations
+of four representations and two landmark widths. Each candidate's
+hyperparameters are selected by validation, and the candidate with the
+lowest validation MSE supplies the final prediction. Test data play no
+role in either decision. This protocol was specified before the fresh
+second-stage data were generated.
+
+The selector chooses raw inputs with 64 landmarks in all 24 AR repetitions,
+KAHM local coordinates with 256 landmarks in all 24 Van der Pol repetitions,
+and affine local coordinates with 256 landmarks in 23 of the 24 Duffing
+repetitions; the remaining Duffing choice is raw input with 256 landmarks.
+Mean selector errors are approximately 0.004424, 0.000872, and 0.002792,
+respectively. These are secondary operational results for the declared
+candidate set, not an oracle comparison with all learning algorithms.
+Selection adds validation use and computational cost, and a new task can
+require a larger or differently designed validation set
+\citep{Cawley2010Selection}.
+
+The companion implementation exposes \texttt{PredictiveGeometryRegressor}
+with training and validation inputs, optional validation groups, prediction,
+and state serialization. Its default candidate family reproduces this
+selector. A raw-input selection avoids geometric queries at prediction
+time. The reusable wrapper was assembled after the experiments, and its
+predictions were checked against the archived selection procedure; its
+existence does not constitute an additional experiment.
+
+\subsection{Use reconstruction as a diagnostic, not the sole selection objective}
+
+The third change is evaluative. A geometric model should report how its
+code treats target-relevant variation alongside input reconstruction.
+On a controlled distribution this can be done using a known conditional
+mean, a target intervention, or a distribution-preserving transformation.
+On an unknown task, a fitted target predictor can provide an exploratory
+diagnostic, but its errors and selection must be accounted for before
+using it to claim an information-loss certificate.
+
+For KAHM development, a useful next objective is therefore to learn or
+select local gates for predictive performance while retaining direct local
+coordinates and a raw-input alternative. We have implemented validation
+selection among fixed candidates; we have not tested a new supervised
+training objective for the KAHM reconstruction bank. Such an objective is
+a consequence to investigate, rather than a result established here.
+
+\section{Scope, Limitations, and Research Direction}\label{sec:limits}
+
+The positive evidence has a specific scope. It concerns the declared
+generators, training and validation sizes, observation maps, horizons,
+small local bank, feature scaling, decoder grids, and test distributions.
+The capacity follow-up guards against a favorable first-stage seed outcome
+and checks two finite budgets. It does not remove task-selection effects:
+Van der Pol was a promising setting observed in the first stage, and we
+explicitly used that observation to motivate the follow-up. The other two
+laws were retained to test the breadth of the finding.
+
+The controlled comparison changes one reconstruction rule inside a matched
+construction. This supports component attribution, but it does not establish
+superiority over independently optimized affine local learning. Indeed,
+the locality-aware affine scoring control nearly closes the straight-branch
+gap. Local-coordinate augmentation also changes dimensionality and
+regularization geometry. Its gain cannot be assigned wholly to information
+recovery, and an equal nominal landmark count is not an exactly equal
+number of effective parameters. At 256 landmarks on Van der Pol, for
+example, the retained RBF-plus-linear dimensions are 268 for raw inputs,
+298 for affine local coordinates, and approximately 272 on average for
+KAHM local coordinates after the eigenvalue cutoff.
+
+The statistical analysis uses paired $t$ approximations across independent
+synthetic repetitions. Bonferroni adjustment protects the declared family
+only to the extent that these marginal approximations are adequate.
+The intervals do not cover every exploratory analysis. Runtime measurements
+share intermediate computations across methods and are not fair standalone
+end-to-end speed comparisons. The numerical sensitivity exercise addresses
+one concrete implementation risk on reused Van der Pol data; it is not a
+complete conditioning analysis of signed kernel normalization.
+
+The natural-data evidence is narrow and adverse for the presented KAHM
+variants. A broader claim about machine learning utility requires natural
+forecasting datasets, strong raw-input and local-model baselines, and
+protocols that respect series or subject boundaries. We have not compared
+against a modern, broadly tuned forecasting suite or demonstrated
+state-of-the-art forecasting. The present contribution is an explanatory
+and reproducible study of a particular geometric model family.
+
+Most importantly, there is not yet a validated diagnostic that predicts
+before fitting the downstream model when KAHM geometry will help on a
+new task. A credible next test would define such a diagnostic using
+training and validation data, freeze its prediction of relative benefit,
+and evaluate that prediction across held-out tasks. Candidate quantities
+include target-relevant changes along local directions and the sensitivity
+needed to decode the corresponding code, rather than reconstruction
+error alone. The test must include tasks with different observation maps,
+noise levels, sample sizes, and dynamics, and must retain cases where
+the prediction is wrong. This would convert a conditional empirical
+finding into transferable model-selection knowledge.
+
+\section{Conclusion}
+
+KAHM geometry can help prediction, but its benefit depends on what the
+predictive representation retains and which decoder uses it. In a
+controlled branch experiment, KAHM-derived scores preserve signed
+positional variation that a matched affine residual code nearly removes,
+despite worse reconstruction. Explicit local coordinates expose that
+variation for both geometries. In a separately designed fresh-sample
+forecasting study, KAHM local coordinates with a finite nonlinear decoder
+give a clear advantage on Van der Pol and lose on other declared laws.
+The resulting model design retains local position, allows decoder
+flexibility, and selects among geometric and raw-input alternatives using
+validation data. These findings support a precise development path for
+KAHMs: study and exploit target-relevant geometry, while testing the
+conditions of its advantage explicitly.
+
+\section*{Code, Data, and Research Transparency}
+
+The \href{\repourl}{companion GitHub repository branch} contains this
+manuscript, the original source snapshot, fixed configurations and seed
+rules, compact historical results, statistical audit scripts, paper-asset
+generators, and commands for fresh experiment execution. The extension is
+\path{extensions/predictive_geometry}; the research branch is
+\path{research/kahm-predictive-geometry}. Its reproduction guide distinguishes
+historical-result verification, a small execution check, and a complete
+regeneration. Fresh executions write separate output directories and
+provenance; they do not overwrite or retrospectively recreate the
+historical freezes. Generated model states and predictions support
+loss recomputation and selected-model replay. Synthetic data are generated
+from the specified laws. The included Airfoil data retain source,
+checksum, and license attribution.
+
+The KAHM routines are pinned to the upstream commit
+\begin{center}\small\texttt{d6d74d1953a4310b73065a556df816e5ab5e3ebc}.\end{center}
+The artifact records both
+source hashes and the original numerical environment. Seeds and package
+versions aid numerical reproduction but do not guarantee byte-identical
+floating-point results across hardware and BLAS implementations. Timing
+fields are not treated as deterministic scientific outcomes. Automated
+checks compare the regenerated predictive quantities and primary contrasts
+with the archived results within stated numerical tolerances.
+
+\paragraph{Relationship to the companion certificate manuscript.}
+\citet{KumarKargaran2026Certificates} studies risk certificates for
+prescribed forecasting representation and decoder classes. The present
+paper asks a different empirical question about KAHM geometry, encoding,
+and finite fitted prediction. It uses shared upstream machinery and
+generator definitions, but the target-intervention experiments, fresh
+capacity follow-up, numerical sensitivity analysis, and validation-selected
+model constitute the study reported here. The ridge and RBF heads are
+not the companion manuscript's fixed sensitivity-budget classes, and no
+certificate from that manuscript is transferred to these fitted results.
+
+\paragraph{Use of AI tools.}
+AI tools assisted with study implementation, numerical and statistical
+checks, literature retrieval, reproducibility packaging, and manuscript
+drafting. The executable artifact and recorded evidence are provided to
+support independent scrutiny of the claims. This document is a research
+draft for author review.
+
+\appendix
+\input{appendix_methods}
+\bibliography{references}
+\end{document}

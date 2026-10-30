@@ -1,0 +1,206 @@
+DATA PREPARATION AND SOURCE NOTE
+Prepared 2026-10-30, before any Airfoil model evaluation.
+
+FORECASTING LAWS
+The four original generators and history indexing are imported directly from
+vendor/upstream/extensions/certified_forecasting/src/certified_forecasting/data.py.
+The oscillator function is copied without numerical changes from the vendored
+experiments/run_oscillators.py, without importing that experiment runner.
+Episode length 72; history 12; horizons 1,4,12; stride 4; 13 origins per episode.
+Nonlinear AR retains the upstream 80-value burn-in. Oscillators retain float64
+RK4, dt=.025, observation interval=.1, burn time=10, bounded sensor
+.95*tanh(x)+Uniform[-.02,.02]. Independent groups are episodes, not windows.
+Default split sizes declared here are train128, validation128, test512;
+callers must use distinct seeds for the three splits.
+
+BRANCH LAW
+S~Uniform{-1,+1}, T~Uniform[-1,1], E~Uniform[-.1,.1], mutually independent.
+X=(T, c*cos(pi*T)+.5*S), c=0 or 1. There is no input noise.
+m_lambda=sqrt(1-lambda)*S+sqrt(3*lambda)*T; Y=m_lambda+E.
+Var(m_lambda)=1 for every lambda in [0,1]. Raw-input Bayes MSE=.01/3.
+Common target bound is [-2.1,2.1]. branch_targets reuses the stored E.
+S must never define primary unsupervised groups; it is provided only to form
+targets and for explicitly labeled latent/oracle diagnostics.
+
+VERIFICATION
+All six forecasting systems: design/target shapes, exact upstream window
+indexing, origin indices, grouping, and ranges verified for n=3, seed923.
+Both oscillators: bit-for-bit array equality against the function extracted
+from the upstream file's AST for seeds11/923, n=4, length72, dt=.025/.0125.
+Branch: noise reuse, bounds, deterministic regeneration, exact-latent recovery
+up to floating point, and approximate unit signal variance checked for
+n=10000, seed8801, lambda=0,.25,.5,.75,1. A preliminary subtraction tolerance
+of 2e-16 was too tight (max error2.22e-16); final tolerance5e-16 passes.
+Airfoil: all106 setting groups and all1503 rows assigned exactly once;
+no setting group or row shared between splits. No model fits performed here.
+
+OPTIONAL AIRFOIL STATIC REGRESSION DATA
+Primary documentation:
+https://archive.ics.uci.edu/dataset/291/airfoil+self+noise
+Brooks, T., Pope, D., & Marcolini, M. (1989). Airfoil Self-Noise [Dataset].
+UCI Machine Learning Repository. DOI:10.24432/C5VW2C. UCI lists CC BY4.0.
+The source describes NASA NACA0012 aerodynamic/acoustic wind-tunnel data,
+1503 observations, five input variables, and scaled sound pressure in dB.
+This is static regression, not another forecasting dataset.
+
+The official UCI binary download could not be transferred through the
+available network path. The exact numeric text was retrieved through GitHub
+from the pinned mirror:
+https://raw.githubusercontent.com/DhannveenUppal7/Airfoil-Self-Noise/a152c1d1ca7d7a4b68c420071393692b621a55c0/airfoil_self_noise.dat
+The saved file preserves that mirror's CRLF bytes, 59984 bytes in total.
+It is identical after CRLF/LF normalization to this independently retrieved
+pinned mirror:
+https://raw.githubusercontent.com/ShusenTang/Dive-into-DL-PyTorch/78b366f8020725f14a533ff1804aaf890dacc14e/data/airfoil_self_noise.dat
+The second file has 58481 LF bytes. Both pinned versions were refetched and
+matched the initially downloaded versions exactly. We have not established
+byte identity against an independently downloaded UCI archive.
+
+FIXED AIRFOIL SPLIT
+Five raw features in order: frequency Hz; angle of attack degrees; chord
+length m; free-stream velocity m/s; suction-side displacement thickness m.
+Target remains original scaled sound pressure in dB. No global population
+range is asserted; API bounds=None. Fit all scaling on training rows only.
+Group by exact joint values of columns1:5 (the four non-frequency features),
+using np.unique(axis=0) lexicographic group IDs. There are106 groups with
+8 to19 rows each (median14). Use RNG seed2026103007, permute106 group IDs,
+and allocate first64 to train, next21 to validation, last21 to test.
+This split was fixed before model performance was evaluated. The split is
+one fixed-cohort robustness check. Group labels avoid sharing these settings;
+they do not establish an iid sample from a physical population or independent
+replications. Repeated model seeds do not create new held-out data.
+
+SPLIT MANIFEST
+{
+  "train": {
+    "rows": 905,
+    "groups": 64,
+    "group_ids_in_allocation_order": [
+      60,
+      15,
+      94,
+      70,
+      9,
+      92,
+      17,
+      25,
+      72,
+      61,
+      81,
+      63,
+      6,
+      46,
+      10,
+      19,
+      42,
+      51,
+      100,
+      101,
+      2,
+      32,
+      93,
+      62,
+      31,
+      0,
+      89,
+      55,
+      20,
+      59,
+      97,
+      102,
+      24,
+      52,
+      30,
+      75,
+      1,
+      73,
+      103,
+      38,
+      34,
+      85,
+      28,
+      96,
+      7,
+      12,
+      65,
+      14,
+      86,
+      5,
+      48,
+      76,
+      27,
+      37,
+      4,
+      8,
+      78,
+      80,
+      50,
+      33,
+      29,
+      104,
+      41,
+      66
+    ]
+  },
+  "validation": {
+    "rows": 295,
+    "groups": 21,
+    "group_ids_in_allocation_order": [
+      64,
+      36,
+      3,
+      53,
+      88,
+      11,
+      83,
+      49,
+      87,
+      99,
+      82,
+      56,
+      57,
+      44,
+      90,
+      71,
+      98,
+      18,
+      26,
+      13,
+      22
+    ]
+  },
+  "test": {
+    "rows": 303,
+    "groups": 21,
+    "group_ids_in_allocation_order": [
+      40,
+      77,
+      74,
+      91,
+      84,
+      54,
+      21,
+      23,
+      67,
+      105,
+      35,
+      68,
+      69,
+      47,
+      45,
+      95,
+      43,
+      39,
+      58,
+      16,
+      79
+    ]
+  }
+}
+
+SHA256 FILE HASHES
+{
+  "data.py": "a0ece522777c5c08e74d25c3b2c0c7556c198f226656b20132bfada1592dda2e",
+  "run_oscillators.py": "8b3ac1a285e3128848e16d1d69192822795cdc9d7180d1802cf23dd4c1339ab2",
+  "datasets.py": "e02fff2811d09f41d1d340a989ef32a46d2776038d0e54045e3266b5f4f6dfb3",
+  "airfoil_self_noise.dat": "74c75fd71783f1e6b71f8a622b993dc592897a97cd689c5090a07147a1b097b3"
+}

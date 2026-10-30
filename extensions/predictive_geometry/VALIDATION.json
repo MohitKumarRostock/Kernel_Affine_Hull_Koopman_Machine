@@ -1,0 +1,202 @@
+{
+  "format": "kahm_release_validation_v1",
+  "created_utc": "2026-10-30T07:09:55.062191+00:00",
+  "status": "passed",
+  "scope": "Computational reproduction of the existing published seed streams, not new statistical evidence.",
+  "commands_tested": [
+    {
+      "command": "python -m reproduce full --workers 4 --run-dir runs/release-final",
+      "status": "passed",
+      "elapsed_wall_seconds": 194.375528
+    },
+    {
+      "command": "python -m reproduce smoke --run-dir runs/release-smoke-final",
+      "status": "passed",
+      "elapsed_wall_seconds": 34.971205
+    },
+    {
+      "command": "python -m reproduce audit --output runs/release-standalone-audit",
+      "status": "passed",
+      "note": "Executed after the final source changes; all source/archive hashes and both statistical families verified."
+    },
+    {
+      "command": "python -m reproduce tables --input archive --output runs/release-standalone-tables",
+      "status": "passed",
+      "note": "Executed after the final source changes; all 41 contrasts and mechanism inputs verified before asset generation."
+    },
+    {
+      "command": "python -m reproduce paper",
+      "status": "passed",
+      "performed_by": "manuscript integration reviewer",
+      "note": "Exact command regenerated assets and successfully ran latexmk after final generated-macro integration."
+    }
+  ],
+  "packaging_sha256": {
+    "archive/MANIFEST.json": "06945a564dd20beb41afa5b610c0621da380c144d4cc33537441aa92fab11bec",
+    "pyproject.toml": "9ab6be94fe381d6b7392ac0a68d05ab4ad1fce199c11f0a1b8d9d87b1e5b97a4",
+    "reproduce/__init__.py": "b9953b66d75f892d183c5f2a25578172d8e1c561ecbbdd5ff29d297d4c352cab",
+    "reproduce/__main__.py": "0209bcc68d74967698a8d2c38153c8fd5bd1419a0b88247bbf36af2f000e4bc7",
+    "reproduce/io.py": "b7ff663cdcc17e2d60390705d4fedcf35b1fc3d3eb3973964efedb59f7fb3e68",
+    "reproduce/worker.py": "e5acc1b0426d213957b926842bd24373c5804a9fbb957926d514374a5ad16bde",
+    "requirements.txt": "4a25c94490eedd853ae87e14a11bf3d9cb1683e5bdb63980bda5a513534a719d",
+    "scripts/build_paper_assets.py": "39722e30c060a74c7ee1218dfab81d975673d663bcbe58b14e445fe8c1578c98",
+    "study/SNAPSHOT.json": "1cd1abde423659b79b4e4fd9373a3c80677917ada3490df08136c415e7c1d530"
+  },
+  "test_source_sha256": {
+    "tests/test_reproduction.py": "eb5092bd60f428c9c275d1ceaed39de1b1dc2625ad0814f0431f84d7aa03967c"
+  },
+  "archive_verification": {
+    "source_files_verified": 51,
+    "archive_files_verified": 17,
+    "snapshot_sha256": "1cd1abde423659b79b4e4fd9373a3c80677917ada3490df08136c415e7c1d530",
+    "archive_manifest_sha256": "06945a564dd20beb41afa5b610c0621da380c144d4cc33537441aa92fab11bec"
+  },
+  "unit_tests": {
+    "packaging_tests": 7,
+    "unchanged_geometry_and_mechanism_tests": 8,
+    "numerical_checks": [
+      "nonunderflow upstream reconstruction equality",
+      "common log-row-offset invariance",
+      "artificial underflow repair",
+      "query context restoration on exception"
+    ],
+    "reduced_smoke_pipeline_fits": 40,
+    "smoke_data_families": [
+      "nonlinear_ar",
+      "vanderpol",
+      "duffing",
+      "branch",
+      "airfoil"
+    ]
+  },
+  "full_job_counts": {
+    "pilot_banks": 14,
+    "confirmation_banks": 168,
+    "airfoil_fits": 24,
+    "capacity_banks": 72,
+    "numerical_sensitivity_banks": 24
+  },
+  "failed_jobs": 0,
+  "mse_reproduction": {
+    "stage1": {
+      "matched_records": 14490,
+      "maximum_absolute_test_mse_difference": 0.0,
+      "within_rtol_1e_minus6_atol_1e_minus10": 14490,
+      "all_within_numerical_comparison_tolerance": true,
+      "scope": "Numerical reproduction diagnostic; timings and machine-dependent metadata are not compared."
+    },
+    "capacity": {
+      "matched_records": 648,
+      "maximum_absolute_test_mse_difference": 0.0,
+      "within_rtol_1e_minus6_atol_1e_minus10": 648,
+      "all_within_numerical_comparison_tolerance": true,
+      "scope": "Numerical reproduction diagnostic; timings and machine-dependent metadata are not compared."
+    },
+    "numerical_sensitivity": {
+      "matched_records": 96,
+      "maximum_absolute_test_mse_difference": 0.0,
+      "within_rtol_1e_minus6_atol_1e_minus10": 96,
+      "all_within_numerical_comparison_tolerance": true,
+      "scope": "Numerical reproduction diagnostic; timings and machine-dependent metadata are not compared."
+    }
+  },
+  "prediction_audits": {
+    "stage1": {
+      "prediction_and_loss_records_checked": 2304,
+      "files_checked": 192,
+      "max_absolute_unit_loss_difference": 5.684341886080802e-14,
+      "max_absolute_record_mse_difference": 1.4210854715202004e-14,
+      "mismatches": [],
+      "required_records": 2304,
+      "required_files": 192,
+      "method": "Independent squared residuals, stable group sorting and reduceat means; no call to the fitted-head loss function."
+    },
+    "capacity_records_checked": 648,
+    "sensitivity_records_checked": 96,
+    "sensitivity_max_absolute_unit_loss_difference": 6.938893903907228e-18,
+    "sensitivity_max_absolute_record_mse_difference": 2.168404344971009e-19
+  },
+  "statistical_families_recomputed": [
+    29,
+    12
+  ],
+  "normalizer_audit": {
+    "query_cluster_pairs": 2236416,
+    "original_exact_zero_normalizers": 99762,
+    "stabilized_exact_zero_normalizers": 0,
+    "original_all_zero_gaussian_rows": 99687
+  },
+  "historical_margin_portability": {
+    "historical_provenance_bytes_hashed": true,
+    "fresh_outcomes_drive_contrasts_and_figures": true,
+    "independent_targeted_checks": [
+      "perturbed fresh pilot/raw-RBF losses accepted with correct historical margin snapshots",
+      "corrupt historical full-stage1 snapshot rejected by frozen hash"
+    ]
+  },
+  "execution_environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.3.5",
+      "scipy": "1.17.0",
+      "scikit-learn": "1.8.0",
+      "pandas": "2.2.3",
+      "matplotlib": "3.10.8",
+      "joblib": "1.5.3",
+      "threadpoolctl": "3.6.0",
+      "contourpy": "1.3.3",
+      "cycler": "0.12.1",
+      "fonttools": "4.61.1",
+      "kiwisolver": "1.4.9",
+      "packaging": "26.3",
+      "pillow": "12.3.0",
+      "pyparsing": "3.3.2",
+      "python-dateutil": "2.9.0.post0",
+      "pytz": "2026.5",
+      "tzdata": "2026.5",
+      "six": "1.17.0"
+    },
+    "blas_threads": 1
+  },
+  "ci_status": "Workflow configured; remote GitHub execution is a separate deployment check.",
+  "known_historical_analysis_amendment": "Capacity margin freeze precedes the documented pre-data selector amendment; two source-version differences remain visible, while the final followup freeze verifies exactly.",
+  "release_file_size_snapshot": {
+    "file_count_excluding_runs_and_caches": 114,
+    "total_bytes": 7333888,
+    "largest_files": [
+      {
+        "path": "archive/stage1/mechanism_records.json.gz",
+        "bytes": 1631056
+      },
+      {
+        "path": "archive/stage1/independent_analysis.json",
+        "bytes": 1474260
+      },
+      {
+        "path": "archive/stage1/records.json.gz",
+        "bytes": 1108806
+      },
+      {
+        "path": "archive/capacity/capacity_records.json",
+        "bytes": 788197
+      },
+      {
+        "path": "manuscript/main.pdf",
+        "bytes": 509333
+      }
+    ],
+    "note": "Taken before writing this validation JSON; manuscript/readiness documents may be updated independently."
+  },
+  "independent_release_review": {
+    "status": "passed",
+    "checks": [
+      "current source hashes match both final execution manifests",
+      "independent keyed comparison of all 15234 MSEs against archive",
+      "required prediction coverage and loss discrepancies",
+      "fresh-run generated macros, contrasts, mechanism/numerical/selector/dimension claims equal manuscript generated assets",
+      "historical margin-provenance hashes verified"
+    ],
+    "blocking_issues_remaining": 0
+  }
+}

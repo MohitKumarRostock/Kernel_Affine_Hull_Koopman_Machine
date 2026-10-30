@@ -1,0 +1,19 @@
+[project]
+name = "kahm-predictive-geometry-reproduction"
+version = "0.1.0"
+description = "Source-checkout reproduction bundle for matched KAHM predictive geometry experiments"
+requires-python = ">=3.12,<3.13"
+authors = [
+  {name = "Mohit Kumar"},
+  {name = "Somayeh Kargaran"},
+]
+readme = "README.md"
+
+[tool.kahm-reproduction]
+invocation = "python -m reproduce"
+reference-python = "3.12.14"
+requirements = "requirements.txt"
+scientific-snapshot = "study/SNAPSHOT.json"
+historical-archive = "archive/MANIFEST.json"
+default-run-root = "runs"
+installation = "Source checkout; install requirements.txt and invoke from this extension directory."

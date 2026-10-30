@@ -1,0 +1,71 @@
+{
+  "scope": "Descriptive post-hoc numerical sensitivity on reused phase4 VDP observations; no fresh confirmation or confidence statement.",
+  "algebra_review": "Each Gaussian query row k is replaced by c*k with c=exp(-max(log k))>0 in exact arithmetic before multiplication by unchanged B. For nonzero k*B*1, (c*k*B)/(c*k*B*1) equals the original normalized signed weights. No training Kxx, inverse B, PCA, covariance, references, or scaler is rescaled/refitted. The finite-precision zero-normalizer fallback can change as intended.",
+  "source_files_and_input_files_verified": 85,
+  "source_hash_mismatches": [],
+  "completed_jobs": 24,
+  "prediction_and_loss_records_checked": 96,
+  "max_absolute_unit_loss_difference": 6.938893903907228e-18,
+  "max_absolute_record_mse_difference": 2.168404344971009e-19,
+  "mismatches": [],
+  "independently_recomputed_test_normalizers": {
+    "query_cluster_pairs": 2236416,
+    "original_exact_zero_normalizers": 99762,
+    "stabilized_exact_zero_normalizers": 0,
+    "original_all_zero_gaussian_rows": 99687
+  },
+  "methods": [
+    {
+      "feature": "kahm:local",
+      "landmarks": 64,
+      "replicates": 24,
+      "original_mean_mse": 0.0010266272454232143,
+      "stabilized_mean_mse": 0.0010266272453802235,
+      "mean_original_minus_stabilized_mse": 4.299087489357626e-14,
+      "max_absolute_replicate_mse_change": 1.012023147575758e-12,
+      "mean_raw_minus_stabilized_mse": 0.0018320167250774656,
+      "mean_affine_local_minus_stabilized_mse": 0.00035010216029172464,
+      "wins_vs_raw": 24,
+      "wins_vs_affine_local": 24
+    },
+    {
+      "feature": "kahm:local",
+      "landmarks": 256,
+      "replicates": 24,
+      "original_mean_mse": 0.0008719691657982609,
+      "stabilized_mean_mse": 0.0008719691661009318,
+      "mean_original_minus_stabilized_mse": -3.026710239138637e-13,
+      "max_absolute_replicate_mse_change": 1.6898029633546918e-11,
+      "mean_raw_minus_stabilized_mse": 0.0007821805359057855,
+      "mean_affine_local_minus_stabilized_mse": 0.00020603378087073935,
+      "wins_vs_raw": 24,
+      "wins_vs_affine_local": 24
+    },
+    {
+      "feature": "kahm:scores",
+      "landmarks": 64,
+      "replicates": 24,
+      "original_mean_mse": 0.001571085368051426,
+      "stabilized_mean_mse": 0.0015652190065487993,
+      "mean_original_minus_stabilized_mse": 5.8663615026264865e-06,
+      "max_absolute_replicate_mse_change": 8.735646276898852e-05,
+      "mean_raw_minus_stabilized_mse": 0.0012934249639088896,
+      "mean_affine_local_minus_stabilized_mse": -0.00018848960087685133,
+      "wins_vs_raw": 24,
+      "wins_vs_affine_local": 4
+    },
+    {
+      "feature": "kahm:scores",
+      "landmarks": 256,
+      "replicates": 24,
+      "original_mean_mse": 0.0010499093299866859,
+      "stabilized_mean_mse": 0.0010458007222378374,
+      "mean_original_minus_stabilized_mse": 4.108607748848403e-06,
+      "max_absolute_replicate_mse_change": 3.5293501961970297e-05,
+      "mean_raw_minus_stabilized_mse": 0.0006083489797688799,
+      "mean_affine_local_minus_stabilized_mse": 3.2202224733833716e-05,
+      "wins_vs_raw": 24,
+      "wins_vs_affine_local": 17
+    }
+  ]
+}

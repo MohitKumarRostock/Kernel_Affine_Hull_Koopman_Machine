@@ -1,0 +1,95 @@
+\section{Related work}
+\label{sec:related}
+
+\paragraph{KAHMs and prediction from geometric reconstruction.}
+KAHMs were introduced for geometrically informed classification, including
+a differential-privacy application \citep{Kumar2024KAHM}, and developed for
+collaborative learning \citep{Kumar2025Collaborative}. We reuse their local
+reconstruction operators through the pinned source of
+\citet{Kumar2026Software}. Geometric classification has earlier antecedents:
+nearest-feature-line classification measures distance to affine lines through
+same-class examples \citep{Li1999FeatureLine}, and kernel sparse
+representation studies reconstruction-based coding in an implicit feature
+space \citep{Gao2010KernelSparse}. Such results do not establish that scalar
+reconstruction affinities retain variation needed for another predictive
+target. We examine that transition while matching partitions, references,
+local bases, scores, and decoders. This evaluates a KAHM component's
+predictive role, not the original methods' classification or
+collaborative-learning claims.
+
+\paragraph{Local coordinate coding and local prediction functions.}
+Local coordinate coding connects localized representations to linear
+approximation of smooth functions \citep{Yu2009LCC}. The closest construction
+is local tangent coding: \citet{Yu2010LTC} augment coding weights by products
+with displacement along local principal directions. Our feature form
+$[\phi_c(z),\,\phi_c(z)P_c^\top(z-\mu_c)]_c$ instantiates this established
+augmentation. With a linear readout it is also a soft combination of local
+affine functions, related to mixtures of experts \citep{Jacobs1991Experts}.
+Here the gates are fitted without outcomes and frozen during supervised
+decoding. We ask whether KAHM-derived gates improve this architecture relative
+to matched affine-derived gates. We neither introduce local tangent features
+nor transfer their approximation bounds without verifying their locality
+and smoothness assumptions.
+
+\paragraph{Target relevance and information accessible to a decoder.}
+Supervised dimension reduction seeks features that preserve the relationship
+between inputs and responses \citep{Fukumizu2004SDR}. Our branch intervention
+changes the target while keeping input samples, reconstruction bank, signal
+variance, and noise variance fixed. Predictive $\mathcal{V}$-information
+provides a complementary distinction: informativeness depends on an
+observer's model family, with restricted regression as one special case
+\citep{Xu2020Usable}. We similarly distinguish retained information from its
+accessibility to a specified fitting procedure. Ridge and finite-feature
+RBF comparisons do not estimate optimal risk over all measurable decoders;
+an augmentation gain can reflect accessibility or regularization as well
+as information recovery.
+
+\paragraph{Normalization and coordinate choice.}
+Retaining the normalizer of positive affinities restores their unnormalized
+values in exact arithmetic. Our log-normalizer experiment applies this
+elementary identity to KAHM folding scores. Log-partition information has
+established uses, including energy-based out-of-distribution detection
+\citep{Liu2020Energy}, although that work concerns classifier logits and
+a different task. We compare score coordinates with an invertible
+reparameterization: information agrees while finite-decoder performance can
+differ. The outer-affinity normalizer is distinct from the signed-reference
+denominator inside KAHM reconstruction. We claim neither the inverse identity
+nor log-normalizer augmentation as a new general principle.
+
+\paragraph{Finite kernel approximation and model selection.}
+Nystr\"om approximation uses a smaller landmark system
+\citep{Williams2001Nystrom}, whose size can affect statistical regularization
+and computation \citep{Rudi2015Nystrom}. Our capacity study therefore tests
+two declared procedures, not equivalent function classes or an unrestricted
+raw-input kernel predictor. Model selection can also induce optimistic
+evaluation when the selection criterion is reused to assess performance
+\citep{Cawley2010Selection}. We distinguish validation selection, follow-up
+on independent synthetic data, and numerical sensitivity on reused
+observations. These distinctions concern the validity and scope of the
+comparison; they do not introduce a new selection or inference method.
+
+\paragraph{Relation to the earlier KAHM prediction-limit studies.}
+\citet{KumarKargaran2026Limits} study successor soft coordinates, class-centered
+lower certificates for norm-bounded linear predictors, and Koopman closure.
+The unpublished companion manuscript \citep{KumarKargaran2026Certificates}
+develops a risk-certificate hierarchy for observed-output forecasting under
+declared decoder sensitivity. Those works already distinguish fitted
+accuracy from class risk and use KAHM features, independent evaluation,
+and geometric comparisons. We do not claim those ingredients or extend
+the certificate hierarchy. Our question concerns how reconstruction,
+encoding, and retained local position interact with the target and finite
+decoder. The fixed-input intervention, encoding ablations, and separately
+frozen capacity follow-up address this question. Their paired-repetition
+intervals are not distribution-free class-exclusion certificates, and the
+supporting propositions supply no new KAHM approximation rate.
+
+\paragraph{Contribution and empirical scope.}
+The contribution is a controlled characterization of a useful KAHM-based
+pipeline and its limits. Positional discrimination explains the straight-branch
+construction; it is not a validated criterion predicting advantage on unseen
+tasks. Fresh Van der Pol data support the augmented KAHM pipeline at both
+tested budgets, alongside contrary AR and Duffing results. Airfoil Self-Noise
+\citep{Brooks1989Airfoil} supplies one grouped static-regression check.
+Together these findings support KAHM-derived local features as a candidate
+assessed jointly with its decoder. Broader claims require further tasks
+and independently tuned alternatives.

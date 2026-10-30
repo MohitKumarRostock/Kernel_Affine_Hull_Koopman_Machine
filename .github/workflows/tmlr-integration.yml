@@ -1,0 +1,72 @@
+name: Integrated TMLR manuscript and anonymous artifact
+
+on:
+  push:
+    paths:
+      - 'extensions/tmlr_integration/**'
+      - '.github/workflows/tmlr-integration.yml'
+  pull_request:
+    paths:
+      - 'extensions/tmlr_integration/**'
+      - '.github/workflows/tmlr-integration.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tmlr-integration-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+  NUMEXPR_NUM_THREADS: '1'
+  PYTHONDONTWRITEBYTECODE: '1'
+  MPLBACKEND: Agg
+
+jobs:
+  manuscript-and-review-artifact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: extensions/natural_forecasting/requirements.txt
+      - name: Install pinned analysis dependencies
+        run: python -m pip install -r extensions/natural_forecasting/requirements.txt
+      - name: Check preserved source and review archive defenses
+        run: |
+          python extensions/tmlr_integration/package.py check-source
+          python -m unittest extensions.tmlr_integration.package_tests -v
+      - name: Restore and audit saved evidence without forecasting fits
+        run: |
+          python extensions/natural_forecasting/package.py restore-reference extensions/natural_forecasting/reference/natural_v1.zip.parts.json
+          python extensions/tmlr_integration/package.py audit .
+      - name: Install manuscript compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended latexmk lmodern
+      - name: Compile anonymous integrated manuscript
+        working-directory: extensions/tmlr_integration/manuscript
+        run: |
+          latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          log = Path('main.log').read_text()
+          if re.search(r'There were undefined (references|citations)|Overfull \\[hv]box', log):
+              raise SystemExit('Unresolved citations/references or overflowing content in manuscript')
+          PY
+      - name: Build and audit the anonymous review export
+        run: |
+          python extensions/tmlr_integration/package.py build --pdf extensions/tmlr_integration/manuscript/main.pdf --output "$RUNNER_TEMP/tmlr-release"
+          python extensions/tmlr_integration/package.py verify "$RUNNER_TEMP/tmlr-release/TMLR_Integrated_Manuscript_Source.zip"
+          python extensions/tmlr_integration/package.py verify "$RUNNER_TEMP/tmlr-release/TMLR_Integrated_Review_Supplement.zip"
+          python extensions/tmlr_integration/package.py audit "$RUNNER_TEMP/tmlr-release/TMLR_Integrated_Review_Supplement.zip"

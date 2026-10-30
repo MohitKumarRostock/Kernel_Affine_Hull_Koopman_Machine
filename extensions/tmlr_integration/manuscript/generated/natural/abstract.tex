@@ -1,0 +1,20 @@
+Kernel Affine Hull Machine (KAHM) features encode local reconstruction
+geometry, but their forecasting value depends on the target, decoder, and
+cost of fitting and selecting a model. We evaluate this dependence on eight
+original natural-data source families, separating four development families
+from four reserved confirmation families. Twenty-six series, two
+context--horizon settings, two capacities, and two seeds yield 208 task runs.
+Comparators include independently fitted affine and locality features,
+raw-history kernel and linear models, and conventional forecasting controls.
+Costs include preprocessing, validation search, refitting, prediction, and
+selector dependencies. On confirmation sources, raw-history-plus-KAHM has
+4.26\% higher source-balanced scaled mean-squared error than the matched
+raw-history kernel predictor at 2.30 times its warm-library pipeline cost;
+raw ridge has lower aggregate error than either. A diagnostic frozen before confirmation
+uses metadata and a cheap validation probe to predict KAHM benefit. Adding
+two geometric features changes none of its 80 confirmation decisions and
+slightly worsens log-benefit prediction error. Saved forecasts independently
+reproduce all 2,496 task--method losses. These bounded results identify
+limitations of the tested KAHM forecasting procedure and usefulness
+diagnostic; they do not establish a general KAHM advantage or impossibility
+of a stronger future criterion.

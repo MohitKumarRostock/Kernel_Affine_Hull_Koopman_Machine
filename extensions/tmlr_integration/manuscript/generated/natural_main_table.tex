@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering\small
+\caption{All twelve standalone methods on the reserved natural sources. Scaled MSE and warm-library wall time use equal source-family weights and the frozen within-source hierarchy. Times include required preprocessing, search, refitting, prediction, serialization, and measured bookkeeping; imports and launch are separate. These are descriptive results from four source families.}
+\label{tab:natural-main}
+\begin{tabular}{lrr}
+\toprule
+Method & Scaled MSE & Wall seconds per task \\
+\midrule
+Raw ridge & 0.7798 & 0.1880 \\
+Raw RBF & 0.8075 & 0.1688 \\
+Affine local & 0.9449 & 0.5002 \\
+Locality local & 0.8964 & 0.2898 \\
+KAHM local & 0.9354 & 0.3218 \\
+Raw + affine & 0.8458 & 0.3379 \\
+Raw + locality & 0.8462 & 0.2791 \\
+Raw + KAHM & 0.8419 & 0.3874 \\
+Seasonal naive & 1.0498 & 0.1614 \\
+Holt & 2.3729 & 0.3449 \\
+Histogram boosting & 0.9555 & 8.9103 \\
+MLP & 0.8785 & 1.4626 \\
+\bottomrule
+\end{tabular}
+\end{table}

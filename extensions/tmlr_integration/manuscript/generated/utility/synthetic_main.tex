@@ -1,0 +1,24 @@
+% Generated from the audited forecasting-utility extension; no model fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{New synthetic factorial: mean test MSE multiplied by $10^3$, over 12 fresh complete repetitions per cell. $N$ counts training episodes; $M$ counts raw RBF landmarks. All correction heads are ridge heads. These are cell means; simultaneous primary intervals appear in Figure~\ref{fig:utility-contrasts}.}
+\label{tab:utility-synthetic}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Law & $N$ & $M$ & Raw RBF & Concat. & +KAHM & +Affine & +Locality \\
+\midrule
+Nonlinear AR & 32 & 16 & 4.8715 & 4.9851 & 4.7525 & 4.7586 & 4.7584 \\
+Nonlinear AR & 32 & 64 & 5.0133 & 5.3388 & 5.0157 & 5.0190 & 5.0173 \\
+Nonlinear AR & 128 & 16 & 4.6648 & 4.6592 & 4.5701 & 4.5805 & 4.5753 \\
+Nonlinear AR & 128 & 64 & 4.4806 & 4.7006 & 4.4806 & 4.4840 & 4.4832 \\
+Van der Pol & 32 & 16 & 22.0913 & 7.0925 & 15.6100 & 15.1578 & 12.8848 \\
+Van der Pol & 32 & 64 & 9.2066 & 2.6518 & 8.2892 & 8.3880 & 8.0522 \\
+Van der Pol & 128 & 16 & 20.5463 & 7.5690 & 14.4955 & 13.8986 & 11.5027 \\
+Van der Pol & 128 & 64 & 8.4031 & 2.4087 & 7.4507 & 7.5359 & 7.0687 \\
+Duffing & 32 & 16 & 7.3080 & 8.5619 & 6.6154 & 5.3215 & 5.6464 \\
+Duffing & 32 & 64 & 5.3159 & 5.0348 & 5.2959 & 4.7693 & 5.0240 \\
+Duffing & 128 & 16 & 6.6937 & 7.6252 & 5.8873 & 4.7225 & 4.8299 \\
+Duffing & 128 & 64 & 4.3215 & 4.0529 & 4.2667 & 3.6788 & 3.8379 \\
+\bottomrule
+\end{tabular}
+\end{table}

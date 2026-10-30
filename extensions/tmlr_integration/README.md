@@ -1,11 +1,47 @@
-# Integrated TMLR study: conditional gains, costs, and transfer limits
+# KAHM forecasting manuscript: predictive structure, decoder capacity, and cost
 
-This is the current TMLR revision, integrating the controlled predictive-geometry
-experiments with the completed natural-source forecasting evaluation and a
-separate bounded geometry-scaling sensitivity analysis. The
-archived studies remain unchanged in `../predictive_geometry` and
-`../natural_forecasting`. The integrated manuscript is
-[manuscript/main.tex](manuscript/main.tex).
+This is an **unsubmitted research draft**. It integrates the original controlled
+predictive-geometry study, the original natural-source forecasting evaluation,
+the bounded post-hoc scaling sensitivity, and the new
+[forecasting-utility extension](../forecasting_utility/README.md). The editable
+manuscript is [manuscript/main.tex](manuscript/main.tex).
+
+The new extension tests a preserved raw-history forecast plus a validation-
+selected geometric residual correction, matched affine/locality controls, and
+measured costs. Its independent execution freeze and complete outcomes are
+separate from the original archives. The original study directories remain
+unchanged.
+
+## Current revised artifacts
+
+Use `package_utility.py` for the revised PDF, complete editable LaTeX source,
+and the new extension's reproducibility artifact. The latter contains the
+new study's complete saved predictions and frozen numerical dependencies.
+It is explicitly a public research artifact for the new extension; the
+historical studies and their independent audit commands remain available in
+this repository.
+
+```bash
+python -m extensions.forecasting_utility.reference restore
+python -m extensions.forecasting_utility.reporting
+python extensions/tmlr_integration/build_utility_assets.py
+cd extensions/tmlr_integration/manuscript
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+```
+
+The manuscript uses the bundled TMLR style in preprint mode with an
+**Unsubmitted research draft** header. It retains the existing anonymous author
+placeholder for author review. There has been no journal submission. The new
+asset builder uses only the audited saved outcomes; it does not fit a model.
+Do not run the historical `build_assets.py` to overwrite the revised narrative.
+
+## Historical study documentation
+
+The remaining sections document the original integrated artifact and its
+preserved evidence. The original anonymous exporter `package.py` predates the
+forecasting-utility extension and must not be used to present a complete
+reproducibility bundle for the revised paper. Its source checks and historical
+audits remain valid for their stated original scope.
 
 The paper separates reconstruction accuracy, the information supplied to a
 predictor, and the finite decoder's ability to use that information. Conditional
@@ -25,7 +61,7 @@ cd manuscript
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The official TMLR style is used in anonymous submission mode. Existing
+The original archived version used anonymous submission mode. Existing
 source-derived tables and vector figures are bundled. Building the PDF does not
 fit forecasting models. The companion `build_assets.py` prepares the integrated
 paper assets from the unchanged source studies, archived natural reports,
@@ -74,7 +110,7 @@ distinguished from independently recreating its omitted full prediction arrays.
 The audit fits no forecasting model or geometry bank. Replay writes to a
 separate empty directory and preserves every measurement record.
 
-## Export anonymous review files
+## Original anonymous review exporter (historical scope)
 
 After the final PDF has been compiled and visually checked:
 

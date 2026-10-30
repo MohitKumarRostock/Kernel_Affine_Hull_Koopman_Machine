@@ -18,8 +18,22 @@ although Duffing's KAHM error
 changes appreciably. Robustness of a ranking within these two fixed scaler
 arms is a narrower statement than invariance of the representation or loss.
 
+The additive extension adds a distinct qualification. Preserving the raw
+forecast makes a zero correction feasible for a successfully fitted model,
+but does not establish that the correction is useful, that KAHM is the
+best correction geometry, or that the procedure completes every fit.
+The synthetic factorial finds gains against raw RBF in selected cells,
+while concatenated KAHM, simpler additive controls, or boosting are better
+in others. The two archive fitting failures prevent a full-roster
+geometric loss comparison. On the explicitly post-hoc matched-success
+diagnostic, raw ridge is substantially more accurate and cheaper than
+the geometric alternatives, and neither frozen 5\% policy improves the
+raw RBF aggregate. An architectural safeguard and a validation margin
+are therefore useful design choices to evaluate, not adoption guarantees.
+
 For evaluating another reconstruction-based feature map, the resulting
-questions are concrete. Does the code retain target-relevant position?
+questions are concrete. Does fitting complete on the declared inputs?
+Does the code retain target-relevant position?
 Does a simpler locality or affine control recover the same benefit?
 Does the comparison persist with a raw-input control and an explicitly
 specified decoder? Does it survive complete selection costs and evaluation
@@ -37,8 +51,10 @@ expected scaled MSE: heterogeneous loss magnitudes matter even when each
 realized log ratio has the same sign as the corresponding raw-minus-KAHM
 loss difference. We therefore report the
 actual decision losses and costs as well as prediction error. The failed
-geometric increment motivates a new hypothesis and fresh reserved sources,
-rather than retuning on the already inspected confirmation outcomes.
+geometric increment motivates the separately frozen additive extension
+and new archive sources in Section~\ref{sec:utility-extension}. It does
+not justify retuning a diagnostic on the already inspected confirmation
+outcomes and reporting them as a new test.
 
 \paragraph{Limits of data, inference, and computation.}
 The eight natural source families were selected for diversity and feasibility,
@@ -50,19 +66,21 @@ seven test origins. Missing-window exclusion defines an available-window
 estimand. FRED-MD is a fixed retrospective snapshot whose upstream
 transformations and release-time revisions are not fully audited here.
 
-The natural candidates are local univariate forecasters with two capacity
+The original natural candidates are local univariate forecasters with two capacity
 settings and finite grids. The study is not a comprehensive neural or
 pretrained forecasting benchmark. The MLP reaches its iteration cap in
 68 of 80 selected confirmation refits; all such fits and warnings remain
 reported. Equal landmark counts do not imply equal effective capacities,
-and the two settings jointly vary sample and model-size caps. CPU timings
+and that study's two settings jointly vary sample and model-size caps. CPU timings
 are implementation-specific, include material bookkeeping, and expose
 imports/launch separately. Process high-water RSS includes interpreter and
 input storage and cannot resolve incremental memory use. Model bytes,
 training memory, energy, and financial cost are different quantities.
 
 The controlled Student intervals rely on their stated paired-difference
-assumptions, and the two contrast families retain separate coverage claims.
+assumptions. The original 29- and 12-contrast families and the new
+24-contrast extension retain separate coverage claims, without a joint
+95\% guarantee across the entire paper.
 The branch reflection and saved-bank conditioning checks are descriptive;
 they supply neither a population Lipschitz bound nor a distribution-free
 KAHM performance certificate. Replaying fixed seeds and reconstructing
@@ -78,6 +96,47 @@ and finite decoder geometry can all change together. Further component
 attribution or a newly chosen procedure would require another specified study
 and fresh reserved evidence for a new transfer claim.
 
+\paragraph{Scope of the additive extension.}
+The new factorial separates the number of training episodes from the raw
+decoder's requested landmark count. It holds the declared geometric bank
+configuration and ridge-correction class fixed; it does not identify an
+optimal KAHM rank, reference count, or decoder family. More training data
+can also change the fitted partitions and residual targets. The correction
+learns in-sample residuals of a selected raw predictor, so insufficient
+residual structure, overfitting in either stage, the coarse penalty and
+mixing grids, and finite validation data can all affect its usefulness.
+A favorable comparison identifies a useful complete procedure under that
+protocol; an adverse comparison does not establish that every KAHM decoder
+or every residual-fitting construction must fail.
+
+The new archive evaluation contributes four selected collections, three
+series per collection, two requested capacities, and one fitting seed.
+Solar Weekly has simulation provenance. This is a bounded extension of
+source coverage, not a representative survey of forecasting domains.
+Actual landmark counts and retained kernel ranks can be below their
+requested values on short series. The initial chronological validation
+rule is applied before a pretest refit, which changes the baseline,
+residual targets, and correction together. No positive test guarantee
+follows from a 5\% validation margin, an exact zero-correction option,
+or a positive alignment computed after observing test outcomes. In fact,
+the shared geometric-bank fit fails on both capacities of one Car Parts
+series, before a zero-correction choice can be evaluated. Full-roster
+geometric and policy mean losses are therefore undefined. The amended
+22-configuration comparison is conditional on successful fitting, with
+only two Car Parts series, and cannot be presented as completion of the
+prespecified full-roster evaluation. A future robust fallback or revised
+grouping rule would be a changed procedure requiring a new evaluation.
+
+The utility decision is also application-dependent. This study supplies
+measured loss--cost pairs and fixed policy outcomes; it does not impose a
+deployment latency budget, a memory ceiling, or an exchange rate between
+accuracy and resources. Component-sum policy costs expose required shared
+work but are not separately timed end-to-end executions. Actual serialized
+state is not a lower bound on model storage, and a single execution cannot
+resolve small timing differences as precisely as a repeated benchmark.
+These limits matter when translating a favorable error comparison into a
+claim that additional representation complexity is justified.
+
 \section{Conclusion}
 KAHM geometry can support useful predictive features under specified
 target and decoder conditions. The controlled experiments locate a
@@ -88,7 +147,24 @@ measured warm-pipeline cost for the tested KAHM augmentation than for its
 raw-history comparator, and no useful geometric increment in the frozen
 benefit diagnostic. A paired post-hoc min--max check does not reverse that
 natural-source ranking or the main controlled mean rankings, while exposing
-measurable preprocessing sensitivity. The defensible practical lesson is to evaluate retained
-information, structural controls, the full fitting procedure, and source
-transfer together. A general rule for when KAHM will be worth its cost
-remains unestablished.
+measurable preprocessing sensitivity.
+
+The new factorial shows that preserving the actual raw forecast can
+recover useful corrections at particular data and decoder budgets, while
+leaving stronger concatenated, simpler geometric, or boosting alternatives.
+The new archive evaluation also exposes a shared fitting failure before
+the zero-correction option can be selected. Its full-roster geometric
+losses remain undefined; the separately amended matched-success diagnostic
+shows little additive KAHM gain over raw RBF at substantially greater
+cost, and much stronger performance from raw ridge. These findings do
+not establish a general geometric adoption rule.
+
+The answer to the motivating question therefore has distinct parts.
+Oracle residual structure is a conditional-mean property relative to a
+baseline; finite-decoder usefulness is a property of the fitted correction
+under the evaluation law. Justifying extra complexity additionally
+requires successful operation, credible simpler alternatives, held-out
+evidence, and an application-specific resource requirement. The present
+paper supplies an auditable account of conditional gains, failed transfer,
+and fit limitations. It does not infer minimum necessary complexity from
+representation preservation or from a favorable fitted comparison.

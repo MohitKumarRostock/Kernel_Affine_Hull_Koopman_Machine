@@ -1,14 +1,16 @@
-name: Integrated TMLR manuscript and anonymous artifact
+name: Historical forecasting evidence integrity
 
 on:
   push:
     paths:
-      - 'extensions/tmlr_integration/**'
+      - 'extensions/tmlr_integration/package.py'
+      - 'extensions/tmlr_integration/package_tests.py'
       - 'extensions/scaling_sensitivity/**'
       - '.github/workflows/tmlr-integration.yml'
   pull_request:
     paths:
-      - 'extensions/tmlr_integration/**'
+      - 'extensions/tmlr_integration/package.py'
+      - 'extensions/tmlr_integration/package_tests.py'
       - 'extensions/scaling_sensitivity/**'
       - '.github/workflows/tmlr-integration.yml'
   workflow_dispatch:
@@ -29,7 +31,7 @@ env:
   MPLBACKEND: Agg
 
 jobs:
-  manuscript-and-review-artifact:
+  preserved-evidence:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -55,24 +57,5 @@ jobs:
       - name: Restore and audit saved evidence without forecasting fits
         run: |
           python extensions/tmlr_integration/package.py audit .
-      - name: Install manuscript compiler
-        run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended latexmk lmodern
-      - name: Compile anonymous integrated manuscript
-        working-directory: extensions/tmlr_integration/manuscript
-        run: |
-          latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-          python - <<'PY'
-          from pathlib import Path
-          import re
-          log = Path('main.log').read_text()
-          if re.search(r'There were undefined (references|citations)|Overfull \\[hv]box', log):
-              raise SystemExit('Unresolved citations/references or overflowing content in manuscript')
-          PY
-      - name: Build and audit the anonymous review export
-        run: |
-          python extensions/tmlr_integration/package.py build --pdf extensions/tmlr_integration/manuscript/main.pdf --output "$RUNNER_TEMP/tmlr-release"
-          python extensions/tmlr_integration/package.py verify "$RUNNER_TEMP/tmlr-release/TMLR_Integrated_Manuscript_Source.zip"
-          python extensions/tmlr_integration/package.py verify "$RUNNER_TEMP/tmlr-release/TMLR_Integrated_Review_Supplement.zip"
-          python extensions/tmlr_integration/package.py audit "$RUNNER_TEMP/tmlr-release/TMLR_Integrated_Review_Supplement.zip"
+      # The current revised manuscript and its complete new extension artifact
+      # are compiled, checked and packaged by forecasting-utility.yml.

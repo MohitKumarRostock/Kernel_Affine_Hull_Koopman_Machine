@@ -1,0 +1,123 @@
+\section{Predictive usefulness and the justification of complexity}
+\label{sec:utility-question}
+
+The question ``when is a forecasting representation useful?'' depends on
+what information is retained, which predictor is fitted, and what resources
+the complete procedure consumes. We distinguish these objects before
+comparing KAHM representations. Let $X$ be an available causal history,
+$Y$ its fixed future target, and $\Gamma_{\mathcal D}$ a representation
+fitted using development data $\mathcal D$. A forecasting procedure includes
+the representation, decoder, regularization, and selection rule. Conditional
+on its fitted state, it returns a fixed forecast $\widehat f$ for a new
+evaluation unit. The studies below specify their own target, origin law,
+aggregation, and evaluation unit; their risks are not interchangeable.
+
+\paragraph{Information retention and finite-decoder access.}
+A representation may discard distinctions needed to predict $Y$. This is
+different from making those distinctions difficult for the chosen decoder
+to use. In particular, appending a deterministic feature map to the raw
+history gives $(X,\Gamma_{\mathcal D}(X))$, from which $X$ is exactly
+recoverable. Conditional on the fitted state, this preserves the
+raw-history Bayes information; it does not create additional information
+about the future (Proposition~\ref{prop:nf-raw-preservation}). An improvement
+from raw augmentation must concern the finite fitting procedure, its
+regularization, or its numerical behavior. Conversely, an information-
+preserving augmentation can worsen that procedure's generalization.
+
+\paragraph{Predictive structure relative to a fixed baseline.}
+There is a useful oracle distinction before selecting a finite decoder.
+Condition on the fitted state, fix a raw forecast $f_0$, and let
+$e=Y-f_0(X)$ and $Z=\Gamma_{\mathcal D}(X)$, with
+$\E\|e\|_2^2<\infty$. Write $R(f)=\E\|Y-f(X)\|_2^2$ for squared-error
+risk under this conditional evaluation law. The standard conditional-expectation projection
+identity gives the best square-integrable correction
+$q^*(Z)=\E[e\mid Z]$ and
+\begin{equation}\label{eq:utility-oracle}
+ R(f_0)-\inf_{q\in L_2(P_Z)}R(f_0+q\circ\Gamma_{\mathcal D})
+ =\E\|\E[e\mid Z]\|_2^2.
+\end{equation}
+Thus the representation contains useful mean-predictive structure for
+this baseline's residual precisely when that conditional mean is nonzero
+with positive probability. This is a standard projection fact, not a new
+KAHM theorem (Appendix~\ref{app:utility-projection}). It is relative to
+the specified baseline and evaluation law: unpredictable residual
+variation does not become useful structure merely because baseline MSE
+is large. A deterministic $Z$ can make existing structure easier for a
+restricted procedure to use without adding information to the raw history.
+The oracle ranges over all square-integrable corrections; neither its
+gain nor the conditional mean is estimated by our finite experiment.
+Whether a particular learned correction accesses that structure is a
+separate empirical question.
+
+\paragraph{An operational utility comparison.}
+For two frozen forecasts $\widehat f_0$ and $\widehat f_s$, evaluated on the
+same unit $E$ and squared-loss aggregation $\ell$, define
+\begin{equation}\label{eq:utility-delta}
+ \Delta_s=\E\!\left[\ell(\widehat f_0;E)-\ell(\widehat f_s;E)
+             \mid\mathcal D\right].
+\end{equation}
+Positive $\Delta_s$ means the richer fitted forecast improves expected
+loss under that evaluation law. A practically useful improvement must also
+be compared with a declared margin and measured resource requirements.
+Selection is part of the procedure: a rule pays for the features, probes,
+and candidate fits needed to make its choice even when it retains the
+baseline. Evaluation of that rule uses outcomes unavailable to its fitting
+and selection. Repetitions of training and independently sampled evaluation
+units assess different forms of variability.
+
+The procedure must also return a forecast on the declared task. A model
+whose candidate class contains the baseline can still fail during feature
+fitting or search before selecting that baseline. Without a prespecified
+failure fallback, its full-roster risk is undefined. We therefore retain
+fit coverage as part of the utility assessment, rather than treating
+missing predictions as favorable error outcomes.
+
+For an application that specifies a minimum useful improvement $\delta$
+and a resource budget $B$, the operational question is whether the evidence
+supports $\Delta_s\geq\delta$ at a complete cost $C_s\leq B$, compared with
+the available alternatives. A large baseline error alone is insufficient:
+it can include unpredictable variation as well as structure accessible to
+a correction. The present study reports error--cost profiles and tests a
+fixed validation rule. It does not assume a universal deployment budget or
+identify a universal exchange rate between prediction error and computation.
+
+\paragraph{What an empirical cost decision establishes.}
+An observed accuracy--cost advantage concerns the fitted procedures being
+compared. It does not show that every cheaper representation or decoder
+fails an accuracy requirement. The stronger necessity statement requires
+lower bounds that apply to the entire class, a declared sensitivity budget, and the
+sampling assumptions of the related certificate framework
+\citep{Anonymous2026Certificates}. Here we study empirical predictive
+utility and measured cost. We neither estimate unrestricted Bayes risk on
+natural data nor certify minimum feasible representation complexity.
+
+\paragraph{Preserving a useful forecasting pathway.}
+Raw-history retention alone need not retain the original finite decoder
+class. In the original natural study, concatenating features changes
+Gaussian distances and the Nystr\"om basis (Section~\ref{sec:natural}).
+The extension therefore examines an additive forecast
+\begin{equation}\label{eq:utility-additive}
+ \widehat f_{g,\gamma}(x)
+       =\widehat f_0(x)+\gamma\widehat q_g(x),\qquad 0\leq\gamma\leq1,
+\end{equation}
+where the raw forecast $\widehat f_0$ remains fixed while a correction
+$\widehat q_g$ is fitted using KAHM, affine, or locality features. Setting
+$\gamma=0$ recovers the baseline exactly. Residual fitting is established
+\citep{Buhlmann2003L2}; the question is which geometric correction, if any,
+is useful under the specified data and computation budgets.
+
+For fixed $\widehat f_0$ and $\widehat q_g$, an elementary squared-loss
+identity gives
+\begin{equation}\label{eq:utility-alignment}
+ R(\widehat f_{g,\gamma})-R(\widehat f_0)
+ =\gamma^2\E\|\widehat q_g(X)\|_2^2
+ -2\gamma\E\langle Y-\widehat f_0(X),\widehat q_g(X)\rangle.
+\end{equation}
+All expectations condition on the frozen fitted state. For a nonzero
+correction, positive residual alignment is necessary and permits a
+sufficiently small positive mixing weight to improve the population risk.
+The identity is a motivation, not a new risk certificate: its population
+quantities are unknown during fitting, a finite weight grid can miss the
+improving interval, and validation can select a worse forecast.
+Appendix~\ref{app:utility-alignment} provides the derivation and the
+distinction between feasible baseline recovery and fitted generalization.

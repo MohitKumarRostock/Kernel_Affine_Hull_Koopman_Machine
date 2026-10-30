@@ -1,0 +1,256 @@
+\section{Additive forecasting: interpretation and research record}
+\label{app:utility}
+
+\subsection{Oracle residual structure and finite correction}
+\label{app:utility-projection}
+Condition on development data and the fitted maps $f_0$ and $\Gamma$.
+For $e=Y-f_0(X)$, suppose $\E\|e\|_2^2<\infty$, let $Z=\Gamma(X)$,
+and put $q^*(Z)=\E[e\mid Z]$. For any square-integrable $q(Z)$,
+conditional expectation makes the cross term zero, giving
+\[
+ \E\|e-q(Z)\|_2^2
+ =\E\|e-q^*(Z)\|_2^2+\E\|q^*(Z)-q(Z)\|_2^2.
+\]
+Taking $q=0$ and then the infimum over $q$ proves
+Equation~\eqref{eq:utility-oracle}. This standard projection argument
+establishes an oracle notion of residual predictive structure, not its
+estimability with a finite sample, a specified ridge head, or a given
+computation budget. The conditional distribution and expectations are
+those of the evaluation law given the frozen fitted state. A deterministic
+feature of $X$ cannot create new information absent from that history;
+the comparison is with the particular baseline $f_0$, not with the
+unrestricted raw-history Bayes predictor.
+
+\subsection{Residual alignment for a frozen correction}
+\label{app:utility-alignment}
+This subsection records a standard squared-loss calculation; it is not
+claimed as a new general learning principle. Condition on development data
+and all random choices used to fit a baseline $f_0$ and a correction $q$.
+Suppose $\E\|Y-f_0(X)\|_2^2<\infty$ and
+$\E\|q(X)\|_2^2<\infty$. Write
+\[
+ A=\E\langle Y-f_0(X),q(X)\rangle,\qquad
+ B=\E\|q(X)\|_2^2.
+\]
+Expanding the squared norm yields
+\[
+ \E\|Y-f_0(X)-\gamma q(X)\|_2^2
+ =R(f_0)-2\gamma A+\gamma^2B.
+\]
+If $B=0$, then $q(X)=0$ almost surely, so $A=0$ and the correction changes
+no population forecast. If $B>0$, minimization over $\gamma\in[0,1]$ gives
+$\gamma^*=\clip(A/B,0,1)$. A positive weight improves risk precisely when
+$A>0$ and $0<\gamma<2A/B$. Thus a useful correction must align with the
+baseline's residual under the evaluation law, with its scale controlled.
+The same identity holds for a loss averaged across target coordinates
+after both $A$ and $B$ are divided by their common coordinate count.
+
+This oracle calculation uses population quantities unavailable to the
+fitted selector. Empirical residual fitting, regularization, and validation
+introduce estimation and selection effects. Inclusion of $\gamma=0$ makes
+the original forecast feasible; it does not imply that the selected test
+forecast is no worse. In particular, correlation with training residuals
+does not prove positive $A$ on a new episode or source.
+
+\subsection{Distinction from representation-class certificates}
+\label{app:utility-scope}
+The empirical difference in Equation~\eqref{eq:utility-delta} compares two
+frozen fitted forecasts. The certificate manuscript instead studies the
+infimum of risk over a declared representation--decoder class, and can
+exclude that entire class under its assumptions
+\citep{Anonymous2026Certificates}. The additive study does not transfer
+such a class-level guarantee to its forecasts. A certificate for a residual
+component would not automatically certify the complete additive forecast;
+the baseline and correction together would have to satisfy the declared
+representation, metric, and sensitivity constraint. Neither mean test
+differences nor a zero-correction option establishes necessity of the
+additional features among all possible decoders.
+
+\subsection{Extension protocol and source roster}
+\label{app:utility-protocol}
+
+The executable configuration and protocol for this extension are stored
+in \path{extensions/forecasting_utility}. They define a distinct study
+from the original controlled, natural-source, and scaling studies. The
+execution freeze hashes the configuration, protocol, source and dependency
+files, archive metadata, and training-prefix-selected roster before full
+model evaluation. Its purpose is to make subsequent deviations and
+recomputation auditable; it is not external review or registration.
+
+\begin{table}[ht]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Additional archive collections and the fixed hash-selected roster.
+Each selected series is evaluated at $M=16$ and $64$. $L$ is history
+length, $H$ is the number of consecutive direct target steps, and $p$ is
+the declared seasonal period. The Solar collection has simulation
+provenance. Source record DOIs, byte hashes, and licenses are retained in
+the artifact.}
+\label{tab:utility-roster}
+\begin{tabular}{llrrrl}
+\toprule
+Collection & Frequency & $L$ & $H$ & $p$ & Selected series \\
+\midrule
+Weather & Daily & 28 & 7 & 7 & T1476, T1967, T416 \\
+Solar Weekly & Weekly & 6 & 2 & 52 & T88, T94, T8 \\
+COVID-19 Deaths & Daily & 28 & 7 & 7 & T42, T146, T96 \\
+Car Parts, missing & Monthly & 6 & 2 & 12 & T1324, T2368, T857 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Weather contains daily Australian weather-station variables, COVID-19
+Deaths contains the archived Johns Hopkins death-count series, and Car
+Parts contains intermittent monthly sales extracted from the
+\texttt{expsmooth} collection. The exact Monash records are
+10.5281/zenodo.4654822, 10.5281/zenodo.4656009, and
+10.5281/zenodo.4656022, respectively. Solar Weekly is record
+10.5281/zenodo.4656151 and contains aggregated simulated NREL production
+series. All four downloaded records declare CC BY 4.0. The use of a
+historical public snapshot does not establish real-time revision-aware
+evaluation; upstream release vintages and the original producers'
+measurement pipelines are not reconstructed here.
+
+Training-prefix eligibility requires at least 16 complete available
+training windows and a positive finite error scale. Hash ordering uses
+the fixed salt \texttt{forecasting-utility-natural-v1} and the source and
+series identifiers. Complete contexts and targets are required; no
+future-aware missing-value filling is applied. This defines an
+available-window forecasting estimand. The scaling denominator uses the
+uncapped initial training prefix and is unchanged by the selected
+pretest refit. Periods are stated in Table~\ref{tab:utility-roster}; when
+the seasonal-difference mean square is unavailable or zero, the
+first-difference mean square is used. This scale is not a fitted
+baseline's test error.
+
+The naive forecast uses the seasonal observation when available and the
+last available observation otherwise; synthetic episodes use persistence.
+The seasonal lag may extend beyond the finite context supplied to the
+learned models, particularly for weekly Solar and monthly Car Parts.
+Thus this practical control shares their targets and forecast origins,
+but not necessarily their identical finite-history information set;
+every observation it accesses is available at or before the forecast origin.
+The practical nonlinear control fits an independent histogram-gradient
+regressor per target coordinate, with 100 iterations, at most 15 leaves,
+$L_2$ penalty 0.01, and early stopping disabled. It receives the same
+raw histories and split origins, without a separate hyperparameter search.
+This is one fixed practical control, not a comprehensive comparison with
+modern neural, pretrained, probabilistic, or multivariate forecasters.
+
+For every model, preprocessing is fitted on the permitted fitting inputs
+only. An additive correction first receives residuals from the selected
+raw predictor on those same fitting rows. A natural-data pretest refit
+rebuilds both the raw predictor and the correction using the chosen
+settings; thus the final raw component differs from the validation-stage
+fit but is again held fixed while its correction is fitted. Synthetic
+fits retain training-only inputs. A final zero-weight correction bypasses
+geometry at prediction time, but its already incurred selection costs
+remain charged. Additional candidate searches are therefore observable
+costs even when the deployed forecast equals the raw baseline.
+The synthetic zero-weight fit retains its searched correction bank in
+memory, because the selected training-only object is retained. The natural
+zero-weight refit omits that bank. Reported serialized bytes describe this
+actual stored state, not the smallest equivalent deployable model;
+neither case evaluates the correction during a zero-weight prediction.
+
+Full validation-candidate records, chosen penalties and mixing weights,
+warnings, split origins, saved forecasts, and wall/CPU timing components
+are retained. Saved test forecasts permit independent reconstruction of
+both episode-level synthetic losses and original-unit and scaled
+archive-source losses. A task or method failure is recorded with its
+exception and does not silently select a replacement source, seed, or
+model. The completeness audit distinguishes requested configurations,
+successful outputs, and failures before producing the manuscript assets.
+
+\subsection{Complete controlled comparisons and source-level results}
+\label{app:utility-results}
+
+Table~\ref{tab:utility-failures} retains every incomplete configuration.
+The failed series is also retained in the original roster and window
+table. Full-roster geometry and policy losses remain undefined. The
+separate reporting amendment creates a post-hoc matched-success
+diagnostic on 22 configurations and 11 series, without changing a fitted
+model, source, or validation rule. The archive displays below use that
+diagnostic support unless explicitly marked as full-roster coverage.
+
+\input{generated/utility/failures}
+
+The new controlled means in Table~\ref{tab:utility-synthetic} are
+supplemented by every practical control and fixed policy in
+Table~\ref{tab:utility-synthetic-controls}. Table~\ref{tab:utility-intervals}
+gives all 24 primary interval endpoints. The raw and concatenated
+contrasts form this extension's family only; intervals are not
+retroactively pooled with the original studies' inference.
+
+\input{generated/utility/synthetic_controls}
+\input{generated/utility/synthetic_intervals}
+\FloatBarrier
+
+The new matched-success archive diagnostic is resolved by source in
+Table~\ref{tab:utility-archive-sources}. Window counts and effective
+decoder sizes appear in Tables~\ref{tab:utility-windows}
+and~\ref{tab:utility-decoder-sizes}. Counts are shared across methods,
+and requested Nystr\"om sizes can be capped by short fitting segments.
+The selected weights and policy decisions in
+Tables~\ref{tab:utility-gamma} and~\ref{tab:utility-policy-choices}
+describe related task configurations, not independent draws of a
+universal adoption probability. Table~\ref{tab:utility-leave-one}
+retains every leave-one-source-out re-aggregation without selecting
+the most favorable subset.
+
+\input{generated/utility/archive_sources}
+\input{generated/utility/archive_windows}
+\input{generated/utility/decoder_sizes}
+\input{generated/utility/gamma_choices}
+\input{generated/utility/policy_choices}
+\input{generated/utility/leave_one_source_out}
+\FloatBarrier
+
+\subsection{Measured accuracy and resource profiles}
+\label{app:utility-cost}
+
+On this same matched-success support,
+Table~\ref{tab:utility-cost-detail} separates model wall time, model CPU
+time, and data preparation. Figure~\ref{fig:utility-accuracy-cost}
+normalizes each procedure's mean loss and model wall time by the raw
+RBF comparator measured in this same execution. It does not combine
+timings from different study stages. The displayed costs refer to
+complete required model dependencies, including validation selection,
+and are distinct from a single already-fitted prediction latency.
+
+\input{generated/utility/archive_costs}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{generated/utility/archive_accuracy_cost.pdf}
+\caption{Post-hoc matched-success archive accuracy and cost relative to the raw RBF
+procedure. Each ratio uses the equal-source aggregate; individual-source
+heterogeneity is retained in Table~\ref{tab:utility-archive-sources}.
+The time axis is logarithmic. No confidence interval across windows or
+application-wide optimality claim is attached to these four-source
+descriptive comparisons.}
+\label{fig:utility-accuracy-cost}
+\end{figure}
+\FloatBarrier
+
+\subsection{Realized residual alignment}
+\label{app:utility-residual-results}
+
+For each saved additive forecast, let
+$d=\widehat f_{\rm add}(X)-\widehat f_{\rm raw}(X)$, which incorporates
+the chosen mixing weight. The prespecified descriptive analysis
+reconstructs $2\,\mathrm{mean}\langle Y-\widehat f_{\rm raw}(X),d\rangle$
+and $\mathrm{mean}\|d\|^2$ directly from test predictions, averaging
+target coordinates and dividing by the fixed training scale for each
+archive task in the common-support diagnostic. Their difference equals the realized raw-minus-additive
+MSE before rounding. The analysis code and independent manuscript
+builder both verify this equality. Table~\ref{tab:utility-residual}
+reports the same source hierarchy used for the main loss comparison.
+
+This decomposition describes how the realized correction aligned with
+the test residual, including its amplitude cost. It does not identify the
+oracle conditional mean in Equation~\eqref{eq:utility-oracle}, explain
+which representation component caused the alignment, or supply a new
+out-of-sample guarantee. Test-derived terms are never used to retune
+the correction, its mixing coefficient, or either adoption policy.
+
+\input{generated/utility/residual_alignment}

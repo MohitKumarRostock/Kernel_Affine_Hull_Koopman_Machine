@@ -1,0 +1,290 @@
+\section{Representations and fitted forecasting rules}
+\label{sec:nf-methods}
+
+A history $x\in\mathbb R^d$ contains the observations available at a forecast
+origin; its response $y\in\mathbb R^H$ contains the next $H$ observations.
+For the univariate tasks below, the input dimension $d$ equals the history length $L$.
+We fit direct multioutput regressors to historical pairs
+$\{(x_i,y_i)\}_{i=1}^n$.  The construction below specifies which part of the
+regressor uses KAHM geometry.  It does not assume that overlapping forecasting
+windows are independent.  All input transformations, reference sets, and
+decoder bases are fitted on the training portion of each fit.
+
+\subsection{Shared reference geometry}
+\label{sec:nf-reference-geometry}
+
+Write $z(x)=D^{-1}(x-\bar x)$, where $\bar x$ and the diagonal scales $D$ are
+training means and population standard deviations.  A standard deviation at
+most $10^{-12}$ is replaced by one.  Thus this transformation retains every
+raw coordinate, including coordinates constant in the observed training set.
+Three independently seeded $k$-means partitions, with $k\in\{2,4,8\}$, use
+the same seeded subset of at most 512 training histories.  Each partition has
+five initializations and at most 150 iterations.  Each cluster supplies at
+most 24 references sampled without replacement; all its rows are used if
+there are fewer.  For a common seed and training set, the alternative gates
+use identical partition and reference-selection rules.  They are nevertheless
+fitted as separate computational pipelines.
+
+Index the 14 local models by $c$, with the partition blocks denoted
+$\mathcal C_b$.  Let
+$Q_c=[q_{c1},\ldots,q_{cm_c}]\in\mathbb R^{d\times m_c}$ contain the
+training-standardized references, stored after the inherited float32
+conversion, and let $\mu_c=m_c^{-1}Q_c\mathbf 1$.
+The orthonormal columns of $P_c\in\mathbb R^{d\times r_c}$ are leading
+eigenvectors of the centered reference covariance.  The requested rank is
+$\min(2,d-1,m_c-1)$; only eigenvalues above double-precision machine epsilon
+are retained.  The inherited implementation further reduces a rank greater
+than one if the smallest projected coordinate range is below $10^{-3}$.
+A reference set with no usable direction has $r_c=0$ and uses its center as
+its reconstruction.  Other numerical failures remain recorded failures.
+
+The affine reconstruction and centered local coordinates are
+\begin{equation}
+ a_c(z)=\mu_c+P_cP_c^\top(z-\mu_c),
+ \qquad u_c(z)=P_c^\top(z-\mu_c).
+ \label{eq:nf-affine}
+\end{equation}
+The affine and locality controls compute these quantities without fitting or
+querying any KAHM kernel.
+
+\subsection{Reconstruction scores and local gates}
+\label{sec:nf-gates}
+
+\paragraph{KAHM reconstruction.}
+Kernel Affine Hull Machines construct nonlinear reconstructions from local
+kernel weights \citep{Kumar2024KAHM}.  We retain the pinned implementation's
+local autoencoder, rather than asserting equivalence to an independently
+optimized end-to-end KAHM learner.  For $r_c>0$, let $\Sigma_c$ be the sample
+covariance of the columns of $P_c^\top Q_c$.  Its Gaussian kernel is
+\begin{equation}
+ k_c(z,q)=\exp\!\left\{-\frac{
+  (P_c^\top(z-q))^\top\Sigma_c^{-1}P_c^\top(z-q)}{2r_c}\right\},
+ \qquad (K_c)_{ij}=k_c(q_{ci},q_{cj}).
+ \label{eq:nf-kahm-kernel}
+\end{equation}
+To specify the inherited local regularizer exactly, put
+$\nu_c=\|Q_c\|_F^2/(dm_c)$ and initialize $\lambda_0=5\nu_c/2$.  Its iteration is
+\begin{equation}
+ B_t=(K_c+\lambda_t I)^{-1},\qquad
+ \lambda_{t+1}=2\nu_c+
+ \frac{\|Q_c-Q_c(K_cB_t)^\top\|_F^2}{dm_c}.
+ \label{eq:nf-local-regularizer}
+\end{equation}
+It stops after an update of size at most $10^{-3}$ or 100 updates, and
+retains the last computed $B_t$ as $B_c$.  In particular, it does not perform
+an extra inverse at the newly updated $\lambda_{t+1}$.
+For $k_c(z)=(k_c(z,q_{cj}))_{j=1}^{m_c}$, define
+\begin{equation}
+ v_c(z)=B_c^\top k_c(z),\qquad
+ \widehat z_c(z)=\frac{Q_cv_c(z)}{\mathbf 1^\top v_c(z)}.
+ \label{eq:nf-reconstruction}
+\end{equation}
+The weights may be signed.  The reconstruction is therefore not generally a
+convex average.  The inherited exact-zero-denominator convention replaces
+the denominator by one; that convention is an implementation choice, not
+a definition of a continuous extension at a singularity.
+
+\paragraph{Stable Gaussian evaluation.}
+For queries we compute the analytic log kernel
+$\ell_{cj}(z)=-\|S_cP_c^\top(z-q_{cj})\|^2/(2r_c)$, where $S_c$ is the
+stored symmetric square root of the inverse covariance, and use
+$\widetilde k_{cj}(z)=\exp\{\ell_{cj}(z)-\max_j\ell_{cj}(z)\}$ in
+Equation~\eqref{eq:nf-reconstruction}.
+In exact arithmetic, $S_c^\top S_c=\Sigma_c^{-1}$, and multiplying every
+kernel entry for one query by the same positive constant cancels from the
+normalized reconstruction whenever its denominator is nonzero.
+This calculation avoids underflow caused solely by a large common negative
+log-kernel offset.  It does not prevent signed cancellation, guarantee a
+well-conditioned denominator, or guarantee equivalence at an exact zero.
+The implementation retains the zero-denominator convention, records numerical
+diagnostics, and rejects nonfinite outputs.  The historical mode instead
+exponentiates the unshifted logs through the inherited query routine; it is
+retained for equivalence checks, while this study uses the shifted evaluation.
+
+\paragraph{Matched folding gates.}
+Given either the KAHM reconstruction $\widehat z_c$ or the affine
+reconstruction $a_c$, denote it by $r_c^{\mathrm{rec}}(z)$.  Define
+\begin{align}
+ \rho_c(z)&=1-\exp\{-\|z-r_c^{\mathrm{rec}}(z)\|\},\qquad
+ \theta_c(z)=\frac1\pi\arccos\!\left(
+ \operatorname{clip}_{[-1,1]}
+ \frac{z^\top r_c^{\mathrm{rec}}(z)}{\|z\|\,\|r_c^{\mathrm{rec}}(z)\|}\right),
+ \notag\\
+ s_c(z)&=\sqrt{\{\rho_c(z)^2+\theta_c(z)^2\}/2},\qquad
+ \phi_c(z)=\frac{[1-\operatorname{clip}_{[0,1]}s_c(z)+\tau]^\omega}
+ {\sum_{j\in\mathcal C_b}[1-\operatorname{clip}_{[0,1]}s_j(z)+\tau]^\omega},
+ \quad c\in\mathcal C_b.
+ \label{eq:nf-folding-gates}
+\end{align}
+When either norm in the cosine denominator is zero, its cosine is set to
+zero, so that $\theta_c=1/2$.  The fixed values are $\omega=16$ and
+$\tau=10^{-6}$; normalization is evaluated with log-sum-exp.  The comparison
+between these two gates changes the reconstruction while retaining the
+score, reference geometry, and local-coordinate construction.
+
+\paragraph{Locality control.}
+The third gate uses the historical native-affine score formula, applied to
+the same references.  With $\epsilon=10^{-6}$, set
+\begin{align}
+ t_c&=\max\!\left\{m_c^{-1}\sum_j\|q_{cj}-\mu_c\|^2,\epsilon\right\},\notag\\
+ e_c&=\max\!\left\{m_c^{-1}\sum_j\|q_{cj}-a_c(q_{cj})\|^2,
+                    0.05t_c,\epsilon\right\},\notag\\
+ b_c(z)&=\frac{\|z-a_c(z)\|^2}{e_c}
+          +0.1\frac{\|z-\mu_c\|^2}{t_c},\notag\\
+ \phi_c(z)&=\frac{\exp[-b_c(z)]}
+                    {\sum_{j\in\mathcal C_b}\exp[-b_j(z)]}.
+ \label{eq:nf-locality-gates}
+\end{align}
+This distinguishes proximity to the local center from projection residual.
+Here ``native'' identifies a score formula; it does not identify a separately
+tuned native learning algorithm.  It supplies a non-KAHM locality alternative
+to the matched folding-score comparison.
+
+\subsection{Local codes and finite forecasting heads}
+\label{sec:nf-local-features}
+
+For each gate family $g$, concatenate all gates and gated local coordinates:
+\begin{equation}
+ T_g(x)=\bigl((\phi_c(z(x)))_c,
+                  (\phi_c(z(x))u_c(z(x)))_c\bigr),\qquad
+ T_{\mathrm{raw}+g}(x)=(z(x),T_g(x)).
+ \label{eq:nf-local-code}
+\end{equation}
+The stored local width is $14+\sum_c r_c\leq42$; the actual width is recorded.
+The raw augmentation prepends all $d$ history coordinates, with no truncation
+when $d>28$.  The combination of local association and local position is
+related to coordinate and tangent coding \citep{Yu2009LCC,YuZhang2010LTC};
+our gates and decoder are the explicit constructions above.
+The stack of $P_c^\top$ has rank at most 28.  A deficient stack alone does
+not prove information loss in $T_g$, because the gates also depend on the
+query.  Raw augmentation gives the simpler unconditional reconstruction
+property stated below, without a rank assumption.
+
+\paragraph{Nystr\"om plus linear basis.}
+\label{sec:nf-head}
+Let $v(x)$ denote $z(x)$, $T_g(x)$, or $T_{\mathrm{raw}+g}(x)$, and let
+$q(x)$ be its coordinatewise training standardization.  Select $M$ training
+rows without replacement as landmarks $a_1,\ldots,a_M$ in $q$-space.
+The requested $M$ is 32 or 64, capped by the training size.
+Set $\sigma^2$ to the median positive squared inter-landmark distance and
+define
+\begin{equation}
+ k_\sigma(q,a)=\exp\{-\|q-a\|^2/(2\sigma^2)\},\qquad
+ b(x)=\left(q(x),\;
+       \operatorname{diag}(\eta_J^{-1/2})U_J^\top
+                  (k_\sigma(q(x),a_j))_{j=1}^M\right).
+ \label{eq:nf-nystrom}
+\end{equation}
+Here $U\operatorname{diag}(\eta)U^\top$ diagonalizes the landmark Gram
+matrix, and $J$ retains eigenvalues exceeding
+$\max(10^{-10}\eta_{\max},10^{-12})$ \citep{Williams2001Nystrom}.
+Distances at most $10^{-14}$ are excluded from the bandwidth median;
+if none remain the squared bandwidth is one, and in all cases it is floored
+at $10^{-12}$.  The bandwidth multiplier is fixed to one.
+Finally, standardize $b$ on training rows to obtain $f(x)$ and the design
+$F_{i,:}=f(x_i)^\top$.  Both head standardizations replace scales below
+$10^{-8}$ by one.  Raw ridge omits the Nystr\"om block and uses the same
+centering and scaling convention.
+
+For each horizon $h$, the fitted decoder solves
+\begin{equation}
+ \min_{\beta_h,a_h}\ \frac1n\sum_{i=1}^n
+       [y_{ih}-a_h-f(x_i)^\top\beta_h]^2+\alpha\|\beta_h\|^2.
+ \label{eq:nf-ridge-objective}
+\end{equation}
+Thus the normal equations use $F^\top F/n+\alpha I$, and the intercept is
+unpenalized.  Internally, targets are standardized using training statistics
+and transformed back after prediction.  For fixed $\alpha$, linearity makes
+this exactly equivalent in real arithmetic to
+Equation~\eqref{eq:nf-ridge-objective} in the original target units.
+This is a Euclidean ridge penalty on a standardized finite basis, rather
+than the canonical Gaussian RKHS norm.  Adding local features also changes
+the Gaussian distances and the resulting Nystr\"om basis; the raw and
+augmented nonlinear decoder classes need not be nested.
+
+One common $\alpha$ from the ordered grid $(0.01,1,100)$ is selected by validation MSE averaged
+over origins and horizons in original target units, with the first grid
+entry winning ties.  Within a method, geometry, training and validation
+features, basis construction, and the Gram eigensystem are computed once;
+all three alphas reuse those quantities.  Different method variants share
+no fitted bank or free preprocessing.  The selected configuration is then
+fitted anew on the admissible pretest training data.  Search designs and
+eigensystems are not retained in the serialized final model.  This gives
+an explicit efficient search whose full computation can be measured.
+
+\subsection{Information and finite-decoder risk}
+\label{sec:nf-information}
+
+The following elementary facts delimit the interpretation of the experiments.
+They are established information-preservation and linear-smoother algebra,
+not new KAHM approximation theorems or performance guarantees.
+
+\begin{proposition}[Information preserved by raw augmentation]
+\label{prop:nf-raw-preservation}
+Condition on a fitted state $\Theta$ containing $\bar x$, positive diagonal
+$D$, and a measurable, finite-valued feature map $T_g$ on the support of $X$.
+Then $T_{\mathrm{raw}+g}(X)$ and $X$ generate the same information conditional
+on $\Theta$.  For a square-integrable response $Y$, their conditional
+expectations and optimal squared-loss Bayes risks coincide, conditional on
+$\Theta$.  This statement requires neither positive gates nor a full-rank
+stack of local bases.
+\end{proposition}
+\begin{proof}
+The augmented code is a measurable function of $(X,\Theta)$, and its first
+$d$ coordinates recover $X=\bar x+Dz(X)$.  Consequently
+$\sigma(T_{\mathrm{raw}+g}(X),\Theta)=\sigma(X,\Theta)$.
+Conditional expectation onto these equal sigma-fields, and hence the
+minimum squared prediction error, is identical.
+\end{proof}
+
+This is an exact-arithmetic statement about the representation, not a
+conditioning guarantee or a claim that a particular fitted decoder uses
+every retained coordinate.  Empirical gains from raw augmentation must
+therefore be explained through finite fitting, representation-dependent
+regularization, or numerical behavior, rather than increased Bayes
+information relative to the same raw input.
+
+\begin{proposition}[Fixed-feature, fixed-alpha risk identity]
+\label{prop:nf-linear-risk}
+Consider one response coordinate, a fixed $\alpha>0$, and the centered
+training design $F$ above.  Let $\mathcal G$ contain the training and query
+inputs and the randomness used to fit their unsupervised feature map, so
+$F$ and $f(x_*)$ are $\mathcal G$-measurable.  Put
+\begin{equation}
+ w_* = \frac{\mathbf 1}{n}
+       +F(F^\top F+n\alpha I)^{-1}f(x_*).
+ \label{eq:nf-smoother}
+\end{equation}
+Let the training response vector be $Y$, the future response be $Y_*$, and
+assume their conditional second moments are finite.  Define
+$\mu=\mathbb E[Y\mid\mathcal G]$,
+$\mu_*=\mathbb E[Y_*\mid\mathcal G]$,
+$\Sigma=\operatorname{Cov}(Y\mid\mathcal G)$,
+$c=\operatorname{Cov}(Y,Y_*\mid\mathcal G)$, and
+$v_*=\operatorname{Var}(Y_*\mid\mathcal G)$.  The fitted prediction is
+$\widehat Y_*=w_*^\top Y$, and
+\begin{equation}
+ \mathbb E[(\widehat Y_*-Y_*)^2\mid\mathcal G]
+   =(w_*^\top\mu-\mu_*)^2+w_*^\top\Sigma w_*+v_*-2w_*^\top c.
+ \label{eq:nf-dependent-risk}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Because $F^\top\mathbf 1=0$, the unpenalized intercept is $\bar Y$ and
+$\widehat\beta=(F^\top F+n\alpha I)^{-1}F^\top Y$.
+Substituting into $\bar Y+f(x_*)^\top\widehat\beta$ gives
+Equation~\eqref{eq:nf-smoother}; the inverse target standardization cancels
+as described above.  Conditional on $\mathcal G$, expand the second moment
+of $w_*^\top Y-Y_*$ as its squared mean plus its variance.  The covariance
+cross term is $-2w_*^\top c$, giving the identity.
+\end{proof}
+
+The identity holds without independent training responses or an independent
+future response.  Overlapping windows and serial dependence can affect both
+$\Sigma$ and $c$; neither may be discarded without additional assumptions.
+Averaging the identity over horizons gives the corresponding average risk.
+Changing geometry changes $w_*$ and can change all its bias and covariance
+terms, without a universal ordering between representations.  The identity
+does not automatically describe the full validation-selected procedure:
+after alpha selection, the smoother depends on observed validation responses.
+No generalization or selection guarantee is inferred from it.

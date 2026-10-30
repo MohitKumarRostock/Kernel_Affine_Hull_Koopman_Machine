@@ -1,0 +1,690 @@
+{
+  "schema_version": 1,
+  "frozen_selection_date": "2026-10-30",
+  "archive_name": "Monash Time Series Forecasting Archive",
+  "archive_url": "https://forecastingdata.org/",
+  "archive_paper_url": "https://arxiv.org/abs/2105.06643",
+  "scope": "Bounded local-series CPU pilot with four development source families and four disjoint reserved confirmation source families. Series and horizons remain nested observations, not independent source replications.",
+  "protocol": {
+    "split_fractions": [
+      0.6,
+      0.2,
+      0.2
+    ],
+    "split_index_rule": "train_end=floor(3*n/5), validation_end=floor(4*n/5), test_end=n; all ends exclusive",
+    "max_series_per_source": 4,
+    "selection_salt": "natural-forecasting-roster-v1",
+    "selection_rule": "SHA256(salt + NUL + source_id + NUL + series_id), lexicographically ascending among train-prefix-eligible series, shared across regimes/budgets. Keep all if fewer than four eligible.",
+    "minimum_train_windows": 16,
+    "eligibility_rule": "Require >=16 finite complete training windows in each adopted regime and a positive finite train-prefix difference MSE scale; inspect training prefix only. Do not replace a selected series because validation/test windows are missing.",
+    "default_max_train_windows": 512,
+    "default_max_evaluation_windows": 64,
+    "window_cap_rule": "Evenly spaced indices among finite chronological origins, including endpoints if cap>=2; availability-only filtering precedes cap; cap1 takes last origin.",
+    "target_rule": "Targets are origin+1 through origin+H inclusive, represented [origin+1,origin+1+H); entire target must lie in its split. Context uses only observations through origin.",
+    "missing_rule": "Retain upstream missing markers as NaN; exclude windows with any unavailable context/target; no imputation. Record all candidate/available/selected counts.",
+    "preprocessing": "None in data loader; each candidate fits its own learned preprocessing using training data only.",
+    "scale_rule": "MSE denominator computed on the entire uncapped training prefix: finite seasonal differences with >=2 pairs and positive MSE; otherwise finite first differences with >=2 pairs and positive MSE; else exclude using training data only.",
+    "seasonal_period_policy": "Fixed frequency map monthly12,weekly52,daily7; a benchmark convention, not a model-selected estimate. A model requiring unavailable seasonal lag must use its declared fallback.",
+    "local_model_rule": "One model per series and regime; no pooled cross-series fitting and no assumed shared calendar across Tourism series.",
+    "proposed_regimes_before_length_check": {
+      "monthly": [
+        [
+          24,
+          3
+        ],
+        [
+          48,
+          6
+        ]
+      ],
+      "weekly": [
+        [
+          26,
+          4
+        ],
+        [
+          52,
+          8
+        ]
+      ],
+      "daily": [
+        [
+          28,
+          7
+        ],
+        [
+          56,
+          14
+        ]
+      ]
+    },
+    "adopted_regimes": {
+      "monthly": [
+        {
+          "context": 12,
+          "horizon": 3
+        },
+        {
+          "context": 24,
+          "horizon": 6
+        }
+      ],
+      "weekly": [
+        {
+          "context": 13,
+          "horizon": 4
+        },
+        {
+          "context": 26,
+          "horizon": 8
+        }
+      ],
+      "daily": [
+        {
+          "context": 28,
+          "horizon": 7
+        },
+        {
+          "context": 56,
+          "horizon": 14
+        }
+      ]
+    },
+    "pre_outcome_feasibility_decision": "At 60% training, Hospital length84 gives50 training observations and0 complete windows for L48,H6; Traffic length104 gives62 training observations and3 windows for L52,H8. Before any model outcomes, monthly contexts were reduced to12/24 and weekly to13/26, giving Hospital21 and Traffic29 potential long-regime training windows. Daily28/56 unchanged. The minimum16 training-window rule applies to every selected series/regime.",
+    "confirmation_policy": "Confirmation family membership fixed from metadata; no comparative model evaluation or forecast losses used in source selection. Confirmation should be evaluated once after development freezes choices."
+  },
+  "sources": [
+    {
+      "source_id": "electricity_weekly",
+      "family_id": "uci_electricity_load",
+      "role": "development",
+      "domain": "electricity consumption",
+      "frequency": "weekly",
+      "seasonal_period": 52,
+      "regimes": [
+        {
+          "context": 13,
+          "horizon": 4
+        },
+        {
+          "context": 26,
+          "horizon": 8
+        }
+      ],
+      "source_selection_basis": "Frozen using public provenance, domain diversity, source length and download size; no comparative model results used.",
+      "zenodo": {
+        "record_id": 4656141,
+        "record_url": "https://zenodo.org/records/4656141",
+        "api_url": "https://zenodo.org/api/records/4656141",
+        "doi": "10.5281/zenodo.4656141",
+        "version": "3",
+        "publication_date": "2020-06-11",
+        "metadata_file": "datasets/metadata/4656141.json",
+        "metadata_sha256": "5b5f7e8d8722b180894018962d865ba096e4eb1a1c5cff9362a02a8a3d238f37"
+      },
+      "title": "Electricity Weekly Dataset",
+      "creators": [
+        "Godahewa, Rakshitha",
+        "Bergmeir, Christoph",
+        "Webb, Geoff",
+        "Hyndman, Rob",
+        "Montero-Manso, Pablo"
+      ],
+      "license": {
+        "id": "cc-by-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "scope": "License specified by the official Zenodo record for this distributed archive snapshot; retain original-source citations and upstream provenance."
+      },
+      "archive": {
+        "filename": "electricity_weekly_dataset.zip",
+        "url": "https://zenodo.org/api/records/4656141/files/electricity_weekly_dataset.zip/content",
+        "bytes": 147816,
+        "sha256": "841c9c1be3f8a89558f5d8ebd652238264deca4f2562d2799e8bc0ee99c10d53",
+        "upstream_checksum": "md5:463fcb89cb55702a0fdf7780fc45fe7e",
+        "member": "electricity_weekly_dataset.tsf",
+        "member_sha256": "3b0bb0312c29a9cffb2f1650154adc78d9631ce9c329fcf0f415a0feb7522150",
+        "encoding": "cp1252"
+      },
+      "snapshot": {
+        "series_count": 321,
+        "minimum_length": 156,
+        "maximum_length": 156,
+        "missing_declared": false
+      },
+      "upstream_description": "The electricity dataset represents the electricity consumption of 370 clients recorded in 15-minutes periods in Kilowatt (kW) from 2011 to 2014. The uploaded dataset is an aggregated version of the hourly electricity dataset used by Lai et al. (2017). It contains 321 weekly time series from 2012 to 2014.",
+      "primary_references": [
+        {
+          "identifier": "https://archive.ics.uci.edu/ml/datasets/ElectricityLoadDiagrams20112014",
+          "relation": "cites",
+          "resource_type": "dataset",
+          "scheme": "url"
+        },
+        {
+          "identifier": "http://arxiv.org/abs/1703.07015",
+          "relation": "cites",
+          "resource_type": "publication-other",
+          "scheme": "url"
+        },
+        {
+          "identifier": "https://github.com/laiguokun/multivariate-time-series-data",
+          "relation": "cites",
+          "resource_type": "dataset",
+          "scheme": "url"
+        }
+      ],
+      "processing_and_family_note": "Use the fixed upstream weekly aggregate unchanged. The original 15-minute UCI data, hourly Lai data and any other temporal aggregates belong to this same source family."
+    },
+    {
+      "source_id": "nn5_daily",
+      "family_id": "nn5_atm_cash",
+      "role": "development",
+      "domain": "ATM cash withdrawals",
+      "frequency": "daily",
+      "seasonal_period": 7,
+      "regimes": [
+        {
+          "context": 28,
+          "horizon": 7
+        },
+        {
+          "context": 56,
+          "horizon": 14
+        }
+      ],
+      "source_selection_basis": "Frozen using public provenance, domain diversity, source length and download size; no comparative model results used.",
+      "zenodo": {
+        "record_id": 4656110,
+        "record_url": "https://zenodo.org/records/4656110",
+        "api_url": "https://zenodo.org/api/records/4656110",
+        "doi": "10.5281/zenodo.4656110",
+        "version": "3",
+        "publication_date": "2020-06-11",
+        "metadata_file": "datasets/metadata/4656110.json",
+        "metadata_sha256": "7201c402dfe019fea0bd9231780d2dac74f134f53749afeb676222d390101532"
+      },
+      "title": "NN5 Daily Dataset (with Missing Values)",
+      "creators": [
+        "Godahewa, Rakshitha",
+        "Bergmeir, Christoph",
+        "Webb, Geoff",
+        "Hyndman, Rob",
+        "Montero-Manso, Pablo"
+      ],
+      "license": {
+        "id": "cc-by-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "scope": "License specified by the official Zenodo record for this distributed archive snapshot; retain original-source citations and upstream provenance."
+      },
+      "archive": {
+        "filename": "nn5_daily_dataset_with_missing_values.zip",
+        "url": "https://zenodo.org/api/records/4656110/files/nn5_daily_dataset_with_missing_values.zip/content",
+        "bytes": 287708,
+        "sha256": "7022d158f6e49e323f3bd76f48fb18ba78b6d013972a97980af01c56f6f4c74b",
+        "upstream_checksum": "md5:2529489455b2d9f730fbb3c65d39df88",
+        "member": "nn5_daily_dataset_with_missing_values.tsf",
+        "member_sha256": "11d905783e726fbfe3317a037fa44ee940617dbcc05ffa1f489c09589ae25c7b",
+        "encoding": "cp1252"
+      },
+      "snapshot": {
+        "series_count": 111,
+        "minimum_length": 791,
+        "maximum_length": 791,
+        "missing_declared": true
+      },
+      "upstream_description": "This dataset was used in the NN5 forecasting competition. It contains 111 daily time series from the banking domain. The goal is predicting the daily cash withdrawals from ATMs in UK.",
+      "primary_references": [
+        {
+          "identifier": "10.1016/j.eswa.2012.01.039",
+          "relation": "cites",
+          "resource_type": "publication-article",
+          "scheme": "doi"
+        },
+        {
+          "identifier": "http://www.neural-forecasting-competition.com/NN5/",
+          "relation": "cites",
+          "resource_type": "dataset",
+          "scheme": "url"
+        }
+      ],
+      "processing_and_family_note": "Use the original archive variant WITH missing values. Do not substitute the imputed variant. Missing contexts/targets are dropped by predeclared availability only; no interpolation across split boundaries."
+    },
+    {
+      "source_id": "tourism_monthly",
+      "family_id": "tourism_competition",
+      "role": "development",
+      "domain": "tourism demand",
+      "frequency": "monthly",
+      "seasonal_period": 12,
+      "regimes": [
+        {
+          "context": 12,
+          "horizon": 3
+        },
+        {
+          "context": 24,
+          "horizon": 6
+        }
+      ],
+      "source_selection_basis": "Frozen using public provenance, domain diversity, source length and download size; no comparative model results used.",
+      "zenodo": {
+        "record_id": 4656096,
+        "record_url": "https://zenodo.org/records/4656096",
+        "api_url": "https://zenodo.org/api/records/4656096",
+        "doi": "10.5281/zenodo.4656096",
+        "version": "3",
+        "publication_date": "2020-06-11",
+        "metadata_file": "datasets/metadata/4656096.json",
+        "metadata_sha256": "69920abdb8c55f24d454e10d4a2c1f16fbc43bdb35aca0bd60cbbab9cfdc27af"
+      },
+      "title": "Tourism Monthly Dataset",
+      "creators": [
+        "Godahewa, Rakshitha",
+        "Bergmeir, Christoph",
+        "Webb, Geoff",
+        "Hyndman, Rob",
+        "Montero-Manso, Pablo"
+      ],
+      "license": {
+        "id": "cc-by-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "scope": "License specified by the official Zenodo record for this distributed archive snapshot; retain original-source citations and upstream provenance."
+      },
+      "archive": {
+        "filename": "tourism_monthly_dataset.zip",
+        "url": "https://zenodo.org/api/records/4656096/files/tourism_monthly_dataset.zip/content",
+        "bytes": 199791,
+        "sha256": "6e434ad8a0ef6acb55ebee0e1d1ffe22707ea4e62c05e091326267f3a5b4a93c",
+        "upstream_checksum": "md5:7b9a152b2736aff87bb5155f6a650693",
+        "member": "tourism_monthly_dataset.tsf",
+        "member_sha256": "fba16c20b9c431406e4377aa61347e7310d4cd155033e2f93af4cbd0e8139b6e",
+        "encoding": "cp1252"
+      },
+      "snapshot": {
+        "series_count": 366,
+        "minimum_length": 91,
+        "maximum_length": 333,
+        "missing_declared": false
+      },
+      "upstream_description": "This dataset contains 366 monthly time series used in the Kaggle Tourism forecasting competition.",
+      "primary_references": [
+        {
+          "identifier": "10.1016/j.ijforecast.2010.04.009",
+          "relation": "cites",
+          "resource_type": "publication-article",
+          "scheme": "doi"
+        },
+        {
+          "identifier": "https://cran.r-project.org/web/packages/Tcomp",
+          "relation": "cites",
+          "resource_type": "publication-softwaredocumentation",
+          "scheme": "url"
+        }
+      ],
+      "processing_and_family_note": "Series have different lengths/start dates. Models are local to each selected series, with per-series chronological splits; no pooled calendar model is fitted. Yearly/quarterly/monthly variants share this family."
+    },
+    {
+      "source_id": "fred_md_monthly",
+      "family_id": "fred_md_macroeconomics",
+      "role": "development",
+      "domain": "macroeconomic indicators",
+      "frequency": "monthly",
+      "seasonal_period": 12,
+      "regimes": [
+        {
+          "context": 12,
+          "horizon": 3
+        },
+        {
+          "context": 24,
+          "horizon": 6
+        }
+      ],
+      "source_selection_basis": "Frozen using public provenance, domain diversity, source length and download size; no comparative model results used.",
+      "zenodo": {
+        "record_id": 4654833,
+        "record_url": "https://zenodo.org/records/4654833",
+        "api_url": "https://zenodo.org/api/records/4654833",
+        "doi": "10.5281/zenodo.4654833",
+        "version": "2",
+        "publication_date": "2020-08-27",
+        "metadata_file": "datasets/metadata/4654833.json",
+        "metadata_sha256": "b9683c51a3428fd6fdd10417f30a4f8715d2e4d98f3bbec30d17d5df506a1919"
+      },
+      "title": "FRED-MD Dataset",
+      "creators": [
+        "Godahewa, Rakshitha",
+        "Bergmeir, Christoph",
+        "Webb, Geoff",
+        "Montero-Manso, Pablo",
+        "Hyndman, Rob"
+      ],
+      "license": {
+        "id": "cc-by-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "scope": "License specified by the official Zenodo record for this distributed archive snapshot; retain original-source citations and upstream provenance."
+      },
+      "archive": {
+        "filename": "fred_md_dataset.zip",
+        "url": "https://zenodo.org/api/records/4654833/files/fred_md_dataset.zip/content",
+        "bytes": 169107,
+        "sha256": "305c0edd2b5e97159c6339be4990ea97fdf86772c1edef2a0dfc836bf29f45c3",
+        "upstream_checksum": "md5:339cc7c28d9e6358bd6ed4115f1b166d",
+        "member": "fred_md_dataset.tsf",
+        "member_sha256": "b62383200451cd400e372583f76dfd4054d7045fe1a7ee994d97734c8cf62f3d",
+        "encoding": "cp1252"
+      },
+      "snapshot": {
+        "series_count": 107,
+        "minimum_length": 728,
+        "maximum_length": 728,
+        "missing_declared": false
+      },
+      "upstream_description": "This dataset contains 107 monthly time series showing a set of macro-economic indicators from the Federal Reserve Bank. It was extracted from the FRED-MD database. The series are differenced and log-transformed as suggested in the literature.",
+      "primary_references": [
+        {
+          "identifier": "10.1080/07350015.2015.1086655",
+          "relation": "cites",
+          "resource_type": "publication-article",
+          "scheme": "doi"
+        },
+        {
+          "identifier": "https://research.stlouisfed.org/wp/more/2015-012",
+          "relation": "cites",
+          "resource_type": "publication-article",
+          "scheme": "url"
+        }
+      ],
+      "processing_and_family_note": "The upstream record describes its series as differenced and log-transformed. Use the archived numbers unchanged; this study does not infer or refit those transformations. This fixed-vintage retrospective snapshot is not a real-time vintage/backtest release-availability study."
+    },
+    {
+      "source_id": "traffic_weekly",
+      "family_id": "caltrans_bay_area_traffic",
+      "role": "confirmation",
+      "domain": "road occupancy",
+      "frequency": "weekly",
+      "seasonal_period": 52,
+      "regimes": [
+        {
+          "context": 13,
+          "horizon": 4
+        },
+        {
+          "context": 26,
+          "horizon": 8
+        }
+      ],
+      "source_selection_basis": "Frozen using public provenance, domain diversity, source length and download size; no comparative model results used.",
+      "zenodo": {
+        "record_id": 4656135,
+        "record_url": "https://zenodo.org/records/4656135",
+        "api_url": "https://zenodo.org/api/records/4656135",
+        "doi": "10.5281/zenodo.4656135",
+        "version": "3",
+        "publication_date": "2020-06-11",
+        "metadata_file": "datasets/metadata/4656135.json",
+        "metadata_sha256": "33ff6ce7fbe24df37e8ab846c018f8bcfcf1411d366eb6a5b816f1d1e5c5b993"
+      },
+      "title": "Traffic Weekly Dataset",
+      "creators": [
+        "Godahewa, Rakshitha",
+        "Bergmeir, Christoph",
+        "Webb, Geoff",
+        "Hyndman, Rob",
+        "Montero-Manso, Pablo"
+      ],
+      "license": {
+        "id": "cc-by-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "scope": "License specified by the official Zenodo record for this distributed archive snapshot; retain original-source citations and upstream provenance."
+      },
+      "archive": {
+        "filename": "traffic_weekly_dataset.zip",
+        "url": "https://zenodo.org/api/records/4656135/files/traffic_weekly_dataset.zip/content",
+        "bytes": 245126,
+        "sha256": "df3fc458fb1d6f770451fc45c43b930c091e69e86d508410dae4843918851525",
+        "upstream_checksum": "md5:0c23d1d99d49c6f0c96f8be1e9393948",
+        "member": "traffic_weekly_dataset.tsf",
+        "member_sha256": "d1562fe04dea15fc4ba8a0a4f9c4db66aa5f5a9de43fbdbe99da27382beac4b4",
+        "encoding": "cp1252"
+      },
+      "snapshot": {
+        "series_count": 862,
+        "minimum_length": 104,
+        "maximum_length": 104,
+        "missing_declared": false
+      },
+      "upstream_description": "This dataset contains an aggregated version of the San Francisco Traffic dataset used by Lai et al. (2017). It contains 862 weekly time series showing the road occupancy rates on the San Francisco Bay area freeways from 2015 to 2016.",
+      "primary_references": [
+        {
+          "identifier": "http://pems.dot.ca.gov/",
+          "relation": "cites",
+          "resource_type": "dataset",
+          "scheme": "url"
+        },
+        {
+          "identifier": "http://arxiv.org/abs/1703.07015",
+          "relation": "cites",
+          "resource_type": "publication-other",
+          "scheme": "url"
+        },
+        {
+          "identifier": "https://github.com/laiguokun/multivariate-time-series-data",
+          "relation": "cites",
+          "resource_type": "dataset",
+          "scheme": "url"
+        }
+      ],
+      "processing_and_family_note": "Use the fixed upstream weekly aggregate unchanged. Other time resolutions/variants from the same Caltrans Bay Area observations share this source family."
+    },
+    {
+      "source_id": "hospital_monthly",
+      "family_id": "expsmooth_hospital",
+      "role": "confirmation",
+      "domain": "hospital patient counts",
+      "frequency": "monthly",
+      "seasonal_period": 12,
+      "regimes": [
+        {
+          "context": 12,
+          "horizon": 3
+        },
+        {
+          "context": 24,
+          "horizon": 6
+        }
+      ],
+      "source_selection_basis": "Frozen using public provenance, domain diversity, source length and download size; no comparative model results used.",
+      "zenodo": {
+        "record_id": 4656014,
+        "record_url": "https://zenodo.org/records/4656014",
+        "api_url": "https://zenodo.org/api/records/4656014",
+        "doi": "10.5281/zenodo.4656014",
+        "version": "2",
+        "publication_date": "2020-08-21",
+        "metadata_file": "datasets/metadata/4656014.json",
+        "metadata_sha256": "b43b5985778c732bca8140a788dbc126fd681012c90f015b28a99c29cd0c029c"
+      },
+      "title": "Hospital Dataset",
+      "creators": [
+        "Godahewa, Rakshitha",
+        "Bergmeir, Christoph",
+        "Webb, Geoff",
+        "Hyndman, Rob",
+        "Montero-Manso, Pablo"
+      ],
+      "license": {
+        "id": "cc-by-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "scope": "License specified by the official Zenodo record for this distributed archive snapshot; retain original-source citations and upstream provenance."
+      },
+      "archive": {
+        "filename": "hospital_dataset.zip",
+        "url": "https://zenodo.org/api/records/4656014/files/hospital_dataset.zip/content",
+        "bytes": 78110,
+        "sha256": "8fd4085efb4517508e30fc69247eee9b74b300765bc6e94482c5d250efba66e5",
+        "upstream_checksum": "md5:00ba7422b837555c0715f4245fe608f7",
+        "member": "hospital_dataset.tsf",
+        "member_sha256": "b84c2d28f5154958cb31229a8db1b79eaba9b2307b477c02475eee698ed176e1",
+        "encoding": "cp1252"
+      },
+      "snapshot": {
+        "series_count": 767,
+        "minimum_length": 84,
+        "maximum_length": 84,
+        "missing_declared": false
+      },
+      "upstream_description": "This dataset contains 767 monthly time series that represent the patient counts related to medical products from January 2000 to December 2006. It was extracted from R expsmooth package.",
+      "primary_references": [
+        {
+          "identifier": "https://CRAN.R-project.org/package=expsmooth",
+          "relation": "cites",
+          "resource_type": "publication-softwaredocumentation",
+          "scheme": "url"
+        }
+      ],
+      "processing_and_family_note": "Series have 84 observations. The originally proposed L48,H6 regime cannot produce a training window under a 60% training split. Revised contexts were set from length feasibility before any model outcomes."
+    },
+    {
+      "source_id": "saugeen_daily",
+      "family_id": "saugeen_river_flow",
+      "role": "confirmation",
+      "domain": "river flow",
+      "frequency": "daily",
+      "seasonal_period": 7,
+      "regimes": [
+        {
+          "context": 28,
+          "horizon": 7
+        },
+        {
+          "context": 56,
+          "horizon": 14
+        }
+      ],
+      "source_selection_basis": "Frozen using public provenance, domain diversity, source length and download size; no comparative model results used.",
+      "zenodo": {
+        "record_id": 4656058,
+        "record_url": "https://zenodo.org/records/4656058",
+        "api_url": "https://zenodo.org/api/records/4656058",
+        "doi": "10.5281/zenodo.4656058",
+        "version": "2",
+        "publication_date": "2020-06-22",
+        "metadata_file": "datasets/metadata/4656058.json",
+        "metadata_sha256": "7df9b7c783c754ab0df747db96c735b3cbb073b758556fea1a79a003d9ab775f"
+      },
+      "title": "Saugeen River Flow (SaugeenDay) Dataset",
+      "creators": [
+        "Godahewa, Rakshitha",
+        "Bergmeir, Christoph",
+        "Webb, Geoff",
+        "Hyndman, Rob",
+        "Montero-Manso, Pablo"
+      ],
+      "license": {
+        "id": "cc-by-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "scope": "License specified by the official Zenodo record for this distributed archive snapshot; retain original-source citations and upstream provenance."
+      },
+      "archive": {
+        "filename": "saugeenday_dataset.zip",
+        "url": "https://zenodo.org/api/records/4656058/files/saugeenday_dataset.zip/content",
+        "bytes": 28721,
+        "sha256": "061cb56ee6829d5686e5e08f1a61f4c0af682e32c37824e79926fc11148747df",
+        "upstream_checksum": "md5:25365107befc47a70fae017043993fd5",
+        "member": "saugeenday_dataset.tsf",
+        "member_sha256": "bfd2ad2d80d8f3b6cd55086716dc9047789ebd76e0c78c06bba7af5b812d95fc",
+        "encoding": "cp1252"
+      },
+      "snapshot": {
+        "series_count": 1,
+        "minimum_length": 23741,
+        "maximum_length": 23741,
+        "missing_declared": false
+      },
+      "upstream_description": "This dataset contains a single very long time series representing the daily mean flow of the Saugeen River at Walkerton in cubic meters per second from 01/01/1915 to 31/12/1979. It was extracted from R deseasonalize package. The length of this time series is 23741.",
+      "primary_references": [
+        {
+          "identifier": "http://www.jenvstat.org/v04/i11",
+          "relation": "cites",
+          "resource_type": "publication-article",
+          "scheme": "url"
+        },
+        {
+          "identifier": "https://CRAN.R-project.org/package=deseasonalize",
+          "relation": "cites",
+          "resource_type": "publication-softwaredocumentation",
+          "scheme": "url"
+        }
+      ],
+      "processing_and_family_note": "Only one physical river series; two horizon/context tasks do not create independent datasets. The common daily period7 is a fixed benchmark convention, not a claim that weekly seasonality dominates this river."
+    },
+    {
+      "source_id": "us_births_daily",
+      "family_id": "us_births_mosaicdata",
+      "role": "confirmation",
+      "domain": "birth counts",
+      "frequency": "daily",
+      "seasonal_period": 7,
+      "regimes": [
+        {
+          "context": 28,
+          "horizon": 7
+        },
+        {
+          "context": 56,
+          "horizon": 14
+        }
+      ],
+      "source_selection_basis": "Frozen using public provenance, domain diversity, source length and download size; no comparative model results used.",
+      "zenodo": {
+        "record_id": 4656049,
+        "record_url": "https://zenodo.org/records/4656049",
+        "api_url": "https://zenodo.org/api/records/4656049",
+        "doi": "10.5281/zenodo.4656049",
+        "version": "2",
+        "publication_date": "2020-06-22",
+        "metadata_file": "datasets/metadata/4656049.json",
+        "metadata_sha256": "a66234ff7b91508c50795247c568c0240690db9a9ecc1bb4c83fc679859bf0b5"
+      },
+      "title": "US Births Dataset",
+      "creators": [
+        "Godahewa, Rakshitha",
+        "Bergmeir, Christoph",
+        "Webb, Geoff",
+        "Hyndman, Rob",
+        "Montero-Manso, Pablo"
+      ],
+      "license": {
+        "id": "cc-by-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "scope": "License specified by the official Zenodo record for this distributed archive snapshot; retain original-source citations and upstream provenance."
+      },
+      "archive": {
+        "filename": "us_births_dataset.zip",
+        "url": "https://zenodo.org/api/records/4656049/files/us_births_dataset.zip/content",
+        "bytes": 16332,
+        "sha256": "cca9ebce263e6a8cd7c776c002e01ff1f904d8bce5dd2c8103cbed8bc6f8b391",
+        "upstream_checksum": "md5:6680000cb82f7db6ced6b480bde89410",
+        "member": "us_births_dataset.tsf",
+        "member_sha256": "7c5c0f85661592d30000aa8a9066d938629ee5f3f5a3f72c75517179a50b38bb",
+        "encoding": "cp1252"
+      },
+      "snapshot": {
+        "series_count": 1,
+        "minimum_length": 7305,
+        "maximum_length": 7305,
+        "missing_declared": false
+      },
+      "upstream_description": "This dataset contains a single very long daily time series representing the number of births in US from 01/01/1969 to 31/12/1988. It was extracted from R mosaicData package. The length of this time series is 7305.",
+      "primary_references": [
+        {
+          "identifier": "https://CRAN.R-project.org/package=mosaicData",
+          "relation": "cites",
+          "resource_type": "publication-softwaredocumentation",
+          "scheme": "url"
+        }
+      ],
+      "processing_and_family_note": "Only one aggregate birth series; two horizon/context tasks do not create independent datasets. Use the fixed historic snapshot unchanged."
+    }
+  ]
+}

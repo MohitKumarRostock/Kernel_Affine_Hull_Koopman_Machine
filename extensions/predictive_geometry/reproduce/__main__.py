@@ -1,4 +1,4 @@
-"""One command for smoke tests, full reruns, audits, and paper assets."""
+"""Reproduce experiments, audit evidence, build the paper, and package TMLR files."""
 from __future__ import annotations
 
 import argparse
@@ -126,6 +126,13 @@ def main():
     p.add_argument("--run-dir", type=Path)
     p.add_argument("--output", type=Path, default=ROOT / "runs/archive-audit")
     p = commands.add_parser("paper", help="Build manuscript PDF after regenerating archived assets; requires latexmk")
+    p = commands.add_parser("review-diagnostics", help="Regenerate explicitly retrospective influence and saved-bank geometry diagnostics")
+    p.add_argument("--run-dir", type=Path, help="Completed full run required for saved-bank rank and gate checks")
+    p.add_argument("--input", type=Path, help="Override the paired-contrast source directory")
+    p.add_argument("--output", type=Path, default=ROOT / "runs/review-diagnostics", help="Use manuscript/generated explicitly to update the paper after a full run")
+    p = commands.add_parser("submission", help="Create deterministic TMLR source and reproducibility ZIPs")
+    p.add_argument("--output-dir", type=Path, default=ROOT / "dist/tmlr")
+    p.add_argument("--verify-dir", type=Path, help="Verify an extracted submission bundle instead of packaging")
     args = parser.parse_args()
     if getattr(args, "workers", 1) < 1:
         parser.error("--workers must be positive")
@@ -139,7 +146,21 @@ def main():
                 call(worker_command("audit-export", args.run_dir.resolve()))
             else:
                 call(worker_command("archive-audit", check_destination(args.output)))
-        else:
+        elif args.command == "review-diagnostics":
+            command = [sys.executable, ROOT / "scripts/review_diagnostics.py", "--output", args.output.resolve()]
+            if args.run_dir:
+                command.extend(["--run-dir", args.run_dir.resolve()])
+            if args.input:
+                command.extend(["--input", args.input.resolve()])
+            call(command)
+        elif args.command == "submission":
+            command = [sys.executable, ROOT / "scripts/package_tmlr_submission.py"]
+            if args.verify_dir:
+                command.extend(["--verify-dir", args.verify_dir.resolve()])
+            else:
+                command.extend(["--output-dir", check_destination(args.output_dir)])
+            call(command)
+        elif args.command == "paper":
             assets(ROOT / "archive", ROOT / "manuscript/generated")
             call(["latexmk", "-pdf", "-interaction=nonstopmode", "-halt-on-error", "main.tex"], ROOT / "manuscript")
     except (OSError, ValueError, subprocess.CalledProcessError) as error:

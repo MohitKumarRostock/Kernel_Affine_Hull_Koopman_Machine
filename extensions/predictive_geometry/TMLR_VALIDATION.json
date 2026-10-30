@@ -1,0 +1,467 @@
+{
+  "format": "kahm_tmlr_revision_validation_v1",
+  "created_utc": "2026-10-30T09:46:13.320588+00:00",
+  "status": "passed",
+  "scope": "Computational reproduction of the same published random streams, with separately labelled retrospective diagnostics; no new independent empirical confirmation.",
+  "baseline_commit": "cdfc4d5abaebcf6bada533fe6b09311a04a86566",
+  "historical_evidence": {
+    "source_files_verified": 51,
+    "archive_files_verified": 17,
+    "snapshot_sha256": "1cd1abde423659b79b4e4fd9373a3c80677917ada3490df08136c415e7c1d530",
+    "archive_manifest_sha256": "06945a564dd20beb41afa5b610c0621da380c144d4cc33537441aa92fab11bec"
+  },
+  "historical_bytes_unchanged": true,
+  "known_historical_analysis_amendment": "The capacity-margin freeze precedes the documented pre-data selector amendment. The two historical source-version differences remain visible; the final followup freeze verifies exactly.",
+  "baseline_full_reproduction": {
+    "status": "passed",
+    "mse_comparison": {
+      "stage1": {
+        "matched_records": 14490,
+        "maximum_absolute_test_mse_difference": 0.0,
+        "within_rtol_1e_minus6_atol_1e_minus10": 14490,
+        "all_within_numerical_comparison_tolerance": true,
+        "scope": "Numerical reproduction diagnostic; timings and machine-dependent metadata are not compared."
+      },
+      "capacity": {
+        "matched_records": 648,
+        "maximum_absolute_test_mse_difference": 0.0,
+        "within_rtol_1e_minus6_atol_1e_minus10": 648,
+        "all_within_numerical_comparison_tolerance": true,
+        "scope": "Numerical reproduction diagnostic; timings and machine-dependent metadata are not compared."
+      },
+      "numerical_sensitivity": {
+        "matched_records": 96,
+        "maximum_absolute_test_mse_difference": 0.0,
+        "within_rtol_1e_minus6_atol_1e_minus10": 96,
+        "all_within_numerical_comparison_tolerance": true,
+        "scope": "Numerical reproduction diagnostic; timings and machine-dependent metadata are not compared."
+      },
+      "pilot_margin_provenance": "Original byte-verified pilot records supply the frozen margins; rerun pilot MSEs are separately included in the stage1 comparison.",
+      "statistical_scope": "Regeneration of the same published random streams; no additional independent replicates."
+    }
+  },
+  "standalone_review_package_execution": {
+    "status": "passed_after_preserved_generated_output_recovery",
+    "validated_candidate_content_sha256": "1632eeb9dd12e9953577243f304a633918f308639a3bd9f0ddcf074c93900d10",
+    "full_execution_dependencies_match_final_repository": true,
+    "full_execution_dependency_sha256": {
+      "reproduce/__init__.py": "b9953b66d75f892d183c5f2a25578172d8e1c561ecbbdd5ff29d297d4c352cab",
+      "reproduce/__main__.py": "29524146736e4ca114ec4f4f0285f67dee897c8c889d8107133e02d98583be79",
+      "reproduce/io.py": "b7ff663cdcc17e2d60390705d4fedcf35b1fc3d3eb3973964efedb59f7fb3e68",
+      "reproduce/worker.py": "e5acc1b0426d213957b926842bd24373c5804a9fbb957926d514374a5ad16bde",
+      "scripts/build_paper_assets.py": "39722e30c060a74c7ee1218dfab81d975673d663bcbe58b14e445fe8c1578c98",
+      "scripts/package_tmlr_submission.py": "01a70d922c1471fa24fd8aa6f76a5391a848ff9a5852bfcdced2c124b08d093e",
+      "requirements.txt": "4a25c94490eedd853ae87e14a11bf3d9cb1683e5bdb63980bda5a513534a719d",
+      "study/SNAPSHOT.json": "1cd1abde423659b79b4e4fd9373a3c80677917ada3490df08136c415e7c1d530",
+      "archive/MANIFEST.json": "06945a564dd20beb41afa5b610c0621da380c144d4cc33537441aa92fab11bec"
+    },
+    "mse_comparison": {
+      "stage1": {
+        "matched_records": 14490,
+        "maximum_absolute_test_mse_difference": 0.0,
+        "within_rtol_1e_minus6_atol_1e_minus10": 14490,
+        "all_within_numerical_comparison_tolerance": true,
+        "scope": "Numerical reproduction diagnostic; timings and machine-dependent metadata are not compared."
+      },
+      "capacity": {
+        "matched_records": 648,
+        "maximum_absolute_test_mse_difference": 0.0,
+        "within_rtol_1e_minus6_atol_1e_minus10": 648,
+        "all_within_numerical_comparison_tolerance": true,
+        "scope": "Numerical reproduction diagnostic; timings and machine-dependent metadata are not compared."
+      },
+      "numerical_sensitivity": {
+        "matched_records": 96,
+        "maximum_absolute_test_mse_difference": 0.0,
+        "within_rtol_1e_minus6_atol_1e_minus10": 96,
+        "all_within_numerical_comparison_tolerance": true,
+        "scope": "Numerical reproduction diagnostic; timings and machine-dependent metadata are not compared."
+      },
+      "pilot_margin_provenance": "Original byte-verified pilot records supply the frozen margins; rerun pilot MSEs are separately included in the stage1 comparison.",
+      "statistical_scope": "Regeneration of the same published random streams; no additional independent replicates."
+    },
+    "valid_generated_npz_archives": 302,
+    "prediction_audits": {
+      "stage1": {
+        "prediction_and_loss_records_checked": 2304,
+        "files_checked": 192,
+        "max_absolute_unit_loss_difference": 5.684341886080802e-14,
+        "max_absolute_record_mse_difference": 1.4210854715202004e-14,
+        "mismatches": [],
+        "required_records": 2304,
+        "required_files": 192,
+        "method": "Independent squared residuals, stable group sorting and reduceat means; no call to the fitted-head loss function."
+      },
+      "capacity_records_checked": 648,
+      "sensitivity_records_checked": 96
+    },
+    "generated_output_incident": {
+      "scope": "Generated execution output only; no historical study or archive bytes changed.",
+      "artifact": "capacity_work/results_numerical_sensitivity/r01_forecast_van_der_pol/unit_losses.npz",
+      "damaged_bytes": 616500,
+      "expected_bytes": 768509,
+      "damaged_sha256": "ecb5a56492a199ea3b4a813776979bd1a080ee6bde254bb9e322c6b1fb29fe01",
+      "exact_prefix_of_verified_baseline": true,
+      "detection": "Independent audit rejected truncated NPZ before run completion.",
+      "cause": "Not established; no duplicate job IDs or destination collision found.",
+      "recovery": "Preserved failed job directory separately; reran only that sensitivity job with the same frozen bank, seeds and configuration. Other 23 sensitivity jobs remained cached.",
+      "recovered_bytes": 768509,
+      "recovered_sha256": "7abfe585f45eb517e6fcc71e21e241df42002a033ba21ea5086ad4d46fe009d8",
+      "recovered_exactly_equals_verified_baseline": true,
+      "final_run_status": "complete",
+      "final_independent_audit": "passed",
+      "recovery_thread_settings": "OPENBLAS, OMP, MKL, NUMEXPR thread limits explicitly set to1 for the final recovery; a prior recovery without explicit limits was within tolerance and is also preserved."
+    },
+    "finalization_scope": "The final submission adds this validation record and final manuscript/documentation. The review-diagnostic generator received a non-executable comment correction and paragraph separator after candidate extraction and was regenerated separately; the full-workflow dependencies above are byte-identical."
+  },
+  "tests": {
+    "reproduction_tests": 7,
+    "diagnostic_tests": 6,
+    "submission_package_tests": 5,
+    "unchanged_geometry_and_mechanism_tests": 8,
+    "all_passed": true,
+    "reduced_smoke_pipeline_fits": 40,
+    "smoke_families": [
+      "nonlinear_ar",
+      "vanderpol",
+      "duffing",
+      "branch",
+      "airfoil"
+    ],
+    "final_diagnostic_tests_after_comment_correction": "6 passed"
+  },
+  "retrospective_diagnostics": {
+    "script_sha256": "26e625d1fec726037f29919eca2da8ac89a3c9cd32f993197e8c4a9e899ebe56",
+    "report_sha256": "01dcb575a63ffce66c2d51e46bb882fa6fefc30e84409c56c26d37893770300f",
+    "contrasts": 41,
+    "stored_banks": 192,
+    "full_numerical_rank_forecast_banks": 144,
+    "vdp_deletion_diagnostics": [
+      {
+        "landmarks": 64,
+        "control": "raw",
+        "skewness": -0.06966854671969687,
+        "minimum_deletion_lower_endpoint": 0.0017278299629660617,
+        "margin": 0.00014890727186869972
+      },
+      {
+        "landmarks": 64,
+        "control": "affine:local",
+        "skewness": 2.692539136574095,
+        "minimum_deletion_lower_endpoint": 0.00026846676716323927,
+        "margin": 0.00014890727186869972
+      },
+      {
+        "landmarks": 256,
+        "control": "raw",
+        "skewness": 0.014209626322466674,
+        "minimum_deletion_lower_endpoint": 0.0007523685846701724,
+        "margin": 0.00014890727186869972
+      },
+      {
+        "landmarks": 256,
+        "control": "affine:local",
+        "skewness": 0.3294305890529338,
+        "minimum_deletion_lower_endpoint": 0.00017863987037040788,
+        "margin": 0.00014890727186869972
+      }
+    ],
+    "bank_group_summaries": [
+      {
+        "phase": "stage1",
+        "setting_id": "branch_c0_n1024",
+        "banks": 24,
+        "ambient_dimension": 2,
+        "rank_min": 1,
+        "rank_max": 1,
+        "full_column_rank_count": 0,
+        "sigma_min_range": [
+          0.0,
+          0.0
+        ],
+        "maximum_condition_number_full_rank_only": null,
+        "test_gate_ranges": {
+          "kahm": {
+            "minimum": 3.3551486048865933e-25,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 688128
+          },
+          "affine": {
+            "minimum": 2.5597669384240348e-20,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 688128
+          }
+        }
+      },
+      {
+        "phase": "stage1",
+        "setting_id": "branch_c1_n1024",
+        "banks": 24,
+        "ambient_dimension": 2,
+        "rank_min": 2,
+        "rank_max": 2,
+        "full_column_rank_count": 24,
+        "sigma_min_range": [
+          2.1874464518440733,
+          2.6026696852111453
+        ],
+        "maximum_condition_number_full_rank_only": 1.38775269014786,
+        "test_gate_ranges": {
+          "kahm": {
+            "minimum": 3.5460957534039083e-28,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 688128
+          },
+          "affine": {
+            "minimum": 8.971161372412559e-29,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 688128
+          }
+        }
+      },
+      {
+        "phase": "stage1",
+        "setting_id": "forecast_nonlinear_ar",
+        "banks": 24,
+        "ambient_dimension": 12,
+        "rank_min": 12,
+        "rank_max": 12,
+        "full_column_rank_count": 24,
+        "sigma_min_range": [
+          0.062012780897131775,
+          0.1213551142435518
+        ],
+        "maximum_condition_number_full_rank_only": 49.02091056063663,
+        "test_gate_ranges": {
+          "kahm": {
+            "minimum": 2.2086905296535092e-35,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 2236416
+          },
+          "affine": {
+            "minimum": 2.364301757793276e-34,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 2236416
+          }
+        }
+      },
+      {
+        "phase": "stage1",
+        "setting_id": "forecast_van_der_pol",
+        "banks": 24,
+        "ambient_dimension": 12,
+        "rank_min": 12,
+        "rank_max": 12,
+        "full_column_rank_count": 24,
+        "sigma_min_range": [
+          0.01599646367636295,
+          0.03830412173564294
+        ],
+        "maximum_condition_number_full_rank_only": 219.8427981236809,
+        "test_gate_ranges": {
+          "kahm": {
+            "minimum": 2.842210005155697e-45,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 2236416
+          },
+          "affine": {
+            "minimum": 9.432969645417806e-20,
+            "maximum": 0.9999999657239711,
+            "zero_count": 0,
+            "values_checked": 2236416
+          }
+        }
+      },
+      {
+        "phase": "stage1",
+        "setting_id": "forecast_duffing",
+        "banks": 24,
+        "ambient_dimension": 12,
+        "rank_min": 12,
+        "rank_max": 12,
+        "full_column_rank_count": 24,
+        "sigma_min_range": [
+          0.013328936800206161,
+          0.022789091599636994
+        ],
+        "maximum_condition_number_full_rank_only": 280.40170018647353,
+        "test_gate_ranges": {
+          "kahm": {
+            "minimum": 3.9248049833858035e-43,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 2236416
+          },
+          "affine": {
+            "minimum": 3.1099031088010923e-07,
+            "maximum": 0.9999922829790058,
+            "zero_count": 0,
+            "values_checked": 2236416
+          }
+        }
+      },
+      {
+        "phase": "capacity",
+        "setting_id": "forecast_nonlinear_ar",
+        "banks": 24,
+        "ambient_dimension": 12,
+        "rank_min": 12,
+        "rank_max": 12,
+        "full_column_rank_count": 24,
+        "sigma_min_range": [
+          0.07312616945208524,
+          0.1345024768744872
+        ],
+        "maximum_condition_number_full_rank_only": 41.87247980426711,
+        "test_gate_ranges": {
+          "kahm": {
+            "minimum": 9.974488284390637e-37,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 2236416
+          },
+          "affine": {
+            "minimum": 7.745293763359365e-37,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 2236416
+          }
+        }
+      },
+      {
+        "phase": "capacity",
+        "setting_id": "forecast_van_der_pol",
+        "banks": 24,
+        "ambient_dimension": 12,
+        "rank_min": 12,
+        "rank_max": 12,
+        "full_column_rank_count": 24,
+        "sigma_min_range": [
+          0.015968807559127333,
+          0.03176393894560464
+        ],
+        "maximum_condition_number_full_rank_only": 219.081601612916,
+        "test_gate_ranges": {
+          "kahm": {
+            "minimum": 6.211491635633516e-44,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 2236416
+          },
+          "affine": {
+            "minimum": 1.5638421459773435e-16,
+            "maximum": 0.9999999882209476,
+            "zero_count": 0,
+            "values_checked": 2236416
+          }
+        }
+      },
+      {
+        "phase": "capacity",
+        "setting_id": "forecast_duffing",
+        "banks": 24,
+        "ambient_dimension": 12,
+        "rank_min": 12,
+        "rank_max": 12,
+        "full_column_rank_count": 24,
+        "sigma_min_range": [
+          0.01316372186933369,
+          0.024018131434668924
+        ],
+        "maximum_condition_number_full_rank_only": 283.7507674920048,
+        "test_gate_ranges": {
+          "kahm": {
+            "minimum": 5.38423192823712e-43,
+            "maximum": 1.0,
+            "zero_count": 0,
+            "values_checked": 2236416
+          },
+          "affine": {
+            "minimum": 1.8570257224683085e-08,
+            "maximum": 0.9999670983490935,
+            "zero_count": 0,
+            "values_checked": 2236416
+          }
+        }
+      }
+    ],
+    "caveat": "Numerical ranks are diagnostics, not exact proofs; rank deficiency does not establish information loss, and tiny positive gates do not guarantee stable decoding."
+  },
+  "manuscript": {
+    "status": "passed",
+    "pages": 29,
+    "extracted_text_matches_repository_pdf": true,
+    "unresolved_references_or_citations": 0,
+    "overfull_boxes": 0,
+    "pdf_author": "Anonymous authors",
+    "pdf_sha256": "23b4c8c8de244ee0be9537da41c58ce1cb058876a326f15484d0553c740d12be",
+    "official_style_commit": "7bf90efe3a0debbba703c05c43f3ff7e4d4a2992",
+    "official_style_sha256": {
+      "tmlr.sty": "816214ff5919aa457b6b443bee52b15d9561421417b7f8a50cc84651519f0002",
+      "tmlr.bst": "306fd454cf40771bee01293eeb98d2c1cd5f4e11ed0cd7296b335f354fc45206",
+      "fancyhdr.sty": "3d2922548e0e5f1a6c5676eda6ebb6dc20d7d305b4d8c2be5f1c833fb1084e6d"
+    },
+    "official_style_unmodified": true,
+    "visual_review": "All 29 pages inspected for layout; main figures, diagnostics, equations, captions and tables checked.",
+    "references_before_appendix": true,
+    "table_captions_above_tables": true,
+    "pdf_metadata": {
+      "title": "When Kernel Affine Hull Geometry Helps Prediction",
+      "author": "Anonymous authors",
+      "subject": "Controlled investigation of KAHM geometry, local coordinates, and predictive performance",
+      "creator": "LaTeX with hyperref",
+      "producer": "pdfTeX-1.40.25"
+    },
+    "embedded_files": 0,
+    "current_study_or_companion_branch_links_in_pdf": 0
+  },
+  "anonymous_related_manuscripts": [
+    {
+      "path": "submission/related_work/Related_Manuscript.pdf",
+      "pages": 50,
+      "sha256": "1155ed4df70a3dc1e1ab2c86091c614f37822a9ba00cd732943176584d986013",
+      "author_metadata": "Anonymous authors",
+      "identifying_current_study_links": 0
+    },
+    {
+      "path": "submission/related_work/Related_Manuscript_Supplement.pdf",
+      "pages": 23,
+      "sha256": "d248be9280c64be54b9046a78ee0ddb3b4d1395296c0168239f250c182d78552",
+      "author_metadata": "Anonymous authors",
+      "identifying_current_study_links": 0
+    }
+  ],
+  "execution_environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.3.5",
+      "scipy": "1.17.0",
+      "scikit-learn": "1.8.0",
+      "pandas": "2.2.3",
+      "matplotlib": "3.10.8",
+      "joblib": "1.5.3",
+      "threadpoolctl": "3.6.0",
+      "contourpy": "1.3.3",
+      "cycler": "0.12.1",
+      "fonttools": "4.61.1",
+      "kiwisolver": "1.4.9",
+      "packaging": "26.3",
+      "pillow": "12.3.0",
+      "pyparsing": "3.3.2",
+      "python-dateutil": "2.9.0.post0",
+      "pytz": "2026.5",
+      "tzdata": "2026.5",
+      "six": "1.17.0"
+    },
+    "blas_threads": 1
+  },
+  "ci_status": "Configured for smoke, retrospective paired diagnostics and deterministic packaging; remote CI status is recorded separately on the revision pull request."
+}

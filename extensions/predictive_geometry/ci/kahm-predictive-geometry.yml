@@ -3,7 +3,7 @@ name: KAHM predictive geometry reproduction
 
 on:
   push:
-    branches: [research/kahm-predictive-geometry]
+    branches: [research/kahm-predictive-geometry, research/tmlr-predictive-geometry]
     paths:
       - 'extensions/predictive_geometry/**'
       - '.github/workflows/kahm-predictive-geometry.yml'
@@ -39,6 +39,8 @@ jobs:
           cache-dependency-path: extensions/predictive_geometry/requirements.txt
       - run: python -m pip install -r requirements.txt
       - run: python -m reproduce smoke --run-dir runs/ci-smoke
+      - run: python -m reproduce review-diagnostics --output runs/ci-diagnostics
+      - run: python -m reproduce submission --output-dir dist/tmlr
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -48,3 +50,5 @@ jobs:
             extensions/predictive_geometry/runs/ci-smoke/smoke_work/smoke_results.json
             extensions/predictive_geometry/runs/ci-smoke/audit_work/archive_audit.json
             extensions/predictive_geometry/runs/ci-smoke/paper_assets/
+            extensions/predictive_geometry/runs/ci-diagnostics/
+            extensions/predictive_geometry/dist/tmlr/

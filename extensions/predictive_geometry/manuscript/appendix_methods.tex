@@ -59,6 +59,36 @@ nonlinear, so affine function classes on $T$ and on $(\phi,z)$ need not
 coincide. This proposition concerns the outer association normalizer,
 not the signed denominator in the KAHM reconstruction.
 
+\begin{proposition}[A sufficient condition for an injective local code]
+\label{prop:local-injectivity}
+Fix a fitted bank with bases $P_c$ and centers $\mu_c$. Suppose its gates
+are measurable and strictly positive, and let $A$ be the matrix obtained by vertically
+stacking the matrices $P_c^\top$. If $A$ has full column rank $d$, then
+\[
+ z\longmapsto
+ \left[\phi(z),\{\phi_c(z)P_c^\top(z-\mu_c)\}_c\right]
+\]
+is injective. In particular, this code and $z$ generate the same
+information, and their Bayes risks agree for every square-integrable
+target.
+\end{proposition}
+\begin{proof}
+The code contains both $\phi_c(z)>0$ and its product with
+$P_c^\top(z-\mu_c)$. Division and addition of the fixed vector
+$P_c^\top\mu_c$ recover $P_c^\top z$ for every $c$. Stacking these
+vectors gives $Az$. Full column rank gives the measurable inverse
+$z=(A^\top A)^{-1}A^\top(Az)$. Conversely, the code is a measurable
+function of $z$, so the generated information and Bayes risks agree.
+\end{proof}
+
+The gates in Equation~\eqref{eq:phi} are strictly positive in exact
+arithmetic because $\tau>0$. The rank assumption is a sufficient
+condition, not a necessary one: when $A$ is rank deficient, the gates
+themselves may retain additional information. It must be checked for
+each fitted bank. Very small gates and an ill-conditioned $A$ can make
+the displayed inverse numerically unstable, and its existence does not
+make it accessible to every finite decoder or fitting procedure.
+
 \begin{proposition}[A score symmetry and its prediction consequence]
 \label{prop:exact-symmetry}
 Let $Q$ be orthogonal on a preprocessed input space. Suppose that each
@@ -155,7 +185,13 @@ Then
 \]
 If $h$ is additionally $L_h$-Lipschitz from the declared representation
 metric and $\kappa\geq LL_h$, the same upper bound applies to the
-infimum risk over $\kappa$-Lipschitz decoders. If a particular decoder
+infimum excess risk over $\kappa$-Lipschitz decoders:
+\[
+ \inf_{\operatorname{Lip}(g)\leq\kappa}
+ \{R(g\circ\Gamma)-R_X^{\mathrm{Bayes}}\}
+ \leq L^2\varepsilon_{\mathrm{rec}}^2.
+\]
+If a particular decoder
 $f$ instead satisfies
 $\|m\circ h-f\|_{L^2(P_U)}\leq\delta_{\mathrm{head}}$, then
 \[
@@ -549,6 +585,8 @@ as an explanation of the local-feature benefit; it is not a proof of
 numerical robustness of every KAHM encoding or of signed normalization
 in general.
 
+\input{generated/review_diagnostics}
+
 \clearpage
 \section{Additional Source-Derived Tables}\label{app:tables}
 
@@ -559,9 +597,7 @@ are generated from the archived outcomes, with each difference,
 standard error, interval, and frozen margin independently recomputed
 by the paper-asset script before it writes these tables.
 
-\begin{table}[htbp]
- \centering\small\setlength{\tabcolsep}{4pt}
- \input{generated/tables/reconstruction}
+\begin{table}[!htbp]
  \caption{Held-out reconstruction errors per standardized input coordinate,
  averaged over the three blocks and 24 full repetitions. ``Best'' takes
  the best local reconstruction separately in each block; ``weighted''
@@ -570,11 +606,11 @@ by the paper-asset script before it writes these tables.
  input settings, for both summaries. These are descriptive diagnostics,
  not the supervised primary endpoint.}
  \label{tab:reconstruction-details}
+ \centering\small\setlength{\tabcolsep}{4pt}
+ \input{generated/tables/reconstruction}
 \end{table}
 
-\begin{table}[htbp]
- \centering\small\setlength{\tabcolsep}{5pt}
- \input{generated/tables/reflection}
+\begin{table}[!htbp]
  \caption{Branch reflection differences at training size 1,024, averaged
  over 24 banks. The statistic is a per-coordinate RMS, with and without
  training-only coordinate scaling. The raw reflection precedes the
@@ -582,28 +618,49 @@ by the paper-asset script before it writes these tables.
  loss for the learned code nor certify a decoder-specific population
  risk bound.}
  \label{tab:reflection-details}
+ \centering\small\setlength{\tabcolsep}{5pt}
+ \input{generated/tables/reflection}
 \end{table}
 
-\begin{table}[htbp]
- \centering\small\setlength{\tabcolsep}{4pt}
- \input{generated/tables/capacity_secondary}
+\begin{table}[!htbp]
  \caption{Complete representation means in the fresh capacity study,
  with MSE multiplied by $10^3$. The full-score KAHM representation is
  a prespecified secondary control. These point estimates do not add
  hypotheses to the 12-comparison primary family.}
  \label{tab:capacity-means-details}
+ \centering\small\setlength{\tabcolsep}{4pt}
+ \input{generated/tables/capacity_secondary}
 \end{table}
 
-\begin{table}[htbp]
- \centering\small\setlength{\tabcolsep}{4pt}
- \input{generated/tables/capacity_selector}
+\clearpage
+\subsection{Selected pipelines and realized dimensions}
+
+The validation-selected pipeline and the retained nonlinear basis are
+distinct summaries: the former describes the operational model choice,
+whereas the latter records the realized dimensions behind the nominal
+landmark budgets.
+
+\begin{table}[!htbp]
  \caption{Secondary validation-only selection among the eight complete
  capacity-study pipelines. Mean test MSE is multiplied by $10^3$.
  Counts concern independent complete repetitions under each generator,
  not a new population of forecasting tasks.}
  \label{tab:capacity-selector-details}
+ \centering\small\setlength{\tabcolsep}{4pt}
+ \input{generated/tables/capacity_selector}
+\end{table}
+
+\begin{table}[!htbp]
+ \caption{Retained RBF-plus-linear dimensions after the Nystr\"om
+ eigenvalue cutoff in the fresh capacity study. Means and ranges cover
+ the 24 repetitions in each cell. The same landmark count $M$ does not
+ imply the same realized dimension or function class.}
+ \label{tab:capacity-dimensions-details}
+ \centering\small\setlength{\tabcolsep}{5pt}
+ \input{generated/tables/capacity_dimensions}
 \end{table}
 
 \clearpage
 \input{generated/tables/all_primary_twenty_nine}
+\clearpage
 \input{generated/tables/all_capacity_twelve}

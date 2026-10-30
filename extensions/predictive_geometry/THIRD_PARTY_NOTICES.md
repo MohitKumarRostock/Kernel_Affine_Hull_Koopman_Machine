@@ -17,11 +17,19 @@ grouped split, and limitation that the original UCI archive was not independentl
 downloaded. This is a static regression check on a fixed cohort.
 
 Python dependencies retain their respective licenses. A dependency license is
-not replaced by this extension's code license. The manuscript and scientific
-authorship metadata are a provisional draft for author review; no journal
-acceptance, DOI, or additional author is asserted.
+not replaced by this extension's code license. No journal acceptance, DOI, or
+additional author is asserted by this source distribution.
 
-`manuscript/jmlr2e.sty` is the JMLR style file supplied with the original
-manuscript. Its source headers and contributor attributions are retained. The
-upstream style project is <https://github.com/JmlrOrg/jmlr-style-file>; the
-extension's MIT code notice does not replace third-party style terms.
+`manuscript/tmlr.sty`, `manuscript/tmlr.bst`, and `manuscript/fancyhdr.sty`
+are the unmodified files from the official TMLR style project,
+<https://github.com/JmlrOrg/tmlr>. Their source headers and contributor
+attributions are retained, with the supplied project license in
+`manuscript/LICENSE_TMLR.txt`. The extension's MIT code notice does not replace
+third-party style terms.
+
+The TMLR review package retains these notices and the existing extension and
+upstream MIT licenses. Published software attribution, source identifiers and
+copyright holders are not removed to suggest that the code has a different
+origin. The review manifest lists these narrow attribution/provenance exceptions;
+they are not an assertion about the submission's authors. First-party overview
+author metadata and current-study branch links are omitted from that view.

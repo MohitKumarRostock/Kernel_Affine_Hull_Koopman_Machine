@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - 'extensions/tmlr_integration/**'
+      - 'extensions/scaling_sensitivity/**'
       - '.github/workflows/tmlr-integration.yml'
   pull_request:
     paths:
       - 'extensions/tmlr_integration/**'
+      - 'extensions/scaling_sensitivity/**'
       - '.github/workflows/tmlr-integration.yml'
   workflow_dispatch:
 
@@ -41,13 +43,17 @@ jobs:
           cache-dependency-path: extensions/natural_forecasting/requirements.txt
       - name: Install pinned analysis dependencies
         run: python -m pip install -r extensions/natural_forecasting/requirements.txt
+      - name: Restore both saved natural and sensitivity artifacts
+        run: |
+          python extensions/natural_forecasting/package.py restore-reference extensions/natural_forecasting/reference/natural_v1.zip.parts.json
+          python -m extensions.scaling_sensitivity.reference restore
       - name: Check preserved source and review archive defenses
         run: |
           python extensions/tmlr_integration/package.py check-source
           python -m unittest extensions.tmlr_integration.package_tests -v
+          python -m unittest extensions.scaling_sensitivity.test_natural extensions.scaling_sensitivity.test_controlled extensions.scaling_sensitivity.test_analysis extensions.scaling_sensitivity.test_reference -v
       - name: Restore and audit saved evidence without forecasting fits
         run: |
-          python extensions/natural_forecasting/package.py restore-reference extensions/natural_forecasting/reference/natural_v1.zip.parts.json
           python extensions/tmlr_integration/package.py audit .
       - name: Install manuscript compiler
         run: |

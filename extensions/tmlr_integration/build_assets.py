@@ -1,4 +1,4 @@
-"""Build the integrated paper's displays from the two unchanged study archives.
+"""Build displays from the original archives and separate scaling sensitivity.
 
 This is post-study reporting. It does not fit, tune, or select a forecasting model.
 Run from any directory after restoring the natural_v1 reference run.
@@ -33,6 +33,17 @@ def build() -> dict:
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(path, destination)
             sources[str(path.relative_to(ROOT))] = digest(path)
+
+    scaling = ROOT / "extensions/scaling_sensitivity/analysis"
+    sources[str((scaling / "summary.json").relative_to(ROOT))] = digest(scaling / "summary.json")
+    for path in sorted((scaling / "generated").rglob("*")):
+        if not path.is_file():
+            continue
+        relative = path.relative_to(scaling / "generated")
+        destination = generated / "scaling" / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, destination)
+        sources[str(path.relative_to(ROOT))] = digest(path)
 
     reports = ROOT / "extensions/natural_forecasting/runs/natural_v1/reports"
     def rows(name):
@@ -77,7 +88,7 @@ def build() -> dict:
         lines.append(f"{label} & {loss(key):.4f} & {cost(key):.4f}" + r" \\")
     lines.extend([r"\bottomrule", r"\end{tabular}", r"\end{table}"])
     (generated / "natural_main_table.tex").write_text("\n".join(lines) + "\n")
-    result = {"format": "tmlr_integrated_assets_v1", "scope": "Post-study reporting; no scientific source or outcomes changed",
+    result = {"format": "tmlr_integrated_assets_v2", "scope": "Post-study reporting from unchanged original archives and separately recorded post-hoc scaling sensitivity; no model fitting or outcome selection",
               "input_sha256": sources, "macros": macros,
               "generated_sha256": {str(p.relative_to(generated)): digest(p) for p in sorted(generated.rglob('*')) if p.is_file()}}
     (HERE / "manuscript/ASSET_PROVENANCE.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")

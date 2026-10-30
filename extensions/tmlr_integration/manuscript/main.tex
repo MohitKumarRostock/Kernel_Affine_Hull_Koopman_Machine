@@ -20,6 +20,7 @@
 \newcommand{\clip}{\operatorname{clip}}
 \input{generated/controlled/claim_numbers}
 \input{generated/natural_numbers}
+\input{generated/scaling/numbers}
 
 \title{Kernel Affine Hull Features for Prediction:\\
 Conditional Gains, Costs, and Limits of Transfer\thanks{AI tools assisted with protocol development, implementation, numerical and statistical verification, analysis, and writing. The authors are responsible for the scientific content.}}
@@ -35,8 +36,8 @@ forecasting study. On a fixed branch distribution, changing the target reveals
 a positional distinction that matched affine scores nearly remove and KAHM
 scores retain. Locality-aware affine scores and explicit local coordinates
 largely repair the deficit, so the mechanism is not exclusive to KAHM.
-A fresh-sample study finds KAHM local-coordinate gains on Van der Pol at two
-decoder capacities, alongside adverse comparisons on autoregression and
+A fresh-sample study with standardized geometry finds KAHM local-coordinate
+gains on Van der Pol at two decoder capacities, alongside adverse comparisons on autoregression and
 Duffing. A subsequent evaluation uses eight natural-data source families,
 with four reserved for confirmation after freezing the model-selection
 diagnostic. On those sources, raw-history-plus-KAHM has
@@ -44,6 +45,9 @@ diagnostic. On those sources, raw-history-plus-KAHM has
 than the matched raw-history predictor at \NaturalCostRatio{} times its
 measured warm-library pipeline cost. Adding geometric features to metadata
 and a paid validation probe changes none of 80 confirmation choices.
+A subsequent paired, post-hoc min--max sensitivity leaves the natural error
+gap almost unchanged, at \ScalingNaturalKahmVsRawPercent\% above the matched raw predictor.
+It changes individual controlled errors without reversing their main mean rankings.
 These results support evaluating geometric features together with their
 decoders, structural controls, and selection costs. They establish conditional
 benefits and bounded failures of transfer, without a general KAHM adoption
@@ -77,7 +81,7 @@ on neighboring laws, and dependence on the finite decoder.
 Third, a separate natural-source study asks whether an augmented KAHM
 procedure is useful at its measured computational cost, and whether a
 frozen diagnostic anticipates its benefit on reserved sources. Its
-confirmation results are unfavorable overall: raw-history-plus-KAHM
+confirmation results under its fixed standardization are unfavorable overall: raw-history-plus-KAHM
 has scaled MSE \NaturalKAHMLoss{}, versus \NaturalRawLoss{} for the
 matched raw-history predictor and \NaturalRidgeLoss{} for raw ridge.
 Adding two geometric descriptors to metadata and a validation probe does
@@ -85,11 +89,20 @@ not change the diagnostic's confirmation decisions. These observations
 delimit the practical conclusions that can be drawn from the favorable
 controlled example.
 
+A bounded follow-up then changes geometry scaling while preserving the raw
+input blocks, seeds, target units, capacities, and validation grids. On the
+same four formerly reserved sources, min--max KAHM has scaled MSE
+\ScalingNaturalKahmMinmaxLoss{}, versus \NaturalKAHMLoss{} under standardization;
+the natural-data ranking persists. This new sensitivity reuses inspected
+data, so its paired comparisons have a different evidential status from the
+original frozen evaluation.
+
 The paper contributes (i) a controlled account of how KAHM reconstruction,
 encoding, and local position interact with the target; (ii) a separately
 specified, fresh-sample demonstration of conditional finite-decoder gains;
 and (iii) an auditable natural-source evaluation of accuracy, complete
-measured pipeline dependencies, and an unsuccessful benefit diagnostic.
+measured pipeline dependencies, and an unsuccessful benefit diagnostic,
+supplemented by a bounded analysis of scaling dependence.
 Local tangent features, finite kernel approximation, and feature-based
 selection are established ideas. Our contribution is the evidence about
 their use with KAHM and the implications for evaluating reconstruction-based
@@ -109,16 +122,23 @@ separate throughout.
 \input{mechanisms}
 \input{controlled_results}
 \input{natural_study}
+\input{scaling_sensitivity}
 \input{discussion}
 
 \section*{Reproducibility and research transparency}
-The anonymous supplement contains the unchanged scientific dependencies,
+The anonymous supplement contains the unchanged original scientific dependencies,
 compact controlled-study records, natural-source snapshots, prepared arrays,
 saved per-origin forecasts, frozen diagnostics, and measured cost records.
 Its manifest distinguishes the post-study review export from the earlier
 execution freezes. The two studies can be audited separately, and their
 reported assets can be regenerated without selecting new models. The
-natural forecast arrays reconstruct all 2,496 task--method losses. These
+original natural forecast arrays reconstruct all 2,496 task--method losses.
+The separate scaling extension adds 1,664 natural method runs and 1,440
+controlled head fits, with an execution freeze published before those fits.
+It retains every new natural forecast and controlled episode-loss array,
+plus a pre-export audit of full controlled predictions and their hashes.
+Replaying compact controlled losses is distinguished from recreating the
+omitted full prediction arrays. These
 computational checks establish consistency of the supplied evidence; they
 do not create additional independent replications or replace scientific
 review. The related unpublished certificate manuscript and its supplement
@@ -129,4 +149,6 @@ are included anonymously to make the scope distinction inspectable.
 \appendix
 \input{appendix_controlled}
 \input{appendix_natural}
+\FloatBarrier
+\input{appendix_scaling}
 \end{document}

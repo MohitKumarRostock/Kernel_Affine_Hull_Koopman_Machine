@@ -13,6 +13,34 @@ from . import package
 
 
 class ReviewIntegrityTests(unittest.TestCase):
+    def test_review_payload_cannot_omit_or_change_a_frozen_scaling_dependency(self):
+        name = "extensions/natural_forecasting/package_tests.py"
+        raw = b"Unchanged execution dependency\n"
+        frozen = {name: package.sha256(raw)}
+        self.assertEqual(package.verify_scaling_payload({name: raw}, frozen), 1)
+        with self.assertRaisesRegex(ValueError, "omitted"):
+            package.verify_scaling_payload({}, frozen)
+        with self.assertRaisesRegex(ValueError, "changed"):
+            package.verify_scaling_payload({name: b"different"}, frozen)
+
+    def test_numeric_replay_allows_roundoff_but_rejects_changed_evidence(self):
+        saved = {"tasks": 208, "means": [0.842191252179071], "phase": "post_hoc"}
+        package.compare_numeric_replay(saved, {**saved, "means": [0.8421912521790711]})
+        for changed in ({**saved, "tasks": 207}, {**saved, "means": [0.8422]},
+                        {**saved, "means": []}, {**saved, "extra": True},
+                        {**saved, "tasks": 208.0}):
+            with self.subTest(changed=changed), self.assertRaises(ValueError):
+                package.compare_numeric_replay(saved, changed)
+
+    def test_csv_replay_keeps_schema_and_counts_exact(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "report.csv"
+            path.write_text("phase,tasks,loss\npost_hoc,208,0.842191252179071\n")
+            parsed = package.read_numeric_csv(path)
+            self.assertEqual(parsed["columns"], ["phase", "tasks", "loss"])
+            self.assertEqual(parsed["rows"], [["post_hoc", 208, 0.842191252179071]])
+            self.assertIs(type(parsed["rows"][0][1]), int)
+
     def bundle(self):
         return package.with_manifest({"README.txt": b"Anonymous review artifact\n", "science/result.json": b'{"loss": 1}\n'},
                                      "manuscript-source", {"post_study_export": True})

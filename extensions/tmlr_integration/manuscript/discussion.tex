@@ -9,6 +9,14 @@ shows that those controlled gains do not suffice to recommend its tested
 augmentation broadly. These results concern different procedures and
 populations; neither the natural failures erase the controlled effects
 nor the controlled effects override the natural failures.
+The later paired scaling check leaves the natural aggregate ranking intact
+under the specified unclipped min--max alternative. It strengthens that
+bounded comparison without extending it to every preprocessing choice or
+future source population.
+The main controlled local-coordinate comparisons retain their mean ordering,
+although Duffing's KAHM error
+changes appreciably. Robustness of a ranking within these two fixed scaler
+arms is a narrower statement than invariance of the representation or loss.
 
 For evaluating another reconstruction-based feature map, the resulting
 questions are concrete. Does the code retain target-relevant position?
@@ -60,6 +68,16 @@ they supply neither a population Lipschitz bound nor a distribution-free
 KAHM performance certificate. Replaying fixed seeds and reconstructing
 saved losses verifies computation without producing new source evidence.
 
+The scaling analysis compares two fixed preprocessing choices on those same
+observations. It does not test clipping, all alternative scalers, local-only
+natural models, or a new scaler-selection rule. Near-equal natural aggregate
+errors do not prove statistical equivalence or scale invariance. Conversely,
+an observed controlled change describes the complete refitted pipeline:
+partitioning, truncated directions, reference-energy regularization, gates,
+and finite decoder geometry can all change together. Further component
+attribution or a newly chosen procedure would require another specified study
+and fresh reserved evidence for a new transfer claim.
+
 \section{Conclusion}
 KAHM geometry can support useful predictive features under specified
 target and decoder conditions. The controlled experiments locate a
@@ -68,7 +86,9 @@ it, and establish conditional finite-decoder gains on Van der Pol. A
 separate natural-source evaluation finds higher aggregate error and
 measured warm-pipeline cost for the tested KAHM augmentation than for its
 raw-history comparator, and no useful geometric increment in the frozen
-benefit diagnostic. The defensible practical lesson is to evaluate retained
+benefit diagnostic. A paired post-hoc min--max check does not reverse that
+natural-source ranking or the main controlled mean rankings, while exposing
+measurable preprocessing sensitivity. The defensible practical lesson is to evaluate retained
 information, structural controls, the full fitting procedure, and source
 transfer together. A general rule for when KAHM will be worth its cost
 remains unestablished.

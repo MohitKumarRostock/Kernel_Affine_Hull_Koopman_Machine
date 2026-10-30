@@ -2,7 +2,8 @@
 
 This is the editable source of *Kernel Affine Hull Features for Prediction:
 Conditional Gains, Costs, and Limits of Transfer*. It consolidates two unpublished
-research studies in the official TMLR anonymous review format.
+research studies and a separate bounded scaling sensitivity in the official
+TMLR anonymous review format.
 
 From this directory, using TeX Live, latexmk, pdfLaTeX, BibTeX, and Latin Modern:
 
@@ -21,11 +22,12 @@ The main paper explains the controlled mechanism, all primary capacity
 contrasts, the independent natural-source comparison, measured computational
 costs, and the unsuccessful frozen diagnostic. Proofs, exact generators,
 method specifications, full source and policy tables, fitting warnings, and
-other diagnostics follow the references. No result is pooled across the two
-studies' distinct inference units or statistical comparison families.
+other diagnostics follow the references. The scaling sensitivity reuses the
+original draws and natural sources and is explicitly post-hoc. No result is
+pooled across distinct inference units or statistical comparison families.
 
 `ASSET_PROVENANCE.json` records the source hashes for the copied study assets
-and newly generated confirmation table/number macros. In a full research
+and newly generated confirmation/scaling tables and number macros. In a full research
 checkout with the saved natural run restored, regenerate these assets using
 `python extensions/tmlr_integration/build_assets.py` from the repository root.
 The complete review supplement also includes that script and its inputs.

@@ -10,11 +10,13 @@ from __future__ import annotations
 
 import argparse
 from contextlib import contextmanager
+import csv
 import gzip
 import hashlib
 import importlib
 import importlib.util
 import json
+import math
 import os
 from pathlib import Path, PurePosixPath
 import re
@@ -32,6 +34,7 @@ REPOSITORY = EXTENSION.parents[1]
 RELATIVE = Path("extensions/tmlr_integration")
 NATURAL = Path("extensions/natural_forecasting")
 CONTROLLED = Path("extensions/predictive_geometry")
+SCALING = Path("extensions/scaling_sensitivity")
 MANIFEST = "REVIEW_MANIFEST.json"
 SOURCE_NAME = "TMLR_Integrated_Manuscript_Source.zip"
 SUPPLEMENT_NAME = "TMLR_Integrated_Review_Supplement.zip"
@@ -55,6 +58,50 @@ def sha256(data: bytes) -> str:
 def digest_file(path: Path) -> str:
     with path.open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def compare_numeric_replay(saved: Any, replayed: Any, path="scaling-analysis"):
+    """Permit floating summation roundoff, never missing fields or changed counts."""
+    if type(saved) is not type(replayed):
+        raise ValueError(f"Analysis replay type differs: {path}")
+    if isinstance(saved, dict):
+        if set(saved) != set(replayed):
+            raise ValueError(f"Analysis replay schema differs: {path}")
+        for key in saved:
+            compare_numeric_replay(saved[key], replayed[key], path + "." + key)
+    elif isinstance(saved, list):
+        if len(saved) != len(replayed):
+            raise ValueError(f"Analysis replay length differs: {path}")
+        for index, (left, right) in enumerate(zip(saved, replayed)):
+            compare_numeric_replay(left, right, f"{path}[{index}]")
+    elif isinstance(saved, float):
+        if not (math.isfinite(saved) and math.isfinite(replayed)
+                and math.isclose(saved, replayed, rel_tol=1e-11, abs_tol=1e-13)):
+            raise ValueError(f"Analysis replay numeric value differs: {path}")
+    elif saved != replayed:
+        raise ValueError(f"Analysis replay value differs: {path}")
+
+
+def read_numeric_csv(path: Path):
+    def value(cell):
+        if re.fullmatch(r"-?(?:0|[1-9][0-9]*)", cell):
+            return int(cell)
+        if re.fullmatch(r"[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?", cell):
+            return float(cell)
+        return cell
+    with path.open(newline="") as stream:
+        rows = list(csv.reader(stream))
+    return {"columns": rows[0], "rows": [[value(cell) for cell in row] for row in rows[1:]]}
+
+
+def verify_scaling_payload(files: dict[str, bytes], frozen: dict[str, str]) -> int:
+    """A review export must carry every byte required by its execution freeze."""
+    for name, expected in frozen.items():
+        if name not in files:
+            raise ValueError(f"Frozen scaling dependency omitted from review payload: {name}")
+        if sha256(files[name]) != expected:
+            raise ValueError(f"Frozen scaling dependency changed in review payload: {name}")
+    return len(frozen)
 
 
 def safe_name(name: str) -> str:
@@ -117,9 +164,13 @@ def source_checks(repository: Path) -> dict[str, Any]:
         }
     else:
         checkpoint_result = natural.verify_checkpoint(repository)
+    sensitivity = load_module(repository / SCALING / "common.py", "scaling_freeze_check")
+    scaling_freeze = sensitivity.verify_freeze(repository)
     return {"status": "passed", "controlled": controlled, "natural": checkpoint_result,
             "frozen_scientific_dependencies_verified": len(freeze["code_sha256"]),
-            "original_natural_source_archives_verified": len(sources)}
+            "original_natural_source_archives_verified": len(sources),
+            "scaling_execution_dependencies_verified": len(scaling_freeze["sha256"]),
+            "scaling_scope": "Separate post-hoc sensitivity; original scientific freezes and results unchanged."}
 
 
 def verify_natural_run(repository: Path, run_directory: Path) -> dict[str, Any]:
@@ -231,6 +282,8 @@ def supplement_payload(repository: Path, run_directory: Path) -> tuple[dict[str,
         raise ValueError("Export from the complete public research checkout; a review subset cannot certify the original 217-file checkpoint")
     checks = source_checks(repository)
     checks["natural_saved_run"] = verify_natural_run(repository, run_directory)
+    scaling_reference = load_module(repository / SCALING / "reference.py", "scaling_reference_packager")
+    checks["scaling_saved_run"] = scaling_reference._audit_gate(repository / SCALING)
     files: dict[str, bytes] = {}
     for directory in ("study", "archive", "reproduce", "scripts", "tests"):
         _add_tree(files, repository, CONTROLLED / directory)
@@ -246,7 +299,7 @@ def supplement_payload(repository: Path, run_directory: Path) -> tuple[dict[str,
         name = path.relative_to(repository).as_posix()
         files[name] = read_source(repository, name)
     for name in ("__init__.py", "run.py", "data.py", "models.py", "baselines.py", "analysis.py",
-                 "report.py", "package.py", "protocol.json", "data_sources.json", "requirements.txt", "PROTOCOL.md"):
+                 "report.py", "package.py", "package_tests.py", "protocol.json", "data_sources.json", "requirements.txt", "PROTOCOL.md"):
         files[(NATURAL / name).as_posix()] = read_source(repository, NATURAL / name)
     for directory in ("tests", "datasets"):
         _add_tree(files, repository, NATURAL / directory)
@@ -255,6 +308,19 @@ def supplement_payload(repository: Path, run_directory: Path) -> tuple[dict[str,
         files[(NATURAL / "registration" / name).as_posix()] = read_source(repository, NATURAL / "registration" / name)
     for name, path in natural_helper(repository).run_payload(run_directory).items():
         files[(NATURAL / "runs/natural_v1" / name).as_posix()] = path.read_bytes() if isinstance(path, Path) else path
+    # The new sensitivity is explicitly separate from the two historical
+    # studies. Include its exact execution freeze, code, compact results and
+    # descriptive analysis. Full controlled predictions are reproducible local
+    # artifacts; the retained full-prediction audit records their verification.
+    for path in sorted((repository / SCALING).iterdir()):
+        if path.is_file() and path.suffix in {".py", ".json", ".md", ".txt"}:
+            name = path.relative_to(repository)
+            files[name.as_posix()] = read_source(repository, name)
+    for directory in ("results", "analysis"):
+        _add_tree(files, repository, SCALING / directory,
+                  suffixes={".json", ".npz", ".csv", ".tex", ".pdf", ".png", ".md"})
+    sensitivity_freeze = json.loads(files[(SCALING / "protocol_freeze.json").as_posix()])
+    checks["scaling_packaged_dependencies_verified"] = verify_scaling_payload(files, sensitivity_freeze["sha256"])
     # These exact included source bytes form a new metadata-only check used by
     # fresh review reproductions. It neither replaces nor re-dates a prior freeze.
     inventory = {name: sha256(raw) for name, raw in files.items()
@@ -294,7 +360,8 @@ def supplement_payload(repository: Path, run_directory: Path) -> tuple[dict[str,
         }
     return files, {"source_checks": checks, "review_transformations": transformations,
                    "omitted_categories": ["Git history", "first-party citation/contact metadata", "named repository links in publication records and historical overviews", "prior manuscript versions", "unrelated repository files", "build caches"],
-                   "scientific_sources_freezes_and_outcomes_modified": False}
+                   "original_scientific_sources_freezes_and_outcomes_modified": False,
+                   "new_evidence": "Bounded, paired post-hoc geometry-scaling sensitivity; no new source confirmation."}
 
 
 def attribution_exception(name: str) -> str | None:
@@ -473,8 +540,32 @@ def audit(repository: Path, output: Path | None = None) -> dict[str, Any]:
         if result.returncode:
             raise RuntimeError("Controlled archive audit failed:\n" + result.stdout[-6000:] + result.stderr[-6000:])
         controlled_log = result.stdout + result.stderr
+    scaling = importlib.import_module("extensions.scaling_sensitivity.analysis")
+    scaling_report = importlib.import_module("extensions.scaling_sensitivity.report")
+    with tempfile.TemporaryDirectory(prefix="tmlr-scaling-audit-") as temporary:
+        scaling_output = Path(temporary)
+        scaling_replay = scaling.generate(output=scaling_output)
+        scaling_report.build(scaling_output / "summary.json", scaling_output / "generated")
+        # Analysis is a deterministic projection of saved evidence. An
+        # independent full-prediction check preceded compact export; this audit
+        # now reconstructs natural forecasts and controlled per-episode losses.
+        for path in sorted(scaling_output.rglob("*")):
+            if not path.is_file() or path.name == "AUDIT.json":
+                continue
+            relative = path.relative_to(scaling_output)
+            expected = repository / SCALING / "analysis" / relative
+            if not expected.is_file():
+                raise ValueError(f"Scaling sensitivity analysis replay differs: {relative}")
+            if path.suffix == ".json":
+                compare_numeric_replay(json.loads(expected.read_text()), json.loads(path.read_text()), str(relative))
+            elif path.suffix == ".csv":
+                compare_numeric_replay(read_numeric_csv(expected), read_numeric_csv(path), str(relative))
+            elif path.read_bytes() != expected.read_bytes():
+                raise ValueError(f"Scaling sensitivity display replay differs: {relative}")
+        scaling_audit = json.loads((scaling_output / "AUDIT.json").read_text())
     checks.update(numeric_audit=numeric, controlled_statistical_audit="passed",
                   frozen_diagnostic_coefficients_recomputed=True, archived_analysis_reports_recomputed=True,
+                  scaling_analysis_recomputed=True, scaling_audit=scaling_audit,
                   forecasting_model_or_geometry_fits=0, source_and_outcomes_modified=False,
                   timing_scope="Recorded costs are checked arithmetically; fresh small diagnostic fit/decision times are not required to equal archived timings.")
     if output is not None:
@@ -574,9 +665,11 @@ REVIEW_README = """# Integrated TMLR anonymous review supplement
 
 Start here. This supplement supports one integrated manuscript, with controlled
 geometry experiments and a separate natural-source forecasting study. It
-contains the complete natural saved run (208 tasks and 2,496 method losses),
-the controlled compact archive, exact scientific sources, pinned requirements,
-all eight original natural-data snapshots, and integrated LaTeX source.
+contains the complete original natural saved run (208 tasks and 2,496 method
+losses), the controlled compact archive, exact scientific sources, pinned
+requirements, all eight original natural-data snapshots, and integrated LaTeX
+source. A separate bounded scaling sensitivity adds 1,664 natural method runs
+and 1,440 controlled head fits on previously inspected sources and draws.
 
 ## Verify before generating any files
 
@@ -607,9 +700,15 @@ Audit independently checks all saved natural prediction arrays against their
 targets/origins and recomputes 2,496 losses, source-balanced analyses, and frozen
 diagnostic coefficients. It also replays the controlled archived paired
 statistics. The small diagnostic ridge regressions are refitted; forecasting
-models and geometric banks are not. Replay writes only to a separate empty
-directory. Recorded pipeline costs remain archival observations, not new
-measurements. Both commands accept the review ZIP directly as an alternative
+models and geometric banks are not. The same audit reconstructs every new
+natural sensitivity loss from saved forecasts, replays all controlled
+sensitivity episode losses, verifies the execution freeze, and regenerates
+the sensitivity summaries and tables. The compact controlled archive retains
+the pre-export full-prediction audit and prediction hashes; replaying compact
+losses is not a new verification of the omitted prediction arrays. Replay
+writes only to a separate empty directory. Recorded pipeline costs remain
+observations from their respective executions, not new timing measurements.
+Both commands accept the review ZIP directly as an alternative
 to an extracted root and use a temporary verified extraction.
 
 ## Full computational reproduction and manuscript build
@@ -621,6 +720,11 @@ unchanged run.py commands `prepare`, `initial-freeze`, `run --role development`,
 `freeze-confirmation`, `run --role confirmation`, and `analyze`, each with a new
 `--run-root`. These reproduce existing seeds and do not add independent evidence.
 The review CHECKPOINT.json verifies the included source subset for fresh runs.
+The separate `extensions/scaling_sensitivity/README.md` gives the fixed
+two-scaler sensitivity reproduction commands. Choose new output directories;
+do not replace the supplied evidence. The published sensitivity execution
+checkpoint preceded those fits, but all source datasets and controlled draws
+had already been inspected, so it is not fresh confirmation.
 
 Build the anonymous paper after initial inventory verification:
 

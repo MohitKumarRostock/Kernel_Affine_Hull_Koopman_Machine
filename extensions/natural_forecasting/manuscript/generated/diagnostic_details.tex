@@ -1,0 +1,137 @@
+{\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{lrrrr}
+\caption{Estimated-benefit diagnostics with frozen hierarchical weights. These are descriptive log-benefit prediction errors and classification accuracies; they are not calibrated probabilities or interval coverage. No recalibration is fitted on confirmation data.}\label{tab:diagnostic-calibration}\\
+\toprule
+Diagnostic & Log RMSE & Log bias & Sign (\%) & 5\% class (\%) \\
+\midrule
+\endfirsthead
+\toprule
+Diagnostic & Log RMSE & Log bias & Sign (\%) & 5\% class (\%) \\
+\midrule
+\endhead
+Development: Metadata & 1.035 & 0.01412 & 57 & 49.2 \\
+Development: Metadata + geometry & 1.037 & 0.03491 & 47.7 & 43 \\
+Development: Metadata + probe & 1.012 & 0.03064 & 52.3 & 53.9 \\
+Development: Metadata + probe + geometry & 1.02 & 0.05091 & 50.8 & 43 \\
+Confirmation: Metadata & 0.1643 & 0.05835 & 55.5 & 59.4 \\
+Confirmation: Metadata + geometry & 0.1612 & 0.05269 & 55.5 & 75 \\
+Confirmation: Metadata + probe & 0.1845 & 0.04069 & 58.6 & 73.4 \\
+Confirmation: Metadata + probe + geometry & 0.1847 & 0.04196 & 58.6 & 71.9 \\
+\bottomrule
+\end{longtable}
+}
+
+{\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{lrrrr}
+\caption{One-off diagnostic development costs. Acquisition sums the union of both matched predictors' complete search/final nodes and each variant's metadata/probe/geometry dependencies within every development task. Summing standalone tasks can conservatively repeat preparation across seeds/tasks. Acquire and total denote wall time; CPU covers acquisition. Do not add the four rows: their developmental labels and some features can be shared. Ridge fitting is measured separately; no deployment-count amortization is assumed.}\label{tab:offline-costs}\\
+\toprule
+Variant & Acquire (s) & CPU (s) & Ridge (ms) & Total (s) \\
+\midrule
+\endfirsthead
+\toprule
+Variant & Acquire (s) & CPU (s) & Ridge (ms) & Total (s) \\
+\midrule
+\endhead
+Metadata & 68.49 & 68.45 & 6.657 & 68.5 \\
+Metadata + geometry & 78.6 & 78.56 & 10.04 & 78.61 \\
+Metadata + probe & 80.83 & 80.79 & 9.035 & 80.84 \\
+Metadata + probe + geometry & 80.83 & 80.79 & 6.146 & 80.84 \\
+\bottomrule
+\end{longtable}
+}
+
+{\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{lrrrrrr}
+\caption{Frozen development-only standardization and ridge coefficients, rounded for display. G denotes geometry and P the cheap probe. An absent feature is shown by a dash. Predictions use the unrounded values in the frozen diagnostic JSON and the fixed zero decision threshold.}\label{tab:diagnostic-coefficients}\\
+\toprule
+Feature & Mean & Scale & Meta & Meta+G & Meta+P & Meta+P+G \\
+\midrule
+\endfirsthead
+\toprule
+Feature & Mean & Scale & Meta & Meta+G & Meta+P & Meta+P+G \\
+\midrule
+\endhead
+Intercept & -- & -- & 0.023966 & 0.023966 & 0.023966 & 0.023966 \\
+log(1 + training windows) & 5.1417 & 0.66192 & 0.017096 & 0.013047 & -0.0099182 & -0.0089504 \\
+log(1 + horizon/history) & 0.23442 & 0.019538 & -0.012299 & -0.013178 & -0.0043432 & -0.0045441 \\
+Lag-one autocorrelation & 0.7189 & 0.24263 & 0.0069415 & 0.001093 & -0.014509 & -0.012806 \\
+KAHM gate entropy & 0.074168 & 0.063288 & -- & -0.010312 & -- & -0.0026401 \\
+log(1 + affine residual) & 0.18213 & 0.12986 & -- & -0.013232 & -- & 0.0063025 \\
+Probe log-loss ratio & 0.25347 & 0.67921 & -- & -- & 0.14611 & 0.1467 \\
+\bottomrule
+\end{longtable}
+}
+
+{\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{lrrrrr}
+\caption{Recorded fitting behavior. Search and selected-refit warning events are separated. Counts describe task fits, which include dependent seeds and settings. Warned counts fits with recorded warnings; at cap counts selected refits reaching the recorded iteration limit. Full warning text is retained in the JSON report. No warning-triggered post hoc retuning is applied.}\label{tab:fit-warnings}\\
+\toprule
+Method & Fits & Warned & Search & Refit & At cap \\
+\midrule
+\endfirsthead
+\toprule
+Method & Fits & Warned & Search & Refit & At cap \\
+\midrule
+\endhead
+Development: Raw ridge & 128 & 0 & 0 & 0 & 0 \\
+Development: Raw RBF & 128 & 0 & 0 & 0 & 0 \\
+Development: Affine local & 128 & 0 & 0 & 0 & 0 \\
+Development: Locality local & 128 & 0 & 0 & 0 & 0 \\
+Development: KAHM local & 128 & 0 & 0 & 0 & 0 \\
+Development: Raw + affine & 128 & 0 & 0 & 0 & 0 \\
+Development: Raw + locality & 128 & 0 & 0 & 0 & 0 \\
+Development: Raw + KAHM & 128 & 0 & 0 & 0 & 0 \\
+Development: Seasonal naive & 128 & 0 & 0 & 0 & 0 \\
+Development: Holt & 128 & 0 & 0 & 0 & 0 \\
+Development: Histogram boosting & 128 & 0 & 0 & 0 & 0 \\
+Development: MLP & 128 & 128 & 232 & 105 & 105 \\
+Confirmation: Raw ridge & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: Raw RBF & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: Affine local & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: Locality local & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: KAHM local & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: Raw + affine & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: Raw + locality & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: Raw + KAHM & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: Seasonal naive & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: Holt & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: Histogram boosting & 80 & 0 & 0 & 0 & 0 \\
+Confirmation: MLP & 80 & 79 & 137 & 68 & 68 \\
+\bottomrule
+\end{longtable}
+}
+
+{\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{lrrrrr}
+\caption{Selection at numerical search-grid endpoints. Counts are descriptive; a two-point grid necessarily chooses an endpoint. These observations do not establish the benefit of a larger grid, and confirmation outcomes are not used to retune any method.}\label{tab:grid-boundaries}\\
+\toprule
+Method & Parameter & Choices & Lower & Upper & Declared grid \\
+\midrule
+\endfirsthead
+\toprule
+Method & Parameter & Choices & Lower & Upper & Declared grid \\
+\midrule
+\endhead
+Development: Raw ridge & alpha & 128 & 84 & 4 & 0.01,1,100 \\
+Development: Raw RBF & alpha & 128 & 35 & 4 & 0.01,1,100 \\
+Development: Affine local & alpha & 128 & 45 & 8 & 0.01,1,100 \\
+Development: Locality local & alpha & 128 & 35 & 9 & 0.01,1,100 \\
+Development: KAHM local & alpha & 128 & 51 & 7 & 0.01,1,100 \\
+Development: Raw + affine & alpha & 128 & 32 & 4 & 0.01,1,100 \\
+Development: Raw + locality & alpha & 128 & 25 & 5 & 0.01,1,100 \\
+Development: Raw + KAHM & alpha & 128 & 30 & 4 & 0.01,1,100 \\
+Development: Histogram boosting & regularization & 128 & 78 & 50 & 0.01,1 \\
+Development: MLP & regularization & 128 & 26 & 102 & 0.01,1 \\
+Confirmation: Raw ridge & alpha & 80 & 20 & 56 & 0.01,1,100 \\
+Confirmation: Raw RBF & alpha & 80 & 13 & 56 & 0.01,1,100 \\
+Confirmation: Affine local & alpha & 80 & 9 & 58 & 0.01,1,100 \\
+Confirmation: Locality local & alpha & 80 & 9 & 60 & 0.01,1,100 \\
+Confirmation: KAHM local & alpha & 80 & 8 & 59 & 0.01,1,100 \\
+Confirmation: Raw + affine & alpha & 80 & 12 & 59 & 0.01,1,100 \\
+Confirmation: Raw + locality & alpha & 80 & 12 & 61 & 0.01,1,100 \\
+Confirmation: Raw + KAHM & alpha & 80 & 12 & 60 & 0.01,1,100 \\
+Confirmation: Histogram boosting & regularization & 80 & 34 & 46 & 0.01,1 \\
+Confirmation: MLP & regularization & 80 & 5 & 75 & 0.01,1 \\
+\bottomrule
+\end{longtable}
+}

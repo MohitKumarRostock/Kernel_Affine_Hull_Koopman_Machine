@@ -1,0 +1,101 @@
+\documentclass[twoside,11pt]{article}
+\usepackage[preprint]{jmlr2e}
+\usepackage{lmodern}
+\usepackage{amsmath,mathtools,booktabs,longtable,array,microtype,enumitem,xcolor}
+\hypersetup{hidelinks,pdftitle={Kernel Affine Hull Features for Natural Forecasting: Accuracy, Computational Cost, and Predicting Benefit},pdfauthor={Mohit Kumar and Somayeh Kargaran}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\MSE}{\operatorname{MSE}}
+\allowdisplaybreaks
+\ShortHeadings{KAHM Features for Natural Forecasting}{Kumar and Kargaran}
+\firstpageno{1}
+\begin{document}
+\title{Kernel Affine Hull Features for Natural Forecasting:\\
+Accuracy, Computational Cost, and Predicting Benefit\thanks{Research draft for author review; not submitted. AI tools assisted with protocol development, implementation, validation, analysis, and writing. The authors must independently verify and approve the final submission.}}
+\author{\name Mohit Kumar \AND \name Somayeh Kargaran}
+\maketitle
+\begin{abstract}%
+\input{generated/abstract}
+\end{abstract}
+\begin{keywords}
+kernel affine hull machines, forecasting, local representations, algorithm selection, computational cost
+\end{keywords}
+
+\section{Introduction}\label{sec:introduction}
+Local reconstruction geometry can provide features for a prediction problem,
+but reconstruction quality alone does not establish their predictive usefulness.
+The forecasting target, the code supplied to the decoder, regularization, and
+the cost of obtaining the fitted predictor all matter. Kernel Affine Hull
+Machines (KAHMs) provide a concrete setting in which to examine these questions:
+their local covariance kernels and normalized reconstruction weights induce
+nonlinear affinity coordinates, which can be augmented with positions in local
+principal subspaces \citep{Kumar2024KAHM}. A practical forecasting claim requires
+evidence about the complete fitted procedure, including the circumstances in
+which an ordinary alternative should be preferred.
+
+An archived precursor study motivated the present investigation by separating
+reconstruction, score encoding, local positional information, and decoder
+capacity. Its controlled branch example showed that an accurate affine
+reconstructor can have an uninformative residual code, while explicit local
+coordinates or a locality-aware affine gate repair much of that limitation.
+A fresh-sample capacity experiment found conditional KAHM gains on Van der Pol
+and unfavorable or unresolved comparisons on other synthetic laws. Those
+observations motivate a test on independent natural sources; they do not supply
+that test. The precursor manuscript, software, and numerical archive remain
+unchanged at repository commit \texttt{a67c4019}. Appendix~\ref{app:checkpoint}
+records the relationship between the two research stages.
+
+The question addressed here is whether KAHM features provide useful forecasting
+accuracy at their complete computational cost, and whether a reduced-capacity
+historical diagnostic can anticipate their benefit on a reserved source family.
+We examine this question in a bounded, explicitly specified experiment. Four
+original source families supply development outcomes, and four different source
+families supply confirmation outcomes after the diagnostic has been frozen.
+The study uses 26 series and two context--horizon settings per series. Two
+capacity settings and two fitting seeds yield 208 task runs, but the units of
+transfer evidence remain the original source families.
+
+Three design choices support a more specific interpretation. First, we compare
+KAHM local features with independently fitted affine and locality-aware
+alternatives, both with and without the complete raw history. Raw augmentation
+makes information retention explicit and places the question on finite-decoder
+behavior. Second, we account for preprocessing, representation learning,
+validation search, final refitting, forecasting, and the computations required
+by a selector. The regularization search reuses features within each method;
+it does not subsidize a competing method with a shared KAHM fit. Third, the
+diagnostic tests a specified increment: whether two geometric measurements add
+useful information beyond historical metadata and a paid validation probe.
+Feature-based forecasting selection already has substantial precedents
+\citep{Prudencio2004MetaLearning,MonteroManso2020FFORMA,Talagala2022FFORMPP,Talagala2023FFORMS}.
+Our experiment evaluates that increment for the declared KAHM comparison.
+
+\input{generated/introduction_findings}
+
+The contribution is an auditable assessment of accuracy, cost, and usefulness
+prediction for this collection of procedures and sources. It includes the
+frozen task registry, measured computational dependencies, saved forecasts,
+independent loss reconstruction, and unsuccessful comparisons. The experiment
+does not estimate a universal KAHM advantage, establish a forecasting
+state of the art, or turn repeated windows and seeds into independent domains.
+
+\input{related_work}
+\input{methods}
+\input{protocol}
+\input{results}
+\input{discussion}
+
+\section*{Reproducibility and author review}
+The accompanying extension contains source snapshots, upstream dataset
+attribution, configuration and dependency pins, two staged freeze records,
+saved per-origin forecasts, cost nodes, and a one-command reconstruction of
+the reported numbers and figures. The original source and outcome files are
+checked against their checkpoint hashes. Numerical results were generated by
+the disclosed programs; algorithmic assistance does not substitute for author
+review. Final author contact information, funding declarations, and
+competing-interest statements require author confirmation before submission.
+
+\bibliography{references}
+\appendix
+\input{appendix}
+\end{document}

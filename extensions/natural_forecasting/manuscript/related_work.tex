@@ -1,0 +1,81 @@
+\section{Related work}
+\label{sec:related}
+
+\paragraph{Reconstruction and local coordinates.}
+Kernel affine hull machines (KAHMs) were introduced for geometrically informed
+classification, including a differential-privacy application
+\citep{Kumar2024KAHM}. We adapt their reconstruction operators to form
+unsupervised gates on forecasting histories and compare them with locality
+and affine-projection controls. Local coordinate coding already connects
+localized representations to approximation of smooth prediction functions
+\citep{Yu2009LCC}. Local tangent coding augments coding weights with weighted
+displacements along local tangent directions \citep{YuZhang2010LTC}; our gated
+local coordinates use this established architectural idea. The empirical
+question is whether KAHM-derived gates improve forecasting within the stated
+architecture and resource regimes. Classification results for the original
+KAHMs and approximation results for local coding concern their own tasks
+and assumptions; they do not establish the outcome of this comparison.
+
+\paragraph{Target relevance and finite prediction procedures.}
+Supervised dimension reduction explicitly seeks representations that preserve
+the relationship between an input and its response \citep{Fukumizu2004SDR}.
+This highlights why a representation's reconstruction quality alone does
+not determine its forecasting value. Our raw-input augmentation retains the
+original history, while changing the coordinates available to a particular
+fitted predictor. Its finite-sample performance can therefore change through
+approximation, estimation or regularization without a change in the
+information contained in that history. We use finite Nystr\"om kernel
+features \citep{Williams2001Nystrom}, so the comparison concerns specified
+fitting procedures. Equal requested landmark counts after different feature
+maps do not imply identical prediction classes, realized ranks or computation.
+The capacity caps and measured costs make these distinctions explicit.
+
+\paragraph{Forecast selection and performance prediction.}
+Learning which forecasting method suits a series is an established problem.
+\citet{Prudencio2004MetaLearning} studied both learned selection between
+forecasting models and model ranking. FFORMA learns forecast-combination
+weights from time-series features \citep{MonteroManso2020FFORMA}.
+FFORMPP predicts forecasting errors from historical-series features and
+uses those predictions for selection or combination
+\citep{Talagala2022FFORMPP}; FFORMS learns a feature-based mapping to a
+selected forecasting model \citep{Talagala2023FFORMS}. These works also
+motivate attention to computation and the representativeness of the data
+used to train a selector. Here a deliberately small, fixed ridge diagnostic
+predicts the relative benefit of appending KAHM local features to a raw-history
+kernel predictor. The main question is the incremental value of geometric
+features beyond metadata and a fixed validation probe. Performance comparisons
+apply to the implemented candidates and selectors. Four development families
+and four reserved families support a bounded examination of this question,
+with substantial limits on transfer to additional domains.
+
+\paragraph{Cheap probes and the cost of choosing a method.}
+Landmarking characterizes a learning task using the measured performance of
+inexpensive learners \citep{Pfahringer2000Landmarking}. Our cheap validation
+probe follows this general principle: it supplies evidence about the target
+that input-only geometric features do not directly measure. We retain both
+metadata-only and probe-augmented diagnostic controls, and charge the probe
+and geometry computation even when the eventual decision selects the raw
+predictor. The accounting also charges all searches needed by a validation
+selector, followed by the chosen candidate's refit and forecast. Offline
+diagnostic fitting and per-task inference are reported separately. This
+evaluates the computational consequences of the declared decision rules;
+the learned rule, the use of probes and the general accuracy--cost tradeoff
+are established ideas.
+
+\paragraph{Forecast evaluation and source separation.}
+Reusing a finite model-selection criterion for evaluation can produce
+optimistic conclusions \citep{Cawley2010Selection}. Forecasting adds concerns
+about temporal information, scaling, appropriate simple baselines and
+dependent errors \citep{Hewamalage2023Evaluation}. We use chronological
+training, validation and test blocks; the separate development/confirmation
+division concerns the original data sources from which those tasks arise.
+The Monash archive supplies datasets from varied domains and documented
+baseline evaluations \citep{Godahewa2021Monash}. We use pinned snapshots and
+keep derived series, horizons, capacities and seeds within their source
+families for aggregation. Diagnostic features and regularization are fixed
+before development outcomes, and fitted diagnostics are frozen before
+confirmation evaluation. The small, deliberately chosen family collection
+supports descriptive source-level comparisons, not population-wide
+confidence claims. This is a historical forecasting study; it does not
+establish real-time deployment performance or performance under future
+changes in data availability.

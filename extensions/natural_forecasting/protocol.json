@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "study_name": "KAHM natural forecasting: accuracy, complete costs, and prospective selection",
+  "historical_checkpoint": "a67c40190458bab7b3e56b4fac76770798d074b3",
+  "status": "development protocol; confirmation outcomes forbidden until freeze",
+  "source_allocation": {
+    "development": ["electricity_weekly", "nn5_daily", "tourism_monthly", "fred_md_monthly"],
+    "confirmation": ["traffic_weekly", "hospital_monthly", "saugeen_daily", "us_births_daily"]
+  },
+  "seeds": [17, 43],
+  "capacity_regimes": {
+    "small": {"max_train_windows": 512, "n_landmarks": 32, "tree_leaves": 15, "tree_iterations": 100, "mlp_width": 32, "mlp_iterations": 200},
+    "medium": {"max_train_windows": 1024, "n_landmarks": 64, "tree_leaves": 31, "tree_iterations": 150, "mlp_width": 64, "mlp_iterations": 300}
+  },
+  "regime_interpretation": "Caps on available training examples and model size, not equal realized time budgets. Compare observed complete costs and accuracy-cost dominance explicitly.",
+  "data": {"max_series_per_source": 4, "max_eval_origins": 64, "chronological_fractions": [0.6, 0.2, 0.2], "minimum_training_windows": 16, "regimes": {"monthly": [[12, 3], [24, 6]], "weekly": [[13, 4], [26, 8]], "daily": [[28, 7], [56, 14]]}},
+  "geometry": {"cluster_counts": [2, 4, 8], "rank": 2, "max_refs": 24, "max_fit": 512, "scaling": "standard", "omega": 16.0, "tau": 0.000001},
+  "query_mode": "stable",
+  "head_search": {"alphas": [0.01, 1.0, 100.0], "bandwidth_multipliers": [1.0]},
+  "methods": ["seasonal_naive", "holt", "raw_ridge", "raw_rbf", "affine_rbf", "locality_rbf", "kahm_rbf", "raw_affine_rbf", "raw_locality_rbf", "raw_kahm_rbf", "hist_gradient", "mlp"],
+  "practical_search": {"regularization": [0.01, 1.0], "holt_damped": [false, true]},
+  "probe": {"max_training_windows": 128, "n_landmarks": 16, "alpha": 1.0, "max_fit": 128},
+  "primary_matched_comparison": ["raw_rbf", "raw_kahm_rbf"],
+  "diagnostics": {"fixed_ridge_alpha": 1.0, "models": ["metadata", "metadata_geometry", "metadata_probe", "metadata_probe_geometry"], "primary_increment": ["metadata_probe", "metadata_probe_geometry"], "practical_relative_improvement": 0.05},
+  "metric": "Mean squared forecast error divided by a training-prefix seasonal-difference mean square; first-difference fallback explicitly recorded. Average horizons within origins, then origins within task. Inferential/source aggregation gives each original family equal weight.",
+  "deployment": "Each method tunes on the chronological validation block, then refits the selected configuration on all admissible pretest windows within its training cap. Forecasts use only histories available at their origins. No target clipping.",
+  "costs": "Measure standalone method search, selected refit, and forecast. Diagnostic/probe nodes are charged to every selecting policy that requires them; shared nodes counted once. Final selected method only is refit for counterfactual selector costing. Imports, data preparation, serialized model bytes, process peak RSS and failed attempts separately recorded.",
+  "resources": {"blas_threads": 1, "concurrent_benchmark_workers": 1, "per_method_timeout_seconds": 120, "per_task_timeout_seconds": 1800, "paid_compute": false},
+  "claims": "Bounded natural-data extension. Seeds, horizons, and series are not independent source families. Four confirmation families cannot establish universal benefit or reliable cross-domain significance. No claim of JMLR readiness is precommitted.",
+  "stage_gate": "Freeze the data roster, all diagnostic coefficients, code, dependencies and protocol before executing any confirmation model outcomes. Retain all declared confirmation tasks and failures. Do not select a diagnostic after viewing confirmation losses."
+}

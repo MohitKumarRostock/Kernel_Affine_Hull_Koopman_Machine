@@ -1,0 +1,94 @@
+\section{Discussion and limitations}\label{sec:discussion}
+\input{generated/discussion_findings}
+
+\subsection{What a representation comparison establishes}
+Raw augmentation gives a clear information baseline: the original history
+remains recoverable from the supplied code. A forecasting gain therefore
+concerns the trained finite decoder and its regularization. It does not show
+that KAHM has created additional target information. Conversely, a loss from
+augmentation does not refute information preservation. Additional standardized
+coordinates change distances, the finite Nystr\"om basis, and the effective
+regularization geometry. These changes can make the prediction procedure
+better or worse even though the raw coordinates remain present.
+
+The affine and locality-aware augmentations are essential controls for this
+reason. A favorable raw-versus-KAHM comparison by itself cannot attribute the
+benefit to nonlinear KAHM reconstruction. Local coordinates, repeated views
+of raw inputs, and their interaction with the downstream feature basis can
+also matter. The declared alternatives share reference-selection rules and
+have comparable local-coordinate constructions, while being fitted as
+independent computational procedures. Actual feature widths and retained
+Nystr\"om ranks are reported instead of assuming that the same landmark
+count implies identical effective capacity.
+
+\subsection{Limits of predicting benefit}
+The diagnostic experiment concerns four specified, low-dimensional ridge
+rules and one fixed reduced-capacity probe. A failure of those rules does
+not establish that usefulness is unpredictable. A successful decision on
+one family would likewise not establish a general adoption criterion.
+With four development families, a complex learned selector would be hard
+to validate independently; the present rules deliberately restrict their
+flexibility and retain every prespecified variant.
+
+Two design limits are especially relevant. The descriptors do not directly
+encode the downstream landmark count. When the training-window cap does
+not bind, the two capacity settings have identical diagnostic inputs even
+though their full predictors differ. The history and horizon are also
+changed together, so their individual effects cannot be identified by this
+experiment. These are limitations of the evaluated criterion, and should
+inform a future independently evaluated diagnostic rather than a retuning
+of the reserved-source results.
+
+Furthermore, predicting conditional mean log benefit is not the same
+decision problem as minimizing conditional expected scaled MSE. Although
+the sign of each realized log ratio agrees with the sign of its loss
+difference, expectations of these quantities need not have the same sign
+under heterogeneous losses. We therefore report both estimated-benefit
+errors and the actual loss and cost of the resulting decisions. Input
+geometry alone also cannot determine a universally preferable predictor:
+different target relationships can be associated with the same input law.
+The paid validation probe supplies target-relevant evidence, and the
+geometric increment is evaluated against that information explicitly.
+
+\subsection{Data, statistical scope, and computational scope}
+The eight source families were deliberately selected from a public archive
+for diversity and feasibility. They are not a probability sample of future
+applications. Four families per phase support bounded descriptive comparisons;
+series, horizons, capacity settings, seeds, and overlapping windows do not
+increase that source count. We report family effects and sensitivity to
+leaving out one family without attaching population confidence claims to
+the small collection.
+
+Some records are short. The longer Hospital and Traffic settings have only
+21 and 29 training windows, respectively. NN5 T88 has seven available test
+origins in the longer setting. The fixed roster retains this case, and its
+loss estimates should be read with that limited support in mind. Missing
+windows are excluded using the same availability rule for every method;
+the resulting estimand concerns available complete windows, rather than
+unobserved targets or operational forecasts with missing contexts. The
+FRED-MD experiment is relative to a supplied retrospective snapshot and
+cannot certify every upstream transformation or emulate real-time release
+and revision constraints.
+
+The comparison is restricted to local univariate forecasters, two small
+capacity settings, and finite tuning grids. It includes a small MLP and
+boosted-tree control but no global pretrained forecaster or comprehensive
+state-of-the-art neural benchmark. The training-window cap is nonbinding
+for the development sources and binding for the long confirmation series;
+the larger setting therefore changes available sample count only for part
+of the collection. The three-value alpha grid is fixed in advance, and a
+boundary choice is not evidence that an optimum over all regularization
+strengths has been located.
+
+Measured costs apply to the supplied reference implementations on the
+recorded CPU environment. Warm-library scientific-pipeline costs include
+required feature construction, selection, refitting, prediction, and
+serialization; library initialization and experimental process launch are
+separate measurements. Timing small procedures can be sensitive to system
+load and Python bookkeeping. The component records expose those effects.
+Process high-water memory and serialized model size answer different
+questions. The former includes the interpreter and input arrays and is
+not an incremental memory estimate for a hypothetical combined selector.
+
+\section{Conclusion}\label{sec:conclusion}
+\input{generated/conclusion_findings}

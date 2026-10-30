@@ -1,0 +1,120 @@
+name: Natural forecasting integrity and synthetic tests
+
+on:
+  push:
+    paths:
+      - 'extensions/natural_forecasting/**'
+      - 'extensions/predictive_geometry/study/**'
+      - '.github/workflows/natural-forecasting.yml'
+  pull_request:
+    paths:
+      - 'extensions/natural_forecasting/**'
+      - 'extensions/predictive_geometry/study/**'
+      - '.github/workflows/natural-forecasting.yml'
+  workflow_dispatch:
+    inputs:
+      build_pdf:
+        description: 'Install LaTeX and validate the manuscript build (no forecasting benchmark)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: natural-forecasting-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+  NUMEXPR_NUM_THREADS: '1'
+  PYTHONDONTWRITEBYTECODE: '1'
+
+jobs:
+  integrity-and-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: extensions/natural_forecasting/requirements.txt
+      - name: Install pinned scientific dependencies
+        run: python -m pip install -r extensions/natural_forecasting/requirements.txt
+      - name: Verify preserved and registered scientific source
+        run: python extensions/natural_forecasting/package.py check-source
+      - name: Run synthetic scientific tests only
+        run: python -m unittest discover -s extensions/natural_forecasting/tests -p 'test_*.py' -v
+      - name: Run synthetic packaging integrity tests
+        run: python -m unittest extensions.natural_forecasting.package_tests -v
+      - name: Verify any committed release ZIPs without fitting models
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os, shutil, subprocess, sys, tempfile
+          from extensions.natural_forecasting.package import verify_zip, verify_reference_parts, restore_reference
+          repository = Path.cwd()
+          extension = Path('extensions/natural_forecasting')
+          archives = sorted(list((extension / 'archive').glob('*.zip')) + list((extension / 'reference').glob('*.zip')))
+          for archive in archives:
+              result = verify_zip(archive)
+              print(archive.name, result['status'], result['payload_files_verified'])
+          multipart = sorted((extension / 'reference').glob('*.zip.parts.json'))
+          for manifest in multipart:
+              result = verify_reference_parts(manifest)
+              print(manifest.name, result['status'], result['multipart_parts_verified'], result['payload_files_verified'])
+              with tempfile.TemporaryDirectory(prefix='natural-reference-ci-', dir=os.environ['RUNNER_TEMP']) as temporary:
+                  checkout = Path(temporary) / 'repository'
+                  def ignored(directory, names):
+                      excluded = {'.git'}
+                      if Path(directory).resolve() == (repository / extension).resolve():
+                          excluded.update({'runs', 'reference'})
+                      return [name for name in names if name in excluded]
+                  shutil.copytree(repository, checkout, ignore=ignored)
+                  restore_reference(manifest.resolve(), checkout)
+                  subprocess.run([sys.executable, str(checkout / extension / 'package.py'), 'audit', str(checkout)], check=True)
+          if not archives and not multipart:
+              print('No release ZIP is committed; source integrity and synthetic tests remain required.')
+          PY
+      - name: Compile manuscript when LaTeX is already available
+        shell: bash
+        run: |
+          if command -v pdflatex >/dev/null && command -v bibtex >/dev/null; then
+            cd extensions/natural_forecasting/manuscript
+            pdflatex -interaction=nonstopmode -halt-on-error main.tex
+            bibtex main
+            pdflatex -interaction=nonstopmode -halt-on-error main.tex
+            pdflatex -interaction=nonstopmode -halt-on-error main.tex
+            if grep -Eq 'There were undefined (references|citations)' main.log; then
+              exit 1
+            fi
+          else
+            echo 'LaTeX unavailable. Use the explicit build_pdf dispatch option for manuscript CI.'
+          fi
+
+  optional-manuscript:
+    if: github.event_name == 'workflow_dispatch' && inputs.build_pdf
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install manuscript dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended latexmk lmodern
+      - name: Build JMLR manuscript without computational experiments
+        working-directory: extensions/natural_forecasting/manuscript
+        run: |
+          latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+          if grep -Eq 'There were undefined (references|citations)' main.log; then
+            exit 1
+          fi

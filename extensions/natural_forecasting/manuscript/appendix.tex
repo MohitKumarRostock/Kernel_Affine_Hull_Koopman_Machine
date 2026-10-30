@@ -1,0 +1,70 @@
+\section{Relationship to the preserved manuscript}\label{app:checkpoint}
+The previous manuscript, \emph{When Kernel Affine Hull Geometry Helps
+Prediction: Local Coordinates, Decoder Capacity, and Conditional Gains},
+is preserved with its reproducibility archive at commit
+\texttt{a67c40190458bab7b3e56b4fac76770798d074b3}. The new extension records
+SHA-256 hashes for all 217 previously tracked repository files and the seven
+submission artifacts. The original study is neither relabeled as natural-data
+confirmation nor pooled with the new source families. Its synthetic
+experiments provide motivation and mechanism controls; the new confirmation
+is based exclusively on the reserved natural sources.
+
+At the 256-landmark setting, the earlier Van der Pol experiment reported mean
+MSEs of 0.00165415 for raw inputs, 0.00107800 for affine local coordinates, and
+0.00087197 for KAHM local coordinates. Across its separately defined capacity
+contrast family, four comparisons supported practical benefit, six supported
+harm, and two were unresolved. These are archived results, not newly estimated
+effects or additional independent forecasting domains. The previous Airfoil
+experiment was static regression and is not included as a natural forecasting
+task in the present study.
+
+The new implementation preserves the local KAHM definition while making
+standalone alternative fitting and alpha-path reuse explicit. Its stable
+Gaussian query calculation and raw-augmentation choices are specified in
+Section~\ref{sec:nf-methods}. The former manuscript remains byte-identical;
+the first-page disclosure in this new draft also addresses the placement
+issue identified in the previous submission-format review.
+
+\section{Reconstruction of the experiment}\label{app:reproduction}
+The repository entry point is
+\texttt{extensions/natural\_forecasting}. From the repository root, install
+the extension's pinned requirements in Python 3.12, then run the synthetic
+unit tests. The data command verifies the eight checksummed archive snapshots.
+The experiment is separated into preparation, initial freeze, development,
+diagnostic freeze, confirmation, and analysis:
+\begin{verbatim}
+python -m extensions.natural_forecasting.run prepare
+python -m extensions.natural_forecasting.run initial-freeze
+python -m extensions.natural_forecasting.run run --role development
+python -m extensions.natural_forecasting.run freeze-confirmation
+python -m extensions.natural_forecasting.run run --role confirmation
+python -m extensions.natural_forecasting.run analyze
+\end{verbatim}
+Each command accepts a separate run directory. A new reproduction makes its
+own freeze; the supplied reference freeze is immutable. Confirmation cannot
+start without a matching code, dependency, roster, and diagnostic state.
+Interrupted complete tasks can be resumed only when their prediction artifacts
+match their recorded hashes. A failed task is retained and stops the run;
+silently replacing a task or dropping a failed method is not permitted by the
+analysis. The supplementary archive includes the exact reference results and
+the metadata needed to audit them without refitting every predictor.
+
+The two random seeds are 17 and 43. NumPy, SciPy, scikit-learn, statsmodels,
+pandas, and threadpoolctl versions, thread settings, visible processor
+information, and the separate library initialization cost are recorded in
+the freeze. These details support reproducibility of the computation.
+Wall-clock measurements remain specific to the declared shared CPU
+environment, and process high-water memory is not an incremental allocation
+measurement.
+
+\input{generated/audit_table}
+
+\section{Additional source and capacity results}\label{app:full-results}
+All declared comparisons are retained below. The two context--horizon pairs
+are coupled settings, so the tables do not separately identify a causal
+context-length or horizon effect. Likewise, the two capacity settings change
+both the cap on training windows and specified model sizes. Their timings are
+observed costs rather than enforced equal-time budgets.
+\input{generated/full_source_table}
+\input{generated/capacity_table}
+\input{generated/diagnostic_details}

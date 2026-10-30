@@ -24,7 +24,8 @@ differ.
 
 ## Routes
 
-Run all commands from `extensions/predictive_geometry`.
+Run all commands from `extensions/predictive_geometry`, or from the root of the
+extracted TMLR reproducibility supplement.
 
 | Command | Work performed |
 |---|---|
@@ -35,6 +36,9 @@ Run all commands from `extensions/predictive_geometry`.
 | `python -m reproduce tables` | Generate manuscript assets from the compact committed archive |
 | `python -m reproduce tables --input runs/NAME/results --output runs/NAME/paper_assets` | Generate assets from a fresh full computational reproduction |
 | `python -m reproduce paper` | Rebuild archival assets and compile `manuscript/main.pdf` with `latexmk` |
+| `python -m reproduce review-diagnostics --output runs/review-diagnostics` | Check archived paired outcomes without replacing the manuscript's complete diagnostic assets |
+| `python -m reproduce review-diagnostics --run-dir runs/full-review --output manuscript/generated` | Recompute paired-outcome and saved-bank rank/gate diagnostics using a completed full run |
+| `python -m reproduce submission --output-dir dist/tmlr` | Verify evidence hashes and build the manuscript-source and reproducibility ZIPs |
 
 A chosen output directory makes the full command easy to resume:
 
@@ -48,6 +52,14 @@ Completed scientific jobs additionally check their original source signatures.
 An incomplete or corrupted job is not silently accepted. Use a new run directory
 after intentional code changes. Output locations cannot overlap the source,
 historical archive, or manuscript directories.
+
+The saved-bank diagnostic command requires `--run-dir` pointing to an already
+completed full run. It inspects 192 banks and replays their original held-out
+inputs without refitting. A command without `--run-dir` performs only the
+paired-outcome checks; it cannot reconstruct bank rank or gate diagnostics from
+the compact archive. Keep such checks under `runs/review-diagnostics`. The
+normal `paper` command preserves the committed `review_*` assets while
+rebuilding the original paper tables and figures.
 
 ## Full execution order and counts
 
@@ -156,6 +168,12 @@ normalizer audit re-evaluates original and stabilized test query routines rather
 than accepting stored counts alone. Every reported comparison retains its
 original independent-unit definition.
 
+A completed job marker alone is insufficient: unreadable or truncated prediction
+archives fail the final audit. Preserve such a failed run for inspection and use
+a new run directory for a clean reproduction. `--resume` skips completed phases;
+it does not repair corrupted generated files. Do not edit a freeze or mark an
+unaudited execution complete to bypass the failure.
+
 The committed archive is sufficient to verify all reported aggregate means,
 both paired-statistical families, and the descriptive mechanism tables. Auditing
 the predictions themselves requires generated full-run files; no large model
@@ -165,9 +183,35 @@ pickle is distributed through Git.
 
 The parent repository installs the source workflow
 `ci/kahm-predictive-geometry.yml` at
-`.github/workflows/kahm-predictive-geometry.yml`. It runs the smoke route on the
-research branch and uploads the execution manifest and generated assets. CI
+`.github/workflows/kahm-predictive-geometry.yml`. It runs smoke checks, archived
+paired diagnostics, and submission packaging on the research branches, and
+uploads the execution manifest, generated assets, and review packages. CI
 does not pretend that a reduced smoke fit reproduces the complete study.
 
-Source/data licenses and citations are in `LICENSE`, `THIRD_PARTY_NOTICES.md`,
-and `CITATION.cff`. The paper metadata are provisional until author approval.
+Source/data licenses and attribution are in `LICENSE` and
+`THIRD_PARTY_NOTICES.md`. Public repository citation metadata are separate from
+the anonymous review packages.
+
+## Verifying a review package
+
+Before rebuilding generated files, run:
+
+```bash
+python scripts/package_tmlr_submission.py --verify-dir .
+```
+
+This compares every distributed file with `SUBMISSION_MANIFEST.json`, recomputes
+the package content-tree digest, and checks the original snapshot/archive
+manifests. The manifest has no current-study repository URL. Its source-to-package
+map records any optional review metadata transformation, including removal of
+the project-author field from the packaged `pyproject.toml`. This does not modify
+the corresponding public repository metadata or any scientific source.
+
+`study/` and `archive/` retain their exact original bytes, including generic
+historical scratch paths. No rewritten historical freeze is presented as an
+original record. Required license notices and published upstream attribution
+are retained and listed as narrow review-view exceptions; the manifest does
+not claim that legitimate attribution contains no names. The package excludes
+Git history, `CITATION.cff`, prior named manuscript PDFs, caches and run outputs.
+See `REVIEWER_README.md` in the generated supplement and
+[TMLR_SUBMISSION.md](TMLR_SUBMISSION.md) for the complete packaging policy.

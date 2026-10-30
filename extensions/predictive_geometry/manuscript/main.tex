@@ -1,25 +1,16 @@
-\documentclass[twoside,11pt]{article}
-\usepackage[preprint]{jmlr2e}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{amsmath,amssymb,mathtools,booktabs,microtype,enumitem,longtable,array}
-\usepackage{lastpage}
+\documentclass[10pt]{article}
+\usepackage{tmlr}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,microtype,enumitem,longtable,array}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{url}
 \hypersetup{hidelinks,
   pdftitle={When Kernel Affine Hull Geometry Helps Prediction},
-  pdfauthor={Mohit Kumar and Somayeh Kargaran},
+  pdfauthor={Anonymous authors},
   pdfsubject={Controlled investigation of KAHM geometry, local coordinates, and predictive performance}}
-\jmlrheading{}{2026}{1--\pageref{LastPage}}{}{}{}{Mohit Kumar and Somayeh Kargaran}
-\ShortHeadings{When KAHM Geometry Helps Prediction}{Kumar and Kargaran}
-\firstpageno{1}
+\newtheorem{proposition}{Proposition}
 \input{generated/claim_numbers}
 \allowdisplaybreaks
-\setlength{\emergencystretch}{2em}
-\makeatletter
-\setlength{\@fptop}{0pt}
-\setlength{\@fpsep}{18pt}
-\setlength{\@fpbot}{0pt plus 1fil}
-\makeatother
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\Var}{\operatorname{Var}}
@@ -27,17 +18,11 @@
 \newcommand{\K}{\mathrm{K}}
 \newcommand{\A}{\mathrm{A}}
 \newcommand{\clip}{\operatorname{clip}}
-\newcommand{\repourl}{https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-predictive-geometry/extensions/predictive_geometry}
 
 \begin{document}
 \title{When Kernel Affine Hull Geometry Helps Prediction:\\
 Local Coordinates, Decoder Capacity, and Conditional Gains}
-\author{\name Mohit Kumar \email mohit.kumar@uni-rostock.de\\
-  \addr University of Rostock, Rostock, Germany\\
-  Software Competence Center Hagenberg, Hagenberg, Austria
-  \AND
-  \name Somayeh Kargaran \email somayeh.kargaran@scch.at\\
-  \addr Software Competence Center Hagenberg, Hagenberg, Austria}
+\author{Anonymous authors}
 \maketitle
 
 \begin{abstract}
@@ -62,10 +47,6 @@ numerical-stability analysis, and complete experiment scripts. The findings
 support task-dependent KAHM representations, while leaving a transferable
 criterion for their advantage open.
 \end{abstract}
-\begin{keywords}
-Kernel Affine Hull Machines, representation learning, local geometry,
-time-series forecasting, reproducible evaluation
-\end{keywords}
 
 \section{Introduction}\label{sec:intro}
 
@@ -232,6 +213,22 @@ Forecast inputs have dimension 12, score codes dimension 14,
 $[\phi,\log Z]$ dimension 17, and local-coordinate features dimension 42.
 These stored dimensions are not assertions of equal effective capacity.
 
+There is a useful sufficient condition for complete information retention.
+Since every $\phi_c$ is positive in exact arithmetic, dividing each gated
+coordinate by its gate recovers $P_c^\top(z-\mu_c)$. If the matrix formed by
+stacking all $P_c^\top$ has full column rank, these projections determine
+$z$ and the local code is injective
+(Proposition~\ref{prop:local-injectivity}). Under that condition, performance
+differences between raw inputs and local codes concern finite fitting and
+decoding, including regularization and numerical conditioning, rather than
+Bayes information loss. A retrospective audit finds full
+numerical column rank in all 144 forecasting banks, with positive gates
+on the inspected test queries (Appendix~\ref{app:review-diagnostics}).
+These checks support the relevance of the sufficient condition; they do
+not constitute a symbolic rank proof or guarantee numerically stable
+inversion. Rank deficiency alone does not establish information loss,
+because the gates may retain additional information beyond the projections.
+
 \subsection{Information preservation does not imply equal decoding difficulty}
 
 The outer normalization in Equation~\eqref{eq:phi} has a simple exact inverse
@@ -347,7 +344,8 @@ an episode, then across episodes. The oscillator laws are the specified
 numerical generators, including their integration schemes, rather than
 claims about exact continuous-time dynamics.
 
-We additionally evaluate the UCI Airfoil Self-Noise data as a secondary
+We additionally evaluate the UCI Airfoil Self-Noise data
+\citep{Brooks1989Airfoil} as a secondary
 static-regression check. Entire operating-condition groups, defined by the
 four non-frequency inputs, are held out. The fixed split has 64 training,
 21 validation, and 21 test groups, containing 905, 295, and 303 rows. Losses
@@ -469,14 +467,14 @@ scaling is not silently substituted into Equation~\eqref{eq:symmetrybound}.
 \end{figure}
 
 \begin{table}[t]
- \centering\small\setlength{\tabcolsep}{3pt}
- \input{generated/tables/branch_primary}
  \caption{The six primary branch settings at 1,024 training points:
  mean ridge test MSE over 24 repetitions, with the primary KAHM advantage
  $G$ and its interval from the 29-comparison family. The Bayes MSE is
  $1/300$. The affine-locality scoring control reuses the shared references
  and is secondary.}
  \label{tab:branch}
+ \centering\small\setlength{\tabcolsep}{3pt}
+ \input{generated/tables/branch_primary}
 \end{table}
 
 The scoring controls are essential to interpreting the large contrast.
@@ -518,14 +516,14 @@ the oscillators. They establish that score-only KAHM codes are an
 inadequate predictive interface for these restricted heads.
 
 \begin{table}[t]
- \centering\small\setlength{\tabcolsep}{3pt}
- \input{generated/tables/ridge_local}
  \caption{All nine first-stage primary settings: mean test MSE over
  24 repetitions for ridge decoders. The local-coordinate improvement $L$
  and its interval belong to the 29-comparison family. Retaining local
  position substantially improves KAHM prediction in eight settings;
  KAHM local coordinates do not dominate affine local coordinates.}
  \label{tab:ridge}
+ \centering\small\setlength{\tabcolsep}{3pt}
+ \input{generated/tables/ridge_local}
 \end{table}
 
 The inverse in Equation~\eqref{eq:inverse} is verified numerically with
@@ -549,18 +547,16 @@ computed from the means, are \VDPAffineWideRelativeGain\% and \VDPRawWideRelativ
 descriptive ratios; the primary inferential quantities are paired absolute
 differences.
 
-The 256-landmark raw-minus-KAHM difference is $0.00078218$, with simultaneous
-interval $[0.00075496,0.00080940]$. The affine-minus-KAHM difference is
-$0.00020603$, with interval $[0.00018100,0.00023107]$. Both lower endpoints
-exceed the frozen practical margin $0.00014891$. The two corresponding
+At 256 landmarks, the simultaneous lower endpoints of the raw-minus-KAHM
+and affine-minus-KAHM intervals are $0.00075496$ and $0.00018100$,
+respectively (Table~\ref{tab:capacity}). Both exceed the frozen practical
+margin $0.00014891$. The two corresponding
 64-landmark intervals also clear that margin. Thus the positive result
 survives the tested increase in nonlinear decoder budget. Increasing the
 budget improves raw and affine performance too; this is not evidence of an
 asymptotic separation between representation families.
 
 \begin{table}[t]
- \centering\small\setlength{\tabcolsep}{3pt}
- \input{generated/tables/capacity_primary}
  \caption{Fresh second-stage forecasting results: mean MSE over 24 new
  repetitions per law, with $M=64$ or $256$ RBF landmarks. All MSEs,
  differences, and interval endpoints are multiplied by $10^3$.
@@ -569,6 +565,8 @@ asymptotic separation between representation families.
  decoder family and tuning grid are used, with gains on Van der Pol
  and losses on the other laws.}
  \label{tab:capacity}
+ \centering\small\setlength{\tabcolsep}{3pt}
+ \input{generated/tables/capacity_primary}
 \end{table}
 
 \begin{figure}[t]
@@ -622,9 +620,15 @@ post-hoc sensitivity analysis using the stable evaluation
 \begin{equation}\label{eq:stable}
  \widetilde{k}_{cj}(z)=
        \exp\{\ell_{cj}(z)-\max_i\ell_{ci}(z)\},
- \qquad \ell_{cj}(z)=\log k_{cj}(z),
+ \qquad
+ \ell_{cj}(z)=-\frac{\Delta_{cj}(z)^\top\Sigma_c^{-1}\Delta_{cj}(z)}{2p_c},
 \end{equation}
-while keeping the fitted references, basis, regularized matrix, and data
+where $\Delta_{cj}(z)=P_c^\top(z-v_{cj})$, $v_{cj}$ is reference $j$,
+$p_c$ is the retained local rank, and $\Sigma_c$ is the projected reference
+covariance. We compute $\ell_{cj}$ directly from this quadratic form,
+before exponentiation; taking logarithms of already underflowed kernel
+values would not repair an all-zero row. We keep the fitted references,
+basis, regularized matrix, and data
 unchanged. We refitted and validation-tuned the affected heads consistently
 under this query evaluation. This is a robustness analysis on reused
 second-stage Van der Pol data, not an additional independent confirmation.
@@ -640,8 +644,6 @@ individual predictions change appreciably. We therefore do not claim that
 the numerical issue is irrelevant to every representation.
 
 \begin{table}[t]
- \centering\small
- \input{generated/tables/numerical_sensitivity}
  \caption{Post-hoc Van der Pol numerical sensitivity on the same 24
  second-stage banks and samples. Stable query evaluation removes observed
  zero denominators while leaving local-coordinate mean MSE effectively
@@ -650,6 +652,8 @@ the numerical issue is irrelevant to every representation.
  local controls at the same width. These comparisons are outside the two primary
  interval families.}
  \label{tab:numerical}
+ \centering\small
+ \input{generated/tables/numerical_sensitivity}
 \end{table}
 
 The practical implication is to stabilize the inner kernel evaluation and
@@ -673,13 +677,13 @@ interval for generalization to arbitrary natural datasets or new group
 populations.
 
 \begin{table}[t]
- \centering\small
- \input{generated/tables/airfoil}
  \caption{Secondary Airfoil static-regression results on one fixed group
  split, averaged over 24 fitting seeds. Units are dB$^2$. These seeds do
  not constitute independent natural-data replications, and the comparison
  is descriptive.}
  \label{tab:airfoil}
+ \centering\small
+ \input{generated/tables/airfoil}
 \end{table}
 
 \section{How the Findings Change the Model}\label{sec:implications}
@@ -772,6 +776,8 @@ number of effective parameters. At 256 landmarks on Van der Pol, for
 example, the retained RBF-plus-linear dimensions are 268 for raw inputs,
 298 for affine local coordinates, and approximately 272 on average for
 KAHM local coordinates after the eigenvalue cutoff.
+Table~\ref{tab:capacity-dimensions-details} reports the retained dimensions
+for all laws, representations, and landmark budgets.
 
 The statistical analysis uses paired $t$ approximations across independent
 synthetic repetitions. Bonferroni adjustment protects the declared family
@@ -820,12 +826,10 @@ conditions of its advantage explicitly.
 
 \section*{Code, Data, and Research Transparency}
 
-The \href{\repourl}{companion GitHub repository branch} contains this
-manuscript, the original source snapshot, fixed configurations and seed
-rules, compact historical results, statistical audit scripts, paper-asset
-generators, and commands for fresh experiment execution. The extension is
-\path{extensions/predictive_geometry}; the research branch is
-\path{research/kahm-predictive-geometry}. Its reproduction guide distinguishes
+The accompanying \path{TMLR_Reproducibility_Supplement.zip} contains the source snapshot, fixed
+configurations and seed rules, compact historical results, statistical
+audit scripts, paper-asset generators, and commands for fresh experiment
+execution. Its reproduction guide distinguishes
 historical-result verification, a small execution check, and a complete
 regeneration. Fresh executions write separate output directories and
 provenance; they do not overwrite or retrospectively recreate the
@@ -844,25 +848,30 @@ fields are not treated as deterministic scientific outcomes. Automated
 checks compare the regenerated predictive quantities and primary contrasts
 with the archived results within stated numerical tolerances.
 
-\paragraph{Relationship to the companion certificate manuscript.}
-\citet{KumarKargaran2026Certificates} studies risk certificates for
+\paragraph{Relationship to a related unpublished manuscript.}
+\citet{Anonymous2026Certificates} studies risk certificates for
 prescribed forecasting representation and decoder classes. The present
 paper asks a different empirical question about KAHM geometry, encoding,
 and finite fitted prediction. It uses shared upstream machinery and
 generator definitions, but the target-intervention experiments, fresh
 capacity follow-up, numerical sensitivity analysis, and validation-selected
 model constitute the study reported here. The ridge and RBF heads are
-not the companion manuscript's fixed sensitivity-budget classes, and no
+not that manuscript's fixed sensitivity-budget classes, and no
 certificate from that manuscript is transferred to these fitted results.
+Anonymized copies are included as \path{Related_Manuscript.pdf} and
+\path{Related_Manuscript_Supplement.pdf} in the accompanying supplementary
+ZIP to support assessment of the relationship between the studies.
 
 \paragraph{Use of AI tools.}
 AI tools assisted with study implementation, numerical and statistical
 checks, literature retrieval, reproducibility packaging, and manuscript
 drafting. The executable artifact and recorded evidence are provided to
-support independent scrutiny of the claims. This document is a research
-draft for author review.
+support independent scrutiny of the claims. The authors are responsible
+for the manuscript's content and for checking the resulting claims.
 
+\bibliographystyle{tmlr}
+\bibliography{references}
+\clearpage
 \appendix
 \input{appendix_methods}
-\bibliography{references}
 \end{document}

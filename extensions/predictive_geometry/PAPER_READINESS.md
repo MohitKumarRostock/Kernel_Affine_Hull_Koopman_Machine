@@ -1,12 +1,12 @@
-# Paper positioning and author review
+# TMLR paper positioning and submission readiness
 
 ## What this paper contributes
 
 **When Kernel Affine Hull Geometry Helps Prediction: Local Coordinates,
 Decoder Capacity, and Conditional Gains** is a complete research manuscript
-in JMLR format. It is a draft for author review, not a submitted or accepted
-journal article. The author names, order, affiliations, and contact details
-are carried forward from the supplied companion manuscript.
+using the official TMLR style in anonymous review mode. Preparation of a
+submission package does not assert that it has been submitted or accepted.
+Author-specific OpenReview declarations are separate from the review PDF.
 
 The positive KAHM claim is deliberately concrete. On the declared Van der Pol
 forecasting generator, KAHM-derived local-coordinate features improve mean
@@ -59,10 +59,12 @@ do not inherit the companion paper's fixed-sensitivity risk certificates.
 
 The manuscript has a distinct empirical question, a supported conditional
 positive finding, complete comparison families, and an executable artifact.
-Its main remaining scientific vulnerability is **generality and significance
-beyond the declared synthetic laws**, rather than insufficient code packaging.
-JMLR formatting and reproducibility do not establish that the contribution
-meets a particular venue's editorial threshold.
+Its main scientific limitation is **generality beyond the declared synthetic
+laws**. The conditional positive result and explanatory scope should remain
+explicit. TMLR assesses whether claims have accurate, convincing support and
+whether the findings interest and are clear to some of its audience; it does
+not require a new state of the art or novelty of the studied method. Formatting
+and computational reproducibility alone do not establish those criteria.
 
 The highest-value additions would be:
 
@@ -78,17 +80,27 @@ The highest-value additions would be:
 
 These are proposed future experiments, not results silently included in the
 paper. A submission may retain the present narrower explanatory scope, but
-its significance must be argued at that scope.
+its scientific interest must be argued at that scope. These additions are not
+formal TMLR submission requirements.
 
-Before actual submission, the authors should verify the text and results,
-confirm authorship and affiliations, supply the appropriate funding and
-conflict disclosures, and describe overlap with both companion manuscripts
-to the venue. Those author-specific declarations have not been fabricated.
-The paper includes disclosure of AI assistance.
+Before actual submission, authors must verify the text/results and complete
+their OpenReview authorship, funding, conflict and related-work declarations.
+Those author-specific facts are not inferred by the packaging code. The paper
+includes disclosure of AI assistance. Read the current
+[TMLR author guide](https://jmlr.org/tmlr/author-guide.html) and
+[acceptance criteria](https://jmlr.org/tmlr/acceptance-criteria.html).
+
+The reproducibility supplement preserves the exact scientific source and
+historical records. Its review manifest identifies retained licenses and
+published upstream provenance, while first-party overview author metadata,
+current-study repository links, Git history and named PDFs are omitted.
+This is an explicit review view, not a claim that every attribution can be
+removed or that the historical evidence has been independently timestamped.
+The concrete build and verification procedure is in
+[TMLR_SUBMISSION.md](TMLR_SUBMISSION.md).
 
 ## Where to review
 
-- [Manuscript PDF](manuscript/main.pdf)
 - [Editable LaTeX](manuscript/main.tex)
 - [Scientific audit](SCIENTIFIC_AUDIT.txt)
 - [Reproduction guide](REPRODUCING.md)

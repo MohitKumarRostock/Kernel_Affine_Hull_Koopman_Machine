@@ -1,0 +1,63 @@
+\section{Related work}\label{sec:related}
+
+\paragraph{Local geometry and reconstruction.}
+Prediction from delay coordinates using local approximation predates
+the present representations \citep{Farmer1987Prediction}. KAHMs were
+introduced for geometrically informed classification, including a
+differential-privacy application \citep{Kumar2024KAHM}, and developed
+for collaborative learning \citep{Kumar2025Collaborative}. Those task
+results do not establish forecasting utility. Local coordinate coding
+connects localized representations with approximation of smooth
+functions \citep{Yu2009LCC}. Local tangent coding adds weighted
+principal-direction displacements \citep{Yu2010LTC}; these are the common
+features retained in our matched comparisons. With linear readouts they
+are also related to local affine experts \citep{Jacobs1991Experts}.
+Our question is whether the additional KAHM reconstruction departures
+change the available functions and improve a specified forecasting
+procedure beyond these common features.
+
+\paragraph{Kernel regression and predictive representations.}
+The matched positive-kernel reconstruction is a vector-valued kernel
+smoother that averages reference coordinates with normalized Gaussian
+weights \citep{Nadaraya1964Regression}. The target-transfer identity in
+Proposition~\ref{prop:mechanism-krr} relates KAHM to kernel ridge
+regression, while Propositions~\ref{prop:mechanism-redundancy}
+and~\ref{prop:mechanism-distinct} characterize equality and inequality of
+the corresponding augmented raw feature spans. Reconstruction and
+forecasting objectives also occur in learned dynamical representations:
+\citet{Lusch2018Embeddings} combine reconstruction, latent linearity,
+and multistep prediction, whereas \citet{Liu2023Koopa} optimize a
+residual Koopman forecaster without the canonical reconstruction loss.
+Here the principal experiment fixes the geometric bank and compares
+its departures with a matched RBF reconstruction under identical
+feature transformations and a restricted residual decoder.
+
+\paragraph{Information, regularization, and residual fitting.}
+Supervised dimension reduction studies preservation of the input--target
+relationship \citep{Fukumizu2004SDR}, and predictive
+$\mathcal V$-information distinguishes information accessible to a
+restricted observer \citep{Xu2020Usable}. Our feature-space analysis
+addresses a finite decoder and does not estimate unrestricted Bayes
+risk on natural data. Residual fitting under squared loss is an
+established construction \citep{Buhlmann2003L2}. The correction bound
+in Proposition~\ref{prop:mechanism-correction-bound} follows from the
+singular values of centered ridge regression and is not specific to
+KAHM. Nystr\"om approximation changes the available coordinates and
+computational cost \citep{Williams2001Nystrom,Rudi2015Nystrom}; the raw
+RBF comparator is therefore evaluated as a complete fitted procedure,
+not as a presumed equivalent function class.
+
+\paragraph{Evaluation and relation to prediction-limit studies.}
+Model-selection bias \citep{Cawley2010Selection} and forecast-evaluation
+pitfalls \citep{Hewamalage2023Evaluation} motivate distinct fitting,
+selection, calibration, and evaluation roles. The supporting natural-data
+studies use the Monash archive \citep{Godahewa2021Monash} and are reported
+separately from the principal simulated experiment. Related work by
+\citet{KumarKargaran2026Limits} studies successor soft coordinates,
+norm-bounded prediction certificates, and Koopman closure. The present
+study shares KAHM source components and some generator definitions with
+that work, but evaluates particular finite forecasting procedures against
+matched alternatives. Its reconstruction-span results and correction
+bound are established under their own assumptions. The paired-error
+intervals and measured costs do not provide class-wide impossibility
+results or minimum-cost certificates.

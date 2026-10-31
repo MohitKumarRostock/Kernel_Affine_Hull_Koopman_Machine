@@ -1,0 +1,164 @@
+\section{Sensitivity to geometry scaling}\label{app:scaling}
+\subsection{Intervention and scope}
+The original experiments in Sections~\ref{c:sec:capacity} and~\ref{sec:natural}
+use training z-score geometry scaling. The sensitivity analysis was specified
+after inspecting those experiments. Its protocol and execution sources were
+published and hashed before the sensitivity fits, and both fixed scaler arms
+were retained. All sensitivity configurations were specified before their own
+evaluation, but the source data and simulation draws had already been
+examined. The resulting comparisons are therefore exploratory. No adoption diagnostic or best-scaler selection
+rule was refitted.
+
+For a history $x\in\R^d$ and coordinate $j\in\{1,\ldots,d\}$,
+the intervention replaces the geometry input scaler by
+\[
+ z_j(x)=2\frac{x_j-m_j}{M_j-m_j}-1,
+ \qquad m_j=\min_{i\in\mathcal T}x_{ij},\quad
+ M_j=\max_{i\in\mathcal T}x_{ij}.
+\]
+The fitting set $\mathcal T$ is the exact training input set for that fit,
+before its geometry subsample. Coordinates with exactly zero training range
+are mapped to zero for every geometry query, as specified by the implementation. Validation and test queries are not clipped; values can
+exceed $[-1,1]$. The raw-input comparator and raw-history component retain their
+training z-score standardization. Feature standardization, target standardization, loss scales,
+forecast horizons, data and model seeds, hyperparameter grids, query arithmetic,
+and the controlled study's known-support output clipping are unchanged.
+
+Changing the scaler inside the geometry pipeline matters. It can alter
+partitions, truncated principal directions, absolute reconstruction distances,
+and angles relative to the origin. The KAHM kernel fit also uses a
+regularization level depending on the squared reference-coordinate magnitude.
+Downstream feature standardization does not reverse these nonlinear changes.
+By contrast, a nonconstant coordinate's positive affine min--max transform
+followed by refitted z-score standardization cancels in exact arithmetic
+when threshold-based scale fallbacks are inactive:
+$[(a x+b)-(a\mu+b)]/(a\sigma)=(x-\mu)/\sigma$ for $a>0$.
+The experiment therefore replaces the geometry scaler itself.
+
+\subsection{Natural-source execution}
+All 208 original configurations are reused: 128 on the original development
+sources and 80 on the four formerly reserved sources. Each configuration runs
+raw plus affine, raw plus locality, and raw plus KAHM under both scalers,
+together with unchanged raw ridge and raw RBF references: 1,664 standalone
+method runs. The local-only natural architectures and the previously fitted benefit diagnostic are not reevaluated in this
+sensitivity analysis. Each fixed arm uses the
+original validation-only alpha selection; the selected model is then refitted
+on the original admissible pretest windows. Its scaler is fitted anew on that
+refit set, without test observations.
+
+The primary descriptive contrast is min--max minus standard raw-plus-KAHM
+scaled MSE on the four formerly reserved source families. Each mean uses the
+original source/series/regime/capacity/seed hierarchy. The original development
+sources are reported separately. Source-wise and leave-one-source-out results
+describe heterogeneity; neither seeds nor overlapping histories supply
+additional independent source families. There are no new confirmatory
+$p$-values or simultaneous superiority claims.
+
+Methods execute serially in one benchmark worker with one BLAS thread;
+method order is shuffled deterministically by task identity, independently
+of outcomes. New warm-library costs include alpha search, selection cleanup,
+selected refit, prediction, and serialization. Current data loading,
+launch-to-result wall time, and the additional sensitivity diagnostics are
+recorded separately; the original source preparation is reused, rather than
+freshly timed. The launch-to-result field includes child execution and communication, rather
+than isolating startup overhead. The recorded import timer starts after some
+adapter dependencies have loaded, so it does not measure full cold startup.
+All cost ratios use baseline references remeasured in the same
+execution, so their numerator and denominator share the timing environment.
+
+\subsection{Controlled execution}
+The sensitivity recreates the 24 complete capacity-study data and fit
+repetitions for
+each of autoregression, Van der Pol, and Duffing, at 64 and 256 landmarks.
+All four original representations are retained under both geometry scalers:
+raw, affine local coordinates, KAHM local coordinates, and KAHM scores.
+A locality-coordinate control uses the locality gates in
+Equation~\eqref{eq:nf-locality-gates} with the same local principal coordinates.
+Thus 72 paired jobs produce 1,440 head fits. The raw representation is
+identical across scaler arms. The original target bounds and validation
+selection rules remain in force.
+
+For each law/capacity cell, the unit of paired dispersion is a complete
+data/fit draw. Episode losses and horizon errors are retained but are not
+counted as additional independent fitted-method repetitions. The analysis
+reports means and paired standard deviations/standard errors descriptively;
+the original contrast families' confidence statements are not extended to
+these post-hoc comparisons. Controlled banks are shared across their
+representations, so controlled execution times are not standalone deployment
+cost estimates.
+
+\subsection{Numerical verification and retained evidence}
+The standard natural arms and fixed references are checked against all 1,040
+corresponding task--method prediction arrays and selected hyperparameters.
+All 576 original
+standard controlled method/capacity fits are checked against archived
+predictions, losses, and selected hyperparameters; 144 controlled raw
+cross-scaler pairs are checked for equality. A separate verification program reconstructs
+the sensitivity losses for natural data from per-origin forecasts and all controlled losses
+from the full saved prediction arrays before compact export.
+
+The review supplement retains every natural sensitivity forecast and all
+controlled per-episode losses, execution records, selected settings, scaler
+statistics, out-of-range diagnostics, and file digests. Full controlled
+predictions and fitted banks are regenerated by the supplied runner; the archived verification report compares their full prediction arrays
+before the compact results are exported.
+Replaying the compact controlled losses is distinguished from independently
+recreating and checking those full prediction arrays. The sensitivity outputs are archived separately from the original
+evaluations.
+
+\subsection{Natural heterogeneity and costs}
+Table~\ref{tab:scaling-development} keeps the original development outcomes
+separate. KAHM's development loss increases by 7.70\%; the source changes
+are $-1.99$\% on Electricity, $+2.06$\% on NN5, $-5.20$\% on Tourism,
+and $+19.54$\% on FRED-MD. Removing FRED-MD changes the aggregate scaler
+effect to a 3.62\% reduction. These alternative aggregates describe sensitivity to source composition;
+they do not validate a scaler-selection rule.
+Table~\ref{tab:scaling-sources} reports both original role groups, and
+Tables~\ref{tab:scaling-all-sources-development}
+and~\ref{tab:scaling-all-sources-confirmation} retain every fixed method.
+
+\input{generated/scaling/natural_development_table}
+\input{generated/scaling/natural_source_table}
+\input{generated/scaling/natural_all_sources_development}
+\input{generated/scaling/natural_all_sources_confirmation}
+\FloatBarrier
+
+The source-balanced fraction of test input coordinates outside the final
+refit range is 3.77\% on the formerly reserved sources and 21.45\% on the
+original development sources. The corresponding fractions of histories
+with at least one such coordinate are 33.08\% and 49.26\%. The largest
+absolute transformed test coordinate is 3.1990 and 1.8638, respectively.
+No final natural refit has a constant input coordinate. These diagnostics
+confirm that unclipped min--max scaling is distinct from enforcing bounded
+query inputs; a clipped alternative was not tested.
+
+Table~\ref{tab:scaling-costs} reports warm-library computation times
+for each stage.
+The retained KAHM min--max Saugeen configuration with history 28, horizon 7,
+medium capacity, and seed 17 takes 6.2914 seconds, including 4.7618 seconds
+of search and 1.3632 seconds of cleanup. It is included at its original
+hierarchical weight, without trimming or a timing-based rerun. The single
+execution cannot distinguish algorithmic cost changes from runtime variation
+with the precision of a separate repeated timing benchmark.
+
+\input{generated/scaling/natural_cost_table}
+\FloatBarrier
+
+\clearpage
+\subsection{Complete controlled sensitivity}
+Table~\ref{tab:scaling-controlled-all} includes all ten representation/scaler
+arms in every law/capacity cell. KAHM local-coordinate mean error changes
+by $-0.24/-0.32$\% on autoregression, $-0.18/+0.23$\% on Van der Pol,
+and $-2.85/-7.35$\% on Duffing at 64/256 landmarks. The main mean rankings
+are unchanged. The score-only KAHM representation is more sensitive on
+Van der Pol, where min--max raises its error by 6.03\% and 4.78\%.
+A secondary ordering consequently reverses at 256 landmarks: standardized
+KAHM scores have mean MSE $1.0499\times10^{-3}$, below affine-local
+$1.0780\times10^{-3}$, whereas their min--max errors are $1.1001\times10^{-3}$
+and $1.0812\times10^{-3}$, respectively. The persistence claim concerns the
+main KAHM-local versus raw/control comparisons, not every pair of methods.
+The repetition-level CSV files supply all paired differences and
+standard errors; the displayed standard deviations describe variability
+without a simultaneous confidence interpretation.
+
+\input{generated/scaling/controlled_all_table}

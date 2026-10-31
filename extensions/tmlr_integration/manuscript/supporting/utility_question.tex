@@ -1,0 +1,71 @@
+\section{Predictive usefulness and computational cost}
+\label{sec:utility-question}
+Let $X\in\R^d$ be an observed history, $Y\in\R^{d_y}$ its future
+response, and $\Gamma_{\mathcal D}$ a representation fitted on development
+data $\mathcal D$. Expectations below are conditional on the fitted
+state. Each experiment specifies its own evaluation distribution and
+loss aggregation. A deterministic representation can discard predictive
+information; appending it to $X$ preserves the raw history and hence its
+Bayes risk (Proposition~\ref{prop:nf-raw-preservation}). This does not
+ensure equal performance of finite, regularized fitted decoders.
+
+\paragraph{Residual information relative to a baseline.}
+Fix $f_0:\R^d\to\R^{d_y}$, put $e=Y-f_0(X)$ and
+$Z=\Gamma_{\mathcal D}(X)$, and assume $\E\|e\|_2^2<\infty$.
+Write $R(f)=\E\|Y-f(X)\|_2^2$ and let
+$L^2(P_Z;\R^{d_y})$ contain the measurable corrections with finite
+second moment under the distribution $P_Z$ of $Z$. Conditional
+expectation gives the best correction $q^*(Z)=\E[e\mid Z]$ and
+\begin{equation}\label{eq:utility-oracle}
+ R(f_0)-\inf_{q\in L^2(P_Z;\R^{d_y})}
+ R(f_0+q\circ\Gamma_{\mathcal D})
+ =\E\|\E[e\mid Z]\|_2^2.
+\end{equation}
+The circle denotes composition. Appendix~\ref{app:utility-projection}
+proves the identity. Improvement is possible in this unrestricted
+correction class precisely when the residual conditional mean is
+nonzero with positive probability. The identity does not determine the
+performance of a correction estimated in a finite class.
+
+\paragraph{Fitted procedures and computation.}
+For fitted forecasts $\widehat f_0$ and $\widehat f_s$, evaluation unit
+$\mathcal E$, and specified squared loss $\ell$, define
+\begin{equation}\label{eq:utility-delta}
+ \Delta_s=\E[\ell(\widehat f_0;\mathcal E)
+             -\ell(\widehat f_s;\mathcal E)\mid\mathcal D].
+\end{equation}
+Positive $\Delta_s$ favors the richer procedure. A comparison may require
+a minimum gain $\delta>0$ and cost budget $B>0$, with measured complete
+procedure cost $C_s\leq B$. Feature construction, fitting, and selection
+are charged even when the selected prediction equals the baseline.
+Evaluation outcomes cannot enter fitting or selection. Independently
+sampled repetitions, overlapping windows, and selected source families
+supply different units of evidence. Missing predictions without a
+prespecified fallback make the affected full-roster aggregate undefined;
+restriction to successful fits changes the evaluated population. No
+experiment here estimates unrestricted natural-data Bayes risk or
+certifies the minimum complexity necessary to achieve a target accuracy.
+
+\paragraph{A correction that retains the fitted baseline.}
+For geometric family $g$, fitted correction $\widehat q_g$, and scalar
+mixing weight $\gamma$, define
+\begin{equation}\label{eq:utility-additive}
+ \widehat f_{g,\gamma}(x)
+ =\widehat f_0(x)+\gamma\widehat q_g(x),\qquad 0\leq\gamma\leq1.
+\end{equation}
+Zero correction recovers the same fitted baseline. Residual fitting is
+established \citep{Buhlmann2003L2}; these studies compare the geometric
+features supplied to the correction. With square-integrable residual
+and correction, expansion of squared loss yields
+\begin{equation}\label{eq:utility-alignment}
+ R(\widehat f_{g,\gamma})-R(\widehat f_0)
+ =\gamma^2\E\|\widehat q_g(X)\|_2^2
+ -2\gamma\E\langle Y-\widehat f_0(X),\widehat q_g(X)\rangle.
+\end{equation}
+Here $\langle\cdot,\cdot\rangle$ is the Euclidean inner product.
+For a correction nonzero with positive probability, positive expected
+alignment is necessary and sufficient for improvement at some
+sufficiently small positive $\gamma$. A finite candidate grid may miss
+that interval, and validation can select a worse forecast. Baseline
+availability is therefore a candidate-class property, not a performance
+guarantee; Appendix~\ref{app:utility-alignment} gives the derivation.

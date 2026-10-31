@@ -1,0 +1,106 @@
+\section{Budgeted online adaptation}
+\label{sec:adaptive-development}
+\input{generated/adaptive_development/numbers}
+
+A chronological development experiment evaluates whether updating local
+KAHM geometry improves forecasts under finite reference and replay
+budgets. Twelve streams, six methods, and two capacity settings yield
+\ADRunCount{} runs and \ADForecastCount{} scored forecasts. Four
+stationary nonlinear AR streams are paired with four recurring-regime
+streams through their innovations. The recurring streams alternate
+between regimes A and B every 256 observations, with both regimes
+represented in the initial fitting period. Regime labels are hidden
+from the forecasting methods. Three Dominick weekly series and one
+Sunspot daily series supply natural-data comparisons. These series had
+been examined previously, so the results characterize development on
+selected inputs. Appendix~\ref{app:adaptive-development} specifies the
+streams, update schedule, and evaluation criteria.
+
+\paragraph{Forecasts and temporal ordering.}
+All geometric methods combine a sliding-window raw ridge baseline with
+ridge residual corrections. Fixed KAHM updates its correction heads while
+retaining the initial geometry. Adaptive KAHM, affine, and RBF-local
+methods share a reference-refresh policy; after a refresh, they re-encode
+the stored histories and rebuild their correction heads. The small
+setting allows 64 shared geometric references and 128 replay rows per
+horizon; the large setting allows 128 references and 256 replay rows.
+A Gaussian kernel ridge regression (KRR) comparator maintains separate
+sliding-window supports for each horizon using recursive add/delete
+inverse updates. Its forecast is a calibrated mixture of KRR and the
+same raw ridge baseline. Different sharing across horizons means that
+these support limits do not equalize memory or computation.
+
+The first 35\% of each stream fits the initial model, the next 15\%
+calibrates correction weights, and the final 50\% evaluates forecasts.
+For each horizon, calibration chooses a weight from
+$\{0,0.25,0.5,1\}$ using only targets observed by the calibration
+boundary. These weights remain fixed during evaluation. Previously
+issued forecasts are scored when their targets arrive; the newly
+available targets then enter the update before subsequent forecasts
+are issued. Bandwidths and gate temperatures are fixed throughout.
+This experiment therefore evaluates reference adaptation with delayed
+labels, rather than online training of the parameters in
+Section~\ref{sec:direct-reconstruction}.
+
+\paragraph{Numerical correction and evaluation outcome.}
+The initial implementation experienced four correction-head failures
+and issued 8,659 framework fallback forecasts. A numerical amendment
+replaced accumulated normal equations with a centered, column-equilibrated
+augmented ridge solve using pivoted QR. The objective, penalties, inputs,
+scalers, reference policy, and evaluation criteria were unchanged.
+Repeating all 144 runs with the amended solver produced no unexpected
+model exceptions, framework fallbacks, or observed capacity violations.
+The two executions use the same streams and are not independent
+replications. Their protocols and source states were archived locally
+before their respective executions.
+
+\input{generated/adaptive_development/loss_table}
+
+Table~\ref{tab:adaptive-development-loss} reports MSE normalized by a
+seasonal-difference scale fitted on the initial prefix. Both capacity
+settings fail the recurring-stream and natural-data accuracy criteria
+specified in Appendix~\ref{app:adaptive-development}. Adaptive KAHM's
+natural mean loss exceeds that of KRR by \ADSmallKRRExcess\% in the
+small setting and \ADLargeKRRExcess\% in the large setting. Only two
+of twelve natural horizon/series combinations select a nonzero KAHM
+correction at either setting; every Sunspot horizon selects zero.
+All small-setting recurring corrections are zero, whereas nine of
+twelve large-setting recurring corrections are active. The criteria
+were intended to decide whether this prototype warranted broader
+experimentation; they are descriptive thresholds, not hypothesis tests.
+
+\paragraph{Feature extrapolation after an accurate solve.}
+A large prediction error remains after the solver amendment. For
+recurring seed 20261101, origin 1554, and horizon 12, large-setting
+adaptive KAHM predicts $\ADPeakPrediction$ when the target is
+$\ADPeakTruth$. The largest absolute standardized query feature is
+approximately $\ADQueryFeatureMagnitude\times10^6$, compared with
+$\ADReplayFeatureMagnitude$ among the currently supervised replay
+features. A fresh centered singular-value-decomposition solve reproduces
+the large correction. For the query's unnormalized signed kernel weights $w_i$, define
+$\rho=|\sum_i w_i|/\sum_i|w_i|$, with $\rho=0$ when every weight
+vanishes. The examined state has $\rho=\ADRelativeDenominator$,
+above its $10^{-10}$ guard. Adaptive affine
+also exhibits severe feature extrapolation under a fresh solve.
+These diagnostic states show that accurate linear algebra and a
+nonvanishing KAHM normalizer are insufficient to control the correction.
+They do not separately identify the effects of scaling, delayed labels,
+and reference refreshes. Every issued forecast contributes to the
+reported loss.
+
+\paragraph{Measured service cost.}
+Every adaptive-KAHM stream meets the 20\,ms screen for the 99th
+percentile of observation-step service time. The largest per-stream
+99th percentiles are \ADSmallPninetyNine{} and
+\ADLargePninetyNine{}\,ms in the small and large settings. Nevertheless,
+\ADOverruns{} of \ADServiceSteps{} evaluated observation steps exceed
+20\,ms; the percentile screen is not a per-step deadline. Service time
+includes updates, reference refreshes, feature and head reconstruction,
+and prediction. It excludes scoring and serialization. The prototype
+maintains geometry even when its correction weight is zero.
+Table~\ref{tab:adaptive-development-resources} provides the complete
+resource measurements. The results support computational feasibility
+under this particular screen, but they do not establish a forecasting
+advantage for the adaptive KAHM procedure. The bounded, fixed-geometry corrections analyzed in the accompanying
+main paper define a different method and do not establish that this
+online procedure has been repaired.

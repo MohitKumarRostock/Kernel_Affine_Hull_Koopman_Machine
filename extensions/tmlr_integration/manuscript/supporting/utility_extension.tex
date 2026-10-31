@@ -1,0 +1,162 @@
+\section{Preserving raw forecasts while testing geometric utility}
+\label{sec:utility-extension}
+
+An additive experiment separates the contribution of KAHM features
+from changes to the raw predictor. It tests whether a local geometric
+correction improves a fixed raw forecast, how this improvement depends
+on training size and raw-decoder capacity, and whether a validation
+rule identifies useful corrections on four additional archive collections.
+The protocol, candidate grid, source roster, and implementation were
+archived before full evaluation. This was a prospective execution
+checkpoint informed by earlier findings, without external preregistration.
+
+\subsection{Forecasts, controls, and selection}
+\label{sec:utility-models}
+
+The raw baseline is a finite Gaussian Nystr\"om predictor with
+appended linear history coordinates, column standardization, and a ridge
+head. Its requested $M$ landmarks and regularization are fitted using the raw history
+only. For each $g\in\{\mathrm{KAHM},\mathrm{affine},\mathrm{locality}\}$,
+we fit a separate ridge head on the local-coordinate features of
+Equation~\eqref{c:eq:local}, using the raw model's training residuals as
+targets. The additive forecast is Equation~\eqref{eq:utility-additive}.
+The correction has its own standardization and ridge penalty; it does not
+change raw distances, landmarks, coefficients, or regularization, and it
+introduces no additional Nystr\"om basis. Residuals are in-sample training
+residuals, not cross-fitted residuals. This choice is part of the evaluated
+procedure and can limit the structure left for the correction to learn.
+
+All geometries use the same partitions, principal-direction configuration,
+reference-selection rules, and fitting seeds. The geometry bank uses
+three blocks of 2, 4, and 8 local models, requested rank two, at most 24
+references per local model, and at most 512 fitting histories. KAHM uses
+the stable Gaussian query arithmetic described in
+Section~\ref{c:sec:numerical}; affine and locality controls do not fit KAHM
+kernels. The concatenated raw-plus-KAHM architecture from the original
+natural study is also fitted under this extension's limits. It preserves
+raw information but changes the finite kernel geometry, so it is a
+different complete procedure, not a restricted version of the additive
+model. Raw ridge, persistence/seasonal-naive prediction, and a fixed
+histogram-gradient-boosting control complete the comparison.
+
+Validation first chooses the raw RBF penalty from
+$\{0.01,1,100\}$. Holding this raw forecast fixed, each correction searches
+the same three penalties and weights $\gamma\in\{0,0.25,0.5,1\}$.
+There are ten distinct correction candidates: one zero correction and
+nine positive-weight choices. Ties favor smaller $\gamma$, followed by
+the fixed penalty order. These extra validation opportunities are part
+of the additive procedure; equal landmark counts do not equalize search
+size, effective function classes, or cost. The main KAHM policy uses its
+selected correction only if validation MSE is at least 5\% below that of
+the selected raw baseline. A second declared policy applies the same
+threshold to the validation-best choice across all three geometries.
+The 5\% threshold is a research sensitivity, not a test-set guarantee or
+an application-derived minimum. Every policy pays for the corrections
+it examines, including corrections it declines.
+
+\subsection{Training size, raw-decoder capacity, and archive sources}
+\label{sec:utility-design}
+
+The synthetic factorial crosses the three forecasting laws in
+Appendix~\ref{c:app:methods},
+$N\in\{32,128\}$ independent training episodes, and
+$M\in\{16,64\}$ raw RBF landmarks. Twelve fresh repetitions use seeds
+9100--9111, for 144 configurations. Within a law and repetition, the 32
+training episodes are a prefix of the same 128-episode collection, and
+all four $N\times M$ settings share 64 validation and 128 test episodes.
+Episodes retain length 72, history 12, offsets 1, 4, and 12, and 13 origins
+per episode. All training origins can fit the decoder; the 512-history
+limit applies only to the geometry bank. Selected forecasts use
+training-only fitting, without adding validation episodes, so $N$ remains
+an interpretable factor. This changes the raw predictor's capacity while
+holding the correction's declared architecture fixed; it does not vary
+every source of model complexity.
+
+Synthetic MSE averages target coordinates and origins within episodes,
+then episodes. The primary loss differences compare additive KAHM with
+raw RBF and concatenated KAHM in each of the 12 law--$N$--$M$ cells.
+All 24 contrasts use a separate family of 95\% Bonferroni paired Student
+intervals over 12 complete repetitions. Their coverage relies on a
+normal approximation for repetition-level differences; origins and
+horizons do not increase the replication count. Affine, locality, and
+practical-control means are reported without promoting their descriptive
+comparisons into that primary interval family.
+
+The archive-source evaluation uses Weather, Solar Weekly, COVID-19 Deaths,
+and Car Parts with missing values from the Monash archive
+\citep{Godahewa2021Monash,Godahewa2020Weather,Godahewa2020SolarWeekly,
+Godahewa2020CovidDeaths,Godahewa2020CarPartsMissing}. They were absent
+from the original eight-source study. Solar Weekly is an aggregation
+of simulated NREL solar-production series; it is not an independent
+observational solar deployment. Three training-prefix-eligible series
+per collection are selected by a fixed hash ordering. Eligibility and
+selection cannot use validation/test forecasting performance, and selected
+series are not replaced because later evaluation is unfavorable or
+unavailable. The roster is listed in Appendix~\ref{app:utility-protocol}.
+
+Each series has chronological 60/20/20 training, validation, and test
+segments. Weather and COVID use a 28-step history and all seven next
+steps as direct targets; Solar Weekly and Car Parts use a six-step
+history and two-step target. Fits use at most 512 available training
+windows and evaluations at most 64 origins per segment, sampled evenly.
+After validation selection, selected configurations are refitted on
+admissible pretest windows under the same cap. Inputs use only past
+observations, including already observed test values at later origins;
+test targets cannot retune the fitted model. Missing values are not
+interpolated. A training-only seasonal-difference MSE, with a declared
+first-difference fallback, supplies the fixed scale. The two requested landmark
+counts give 24 configurations. Aggregation weights capacities equally
+within series, series equally within source, and the four sources equally.
+These are descriptive comparisons on four selected collections, not
+24 independent domains or a random sample of applications.
+
+The main model-pipeline cost covers raw search, geometry and correction
+search, validation forecasts, selected refits, final prediction, and model
+serialization. Shared raw work is charged once for an additive procedure
+or policy. Data preparation is recorded separately, as are model size and
+prediction cost. Imports, downloads, prediction-artifact writes, and
+research reporting are outside model timing. Policy costs are unions of
+measured required components, not separately timed full-policy executions.
+One task and one numerical-library
+thread are active during timing. Wall time and available CPU components
+are recorded separately. The accuracy--cost comparison therefore
+describes this implementation and hardware, without claiming a minimum
+necessary representation complexity. Additional fitting and audit details
+appear in Appendix~\ref{app:utility-protocol}.
+
+\subsection{Complete outcomes and fit coverage}
+\label{sec:utility-synthetic-results}\label{sec:utility-archive-results}
+Tables~\ref{tab:utility-synthetic}, \ref{tab:utility-synthetic-controls},
+and~\ref{tab:utility-intervals} report every synthetic cell and primary
+contrast. Five of twelve comparisons with raw RBF favor additive KAHM,
+none favors raw RBF, and seven remain unresolved. Against concatenated
+KAHM, six favor the additive construction, four favor concatenation,
+and two remain unresolved. Simpler additive geometries have lower mean
+error in every Van der Pol and Duffing cell; the raw-baseline contrasts
+do not establish an advantage specific to KAHM.
+
+\input{supporting/utility_synthetic_main}
+
+All 144 synthetic configurations complete. On the archive roster, 22
+of 24 configurations complete every procedure. Both capacities of Car
+Parts T1324 have 23 training histories but only seven distinct ones;
+the declared eight-group bank fails. Concatenated KAHM and all three
+additive geometries fail on both configurations, giving eight failed
+fits and four unavailable dependent policy outputs. These are shared
+bank-fitting failures, not an isolated KAHM-kernel failure. Raw ridge,
+raw RBF, naive, and boosting complete all 24 configurations.
+
+\input{generated/utility/archive_main}
+
+The full-roster geometric and policy losses are undefined. The separate
+post-hoc matched-success analysis conditions on 22 configurations,
+with eleven series and equal source weights. Additive KAHM gains only
+\UtilityKAHMGainPercent\% over raw RBF at \UtilityKAHMCostRatio{}
+times its measured model-pipeline cost; ridge is more accurate and
+cheaper. Neither policy improves aggregate loss on this subset. COVID
+is the only source mean improved by additive KAHM, Solar is unchanged,
+and Weather and Car Parts worsen; excluding COVID reverses the
+aggregate direction. Appendix~\ref{app:utility-results} retains failures,
+source means, interval families, chosen corrections, and decoder sizes;
+Appendices~\ref{app:utility-cost} and~\ref{app:utility-residual-results}
+give complete costs and the saved-forecast residual-alignment identity.

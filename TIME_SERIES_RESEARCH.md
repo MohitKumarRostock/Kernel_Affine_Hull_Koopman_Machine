@@ -35,10 +35,12 @@ The predefined study decision required every accuracy condition and stability ch
 
 ## Access
 
-- [Paper and editable source](TMLR.md)
+- [Focused paper, Supporting Studies, and editable source](extensions/tmlr_integration/README.md)
 - [Mathematical definitions and derivations](extensions/reconstruction_mechanism/MATHEMATICAL_BACKGROUND.md)
 - [Complete principal results](extensions/reconstruction_mechanism/FINDINGS.md)
 - [Evidence restoration, analysis, and replay](extensions/reconstruction_mechanism/README.md)
 - [Earlier Koopman result provenance](reproduction/reported_results.tsv)
+
+The focused manuscript contains the core proofs and principal experimental protocol. The separate, self-contained *Supporting Studies* document retains the complementary methods, results, and technical appendices. The review supplement combines that PDF with the unchanged principal saved-forecast archive. The editable source preserves required author-identifying license attribution and is distributed separately from the anonymous review files.
 
 KAHM is the local reconstruction used in the forecasting representations. KAHKM is the earlier Koopman architecture. The distinction is maintained throughout the result documentation.

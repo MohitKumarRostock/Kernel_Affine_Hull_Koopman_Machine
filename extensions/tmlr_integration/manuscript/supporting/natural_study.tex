@@ -1,0 +1,53 @@
+\section{Natural forecasting: transfer, cost, and predicting benefit}\label{sec:natural}
+The study fixes four development families (Electricity, NN5, Tourism,
+and FRED-MD) and four confirmation families (Traffic, Hospital, Saugeen
+River flow, and US births). Training-prefix eligibility and identifier
+hashes select 26 series. Two history--horizon regimes, two capacities,
+and two seeds yield 208 runs, including 80 confirmation runs. Every
+method uses the same available windows and chronological 60/20/20
+splits. All fitted transformations use permitted training observations;
+validation selects hyperparameters, and a final fit uses eligible
+pretest windows. Appendix~\ref{sec:nf-methods} defines all twelve
+procedures; Appendix~\ref{sec:nf-protocol} supplies source versions,
+chronology, capacity grids, loss scales, selection rules, and cost scopes.
+The four confirmation families remain the units of transfer despite
+multiple configurations and overlapping windows within them.
+
+The primary matched comparison is raw finite-RBF prediction against
+raw history augmented by KAHM gates and gated principal coordinates.
+The augmentation preserves history information, but changes Gaussian
+distances, the finite basis, and regularization. All 208 runs complete
+with every candidate present, yielding 2,496 task--method losses.
+Raw plus KAHM has \NaturalErrorIncrease\% higher source-balanced loss
+than raw RBF at \NaturalCostRatio{} times its measured warm-library
+pipeline cost; raw ridge is more accurate than both
+(Table~\ref{tab:method-summary}). KAHM raises loss against raw RBF by
+0.50\% on Traffic, 12.27\% on Hospital, and 3.53\% on US births,
+and lowers it by 1.53\% on Saugeen. Omitting any one confirmation
+family leaves the aggregate unfavorable. These are descriptive selected-source
+comparisons, without population-wide confidence intervals.
+
+The structural controls and development results further limit
+attribution. Raw plus KAHM improves aggregate loss over raw plus affine
+and raw plus locality by only 0.46\% and 0.50\%, respectively; each
+comparison changes sign across source means. FRED-MD contributes
+96.62\% of the development gain over raw RBF, while raw plus affine
+has lower mean loss and cost than KAHM in every development family.
+Table~\ref{tab:cleanup-costs} separates substantial selection cleanup
+from search and refitting. The reported 2.30-fold ratio describes the
+supplied warm workflow, not cold-start deployment or intrinsic complexity.
+
+Four ridge diagnostics predict log relative benefit from metadata,
+geometry, a reduced-capacity validation probe, or their combinations.
+They are trained on development outcomes with whole-source exclusions
+and frozen before confirmation (Section~\ref{sec:nf-diagnostic}). Adding
+geometry to metadata plus the paid probe changes none of the 80
+confirmation decisions. Both variants attain scaled MSE
+\NaturalProbeLoss{} at about \NaturalProbeCost{} seconds per task;
+log-benefit RMSE increases from 0.184549 to 0.184680. Their aggregate
+gain over always raw is only \NaturalProbeGainPercent\%, at
+\NaturalProbeCostRatio{} times its pipeline cost. Metadata plus geometry
+also makes the same decisions as metadata alone. Complete methods,
+policies, source outcomes, and diagnostic predictions appear in
+Appendix~\ref{app:full-results}. These data do not validate the tested
+geometric adoption rule; they do not rule out a different diagnostic.

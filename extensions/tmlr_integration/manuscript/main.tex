@@ -6,9 +6,9 @@
 \usepackage{hyperref}
 \usepackage{url}
 \hypersetup{hidelinks,
- pdftitle={Kernel Affine Hull Representations for Time-Series Forecasting: Distinctness, Stability, and Predictive Limits},
+ pdftitle={Kernel Affine Hull Features for Time-Series Forecasting: Distinctness, Bounded Corrections, and Predictive Limits},
  pdfauthor={Anonymous authors},
- pdfsubject={Reconstruction representations, bounded residual forecasting, and matched empirical evaluation}}
+ pdfsubject={Reconstruction feature spaces, bounded residual forecasts, and matched empirical evaluation}}
 \newtheorem{proposition}{Proposition}
 \allowdisplaybreaks
 \newcommand{\R}{\mathbb{R}}
@@ -26,283 +26,53 @@
 \input{generated/direct_reconstruction/result_macros}
 \input{generated/reconstruction_mechanism/numbers}
 
-\title{Kernel Affine Hull Representations\\
+\title{Kernel Affine Hull Features\\
 for Time-Series Forecasting:\\
-Distinctness, Stability, and Predictive Limits}
+Distinctness, Bounded Corrections, and Predictive Limits\thanks{AI tools assisted with protocol development, implementation, numerical and statistical verification, analysis, and manuscript preparation. The authors are responsible for the scientific claims, the accuracy of the evidence, and the final text.}}
 \author{Anonymous authors}
 \begin{document}
 \maketitle
 \begin{abstract}
-Kernel Affine Hull Machines (KAHMs) construct nonlinear reconstructions
-from local reference observations. We study when these reconstructions
-provide useful features for a finite-dimensional time-series forecasting
-decoder. We show that direct transfer of normalized reconstruction weights
-to reference targets is a ratio of kernel-ridge predictions. We identify
-conditions under which KAHM and matched radial-basis-function (RBF)
-reconstructions generate the same augmented feature span when common
-affine features are retained, and construct an irregular
-reference set for which their spans differ. A bounded feature transform
-and a ridge residual decoder also yield a uniform bound on the magnitude
-of the forecast correction. These algebraic properties are distinct from
-predictive accuracy. In a prospectively specified experiment, we compare
-ten procedures on 192 task suites comprising three nonlinear simulation
-laws, a linear control, two observation-noise levels, and 24 independent
-repetitions. The bounded KAHM reconstruction departure reduces aggregate
-nonlinear normalized mean squared error by \RMKvsCommonGain\% relative
-to the shared local-coordinate basis. Its gains over matched RBF
-reconstruction and raw-input RBF forecasting are
-\RMKvsRBFDepartureGain\% and \RMKvsRawRBFGain\%, respectively; neither
-comparison establishes the prespecified 3\% improvement margin under
-simultaneous inference. Boosted trees and a validation-selected non-KAHM
-procedure attain lower aggregate error. The correction bounds and the
-linear-control noninferiority criterion are satisfied. Complementary
-controlled, natural-data, and adaptive experiments further delimit the
-conditions under which these representations help. The evidence shows
-that reconstruction can contribute useful forecasting features, while
-neither a distinct feature span nor a bounded correction establishes a
-practical advantage specific to KAHM.
+Kernel Affine Hull Machines (KAHMs) reconstruct observations from local
+reference sets. We study whether these reconstructions provide useful
+features for a finite-dimensional forecasting decoder. Direct transfer of
+normalized KAHM weights to reference targets is a ratio of kernel-ridge
+predictions. We give sufficient conditions under which KAHM and matched
+radial-basis-function (RBF) reconstructions generate the same augmented
+feature span, and construct an irregular reference set for which the spans
+differ. Separately, bounded features and a ridge residual decoder yield a
+uniform bound on the forecast correction, including its free intercept.
+A prospectively specified experiment compares ten procedures on 192 task
+suites: three nonlinear simulation laws and a linear control, two
+observation-noise levels, and 24 independent repetitions. The bounded
+KAHM departure improves aggregate nonlinear normalized mean squared
+error by \RMKvsCommonGain\% over common local-coordinate features.
+Its gains over matched RBF reconstruction and raw-input RBF forecasting
+are \RMKvsRBFDepartureGain\% and \RMKvsRawRBFGain\%; neither establishes
+the prespecified 3\% margin under simultaneous inference. Boosted trees
+and a validation-selected non-KAHM procedure attain lower aggregate
+error. The correction bounds and linear-control noninferiority criterion
+are satisfied. Supporting studies identify conditional gains, unfavorable
+natural-data comparisons, and limitations of adaptation. Reconstruction
+can therefore supply useful forecasting features, but algebraic
+distinctness and bounded corrections do not establish a practical
+advantage specific to KAHM.
 \end{abstract}
 
-\section{Introduction}\label{sec:introduction}
-A representation is useful for forecasting when the fitted decoder can
-extract information relevant to future observations from it. Kernel Affine
-Hull Machines (KAHMs) construct nonlinear reconstruction maps from local
-reference observations \citep{Kumar2024KAHM}. Such a map can reconstruct
-an observed history accurately without providing a useful code for its
-future. For example, a reconstruction residual that vanishes along an
-affine line loses position along that line, even when the forecasting
-target varies with position. More generally, deterministic features cannot
-add information to the history from which they are computed, but they can
-make different functions available to a restricted, regularized decoder.
-
-This distinction motivates three questions. First, does a KAHM
-reconstruction provide functions that a simpler matched representation
-cannot express? Second, can the magnitude of the forecast correction
-built from those functions be controlled? Third, does the fitted procedure
-improve prediction at the available sample size and computational budget?
-The answers require different evidence. A difference between function
-spans is an algebraic property. A correction bound concerns the magnitude
-of a fitted prediction component. Predictive usefulness depends on the
-target, the data distribution, regularization, and model selection.
-
-We study these questions using \emph{reconstruction departures}: the
-difference between a nonlinear local reconstruction and its affine
-projection, multiplied by a locality weight. The decoder also receives
-the locality weights and weighted principal coordinates. This common
-feature block preserves local position and is identical across the KAHM
-and radial-basis-function (RBF) reconstruction procedures. Replacing the
-nonlinear reconstruction with the affine projection makes the departure
-zero. The resulting common-feature procedure therefore isolates the
-contribution of the additional reconstruction features. A positive-kernel
-RBF reconstruction, using the same references, kernel, and locality
-weights, provides a more closely matched comparison.
-
-Our analysis first identifies cases in which the apparent additional
-structure is redundant. Applying normalized KAHM reconstruction weights
-to reference targets gives exactly a ratio of two kernel-ridge predictions:
-one fitted to the targets and one fitted to a constant response.
-Symmetric reference sets can also produce the same augmented raw feature
-span for KAHM and RBF reconstruction. In contrast, an explicit irregular
-three-reference construction yields a KAHM departure outside the span of
-the corresponding affine and RBF features. This establishes that the
-reconstruction can change the available basis under stated conditions.
-It does not establish a general advantage over kernel regression.
-Moreover, isotropic ridge regularization and nonlinear feature
-normalization depend on the feature parameterization. The empirical
-comparison therefore concerns the complete fitted procedures, even when
-two unregularized feature spans coincide.
-
-The stability analysis addresses a separate difficulty. In an adaptive
-experiment, a numerical solver correction removed computational exceptions
-but did not eliminate extreme forecasts. Recomputing an examined state
-with a fresh solve reproduced the extreme correction, showing that a
-correct linear solve alone does not control extrapolation through the
-features. We consequently study a fixed-geometry construction that
-normalizes and bounds each feature block before fitting a ridge residual
-decoder. We prove a uniform correction-magnitude bound that includes the
-free intercept and specifies the scaling of the ridge penalty. The bound
-does not control the raw baseline or guarantee small forecast error.
-
-The principal forecasting experiment compares ten procedures across three
-nonlinear simulation laws and a linear Gaussian autoregressive control,
-with two levels of additional observation noise. Twenty-four independent
-repetitions yield 192 task suites. Four episode sets have separate roles:
-fitting, hyperparameter selection, correction calibration, and final
-evaluation. The protocol, source code, analysis, and prepared inputs were
-recorded locally before the final forecasts were computed. This prospective
-record was not a public preregistration. Five comparisons test whether the
-KAHM procedure improves nonlinear aggregate loss by at least 3\% relative
-to the common basis, matched RBF reconstruction, raw-input RBF forecasting,
-boosted trees, and a validation-selected non-KAHM procedure. A sixth
-comparison tests noninferiority to ridge on the linear control, with a
-5\% tolerance. These margins specify the study's research criteria;
-they are not application-specific requirements.
-
-The KAHM departure improves the common basis by 12.58\%, with a positive
-simultaneous lower confidence bound for the required margin. The 1.17\%
-point improvement over matched RBF reconstruction is smaller than the
-3\% margin. The 3.92\% point improvement over raw-input RBF forecasting
-exceeds that margin, but its simultaneous lower bound does not establish
-it. Boosted trees and the selected non-KAHM procedure attain lower
-aggregate error. Thus the experiment supports a contribution from
-reconstruction features beyond the common local coordinates, while
-leaving the required practical advantage specific to KAHM unestablished.
-
-Complementary experiments examine representation information, decoder
-capacity, natural-data transfer, residual correction, supervised geometry,
-and online adaptation. Table~\ref{tab:evidence-status} summarizes their
-roles. They use different procedures, loss normalizations, and sampling
-units, so their results are interpreted separately. In particular, a new
-realization of a known simulation law tests repeatability under that law;
-it does not supply evidence from a new application. The natural-data
-studies retain both unsuccessful fits and unavailable tasks when these
-prevent an aggregate comparison.
-
-\begin{table}[t]
-\centering
-\caption{Questions addressed by the component studies. Each study retains
-its own procedures, evaluation population, and statistical analysis.
-Results are not pooled across studies.}
-\label{tab:evidence-status}
-\small
-\begin{tabular}{@{}p{0.23\linewidth}p{0.35\linewidth}p{0.35\linewidth}@{}}
-\toprule
-Study & Question & Main finding or scope \\
-\midrule
-Controlled representations and capacity & Does the code retain predictive
-position, and can the fitted decoder use it? & Conditional benefits under
-target interventions and fresh simulations. \\
-Natural-data forecasting & Does KAHM augmentation improve raw-input
-prediction on reserved collections? & Higher aggregate error and cost
-than the raw-input RBF comparator. \\
-Scaling sensitivity & Does an alternative input scaler change the
-comparison? & The natural-data aggregate ordering persists; individual
-controlled losses can change. \\
-Additive correction & Can geometric features improve a retained raw
-forecast? & Some synthetic gains; two failed configurations prevent the
-planned full-roster natural-data comparison. \\
-Proxy metric and donor residuals & Does supervised geometry or excluded-donor
-residual fitting improve prediction? & Ridge corrections can help, but
-the added value of these components is not established. \\
-Gate-temperature pilot & Can supervised locality weights help? & Nine
-exploratory tasks with a separate generator and search budget. \\
-Direct reconstruction training & Do trained reconstruction parameters
-outperform equally trained controls? & 43 of 46 tasks are feasible;
-synthetic evidence is mixed. \\
-Online adaptation & Does updated geometry improve accuracy within a
-fixed resource budget? & Neither capacity level satisfies the accuracy
-criteria in 144 runs. \\
-Reconstruction departures & Do distinct, bounded reconstruction features
-improve a fixed decoder? & 192 task suites; improvement over common
-coordinates, without the required advantage over all comparators. \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The paper contributes a characterization of reconstruction-derived
-function spaces, a correction bound for a specified residual decoder,
-and a matched empirical evaluation of their predictive value. Local
-coordinates, residual fitting, supervised representation learning, and
-differentiable ridge solutions are established tools
-\citep{Yu2010LTC,Buhlmann2003L2,Bertinetto2019Solvers}. Our contribution
-concerns the properties of the particular KAHM constructions and the
-conditions under which their fitted forecasts help or fail.
-
-\paragraph{Notation.}
-Vectors are columns unless a row of a data matrix is explicitly specified.
-A matrix of reference observations stores one transposed observation per
-row. The symbol $v^\top$ denotes transpose, $\|v\|_2$ the Euclidean norm,
-and $\|v\|_1$ the sum of absolute coordinates. The identity matrix $I$ and
-the all-ones vector $\mathbf 1$ have the dimension required by their
-surrounding matrix products. The operators $\E$, $\Var$, and
-$\operatorname{Cov}$ denote expectation, variance, and covariance under
-the probability law stated in each result. Empirical averages and
-variances are identified by their data split. A forecasting history
-contains only observations available at its forecast origin; the target
-at horizon $h$ is the observation $h$ time steps after that origin.
-
-\input{related_work}
-\input{utility_question}
-\input{mechanisms}
-\input{section_reconstruction_mechanism}
-\input{section_direct_reconstruction}
-\input{section_adaptive_development}
-\input{controlled_results}
-\input{natural_study}
-\input{scaling_sensitivity}
-\input{utility_extension}
-\input{section_target_geometry}
-\input{discussion}
-
-\section*{Reproducibility and research transparency}
-The supplementary source contains the editable manuscript, its generated
-tables and figures, and instructions for compiling the PDF. The code and
-evidence materials organize each experiment separately. For each study,
-they specify the observation or dataset sources, preprocessing, split
-roles, model-selection rules, statistical contrasts, and resource
-accounting. Machine-readable records include predictions, targets,
-selected configurations, warnings, and unsuccessful or unavailable tasks.
-Checksums identify the source and data associated with each reported run.
-The accompanying reproduction guide distinguishes reconstruction of
-reported results from refitting the forecasting models.
-
-For the reconstruction-departure experiment, the prospective local record
-contains 239 source, configuration, and input files for all 192 task
-suites. All ten procedures finish on every task, yielding 1,920 saved
-prediction arrays and 9,584,640 forecast values. The statistical analysis
-uses 24 independent repetition aggregates. An analysis program that does
-not import the forecasting implementation reconstructs losses and all
-six primary contrasts from the predictions. Separately implemented
-feature evaluation, ridge prediction, and tree traversal check the saved
-selected states, normal equations, window chronology, and selection
-rules. Selected-state replay reproduces all 1,920 prediction arrays
-exactly in the recorded environment. Discarded hyperparameter candidates
-have saved validation scores but not all fitted coefficients; their
-selection scores can be checked without claiming an independent refit.
-
-Earlier studies retain their own evidence and verification procedures.
-The additive-correction study records 1,344 attempted standalone fits,
-including eight failures and four unavailable dependent policy outputs
-on two configurations. Its successful-subset natural-data analysis is
-identified as post hoc. The target-geometry study retains all 768
-forecasts from its 48 tasks. The direct-training study retains all 46
-planned tasks, including three with no eligible training-query windows.
-The adaptive study retains the original numerical failure and the results
-obtained after the documented solver correction. These computational
-records support traceability and consistency; they are not external
-replications or additional independent observations.
-
-The anonymous saved-forecast supplement contains the numeric predictions
-and evaluation targets for all 192 task suites, together with the fitting
-targets needed to reconstruct loss normalization. Its standalone program,
-\path{verify_saved_forecasts.py}, recomputes the eight numerical analysis
-tables and all six primary contrasts, verifies array identities, and checks
-that each saved policy forecast equals its recorded selected procedure.
-This supplement supports statistical reproduction from saved forecasts;
-it does not refit models or recompute feature bounds and resource timings.
-
-\paragraph{Use of AI tools.}
-AI tools assisted with protocol development, implementation, numerical and
-statistical verification, analysis, and writing. The authors are
-responsible for the scientific claims, the accuracy of the evidence,
-and the final manuscript.
+\input{core_introduction}
+\input{core_related}
+\input{core_method}
+\input{core_theory}
+\input{core_decoder}
+\input{core_experiment}
+\input{supporting_summary}
+\input{core_discussion}
 
 \bibliography{references}
 \bibliographystyle{tmlr}
 \appendix
-\input{appendix_controlled}
-\input{appendix_natural}
 \FloatBarrier
-\input{appendix_scaling}
-\input{appendix_utility}
+\input{focused_appendix_math}
 \FloatBarrier
-\input{appendix_target_geometry}
-\FloatBarrier
-\input{appendix_direct_reconstruction}
-\FloatBarrier
-\input{appendix_adaptive_development}
-\FloatBarrier
-\input{appendix_reconstruction_mechanism}
-\FloatBarrier
-\input{appendix_reconstruction_results}
+\input{focused_appendix_experiment}
 \end{document}

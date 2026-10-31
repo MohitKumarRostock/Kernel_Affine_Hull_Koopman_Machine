@@ -1,10 +1,11 @@
 # KAHM representations for time-series forecasting
 
-This repository contains the manuscript, implementation, and experimental evidence for **Kernel Affine Hull Representations for Time-Series Forecasting: Distinctness, Stability, and Predictive Limits**. The study examines how a Kernel Affine Hull Machine (KAHM) reconstruction contributes features to a finite forecasting model, when those features differ from simpler alternatives, and whether the resulting procedure improves prediction.
+This repository contains the manuscript, implementation, and experimental evidence for **Kernel Affine Hull Features for Time-Series Forecasting: Distinctness, Bounded Corrections, and Predictive Limits**. The study examines how a Kernel Affine Hull Machine (KAHM) reconstruction contributes features to a finite forecasting model, when those features differ from simpler alternatives, and whether the resulting procedure improves prediction.
 
 ## Manuscript and principal findings
 
 - [Manuscript PDF](extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript.pdf)
+- [Supplementary studies](extensions/tmlr_integration/review/KAHM_Supplementary_Studies.pdf)
 - [Editable LaTeX source](extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
 - [Mathematical background](extensions/reconstruction_mechanism/MATHEMATICAL_BACKGROUND.md)
 - [Experimental findings](extensions/reconstruction_mechanism/FINDINGS.md)
@@ -16,6 +17,8 @@ The theoretical analysis distinguishes three properties. A deterministic reconst
 The principal experiment compares ten procedures in 192 task suites, comprising four simulation laws, two observation-noise levels, and 24 independent repetitions. On the three nonlinear laws, the bounded KAHM procedure reduces aggregate normalized mean squared error by **12.58% relative to the common local-coordinate features**. The gains over matched RBF departures and raw-history RBF features are **1.17%** and **3.92%**, respectively; neither comparison establishes the prespecified 3% improvement under the simultaneous analysis. KAHM has **1.77% higher error than boosted trees** and **6.04% higher error than the validation-selected non-KAHM procedure**. The linear-control noninferiority criterion and all numerical stability checks are satisfied.
 
 These results support a conditional contribution of reconstruction features to a finite decoder. They do not establish a distinctive practical forecasting advantage for KAHM over the complete set of evaluated alternatives. The inferential units are the 24 repetition aggregates. The 9,584,640 individual forecast values are dependent measurements within those repetitions.
+
+The main paper contains the central definitions and theoretical statements, complete proofs, the matched forecasting experiment, and its full protocol. A concise synthesis keeps the material supporting findings and limitations visible. The companion supplementary studies provide the complete controlled, natural-data, scaling, additive, learned-geometry, direct-training, and adaptive investigations with their own notation and comparison families.
 
 ## Reproduce the principal experiment
 
@@ -39,7 +42,7 @@ The source and inputs were fixed locally before the held-out forecasts were comp
 
 | Location | Contents |
 | --- | --- |
-| `extensions/tmlr_integration/` | Manuscript source, generated displays, compiled paper, and build instructions |
+| `extensions/tmlr_integration/` | Main paper and supporting-study source, generated displays, compiled PDFs, and submission-package instructions |
 | `extensions/reconstruction_mechanism/` | Reconstruction-departure experiment, algebraic examples, saved evidence, and verification tools |
 | `extensions/predictive_geometry/` | Controlled representation and decoder experiments |
 | `extensions/natural_forecasting/` | Natural-data evaluation and dataset provenance |
@@ -59,9 +62,10 @@ The LaTeX source includes the bibliography, official TMLR style, figures, and ta
 ```bash
 cd extensions/tmlr_integration/manuscript
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
 ```
 
-Compilation does not fit forecasting models. The paper is prepared in anonymous TMLR review format. The public repository contains author-identifying information and is separate from any anonymous submission supplement. The repository does not imply that the manuscript has been submitted or accepted.
+Compilation does not fit forecasting models. Both PDFs use anonymous TMLR review formatting. The [submission-package guide](extensions/tmlr_integration/README.md) describes the main PDF and the anonymous supplement containing the supporting studies and unchanged saved-forecast evidence. The editable source retains required author-identifying license attribution and is not an anonymous review upload. The public repository does not imply that the manuscript has been submitted or accepted.
 
 ## Licensing and citation
 

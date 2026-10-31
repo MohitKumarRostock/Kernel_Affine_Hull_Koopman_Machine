@@ -1,0 +1,271 @@
+\section{Natural-data protocol}
+\label{sec:nf-protocol}
+
+Source allocation, task roster, model grids, and analysis are fixed before
+comparative outcomes.  The evaluation compares matched representations, accuracy and computational
+cost, and prospective model selection on reserved source families. The
+reproduction materials include specifications, input checksums, and source
+checkpoints. The study was not externally preregistered.
+
+\subsection{Sources and chronological tasks}
+\label{sec:nf-data}
+
+Table~\ref{tab:nf-sources} gives eight versioned Monash snapshots
+\citep{Godahewa2021Monash}, chosen by provenance, application diversity, length,
+and size.  Related series, channels, and aggregations share a source family
+and cannot cross the boundary between development and confirmation.  Models are local to
+each series, including differently dated Tourism series.  The supplement
+retains the records' CC BY 4.0 licenses, versions, attribution, original-source
+references, and archive hashes.
+
+\begin{table}[t]
+\caption{Fixed source allocation and forecast regimes.  ``Selected/all'' counts
+series, not independent source families.  Each selected series uses both regimes
+for its frequency.  $L$ is history length, $H$ forecast horizon, and $s$ the
+declared seasonal period.}
+\label{tab:nf-sources}
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lp{0.48\linewidth}cr@{}}
+\toprule
+Phase & Source snapshot & Frequency & Selected/all \\
+\midrule
+Development & Electricity \citep{DatasetElectricityWeekly} & weekly & 4/321 \\
+ & NN5, with missing values \citep{DatasetNN5Daily} & daily & 4/111 \\
+ & Tourism \citep{DatasetTourismMonthly} & monthly & 4/366 \\
+ & FRED-MD \citep{DatasetFREDMD} & monthly & 4/107 \\
+\midrule
+Confirmation & Traffic \citep{DatasetTrafficWeekly} & weekly & 4/862 \\
+ & Hospital \citep{DatasetHospitalMonthly} & monthly & 4/767 \\
+ & Saugeen River flow \citep{DatasetSaugeenDaily} & daily & 1/1 \\
+ & US births \citep{DatasetUSBirthsDaily} & daily & 1/1 \\
+\bottomrule
+\end{tabular}
+\par\medskip
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Frequency & Short $(L,H)$ & Long $(L,H)$ & $s$ \\
+\midrule
+Monthly & $(12,3)$ & $(24,6)$ & 12 \\
+Weekly & $(13,4)$ & $(26,8)$ & 52 \\
+Daily & $(28,7)$ & $(56,14)$ & 7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Training-prefix eligibility requires at least 16 finite windows in each regime
+and a positive training error scale.  A fixed salted hash of source and series
+ID orders eligible series; we retain the first four, or all if fewer exist,
+across regimes and capacities.  No later loss or availability criterion selects
+replacements.  The 26 series give 52 base tasks; two capacities and seeds 17
+and 43 give 208 runs: 128 development and 80 confirmation, with four source
+families per phase.
+
+For a length-$n$ series indexed from zero, let
+$a=\lfloor3n/5\rfloor$ and $b=\lfloor4n/5\rfloor$.  Training, validation, and
+test intervals are $[0,a)$, $[a,b)$, and $[b,n)$.  An origin $t$ is the last
+observed index, with
+\begin{equation}
+ x_t=(y_{t-L+1},\ldots,y_t)^\top,\qquad
+ y_t^+=(y_{t+1},\ldots,y_{t+H})^\top.
+ \label{eq:nf-forecast-window}
+\end{equation}
+The complete target interval must lie within its split; contexts may include
+earlier observed values.  Stateful controls receive $t+1$, their first-future
+index.  We retain raw snapshot values, including NN5 missing markers, and
+discard windows with an unavailable context or target without interpolation.
+Evenly spaced indices among available origins give at most 64 validation and
+64 test windows, and the training cap in Table~\ref{tab:nf-capacity}.  Every
+method receives the same evaluation origins.
+
+Before outcomes, length checks reduced the proposed monthly $(48,6)$ and
+weekly $(52,8)$ regimes, which yield zero Hospital and three Traffic training
+windows.  The adopted long regimes yield 21 and 29, respectively.  Context
+and horizon are paired, so their separate effects are not identified.
+NN5 T88 at $(56,14)$ retains only seven test origins out of 146 candidates.
+All task availability counts are recorded.
+
+All candidate preprocessing is fitted on training data, and validation MSE
+selects hyperparameters.  The selected pipeline is then fitted anew on all
+eligible windows with targets preceding $b$, subject to its training cap.
+This refit includes windows crossing the former training/validation
+boundary because all their targets precede the test segment.  Parameters are fixed thereafter; earlier realized observations may
+enter later contexts or state updates.  Test outcomes never retune parameters.
+
+\subsection{Comparators, capacity, and loss}
+\label{sec:nf-comparators}
+
+The twelve methods comprise raw ridge and raw RBF heads; affine-, locality-,
+and KAHM-gated local RBF pipelines; each local pipeline augmented by the full
+raw history; and seasonal naive, Holt, histogram gradient boosting, and a
+one-hidden-layer MLP.  Section~\ref{sec:nf-methods} defines the feature maps and
+finite RBF head.  The primary matched pair is raw RBF ($R$) versus raw-history
+plus KAHM RBF ($K$).  The raw-history controls retain the inputs independently
+of local-basis rank (Proposition~\ref{prop:nf-raw-preservation}).  The evaluation reports every method in this twelve-method portfolio.
+
+The geometric bank uses cluster counts $(2,4,8)$, requested rank two, at most
+24 references per local model, a 512-row fitting cap, $\omega=16$, and
+$\tau=10^{-6}$.  Reduced effective ranks and numerical fallbacks are recorded.
+Each alternative constructs its own representation; affine/locality controls
+do not fit a KAHM kernel.  Within a method, the fixed representation and head
+statistics are reused across ridge penalties $\{0.01,1,100\}$; the bandwidth
+multiplier is one.  Boosting/MLP regularization is chosen from $\{0.01,1\}$,
+Holt selects damped or undamped trend, and seasonal naive has no tuned parameter.
+These modest declared grids do not imply optimal tuning of every comparator.
+
+\begin{table}[t]
+\caption{Capacity caps.  These are limits on examples and model size, not equal
+realized time budgets.  A shorter source uses its available examples.}
+\label{tab:nf-capacity}
+\centering\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Setting & Training windows & RBF landmarks & Tree leaves/iterations & MLP width/iterations \\
+\midrule
+Small & 512 & 32 & 15/100 & 32/200 \\
+Medium & 1,024 & 64 & 31/150 & 64/300 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Seasonal naive can use its declared lag from the observed past even when it
+exceeds $L$, using the last finite value for an unavailable lag and period one
+before a full seasonal lag exists.  Holt fits a capped historical segment,
+forward-fills only within that segment, and assimilates observations strictly
+before each forecast; an absent online observation causes a state prediction
+without measurement update.  Boosting and MLP fit direct multi-output forecasts
+without a random internal validation split.
+
+For a nonempty set $\mathcal O$ of evaluated forecast origins, the
+scaled task loss is
+\begin{equation}
+ \ell=\frac{1}{|\mathcal O|Hq}
+       \sum_{t\in\mathcal O}\sum_{h=1}^{H}
+       (\widehat y_{t+h}-y_{t+h})^2,
+ \label{eq:nf-scaled-loss}
+\end{equation}
+Here $q$ is fitted on the uncapped initial training prefix. For seasonal
+period $s$, let $\mathcal P_s$ contain indices for which both $y_i$ and
+$y_{i-s}$ are finite observations in that prefix. The seasonal scale is
+$q_s=|\mathcal P_s|^{-1}\sum_{i\in\mathcal P_s}(y_i-y_{i-s})^2$
+when at least two such pairs exist. We use $q=q_s$ if this value is
+positive and finite; otherwise we apply the same rule with $s=1$. A
+series with neither valid scale is ineligible.  This denominator remains fixed during refitting.  Raw MSE,
+$q$, predictions, and origin losses are saved and independently checked.
+
+For each source family, we average seeds and capacities within each
+history--horizon regime, then regimes within each series, and finally
+series within the family. The overall mean weights source families equally.  These nested observations are not
+independent source replications.  We report family outcomes, dispersion, and
+leave-one-family-out sensitivity, without broad-population confidence intervals
+or window-level significance claims.
+
+\subsection{Measured pipeline and selector costs}
+\label{sec:nf-costs}
+
+Methods execute sequentially in fresh child processes with one BLAS thread
+and deterministically shuffled order, limited to 120 seconds per method and
+1,800 per task.  Wall and process CPU time are separate.  Each warm-library
+scientific pipeline includes
+data/checksum preparation, array loading, configuration fitting and validation,
+selection bookkeeping, selected refitting, forecasting, and model serialization.
+Source preparation is equally allocated across its tasks and charged consistently
+to alternatives.  Shared imports are initialized before measurement;
+initialization, process launch/IPC, and launch-to-result duration are recorded
+separately rather than allocated arbitrarily to policies.
+
+Let $S_m$ be the set of computational steps for searching method $m$
+and $F_m$ the steps for its final refit, forecasts, and serialization.
+Let $\mathcal D_{\rm data}$ contain shared data preparation steps,
+$c_v$ be the measured cost of step $v$, and $c_{\rm decision}$ the
+selection bookkeeping cost. A validation selector over candidate set
+$\mathcal A$ chooses method $m^*$ and incurs
+\begin{equation}
+ \mathcal D_{\rm val}=\mathcal D_{\rm data}
+      \cup\bigcup_{m\in\mathcal A}S_m\cup F_{m^*},\qquad
+ C=\sum_{v\in\mathcal D_{\rm val}}c_v+c_{\rm decision}.
+ \label{eq:nf-selector-cost}
+\end{equation}
+Set unions count shared dependencies once.  A learned selector instead pays
+for its required metadata/geometry/probe nodes plus $S_{m^*}\cup F_{m^*}$,
+even when it rejects KAHM.  Geometry-only acquisition is conservatively billed
+through its measured fitted-probe component.  Thus policy costs are
+counterfactual sums of measured required computations, not the cost of running
+every alternative in the benchmark.
+
+Development-label acquisition also costs the $R,K$ searches, refits, and
+forecasts, plus each variant's feature/probe nodes.  We report this investment
+separately from regression fitting, online policy costs, and the full research
+benchmark's elapsed time, without assuming a deployment count for amortization.
+Summed standalone task costs are conservative where sharing across seeds or
+capacities could reduce work.
+
+We also record serialized model bytes and peak process resident set
+size (RSS).  RSS includes the
+interpreter, arrays present at worker initialization, and earlier process history; it is neither
+incremental memory nor an additive exact policy-memory reconstruction.  No
+GPU measurement is inferred from CPU timing.  Failed attempts remain visible
+and retain the available timing records.  Method failures are included in the coverage accounting before losses
+are aggregated over the specified task and method roster.
+
+\subsection{Prospective benefit diagnostic}
+\label{sec:nf-diagnostic}
+
+The diagnostic predicts benefit before a task's test outcomes, while using
+its training history and permitted validation information.  Its development
+label is $\log[(\ell_R+\epsilon)/(\ell_K+\epsilon)]$, with
+$\epsilon=10^{-12}$.  Development test errors may train this cross-task rule;
+confirmation errors cannot train, standardize, tune, or select it.
+
+We retain four weighted ridge rules: metadata $M$, $M$ plus geometry $G$,
+$M$ plus a validation probe $P$, and $M+P+G$.  With $N_{\rm train}$ denoting the number of retained training windows,
+the metadata features are $\log(1+N_{\rm train})$, $\log(1+H/L)$, and training-prefix lag-one
+autocorrelation, computed from finite adjacent observation pairs and set
+to zero if either variance is zero or fewer than three pairs are available.
+Geometry adds normalized KAHM gate entropy and $\log(1+r)$. For
+$n_p$ probe-training inputs $z_i\in\R^d$ and the three partition
+blocks $\mathcal C_b$, these quantities are
+\[
+ E_{\rm gate}=-\frac{1}{3n_p}\sum_{b=1}^3\sum_{i=1}^{n_p}
+ \frac{\sum_{c\in\mathcal C_b}\phi_c(z_i)\log\phi_c(z_i)}
+ {\log|\mathcal C_b|},\qquad
+ r=\frac{1}{3n_pd}\sum_{b=1}^3\sum_{i=1}^{n_p}
+ \sum_{c\in\mathcal C_b}\phi_c(z_i)\|z_i-a_c(z_i)\|_2^2.
+\]
+The gates and affine reconstructions are defined in
+Appendix~\ref{sec:nf-methods}. A singleton block would contribute
+zero normalized entropy.  The probe fits the matched $R,K$ pair with at most 128 training
+windows, 16 landmarks, a 128-row bank cap, and penalty one; its feature is
+the log ratio of scaled validation losses with the same loss floor.
+
+The diagnostic penalty is fixed at one, with an unpenalized intercept.
+Source-balanced feature standardization and fitting occur inside each
+development fold, holding out an entire source family.  All four variants are
+then fitted on all development families and frozen before confirmation.
+The primary incremental comparison is $M+P+G$ against $M+P$, testing whether
+geometry adds value beyond metadata and a reduced-capacity validation probe.
+Controls include always $R$, always $K$, direct probe selection, validation
+selection within the matched pair, the six-method raw/practical portfolio,
+the two-method KAHM portfolio, and the full twelve-method portfolio.
+
+A positive predicted log benefit selects $K$; zero or negative estimates
+select $R$.  A fixed 5\%
+relative MSE change defines secondary practical benefit/harm, not a tuned
+selection threshold.  All four variants are reported without choosing one from
+confirmation performance.  A test-set oracle is only a hindsight regret
+reference.  Utility requires improved held-out loss--cost behavior against
+metadata and probe controls, not merely correlation with retrospective gains.
+
+Before confirmation, a verification program checks development predictions
+against their targets and reported errors. The archived checkpoint records
+the code, dependencies, task roster, development records, and diagnostic
+coefficients. Confirmation evaluates the complete specified roster.
+This is a selected, small collection, not a random sample of forecasting
+domains or a state-of-the-art survey.  Seasonal periods are conventions rather
+than fitted optimal cycles.  In particular, FRED-MD is a fixed-vintage
+snapshot: its metadata describe transformed series without a complete
+per-series preprocessing audit \citep{DatasetFREDMD}.  Our train-only guarantees
+apply to processing in this extension, not to unverified upstream decisions,
+historical revisions, or release-time availability.  The conclusions must
+remain conditional on these sources, contexts, grids, and resource settings.

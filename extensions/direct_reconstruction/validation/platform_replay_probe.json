@@ -1,0 +1,402 @@
+{
+  "ci_context": {
+    "cpu_model_recorded": false,
+    "failed_region": "westus",
+    "failed_run_id": 41185059891,
+    "failure": "synthetic__duffing__11200: Data regeneration does not reproduce the saved input hashes",
+    "passed_region": "centralus",
+    "passed_run_id": 41185063787,
+    "python": "3.12.15",
+    "runner_image": "20261025.179.1",
+    "scope": "Same-commit jobs used the same recorded OS image; no direct CPU/ufunc dispatch trace was available for the failed worker.",
+    "source": "Failure log plus parent-reported duplicate run comparison",
+    "ubuntu": "26.04.1 LTS"
+  },
+  "direct_four_batch_probe": {
+    "command_argv": [
+      "python",
+      "-c",
+      "import json,numpy as np\nfrom pathlib import Path\nfrom extensions.predictive_geometry.study.datasets import generate_episodes\nroot=Path('extensions/direct_reconstruction/results');p=json.loads((root/'protocol.json').read_text());task=next(t for t in p['tasks'] if t['task_id']=='synthetic__duffing__84200');answer={}\nwith np.load(root/task['prepared_path'],allow_pickle=False) as f:\n for split in 'ABCD':\n  m=task['split_records'][split];fresh=generate_episodes('duffing',m['episode_count'],72,m['generator_seed'])[:,:,0];saved=f[split+'_episodes'];d=fresh-saved\n  answer[split]={'episodes':m['episode_count'],'values':saved.size,'different_values':int(np.sum(saved!=fresh)),'max_absolute_difference':float(np.max(np.abs(d))),'rms_difference':float(np.sqrt(np.mean(d*d))),'exact':bool(np.array_equal(saved,fresh))}\nprint(json.dumps(answer))\n"
+    ],
+    "model_fits": 0,
+    "results": {
+      "AVX512_disabled": {
+        "A": {
+          "different_values": 1193,
+          "episodes": 64,
+          "exact": false,
+          "max_absolute_difference": 5.576095141179849e-14,
+          "rms_difference": 2.590612696863272e-15,
+          "values": 4608
+        },
+        "B": {
+          "different_values": 206,
+          "episodes": 32,
+          "exact": false,
+          "max_absolute_difference": 1.2101430968414206e-14,
+          "rms_difference": 1.2945967099292786e-15,
+          "values": 2304
+        },
+        "C": {
+          "different_values": 357,
+          "episodes": 32,
+          "exact": false,
+          "max_absolute_difference": 2.0383694732117874e-13,
+          "rms_difference": 1.8586113969001653e-14,
+          "values": 2304
+        },
+        "D": {
+          "different_values": 3121,
+          "episodes": 128,
+          "exact": false,
+          "max_absolute_difference": 2.0122792321330962e-14,
+          "rms_difference": 1.8404207812409274e-15,
+          "values": 9216
+        }
+      },
+      "native": {
+        "A": {
+          "different_values": 0,
+          "episodes": 64,
+          "exact": true,
+          "max_absolute_difference": 0.0,
+          "rms_difference": 0.0,
+          "values": 4608
+        },
+        "B": {
+          "different_values": 0,
+          "episodes": 32,
+          "exact": true,
+          "max_absolute_difference": 0.0,
+          "rms_difference": 0.0,
+          "values": 2304
+        },
+        "C": {
+          "different_values": 0,
+          "episodes": 32,
+          "exact": true,
+          "max_absolute_difference": 0.0,
+          "rms_difference": 0.0,
+          "values": 2304
+        },
+        "D": {
+          "different_values": 0,
+          "episodes": 128,
+          "exact": true,
+          "max_absolute_difference": 0.0,
+          "rms_difference": 0.0,
+          "values": 9216
+        }
+      }
+    },
+    "study": "extensions/direct_reconstruction",
+    "task_id": "synthetic__duffing__84200",
+    "timing": {
+      "per_subprocess_seconds": null,
+      "tool_reported_outer_command_wall_seconds": 0.362385237
+    },
+    "variants_executed": [
+      "native",
+      "AVX512_disabled"
+    ]
+  },
+  "environment": {
+    "disabled_avx512_feature_list": [
+      "AVX512F",
+      "AVX512CD",
+      "AVX512_KNL",
+      "AVX512_KNM",
+      "AVX512_SKX",
+      "AVX512_CLX",
+      "AVX512_CNL",
+      "AVX512_ICL",
+      "AVX512_SPR"
+    ],
+    "environment_note": "Each child process inherited os.environ and applied the stated thread and variant overrides before importing NumPy. An earlier unmodified environment introspection process showed nine BLAS threads; it was not a generator diagnostic subprocess.",
+    "float64_dispatch_observation": {
+      "cos": {
+        "AVX512_disabled_current": "AVX2",
+        "available": "AVX512_SKX AVX2 baseline(SSE SSE2 SSE3)",
+        "native_current": "AVX512_SKX"
+      },
+      "power": {
+        "AVX512_disabled_current": "baseline(SSE SSE2 SSE3)",
+        "available": "AVX512_SKX baseline(SSE SSE2 SSE3)",
+        "native_current": "AVX512_SKX"
+      },
+      "sin": {
+        "AVX512_disabled_current": "AVX2",
+        "available": "AVX512_SKX AVX2 baseline(SSE SSE2 SSE3)",
+        "native_current": "AVX512_SKX"
+      },
+      "tanh": {
+        "AVX512_disabled_current": "AVX2",
+        "available": "AVX512_SKX AVX2 baseline(SSE SSE2 SSE3)",
+        "native_current": "AVX512_SKX"
+      }
+    },
+    "glibc": "2.39",
+    "native_numpy_cpu_baseline": [
+      "SSE",
+      "SSE2",
+      "SSE3"
+    ],
+    "native_numpy_cpu_dispatch": [
+      "SSSE3",
+      "SSE41",
+      "POPCNT",
+      "SSE42",
+      "AVX",
+      "F16C",
+      "FMA3",
+      "AVX2",
+      "AVX512F",
+      "AVX512CD",
+      "AVX512_KNL",
+      "AVX512_KNM",
+      "AVX512_SKX",
+      "AVX512_CLX",
+      "AVX512_CNL",
+      "AVX512_ICL",
+      "AVX512_SPR"
+    ],
+    "native_numpy_enabled_features": [
+      "MMX",
+      "SSE",
+      "SSE2",
+      "SSE3",
+      "SSSE3",
+      "SSE41",
+      "POPCNT",
+      "SSE42",
+      "AVX",
+      "F16C",
+      "FMA3",
+      "AVX2",
+      "AVX512F",
+      "AVX512CD",
+      "AVX512VPOPCNTDQ",
+      "AVX512VL",
+      "AVX512BW",
+      "AVX512DQ",
+      "AVX512VNNI",
+      "AVX512IFMA",
+      "AVX512VBMI",
+      "AVX512VBMI2",
+      "AVX512BITALG",
+      "AVX512_SKX",
+      "AVX512_CLX",
+      "AVX512_CNL",
+      "AVX512_ICL"
+    ],
+    "numpy": "2.3.5",
+    "openblas_architecture": "SkylakeX",
+    "openblas_version": "0.3.30",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "probe_thread_environment_overrides": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+    },
+    "python": "3.12.14",
+    "scikit_learn": "1.8.0",
+    "scipy": "1.17.0",
+    "variants": {
+      "AVX512_AVX2_FMA3_disabled": {
+        "NPY_DISABLE_CPU_FEATURES": "AVX512F,AVX512CD,AVX512_KNL,AVX512_KNM,AVX512_SKX,AVX512_CLX,AVX512_CNL,AVX512_ICL,AVX512_SPR,AVX2,FMA3"
+      },
+      "AVX512_disabled": {
+        "NPY_DISABLE_CPU_FEATURES": "AVX512F,AVX512CD,AVX512_KNL,AVX512_KNM,AVX512_SKX,AVX512_CLX,AVX512_CNL,AVX512_ICL,AVX512_SPR"
+      },
+      "native": {}
+    }
+  },
+  "execution_recipe": {
+    "argv_convention": "Each probe uses the exact command_argv below. For each declared variant, launch a fresh subprocess with env=dict(os.environ, **probe_thread_environment_overrides, **variants[variant]); capture stdout/stderr as text. Native used no NPY_DISABLE_CPU_FEATURES override.",
+    "timing_note": "Per-child timers and actual probe start/end timestamps were not instrumented. Tool-reported command wall times below cover an outer diagnostic driver and its subprocesses; they are not forecast-pipeline timings. The record timestamp is the subsequent verified UTC clock reading."
+  },
+  "historical_probe": {
+    "command_argv": [
+      "python",
+      "-c",
+      "import json, numpy as np\nfrom pathlib import Path\nfrom extensions.target_geometry.analysis import reconstruct_inputs\nfrom extensions.target_geometry.data import array_hash\nbase=Path('extensions/target_geometry');cfg=json.loads((base/'config.json').read_text());report=json.loads((base/'results/v1/synthetic__duffing__11200/result.json').read_text());arrays=reconstruct_inputs(report['task'],cfg)\nwith np.load(base/'results/v1/synthetic__duffing__11200/predictions.npz',allow_pickle=False) as p:\n errors={s:{'different':int(np.sum(arrays[k]!=p[s])),'max_abs':float(np.max(np.abs(arrays[k]-p[s])))} for s,k in [('target','Y_test'),('validation_target','Y_validation')]}\nprint(json.dumps({'all_hashes_match':{k:array_hash(v)==report['arrays_sha256'][k] for k,v in arrays.items()},'saved_target_differences':errors}))\n"
+    ],
+    "elementwise_scope": "Changed-value counts and maximum differences were captured only for archived test and validation targets; training and all X arrays were compared by canonical hash. Total target element counts were not printed by this probe.",
+    "results": {
+      "AVX512_AVX2_FMA3_disabled": {
+        "array_hash_matches": {
+          "X_test": false,
+          "X_train": false,
+          "X_validation": false,
+          "Y_test": false,
+          "Y_train": false,
+          "Y_validation": false,
+          "groups_test": true,
+          "groups_train": true,
+          "groups_validation": true,
+          "origins_test": true,
+          "origins_train": true,
+          "origins_validation": true
+        },
+        "returncode": 0,
+        "saved_target_differences": {
+          "test": {
+            "different_values": 2411,
+            "max_absolute_difference": 4.04121180963557e-14
+          },
+          "validation": {
+            "different_values": 1243,
+            "max_absolute_difference": 1.4988010832439613e-14
+          }
+        },
+        "stderr": ""
+      },
+      "AVX512_disabled": {
+        "array_hash_matches": {
+          "X_test": false,
+          "X_train": false,
+          "X_validation": false,
+          "Y_test": false,
+          "Y_train": false,
+          "Y_validation": false,
+          "groups_test": true,
+          "groups_train": true,
+          "groups_validation": true,
+          "origins_test": true,
+          "origins_train": true,
+          "origins_validation": true
+        },
+        "returncode": 0,
+        "saved_target_differences": {
+          "test": {
+            "different_values": 1180,
+            "max_absolute_difference": 4.030109579389318e-14
+          },
+          "validation": {
+            "different_values": 683,
+            "max_absolute_difference": 1.4988010832439613e-14
+          }
+        },
+        "stderr": ""
+      },
+      "native": {
+        "array_hash_matches": {
+          "X_test": true,
+          "X_train": true,
+          "X_validation": true,
+          "Y_test": true,
+          "Y_train": true,
+          "Y_validation": true,
+          "groups_test": true,
+          "groups_train": true,
+          "groups_validation": true,
+          "origins_test": true,
+          "origins_train": true,
+          "origins_validation": true
+        },
+        "returncode": 0,
+        "saved_target_differences": {
+          "test": {
+            "different_values": 0,
+            "max_absolute_difference": 0.0
+          },
+          "validation": {
+            "different_values": 0,
+            "max_absolute_difference": 0.0
+          }
+        },
+        "stderr": ""
+      }
+    },
+    "study": "extensions/target_geometry",
+    "task_id": "synthetic__duffing__11200",
+    "timing": {
+      "initial_tool_wait_seconds": 1.001297619,
+      "initial_wait_completed_process": false,
+      "note": "The initial tool call yielded while the process was running; the subsequent completion did not provide an instrumented total duration.",
+      "total_driver_wall_seconds": null
+    },
+    "variants_executed": [
+      "native",
+      "AVX512_disabled",
+      "AVX512_AVX2_FMA3_disabled"
+    ]
+  },
+  "interpretation": [
+    "The native local dispatch reproduces the observed original task hashes and all four saved new-task episode batches exactly.",
+    "Changing only NumPy dispatch availability can change Duffing floating-point outputs while leaving episode/origin indices unchanged. The power(x,3) primitive probe specifically demonstrates a kernel-dependent last-bit difference.",
+    "Small numerical differences still fail the unchanged exact generator-replay check; numerical closeness is not a passed bitwise audit.",
+    "Saved archive/input hashes and bitwise generation are separate reproducibility properties. This diagnostic does not modify saved inputs, hashes, outcomes, or frozen audit rules.",
+    "Disabling AVX512 globally is not a repair for these recorded hashes. Matching package versions and OS alone does not guarantee matching CPU-selected kernels.",
+    "A compatible numerical environment is required for full strict replay. Sampled primitive equality for cosine/sine/tanh does not prove equality for every possible input."
+  ],
+  "primary_documentation": [
+    "https://numpy.org/doc/2.3/reference/simd/how-it-works.html",
+    "https://numpy.org/doc/2.3/reference/simd/build-options.html",
+    "https://sourceware.org/glibc/manual/2.39/html_node/Hardware-Capability-Tunables.html"
+  ],
+  "primitive_probe": {
+    "command_argv": [
+      "python",
+      "-c",
+      "import json,numpy as np\nfrom pathlib import Path\nfrom extensions.predictive_geometry.study.datasets import generate_episodes\nrng=np.random.default_rng(78213);x=rng.uniform(-2,2,size=128);phase=rng.uniform(0,2*np.pi,size=128)\nops={'power3':np.power(x,3),'cos':np.cos(phase),'sin':np.sin(phase),'tanh':np.tanh(x)}\nrun=Path('extensions/direct_reconstruction/results'); protocol=json.loads((run/'protocol.json').read_text());task=next(t for t in protocol['tasks'] if t['task_id']=='synthetic__duffing__84200');a=task['split_records']['A']; regenerated=generate_episodes('duffing',a['episode_count'],72,a['generator_seed'])[:,:,0]\nwith np.load(run/task['prepared_path'],allow_pickle=False) as f:\n saved=f['A_episodes'];difference={'different_values':int(np.sum(saved!=regenerated)),'max_abs':float(np.max(np.abs(saved-regenerated))),'exact':bool(np.array_equal(saved,regenerated))}\nprint(json.dumps({'operation_hex':{k:v.tobytes().hex() for k,v in ops.items()},'dispatch':np.lib.introspect.opt_func_info(func_name='^(power|cos|sin|tanh)$'),'new_direct_A_generator':difference}))\n"
+    ],
+    "comparison_note": "In the executed outer driver the disabled result key was no_avx512; the environment is identical to the AVX512_disabled variant recorded here. Returned hexadecimal arrays were used for the comparison but are not duplicated in this compact record.",
+    "comparison_python": "for name in variants['native']['operation_hex']:\n a=np.frombuffer(bytes.fromhex(variants['native']['operation_hex'][name]),dtype=np.float64);b=np.frombuffer(bytes.fromhex(variants['no_avx512']['operation_hex'][name]),dtype=np.float64)\n comparison[name]={'different':int(np.sum(a!=b)),'max_abs':float(np.max(np.abs(a-b)))}",
+    "new_task_A_crosscheck": "synthetic__duffing__84200",
+    "new_task_A_results": {
+      "AVX512_disabled": {
+        "different_values": 1193,
+        "exact": false,
+        "max_absolute_difference": 5.576095141179849e-14
+      },
+      "native": {
+        "different_values": 0,
+        "exact": true,
+        "max_absolute_difference": 0.0
+      }
+    },
+    "random_seed": 78213,
+    "results": {
+      "cos": {
+        "different_values": 0,
+        "max_absolute_difference": 0.0
+      },
+      "power3": {
+        "different_values": 5,
+        "max_absolute_difference": 8.881784197001252e-16
+      },
+      "sin": {
+        "different_values": 0,
+        "max_absolute_difference": 0.0
+      },
+      "tanh": {
+        "different_values": 0,
+        "max_absolute_difference": 0.0
+      }
+    },
+    "timing": {
+      "per_subprocess_seconds": null,
+      "tool_reported_outer_command_wall_seconds": 0.228681358
+    },
+    "values_per_operation": 128,
+    "variants_executed": [
+      "native",
+      "AVX512_disabled"
+    ]
+  },
+  "recorded_absolute_working_directory": "/workspace/scratch/fa9a3361d0d9/work/kahm_repository",
+  "recorded_at_utc": "2026-10-31T08:42:24+00:00",
+  "schema_version": 1,
+  "scope": {
+    "audit_checks_relaxed": false,
+    "coverage": "One historical Duffing task; one new Duffing task with all four episode batches; one 128-value primitive probe. No claim that every source, task, CPU, or platform was tested.",
+    "model_fits": 0,
+    "purpose": "Diagnose bitwise inherited-generator portability, not re-evaluate predictive accuracy or model cost.",
+    "remote_cause_status": "Matching failure mechanism reproduced locally. The failed GitHub worker CPU was not logged, so its exact hardware cause remains an inference.",
+    "saved_evidence_modified": false,
+    "scientific_files_edited": false
+  },
+  "status": "Post-execution non-scientific platform diagnostic; transcribed from completed tool outputs without rerunning the experiments.",
+  "working_directory": "repository root"
+}

@@ -32,7 +32,7 @@
       "passed": true,
       "summary_sha256": "8de635d9141c26fe0d6a42dc6ff5c11fdeed0c5e4f424ff46dcdda3abbd681d4"
     },
-    "execution_note": "The preserved historical script retains the absolute workspace paths used during this check; its two path constants identify the original run and report location. The main frozen analyzer is portable.",
+    "execution_note": "The preserved historical script retains the absolute workspace paths used during this check; its two path constants identify the original run and report location. The main analyzer resolves repository-relative paths; strict numerical replay also requires compatible CPU-dispatched kernels.",
     "imports_study_model_or_analyzer": false,
     "primary_outcome_counts": {
       "negative": 6,
@@ -49,7 +49,9 @@
     "Passing engineering checks does not imply a distinctive predictive contribution.",
     "No independent refit of every hyperparameter candidate is claimed.",
     "Public checkpoint timing cannot rule out an unrecorded private evaluation; fitting API excludes D targets and the preserved run follows the frozen design.",
-    "The three empty-B rideshare tasks remain unavailable; full four-collection aggregates are undefined."
+    "The three empty-B rideshare tasks remain unavailable; full four-collection aggregates are undefined.",
+    "Matching package versions alone does not guarantee bitwise generator replay across CPU dispatch paths; frozen checks and original outcomes remain unchanged.",
+    "The selected-state tolerance can also fail across CPU dispatch paths for a saved raw-RBF comparator; the preserved no-refit diagnostic measures roundoff-scale loss changes and does not relabel a failed strict replay as passed."
   ],
   "post_execution_evidence_audit": {
     "anticipated_unavailable_tasks": 3,
@@ -73,6 +75,28 @@
     "report_sha256": "1e49bae05d523399cbf0cee24d0068147b7ddf5e714b8678f0f95e7af24f9cc2",
     "selected_models": 731,
     "total_checks": 543017
+  },
+  "post_execution_platform_diagnostic": {
+    "forecasting_fits": 0,
+    "report_path": "validation/platform_replay_probe.json",
+    "report_sha256": "acf603c7e7127d669f740e4be93e7a2ab0a419e221cf2ce48ba3f6d4afa3df20",
+    "scope": "One new Duffing task: native bitwise regeneration succeeds; disabling AVX-512 produces roundoff-scale differences and fails the unchanged exact check. This is a post-execution environment diagnostic, not a replacement scientific audit."
+  },
+  "post_execution_selected_state_platform_diagnostic": {
+    "forecasting_fits": 0,
+    "report_path": "validation/raw_rbf_portability_diagnostic.json",
+    "report_sha256": "52e77b2b3988ec365561cb6c87a41fe47ee07499eaa471bcc649ab1414f56f96",
+    "scope": "One already selected Wikipedia raw-RBF state: altered NumPy dispatch crosses the unchanged pointwise replay tolerance on C/D, with relative MSE changes below 1e-14. Native replay passes. No predictions or inference results are replaced.",
+    "script_path": "validation/raw_rbf_cpu_probe.py",
+    "script_sha256": "edbc32f86ee3498a76924f609b3814d953f7c6c3cba8b41d92061c7fd1817310"
+  },
+  "post_publication_workflow": {
+    "corrected_test_invocation": "Both frozen test scripts run directly; the model test receives the repository root on PYTHONPATH.",
+    "frozen_scientific_file_hashes_preserved": 32,
+    "full_successful_hosted_workflow": "https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/actions/runs/41185641611",
+    "scope": "Tests, restoration, strict frozen evidence audit, manuscript compilation and packaging all pass on this hosted run. A duplicate run on another worker fails exact Duffing regeneration and two pointwise raw-RBF replay checks; the diagnostic records investigate these environment sensitivities without relaxing the checks.",
+    "tested_commit": "3340572db8ea52a8b14dacebc20b14ca56718148",
+    "tests_passed": 31
   },
   "pre_freeze_natural_input_audit": {
     "checks": {

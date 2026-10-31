@@ -47,6 +47,15 @@ jobs:
           cache-dependency-path: extensions/direct_reconstruction/requirements.txt
       - name: Install declared numerical dependencies
         run: python -m pip install -r extensions/direct_reconstruction/requirements.txt
+      - name: Record the numerical runtime for strict replay
+        run: |
+          python - <<'PY'
+          import platform
+          import numpy as np
+          print(platform.platform())
+          np.show_runtime()
+          print('Frozen generator replay requires identical numerical dispatch; CPU differences are not silently tolerated.')
+          PY
       - name: Check numerical contracts and chronological protocol
         env:
           PYTHONPATH: ${{ github.workspace }}

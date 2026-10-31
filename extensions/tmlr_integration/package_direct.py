@@ -325,6 +325,15 @@ candidate, establish global optimality, or certify unrecorded evaluations.
 The local Git membership check is available when the recorded commit object
 exists; standalone extracted archives still verify bytes and recorded hashes.
 
+Strict numerical replay also depends on compatible CPU-dispatched kernels,
+not just package versions. A preserved post-execution diagnostic under
+`extensions/direct_reconstruction/validation/platform_replay_probe.json`
+shows that disabling AVX-512 changes some Duffing values at roundoff scale
+and fails the unchanged exact generator check. Consult the extension README
+for the observed environment limitations, including one raw-RBF selected-state
+pointwise replay failure under altered dispatch. Saved-file hash verification remains
+separate from regenerating numerical values on a different processor.
+
 Repository checkouts transport task evidence as lossless per-task archives.
 The packaging audit verifies and restores those files automatically when a
 packed manifest is present. Before running the original analyzer directly on

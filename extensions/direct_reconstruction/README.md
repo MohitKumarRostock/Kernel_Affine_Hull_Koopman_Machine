@@ -78,6 +78,27 @@ Use Python 3.12 with NumPy 2.3.5, SciPy 1.17.0 and scikit-learn 1.8.0.
 The exact host and environment are captured in the execution records.
 The runner sets numerical-library thread counts to one before imports.
 
+**Bitwise replay limitation.** Package-version pins alone do not guarantee
+identical Duffing regeneration across CPU dispatch paths. Native local replay
+uses NumPy's `AVX512_SKX` float64 power kernel and matches the saved inputs.
+Disabling AVX-512 changes values by up to `2.04e-13` in the four batches of
+one checked new-study task, which fails the unchanged exact generator check.
+The [recorded platform probe](validation/platform_replay_probe.json) preserves
+the commands, environment, measured differences, and limited scope. Saved
+input and result hashes remain unchanged; numerical closeness does not count
+as a passed bitwise audit. Full strict replay requires compatible numerical
+kernels in addition to the declared package versions.
+
+A [separate one-state probe](validation/raw_rbf_portability_diagnostic.json)
+also reproduces a strict selected-state replay failure for Wikipedia's third
+raw-RBF comparator when NumPy AVX-512 is disabled. One-ulp exponential-kernel
+differences grow into prediction changes of at most `2.18e-9`, crossing the
+unchanged pointwise tolerance near zero; relative MSE changes stay below
+`1e-14`. Native replay passes. The [probe script](validation/raw_rbf_cpu_probe.py)
+performs no fits. A complete [hosted strict audit and package build](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/actions/runs/41185641611)
+also passed, while another worker failed the documented checks. The preserved
+forecasts, scientific source, analysis and tolerances are unchanged.
+
 
 A repository checkout stores completed task evidence in lossless ZIP files.
 Restore their exact original bytes and audit all saved outcomes with:

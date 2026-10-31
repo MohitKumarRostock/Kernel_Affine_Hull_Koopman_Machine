@@ -1,0 +1,799 @@
+{
+  "scope": "Bounded diagnosis of one already-fitted raw RBF selected state; no refits, generators or frozen-source edits",
+  "task": "wikipedia_daily__03",
+  "method": "raw_rbf",
+  "strict_audit_tolerances": {
+    "rtol": 1e-10,
+    "atol": 1e-10
+  },
+  "configurations": {
+    "native": {
+      "task": "wikipedia_daily__03",
+      "method": "raw_rbf",
+      "selected_state_sha256": "61c2a26243316ffaffd9e73ab2394f7f13cbf7e51959193e0472f3cf036e2b52",
+      "probe_sha256": "edbc32f86ee3498a76924f609b3814d953f7c6c3cba8b41d92061c7fd1817310",
+      "environment": {
+        "NPY_DISABLE_CPU_FEATURES": null,
+        "OPENBLAS_CORETYPE": null,
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "numpy_version": "2.3.5",
+      "threadpools": [
+        {
+          "user_api": "blas",
+          "internal_api": "openblas",
+          "num_threads": 1,
+          "prefix": "libscipy_openblas",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-fdde5778.so",
+          "version": "0.3.30",
+          "threading_layer": "pthreads",
+          "architecture": "SkylakeX"
+        },
+        {
+          "user_api": "blas",
+          "internal_api": "openblas",
+          "num_threads": 1,
+          "prefix": "libscipy_openblas",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy.libs/libscipy_openblas-6cdc3b4a.so",
+          "version": "0.3.30",
+          "threading_layer": "pthreads",
+          "architecture": "SkylakeX"
+        },
+        {
+          "user_api": "openmp",
+          "internal_api": "openmp",
+          "num_threads": 1,
+          "prefix": "libgomp",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0",
+          "version": null
+        }
+      ],
+      "numpy_runtime": "[{'numpy_version': '2.3.5',\n  'python': '3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]',\n  'uname': uname_result(system='Linux', node='733bcf56453f', release='6.18.57', version='#1 SMP Tue Oct 20 21:56:04 UTC 2026', machine='x86_64')},\n {'simd_extensions': {'baseline': ['SSE', 'SSE2', 'SSE3'],\n                      'found': ['SSSE3',\n                                'SSE41',\n                                'POPCNT',\n                                'SSE42',\n                                'AVX',\n                                'F16C',\n                                'FMA3',\n                                'AVX2',\n                                'AVX512F',\n                                'AVX512CD',\n                                'AVX512_SKX',\n                                'AVX512_CLX',\n                                'AVX512_CNL',\n                                'AVX512_ICL'],\n                      'not_found': ['AVX512_KNL', 'AVX512_KNM', 'AVX512_SPR']}},\n {'ignore_floating_point_errors_in_matmul': False},\n {'architecture': 'SkylakeX',\n  'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-fdde5778.so',\n  'internal_api': 'openblas',\n  'num_threads': 1,\n  'prefix': 'libscipy_openblas',\n  'threading_layer': 'pthreads',\n  'user_api': 'blas',\n  'version': '0.3.30'},\n {'architecture': 'SkylakeX',\n  'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy.libs/libscipy_openblas-6cdc3b4a.so',\n  'internal_api': 'openblas',\n  'num_threads': 1,\n  'prefix': 'libscipy_openblas',\n  'threading_layer': 'pthreads',\n  'user_api': 'blas',\n  'version': '0.3.30'},\n {'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0',\n  'internal_api': 'openmp',\n  'num_threads': 1,\n  'prefix': 'libgomp',\n  'user_api': 'openmp',\n  'version': None}]\n",
+      "state": {
+        "bandwidth_squared": 0.033577703874302325,
+        "ridge_alpha": 100.0,
+        "transform_shape": [
+          64,
+          64
+        ],
+        "transform_operator_norm": 61.15679591733991,
+        "transform_condition_number": 411.68467084291933,
+        "feature_scale_min": 0.012484992218766427,
+        "coefficient_max_abs": 6196.679958769654,
+        "coefficient_l1_per_horizon": [
+          78769.04978790488,
+          55428.87322223464,
+          63510.61929778961
+        ],
+        "A_loss_scale": 1869372218.8477159
+      },
+      "splits": {
+        "C": {
+          "shape": [
+            114,
+            3
+          ],
+          "exact_match": false,
+          "strict_replay_pass": true,
+          "violating_entries": 0,
+          "max_absolute_prediction_difference": 1.0913936421275139e-11,
+          "max_relative_prediction_difference_nonzero_reference": 6.741846619610205e-13,
+          "max_difference_to_audit_tolerance_ratio": 0.0027156966544138465,
+          "worst_tolerance_location": {
+            "row": 25,
+            "horizon_index": 0,
+            "saved": 0.6745145307277198,
+            "replayed": 0.6745145307281746,
+            "difference": 4.547473508864641e-13,
+            "allowed_tolerance": 1.67451453072772e-10
+          },
+          "saved_mse": 171757232.0417862,
+          "replayed_mse": 171757232.0417862,
+          "mse_difference": 0.0,
+          "relative_mse_difference": 0.0,
+          "scaled_mse_difference": 0.0,
+          "saved_mse_by_horizon": [
+            102978425.53311257,
+            201926864.22452918,
+            210366406.3677169
+          ],
+          "replayed_mse_by_horizon": [
+            102978425.53311256,
+            201926864.22452915,
+            210366406.3677169
+          ]
+        },
+        "D": {
+          "shape": [
+            115,
+            3
+          ],
+          "exact_match": true,
+          "strict_replay_pass": true,
+          "violating_entries": 0,
+          "max_absolute_prediction_difference": 0.0,
+          "max_relative_prediction_difference_nonzero_reference": 0.0,
+          "max_difference_to_audit_tolerance_ratio": 0.0,
+          "worst_tolerance_location": {
+            "row": 0,
+            "horizon_index": 0,
+            "saved": -3516.5906569881327,
+            "replayed": -3516.5906569881327,
+            "difference": 0.0,
+            "allowed_tolerance": 3.5175906569881326e-07
+          },
+          "saved_mse": 82487414.21770887,
+          "replayed_mse": 82487414.21770887,
+          "mse_difference": 0.0,
+          "relative_mse_difference": 0.0,
+          "scaled_mse_difference": 0.0,
+          "saved_mse_by_horizon": [
+            59056625.07610841,
+            87760546.97221124,
+            100645070.60480702
+          ],
+          "replayed_mse_by_horizon": [
+            59056625.07610841,
+            87760546.97221124,
+            100645070.60480702
+          ]
+        }
+      },
+      "scope": "Only selected-state replay and arithmetic tracing on saved C/D inputs; no fits or generator calls"
+    },
+    "numpy_no_avx512": {
+      "task": "wikipedia_daily__03",
+      "method": "raw_rbf",
+      "selected_state_sha256": "61c2a26243316ffaffd9e73ab2394f7f13cbf7e51959193e0472f3cf036e2b52",
+      "probe_sha256": "edbc32f86ee3498a76924f609b3814d953f7c6c3cba8b41d92061c7fd1817310",
+      "environment": {
+        "NPY_DISABLE_CPU_FEATURES": "AVX512F,AVX512CD,AVX512_SKX,AVX512_CLX,AVX512_CNL,AVX512_ICL",
+        "OPENBLAS_CORETYPE": null,
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "numpy_version": "2.3.5",
+      "threadpools": [
+        {
+          "user_api": "blas",
+          "internal_api": "openblas",
+          "num_threads": 1,
+          "prefix": "libscipy_openblas",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-fdde5778.so",
+          "version": "0.3.30",
+          "threading_layer": "pthreads",
+          "architecture": "SkylakeX"
+        },
+        {
+          "user_api": "blas",
+          "internal_api": "openblas",
+          "num_threads": 1,
+          "prefix": "libscipy_openblas",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy.libs/libscipy_openblas-6cdc3b4a.so",
+          "version": "0.3.30",
+          "threading_layer": "pthreads",
+          "architecture": "SkylakeX"
+        },
+        {
+          "user_api": "openmp",
+          "internal_api": "openmp",
+          "num_threads": 1,
+          "prefix": "libgomp",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0",
+          "version": null
+        }
+      ],
+      "numpy_runtime": "[{'numpy_version': '2.3.5',\n  'python': '3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]',\n  'uname': uname_result(system='Linux', node='733bcf56453f', release='6.18.57', version='#1 SMP Tue Oct 20 21:56:04 UTC 2026', machine='x86_64')},\n {'simd_extensions': {'baseline': ['SSE', 'SSE2', 'SSE3'],\n                      'found': ['SSSE3',\n                                'SSE41',\n                                'POPCNT',\n                                'SSE42',\n                                'AVX',\n                                'F16C',\n                                'FMA3',\n                                'AVX2'],\n                      'not_found': ['AVX512F',\n                                    'AVX512CD',\n                                    'AVX512_KNL',\n                                    'AVX512_KNM',\n                                    'AVX512_SKX',\n                                    'AVX512_CLX',\n                                    'AVX512_CNL',\n                                    'AVX512_ICL',\n                                    'AVX512_SPR']}},\n {'ignore_floating_point_errors_in_matmul': False},\n {'architecture': 'SkylakeX',\n  'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-fdde5778.so',\n  'internal_api': 'openblas',\n  'num_threads': 1,\n  'prefix': 'libscipy_openblas',\n  'threading_layer': 'pthreads',\n  'user_api': 'blas',\n  'version': '0.3.30'},\n {'architecture': 'SkylakeX',\n  'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy.libs/libscipy_openblas-6cdc3b4a.so',\n  'internal_api': 'openblas',\n  'num_threads': 1,\n  'prefix': 'libscipy_openblas',\n  'threading_layer': 'pthreads',\n  'user_api': 'blas',\n  'version': '0.3.30'},\n {'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0',\n  'internal_api': 'openmp',\n  'num_threads': 1,\n  'prefix': 'libgomp',\n  'user_api': 'openmp',\n  'version': None}]\n",
+      "state": {
+        "bandwidth_squared": 0.033577703874302325,
+        "ridge_alpha": 100.0,
+        "transform_shape": [
+          64,
+          64
+        ],
+        "transform_operator_norm": 61.15679591733991,
+        "transform_condition_number": 411.68467084291933,
+        "feature_scale_min": 0.012484992218766427,
+        "coefficient_max_abs": 6196.679958769654,
+        "coefficient_l1_per_horizon": [
+          78769.04978790488,
+          55428.87322223464,
+          63510.61929778961
+        ],
+        "A_loss_scale": 1869372218.8477159
+      },
+      "splits": {
+        "C": {
+          "shape": [
+            114,
+            3
+          ],
+          "exact_match": false,
+          "strict_replay_pass": false,
+          "violating_entries": 1,
+          "max_absolute_prediction_difference": 1.876514943432994e-09,
+          "max_relative_prediction_difference_nonzero_reference": 3.6203716347306797e-10,
+          "max_difference_to_audit_tolerance_ratio": 1.4583291034202355,
+          "worst_tolerance_location": {
+            "row": 25,
+            "horizon_index": 0,
+            "saved": 0.6745145307277198,
+            "replayed": 0.6745145304835205,
+            "difference": -2.4419932742603123e-10,
+            "allowed_tolerance": 1.67451453072772e-10
+          },
+          "saved_mse": 171757232.0417862,
+          "replayed_mse": 171757232.041786,
+          "mse_difference": -2.086162567138672e-07,
+          "relative_mse_difference": -1.214599549805936e-15,
+          "scaled_mse_difference": -1.1159695999037504e-16,
+          "saved_mse_by_horizon": [
+            102978425.53311257,
+            201926864.22452918,
+            210366406.3677169
+          ],
+          "replayed_mse_by_horizon": [
+            102978425.53311113,
+            201926864.22452953,
+            210366406.36771727
+          ]
+        },
+        "D": {
+          "shape": [
+            115,
+            3
+          ],
+          "exact_match": false,
+          "strict_replay_pass": false,
+          "violating_entries": 1,
+          "max_absolute_prediction_difference": 2.1727828425355256e-09,
+          "max_relative_prediction_difference_nonzero_reference": 3.286196075114277e-10,
+          "max_difference_to_audit_tolerance_ratio": 2.149216331263386,
+          "worst_tolerance_location": {
+            "row": 67,
+            "horizon_index": 1,
+            "saved": 1.8902855067444762,
+            "replayed": 1.890285507365661,
+            "difference": 6.2118488131091e-10,
+            "allowed_tolerance": 2.8902855067444764e-10
+          },
+          "saved_mse": 82487414.21770887,
+          "replayed_mse": 82487414.2177093,
+          "mse_difference": 4.3213367462158203e-07,
+          "relative_mse_difference": 5.23878313703776e-15,
+          "scaled_mse_difference": 2.31165131408634e-16,
+          "saved_mse_by_horizon": [
+            59056625.07610841,
+            87760546.97221124,
+            100645070.60480702
+          ],
+          "replayed_mse_by_horizon": [
+            59056625.07610851,
+            87760546.97221144,
+            100645070.60480793
+          ]
+        }
+      },
+      "scope": "Only selected-state replay and arithmetic tracing on saved C/D inputs; no fits or generator calls"
+    },
+    "blas_haswell": {
+      "task": "wikipedia_daily__03",
+      "method": "raw_rbf",
+      "selected_state_sha256": "61c2a26243316ffaffd9e73ab2394f7f13cbf7e51959193e0472f3cf036e2b52",
+      "probe_sha256": "edbc32f86ee3498a76924f609b3814d953f7c6c3cba8b41d92061c7fd1817310",
+      "environment": {
+        "NPY_DISABLE_CPU_FEATURES": null,
+        "OPENBLAS_CORETYPE": "Haswell",
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "numpy_version": "2.3.5",
+      "threadpools": [
+        {
+          "user_api": "blas",
+          "internal_api": "openblas",
+          "num_threads": 1,
+          "prefix": "libscipy_openblas",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-fdde5778.so",
+          "version": "0.3.30",
+          "threading_layer": "pthreads",
+          "architecture": "Haswell"
+        },
+        {
+          "user_api": "blas",
+          "internal_api": "openblas",
+          "num_threads": 1,
+          "prefix": "libscipy_openblas",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy.libs/libscipy_openblas-6cdc3b4a.so",
+          "version": "0.3.30",
+          "threading_layer": "pthreads",
+          "architecture": "Haswell"
+        },
+        {
+          "user_api": "openmp",
+          "internal_api": "openmp",
+          "num_threads": 1,
+          "prefix": "libgomp",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0",
+          "version": null
+        }
+      ],
+      "numpy_runtime": "[{'numpy_version': '2.3.5',\n  'python': '3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]',\n  'uname': uname_result(system='Linux', node='733bcf56453f', release='6.18.57', version='#1 SMP Tue Oct 20 21:56:04 UTC 2026', machine='x86_64')},\n {'simd_extensions': {'baseline': ['SSE', 'SSE2', 'SSE3'],\n                      'found': ['SSSE3',\n                                'SSE41',\n                                'POPCNT',\n                                'SSE42',\n                                'AVX',\n                                'F16C',\n                                'FMA3',\n                                'AVX2',\n                                'AVX512F',\n                                'AVX512CD',\n                                'AVX512_SKX',\n                                'AVX512_CLX',\n                                'AVX512_CNL',\n                                'AVX512_ICL'],\n                      'not_found': ['AVX512_KNL', 'AVX512_KNM', 'AVX512_SPR']}},\n {'ignore_floating_point_errors_in_matmul': False},\n {'architecture': 'Haswell',\n  'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-fdde5778.so',\n  'internal_api': 'openblas',\n  'num_threads': 1,\n  'prefix': 'libscipy_openblas',\n  'threading_layer': 'pthreads',\n  'user_api': 'blas',\n  'version': '0.3.30'},\n {'architecture': 'Haswell',\n  'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy.libs/libscipy_openblas-6cdc3b4a.so',\n  'internal_api': 'openblas',\n  'num_threads': 1,\n  'prefix': 'libscipy_openblas',\n  'threading_layer': 'pthreads',\n  'user_api': 'blas',\n  'version': '0.3.30'},\n {'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0',\n  'internal_api': 'openmp',\n  'num_threads': 1,\n  'prefix': 'libgomp',\n  'user_api': 'openmp',\n  'version': None}]\n",
+      "state": {
+        "bandwidth_squared": 0.033577703874302325,
+        "ridge_alpha": 100.0,
+        "transform_shape": [
+          64,
+          64
+        ],
+        "transform_operator_norm": 61.15679591733991,
+        "transform_condition_number": 411.68467084291916,
+        "feature_scale_min": 0.012484992218766427,
+        "coefficient_max_abs": 6196.679958769654,
+        "coefficient_l1_per_horizon": [
+          78769.04978790488,
+          55428.87322223464,
+          63510.61929778961
+        ],
+        "A_loss_scale": 1869372218.8477159
+      },
+      "splits": {
+        "C": {
+          "shape": [
+            114,
+            3
+          ],
+          "exact_match": false,
+          "strict_replay_pass": true,
+          "violating_entries": 0,
+          "max_absolute_prediction_difference": 1.0913936421275139e-11,
+          "max_relative_prediction_difference_nonzero_reference": 6.741846619610205e-13,
+          "max_difference_to_audit_tolerance_ratio": 0.0027156966544138465,
+          "worst_tolerance_location": {
+            "row": 25,
+            "horizon_index": 0,
+            "saved": 0.6745145307277198,
+            "replayed": 0.6745145307281746,
+            "difference": 4.547473508864641e-13,
+            "allowed_tolerance": 1.67451453072772e-10
+          },
+          "saved_mse": 171757232.0417862,
+          "replayed_mse": 171757232.0417862,
+          "mse_difference": 0.0,
+          "relative_mse_difference": 0.0,
+          "scaled_mse_difference": 0.0,
+          "saved_mse_by_horizon": [
+            102978425.53311257,
+            201926864.22452918,
+            210366406.3677169
+          ],
+          "replayed_mse_by_horizon": [
+            102978425.53311256,
+            201926864.22452915,
+            210366406.3677169
+          ]
+        },
+        "D": {
+          "shape": [
+            115,
+            3
+          ],
+          "exact_match": false,
+          "strict_replay_pass": true,
+          "violating_entries": 0,
+          "max_absolute_prediction_difference": 1.44427758641541e-09,
+          "max_relative_prediction_difference_nonzero_reference": 3.959121937669116e-13,
+          "max_difference_to_audit_tolerance_ratio": 0.00395637074280026,
+          "worst_tolerance_location": {
+            "row": 114,
+            "horizon_index": 2,
+            "saved": -1438.0554382344867,
+            "replayed": -1438.055438235056,
+            "difference": -5.693436833098531e-10,
+            "allowed_tolerance": 1.439055438234487e-07
+          },
+          "saved_mse": 82487414.21770887,
+          "replayed_mse": 82487414.217709,
+          "mse_difference": 1.341104507446289e-07,
+          "relative_mse_difference": 1.6258292494255118e-15,
+          "scaled_mse_difference": 7.17409028509554e-17,
+          "saved_mse_by_horizon": [
+            59056625.07610841,
+            87760546.97221124,
+            100645070.60480702
+          ],
+          "replayed_mse_by_horizon": [
+            59056625.0761084,
+            87760546.97221166,
+            100645070.60480705
+          ]
+        }
+      },
+      "scope": "Only selected-state replay and arithmetic tracing on saved C/D inputs; no fits or generator calls"
+    },
+    "both_no_avx512_haswell": {
+      "task": "wikipedia_daily__03",
+      "method": "raw_rbf",
+      "selected_state_sha256": "61c2a26243316ffaffd9e73ab2394f7f13cbf7e51959193e0472f3cf036e2b52",
+      "probe_sha256": "edbc32f86ee3498a76924f609b3814d953f7c6c3cba8b41d92061c7fd1817310",
+      "environment": {
+        "NPY_DISABLE_CPU_FEATURES": "AVX512F,AVX512CD,AVX512_SKX,AVX512_CLX,AVX512_CNL,AVX512_ICL",
+        "OPENBLAS_CORETYPE": "Haswell",
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      },
+      "numpy_version": "2.3.5",
+      "threadpools": [
+        {
+          "user_api": "blas",
+          "internal_api": "openblas",
+          "num_threads": 1,
+          "prefix": "libscipy_openblas",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-fdde5778.so",
+          "version": "0.3.30",
+          "threading_layer": "pthreads",
+          "architecture": "Haswell"
+        },
+        {
+          "user_api": "blas",
+          "internal_api": "openblas",
+          "num_threads": 1,
+          "prefix": "libscipy_openblas",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy.libs/libscipy_openblas-6cdc3b4a.so",
+          "version": "0.3.30",
+          "threading_layer": "pthreads",
+          "architecture": "Haswell"
+        },
+        {
+          "user_api": "openmp",
+          "internal_api": "openmp",
+          "num_threads": 1,
+          "prefix": "libgomp",
+          "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0",
+          "version": null
+        }
+      ],
+      "numpy_runtime": "[{'numpy_version': '2.3.5',\n  'python': '3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]',\n  'uname': uname_result(system='Linux', node='733bcf56453f', release='6.18.57', version='#1 SMP Tue Oct 20 21:56:04 UTC 2026', machine='x86_64')},\n {'simd_extensions': {'baseline': ['SSE', 'SSE2', 'SSE3'],\n                      'found': ['SSSE3',\n                                'SSE41',\n                                'POPCNT',\n                                'SSE42',\n                                'AVX',\n                                'F16C',\n                                'FMA3',\n                                'AVX2'],\n                      'not_found': ['AVX512F',\n                                    'AVX512CD',\n                                    'AVX512_KNL',\n                                    'AVX512_KNM',\n                                    'AVX512_SKX',\n                                    'AVX512_CLX',\n                                    'AVX512_CNL',\n                                    'AVX512_ICL',\n                                    'AVX512_SPR']}},\n {'ignore_floating_point_errors_in_matmul': False},\n {'architecture': 'Haswell',\n  'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-fdde5778.so',\n  'internal_api': 'openblas',\n  'num_threads': 1,\n  'prefix': 'libscipy_openblas',\n  'threading_layer': 'pthreads',\n  'user_api': 'blas',\n  'version': '0.3.30'},\n {'architecture': 'Haswell',\n  'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy.libs/libscipy_openblas-6cdc3b4a.so',\n  'internal_api': 'openblas',\n  'num_threads': 1,\n  'prefix': 'libscipy_openblas',\n  'threading_layer': 'pthreads',\n  'user_api': 'blas',\n  'version': '0.3.30'},\n {'filepath': '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0',\n  'internal_api': 'openmp',\n  'num_threads': 1,\n  'prefix': 'libgomp',\n  'user_api': 'openmp',\n  'version': None}]\n",
+      "state": {
+        "bandwidth_squared": 0.033577703874302325,
+        "ridge_alpha": 100.0,
+        "transform_shape": [
+          64,
+          64
+        ],
+        "transform_operator_norm": 61.15679591733991,
+        "transform_condition_number": 411.68467084291916,
+        "feature_scale_min": 0.012484992218766427,
+        "coefficient_max_abs": 6196.679958769654,
+        "coefficient_l1_per_horizon": [
+          78769.04978790488,
+          55428.87322223464,
+          63510.61929778961
+        ],
+        "A_loss_scale": 1869372218.8477159
+      },
+      "splits": {
+        "C": {
+          "shape": [
+            114,
+            3
+          ],
+          "exact_match": false,
+          "strict_replay_pass": false,
+          "violating_entries": 1,
+          "max_absolute_prediction_difference": 1.876514943432994e-09,
+          "max_relative_prediction_difference_nonzero_reference": 3.6203716347306797e-10,
+          "max_difference_to_audit_tolerance_ratio": 1.4583291034202355,
+          "worst_tolerance_location": {
+            "row": 25,
+            "horizon_index": 0,
+            "saved": 0.6745145307277198,
+            "replayed": 0.6745145304835205,
+            "difference": -2.4419932742603123e-10,
+            "allowed_tolerance": 1.67451453072772e-10
+          },
+          "saved_mse": 171757232.0417862,
+          "replayed_mse": 171757232.041786,
+          "mse_difference": -2.086162567138672e-07,
+          "relative_mse_difference": -1.214599549805936e-15,
+          "scaled_mse_difference": -1.1159695999037504e-16,
+          "saved_mse_by_horizon": [
+            102978425.53311257,
+            201926864.22452918,
+            210366406.3677169
+          ],
+          "replayed_mse_by_horizon": [
+            102978425.53311113,
+            201926864.22452953,
+            210366406.36771727
+          ]
+        },
+        "D": {
+          "shape": [
+            115,
+            3
+          ],
+          "exact_match": false,
+          "strict_replay_pass": false,
+          "violating_entries": 1,
+          "max_absolute_prediction_difference": 2.1727828425355256e-09,
+          "max_relative_prediction_difference_nonzero_reference": 3.286196075114277e-10,
+          "max_difference_to_audit_tolerance_ratio": 2.149216331263386,
+          "worst_tolerance_location": {
+            "row": 67,
+            "horizon_index": 1,
+            "saved": 1.8902855067444762,
+            "replayed": 1.890285507365661,
+            "difference": 6.2118488131091e-10,
+            "allowed_tolerance": 2.8902855067444764e-10
+          },
+          "saved_mse": 82487414.21770887,
+          "replayed_mse": 82487414.21770945,
+          "mse_difference": 5.811452865600586e-07,
+          "relative_mse_difference": 7.045260080843884e-15,
+          "scaled_mse_difference": 3.108772456874734e-16,
+          "saved_mse_by_horizon": [
+            59056625.07610841,
+            87760546.97221124,
+            100645070.60480702
+          ],
+          "replayed_mse_by_horizon": [
+            59056625.0761085,
+            87760546.97221185,
+            100645070.60480796
+          ]
+        }
+      },
+      "scope": "Only selected-state replay and arithmetic tracing on saved C/D inputs; no fits or generator calls"
+    }
+  },
+  "arithmetic_stage_differences_from_native": {
+    "numpy_no_avx512": {
+      "C": {
+        "z": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 3192,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "distance": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 7296,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "kernel": {
+          "max_absolute_difference": 1.1102230246251565e-16,
+          "changed_entries": 349,
+          "total_entries": 7296,
+          "max_relative_difference_nonzero_native": 2.200397680097794e-16,
+          "maximum_ulp_change": 1.0
+        },
+        "projected": {
+          "max_absolute_difference": 7.105427357601002e-15,
+          "changed_entries": 2874,
+          "total_entries": 7296,
+          "max_relative_difference_nonzero_native": 4.448455965188397e-11
+        },
+        "standardized": {
+          "max_absolute_difference": 5.691558335740865e-13,
+          "changed_entries": 2761,
+          "total_entries": 10488,
+          "max_relative_difference_nonzero_native": 2.9772227216722795e-10
+        },
+        "prediction": {
+          "max_absolute_difference": 1.876287569757551e-09,
+          "changed_entries": 326,
+          "total_entries": 342,
+          "max_relative_difference_nonzero_native": 3.6271134813478444e-10
+        }
+      },
+      "D": {
+        "z": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 3220,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "distance": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 7360,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "kernel": {
+          "max_absolute_difference": 1.1102230246251565e-16,
+          "changed_entries": 339,
+          "total_entries": 7360,
+          "max_relative_difference_nonzero_native": 2.1949151912701119e-16,
+          "maximum_ulp_change": 1.0
+        },
+        "projected": {
+          "max_absolute_difference": 7.89993070959838e-15,
+          "changed_entries": 2923,
+          "total_entries": 7360,
+          "max_relative_difference_nonzero_native": 1.2057386055080011e-10
+        },
+        "standardized": {
+          "max_absolute_difference": 6.326050794314142e-13,
+          "changed_entries": 2816,
+          "total_entries": 10580,
+          "max_relative_difference_nonzero_native": 2.3672903578566355e-10
+        },
+        "prediction": {
+          "max_absolute_difference": 2.1727828425355256e-09,
+          "changed_entries": 327,
+          "total_entries": 345,
+          "max_relative_difference_nonzero_native": 3.286196075114277e-10
+        }
+      }
+    },
+    "blas_haswell": {
+      "C": {
+        "z": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 3192,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "distance": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 7296,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "kernel": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 7296,
+          "max_relative_difference_nonzero_native": 0.0,
+          "maximum_ulp_change": 0.0
+        },
+        "projected": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 7296,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "standardized": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 10488,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "prediction": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 342,
+          "max_relative_difference_nonzero_native": 0.0
+        }
+      },
+      "D": {
+        "z": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 3220,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "distance": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 7360,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "kernel": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 7360,
+          "max_relative_difference_nonzero_native": 0.0,
+          "maximum_ulp_change": 0.0
+        },
+        "projected": {
+          "max_absolute_difference": 7.518291544883482e-15,
+          "changed_entries": 61,
+          "total_entries": 7360,
+          "max_relative_difference_nonzero_native": 5.91162064402781e-12
+        },
+        "standardized": {
+          "max_absolute_difference": 5.198064201294983e-13,
+          "changed_entries": 59,
+          "total_entries": 10580,
+          "max_relative_difference_nonzero_native": 4.3670972379626334e-13
+        },
+        "prediction": {
+          "max_absolute_difference": 1.44427758641541e-09,
+          "changed_entries": 3,
+          "total_entries": 345,
+          "max_relative_difference_nonzero_native": 3.959121937669116e-13
+        }
+      }
+    },
+    "both_no_avx512_haswell": {
+      "C": {
+        "z": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 3192,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "distance": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 7296,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "kernel": {
+          "max_absolute_difference": 1.1102230246251565e-16,
+          "changed_entries": 349,
+          "total_entries": 7296,
+          "max_relative_difference_nonzero_native": 2.200397680097794e-16,
+          "maximum_ulp_change": 1.0
+        },
+        "projected": {
+          "max_absolute_difference": 7.105427357601002e-15,
+          "changed_entries": 2874,
+          "total_entries": 7296,
+          "max_relative_difference_nonzero_native": 4.448455965188397e-11
+        },
+        "standardized": {
+          "max_absolute_difference": 5.691558335740865e-13,
+          "changed_entries": 2761,
+          "total_entries": 10488,
+          "max_relative_difference_nonzero_native": 2.9772227216722795e-10
+        },
+        "prediction": {
+          "max_absolute_difference": 1.876287569757551e-09,
+          "changed_entries": 326,
+          "total_entries": 342,
+          "max_relative_difference_nonzero_native": 3.6271134813478444e-10
+        }
+      },
+      "D": {
+        "z": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 3220,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "distance": {
+          "max_absolute_difference": 0.0,
+          "changed_entries": 0,
+          "total_entries": 7360,
+          "max_relative_difference_nonzero_native": 0.0
+        },
+        "kernel": {
+          "max_absolute_difference": 1.1102230246251565e-16,
+          "changed_entries": 339,
+          "total_entries": 7360,
+          "max_relative_difference_nonzero_native": 2.1949151912701119e-16,
+          "maximum_ulp_change": 1.0
+        },
+        "projected": {
+          "max_absolute_difference": 7.89993070959838e-15,
+          "changed_entries": 2984,
+          "total_entries": 7360,
+          "max_relative_difference_nonzero_native": 1.2057386055080011e-10
+        },
+        "standardized": {
+          "max_absolute_difference": 6.326050794314142e-13,
+          "changed_entries": 2875,
+          "total_entries": 10580,
+          "max_relative_difference_nonzero_native": 2.3672903578566355e-10
+        },
+        "prediction": {
+          "max_absolute_difference": 2.1727828425355256e-09,
+          "changed_entries": 330,
+          "total_entries": 345,
+          "max_relative_difference_nonzero_native": 3.286196075114277e-10
+        }
+      }
+    }
+  },
+  "conclusion": "Disabling NumPy AVX512 dispatch reproduces one strict replay mismatch on C and one on D. Standardized inputs and squared distances are identical; the first differences are one-ulp Gaussian exp values. Nystrom projection and the retained ridge coefficients amplify these into approximately 2e-9 absolute prediction changes. Near-zero saved predictions exceed the strict combined tolerance; raw/scaled MSE changes remain at floating-point reduction scale. Haswell BLAS selection alone passes both strict checks.",
+  "probe_script_sha256": "edbc32f86ee3498a76924f609b3814d953f7c6c3cba8b41d92061c7fd1817310"
+}

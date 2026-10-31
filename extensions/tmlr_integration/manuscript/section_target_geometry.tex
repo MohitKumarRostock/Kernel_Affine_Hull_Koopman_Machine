@@ -1,0 +1,241 @@
+\section{Forecast-trained geometry on a strong baseline}
+\label{sec:target-geometry}
+
+The preceding archive comparison makes improvement over a weak raw RBF
+predictor an insufficient adoption criterion. It also leaves two distinct
+questions open: whether donor residuals improve correction fitting, and
+whether a geometry trained with predictive targets transfers usefully to
+KAHM. We specify a further bounded study before its full execution, with
+a stronger ridge reference and equally trained geometric controls. The
+new source, protocol, roster and dependency freeze are separate from all
+earlier studies. This is a prospective execution checkpoint, not external
+preregistration; the motivation uses the already observed earlier results.
+
+\subsection{Baseline, residual targets, and matched procedures}
+\label{sec:target-procedures}
+
+The base $f_0$ is a raw-history ridge predictor, with its penalty selected
+on a separate validation segment. Four gates use the same partition and
+reference-selection rules: KAHM reconstruction, affine reconstruction,
+locality-aware affine, and a center-distance RBF gate. All retain the
+affinity-gated principal coordinates of Equation~\eqref{c:eq:local}.
+The RBF-local control therefore describes local affine experts; it is
+distinct from the raw Nystr\"om predictor. Requested banks contain
+$2,4,8$ groups, rank two, at most 24 references per group and 512 fitting
+histories. The established stable KAHM query is unchanged.
+
+For each gate we fit three procedures: an identity metric with in-sample
+residuals, an identity metric with out-of-fold (OOF) donor residuals, and a
+learned metric with those same OOF residuals. Banks use all training
+histories. All three correction heads use exactly the same eligible rows,
+so the natural-data OOF procedure does not gain a different correction
+sample simply by excluding its initial donor prefix. Each head is a
+separately standardized ridge correction with an explicit zero option:
+\[
+ \widehat f_g(x)=f_0(x)+\gamma q_g\bigl(\Gamma_g(x)\bigr),
+ \qquad \gamma\in\{0,\tfrac14,\tfrac12,1\}.
+\]
+The baseline and correction penalties use the same seven-value grid
+$\{10^{-4},10^{-3},10^{-2},10^{-1},1,10,100\}$. The base is selected
+first and held fixed. Zero correction precedes the 21 positive
+penalty--weight candidates; only a strict validation improvement replaces
+the incumbent. Both studies retain their selected training-only fits,
+without a pretest refit. An available zero option remains a candidate,
+not a generalization guarantee.
+
+Synthetic donors exclude complete independent episodes in four folds.
+Natural-series donors use three forward blocks following an initial 40\%
+of training origins; every donor target must have been available at the
+first forecast origin of its query block. A donor selects its own ridge
+penalty using an inner split of its own available data. The final base's
+outer-validation choice never feeds backward into donor fitting.
+Appendix~\ref{app:target-protocol} gives the boundary and small-sample
+rules. This design distinguishes episode cross-fitting from chronological
+prediction; it does not assert that ordinary $K$-fold evaluation is
+invalid for every autoregressive model \citep{Bergmeir2018CV}.
+
+\paragraph{Honest donor errors can still differ from final-model errors.}
+Condition on fitted maps, put $Z=\Gamma(X)$, and consider one fresh
+evaluation law $Q$. For the final base and a fixed donor $f_d$, define
+\[
+ m_0(Z)=\E_Q[Y-f_0(X)\mid Z],\qquad
+ b_d(Z)=\E_Q[f_0(X)-f_d(X)\mid Z].
+\]
+The donor-optimal correction is $q_d=m_0+b_d$. Under finite second
+moments, define $R_H(f)=H^{-1}\E_Q\|Y-f(X)\|_2^2$. Then
+\begin{equation}
+ R_H(f_0)-R_H(f_0+q_d\circ\Gamma)
+ =\frac1H\E_Q\|m_0(Z)\|_2^2-\frac1H\E_Q\|b_d(Z)\|_2^2.
+ \label{eq:target-donor-transport}
+\end{equation}
+This elementary projection identity, proved with its fitted-correction
+extension in Appendix~\ref{app:target-transport}, explains why donor
+exclusion alone does not establish improvement of a different final
+predictor. Chronological folds need not share $Q$. Our recorded
+donor/final disagreement on correction-training rows is a descriptive
+diagnostic, not an estimate of either oracle term in
+Equation~\eqref{eq:target-donor-transport}.
+
+\subsection{A residual-supervised metric shared across geometries}
+\label{sec:target-metric}
+
+We learn a positive diagonal input metric through a Gaussian
+kernel-regression proxy, following the supervised metric-learning
+principle of \citet{Weinberger2007Metric}. Let $z_i$ denote
+training-standardized histories and $s_i$ the donor residual vectors,
+centered by output and divided by one pooled residual standard deviation.
+The shared scalar division preserves relative original-unit horizon
+weights. On at most 256 training correction rows, set
+\begin{align}
+ d_\theta^2(z_i,z_j)&=\sum_{k=1}^{d}e^{\theta_k}(z_{ik}-z_{jk})^2,
+ &p_{ij}(\theta)&=
+ \frac{\exp\{-d_\theta^2(z_i,z_j)/(2\sigma^2)\}}
+      {\sum_{l\in A_i}\exp\{-d_\theta^2(z_i,z_l)/(2\sigma^2)\}},
+ \quad j\in A_i,\label{eq:target-metric-weights}\\
+ \mathcal J(\eta)&=
+ \frac{1}{|I|H}\sum_{i\in I}
+ \left\|s_i-\sum_{j\in A_i}p_{ij}(\theta)s_j\right\|_2^2
+ +\frac{0.05}{d}\|\theta\|_2^2,
+ &\theta&=\eta-\overline\eta\mathbf1.
+ \label{eq:target-metric-objective}
+\end{align}
+The admissible donor set $A_i$ excludes the query's episode for synthetic
+data, or origins within $L+H$ steps for natural data; $I$ contains queries
+with at least one donor. The bandwidth $\sigma^2$ is the identity-metric
+median positive admissible squared distance and remains fixed during
+optimization. The box $|\eta_k|\leq\log(16)/2$ bounds the ratio between
+the largest and smallest metric weights by 16; their geometric mean is
+one. These are bounds on the free $\eta$ coordinates, not the individual
+centered $\theta$ coordinates.
+
+L-BFGS-B uses the analytic gradient and at most 40 iterations.
+Identity is the declared fallback for an unavailable or nonfinite
+objective, constant residuals, or a worse final iterate. Finite improved
+iterates at the iteration limit are retained with their convergence
+status. No validation or test outcomes enter this optimization. Natural
+metric donors may be earlier or later within the training period: this
+is offline supervised fitting, separate from the forward construction
+of baseline residuals.
+
+The same learned weights are applied \emph{after} input standardization
+for all four geometric gates; subsequent partitioning and local models
+are refitted under that metric. This is a supervised kernel proxy
+transferred to KAHM and its controls, not end-to-end minimization of
+KAHM forecasting loss. Its training objective may decrease without
+improving the final decoder. The comparison with equally trained local
+controls tests whether any benefit is specific to the KAHM reconstruction.
+
+\subsection{Declared evaluation and complete accounting}
+\label{sec:target-evaluation}
+
+Twelve new repetitions on each of the inherited nonlinear AR, Van der
+Pol and Duffing laws give 36 synthetic tasks. Each uses 128 training,
+64 validation and 128 test episodes, history 12, direct offsets $1,4,12$
+and the inherited observation law. Six prespecified comparisons per
+law isolate learned-OOF KAHM versus ridge, learned versus identity
+metric for OOF KAHM, OOF versus in-sample targets at the identity metric,
+and learned-OOF KAHM versus each of the three equally trained geometric
+controls. All 18 comparisons receive two-sided Bonferroni-adjusted
+paired Student intervals over the 12 complete repetition differences.
+Their coverage uses a normal approximation; origins and horizons do not
+increase the replication count. These fresh simulations supply new
+stochastic evidence on known laws, not new-domain confirmation.
+
+Four additional Monash collections \citep{Godahewa2021Monash} provide
+Australian state electricity demand, Bitcoin activity indicators,
+Melbourne pedestrian counts, and KDD2018 air quality. Three series per
+collection are selected by frozen training-prefix eligibility and hash
+ordering. The 12-series roster and split rules are specified in
+Appendix~\ref{app:target-protocol}. These are new source collections;
+broad application domains overlap some earlier work. They are not a
+random sample of future forecasting applications. Natural results use
+equal weights for series within source and for the four sources;
+overlapping windows do not create independent source replications.
+
+The 16 procedures comprise the 12 geometric corrections, ridge,
+raw Nystr\"om-plus-linear regression, naive prediction, and a jointly
+fitted raw-plus-KAHM ridge readout. The last is a secondary architecture
+control and differs from the earlier concatenated Nystr\"om procedure.
+New group-count reductions and predefined ridge fallbacks retain tasks
+with degenerate local data. Fewer than eight eligible correction rows
+or a failed secondary joint head invokes a fallback for the affected
+arms while retaining the available baselines. These rules do not
+retrospectively replace the previous utility study's failed fits.
+Full-roster results remain unavailable if a primary baseline or required
+task output is missing.
+
+Warm pipeline cost charges each method for its complete required
+baseline, donor, metric, bank, head-selection and serialization work,
+including rejected candidates and fallbacks. Shared components are
+charged once per standalone procedure. These are measured component
+sums on one host, not repeated end-to-end deployment timings or minimum
+possible complexity. Tables~\ref{tab:target-synthetic-main}
+and~\ref{tab:target-archive-main} report the declared comparisons;
+Appendix~\ref{app:target-results} retains all contrasts, source-level
+results, fitting diagnostics, and resource records.
+
+\subsection{Results: predictive gains and their attribution}
+\label{sec:target-results}
+
+All 48 tasks and 768 method--task forecast outputs completed, without
+fallbacks. Learned-OOF KAHM reduces mean synthetic MSE relative to ridge
+by 11.18\% on nonlinear AR, 53.26\% on Van der Pol, and 19.44\% on
+Duffing. All three adjusted paired intervals favor the correction.
+However, the three learned-versus-identity metric intervals and the
+three OOF-versus-in-sample target intervals all include zero. These
+comparisons do not establish equivalence; they leave the incremental
+benefits of the two proposed changes unresolved at the declared
+precision. Among nine comparisons with equally trained geometric
+controls, none favors KAHM with an interval excluding zero. Five favor
+the control: locality and RBF-local on Van der Pol, and all three on
+Duffing. The other four remain unresolved. Thus the 18-contrast family
+contains three favorable, five unfavorable, and ten unresolved results
+for its designated candidates
+(Appendix~\ref{app:target-results}). The secondary raw RBF predictor
+also has lower mean MSE than learned-OOF KAHM on every law; this mean
+ranking has no additional confirmatory interval.
+
+On the four new archive collections, learned-OOF KAHM has
+source-balanced scaled MSE 1.272128 versus ridge's 1.300458, a
+descriptive 2.18\% reduction. Its charged mean pipeline time is
+0.1622\,s versus 0.001299\,s for ridge, or $124.9\times$ on this host.
+The identity-metric in-sample KAHM procedure achieves a lower loss,
+1.264589 (2.76\% below ridge), at $39.3\times$ ridge's time. The
+best registered archive mean is 1.257888 for identity-metric,
+in-sample RBF-local correction. Learned-OOF affine and locality also
+have lower means than learned-OOF KAHM, at 1.268679 and 1.266922,
+respectively. Figure~\ref{fig:target-accuracy-cost} places the modest
+archive accuracy changes alongside their measured computational cost;
+the added metric stage is not supported as a default improvement by
+these results.
+
+Learned-OOF KAHM improves the mean in each of the four collections,
+but improves only seven of the 12 individual series, worsens four,
+and exactly retains ridge on one through zero correction. Omitting
+each collection in turn leaves descriptive aggregate gains of
+1.49--3.35\%. This sensitivity check shows that the sign does not
+depend on retaining any one collection; it does not expand the
+population represented by four selected collections or supply an
+independent replication. Together, the new results establish utility
+over the selected ridge reference in the stated settings while
+leaving a KAHM-specific advantage unsupported. They also retain the
+earlier evidence that useful local forecasting structure can be
+captured by simpler geometric controls.
+
+\input{generated/target_geometry/synthetic_main}
+\input{generated/target_geometry/archive_main}
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.96\linewidth]{generated/target_geometry/archive_accuracy_cost.pdf}
+\caption{Accuracy and charged computation on the four new archive
+collections. Both axes divide the source-balanced method mean by the
+corresponding ridge mean and use logarithmic scales. Lower loss and
+lower time are preferable. Circles, squares, and triangles distinguish
+identity/in-sample, identity/OOF, and learned/OOF procedures. Times
+charge the complete required components of each method, including
+selection; they are descriptive measurements from one host. The plot
+shows all 16 procedures without implying uncertainty intervals or a
+population-wide ranking.}
+\label{fig:target-accuracy-cost}
+\end{figure}
+\FloatBarrier

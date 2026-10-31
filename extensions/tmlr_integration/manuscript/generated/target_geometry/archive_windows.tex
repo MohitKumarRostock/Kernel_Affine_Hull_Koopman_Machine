@@ -1,0 +1,24 @@
+% Generated only from audited target-geometry predictions; no fitting.
+\begin{table}[!htbp]
+\centering\scriptsize\setlength{\tabcolsep}{4pt}
+\caption{Exact natural-series roster, selected before forecasts by a salted hash among training-prefix-eligible candidates. $L$ is history length and $H$ the complete forecast path length. Chronological boundaries are 60/20/20; windows with missing inputs or targets are omitted without imputation. At most 512/64/64 windows are retained by the frozen deterministic sampling rule. The loss scale is computed before validation. Bitcoin series are network indicators, not prices.}
+\label{tab:target-archive-windows}
+\begin{tabular}{llrrrr}
+\toprule
+Collection & Series & $L$ & $H$ & Train/val/test & Loss scale \\
+\midrule
+Australian electricity & T3 & 48 & 12 & 512/64/64 & $1.43\times10^{5}$ \\
+Australian electricity & T5 & 48 & 12 & 512/64/64 & 4182.897 \\
+Australian electricity & T1 & 48 & 12 & 512/64/64 & $4.50\times10^{5}$ \\
+Bitcoin indicators & sent\_addresses & 28 & 7 & 512/64/64 & $2.07\times10^{8}$ \\
+Bitcoin indicators & confirmation\_time & 28 & 7 & 512/64/64 & 163.705 \\
+Bitcoin indicators & block\_size & 28 & 7 & 512/64/64 & $3.19\times10^{9}$ \\
+Pedestrian counts & T10 & 48 & 6 & 512/64/64 & 26088.371 \\
+Pedestrian counts & T14 & 48 & 6 & 512/64/64 & 31655.986 \\
+Pedestrian counts & T20 & 48 & 6 & 512/64/64 & 27784.521 \\
+KDD air quality & T239 & 48 & 6 & 512/64/64 & 102.986 \\
+KDD air quality & T99 & 48 & 6 & 512/64/64 & 226.458 \\
+KDD air quality & T233 & 48 & 6 & 512/64/64 & 441.826 \\
+\bottomrule
+\end{tabular}
+\end{table}

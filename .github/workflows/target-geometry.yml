@@ -1,0 +1,119 @@
+name: Target geometry evidence and revised manuscript
+
+on:
+  push:
+    paths:
+      - 'extensions/target_geometry/**'
+      - 'extensions/tmlr_integration/manuscript/**'
+      - 'extensions/tmlr_integration/package_target.py'
+      - 'extensions/tmlr_integration/package_utility.py'
+      - 'extensions/natural_forecasting/**'
+      - 'extensions/forecasting_utility/**'
+      - 'extensions/predictive_geometry/study/**'
+      - '.github/workflows/target-geometry.yml'
+  pull_request:
+    paths:
+      - 'extensions/target_geometry/**'
+      - 'extensions/tmlr_integration/manuscript/**'
+      - 'extensions/tmlr_integration/package_target.py'
+      - 'extensions/tmlr_integration/package_utility.py'
+      - 'extensions/natural_forecasting/**'
+      - 'extensions/forecasting_utility/**'
+      - 'extensions/predictive_geometry/study/**'
+      - '.github/workflows/target-geometry.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: target-geometry-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+  NUMEXPR_NUM_THREADS: '1'
+  PYTHONDONTWRITEBYTECODE: '1'
+  MPLBACKEND: Agg
+
+jobs:
+  audit-manuscript-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: extensions/target_geometry/requirements.txt
+      - name: Install the frozen numerical dependencies
+        run: python -m pip install -r extensions/target_geometry/requirements.txt
+      - name: Run the 28 fabricated-data engineering tests
+        run: >-
+          python -m unittest extensions.target_geometry.test_models
+          extensions.target_geometry.test_protocol
+          extensions.target_geometry.test_analysis -v
+      - name: Verify the scientific freeze and prepared data boundaries
+        run: |
+          python -m extensions.target_geometry.freeze verify
+          python -m extensions.target_geometry.data verify
+      - name: Independently audit saved predictions into a temporary report directory
+        run: >-
+          python -m extensions.target_geometry.analysis
+          --run-dir extensions/target_geometry/results/v1
+          --output "$RUNNER_TEMP/kahm-target-analysis"
+      - name: Verify the public checkpoint and exact saved-report replay
+        run: >-
+          python -m extensions.tmlr_integration.package_target audit
+          --run-dir extensions/target_geometry/results/v1
+          --reports-dir extensions/target_geometry/reports
+      - name: Rebuild manuscript assets from the audited saved reports
+        run: >-
+          python -m extensions.target_geometry.build_assets
+          --reports extensions/target_geometry/reports
+          --output extensions/tmlr_integration/manuscript/generated/target_geometry
+      - name: Install the manuscript compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended latexmk lmodern poppler-utils
+      - name: Compile and check the complete revised manuscript
+        working-directory: extensions/tmlr_integration/manuscript
+        run: |
+          mkdir -p "$RUNNER_TEMP/kahm-target-tex"
+          latexmk -pdf -interaction=nonstopmode -halt-on-error -output-directory="$RUNNER_TEMP/kahm-target-tex" main.tex
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import re
+
+          output = Path(os.environ['RUNNER_TEMP']) / 'kahm-target-tex'
+          log = (output / 'main.log').read_text()
+          if re.search(r'There were undefined (references|citations)|(?:LaTeX|Package natbib) Warning:.*undefined|Overfull \\[hv]box', log):
+              raise SystemExit('Unresolved references/citations or overflowing manuscript content')
+          if not (output / 'main.pdf').is_file():
+              raise SystemExit('Compiled revised manuscript is missing')
+          PY
+      - name: Package the revised manuscript and saved evidence without refitting
+        run: >-
+          python -m extensions.tmlr_integration.package_target build
+          --pdf "$RUNNER_TEMP/kahm-target-tex/main.pdf"
+          --output "$RUNNER_TEMP/kahm-target-artifacts"
+          --run-dir extensions/target_geometry/results/v1
+          --reports-dir extensions/target_geometry/reports
+      - name: Verify both artifact inventories
+        run: |
+          python -m extensions.tmlr_integration.package_target verify "$RUNNER_TEMP/kahm-target-artifacts/KAHM_Prediction_Revised_Manuscript_Source.zip"
+          python -m extensions.tmlr_integration.package_target verify "$RUNNER_TEMP/kahm-target-artifacts/KAHM_Target_Geometry_Reproduction.zip"
+      - name: Upload the research draft, editable source, evidence bundle, and hashes
+        uses: actions/upload-artifact@v7
+        with:
+          name: kahm-target-geometry-research-draft
+          path: ${{ runner.temp }}/kahm-target-artifacts/*
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0

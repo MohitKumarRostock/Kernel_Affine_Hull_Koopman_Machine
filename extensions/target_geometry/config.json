@@ -1,0 +1,31 @@
+{
+  "study_id": "kahm-target-geometry-v1",
+  "schema_version": 1,
+  "base_alphas": [0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0],
+  "correction_alphas": [0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0],
+  "gammas": [0.0, 0.25, 0.5, 1.0],
+  "gates": ["kahm", "affine", "locality", "rbf"],
+  "geometry": {"cluster_counts": [2, 4, 8], "rank": 2, "max_refs": 24, "max_fit": 512, "omega": 16.0, "tau": 0.000001},
+  "metric": {"max_rows": 256, "max_iter": 40, "regularization": 0.05, "max_weight_ratio": 16.0},
+  "synthetic": {
+    "laws": ["nonlinear_ar", "vanderpol", "duffing"],
+    "repetition_seeds": [11200, 11201, 11202, 11203, 11204, 11205, 11206, 11207, 11208, 11209, 11210, 11211],
+    "training_episodes": 128, "validation_episodes": 64, "test_episodes": 128,
+    "history": 12, "horizons": [1, 4, 12], "stride": 4,
+    "seed_namespace": 9027, "outer_folds": 4
+  },
+  "natural": {"seed": 491, "initial_fraction": 0.4, "forward_folds": 3},
+  "rbf_landmarks": 64,
+  "primary_contrasts": [
+    ["ridge", "learned_oof_kahm"],
+    ["fixed_oof_kahm", "learned_oof_kahm"],
+    ["fixed_is_kahm", "fixed_oof_kahm"],
+    ["learned_oof_affine", "learned_oof_kahm"],
+    ["learned_oof_locality", "learned_oof_kahm"],
+    ["learned_oof_rbf", "learned_oof_kahm"]
+  ],
+  "confidence": {"family_alpha": 0.05, "primary_family_size": 18, "method": "Bonferroni paired Student over complete independent repetitions; normal approximation"},
+  "resources": {"workers": 1, "blas_threads": 1, "paid_compute": false},
+  "refit": "No pretest refit; retain training-only selected fits for both studies.",
+  "scope": "Three previously studied numerical laws with independent new draws; four new selected archive collections with descriptive source-balanced comparisons. Shared supervised kernel-regression metric, not end-to-end KAHM metric optimization or a general superiority certificate."
+}

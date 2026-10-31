@@ -1,8 +1,60 @@
-# Kernel Affine Hull Koopman Machine
+# KAHM for time-series forecasting
 
-Research software and reproducibility artifacts for Kernel Affine Hull Koopman Machine (KAHKM) experiments.
+Research software for **Kernel Affine Hull Machines (KAHMs) as local geometric
+forecasting representations**, alongside the preserved Kernel Affine Hull
+Koopman Machine (KAHKM) experiments that gave this repository its name.
 
-The repository contains the KAHKM implementation, experiment runners, hyperparameter-search scripts, archived numerical outputs, figure and table generators, and provenance records used to reproduce the reported results.
+The current research asks which target-relevant structure a geometric feature
+bank retains, how a finite decoder uses it, and whether its prediction gain
+justifies the complete fitting and selection cost. The repository retains
+negative comparisons and failed historical fits as part of that evidence.
+
+## Current manuscript and study
+
+**Kernel Affine Hull Machines for Time-Series Forecasting: Predictive Geometry,
+Residual Learning, and Cost** — an unsubmitted research draft.
+
+- [Revised manuscript PDF](extensions/tmlr_integration/review/KAHM_Prediction_Revised.pdf)
+- [Editable LaTeX and build guide](extensions/tmlr_integration/README.md)
+- [New target-geometry experiment](extensions/target_geometry/README.md)
+- [Audited findings](extensions/target_geometry/FINDINGS.md)
+- [Time-series research map](TIME_SERIES_RESEARCH.md)
+- [Focused next research questions](extensions/target_geometry/RESEARCH_ROADMAP.md)
+
+The latest experiment was publicly frozen before execution and completed all
+48 tasks and 768 forecasts. KAHM residual correction improves ridge on the
+three synthetic laws and modestly improves the new archive aggregate.
+Learning the shared metric and using donor residuals do not establish an
+incremental synthetic benefit; simpler local controls remain stronger in
+several comparisons. The archive learned-metric KAHM result is **2.18% lower
+scaled MSE than ridge**, with **0.162 seconds versus 0.00130 seconds** of charged
+pipeline time per task on the recorded host. Fixed-metric in-sample KAHM gains
+**2.76%** at lower cost, and simpler corrections have lower aggregate error.
+These results support a conditional local-representation research program,
+without establishing broad or KAHM-specific forecasting superiority.
+
+## Audit the new evidence without forecast refits
+
+Use Python 3.12. Prepared data, all final predictions, exact source hashes,
+recorded validation trials, and measured computation nodes are included.
+
+```bash
+python -m pip install -r extensions/target_geometry/requirements.txt
+python -m extensions.target_geometry.freeze verify
+python -m extensions.target_geometry.analysis \
+  --run-dir extensions/target_geometry/results/v1 --output /tmp/kahm-target-audit
+```
+
+The study guide documents model refits into a new directory, the 28 engineering
+checks, and the distinction between recorded-grid verification and independent
+refitting. Source-balanced archive results cover four selected collections;
+repeated windows do not create additional independent domains.
+
+## Preserved KAHKM and historical study evidence
+
+The following reference environment and result map concern the original KAHKM
+experiments. Later forecasting extensions each declare their own environment,
+protocol, freeze and evaluation scope.
 
 ## Reproducibility
 

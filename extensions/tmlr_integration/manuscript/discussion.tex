@@ -31,6 +31,18 @@ the geometric alternatives, and neither frozen 5\% policy improves the
 raw RBF aggregate. An architectural safeguard and a validation margin
 are therefore useful design choices to evaluate, not adoption guarantees.
 
+The target-geometry study adds evidence for a more specific time-series
+role. KAHM local features can correct a ridge forecast on all three known
+synthetic laws and modestly improve the new archive aggregate. Those
+improvements are properties of the complete procedures. The simultaneous
+comparisons do not establish a benefit from switching to donor residuals
+or learning the shared proxy metric, and five favor simpler matched
+geometries. Raw RBF also has lower mean error on each synthetic law in
+this experiment. On the archive, fixed-metric in-sample KAHM is both more
+accurate and cheaper than learned-metric OOF KAHM. Thus the successful
+ridge correction does not identify supervised metric learning, donor
+exclusion, or the KAHM gate as its unique source.
+
 For evaluating another reconstruction-based feature map, the resulting
 questions are concrete. Does fitting complete on the declared inputs?
 Does the code retain target-relevant position?
@@ -79,7 +91,8 @@ training memory, energy, and financial cost are different quantities.
 
 The controlled Student intervals rely on their stated paired-difference
 assumptions. The original 29- and 12-contrast families and the new
-24-contrast extension retain separate coverage claims, without a joint
+24-contrast additive extension and 18-contrast target-geometry study
+retain separate coverage claims, without a joint
 95\% guarantee across the entire paper.
 The branch reflection and saved-bank conditioning checks are descriptive;
 they supply neither a population Lipschitz bound nor a distribution-free
@@ -124,8 +137,9 @@ series, before a zero-correction choice can be evaluated. Full-roster
 geometric and policy mean losses are therefore undefined. The amended
 22-configuration comparison is conditional on successful fitting, with
 only two Car Parts series, and cannot be presented as completion of the
-prespecified full-roster evaluation. A future robust fallback or revised
-grouping rule would be a changed procedure requiring a new evaluation.
+prespecified full-roster evaluation. The robust fallback and revised grouping rules in
+Section~\ref{sec:target-geometry} are changed procedures evaluated
+separately; they do not replace these historical failures.
 
 The utility decision is also application-dependent. This study supplies
 measured loss--cost pairs and fixed policy outcomes; it does not impose a
@@ -137,34 +151,88 @@ resolve small timing differences as precisely as a repeated benchmark.
 These limits matter when translating a favorable error comparison into a
 claim that additional representation complexity is justified.
 
+\paragraph{Scope of target-trained geometry and donor residuals.}
+The latest experiment tests one constrained diagonal metric, one fixed
+Gaussian proxy bandwidth, one 256-row metric cap, one regularization
+strength and a finite family of readouts. All metric fits converge under
+the optimizer's criterion, but the median regularized objective reduction
+is small. Convergence and a lower training proxy are not evidence of a
+useful forecast geometry. The experiment is not an exhaustive search over
+supervised metrics, and it does not train KAHM's reconstruction parameters
+directly against forecast error. Its three known laws, four selected
+collections, fixed contexts/horizons, and capped training sizes bound the
+conclusion. Neither overlapping windows nor multiple gates expand the
+number of independent natural collections.
+
+Donor exclusion prevents a predictor from fitting its own query label;
+it does not make donor and final-model residual distributions identical.
+The elementary identity in Equation~\eqref{eq:target-donor-transport}
+conditions on fixed maps under a common evaluation law. Chronological
+folds can have different laws and sample sizes, so their observed
+prediction disagreement supplies a diagnostic rather than an oracle-risk
+certificate. The new comparison also makes no pretest refit, holding the
+selected base fixed. This differs materially from the earlier utility
+study and avoids attributing all between-study changes to residual honesty.
+
+The archive gain from learned-metric KAHM is 2.18\%, while the charged
+standalone procedure costs about 0.162 seconds per task versus 0.00130
+seconds for ridge on the recorded host. The ratio of approximately 125
+therefore accompanies small absolute times at the tested scale; it is
+neither an intrinsic algorithmic constant nor evidence of deployment
+infeasibility. Fixed-metric KAHM and simpler controls nevertheless supply
+better observed accuracy--cost pairs here. Computation includes the paid
+metric, donors and selection, and conservatively retains test bank
+transform costs when validation chooses zero correction. It does not
+measure peak incremental memory, streaming update latency or optimized
+production kernels.
+
+\paragraph{A focused research program for KAHM forecasting.}
+The evidence supports studying KAHM as a local representation whose
+usefulness depends on target, decoder and resources. A next methodological
+step is to train a KAHM gate or reconstruction parameter against a
+forecast-specific objective, with horizon-specific or low-rank metrics
+as explicit alternatives. Such a study should include the same supervision
+and optimization budget for affine, locality and RBF-local controls;
+otherwise a gain would confound supervised fitting with the KAHM rule.
+This is an untested hypothesis, not a conclusion of the present proxy
+experiment. More capacity is justified only by fresh held-out improvement
+over those controls and the strongest practical raw-input baseline.
+
+A second direction is efficient updating of useful local structure.
+Reference reduction, cached local factorizations and bounded updates
+could change the measured cost tradeoff, but no streaming or drift
+experiment is reported here. A new chronological protocol should jointly
+measure prediction, update latency and memory, with a rule for retiring
+or declining an unhelpful correction. Larger independent source coverage
+and stronger forecasting baselines would then test transfer. The present
+archive outcomes can guide development; they cannot be reused as unseen
+confirmation of a newly chosen method.
+
 \section{Conclusion}
-KAHM geometry can support useful predictive features under specified
-target and decoder conditions. The controlled experiments locate a
-positional-information bottleneck, show that simpler controls can repair
-it, and establish conditional finite-decoder gains on Van der Pol. A
-separate natural-source evaluation finds higher aggregate error and
-measured warm-pipeline cost for the tested KAHM augmentation than for its
-raw-history comparator, and no useful geometric increment in the frozen
-benefit diagnostic. A paired post-hoc min--max check does not reverse that
-natural-source ranking or the main controlled mean rankings, while exposing
-measurable preprocessing sensitivity.
+KAHM can be studied productively in time-series forecasting as a local
+geometric representation with an explicit decoder and baseline. The
+controlled intervention identifies when reconstruction scores omit
+predictive position; the original finite-decoder study demonstrates
+conditional gains. Natural-source and scaling experiments limit their
+transfer, and the additive utility study exposes both weak incremental
+benefit and fitting failures. These observations remain part of the
+scientific record.
 
-The new factorial shows that preserving the actual raw forecast can
-recover useful corrections at particular data and decoder budgets, while
-leaving stronger concatenated, simpler geometric, or boosting alternatives.
-The new archive evaluation also exposes a shared fitting failure before
-the zero-correction option can be selected. Its full-roster geometric
-losses remain undefined; the separately amended matched-success diagnostic
-shows little additive KAHM gain over raw RBF at substantially greater
-cost, and much stronger performance from raw ridge. These findings do
-not establish a general geometric adoption rule.
+The new prospectively frozen study completes all 48 tasks and 768
+forecasts, evaluates honestly excluded donor residuals and a shared
+supervised metric, and supplies an elementary account of donor-to-final
+residual mismatch. Learned-metric KAHM improves ridge on the three
+synthetic laws and by 2.18\% on the four-collection archive aggregate.
+However, incremental metric and donor-target benefits are unresolved in
+the synthetic family, matched local controls win five comparisons, and
+fixed-metric KAHM or simpler corrections offer better archive tradeoffs.
+These results justify continued investigation of target-relevant local
+geometry while leaving a KAHM-specific advantage unestablished.
 
-The answer to the motivating question therefore has distinct parts.
-Oracle residual structure is a conditional-mean property relative to a
-baseline; finite-decoder usefulness is a property of the fitted correction
-under the evaluation law. Justifying extra complexity additionally
-requires successful operation, credible simpler alternatives, held-out
-evidence, and an application-specific resource requirement. The present
-paper supplies an auditable account of conditional gains, failed transfer,
-and fit limitations. It does not infer minimum necessary complexity from
-representation preservation or from a favorable fitted comparison.
+A defensible forecasting contribution therefore requires more than
+reconstruction accuracy or retention of the raw pathway: it must identify
+what the geometry adds beyond matched alternatives, show that the gain
+survives temporal evaluation, and report the complete resources used to
+obtain it. The revised framework and reproducible evidence make those
+questions concrete. Direct forecast-trained KAHM geometry and efficient
+adaptation remain testable next steps rather than promised improvements.

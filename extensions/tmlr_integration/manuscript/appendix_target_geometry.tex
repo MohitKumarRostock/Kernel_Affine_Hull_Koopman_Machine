@@ -1,0 +1,325 @@
+\section{Target-adapted geometry: theory, protocol, and complete results}
+\label{app:target-geometry}
+
+\subsection{Residual-target transport between fitted baselines}
+\label{app:target-transport}
+
+The following proposition makes an elementary consequence of
+conditional-expectation projection explicit for residual learning.
+It is not claimed as a new general statistical theorem or a KAHM
+performance guarantee. Condition on the development state and fix a
+representation $Z=\Gamma(X)$, final base $f_0$, and donor $f_d$.
+All expectations below use one evaluation law $Q$ with finite second
+moments. For a fixed positive-definite matrix $W$, write
+$\langle a,b\rangle_W=a^\top Wb$,
+$\|a\|_W^2=a^\top Wa$, and
+$R_W(f)=\E_Q\|Y-f(X)\|_W^2$. The study's equal-horizon mean squared
+error is obtained with $W=I/H$.
+
+\begin{proposition}[Correction gain and donor mismatch]
+\label{prop:target-transport}
+Put $m_0(Z)=\E_Q[Y-f_0(X)\mid Z]$ and
+$b_d(Z)=\E_Q[f_0(X)-f_d(X)\mid Z]$. For every fixed
+square-integrable correction $q(Z)$,
+\begin{equation}
+ R_W(f_0)-R_W(f_0+q\circ\Gamma)
+ =\E_Q\|m_0\|_W^2-\E_Q\|q-m_0\|_W^2.
+ \label{eq:target-general-gain}
+\end{equation}
+The donor's oracle correction is
+$q_d(Z)=\E_Q[Y-f_d(X)\mid Z]=m_0(Z)+b_d(Z)$. Consequently,
+\begin{align}
+ R_W(f_0)-R_W(f_0+q_d\circ\Gamma)
+ &=\E_Q\|m_0\|_W^2-\E_Q\|b_d\|_W^2,\label{eq:target-transport-proof}\\
+ R_W(f_0)-R_W(f_0+\widehat q\circ\Gamma)
+ &=\E_Q\|m_0\|_W^2-\E_Q\|b_d+a\|_W^2,
+ \quad a=\widehat q-q_d.\label{eq:target-fitted-transport}
+\end{align}
+Furthermore,
+$\E_Q\|b_d\|_W^2\leq\E_Q\|f_0(X)-f_d(X)\|_W^2$.
+\end{proposition}
+
+\begin{proof}
+Write $Y-f_0(X)=m_0(Z)+\epsilon$, where
+$\E_Q[\epsilon\mid Z]=0$. Conditional orthogonality gives
+\[
+ R_W(f_0+q\circ\Gamma)
+ =\E_Q\|\epsilon\|_W^2+\E_Q\|m_0-q\|_W^2.
+\]
+Subtract this equality from its $q=0$ counterpart to obtain
+Equation~\eqref{eq:target-general-gain}. Linearity of conditional
+expectation yields $q_d=m_0+b_d$; substituting $q_d$ and then
+$q_d+a$ proves the next two identities. Conditional Jensen's
+inequality for the convex quadratic norm proves the final bound.
+\end{proof}
+
+The final term in Equation~\eqref{eq:target-fitted-transport} contains
+$2\E_Q\langle b_d,a\rangle_W$. It cannot be replaced by separate
+nonnegative mismatch and estimation penalties without another
+orthogonality argument: approximation error may reinforce or partially
+cancel the donor discrepancy. Even an exact donor correction can harm
+the final base when its conditional mismatch exceeds the final base's
+predictable residual signal.
+
+For fixed donors $f_1,\ldots,f_K$ and deterministic weights
+$\pi_k\geq0$ summing to one, let $\bar f=\sum_k\pi_k f_k$.
+Expanding around $\bar f$ gives
+\[
+ \sum_k\pi_k\E_Q\|Y-f_k(X)-q(Z)\|_W^2
+ =\E_Q\|Y-\bar f(X)-q(Z)\|_W^2
+  +\sum_k\pi_k\E_Q\|f_k(X)-\bar f(X)\|_W^2.
+\]
+The cross term vanishes because the weighted donor deviations sum to
+zero. Hence the common-law population optimizer is
+$\E_Q[Y-\bar f(X)\mid Z]$, and the proposition applies with
+$f_d=\bar f$. This does not identify a finite OOF fit with that
+optimizer. Chronological folds can have different laws and sample
+sizes; a donor index depending on the observation must retain that
+joint law rather than being replaced by constant mixture weights.
+
+For a fixed realized correction $\delta(X)$, direct expansion also gives
+\begin{equation}
+ R_W(f_0)-R_W(f_0+\delta)
+ =2\E_Q\langle Y-f_0(X),\delta(X)\rangle_W
+  -\E_Q\|\delta(X)\|_W^2.
+ \label{eq:target-alignment-audit}
+\end{equation}
+The independent audit verifies its empirical counterpart from saved test
+predictions. It does not estimate the oracle $m_0$ or $b_d$.
+Donor/final disagreement is recorded separately on correction-training
+rows. The final baseline has seen those rows, so this diagnostic is not
+an unbiased estimate of future disagreement or predictive risk.
+
+\subsection{Exact prospective design and source roster}
+\label{app:target-protocol}
+
+The executable protocol is \path{extensions/target_geometry/PROTOCOL.md};
+its configuration, numerical dependencies, implementation and prepared
+roster are hashed before the full run. Development checks use separate
+seeds and do not enter confirmation. The new synthetic seeds are
+11200--11211. For law index $l$ and split index $s=0,1,2$, the inherited
+generator receives the first state value from
+\texttt{SeedSequence([seed,l,s,9027])}. Each task has 128/64/128
+training/validation/test episodes of length 72, history 12, offsets
+$1,4,12$ and stride four, yielding 13 origins per episode.
+These data retain the earlier numerical observation conventions.
+
+For synthetic OOF targets, episode index modulo four assigns folds.
+Each donor excludes every row of the queried episodes. Within its
+remaining episodes, the first 80\% of ordered episode IDs fit its
+inner candidate models and the rest select its penalty. The selected
+donor is then fitted on all donor episodes. No queried episode or
+outer-validation target selects that donor's penalty.
+
+For natural series, the first $\lceil0.4n\rceil$ capped training origins
+initialize the donor history; the remainder form three contiguous query
+blocks. If $t_b$ is the first query origin, only donor rows with
+$t+H\leq t_b$ are allowed. An 80/20 inner chronological split applies
+the same target-availability condition before inner validation.
+Fewer than eight inner-fitting rows invokes the predefined donor
+penalty one. Fewer than eight outer donor rows makes that query block
+ineligible for \emph{both} residual-target procedures. The fitting
+sample is otherwise fixed by indices, not by residual values or model
+success. Fewer than eight eligible correction rows retains the available
+baselines and sends the correction arms to their declared ridge fallback.
+An eligible donor fit failure sends its dependent methods to that
+fallback. An unavailable primary base or required evaluation split is
+retained as a task failure.
+
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{New target-geometry archive collections and fixed roster.
+$L$ is history length, $H$ the number of consecutive target steps, and
+$p$ the seasonal period. Selection uses only training-prefix eligibility
+and identifier hashes. These are 12 series from four selected collections,
+not 12 independent application domains.}
+\label{tab:target-roster}
+\begin{tabular}{llrrrl}
+\toprule
+Collection & Frequency & $L$ & $H$ & $p$ & Selected series \\
+\midrule
+Australian electricity & Half-hourly & 48 & 12 & 48 & T3, T5, T1 \\
+Bitcoin indicators & Daily & 28 & 7 & 7 & \begin{tabular}[t]{@{}l@{}}sent\_addresses, confirmation\_time,\\block\_size\end{tabular} \\
+Melbourne pedestrian & Hourly & 48 & 6 & 24 & T10, T14, T20 \\
+KDD2018 air quality & Hourly & 48 & 6 & 24 & T239, T99, T233 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The source records are respectively
+\href{https://doi.org/10.5281/zenodo.4659727}{10.5281/zenodo.4659727},
+\href{https://doi.org/10.5281/zenodo.5121965}{10.5281/zenodo.5121965},
+\href{https://doi.org/10.5281/zenodo.4656626}{10.5281/zenodo.4656626}, and
+\href{https://doi.org/10.5281/zenodo.4656719}{10.5281/zenodo.4656719}.
+All pinned records declare CC BY 4.0; archive/member hashes, attribution,
+source exclusions and metadata are retained in
+\path{extensions/target_geometry/sources/manifest.json}.
+Bitcoin selections are activity indicators, not price forecasts.
+New collection identity does not imply a new broad application domain,
+real-time data-vintage reconstruction, or population representativeness.
+
+Training-prefix eligibility requires 96 finite windows and a positive
+seasonal-difference mean-square scale, with first-difference fallback.
+The selection salt is
+\texttt{kahm-target-geometry-new-collections-v1}. Each series uses
+chronological 60/20/20 splits. Training is capped at 512 windows and
+validation/test at 64 origins per segment by even index spacing.
+All targets lie inside their segment; later test histories can contain
+already observed test values. Missing windows are excluded without
+interpolation, defining an available-window estimand. The loss scale
+uses the initial training prefix only. The naive control uses the
+declared seasonal lag with an available-value fallback; synthetic
+naive prediction is persistence.
+
+The 18 primary contrasts use 12 paired repetition-level means each.
+For positive differences favoring the second method, they compare
+ridge with learned-OOF KAHM; identity-OOF KAHM with learned-OOF KAHM;
+identity-in-sample KAHM with identity-OOF KAHM; and learned-OOF affine,
+locality, and RBF-local with learned-OOF KAHM. Intervals use
+$\bar d\pm t_{11,1-0.05/(2\cdot18)}s_d/\sqrt{12}$ under their stated
+normal approximation. No joint coverage is asserted with prior study
+families. Archive results and leave-one-source-out re-aggregations are
+descriptive; no window-based confidence interval is attached to four
+selected source collections.
+
+\subsection{Implementation, safeguards, and accounting}
+\label{app:target-implementation}
+
+The metric uniformly samples up to 256 correction rows without
+replacement using the task seed. All training inputs determine its
+input standardizer, matching the downstream bank; only eligible OOF
+residual targets fit its supervised objective. Its donor mask excludes
+whole synthetic episodes or natural origins separated by at most
+$L+H$. Queries with no admissible donor are omitted from the proxy;
+fewer than two admissible queries or donor groups invokes identity.
+The residual pooled scale is
+$[\mathrm{mean}_{i,h}(r_{ih}-\bar r_h)^2]^{1/2}$, before row subsampling.
+Constant residuals or absence of positive admissible input distances
+also invoke identity. Log-sum-exp evaluates kernel probabilities.
+L-BFGS-B uses \texttt{ftol=$10^{-10}$},
+\texttt{gtol=$10^{-6}$}, at most 40 iterations and 20 line-search
+steps. The source retains the analytic derivative, numerical gradient
+check, fitted weights, objective values, donor counts, optimizer status
+and fallback reason. Training-objective improvement is not a forecast
+accuracy claim.
+
+Each bank caps every requested group count by the number of distinct
+sampled partition histories. If numerical clustering still has empty
+groups, all counts are halved down to one, with each reduction recorded.
+Rank-zero local models use their inherited center reconstruction.
+Unexpected geometry or correction errors return the fitted ridge
+forecast with the exception and incurred work retained. A failed
+supervised metric uses identity; a failed secondary raw RBF also uses
+ridge. A numerical failure of the secondary jointly fitted head is
+isolated to that arm and invokes the same ridge fallback. These are
+predefined procedures for the present study, distinct from the previous
+study's unchanged fit failures.
+
+KAHM, affine and locality codes import the archived reconstruction and
+coordinate formulas. The RBF-local gate for local model $c$ uses
+$\exp\{-\|z-\mu_c\|_2^2/(2s_c)\}$, normalized within its block,
+where $s_c$ is its reference mean squared radius, floored at $10^{-6}$.
+All four multiply local coordinates by their corresponding affinities.
+Applying metric weights before re-standardizing each input column
+would cancel the intended metric; the implementation instead applies
+$\operatorname{diag}(e^{\theta/2})$ after the shared standardizer.
+Identity-weight tests recover archived features on nondegenerate data.
+
+One task and one numerical-library thread execute at a time. Disjoint
+wall and process-CPU nodes record base search/prediction, donor fitting,
+metric learning, bank construction and transformations, head search,
+final prediction and selected-model serialization. Each procedure pays
+for its required nodes once, including a rejected correction's search.
+Test feature transformations are conservatively charged even when
+zero correction bypasses their subsequent use; they consume test
+inputs only. Imports, data download/preparation, artifact writes and
+reporting are outside model timing. Serialized bytes describe the
+retained model state, not an information-theoretic storage minimum.
+
+\subsection{Complete comparisons and diagnostic records}
+\label{app:target-results}
+
+The generated displays retain all prescribed primary contrasts and
+every source rather than selecting favorable outcomes. The independent
+analyzer recomputes losses from saved targets and predictions, checks
+the complete task/method roster, validates donor exclusions and
+selection records, sums charged dependencies, checks zero-correction
+equality, and verifies Equation~\eqref{eq:target-alignment-audit}.
+Metric objectives, effective groups, selected mixing weights and
+donor/final disagreement remain diagnostics of the declared procedures.
+Neither these quantities nor a smaller proxy objective estimates
+unrestricted Bayes risk, identifies minimum necessary complexity, or
+certifies a universal KAHM adoption rule.
+
+\paragraph{Primary contrasts and source sensitivity.}
+Figure~\ref{fig:target-synthetic-contrasts} displays the complete
+18-contrast family, with numerical endpoints in
+Table~\ref{tab:target-synthetic-intervals}. The three ridge contrasts
+favor learned-OOF KAHM, while five matched-geometry contrasts favor
+the simpler control. None establishes a learned-metric or OOF-target
+increment for KAHM. Table~\ref{tab:target-archive-sources} retains
+the source means, and Table~\ref{tab:target-archive-windows} records
+every series's windows and training loss scale. Individual-series
+losses are retained in \path{reports/task_metrics.csv} under the new
+extension. Learned-OOF KAHM's source-mean
+reductions relative to ridge are 3.91\% for Australian electricity,
+1.38\% for Bitcoin indicators, 4.37\% for pedestrian counts, and
+0.85\% for air quality. These favorable source aggregates coexist
+with four individual-series losses. The complete leave-one-source-out
+display in Table~\ref{tab:target-leave-one-source-out} concerns
+composition sensitivity of this roster, not uncertainty over new
+collections.
+
+\paragraph{Optimization and residual diagnostics.}
+All 36 synthetic and 12 archive metric fits report optimizer
+convergence; none invokes identity fallback or reaches the iteration
+limit. There are no recorded bank group reductions or fitting warnings.
+Synthetic optimization takes two to three iterations and decreases
+the regularized objective by a median $1.8741\times10^{-6}$; the
+learned maximum-to-minimum weight ratios span 1.0013--1.1054. The
+synthetic metric therefore remains close to identity under the frozen
+bandwidth, penalty and diagonal parameterization. Archive optimization
+takes two to 14 iterations, with median objective decrease
+$2.9692\times10^{-4}$ and weight ratios 1.0577--16.0000. One pedestrian
+series reaches the declared ratio cap. These are observed solver
+statuses and training-objective changes, not guarantees of global
+optimality, forecasting improvement, or performance of an
+end-to-end KAHM metric.
+
+The median correction-row donor/final disagreement divided by OOF
+residual MSE is 0.0024 for synthetic tasks and 0.1047 for archive tasks
+(Table~\ref{tab:target-diagnostics}). This descriptive difference
+documents that the two residual sources need not be interchangeable;
+it cannot identify the oracle transport penalty in
+Proposition~\ref{prop:target-transport} or attribute observed test
+differences to that penalty. Validation selects full-strength
+learned-OOF KAHM correction on 35 of 36 synthetic tasks, with half
+strength on the remaining task. Archive selections are more restrained:
+the counts for $\gamma=0,1/4,1/2,1$ are $1,4,6,1$
+(Table~\ref{tab:target-selection}). The four archive series harmed
+despite nonzero validation selection confirm that the available zero
+option does not ensure improvement on future observations.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{generated/target_geometry/synthetic_contrasts.pdf}
+\caption{All six prescribed contrasts for each known synthetic law.
+Points are paired mean differences in MSE, multiplied by $10^3$;
+positive values favor the candidate named to the right of each arrow.
+Intervals use the common 18-comparison Bonferroni adjustment and
+12 independent repetition differences per law. The learned-metric
+comparison holds OOF targets fixed; the residual-target comparison
+holds the identity metric fixed. Matched-geometry comparisons use
+the shared learned metric and OOF targets. Each panel has its own
+horizontal range, and intervals containing zero are unresolved,
+not evidence of equal performance.}
+\label{fig:target-synthetic-contrasts}
+\end{figure}
+
+\input{generated/target_geometry/synthetic_intervals}
+\input{generated/target_geometry/archive_sources}
+\input{generated/target_geometry/archive_windows}
+\input{generated/target_geometry/diagnostics}
+\input{generated/target_geometry/selection_frequency}
+\input{generated/target_geometry/leave_one_source_out}
+\FloatBarrier

@@ -1,14 +1,38 @@
 # Current KAHM time-series manuscript
 
 The current manuscript is **Kernel Affine Hull Machines for Time-Series
-Forecasting: Predictive Geometry, Residual Learning, and Cost**.
+Forecasting: Forecast-Trained Local Geometry and Matched Evaluation**.
 
-Read [the revised PDF](extensions/tmlr_integration/review/KAHM_Prediction_Revised.pdf),
+Read [the revised PDF](extensions/tmlr_integration/review/KAHM_Forecast_Trained_Manuscript.pdf),
 [the editable source](extensions/tmlr_integration/manuscript/main.tex), and
 [the complete build guide](extensions/tmlr_integration/README.md).
 It is an unsubmitted research draft in TMLR preprint style.
 
-## New target-geometry study
+## Direct forecast-trained reconstruction
+
+The [current experiment](extensions/direct_reconstruction/README.md) trains
+KAHM kernel bandwidths and gate temperatures for the actual forecast and
+horizon, with equally supervised affine, locality and RBF-local alternatives.
+Its [public freeze](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/39174d06dffc7e28fed73dbbf866e539560dd021)
+contains the numerical implementation, independent analysis and all 46
+planned input sets before evaluation. Three rideshare tasks are retained as
+availability failures; they prevent a complete four-collection aggregate.
+The seven-series archive subset is explicitly availability-conditioned.
+
+The manuscript defines the complete forecasting family and separates its
+methodological specification from any comparative superiority supported by
+actual results. The [new packager](extensions/tmlr_integration/package_direct.py)
+produces the complete editable manuscript and a self-contained reproduction
+bundle for this extension and its separate exploratory gate pilot.
+
+The completed comparison yields 2 positive, 6 negative and 10 unresolved
+adjusted intervals for reconstruction-trained KAHM. It demonstrates a 41.43%
+Van der Pol improvement over gate-only KAHM, while matched and practical
+comparators remain stronger in important settings. The
+[full findings](extensions/direct_reconstruction/FINDINGS.md) report all
+procedures, unavailable tasks, source dependence and costs.
+
+## Previous shared proxy-metric study
 
 The [new study](extensions/target_geometry/README.md) compares a ridge baseline,
 matched local geometric corrections, in-sample versus excluded-donor residuals,

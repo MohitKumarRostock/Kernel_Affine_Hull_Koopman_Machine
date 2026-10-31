@@ -1,0 +1,359 @@
+{
+  "builder": {
+    "bytes": 23385,
+    "path": "/workspace/scratch/fa9a3361d0d9/work/kahm_repository/extensions/direct_reconstruction/build_figures.py",
+    "sha256": "5eddcf543ddaf48fe3d2c6a0c020e794494ae13d03e54b71669b208b847037ec"
+  },
+  "created_utc": "2026-10-31T08:17:58.377117+00:00",
+  "figures": {
+    "natural_available_accuracy_cost": {
+      "accuracy_weighting": "equal available collection, then equal available series",
+      "available_collections": [
+        "dominick_weekly",
+        "sunspot_daily",
+        "wikipedia_daily"
+      ],
+      "available_series": 7,
+      "caption": "Supplemental available-case natural accuracy and measured cost for all seventeen procedures. Accuracy averages A-seasonal-scaled MSE equally over series within each available collection, then equally over the three available collections (seven series). The horizontal coordinate is the arithmetic mean measured procedure time across those seven available tasks, with equal task weights and a logarithmic axis. Thus accuracy and time use explicitly different weighting rules. Time includes the implementation's charged fitting, selection and eager query dependencies and selected-state packing/serialization on this host; candidate dependencies are counted once for the non-KAHM policy. Downloads, process imports, data preparation and artifact writes are excluded. Numbered points identify all procedures; overlapping points share the same plotted coordinates. There are no uncertainty intervals or source-population claims. The planned four-collection aggregate remains undefined because the three frozen rideshare tasks were unavailable; this figure does not replace it.",
+      "file": {
+        "bytes": 20812,
+        "path": "natural_available_accuracy_cost.pdf",
+        "sha256": "76eeb9745718181b1dd2edfd7fe6d86353603a00890e8726910ed2b6654342c1"
+      },
+      "logarithmic_x_axis": true,
+      "plotted_rows": [
+        {
+          "available_scaled_mse": 0.3856252891102004,
+          "mean_warm_seconds": 0.001729594857221985,
+          "method": "ridge"
+        },
+        {
+          "available_scaled_mse": 0.3630073065147559,
+          "mean_warm_seconds": 0.012981464286505278,
+          "method": "raw_rbf"
+        },
+        {
+          "available_scaled_mse": 0.35220069812075394,
+          "mean_warm_seconds": 0.65497704885794,
+          "method": "raw_hgb"
+        },
+        {
+          "available_scaled_mse": 0.460134461184589,
+          "mean_warm_seconds": 5.7275572024601775e-05,
+          "method": "seasonal_naive"
+        },
+        {
+          "available_scaled_mse": 0.394069744867575,
+          "mean_warm_seconds": 0.050203617998964285,
+          "method": "fixed_kahm"
+        },
+        {
+          "available_scaled_mse": 0.380006180518155,
+          "mean_warm_seconds": 0.032642324143255665,
+          "method": "fixed_affine"
+        },
+        {
+          "available_scaled_mse": 0.37626349061801695,
+          "mean_warm_seconds": 0.029855971000350628,
+          "method": "fixed_locality"
+        },
+        {
+          "available_scaled_mse": 0.38619965553959723,
+          "mean_warm_seconds": 0.029566659430461835,
+          "method": "fixed_rbf_local"
+        },
+        {
+          "available_scaled_mse": 0.3961918896183909,
+          "mean_warm_seconds": 0.7339623448562114,
+          "method": "gate_kahm"
+        },
+        {
+          "available_scaled_mse": 0.38952069111299364,
+          "mean_warm_seconds": 0.6936333124290935,
+          "method": "gate_affine"
+        },
+        {
+          "available_scaled_mse": 0.38233290868043524,
+          "mean_warm_seconds": 0.5606148737141277,
+          "method": "gate_locality"
+        },
+        {
+          "available_scaled_mse": 0.3677875396045014,
+          "mean_warm_seconds": 0.6556471238569169,
+          "method": "gate_rbf_local"
+        },
+        {
+          "available_scaled_mse": 0.37193547670391136,
+          "mean_warm_seconds": 7.928688394142747,
+          "method": "reconstruction_kahm"
+        },
+        {
+          "available_scaled_mse": 0.38172205429997047,
+          "mean_warm_seconds": 5.345340344285432,
+          "method": "reconstruction_affine"
+        },
+        {
+          "available_scaled_mse": 0.37482889825836874,
+          "mean_warm_seconds": 2.1329346881429956,
+          "method": "reconstruction_locality"
+        },
+        {
+          "available_scaled_mse": 0.36383454698368684,
+          "mean_warm_seconds": 2.1839873770009683,
+          "method": "reconstruction_rbf_local"
+        },
+        {
+          "available_scaled_mse": 0.38247198432798707,
+          "mean_warm_seconds": 12.155316967143206,
+          "method": "nonkahm_policy"
+        }
+      ],
+      "size_inches": [
+        6.8,
+        4.2
+      ],
+      "statistics_source": "summary.json: method_aggregates and cost_aggregates",
+      "time_weighting": "equal weight over seven available tasks",
+      "vector_pdf": true
+    },
+    "primary_contrasts": {
+      "caption": "Reserved synthetic evidence for forecast-directed KAHM reconstruction. Each point is the mean paired comparator-minus-reconstruction-KAHM MSE difference across twelve independent repetitions of the indicated law; bars are the frozen two-sided Bonferroni t intervals (11 degrees of freedom, family alpha 0.05 over all eighteen contrasts). Differences and interval endpoints are multiplied by 1,000; these are absolute MSE differences, not ratio or percentage intervals. Positive values favor reconstruction-trained KAHM. Blue intervals lie above zero, muted orange intervals lie below zero, and gray intervals include zero. Horizontal scales differ across panels. Coverage concerns this new contrast family under the paired-difference normal approximation, not the full manuscript.",
+      "control_order": [
+        "raw_rbf",
+        "gate_kahm",
+        "reconstruction_affine",
+        "reconstruction_locality",
+        "reconstruction_rbf_local",
+        "nonkahm_policy"
+      ],
+      "display_scale": 1000.0,
+      "file": {
+        "bytes": 20711,
+        "path": "primary_contrasts.pdf",
+        "sha256": "9fa066718d04d106171354835f98426029a852d837897e5f56f2041426e72207"
+      },
+      "law_order": [
+        "nonlinear_ar",
+        "vanderpol",
+        "duffing"
+      ],
+      "plotted_rows": [
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "positive",
+          "control": "raw_rbf",
+          "interval_high_times_1000": 0.2775821667349237,
+          "interval_low_times_1000": 0.0066528514994787045,
+          "law": "nonlinear_ar",
+          "mean_difference_times_1000": 0.1421175091172012
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "unresolved",
+          "control": "gate_kahm",
+          "interval_high_times_1000": 0.047076187186587404,
+          "interval_low_times_1000": -0.03861677503846201,
+          "law": "nonlinear_ar",
+          "mean_difference_times_1000": 0.004229706074062696
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "unresolved",
+          "control": "reconstruction_affine",
+          "interval_high_times_1000": 0.0897374942523432,
+          "interval_low_times_1000": -0.10040366351424346,
+          "law": "nonlinear_ar",
+          "mean_difference_times_1000": -0.005333084630950123
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "unresolved",
+          "control": "reconstruction_locality",
+          "interval_high_times_1000": 0.14203939192175222,
+          "interval_low_times_1000": -0.0345713897998254,
+          "law": "nonlinear_ar",
+          "mean_difference_times_1000": 0.0537340010609634
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "unresolved",
+          "control": "reconstruction_rbf_local",
+          "interval_high_times_1000": 0.0776534489001812,
+          "interval_low_times_1000": -0.09496293208904202,
+          "law": "nonlinear_ar",
+          "mean_difference_times_1000": -0.008654741594430406
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "unresolved",
+          "control": "nonkahm_policy",
+          "interval_high_times_1000": 0.06263228949843848,
+          "interval_low_times_1000": -0.14692339225916715,
+          "law": "nonlinear_ar",
+          "mean_difference_times_1000": -0.04214555138036434
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "unresolved",
+          "control": "raw_rbf",
+          "interval_high_times_1000": 0.11176294412023431,
+          "interval_low_times_1000": -4.196945924757335,
+          "law": "vanderpol",
+          "mean_difference_times_1000": -2.042591490318551
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "positive",
+          "control": "gate_kahm",
+          "interval_high_times_1000": 7.708602850947179,
+          "interval_low_times_1000": 4.34946733826016,
+          "law": "vanderpol",
+          "mean_difference_times_1000": 6.02903509460367
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "negative",
+          "control": "reconstruction_affine",
+          "interval_high_times_1000": -0.1549848868284034,
+          "interval_low_times_1000": -1.8051360947529766,
+          "law": "vanderpol",
+          "mean_difference_times_1000": -0.98006049079069
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "unresolved",
+          "control": "reconstruction_locality",
+          "interval_high_times_1000": 2.7484786063495434,
+          "interval_low_times_1000": -1.2139475552453292,
+          "law": "vanderpol",
+          "mean_difference_times_1000": 0.767265525552107
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "unresolved",
+          "control": "reconstruction_rbf_local",
+          "interval_high_times_1000": 0.6036236845245663,
+          "interval_low_times_1000": -2.0584274151522566,
+          "law": "vanderpol",
+          "mean_difference_times_1000": -0.7274018653138451
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "negative",
+          "control": "nonkahm_policy",
+          "interval_high_times_1000": -4.300247488197361,
+          "interval_low_times_1000": -7.899302944330179,
+          "law": "vanderpol",
+          "mean_difference_times_1000": -6.09977521626377
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "negative",
+          "control": "raw_rbf",
+          "interval_high_times_1000": -0.48035755929022944,
+          "interval_low_times_1000": -1.4550224924918764,
+          "law": "duffing",
+          "mean_difference_times_1000": -0.967690025891053
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "unresolved",
+          "control": "gate_kahm",
+          "interval_high_times_1000": 0.6824800179600107,
+          "interval_low_times_1000": -0.05752882572920983,
+          "law": "duffing",
+          "mean_difference_times_1000": 0.3124755961154005
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "negative",
+          "control": "reconstruction_affine",
+          "interval_high_times_1000": -0.3027322204943935,
+          "interval_low_times_1000": -0.9921474965739119,
+          "law": "duffing",
+          "mean_difference_times_1000": -0.6474398585341528
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "negative",
+          "control": "reconstruction_locality",
+          "interval_high_times_1000": -0.31653937800210263,
+          "interval_low_times_1000": -1.6034316373862716,
+          "law": "duffing",
+          "mean_difference_times_1000": -0.959985507694187
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "unresolved",
+          "control": "reconstruction_rbf_local",
+          "interval_high_times_1000": 0.4104507966499099,
+          "interval_low_times_1000": -1.0862967222324236,
+          "law": "duffing",
+          "mean_difference_times_1000": -0.33792296279125694
+        },
+        {
+          "candidate": "reconstruction_kahm",
+          "conclusion": "negative",
+          "control": "nonkahm_policy",
+          "interval_high_times_1000": -0.8408280118942258,
+          "interval_low_times_1000": -1.5889539580575451,
+          "law": "duffing",
+          "mean_difference_times_1000": -1.2148909849758855
+        }
+      ],
+      "size_inches": [
+        6.8,
+        3.6
+      ],
+      "statistics_source": "summary.json: primary_contrasts",
+      "vector_pdf": true
+    }
+  },
+  "input_directory": "/workspace/scratch/fa9a3361d0d9/work/kahm_repository/extensions/direct_reconstruction/results",
+  "inputs": [
+    {
+      "bytes": 3847,
+      "path": "execution.json",
+      "sha256": "79ea1d18b45da2d994c7dbaf6672998cc40dfb0ac2f59682412409d8bff3f4c1"
+    },
+    {
+      "bytes": 2014,
+      "path": "audit_report.json",
+      "sha256": "1e49bae05d523399cbf0cee24d0068147b7ddf5e714b8678f0f95e7af24f9cc2"
+    },
+    {
+      "bytes": 108516,
+      "path": "summary.json",
+      "sha256": "8de635d9141c26fe0d6a42dc6ff5c11fdeed0c5e4f424ff46dcdda3abbd681d4"
+    },
+    {
+      "bytes": 326692,
+      "path": "protocol.json",
+      "sha256": "a67eda3b6fbf0a5c0474a913b05c6a0e65855bcad63f298822fd87bd6575b01c"
+    },
+    {
+      "bytes": 11250,
+      "path": "freeze.json",
+      "sha256": "7747a339fb5537bf4524c8b77058b8e209fec0867f696dd99590f9ac990d8407"
+    }
+  ],
+  "matplotlib_version": "3.10.8",
+  "outputs": [
+    {
+      "bytes": 20711,
+      "path": "primary_contrasts.pdf",
+      "sha256": "9fa066718d04d106171354835f98426029a852d837897e5f56f2041426e72207"
+    },
+    {
+      "bytes": 20812,
+      "path": "natural_available_accuracy_cost.pdf",
+      "sha256": "76eeb9745718181b1dd2edfd7fe6d86353603a00890e8726910ed2b6654342c1"
+    }
+  ],
+  "public_freeze_commit": "39174d06dffc7e28fed73dbbf866e539560dd021",
+  "publication_audit_passed": true,
+  "schema_version": "direct-reconstruction-display-v1",
+  "scope": "Display only; no new fitting, model selection, loss calculation or statistical inference",
+  "selected_models_replayed": true,
+  "visual_review": "PDFs require visual inspection after rendering; automated label placement is not a substitute"
+}

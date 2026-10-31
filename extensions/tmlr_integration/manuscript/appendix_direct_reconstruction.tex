@@ -1,0 +1,161 @@
+\section{Direct reconstruction protocol and reproducibility}
+\label{app:direct-protocol}
+
+The complete protocol is versioned under
+\path{extensions/direct_reconstruction/PROTOCOL.md}. Its scientific
+freeze contains the model, preparation and execution code, independent
+analysis, numerical tests, inherited numerical dependencies, exact input
+roster, source provenance and prepared arrays. The published checkpoint
+precedes full D evaluation. The preserved pilot under
+\path{extensions/forecast_gate_pilot} has its own earlier source freeze
+and is not relabelled as part of this evaluation.
+
+\paragraph{Chronology and seasonal prediction.}
+Synthetic seeds are 84200--84211 for each law, with the inherited
+72-observation episodes and thirteen forecast origins per episode.
+Development checks use seed 932001, outside the reported roster.
+Whole-episode inner validation selects the raw baseline in A. For natural
+data, inner A training targets must have matured by its first
+validation query. Every outer target lies inside its segment. A history
+can include observations from the preceding segment because these have
+already been observed at the forecast origin. No future missing-value
+imputation or label-based series replacement is used.
+
+Dominick has history 52, offsets $(1,2,4)$ and seasonal period 52.
+Rideshare uses only \texttt{price\_mean} series, history 24, offsets
+$(1,3,6)$ and period 24. Wikipedia has history 28, offsets $(1,3,7)$ and
+period 7. Sunspot uses the last 4,096 observations independent of their
+values, history 28, offsets $(1,3,7)$ and period one. Each of the first
+three collections contributes three hash-selected eligible series;
+sunspot contributes its single series. Every source record, archive
+checksum, selected identifier, original origin index, split boundary and
+training-only scale is preserved. Natural row caps are 512/128/128/128.
+The minimum A eligibility is 96 complete windows with a positive finite
+scale. A later unavailable segment remains a recorded failure. The three selected
+rideshare series have no complete B windows, identified during preparation
+after A-only selection; all three are retained as planned feasibility
+failures. This precludes a complete four-collection accuracy aggregate.
+
+Seasonal naive predicts each offset from the most recent observed value
+with the appropriate seasonal phase. For period $p$ this is
+$y_{t+h-p\lceil h/p\rceil}$, using only indices at or before $t$.
+Period one therefore gives persistence. All declared histories include
+the required seasonal lag. The selected source records are
+\url{https://doi.org/10.5281/zenodo.4654802},
+\url{https://doi.org/10.5281/zenodo.5122114},
+\url{https://doi.org/10.5281/zenodo.4656080}, and
+\url{https://doi.org/10.5281/zenodo.4654773}; the source manifest retains
+attribution and archive-license metadata.
+
+\paragraph{Baseline and correction selection.}
+Raw RBF and boosting retain the frozen ridge state for a logged
+horizon-wise D fallback; a D failure cannot change their C forecast or
+the C-selected policy. Its baseline cost and serialized bytes are included.
+Raw ridge uses penalties $10^{-4},10^{-3},10^{-2},10^{-1},1,10,100$,
+selected inside A and then refitted on A. The raw RBF reference retains
+raw standardized history together with at most 64 Nystr\"om landmarks;
+bandwidth factors $0.5,1,2$ multiply the median positive landmark
+squared-distance scale, and B selects among them and the same seven
+penalties.
+Histogram gradient boosting fits 100 iterations with L2 penalty one,
+learning rate $0.05$ or $0.1$, and maximum leaves 7 or 15; B selects the
+grid jointly across horizons without external early stopping, using
+a separate fitted tree ensemble per target. All local corrections use the
+same A residual targets, sum-loss penalties $0.01,0.1,1$, A-standardized
+features and unpenalized intercept. C chooses their mixing weights
+separately by horizon with a strict zero-first rule. A budget exit or
+nonfinite trial is logged; the best finite incumbent is retained.
+
+The affine gain and locality/RBF anisotropy are deliberately different
+functional interventions from the KAHM bandwidth. Their common parameter
+counts, supervision and evaluation ceilings support a matched experiment
+at that level; they do not prove equal approximation power or equal
+computation. Likewise, a gate-only arm has three parameters per horizon
+and a reconstruction/shape arm has six, so their comparison asks whether
+the additional intervention helps within the declared budget.
+
+\paragraph{Computation and state.}
+Numerical-library thread counts are fixed to one. Warm measured nodes
+cover the baseline, shared bank, KAHM-specific factors, all paid geometry
+trials, C selection, and D transformations and predictions. The implementation eagerly prepares
+fixed gate queries and charges that work even when C selects zero
+correction or a different bandwidth; the accounting is conservative
+relative to a possible lazy implementation.
+Each standalone procedure sums its required dependencies once. Policy
+costs sum the union of measured candidate dependencies, including their
+eager query work, not only the selected winner. This component sum is not
+a separately timed minimal policy execution. Selected fitted states, their serialized byte sizes and
+serialization time are retained. Downloads, input preparation, imports
+and evidence artifact writing lie outside the model pipeline. Absolute
+times and ratios describe this implementation and host, not intrinsic
+algorithmic constants. A whole-process high-water RSS is not a
+per-method memory estimate.
+
+This study does not impose a deployment budget or match alternatives by
+measured wall time. It also does not test delayed-label updates or drift.
+The preserved bounded-window ridge prototype maintains a fixed feature
+map and has a different intercept convention; numerical agreement with
+batch ridge does not demonstrate useful incremental KAHM geometry.
+Prediction, update latency and incremental memory remain joint endpoints
+for a further chronological adaptation study.
+
+\paragraph{Independent evidence checks.}
+The audit verifies frozen inputs and scientific source, reconstructs
+windows from retained raw episodes or series, recomputes C/D losses,
+checks all method and candidate rosters, replays strict selection,
+checks exact zero correction, reconstructs cost dependencies and
+replays serialized selected predictions. It does not independently
+refit every optimization trial or turn recorded consistency into
+external replication. Per-task and per-horizon outputs remain available
+regardless of the direction of the aggregate comparison.
+
+
+\subsection{Complete comparisons and resource records}
+
+\begin{table}[!htbp]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{The complete 18-comparison family for reconstruction-trained
+KAHM. Gain is $100(\overline L_{\rm control}-\overline L_{\rm KAHM})/
+\overline L_{\rm control}$. Intervals are absolute paired MSE differences,
+not percentage intervals; their positive direction favors KAHM.}
+\label{tab:direct-primary}
+\input{generated/direct_reconstruction/display_primary_table}
+\end{table}
+
+\begin{table}[p]
+\centering\small
+\setlength{\tabcolsep}{5pt}
+\caption{Collection-specific scaled MSE for every procedure. Each
+available collection weights its selected series equally. All three
+A-selected rideshare series have no complete B windows, so their entries
+and the planned four-collection aggregate are undefined.}
+\label{tab:direct-natural}
+\input{generated/direct_reconstruction/display_natural_table}
+\end{table}
+
+\begin{table}[p]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{Measured complete procedure dependencies and selected model
+state. Means weight the 36 synthetic tasks equally or the seven available
+natural tasks equally. Natural loss tables instead weight their three
+available collections equally. Times include selected-state packing and
+serialization, and policy search costs count shared dependencies once.
+State bytes are not peak resident memory.}
+\label{tab:direct-cost}
+\input{generated/direct_reconstruction/display_cost_table}
+\end{table}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth]{generated/direct_reconstruction/natural_available_accuracy_cost.pdf}
+\caption{Available-case natural accuracy and implemented cost for all
+17 procedures. Accuracy averages equally across three collections; time
+averages equally across seven feasible task suites, with a logarithmic
+horizontal scale. The missing rideshare collection is not replaced.
+This descriptive plot does not establish population uncertainty or an
+application-specific acceptable-cost threshold.}
+\label{fig:direct-natural-cost}
+\end{figure}
+\FloatBarrier

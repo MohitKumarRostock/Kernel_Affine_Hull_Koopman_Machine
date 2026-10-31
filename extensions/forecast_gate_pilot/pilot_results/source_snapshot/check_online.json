@@ -1,0 +1,58 @@
+{
+  "status": "passed",
+  "scope": "Numerical fixed-feature/readout and fixed-bank-cache checks only",
+  "not_established": [
+    "streaming forecast accuracy",
+    "KAHM predictive advantage",
+    "geometry update correctness",
+    "latency or memory benchmark"
+  ],
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "tests_run": 8,
+  "failures": 0,
+  "errors": 0,
+  "metrics": {
+    "sliding_window": {
+      "updates": 300,
+      "window": 19,
+      "features": 7,
+      "outputs": 3,
+      "max_coefficient_absolute_error": 1.1962653090336062e-14,
+      "max_prediction_absolute_error": 3.863576125695545e-14,
+      "numerical_fallbacks": 0
+    },
+    "fallback_reports": [
+      {
+        "update_number": 1,
+        "geometry_version": "v1",
+        "active_rows": 1,
+        "evicted": false,
+        "rebuilt": true,
+        "reason": "large_leverage_cancellation"
+      },
+      {
+        "update_number": 2,
+        "geometry_version": "v1",
+        "active_rows": 1,
+        "evicted": true,
+        "rebuilt": true,
+        "reason": "unsafe_rank_one_denominator"
+      }
+    ],
+    "kahm_cache": {
+      "queries": 30,
+      "references": 9,
+      "dimension": 5,
+      "max_absolute_equivalence_error": 6.661338147750939e-16,
+      "max_common_scaling_error": 6.661338147750939e-16
+    }
+  },
+  "complexity": {
+    "ordinary_update": "O(p^2 + p*H)",
+    "bounded_rebuild": "O(W*p^2 + W*p*H + p^3 + p^2*H)",
+    "owned_numerical_state": "O(W*(p+H) + p^2 + p*H)",
+    "cache_construction": "O(d*m^2)",
+    "cache_query_excluding_kernel": "O(d*m)"
+  }
+}

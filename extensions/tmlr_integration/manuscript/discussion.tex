@@ -69,7 +69,7 @@ not justify retuning a diagnostic on the already inspected confirmation
 outcomes and reporting them as a new test.
 
 \paragraph{Limits of data, inference, and computation.}
-The eight natural source families were selected for diversity and feasibility,
+The eight source families in the original natural study were selected for diversity and feasibility,
 not sampled randomly from future applications. Four families per phase
 support bounded descriptive comparisons; related windows, settings, and
 seeds do not enlarge that number. Longer Hospital and Traffic regimes
@@ -151,8 +151,8 @@ resolve small timing differences as precisely as a repeated benchmark.
 These limits matter when translating a favorable error comparison into a
 claim that additional representation complexity is justified.
 
-\paragraph{Scope of target-trained geometry and donor residuals.}
-The latest experiment tests one constrained diagonal metric, one fixed
+\paragraph{Scope of proxy-metric geometry and donor residuals.}
+The proxy-metric experiment tests one constrained diagonal metric, one fixed
 Gaussian proxy bandwidth, one 256-row metric cap, one regularization
 strength and a finite family of readouts. All metric fits converge under
 the optimizer's criterion, but the median regularized objective reduction
@@ -186,53 +186,88 @@ transform costs when validation chooses zero correction. It does not
 measure peak incremental memory, streaming update latency or optimized
 production kernels.
 
-\paragraph{A focused research program for KAHM forecasting.}
-The evidence supports studying KAHM as a local representation whose
-usefulness depends on target, decoder and resources. A next methodological
-step is to train a KAHM gate or reconstruction parameter against a
-forecast-specific objective, with horizon-specific or low-rank metrics
-as explicit alternatives. Such a study should include the same supervision
-and optimization budget for affine, locality and RBF-local controls;
-otherwise a gain would confound supervised fitting with the KAHM rule.
-This is an untested hypothesis, not a conclusion of the present proxy
-experiment. More capacity is justified only by fresh held-out improvement
-over those controls and the strongest practical raw-input baseline.
+\paragraph{Scope of direct reconstruction training.}
+The newest intervention trains bounded bandwidths and temperatures while
+holding references, local covariance, principal directions and original
+kernel regularization fixed. It tests one finite local search with three
+head penalties, four correction weights and finite A/B/C samples. The
+matched controls receive equal supervision and search ceilings within
+each intervention, but have different functional forms. Neither a
+successful optimizer termination nor a better B objective establishes
+an optimal representation or improved D prediction. A null or adverse
+comparison constrains this procedure, not every possible KAHM forecaster.
+Raw ridge, RBF and gradient boosting are practical comparators at this
+scale; the study is not a comprehensive neural or pretrained-model
+benchmark.
 
-A second direction is efficient updating of useful local structure.
-Reference reduction, cached local factorizations and bounded updates
-could change the measured cost tradeoff, but no streaming or drift
-experiment is reported here. A new chronological protocol should jointly
-measure prediction, update latency and memory, with a rule for retiring
-or declining an unhelpful correction. Larger independent source coverage
-and stronger forecasting baselines would then test transfer. The present
-archive outcomes can guide development; they cannot be reused as unseen
-confirmation of a newly chosen method.
+The natural feasibility finding has a different cause from the earlier
+geometric fit failures. The three A-selected rideshare series have no
+complete B windows, so the declared training procedure cannot start.
+Numerical fallback during prediction does not repair absent training
+queries. Their membership was not changed after this finding. The
+planned four-collection efficacy aggregate is undefined; the available
+seven-series, three-collection description is conditional on feasibility.
+This transparent restriction prevents a completed-subset comparison from
+being presented as full source coverage. A future missing-data procedure
+must specify its interpolation or causal imputation and label-availability
+rules before evaluation on new evidence.
+
+The synthetic intervals rely on the stated paired-difference normal
+approximation, using twelve repetitions per known law and a separate
+18-contrast family, not a paper-wide confidence claim. Three available purposive archive collections support descriptive
+comparisons, not population intervals. Serialized state bytes measure
+retained model files rather than incremental memory. Warm component sums
+include eager query work and selected-state packing; a minimal deployment
+implementation could have different costs. No application latency limit,
+memory ceiling or accuracy--cost exchange rate is imposed here.
+
+\paragraph{A focused research program for KAHM forecasting.}
+Direct forecast supervision is now a specified and evaluated intervention,
+with the gate-only pilot and reconstruction study retaining distinct
+roles. Further method changes must explain which residual structure or
+forecast regime should make the KAHM reconstruction useful beyond the
+matched controls. Retuning these outcomes can guide development, but
+cannot produce a new unseen confirmation claim on the same evidence.
+
+Efficient adaptation remains untested. Reference reduction, cached local
+factorizations and bounded updates could change the measured tradeoff,
+but a fixed-feature ridge update is not an update of KAHM geometry.
+A further chronological delayed-label study should jointly measure
+forecast error, update latency, incremental memory, geometry refreshes
+and fallback behavior, including a rule for declining an unhelpful
+correction. Any claimed deployment benefit requires a declared resource
+budget and a comparison with equally optimized simpler procedures.
 
 \section{Conclusion}
-KAHM can be studied productively in time-series forecasting as a local
-geometric representation with an explicit decoder and baseline. The
-controlled intervention identifies when reconstruction scores omit
-predictive position; the original finite-decoder study demonstrates
-conditional gains. Natural-source and scaling experiments limit their
-transfer, and the additive utility study exposes both weak incremental
-benefit and fitting failures. These observations remain part of the
-scientific record.
+This work establishes KAHM as a fully specified, implemented and evaluated
+family of time-series forecasters: observed histories feed local
+reconstruction gates and principal coordinates, a finite decoder produces
+horizon-specific corrections, and temporal selection retains a declared
+baseline. The controlled analysis separates accurate reconstruction from
+predictive information and finite-decoder access. Historical natural,
+scaling and additive studies preserve both useful effects and unfavorable
+comparisons, including failed fits. The proxy-metric study clarifies
+residual-target mismatch while leaving the value of its extra complexity
+unresolved.
 
-The new prospectively frozen study completes all 48 tasks and 768
-forecasts, evaluates honestly excluded donor residuals and a shared
-supervised metric, and supplies an elementary account of donor-to-final
-residual mismatch. Learned-metric KAHM improves ridge on the three
-synthetic laws and by 2.18\% on the four-collection archive aggregate.
-However, incremental metric and donor-target benefits are unresolved in
-the synthetic family, matched local controls win five comparisons, and
-fixed-metric KAHM or simpler corrections offer better archive tradeoffs.
-These results justify continued investigation of target-relevant local
-geometry while leaving a KAHM-specific advantage unestablished.
+The new direct-reconstruction study answers a narrower next question.
+Training kernel bandwidths and gate temperatures against the final
+forecast improves KAHM substantially over gate-only training on Van der
+Pol, and KAHM beats raw RBF on nonlinear AR under the declared simultaneous
+analysis. However, six of the 18 primary comparisons favor the comparator,
+including three defeats against equally shape-trained local controls.
+The seven-series natural subset improves ridge by 3.55\%, largely through
+one collection, while stronger raw and local alternatives remain. Three
+planned tasks lack training-query windows, so a complete four-collection
+claim cannot be made. Measured computation increases materially with
+reconstruction training.
 
-A defensible forecasting contribution therefore requires more than
-reconstruction accuracy or retention of the raw pathway: it must identify
-what the geometry adds beyond matched alternatives, show that the gain
-survives temporal evaluation, and report the complete resources used to
-obtain it. The revised framework and reproducible evidence make those
-questions concrete. Direct forecast-trained KAHM geometry and efficient
-adaptation remain testable next steps rather than promised improvements.
+These results support a concrete KAHM forecasting methodology and a
+reproducible within-family training effect, rather than broad predictive
+superiority or an automatic adoption rule. A distinctive contribution
+still requires showing what the KAHM rule adds beyond matched alternatives
+on newly reserved evidence at a declared useful cost. Bounded incremental
+geometry is a further experimental question, not a consequence of static
+accuracy or fixed-feature update identities. The preserved code, theory,
+selected states, predictions, optimizer traces and failures make that
+research program explicit and independently checkable.

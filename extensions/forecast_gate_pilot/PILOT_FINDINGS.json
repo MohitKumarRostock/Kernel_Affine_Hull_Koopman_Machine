@@ -1,0 +1,88 @@
+{
+  "scope": "Exploratory known-law pilot; no confirmatory inference",
+  "methods": [
+    "raw_ridge",
+    "raw_rbf",
+    "fixed_kahm",
+    "direct_kahm",
+    "fixed_affine",
+    "direct_affine",
+    "fixed_locality",
+    "direct_locality",
+    "fixed_rbf_local",
+    "direct_rbf_local",
+    "persistence"
+  ],
+  "task_count": 9,
+  "available_method_task_outputs": 99,
+  "gains_percent_positive_favors_direct_kahm": {
+    "nonlinear_ar": {
+      "raw_ridge": 9.59871130444686,
+      "raw_rbf": 2.830866756558684,
+      "fixed_kahm": 0.5337581006924889,
+      "direct_affine": -0.6776876051536733,
+      "direct_locality": 0.7618419259930426,
+      "direct_rbf_local": -2.8408807910189573
+    },
+    "van_der_pol": {
+      "raw_ridge": 68.59652381556963,
+      "raw_rbf": -112.57816595019857,
+      "fixed_kahm": 30.21164800574275,
+      "direct_affine": -9.100733546723141,
+      "direct_locality": 3.7360066249830957,
+      "direct_rbf_local": -23.69500286006708
+    },
+    "duffing": {
+      "raw_ridge": 24.776474999845686,
+      "raw_rbf": -30.142395728939366,
+      "fixed_kahm": 11.289460768899167,
+      "direct_affine": -3.0208024114880496,
+      "direct_locality": -20.962843139177416,
+      "direct_rbf_local": 1.6755818039306958
+    }
+  },
+  "median_charged_wall_seconds": {
+    "raw_ridge": 0.0015961629997036653,
+    "raw_rbf": 0.016564946000471537,
+    "fixed_kahm": 0.04348950599978707,
+    "direct_kahm": 0.8557946599994466,
+    "fixed_affine": 0.033464154999819584,
+    "direct_affine": 0.7201396109994675,
+    "fixed_locality": 0.032310310999491776,
+    "direct_locality": 0.8102742870014481,
+    "fixed_rbf_local": 0.031132300000535906,
+    "direct_rbf_local": 0.8008650720021251
+  },
+  "optimization_count": 324,
+  "objective_evaluations": 20569,
+  "budget_exhaustions": 3,
+  "converged_optimizations": 321,
+  "recorded_failure_events": 0,
+  "audit": {
+    "available_forecasts": 99,
+    "complete_task_count": 9,
+    "counts": {
+      "cost_checks": 450,
+      "hash_checks": 454,
+      "loss_checks": 726,
+      "optimization_checks": 1296,
+      "prediction_checks": 414,
+      "selection_checks": 1647,
+      "window_checks": 333,
+      "zero_correction_checks": 0
+    },
+    "expected_forecasts": 99,
+    "failures": [],
+    "mode": "run",
+    "not_confirmatory": true,
+    "notes": [
+      "Saved losses and recorded selection are reconstructed; individual candidate models are not independently refitted.",
+      "Hash agreement verifies supplied evidence consistency, not independent predictive replication.",
+      "This is an exploratory known-law pilot; no population confidence intervals or new-source claims are justified."
+    ],
+    "passed": true,
+    "recorded_fallback_events": 0,
+    "study_status": "exploratory_known_law_pilot",
+    "task_count": 9
+  }
+}

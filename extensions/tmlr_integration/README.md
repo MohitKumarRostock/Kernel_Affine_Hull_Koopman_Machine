@@ -1,72 +1,73 @@
-# KAHM for time-series forecasting: predictive geometry, residual learning, and cost
+# KAHM time-series forecasting: forecast-trained local geometry
 
-This is an **unsubmitted research draft**. The integrated manuscript preserves
-the controlled geometry study, original natural-source evaluation, paired
-scaling sensitivity and additive-utility extension, and adds the completed
-[target-geometry study](../target_geometry/README.md).
+This is an **unsubmitted research draft** with anonymous author metadata
+retained pending author publication preparation. The integrated manuscript
+preserves all previous studies and adds the separate exploratory gate pilot
+and directly forecast-trained reconstruction experiment.
 
-- [Current revised PDF](review/KAHM_Prediction_Revised.pdf)
+- [Current manuscript PDF](review/KAHM_Forecast_Trained_Manuscript.pdf)
 - [Editable manuscript](manuscript/main.tex)
-- [Audited new findings](../target_geometry/FINDINGS.md)
-- [Research roadmap](../target_geometry/RESEARCH_ROADMAP.md)
+- [Direct reconstruction study](../direct_reconstruction/README.md)
+- [Frozen protocol](../direct_reconstruction/PROTOCOL.md)
+- [Previous proxy-metric findings](../target_geometry/FINDINGS.md)
 
-The new study evaluates a ridge baseline with matched KAHM, affine, locality and
-RBF-local corrections; in-sample versus excluded-donor residuals; and a shared
-supervised diagonal metric. It completes **48 tasks and 768 forecasts**. Its
-favorable ridge comparisons coexist with unresolved metric/residual increments,
-stronger simpler controls and substantial measured computation. It does not
-establish a KAHM-specific performance advantage.
+The method fits a fixed baseline and geometric residual head, trains selected
+KAHM reconstruction parameters against forecast error on B, selects on C,
+and evaluates on D. Matched local controls and practical raw-input models
+receive explicitly stated training and optimization opportunities. The
+planned roster has 36 simulation and ten natural tasks. Three rideshare tasks
+lack B windows and remain feasibility failures, making the complete
+four-collection accuracy aggregate undefined.
 
 ## Audit and rebuild the current draft
 
-From the repository root, with Python 3.12 and the pinned dependencies:
+From the repository root:
 
 ```bash
-python -m pip install -r extensions/target_geometry/requirements.txt
-python -m extensions.target_geometry.freeze verify
-python -m extensions.target_geometry.analysis \
-  --run-dir extensions/target_geometry/results/v1 --output /tmp/kahm-target-audit
-python -m extensions.target_geometry.build_assets \
-  --reports /tmp/kahm-target-audit \
-  --output extensions/tmlr_integration/manuscript/generated/target_geometry
+python -m pip install -r extensions/direct_reconstruction/requirements.txt
+python extensions/direct_reconstruction/evidence.py unpack \
+  --run-dir extensions/direct_reconstruction/results
+python extensions/direct_reconstruction/analyze.py \
+  extensions/direct_reconstruction/results --verify-live-source
+python -m extensions.tmlr_integration.package_direct audit
 cd extensions/tmlr_integration/manuscript
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-All historical displays are already included. The new asset builder consumes
-saved, audited predictions and fits no forecasting model. The manuscript uses
-the bundled TMLR preprint style, an **Unsubmitted research draft** header, and
-an anonymous author placeholder pending author review.
+All generated historical and current displays are included. The frozen
+analyzer recomputes the five new TeX tables/macros from saved predictions;
+no forecasting refits are required. The manuscript uses the bundled TMLR
+preprint style, an **Unsubmitted research draft** header, and an accurate
+AI-assistance disclosure. No journal submission has been made.
 
-## Current manuscript and reproduction bundles
-
-Use `package_target.py` for the current deliverables:
+## Current deliverables
 
 ```bash
-python -m extensions.tmlr_integration.package_target audit
-python -m extensions.tmlr_integration.package_target build \
+python -m extensions.tmlr_integration.package_direct build \
   --pdf /absolute/path/to/main.pdf --output /absolute/path/to/release
+python -m extensions.tmlr_integration.package_direct verify /absolute/path/to/release
 ```
 
 | Deliverable | Scope |
 |---|---|
-| `KAHM_Prediction_Revised.pdf` | Complete revised research manuscript |
-| `KAHM_Prediction_Revised_Manuscript_Source.zip` | Editable LaTeX, bibliography, styles and all historical/new generated displays |
-| `KAHM_Target_Geometry_Reproduction.zip` | New target-geometry protocol, complete frozen numerical dependencies, prepared data, all 768 forecasts and independent audit |
-| `RELEASE_MANIFEST.json` | Byte sizes and SHA-256 hashes of the deliverables |
+| `KAHM_Forecast_Trained_Manuscript.pdf` | Complete integrated manuscript |
+| `KAHM_Forecast_Trained_Manuscript_Source.zip` | Editable LaTeX, bibliography, styles and all generated displays |
+| `KAHM_Direct_Reconstruction_Reproduction.zip` | New frozen experiment, exact numerical dependencies, inputs, predictions, selected models, traces, failure records and separate preserved pilot |
+| `RELEASE_MANIFEST.json` | Byte sizes, SHA-256 hashes and evidence accounting |
 
-The reproduction bundle covers the latest extension. It does not replace the
-older studies or assert that their complete evidence is embedded. Their original
-archives, failure records and audit commands remain in the repository. The source
-ZIP includes every display needed to compile the full integrated manuscript.
-The independent audit reconstructs final predictions' losses, metric objectives,
-exclusions and cost dependencies; it checks recorded validation-grid minima
-without independently refitting every trial.
+The packager runs the frozen analyzer on a disposable copy, replays selected
+models, compares regenerated reports and tables exactly, and verifies byte
+inventories. It does not refit candidate forecasters. The reproduction ZIP
+contains unpacked evidence so its audit is directly runnable; the repository
+uses lossless task archives to keep publication manageable. The prospective
+scientific freeze is distinct from post-execution packaging inventories.
 
-The [target-geometry CI workflow](../../.github/workflows/target-geometry.yml)
-checks this scope and produces review artifacts without running the confirmatory
-forecasting fits. A prospective source/protocol freeze is distinct from the
-post-execution delivery manifest. No journal submission has been made.
+The [evidence-only CI workflow](../../.github/workflows/direct-reconstruction.yml)
+checks numerical contracts, replays saved evidence, compiles the manuscript
+and packages review files. Its tests use fabricated/development data; it does
+not rerun the reserved forecast fits. Earlier packagers retain their stated
+historical scope and must not be used to claim a complete reproduction bundle
+for the newest study.
 
 ## Historical study documentation
 

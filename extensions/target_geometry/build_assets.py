@@ -9,12 +9,16 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
+import tempfile
 
+os.environ.setdefault("MPLCONFIGDIR", str(Path(tempfile.gettempdir()) / "kahm-target-geometry-matplotlib"))
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+from matplotlib.ticker import FixedLocator, FuncFormatter, LogLocator, MaxNLocator, NullLocator
 import numpy as np
 
 from . import data
@@ -171,6 +175,22 @@ def save_figure(fig, output, stem):
     plt.close(fig)
 
 
+def ratio_ticks(axis, values):
+    values = [value for value in values if value is not None and np.isfinite(value) and value > 0]
+    if not values:
+        return
+    low, high = min(values), max(values)
+    if low == high:
+        low, high = low * 0.9, high * 1.1
+    if high / low < 4:
+        ticks = MaxNLocator(nbins=4).tick_values(low, high)
+        axis.set_major_locator(FixedLocator(ticks[ticks > 0]))
+    else:
+        axis.set_major_locator(LogLocator(base=10, subs=(1,), numticks=6))
+    axis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:g}"))
+    axis.set_minor_locator(NullLocator())
+
+
 def build_figures(summary, output):
     plt.rcParams.update({"font.size": 9, "axes.titlesize": 10, "axes.labelsize": 9,
                          "legend.fontsize": 8, "xtick.labelsize": 8, "ytick.labelsize": 8,
@@ -218,6 +238,9 @@ def build_figures(summary, output):
     ax.set(xscale="log", yscale="log", xlabel="Charged standalone wall time / ridge (log scale)",
            ylabel="Collection-balanced scaled MSE / ridge (log scale)",
            title="Archive accuracy and computation: descriptive four-collection means")
+    ratio_ticks(ax.xaxis, [row["wall_ratio_vs_ridge"] for row in natural.values()])
+    ratio_ticks(ax.yaxis, [1 + row["relative_change_vs_ridge_pct"] / 100 for row in natural.values()
+                          if row["relative_change_vs_ridge_pct"] is not None])
     ax.grid(color="#ededed", lw=0.5)
     baseline_handles, baseline_labels = ax.get_legend_handles_labels()
     handles = baseline_handles + [Line2D([], [], marker="o", ls="", color=color, label=GATE_LABELS[gate])
@@ -232,6 +255,11 @@ def build_figures(summary, output):
     indexed = {(row["source_id"], row["method"]): row for row in summary["natural_sources"]}
     methods = ["joint_kahm_ridge", "fixed_is_kahm", "fixed_oof_kahm", "learned_oof_kahm",
                "learned_oof_affine", "learned_oof_locality", "learned_oof_rbf"]
+    all_ratios = [indexed[source, method]["scaled_mse"] / indexed[source, "ridge"]["scaled_mse"]
+                  for source in sources for method in methods
+                  if indexed[source, method]["scaled_mse"] is not None
+                  and indexed[source, "ridge"]["scaled_mse"] is not None
+                  and indexed[source, "ridge"]["scaled_mse"] > 0]
     fig, axes = plt.subplots(2, 2, figsize=(9, 6), sharex=True, constrained_layout=True)
     for ax, source in zip(axes.flat, sources):
         ridge = indexed[source, "ridge"]["scaled_mse"]
@@ -246,6 +274,7 @@ def build_figures(summary, output):
         ax.invert_yaxis()
         ax.set_title(SOURCE_LABELS[source])
         ax.set_xscale("log")
+        ratio_ticks(ax.xaxis, all_ratios)
         ax.set_xlabel("Scaled MSE / ridge (log scale)")
         ax.grid(axis="x", color="#e5e5e5", lw=0.5)
     fig.suptitle("Per-collection descriptive effects; no population uncertainty intervals", fontsize=10)

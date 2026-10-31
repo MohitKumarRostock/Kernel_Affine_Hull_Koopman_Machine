@@ -41,7 +41,7 @@ From the repository root in Python 3.12:
 ```bash
 python -m pip install -r extensions/target_geometry/requirements.txt
 python -m unittest extensions.target_geometry.test_models \
-  extensions.target_geometry.test_protocol -v
+  extensions.target_geometry.test_protocol extensions.target_geometry.test_analysis -v
 python -m extensions.target_geometry.data verify
 python -m extensions.target_geometry.freeze verify
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
@@ -65,5 +65,8 @@ constitute a forecasting guarantee.
 
 The source/protocol snapshot is `freeze.json`; its public checkpoint is recorded
 in `PUBLICATION.json`. These are prospective execution records, not an external
-registration. Audit-derived findings and the revised manuscript are added after
-the fixed execution, without changing the scientific freeze.
+registration. The complete run has 48 tasks, 768 audited forecasts, no fallbacks and
+28 passing engineering checks. [Findings](FINDINGS.md) report the favorable
+ridge corrections together with unresolved metric/residual-stage increments,
+stronger local controls and measured costs. The scientific freeze is unchanged.
+See the [research roadmap](RESEARCH_ROADMAP.md) for bounded next hypotheses.

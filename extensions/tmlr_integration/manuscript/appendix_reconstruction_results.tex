@@ -284,7 +284,19 @@ The analysis program verifies the prospective source and input checksums,
 the complete task roster, exact target correspondence, A variance scales,
 policy predictions, nonfinite/failure accounting and all primary aggregation.
 The reporting builder separately reconstructs condition and repetition means
-and all six $t$ lower bounds before producing these displays. Numerical
+and all six $t$ lower bounds before producing these displays.
+
+Selected-state inference is compared with the saved forecasts using relative
+tolerance $10^{-10}$ and absolute tolerance $10^{-12}$. Reproduction at these
+tolerances requires compatible numerical kernels as well as matching package
+versions. Processor-dependent vectorized arithmetic can produce differences
+that exceed the pointwise comparison criterion. The archived forecast arrays
+define the reported scores. The anonymous supplement reconstructs the losses,
+repetition aggregates, and six simultaneous confidence bounds directly from
+those numeric forecasts and the training-target variance scales, without
+evaluating serialized model states.
+
+Numerical
 development checks, model replay and independent calculations are consistency
 checks; they do not constitute a new scientific replication. The protocol was specified locally before evaluation and was informed
 by the earlier experiments. It was not publicly preregistered. Neither these known-law repetitions nor the algebraic

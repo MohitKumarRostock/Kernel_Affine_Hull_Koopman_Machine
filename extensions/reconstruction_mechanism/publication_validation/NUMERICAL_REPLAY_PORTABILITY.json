@@ -1,0 +1,66 @@
+{
+  "comparison": {
+    "absolute_tolerance": 1e-12,
+    "criterion": "abs(replayed - saved) <= absolute_tolerance + relative_tolerance * abs(saved)",
+    "relative_tolerance": 1e-10
+  },
+  "comparison_shape": [
+    1664,
+    3
+  ],
+  "default_dispatch_control": {
+    "raw_rbf_maximum_absolute_difference": 0.0,
+    "raw_rbf_values_compared": 4992,
+    "raw_rbf_values_outside_tolerance": 0,
+    "result": "passed",
+    "targeted_task_methods_compared": 10
+  },
+  "disabled_avx512": {
+    "configured_before_numpy_import": true,
+    "environment_variable": "NPY_DISABLE_CPU_FEATURES",
+    "first_failing_pair_in_full_roster_order": 42,
+    "maximum_absolute_difference": 1.0663936400590046e-10,
+    "maximum_relative_difference": 1.194201588837958e-08,
+    "relative_raw_mse_change": -3.6092439091607913e-12,
+    "replayed_raw_mse": 0.007813658555265238,
+    "result": "fails_original_pointwise_replay_tolerance",
+    "saved_raw_mse": 0.007813658555293439,
+    "value": "AVX512F,AVX512CD,AVX512_KNL,AVX512_KNM,AVX512_SKX,AVX512_CLX,AVX512_CNL,AVX512_ICL,AVX512_SPR",
+    "values_compared": 4992,
+    "values_outside_tolerance": 49
+  },
+  "environment": {
+    "assigned_cpus": 1,
+    "libc": "glibc 2.39",
+    "numerical_threads": 1,
+    "numpy": "2.3.5",
+    "python": "3.12.14",
+    "scikit_learn": "1.8.0",
+    "scipy": "1.17.0"
+  },
+  "experimental_effect": {
+    "new_model_fits": 0,
+    "new_model_selections": 0,
+    "recorded_forecast_changes": 0,
+    "reported_analysis_changes": 0,
+    "scientific_source_changes": 0,
+    "tolerance_changes": 0
+  },
+  "interpretation": "Matching package and operating-system versions does not guarantee pointwise serialized-state replay across different processor dispatch. Archived numeric forecasts remain the basis of the reported analysis and support separate direct statistical reproduction.",
+  "method": "raw_rbf",
+  "reproduction": {
+    "command": "NPY_DISABLE_CPU_FEATURES=AVX512F,AVX512CD,AVX512_KNL,AVX512_KNM,AVX512_SKX,AVX512_CLX,AVX512_CNL,AVX512_ICL,AVX512_SPR python -m extensions.reconstruction_mechanism.run replay --task-id vanderpol__noise0__seed946100",
+    "evaluation_path": "Load the recorded selected state, evaluate its predict method on prepared D_X, and compare against the original predictions.npz using the frozen tolerances.",
+    "expected_result": "The unchanged pointwise assertion fails for raw_rbf on the specified task; no successful replay record is written.",
+    "working_directory": "repository root after restoring the saved evidence"
+  },
+  "schema": "kahm-selected-state-numerical-portability-v1",
+  "scope": "Post-evaluation diagnostic of numerical portability in selected-state prediction; no model fitting or selection.",
+  "source_identity": {
+    "prediction_archive_sha256": "b333be2fc8b2e3d87644cea29ce524ef3cbc8385b849c96903fb613566326b95",
+    "prepared_input_sha256": "cd5fd063ae449657bdeb90d727ab117534d37d5aae1cbced02f482c924516b92",
+    "scientific_freeze_sha256": "22d4c492ef7a591eb1f21eca5ff458a3f48d102fdc3cd63de597e5fd7b351bda",
+    "selected_state_sha256": "a9b70f09f790a9298119da77ebea0cf7885ddc41049d660633000016367fe44a"
+  },
+  "task_id": "vanderpol__noise0__seed946100"
+}

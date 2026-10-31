@@ -46,6 +46,12 @@ python -m extensions.reconstruction_mechanism.package_results audit
 
 These operations verify the recorded computation. They do not add independent experimental observations.
 
+### Numerical portability
+
+Saved-forecast statistical reproduction and selected-state inference are separate checks. The original numeric forecasts and A-target variance scales reproduce the reported losses, repetition aggregates, and six primary confidence bounds directly. The anonymous saved-forecast supplement performs this calculation without loading fitted Python model objects.
+
+Selected-state replay uses relative tolerance `1e-10` and absolute tolerance `1e-12`. It requires compatible numerical kernels as well as matching software versions. A controlled diagnostic under Python 3.12.14, NumPy 2.3.5, and glibc 2.39 reproduces the recorded raw-RBF predictions for Van der Pol task `vanderpol__noise0__seed946100` exactly with default processor dispatch. Disabling NumPy's AVX512 dispatch before import causes 49 of its 4,992 raw-RBF predictions to exceed the original pointwise tolerance; the largest absolute difference is approximately `1.07e-10`. This is a failed strict replay under that dispatch configuration. The diagnostic concerns numerical inference portability; reported losses and confidence bounds are computed from the archived forecast arrays. The [numerical portability record](publication_validation/NUMERICAL_REPLAY_PORTABILITY.json) gives the environment, invocation, source hashes, and complete targeted comparison.
+
 ## Numerical checks and manuscript build
 
 The numerical tests use fabricated data or a development seed excluded from the research roster:

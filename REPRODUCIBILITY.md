@@ -30,6 +30,12 @@ python -m extensions.reconstruction_mechanism.audit \
 
 The study guide also describes selected-state replay and refitting. A new execution must use a separate results directory or disposable checkout. The original evidence is retained so that repeated computation can be distinguished from the reported experiment.
 
+### Statistical reproduction and numerical inference portability
+
+The anonymous saved-forecast supplement reconstructs all 192 task suites and the complete primary statistical analysis directly from numeric forecast arrays and A-target variance scales. This operation is separate from evaluating serialized fitted states. Its successful verification does not establish that every processor reproduces each selected-state prediction within the declared pointwise tolerance.
+
+Selected-state replay compares predictions using relative tolerance `1e-10` and absolute tolerance `1e-12`. The reference Linux environment uses Python 3.12.14 and glibc 2.39, with the pinned numerical packages. Processor-dependent vectorized kernels can still affect the comparison. In a targeted test, disabling NumPy AVX512 dispatch changes 49 of 4,992 raw-RBF predictions on `vanderpol__noise0__seed946100` beyond the original tolerance, with maximum absolute difference `1.0663936400590046e-10`; default dispatch reproduces those raw-RBF predictions exactly. The [diagnostic record](extensions/reconstruction_mechanism/publication_validation/NUMERICAL_REPLAY_PORTABILITY.json) specifies the reproducible invocation and identifies the original source arrays and fitted state. The strict replay criterion concerns numerical agreement between model evaluations and archived predictions. The reported statistical analysis uses the archived predictions directly.
+
 ## Evidence levels
 
 | Operation | What it checks |

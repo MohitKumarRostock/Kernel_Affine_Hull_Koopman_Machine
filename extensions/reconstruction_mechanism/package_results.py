@@ -373,6 +373,18 @@ Replay loads the supplied Python model states and evaluates their predictions.
 It writes a separate replay record. Checksums alone do not execute or unpickle
 model states. Arithmetic equality is assessed in the recorded software environment.
 
+The comparison uses relative tolerance `1e-10` and absolute tolerance `1e-12`.
+Compatible processor-dependent numerical kernels are required in addition to
+matching package versions. A controlled AVX512-dispatch diagnostic exceeds the
+original pointwise tolerance for one raw-RBF selected state; its environment,
+source identities and invocation are recorded in
+`extensions/reconstruction_mechanism/publication_validation/NUMERICAL_REPLAY_PORTABILITY.json`.
+The archived forecast arrays define the reported scores. The anonymous
+saved-forecast supplement reconstructs losses, aggregates and confidence bounds
+directly from those arrays and A-target variance scales, independently of
+serialized-state inference. The declared tolerance determines whether numerical inference has been
+reproduced successfully.
+
 ## Reproduce fitting
 
 The task roster is `prepared_inputs/manifest.json`. Run each task in a fresh

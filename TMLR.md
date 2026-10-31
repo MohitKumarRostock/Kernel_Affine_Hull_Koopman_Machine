@@ -1,20 +1,42 @@
-# Current integrated TMLR manuscript
+# Current KAHM time-series manuscript
 
-The current manuscript is **Kernel Affine Hull Features for Prediction: Conditional Gains, Costs, and Limits of Transfer**.
+The current manuscript is **Kernel Affine Hull Machines for Time-Series
+Forecasting: Predictive Geometry, Residual Learning, and Cost**.
 
-Read [the compiled anonymous PDF](extensions/tmlr_integration/review/TMLR_Integrated_Manuscript.pdf).
+Read [the revised PDF](extensions/tmlr_integration/review/KAHM_Prediction_Revised.pdf),
+[the editable source](extensions/tmlr_integration/manuscript/main.tex), and
+[the complete build guide](extensions/tmlr_integration/README.md).
+It is an unsubmitted research draft in TMLR preprint style.
 
-Start with [the integrated study](extensions/tmlr_integration/README.md) and
-[its LaTeX source](extensions/tmlr_integration/manuscript/main.tex).
-It combines the controlled predictive-geometry experiments and the completed
-natural-source forecasting evaluation in one anonymous TMLR-format paper.
+## New target-geometry study
 
-The controlled results retain the Van der Pol gains and the adverse AR, Duffing,
-and Airfoil comparisons. The natural confirmation is reported just as clearly:
-raw plus KAHM has 4.26% higher source-balanced scaled MSE than raw RBF at
-2.30 times the measured warm-library pipeline cost. The geometric diagnostic
-changes none of 80 confirmation decisions. Those 80 configurations belong to
-four original source families and are not independent domains.
+The [new study](extensions/target_geometry/README.md) compares a ridge baseline,
+matched local geometric corrections, in-sample versus excluded-donor residuals,
+and a training-only supervised metric shared across KAHM, affine, locality and
+RBF-local gates. The public checkpoint
+[`0d7ee3c`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/0d7ee3c17515eb1d922cdd302facd2b7874dc9a9)
+preceded the 48-task execution. All 768 forecasts are retained and independently
+audited, with no fallback forecasts or missing tasks.
+
+Learned-metric KAHM improves ridge by 11.18%, 53.26% and 19.44% on the three
+synthetic laws under the 18-comparison analysis. Neither the metric increment
+nor the OOF target increment is resolved there, and five matched-control
+comparisons favor simpler geometries. On four new archive collections, its
+scaled MSE is 1.2721 versus ridge's 1.3005 (2.18% lower), at 0.162 versus
+0.00130 seconds of charged pipeline time. Fixed-metric in-sample KAHM reaches
+1.2646, and simpler corrections remain stronger. These descriptive archive
+results do not establish a KAHM-specific advantage.
+
+See [the complete findings](extensions/target_geometry/FINDINGS.md),
+[the residual transport identity](extensions/target_geometry/THEORY.md), and
+[the focused research roadmap](extensions/target_geometry/RESEARCH_ROADMAP.md).
+The new reproduction bundle covers this extension; it does not replace older
+studies or their independently preserved failures. The historical natural study
+still reports 4.26% higher error and 2.30 times the cost for its tested KAHM
+augmentation, and the additive-utility study retains its eight failed model
+fits and post-hoc matched-success diagnostic.
+
+## Historical study context
 
 ## New bounded scaling sensitivity
 

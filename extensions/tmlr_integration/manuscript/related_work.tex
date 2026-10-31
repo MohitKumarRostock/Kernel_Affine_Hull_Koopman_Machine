@@ -12,7 +12,12 @@ representations with approximation of smooth functions \citep{Yu2009LCC}.
 Local tangent coding explicitly augments coding weights with weighted
 principal-direction displacements \citep{Yu2010LTC}, the feature form used
 here. With linear readouts this also resembles local affine experts
-\citep{Jacobs1991Experts}; our gates are fitted without outcomes.
+\citep{Jacobs1991Experts}. The historical banks are fitted without outcomes;
+Section~\ref{sec:target-geometry} instead learns an input metric from
+training residuals and shares it across all four gates. Its Gaussian
+regression proxy follows supervised metric learning
+\citep{Weinberger2007Metric}; the contribution is a controlled test of
+transfer to KAHM, rather than the invention of metric learning.
 
 \paragraph{Target information and finite fitting.}
 Supervised dimension reduction asks which features preserve the input--target

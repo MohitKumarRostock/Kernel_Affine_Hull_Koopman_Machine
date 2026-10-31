@@ -1,0 +1,30 @@
+% Generated only from audited target-geometry predictions; no fitting.
+\begin{table}[!htbp]
+\centering\scriptsize\setlength{\tabcolsep}{4pt}
+\caption{The complete family of 18 prespecified synthetic comparisons. $\Delta$ is control minus candidate test MSE; positive values favor the candidate. Intervals use the paired repetition differences, Student's $t_{11}$ quantile, and a two-sided Bonferroni allocation of $0.05/18$. Family coverage is approximate because normality of repetition differences is not guaranteed. No claim joins this family to earlier experiments.}
+\label{tab:target-synthetic-intervals}
+\begin{tabular}{lllrr}
+\toprule
+Law & Control & Candidate & $\Delta\times10^3$ & Family interval \\
+\midrule
+Nonlinear AR & Raw ridge & Learned, OOF KAHM & 0.566 & [0.459, 0.672] \\
+Nonlinear AR & Fixed, OOF KAHM & Learned, OOF KAHM & -0.011 & [-0.105, 0.083] \\
+Nonlinear AR & Fixed, IS KAHM & Fixed, OOF KAHM & -0.003 & [-0.006, $4.07\times10^{-4}$] \\
+Nonlinear AR & Learned, OOF Affine & Learned, OOF KAHM & -0.032 & [-0.111, 0.046] \\
+Nonlinear AR & Learned, OOF Locality & Learned, OOF KAHM & 0.038 & [-0.122, 0.199] \\
+Nonlinear AR & Learned, OOF RBF local & Learned, OOF KAHM & -0.083 & [-0.182, 0.015] \\
+Van der Pol & Raw ridge & Learned, OOF KAHM & 23.510 & [21.236, 25.785] \\
+Van der Pol & Fixed, OOF KAHM & Learned, OOF KAHM & 0.754 & [-0.939, 2.447] \\
+Van der Pol & Fixed, IS KAHM & Fixed, OOF KAHM & -0.003 & [-0.008, 0.002] \\
+Van der Pol & Learned, OOF Affine & Learned, OOF KAHM & -1.751 & [-4.088, 0.586] \\
+Van der Pol & Learned, OOF Locality & Learned, OOF KAHM & -6.661 & [-8.765, -4.558] \\
+Van der Pol & Learned, OOF RBF local & Learned, OOF KAHM & -5.169 & [-6.229, -4.110] \\
+Duffing & Raw ridge & Learned, OOF KAHM & 1.344 & [1.054, 1.634] \\
+Duffing & Fixed, OOF KAHM & Learned, OOF KAHM & -0.103 & [-0.336, 0.130] \\
+Duffing & Fixed, IS KAHM & Fixed, OOF KAHM & -0.001 & [-0.006, 0.004] \\
+Duffing & Learned, OOF Affine & Learned, OOF KAHM & -0.836 & [-1.254, -0.418] \\
+Duffing & Learned, OOF Locality & Learned, OOF KAHM & -1.036 & [-1.489, -0.583] \\
+Duffing & Learned, OOF RBF local & Learned, OOF KAHM & -0.243 & [-0.435, -0.051] \\
+\bottomrule
+\end{tabular}
+\end{table}

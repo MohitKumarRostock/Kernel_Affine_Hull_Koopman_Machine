@@ -1,0 +1,28 @@
+% Generated only from audited target-geometry predictions; no fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{The new-collection archive experiment: equal-collection means of equal-series scaled MSE and charged standalone wall seconds, covering four collections and three series per collection. Scaling uses training-only seasonal-difference MSE (first-difference fallback). Change is relative to raw ridge; negative is favorable. Fallbacks predict raw ridge and retain attempted computation. Missing tasks make the affected full-roster means undefined. These are descriptive results, with no population confidence intervals or independence claims for adjacent origins.}
+\label{tab:target-archive-main}
+\begin{tabular}{lrrrrr}
+\toprule
+Procedure & Outputs & Scaled MSE & Change (\%) & Seconds & Fallbacks \\
+\midrule
+Raw ridge & 12/12 & 1.3005 & 0.00 & 0.001 & 0 \\
+Raw RBF & 12/12 & 1.9483 & 49.82 & 0.005 & 0 \\
+Persistence / seasonal naive & 12/12 & 1.8476 & 42.07 & 0.004 & 0 \\
+Joint raw + KAHM & 12/12 & 1.4530 & 11.73 & 0.058 & 0 \\
+Fixed, IS KAHM & 12/12 & 1.2646 & -2.76 & 0.051 & 0 \\
+Fixed, IS Affine & 12/12 & 1.2584 & -3.24 & 0.029 & 0 \\
+Fixed, IS Locality & 12/12 & 1.2635 & -2.84 & 0.028 & 0 \\
+Fixed, IS RBF local & 12/12 & 1.2579 & -3.27 & 0.027 & 0 \\
+Fixed, OOF KAHM & 12/12 & 1.2767 & -1.83 & 0.056 & 0 \\
+Fixed, OOF Affine & 12/12 & 1.2731 & -2.11 & 0.034 & 0 \\
+Fixed, OOF Locality & 12/12 & 1.2735 & -2.07 & 0.032 & 0 \\
+Fixed, OOF RBF local & 12/12 & 1.2746 & -1.99 & 0.031 & 0 \\
+Learned, OOF KAHM & 12/12 & 1.2721 & -2.18 & 0.162 & 0 \\
+Learned, OOF Affine & 12/12 & 1.2687 & -2.44 & 0.142 & 0 \\
+Learned, OOF Locality & 12/12 & 1.2669 & -2.58 & 0.141 & 0 \\
+Learned, OOF RBF local & 12/12 & 1.2848 & -1.20 & 0.139 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}

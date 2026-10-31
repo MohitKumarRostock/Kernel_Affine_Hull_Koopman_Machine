@@ -1,0 +1,28 @@
+% Generated only from audited target-geometry predictions; no fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Descriptive sensitivity to collection composition: each column omits the named collection and recomputes the mean scaled loss over the remaining three collections, divided by the corresponding raw-ridge loss. Values below one favor the procedure. Every omission is shown; none is selected as the primary result. These ratios are not independent replications, confidence intervals, or additional confirmatory tests.}
+\label{tab:target-leave-one-source-out}
+\begin{tabular}{lrrrr}
+\toprule
+Procedure & Electricity & Bitcoin & Pedestrian & Air quality \\
+\midrule
+Raw ridge & 1.000 & 1.000 & 1.000 & 1.000 \\
+Raw RBF & 1.526 & 0.941 & 1.702 & 1.548 \\
+Persistence / seasonal naive & 1.344 & 1.912 & 1.481 & 1.227 \\
+Joint raw + KAHM & 1.127 & 0.913 & 1.199 & 1.130 \\
+Fixed, IS KAHM & 0.974 & 0.969 & 0.977 & 0.968 \\
+Fixed, IS Affine & 0.968 & 0.964 & 0.973 & 0.964 \\
+Fixed, IS Locality & 0.974 & 0.967 & 0.978 & 0.966 \\
+Fixed, IS RBF local & 0.965 & 0.959 & 0.977 & 0.965 \\
+Fixed, OOF KAHM & 0.983 & 0.963 & 0.994 & 0.979 \\
+Fixed, OOF Affine & 0.979 & 0.957 & 0.994 & 0.976 \\
+Fixed, OOF Locality & 0.981 & 0.967 & 0.991 & 0.973 \\
+Fixed, OOF RBF local & 0.980 & 0.976 & 0.985 & 0.978 \\
+Learned, OOF KAHM & 0.979 & 0.966 & 0.985 & 0.977 \\
+Learned, OOF Affine & 0.972 & 0.967 & 0.988 & 0.972 \\
+Learned, OOF Locality & 0.975 & 0.952 & 0.989 & 0.971 \\
+Learned, OOF RBF local & 0.988 & 0.991 & 0.990 & 0.985 \\
+\bottomrule
+\end{tabular}
+\end{table}

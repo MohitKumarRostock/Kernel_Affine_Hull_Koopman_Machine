@@ -1,39 +1,72 @@
-# KAHM forecasting manuscript: predictive structure, decoder capacity, and cost
+# KAHM for time-series forecasting: predictive geometry, residual learning, and cost
 
-This is an **unsubmitted research draft**. It integrates the original controlled
-predictive-geometry study, the original natural-source forecasting evaluation,
-the bounded post-hoc scaling sensitivity, and the new
-[forecasting-utility extension](../forecasting_utility/README.md). The editable
-manuscript is [manuscript/main.tex](manuscript/main.tex).
+This is an **unsubmitted research draft**. The integrated manuscript preserves
+the controlled geometry study, original natural-source evaluation, paired
+scaling sensitivity and additive-utility extension, and adds the completed
+[target-geometry study](../target_geometry/README.md).
 
-The new extension tests a preserved raw-history forecast plus a validation-
-selected geometric residual correction, matched affine/locality controls, and
-measured costs. Its independent execution freeze and complete outcomes are
-separate from the original archives. The original study directories remain
-unchanged.
+- [Current revised PDF](review/KAHM_Prediction_Revised.pdf)
+- [Editable manuscript](manuscript/main.tex)
+- [Audited new findings](../target_geometry/FINDINGS.md)
+- [Research roadmap](../target_geometry/RESEARCH_ROADMAP.md)
 
-## Current revised artifacts
+The new study evaluates a ridge baseline with matched KAHM, affine, locality and
+RBF-local corrections; in-sample versus excluded-donor residuals; and a shared
+supervised diagonal metric. It completes **48 tasks and 768 forecasts**. Its
+favorable ridge comparisons coexist with unresolved metric/residual increments,
+stronger simpler controls and substantial measured computation. It does not
+establish a KAHM-specific performance advantage.
 
-Use `package_utility.py` for the revised PDF, complete editable LaTeX source,
-and the new extension's reproducibility artifact. The latter contains the
-new study's complete saved predictions and frozen numerical dependencies.
-It is explicitly a public research artifact for the new extension; the
-historical studies and their independent audit commands remain available in
-this repository.
+## Audit and rebuild the current draft
+
+From the repository root, with Python 3.12 and the pinned dependencies:
 
 ```bash
-python -m extensions.forecasting_utility.reference restore
-python -m extensions.forecasting_utility.reporting
-python extensions/tmlr_integration/build_utility_assets.py
+python -m pip install -r extensions/target_geometry/requirements.txt
+python -m extensions.target_geometry.freeze verify
+python -m extensions.target_geometry.analysis \
+  --run-dir extensions/target_geometry/results/v1 --output /tmp/kahm-target-audit
+python -m extensions.target_geometry.build_assets \
+  --reports /tmp/kahm-target-audit \
+  --output extensions/tmlr_integration/manuscript/generated/target_geometry
 cd extensions/tmlr_integration/manuscript
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The manuscript uses the bundled TMLR style in preprint mode with an
-**Unsubmitted research draft** header. It retains the existing anonymous author
-placeholder for author review. There has been no journal submission. The new
-asset builder uses only the audited saved outcomes; it does not fit a model.
-Do not run the historical `build_assets.py` to overwrite the revised narrative.
+All historical displays are already included. The new asset builder consumes
+saved, audited predictions and fits no forecasting model. The manuscript uses
+the bundled TMLR preprint style, an **Unsubmitted research draft** header, and
+an anonymous author placeholder pending author review.
+
+## Current manuscript and reproduction bundles
+
+Use `package_target.py` for the current deliverables:
+
+```bash
+python -m extensions.tmlr_integration.package_target audit
+python -m extensions.tmlr_integration.package_target build \
+  --pdf /absolute/path/to/main.pdf --output /absolute/path/to/release
+```
+
+| Deliverable | Scope |
+|---|---|
+| `KAHM_Prediction_Revised.pdf` | Complete revised research manuscript |
+| `KAHM_Prediction_Revised_Manuscript_Source.zip` | Editable LaTeX, bibliography, styles and all historical/new generated displays |
+| `KAHM_Target_Geometry_Reproduction.zip` | New target-geometry protocol, complete frozen numerical dependencies, prepared data, all 768 forecasts and independent audit |
+| `RELEASE_MANIFEST.json` | Byte sizes and SHA-256 hashes of the deliverables |
+
+The reproduction bundle covers the latest extension. It does not replace the
+older studies or assert that their complete evidence is embedded. Their original
+archives, failure records and audit commands remain in the repository. The source
+ZIP includes every display needed to compile the full integrated manuscript.
+The independent audit reconstructs final predictions' losses, metric objectives,
+exclusions and cost dependencies; it checks recorded validation-grid minima
+without independently refitting every trial.
+
+The [target-geometry CI workflow](../../.github/workflows/target-geometry.yml)
+checks this scope and produces review artifacts without running the confirmatory
+forecasting fits. A prospective source/protocol freeze is distinct from the
+post-execution delivery manifest. No journal submission has been made.
 
 ## Historical study documentation
 

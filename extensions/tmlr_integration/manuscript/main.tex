@@ -6,7 +6,7 @@
 \usepackage{hyperref}
 \usepackage{url}
 \hypersetup{hidelinks,
- pdftitle={When Do Kernel Affine Hull Features Help Forecasting? Predictive Structure, Decoder Capacity, and Cost},
+ pdftitle={Kernel Affine Hull Machines for Time-Series Forecasting: Predictive Geometry, Residual Learning, and Cost},
  pdfauthor={Anonymous authors},
  pdfsubject={Unsubmitted research draft: predictive usefulness and measured costs of KAHM forecasting features}}
 \lhead{Unsubmitted research draft}
@@ -23,44 +23,43 @@
 \input{generated/natural_numbers}
 \input{generated/scaling/numbers}
 \input{generated/utility/numbers}
+\input{generated/target_geometry/numbers}
 
-\title{When Do Kernel Affine Hull Features Help Forecasting?\\
-Predictive Structure, Decoder Capacity, and Cost\thanks{AI tools assisted with protocol development, implementation, numerical and statistical verification, analysis, and writing. The authors are responsible for the scientific content. This manuscript has not been submitted; anonymous author metadata is retained pending the authors' final publication preparation.}}
+\title{Kernel Affine Hull Machines for Time-Series Forecasting:\\
+Predictive Geometry, Residual Learning, and Cost\thanks{AI tools assisted with protocol development, implementation, numerical and statistical verification, analysis, and writing. The authors are responsible for the scientific content. This manuscript has not been submitted; anonymous author metadata is retained pending the authors' final publication preparation.}}
 \author{Anonymous authors}
 \begin{document}
 \maketitle
 \begin{abstract}
-Kernel Affine Hull Machines (KAHMs) learn local reconstruction geometry,
-but reconstruction quality alone does not determine predictive usefulness.
-We separate retained information, residual predictive structure, finite
-decoder access, fit feasibility, and measured cost. A controlled target
-intervention identifies a positional distinction that matched affine scores
-nearly erase and KAHM scores retain; locality-aware scores or explicit local
-coordinates also repair it. An original fresh-sample study finds KAHM
-local-coordinate gains on Van der Pol, alongside adverse comparisons on
-autoregression and Duffing. In a separate eight-source natural study,
-the four reserved sources give raw-plus-KAHM
-\NaturalErrorIncrease\% higher scaled MSE than raw RBF at
-\NaturalCostRatio{} times its measured pipeline cost; geometric descriptors
-change none of 80 frozen diagnostic choices. A paired scaling sensitivity
-leaves that aggregate ranking unchanged.
-A new prospectively frozen extension preserves the actual raw forecast
-and fits a separate KAHM, affine, or locality residual correction. It
-crosses 32/128 training episodes with 16/64 raw landmarks on three laws,
-using 12 fresh repetitions. Additive KAHM improves raw RBF in
-\UtilityRawPositiveContrasts{} of 12 cells under simultaneous paired
-intervals, but concatenated KAHM wins all four Van der Pol comparisons;
-simpler additive controls also remain competitive. On four new archive
-collections, geometric fitting fails on two of 24 configurations, leaving
-full-roster geometric and policy losses undefined. A post-hoc matched-success
-diagnostic on 22 configurations gives only
-\UtilityKAHMGainPercent\% lower MSE for additive KAHM than raw RBF at
-\UtilityKAHMCostRatio{} times its model-pipeline cost; raw ridge is
-substantially more accurate and cheaper. The fixed validation policy
-does not improve aggregate test error on that diagnostic. These results characterize
-conditional geometric benefits while exposing the limits of preserving
-raw information or raw predictions as an adoption argument. They do not
-establish a general KAHM selection rule or minimum necessary complexity.
+Kernel Affine Hull Machines (KAHMs) provide local reconstruction geometry
+that can be used to build forecasting features. We study when that geometry
+retains target-relevant position, supports a finite decoder, and improves
+prediction at its complete measured cost. A controlled target intervention
+identifies a positional bottleneck and simpler controls that repair it.
+Earlier synthetic gains on Van der Pol coexist with an unfavorable
+natural-source comparison: raw-plus-KAHM has \NaturalErrorIncrease\%
+higher scaled MSE than raw RBF at \NaturalCostRatio{} times its pipeline
+cost. Scaling and additive-correction studies preserve these limitations,
+including explicitly retained fitting failures.
+We then test a prospectively frozen extension using a ridge baseline,
+episode-held-out or forward donor residuals, robust geometric fitting,
+and a residual-supervised diagonal metric shared by KAHM, affine,
+locality and RBF-local controls. An elementary risk identity separates
+useful final-model residual structure from donor-to-final target mismatch.
+All \TGTaskCount{} tasks yield \TGForecastCount{} audited forecasts.
+Learned-metric KAHM corrections improve ridge on all three simulation
+laws under an 18-comparison simultaneous analysis, but neither the metric
+change nor donor residuals establish an incremental synthetic benefit;
+five comparisons favor equally trained local controls. On twelve series
+from four additional archive collections, learned-metric KAHM lowers
+source-balanced scaled MSE from \TGNaturalRidgeMSE{} to
+\TGNaturalLearnedMSE{} (2.18\%), at \TGNaturalCostRatio{} times the
+measured pipeline cost. Fixed-metric in-sample KAHM improves the same
+baseline by 2.76\% at lower cost, and simpler corrections remain more
+accurate. These bounded results establish a reproducible framework for
+studying KAHM as a local forecasting representation while leaving a
+KAHM-specific predictive advantage and efficient target-trained geometry
+as open research questions.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
@@ -76,8 +75,8 @@ position, even though the reconstructor used it. Conversely, preserving
 the raw input does not ensure that a particular regularized decoder benefits
 from appended geometric features.
 
-We examine this distinction in four connected but separately evaluated
-steps. First, a controlled input distribution varies the target's dependence
+We examine this distinction in five connected but separately evaluated
+studies, supplemented by a paired scaling sensitivity. First, a controlled input distribution varies the target's dependence
 on branch identity and signed local position. Matched banks separate the
 reconstruction rule from reference selection, principal directions, and
 score encoding. This intervention identifies a positional-information
@@ -110,9 +109,11 @@ encoding, and local position interact with the target; (ii) a separately
 specified, fresh-sample demonstration of conditional finite-decoder gains;
 (iii) an auditable natural-source evaluation of accuracy, complete
 measured pipeline dependencies, and an unsuccessful benefit diagnostic,
-supplemented by a bounded analysis of scaling dependence; and (iv) a new
-test of additive geometric corrections that preserves the actual raw
-forecast while separating training sample size from raw-decoder capacity.
+supplemented by a bounded analysis of scaling dependence; and (iv) a test of additive geometric corrections that preserves the actual raw
+forecast while separating training sample size from raw-decoder capacity;
+and (v) a prospectively specified comparison of residual targets and
+shared supervised metrics on a ridge baseline, with an explicit
+donor-to-final residual transport identity.
 Local tangent features, finite kernel approximation, and feature-based
 selection are established ideas. Our contribution is the evidence about
 their use with KAHM and the implications for evaluating reconstruction-based
@@ -149,6 +150,31 @@ and cheaper than the tested geometric procedures. This evidence makes
 the justification question more demanding than whether an augmentation
 occasionally improves one chosen baseline.
 
+The fifth study develops KAHM's time-series role as a local geometric
+representation within an auditable forecasting procedure. Its components
+are explicit: training-only input scaling and metric learning, local
+reconstruction gates and principal coordinates, a retained baseline, a
+regularized correction, and chronological or episode-separated validation.
+The new metric uses a supervised Gaussian residual-regression proxy and
+is supplied equally to KAHM and three local controls. It is not an
+end-to-end KAHM objective. A mathematical clarification shows that even
+an oracle correction for a donor predictor can harm a different final
+baseline when their conditional disagreement exceeds useful residual
+structure. This motivates evaluating donor residuals instead of assuming
+that exclusion by itself improves the deployed correction.
+
+The resulting study completes 36 fresh simulation tasks and 12 new-collection
+archive tasks without a fallback. It supports KAHM correction gains over
+ridge, but does not attribute them uniquely to KAHM: matched local controls
+win several simultaneous synthetic comparisons and have stronger archive
+aggregates. Neither changing residual targets nor learning the proxy metric
+establishes an incremental synthetic advantage. The archive gain is modest
+relative to the measured computation, and the simpler fixed-metric KAHM
+arm is more accurate there. The research contribution is a concrete
+mechanism, comparative evidence and reusable experimental machinery for
+local geometric forecasting. Broad performance superiority, minimum
+necessary complexity and an automatic adoption rule remain unsupported.
+
 \input{related_work}
 \input{utility_question}
 \input{mechanisms}
@@ -156,12 +182,14 @@ occasionally improves one chosen baseline.
 \input{natural_study}
 \input{scaling_sensitivity}
 \input{utility_extension}
+\input{section_target_geometry}
 \input{discussion}
 
 \section*{Reproducibility and research transparency}
 The public repository preserves the original scientific source code,
-execution freezes, and archived outcomes separately from the new
-\path{extensions/forecasting_utility} study. Historical bundles retain
+execution freezes, and archived outcomes separately from the
+\path{extensions/forecasting_utility} and
+\path{extensions/target_geometry} studies. Historical bundles retain
 their original scope: the natural forecast arrays reconstruct 2,496
 task--method losses, and the separate scaling analysis contains 1,664
 natural method runs and 1,440 controlled head fits. Its compact controlled
@@ -169,7 +197,7 @@ episode losses and recorded full-prediction audit are distinguished from
 recreating the omitted full controlled prediction arrays. Those archives
 are not silently replaced by the present extension.
 
-The new extension has its own protocol and dependency freeze, published
+The earlier forecasting-utility extension has its own protocol and dependency freeze, published
 before full evaluation, and a reproducibility bundle retaining all 1,336
 successful standalone forecasts from 1,344 attempted fits in 168
 configurations. Eight geometric fits and four dependent policy evaluations
@@ -185,7 +213,7 @@ the original studies' complete bundles or the separate certificate paper.
 A distinct manuscript-source bundle contains the editable \LaTeX{} and
 generated displays for this revised research draft.
 
-The independent extension audit reconstructs final losses from saved
+The independent forecasting-utility audit reconstructs final losses from saved
 predictions, checks the fixed selector decisions and their cost
 dependencies, and verifies exact baseline recovery at zero correction.
 The manuscript asset builder independently reconstructs the residual
@@ -195,6 +223,21 @@ These computational checks establish consistency of supplied evidence;
 they do not create independent replications, establish a universal
 complexity criterion, or replace scientific review.
 
+The target-geometry study has a distinct public protocol checkpoint
+\texttt{0d7ee3c17515eb1d922cdd302facd2b7874dc9a9}, created before its
+confirmatory execution. Its 55-file scientific freeze includes the
+protocol, numerical source, input roster, prepared arrays and independent
+analysis. The complete 48-task run retains all 768 final forecasts,
+validation candidates, donor boundaries, metric objectives, warnings,
+input hashes and computation nodes. Its independent audit reconstructs
+inputs and final losses, verifies donor exclusions and the metric proxy,
+and checks selection against recorded grids without independently
+refitting every validation candidate. No reporting amendment or task
+replacement was needed for this run. The new reproduction bundle covers
+this target-geometry study and its frozen numerical dependencies; historical
+archives retain their stated scope. The editable manuscript bundle includes
+all generated displays needed to compile the integrated draft.
+
 \bibliography{references}
 \bibliographystyle{tmlr}
 \appendix
@@ -203,4 +246,6 @@ complexity criterion, or replace scientific review.
 \FloatBarrier
 \input{appendix_scaling}
 \input{appendix_utility}
+\FloatBarrier
+\input{appendix_target_geometry}
 \end{document}

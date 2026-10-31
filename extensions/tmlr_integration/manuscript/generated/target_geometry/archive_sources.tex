@@ -1,0 +1,28 @@
+% Generated only from audited target-geometry predictions; no fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Scaled MSE by collection, averaging its three declared series. Collections receive equal weights in the aggregate; neither series nor repeated origins increase the collection count. No confidence intervals are attached to these four descriptive collection means.}
+\label{tab:target-archive-sources}
+\begin{tabular}{lrrrr}
+\toprule
+Procedure & Electricity & Bitcoin & Pedestrian & Air quality \\
+\midrule
+Raw ridge & 0.2879 & 3.0946 & 1.2489 & 0.5704 \\
+Raw RBF & 0.2969 & 5.8096 & 1.0650 & 0.6216 \\
+Persistence / seasonal naive & 0.7859 & 3.3622 & 1.5349 & 1.7073 \\
+Joint raw + KAHM & 0.2760 & 3.8872 & 1.0713 & 0.5773 \\
+Fixed, IS KAHM & 0.2725 & 3.0163 & 1.1943 & 0.5752 \\
+Fixed, IS Affine & 0.2753 & 3.0013 & 1.1862 & 0.5708 \\
+Fixed, IS Locality & 0.2678 & 3.0174 & 1.1882 & 0.5808 \\
+Fixed, IS RBF local & 0.2885 & 3.0102 & 1.1697 & 0.5631 \\
+Fixed, OOF KAHM & 0.2778 & 3.0781 & 1.1766 & 0.5741 \\
+Fixed, OOF Affine & 0.2798 & 3.0762 & 1.1636 & 0.5728 \\
+Fixed, OOF Locality & 0.2713 & 3.0559 & 1.1781 & 0.5887 \\
+Fixed, OOF RBF local & 0.2828 & 3.0424 & 1.2035 & 0.5695 \\
+Learned, OOF KAHM & 0.2766 & 3.0520 & 1.1943 & 0.5656 \\
+Learned, OOF Affine & 0.2975 & 3.0369 & 1.1691 & 0.5711 \\
+Learned, OOF Locality & 0.2751 & 3.0615 & 1.1597 & 0.5714 \\
+Learned, OOF RBF local & 0.2838 & 3.0506 & 1.2278 & 0.5772 \\
+\bottomrule
+\end{tabular}
+\end{table}

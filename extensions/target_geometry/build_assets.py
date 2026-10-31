@@ -199,7 +199,9 @@ def build_figures(summary, output):
     contrasts = summary["primary_contrasts"]
     labels = ["Ridge → learned KAHM", "Fixed → learned KAHM", "IS → OOF KAHM",
               "Affine → KAHM", "Locality → KAHM", "RBF local → KAHM"]
-    fig, axes = plt.subplots(1, 3, figsize=(10.8, 3.7), sharey=True, constrained_layout=True)
+    # These three panels are placed at 6.5-inch manuscript width. Twelve-point
+    # source tick labels remain about 7.2 pt after that reduction.
+    fig, axes = plt.subplots(1, 3, figsize=(10.8, 4.3), sharey=True, constrained_layout=True)
     for ax, law in zip(axes, summary["config"]["synthetic"]["laws"]):
         selected = [row for row in contrasts if row["law"] == law]
         for index, row in enumerate(selected):
@@ -208,14 +210,16 @@ def build_figures(summary, output):
             mean, lower, upper = (row[key] * 1000 for key in ("mean_difference", "lower", "upper"))
             color = "#0072B2" if lower > 0 else "#D55E00" if upper < 0 else "#666666"
             ax.errorbar(mean, index, xerr=[[mean - lower], [upper - mean]], fmt="o", color=color,
-                        capsize=3, markersize=4, elinewidth=1.2)
+                        capsize=3, markersize=5, elinewidth=1.3)
         ax.axvline(0, color="#777777", lw=0.8, ls="--")
-        ax.set_title(LAW_LABELS[law])
-        ax.set_xlabel("Control − candidate MSE (×10³)")
-        ax.set_yticks(range(len(labels)), labels)
+        ax.set_title(LAW_LABELS[law], fontsize=14)
+        ax.set_xlabel("Control − candidate MSE (×10³)", fontsize=12)
+        ax.set_yticks(range(len(labels)), labels, fontsize=12)
+        ax.tick_params(axis="x", labelsize=12)
+        ax.xaxis.set_major_locator(MaxNLocator(nbins=4))
         ax.grid(axis="x", color="#e5e5e5", lw=0.5)
     axes[0].invert_yaxis()
-    fig.suptitle("Paired synthetic effects: 18 Bonferroni-adjusted Student intervals\nPositive favors the candidate; 12 independent repetitions per law", fontsize=10)
+    fig.suptitle("Paired synthetic effects: 18 Bonferroni-adjusted Student intervals\nPositive favors the candidate; 12 independent repetitions per law", fontsize=13)
     save_figure(fig, output, "synthetic_contrasts")
 
     natural = {row["method"]: row for row in summary["natural"]}

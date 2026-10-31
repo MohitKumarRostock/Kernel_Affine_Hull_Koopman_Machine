@@ -1,18 +1,20 @@
 # Target-geometry study: audited findings
 
-**Status:** completed, with the scientific protocol unchanged after its public checkpoint.
+The study evaluates a shared supervised metric and alternative residual targets under a protocol fixed before execution.
 
 The public execution checkpoint is [`0d7ee3c17515eb1d922cdd302facd2b7874dc9a9`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/0d7ee3c17515eb1d922cdd302facd2b7874dc9a9). It preceded the first confirmatory fit. This is a timestamped protocol, not an external registry preregistration.
 
-All **48 tasks, 768 final forecasts, and 18 primary contrasts** are accounted for. There were **zero arm-level fallbacks, metric fallbacks, task failures, recorded warnings, or group reductions**. All 48 metric fits reported optimizer convergence. These statements concern this run; historical failures remain unchanged.
+All **48 tasks, 768 final forecasts, and 18 primary contrasts** are accounted for. There were **zero arm-level fallbacks, metric fallbacks, task failures, recorded warnings, or group reductions**. All 48 metric fits reported optimizer convergence. These execution statistics concern this study alone.
 
-## What the extension establishes
+## Main findings
 
 KAHM local-coordinate residual corrections can improve a raw ridge forecast under the evaluated protocols. The experiment does **not** establish that the KAHM gate is the source of an advantage over simpler local geometry. It also does not establish an incremental synthetic benefit from either the shared proxy metric or the switch to OOF donor residuals.
 
-Learned-OOF KAHM improves ridge on all three synthetic laws in the simultaneous analysis: **11.18% on nonlinear AR, 53.26% on Van der Pol, and 19.44% on Duffing**. All three metric-increment intervals and all three OOF-target-increment intervals cross zero. Among the nine equally trained local-control contrasts, none favors KAHM with an interval excluding zero; five favor the control. Raw RBF has lower mean error than learned-OOF KAHM on all three laws as a secondary comparison.
+Here OOF denotes out-of-fold donor residuals: each residual target is formed using a donor baseline that excludes the corresponding held-out group or respects its chronological availability. Learned-OOF KAHM improves ridge on all three synthetic laws in the simultaneous analysis: **11.18% on nonlinear AR, 53.26% on Van der Pol, and 19.44% on Duffing**. All three metric-increment intervals and all three OOF-target-increment intervals cross zero. Among the nine equally trained local-control contrasts, none favors KAHM with an interval excluding zero; five favor the control. Raw RBF has lower mean error than learned-OOF KAHM on all three laws as a secondary comparison.
 
 ## Archive accuracy and measured computation
+
+In the procedure identifiers, `fixed` denotes the original metric, `learned` denotes the supervised diagonal metric, `is` denotes in-sample residual targets, and `oof` denotes out-of-fold donor residual targets. The final component identifies the KAHM, affine, locality, or RBF local features. `joint_kahm_ridge` concatenates raw and KAHM features in a single ridge predictor.
 
 The table uses equal collection weights after equal series weights. Four selected collections and twelve series do not support a population-domain confidence interval. Negative error change is favorable. Pipeline times are warm component sums on one host, including required donor, metric, bank and selection work. Ratios are not intrinsic algorithmic constants.
 
@@ -68,9 +70,9 @@ Differences are control MSE minus candidate MSE; positive favors the candidate. 
 
 The learned metric minimizes a Gaussian residual-regression proxy shared across all four gates. It does not optimize KAHM forecasting loss end to end. Synthetic learned metrics remain close to identity: maximum/minimum weight ratios range from 1.0013 to 1.1054, with median objective reduction 1.8741e-6. The archive median reduction is 2.9692e-4; one pedestrian task reaches the allowed weight ratio of 16. Proxy convergence does not imply an appropriate forecasting metric.
 
-The new theory section gives an elementary conditional-risk identity: applying the donor-optimal residual correction to a different final baseline yields useful final-model residual energy minus conditional donor/final disagreement energy. This identity assumes fixed functions and one common evaluation law. Observed training-row disagreement is descriptive, and forward folds need not share that law. OOF target construction is therefore a design to test, not an improvement guarantee.
+A conditional-risk identity explains the residual-target comparison. A correction optimized for a donor baseline need not remain optimal after that baseline changes. Its risk reduction for the final baseline equals the available final-baseline residual-mean energy minus the energy of the conditional donor-to-final discrepancy, as defined and derived in [THEORY.md](THEORY.md). This identity assumes fixed functions and one common evaluation law. Observed training-row disagreement is descriptive, and forward folds need not share that law. OOF target construction is therefore a design to test, not an improvement guarantee.
 
-The study uses capped univariate histories, three familiar simulation laws, four selected archive collections and finite tuning grids. The new data are fresh collection-level evidence, with some broad domains shared with older studies. Bitcoin series are activity indicators, not price forecasts. The archive split allows later forecast origins to use already observed values, and missing windows are omitted according to the frozen rule.
+The study uses capped univariate histories, three familiar simulation laws, four selected archive collections and finite tuning grids. The four collections had not been used in the preceding studies, although some broad application domains overlap. Bitcoin series are activity indicators, not price forecasts. The archive split allows later forecast origins to use already observed values, and missing windows are omitted according to the frozen rule.
 
 ## Reproduction and evidence
 

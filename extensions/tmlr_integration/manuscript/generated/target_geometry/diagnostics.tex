@@ -1,11 +1,11 @@
 % Generated only from audited target-geometry predictions; no fitting.
 \begin{table}[!htbp]
 \centering\scriptsize\setlength{\tabcolsep}{4pt}
-\caption{Training diagnostics, not independent evidence of test benefit. $J$ is the regularized Gaussian residual-regression proxy shared by all geometric arms. A finite improved iterate may be retained at an iteration limit, separately from optimizer convergence. $D$ is mean squared disagreement between donor and final ridge predictions on the same correction rows; $R_{\rm OOF}$ is their OOF residual MSE. Medians summarize observed tasks and are descriptive. Exact objectives, warnings, weight ratios, missing diagnostics and residual identities are retained in the report CSV files.}
+\caption{Training diagnostics, not independent evidence of test benefit. $\mathcal J$ is the regularized Gaussian residual-regression proxy shared by all geometric arms. $\mathcal J_0$ and $\mathcal J_{\rm fit}$ are the identity-metric and selected fitted-metric objectives. A finite improved iterate may be retained at an iteration limit, separately from optimizer convergence. $D$ is mean squared disagreement between donor and final ridge predictions on the same correction rows; $R_{\rm OOF}$ is their out-of-fold (OOF) residual MSE. Medians summarize observed tasks and are descriptive. Exact objectives, warnings, weight ratios, missing diagnostics and residual identities are retained in the report CSV files.}
 \label{tab:target-diagnostics}
 \begin{tabular}{lrrrrr}
 \toprule
-Phase & Tasks & Converged & Metric fallback & Median $J_0-J_*$ & Median $D/R_{\rm OOF}$ \\
+Phase & Tasks & Converged & Metric fallback & Median $\mathcal J_0-\mathcal J_{\rm fit}$ & Median $D/R_{\rm OOF}$ \\
 \midrule
 Synthetic & 36 & 36 & 0 & $1.874\times10^{-6}$ & 0.0024 \\
 Archive & 12 & 12 & 0 & 0.0003 & 0.1047 \\

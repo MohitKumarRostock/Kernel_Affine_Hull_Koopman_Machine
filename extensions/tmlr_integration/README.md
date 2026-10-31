@@ -1,35 +1,42 @@
-# KAHM reconstruction and prediction: completed-results manuscript
+# KAHM reconstruction and prediction: manuscript and reproducibility
 
-**Kernel Affine Hull Representations for Time-Series Forecasting: Distinctness, Stability, and Predictive Limits** integrates completed algebra, the fixed reconstruction-departure experiment and the prior studies. The final mechanism decision is **STOP_FORECASTING_PERFORMANCE_BRANCH**: useful value over the common basis is established, but the required KAHM-specific practical advantage is not.
+**Kernel Affine Hull Representations for Time-Series Forecasting: Distinctness, Stability, and Predictive Limits** connects the algebra of local reconstruction with the performance of finite forecasting decoders. It presents theoretical conditions, a matched reconstruction-departure experiment, and the relevant controlled, natural-data, and adaptive studies.
 
 - [Manuscript PDF](review/KAHM_Reconstruction_Prediction_Manuscript.pdf)
-- [Editable LaTeX source ZIP](review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
-- [Source entry point](manuscript/main.tex)
-- [Completed findings](../reconstruction_mechanism/FINDINGS.md)
-- [Evidence restoration and independent verification](../reconstruction_mechanism/README.md)
-- [Preserved adaptive development](../adaptive_development/FINDINGS.md)
+- [Editable LaTeX source](review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
+- [LaTeX entry point](manuscript/main.tex)
+- [Principal experimental findings](../reconstruction_mechanism/FINDINGS.md)
+- [Principal study reproduction guide](../reconstruction_mechanism/README.md)
+- [Guide to all forecasting studies](../../TIME_SERIES_RESEARCH.md)
 
-## Build the current paper
+## Build the paper
 
-All generated figures/tables, bibliography and styles are included. No forecast fitting is required. Install TeX Live with `latexmk` and Latin Modern fonts, then:
+The source includes the bibliography, official TMLR style, figures, and tables. Install TeX Live with `latexmk`, pdfLaTeX, BibTeX, and Latin Modern fonts. From the repository root:
 
 ```bash
 cd extensions/tmlr_integration/manuscript
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The source uses TMLR preprint mode and a **Research preprint** header. It has not been submitted for peer review. Anonymous author metadata is retained from the supplied source, and the AI-assistance disclosure remains explicit.
+Compilation produces `main.pdf` without fitting a forecasting model. The manuscript uses anonymous TMLR review mode. The public repository remains author-identifying and is not an anonymous review artifact.
 
-To regenerate the two newest sets of manuscript displays from saved evidence, first restore the repository's exact evidence parts as described in the study guide, then run:
+The source states the scope of AI assistance and separates mathematical results from empirical conclusions. A successful build establishes that the document compiles; the scientific claims depend on the assumptions and evidence described in the paper.
+
+## Generate displays from saved evidence
+
+The source package already includes every display needed for compilation. To reconstruct the adaptive and reconstruction-departure displays, restore the repository evidence using the [principal study guide](../reconstruction_mechanism/README.md), then run from the repository root:
 
 ```bash
 python extensions/tmlr_integration/build_adaptive_assets.py
 python extensions/tmlr_integration/build_mechanism_assets.py
+python -m extensions.tmlr_integration.format_manuscript_assets
 ```
 
-Each builder checks aggregation and records input/output hashes. Historical sources and outcomes are unchanged. The new statistical family is not pooled with earlier ones.
+The builders compute summaries from the saved evidence and record input and output hashes. The formatting command applies the manuscript's caption and notation conventions without changing numerical table entries, and records the presentation transformation separately. These commands do not fit new models. Earlier displays have their own source studies and generation scripts. The manuscript's provenance files map generated assets to those inputs.
 
-## Package the completed release
+## Verify and package the principal study
+
+The reconstruction-departure packager checks the original scientific checkpoint, saved analysis, internal audit, and selected-state replay. After the evidence has been restored:
 
 ```bash
 python -m extensions.reconstruction_mechanism.package_results audit
@@ -38,161 +45,48 @@ python -m extensions.reconstruction_mechanism.package_results build \
 python -m extensions.reconstruction_mechanism.package_results verify /absolute/path/to/release
 ```
 
-| Artifact | Scope |
+| Artifact | Contents |
 | --- | --- |
-| `KAHM_Reconstruction_Prediction_Manuscript.pdf` | Complete final-results research preprint |
-| `KAHM_Reconstruction_Prediction_Manuscript_Source.zip` | All editable LaTeX, bibliography, styles and generated displays; compiles independently |
-| `KAHM_Reconstruction_Mechanism_Reproduction.zip` | Expanded new mechanism evidence, numerical dependencies, saved predictions/states and audits |
-| `RELEASE_MANIFEST.json` | Exact byte inventories, source provenance and completed-result accounting |
+| `KAHM_Reconstruction_Prediction_Manuscript.pdf` | Compiled manuscript |
+| `KAHM_Reconstruction_Prediction_Manuscript_Source.zip` | Editable LaTeX, bibliography, style files, and generated displays |
+| `KAHM_Reconstruction_Mechanism_Reproduction.zip` | Scientific code, exact inputs, predictions, fitted states, and verification records for the principal experiment |
+| `RELEASE_MANIFEST.json` | Byte sizes, SHA-256 hashes, and provenance of the packaged files |
 
-The reproduction ZIP covers the final mechanism study. It does not claim to include every historical study's complete data. The repository preserves the earlier studies separately; its new lossless transport contains both mechanism and adaptive evidence. The new packager recomputes only the new frozen analysis and verifies independent audit/replay records, without invoking old CPU-sensitive forecast replays. Historical packagers remain available for their original scope.
+The reproduction archive covers the reconstruction-departure experiment. It is not a complete collection of every historical dataset and experiment in the paper. The public repository provides the earlier studies through their separate guides. The repository's lossless evidence transport also includes the adaptive study, whereas the principal reproduction archive contains the mechanism study and its numerical dependencies.
 
-[Current CI](../../.github/workflows/reconstruction-mechanism.yml) restores evidence, verifies the scientific freeze, independently audits results, compiles the full manuscript, verifies archives and replays selected states from the extracted reproduction package. It does not refit or retune the reserved forecasting experiment.
+The study-specific audit does not invoke older CPU-sensitive forecast replays. Those retain the environments and limitations reported in their original studies. Recomputing an analysis or replaying a saved state is a computational consistency check, not a new independent experimental observation.
 
-## Historical study documentation
+## Anonymous saved-forecast supplement
 
-The remaining sections document the original integrated artifact and its
-preserved evidence. The original anonymous exporter `package.py` predates the
-forecasting-utility extension and must not be used to present a complete
-reproducibility bundle for the revised paper. Its source checks and historical
-audits remain valid for their stated original scope.
-
-The paper separates reconstruction accuracy, the information supplied to a
-predictor, and the finite decoder's ability to use that information. Conditional
-synthetic gains are presented alongside unfavorable natural-source comparisons.
-The natural confirmation has four original source families; 80 confirmation
-task configurations are not 80 independent forecasting domains. The new scaling comparisons reuse those sources and the original controlled
-draws, so they are explicitly post-hoc sensitivity. Measured pipeline costs
-include implementation overhead and do not establish an intrinsic
-hardware-independent complexity ratio.
-
-## Build the paper
-
-Install TeX Live, `latexmk`, and the Latin Modern fonts. From this directory:
+The [review-supplement builder](package_tmlr_review.py) creates `KAHM_TMLR_Saved_Forecasts.zip`, an approximately 80.8 MB anonymous archive for numerical verification of the principal experiment. Restore the mechanism evidence first, then run from the repository root:
 
 ```bash
-cd manuscript
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+python extensions/tmlr_integration/package_tmlr_review.py --output-dir /tmp/kahm-tmlr-review
 ```
 
-The original archived version used anonymous submission mode. Existing
-source-derived tables and vector figures are bundled. Building the PDF does not
-fit forecasting models. The companion `build_assets.py` prepares the integrated
-paper assets from the unchanged source studies, archived natural reports,
-and the independently audited scaling-sensitivity summary.
+The output directory must be new. The builder writes an extracted supplement, the ZIP archive, and a package summary containing its size and SHA-256 digest. The large ZIP is distributed as a downloadable submission artifact; the repository contains the builder and [standalone verifier](verify_saved_forecasts.py).
 
-## Verify the public research checkout
-
-From the repository root, first restore the committed reference artifacts if
-needed. The original reference command is needed only when its run is absent;
-the sensitivity restoration accepts already present identical files:
+After unpacking the ZIP, enter the extracted supplement directory, install its numerical dependencies, and run:
 
 ```bash
-python extensions/natural_forecasting/package.py restore-reference \
-  extensions/natural_forecasting/reference/natural_v1.zip.parts.json
-python -m extensions.scaling_sensitivity.reference restore
-python extensions/tmlr_integration/package.py check-source
-python -m unittest extensions.tmlr_integration.package_tests -v
+python -m pip install -r requirements.txt
+python verify_saved_forecasts.py
 ```
 
-The source check verifies all 217 files in the original public checkpoint,
-20 registered natural-study scientific dependencies, the controlled
-scientific snapshot/compact archive, and 609 files in the new sensitivity
-execution freeze. The original scientific sources and results remain intact.
-The separate [sensitivity guide](../scaling_sensitivity/README.md) documents
-1,664 new natural method runs and 1,440 controlled head fits on reused data,
-including the public execution checkpoint, fixed two-arm design, and scope.
+The supplement contains every held-out forecast from all 192 tasks and ten procedures, the training targets and variance scales needed for normalization, and eight reported numerical tables. The verifier checks file and array hashes, complete task and method coverage, normalized losses, repetition aggregates, and all six primary contrasts. It recomputes the eight tables without importing forecasting models or deserializing fitted model objects.
 
-Restoration refuses to overwrite an existing run. The pinned scientific
-dependencies are in `extensions/natural_forecasting/requirements.txt`; use
-Python 3.12 and install them in an environment outside an extracted review
-artifact. Then audit or replay both studies:
+Its scope is saved-forecast and statistical reproduction. It does not refit models, repeat feature-bound checks, remeasure timing, or rerun the earlier studies. Full fitting and verification use the separate public study code and evidence. This scope is stated in the supplement itself so that its numerical checks can be interpreted separately from complete experimental replication.
 
-```bash
-python extensions/tmlr_integration/package.py audit .
-python extensions/tmlr_integration/package.py replay . --output ../tmlr-replay
-```
+## Earlier studies and archival verification
 
-The audit independently recomputes 2,496 task-method errors from saved natural
-forecasts, verifies targets/origins and complete rosters, replays source-balanced
-analyses, and refits the small diagnostic regressions to check frozen
-coefficients. It also recomputes the archived controlled paired statistics.
-The same audit reconstructs all 1,664 new natural sensitivity losses and all
-1,440 controlled episode-loss summaries, validates the retained full-prediction
-audit, and regenerates the sensitivity tables. Compact controlled replay is
-distinguished from independently recreating its omitted full prediction arrays.
-The audit fits no forecasting model or geometry bank. Replay writes to a
-separate empty directory and preserves every measurement record.
+The original integrated-paper exporter, `package.py`, covers an earlier subset of the evidence. Its whole-checkpoint checks and anonymous exports are meaningful only for that historical scope. They do not produce a complete reproduction bundle for the present manuscript. In particular, they predate the additive, target-geometry, direct-training, adaptive, and reconstruction-departure experiments.
 
-## Original anonymous review exporter (historical scope)
+Historical checkpoints include their original documentation and retain their original checksums. Whole-checkpoint verification requires the matching historical checkout or archive. The current reader documentation is maintained separately from these immutable records. Study-specific scientific freezes continue to identify the source and inputs that produced each reported result.
 
-After the final PDF has been compiled and visually checked:
+The principal paper is supported by several forms of evidence: complete prediction arrays where retained, compact historical summaries where full arrays are unavailable, independently evaluated fitted states, and prospective source checkpoints with their stated public or local status. The manuscript distinguishes these forms rather than treating them as interchangeable guarantees.
 
-```bash
-python extensions/tmlr_integration/package.py build \
-  --pdf /absolute/path/to/main.pdf \
-  --output /absolute/path/to/tmlr-release
-```
+## Review materials
 
-The output consists of:
+The review PDF and saved-forecast supplement are prepared for anonymous review. Public repository URLs, author metadata, Git history, and identifying provenance remain separate from those review materials. Necessary citations, data attribution, and software licenses retain their accurate scope.
 
-| File | Purpose |
-|---|---|
-| `TMLR_Integrated_Manuscript.pdf` | Anonymous integrated review manuscript |
-| `TMLR_Integrated_Manuscript_Source.zip` | Complete editable LaTeX, official style, figures, and tables |
-| `TMLR_Integrated_Review_Supplement.zip` | Anonymous executable review artifact with source data, scientific code, frozen records, saved forecasts, and related unpublished manuscripts |
-| `RELEASE_MANIFEST.json` | Byte sizes and SHA-256 hashes of the delivered files |
-
-ZIP entries have deterministic timestamps and ordering. Both ZIPs together must
-be below 100 MB. The PDF must be newer than all of its build inputs. Existing
-named outputs require explicit `--overwrite`; unrelated files are preserved.
-
-From a source checkout, verify the ZIPs directly:
-
-```bash
-python extensions/tmlr_integration/package.py verify /path/to/TMLR_Integrated_Manuscript_Source.zip
-python extensions/tmlr_integration/package.py verify /path/to/TMLR_Integrated_Review_Supplement.zip
-python extensions/tmlr_integration/package.py audit /path/to/TMLR_Integrated_Review_Supplement.zip
-```
-
-The supplement also contains these commands and a top-level
-`REVIEWER_README.md`. It is a repository-shaped standalone review view, not a
-copy of the complete public Git history.
-
-## Exact provenance and anonymous review
-
-The public original checkpoint remains immutable. The review ZIP omits
-identifying historical overviews, first-party author/contact/citation metadata,
-current-study repository links, old manuscript versions, Git history, and
-unrelated files. One optional project-author metadata field is removed. In the
-review view only, the identifying full-repository `CHECKPOINT.json` is replaced
-by an explicitly post-study inventory of included unchanged source/data files.
-The export manifest records the original and packaged hashes and describes
-this transformation. It never presents the new inventory as an original
-freeze or changes the prior scientific hashes.
-
-The exact scientific sources, datasets, forecasts, analyses, initial and
-confirmation freezes remain byte-identical. The original `VALIDATION.json`
-retains its historical 217-file verification claim; the review checker states
-its own selected-source scope. Original generic runtime paths are retained in
-frozen records. Required licenses, published references, dataset metadata, and
-immutable upstream-source provenance are declared attribution exceptions.
-Mechanical identity scans do not guarantee anonymity against inference from
-scientific content. The PDF and related-work PDFs also require visual review.
-
-The older natural-study packager checks the complete public checkpoint and
-must not be used as the entry point for the anonymous subset. Use this
-integration's `package.py` for review exports. Fresh natural-study full runs
-remain possible using unchanged scientific commands and the review inventory;
-they must use a new run directory and create their own freeze.
-
-## Author decisions before journal submission
-
-This is an unpublished research draft. Computational checks and export
-validation do not substitute for substantive author review. The authors must
-verify the scientific interpretation and citations, confirm their intellectual
-contributions and author list, settle funding and competing-interest
-declarations, and approve the submission. The first-page AI-assistance
-disclosure describes actual assistance and must not be reduced to language
-editing alone. No submission, acceptance, publication, or author approval is
-asserted by the source repository or package command.
+The repository does not assert a journal submission or decision. Submission metadata, authorship, funding, conflicts of interest, and approval of the scientific interpretation are supplied by the authors through the journal's submission process.

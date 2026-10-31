@@ -8,7 +8,7 @@ validation-selected non-KAHM policy. The complete roster has 17 procedures.
 
 The study is separate from the preceding
 [proxy metric experiment](../target_geometry/README.md) and the preserved
-[exploratory gate pilot](../forecast_gate_pilot/INTEGRATION.md). The scientific
+[exploratory gate pilot](../forecast_gate_pilot/SCIENTIFIC_GUIDE.md). The scientific
 code, analysis, exact inputs and protocol are frozen before full execution.
 
 ## Completed findings
@@ -35,7 +35,7 @@ Mean charged natural pipeline time is 7.929 seconds for KAHM, 0.0130 for raw
 RBF and 0.6550 for boosting; these are static fitting/selection/query costs.
 
 Read [complete findings](FINDINGS.md), [all numerical reports](results/summary.json),
-[the validation record](VALIDATION.json), and [the next research questions](RESEARCH_ROADMAP.md).
+[the validation record](VALIDATION.json), and [the experimental protocol](PROTOCOL.md).
 The study establishes an explicit, tested forecasting construction and a
 within-KAHM training benefit in one regime; it does not establish distinctive
 general superiority or an incremental-update benefit.
@@ -133,10 +133,7 @@ Preparation saves inputs and a scientific freeze without fitting a forecaster:
 python extensions/direct_reconstruction/run.py prepare --output /tmp/kahm-direct-new
 ```
 
-Publish that exact freeze before a new prospective execution, then pass its
-full 40-character commit SHA to the `run` subcommand. The preserved completed
-run must never be overwritten. A repeated fit is a computational reproduction,
-not another unseen confirmation after its outcomes have been inspected.
+The `run` subcommand takes the full 40-character commit identifier containing the prepared freeze. Use a distinct output directory to retain the reported execution separately. A repeated fit provides computational reproduction of the specified procedure; it does not create another independent confirmation after the outcomes have been inspected.
 
 The independent analysis reconstructs windows, losses, C selection, costs
 and frozen hashes, and replays selected serialized models. It does not

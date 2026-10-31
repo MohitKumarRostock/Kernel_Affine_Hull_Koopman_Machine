@@ -1,329 +1,196 @@
 \section{Interpretation and limitations}\label{sec:discussion}
-\paragraph{The final mechanism result.}
-The final experiment separates three conclusions. KAHM reconstruction can
-supply raw functions outside a matched affine-plus-RBF span under explicit
-reference conditions. A blockwise bounded feature map and correctly scaled
-ridge solve give a uniform correction bound. The complete bounded
-KAHM procedure also improves the shared-coordinate control by 12.58\%
-on the declared nonlinear aggregate. None of these statements establishes
-that the KAHM reconstruction is the practically preferable predictor.
-Its 1.17\% advantage over matched RBF departure does not meet the 3\%
-criterion; its 3.92\% point advantage over raw RBF has an unresolved
-simultaneous useful-margin bound. Boosted trees and the C-selected
-non-KAHM policy have lower aggregate error. The linear-control
-noninferiority condition and all stability screens pass, but four of
-six required margin criteria are not established. The fixed research decision is therefore
-to stop this forecasting-performance branch.
 
-The positive finding remains: the full reconstruction departure helps the specified regularized
-readout beyond its common basis. The experiment does not identify the
-KAHM normalization as a sufficiently valuable contribution over the
-matched reconstruction and practical procedures. All 432 nonlinear
-KAHM correction cells are active, so the result cannot be explained as
-universal recovery of the raw baseline. The algebraic distinctness
-witness is an existence result; it does not show that every fitted bank
-adds a new raw direction, that its added functions align with a future
-target, or that the available sample supports their estimation.
+\subsection{Distinct features, bounded corrections, and predictive value}
+The results distinguish three properties of a reconstruction-based
+forecaster. First, KAHM reconstruction departures can contain functions
+outside the span of matched affine and RBF features. The irregular-reference
+construction proves the existence of this distinction; it does not imply
+that every fitted reference set adds a new function. Second, bounded
+features and ridge regularization control the magnitude of the fitted
+correction. Third, the correction can improve prediction for a particular
+target and decoder. None of these properties implies the next without
+additional assumptions.
 
-\paragraph{What the combined evidence supports.}
-The branch intervention shows how accurate reconstruction can coexist
-with a poor predictive code, and how explicit position or a locality-aware
-score can repair it. The fresh synthetic study shows that representation
-and finite decoder must be evaluated jointly: KAHM helps on a declared
-law while other controls win on others. The separate natural-source study
-shows that those controlled gains do not suffice to recommend its tested
-augmentation broadly. These results concern different procedures and
-populations; neither the natural failures erase the controlled effects
-nor the controlled effects override the natural failures.
-The later paired scaling check leaves the natural aggregate ranking intact
-under the specified unclipped min--max alternative. It strengthens that
-bounded comparison without extending it to every preprocessing choice or
-future source population.
-The main controlled local-coordinate comparisons retain their mean ordering,
-although Duffing's KAHM error
-changes appreciably. Robustness of a ranking within these two fixed scaler
-arms is a narrower statement than invariance of the representation or loss.
+The principal experiment provides a useful example of this separation.
+The bounded KAHM departure reduces nonlinear aggregate error by 12.58\%
+relative to the shared gate-and-coordinate basis. This improvement meets
+the prespecified 3\% margin and shows that the reconstruction features
+contribute predictive value to the tested decoder. However, the matched
+RBF departure recovers much of the same benefit. KAHM's 1.17\% point
+advantage over that procedure does not meet the required margin. Its
+3.92\% point advantage over raw-input RBF forecasting has an unresolved
+simultaneous lower bound, and boosted trees and the selected non-KAHM
+procedure attain lower aggregate error. The linear-control noninferiority
+criterion and all stability checks are satisfied, but the collection of
+required forecasting comparisons is not. These findings support the use
+of matched reconstruction controls when evaluating the contribution of a
+particular normalization or geometric construction.
 
-The additive extension adds a distinct qualification. Preserving the raw
-forecast makes a zero correction feasible for a successfully fitted model,
-but does not establish that the correction is useful, that KAHM is the
-best correction geometry, or that the procedure completes every fit.
-The synthetic factorial finds gains against raw RBF in selected cells,
-while concatenated KAHM, simpler additive controls, or boosting are better
-in others. The two archive fitting failures prevent a full-roster
-geometric loss comparison. On the explicitly post-hoc matched-success
-diagnostic, raw ridge is substantially more accurate and cheaper than
-the geometric alternatives, and neither frozen 5\% policy improves the
-raw RBF aggregate. An architectural safeguard and a validation margin
-are therefore useful design choices to evaluate, not adoption guarantees.
+The correction is selected with nonzero weight in all 432 nonlinear
+KAHM task--horizon combinations. Thus the aggregate result does not arise
+from always returning the raw ridge baseline. Nevertheless, activation
+is only a validation decision. It does not establish that the correction
+reduces held-out loss in each task or horizon. Likewise, the raw-span
+analysis describes representable functions before block normalization
+and penalized fitting. A nonorthogonal change of coordinates can alter
+ridge predictions even when the underlying spans coincide, and separate
+radial transformations can change the spans themselves. The experiments
+therefore compare complete, specified forecasting procedures.
 
-The target-geometry study adds evidence for a more specific time-series
-role. KAHM local features can correct a ridge forecast on all three known
-synthetic laws and modestly improve the new archive aggregate. Those
-improvements are properties of the complete procedures. The simultaneous
-comparisons do not establish a benefit from switching to donor residuals
-or learning the shared proxy metric, and five favor simpler matched
-geometries. Raw RBF also has lower mean error on each synthetic law in
-this experiment. On the archive, fixed-metric in-sample KAHM is both more
-accurate and cheaper than learned-metric OOF KAHM. Thus the successful
-ridge correction does not identify supervised metric learning, donor
-exclusion, or the KAHM gate as its unique source.
+\subsection{What the complementary experiments establish}
+The controlled representation experiments show that reconstruction
+accuracy and predictive encoding can differ. A residual score can discard
+position along a reconstructed set, whereas explicit local coordinates
+or a locality-sensitive score can retain it. Fresh simulations then show
+that the representation and finite decoder must be evaluated together:
+KAHM has favorable comparisons on one declared law while simpler controls
+perform better on others. These conditional gains do not justify a
+recommendation across unrelated time-series sources.
 
-For evaluating another reconstruction-based feature map, the resulting
-questions are concrete. Does fitting complete on the declared inputs?
-Does the code retain target-relevant position?
-Does a simpler locality or affine control recover the same benefit?
-Does the comparison persist with a raw-input control and an explicitly
-specified decoder? Does it survive complete selection costs and evaluation
-on reserved original sources? The present experiments demonstrate why
-each check can change the interpretation. They do not provide an automatic
-test for choosing a representation.
+The natural-data study illustrates that restriction. Its KAHM augmentation
+has higher aggregate error and cost than the raw-input RBF comparator.
+An additional comparison using an unclipped min--max scaler preserves
+the aggregate ordering on those same observations, although individual
+controlled losses change. This supports the ordering under the two tested
+preprocessing choices. It does not establish invariance to scaling or
+transfer to a new population of series.
 
-\paragraph{Limits of the benefit diagnostic.}
-The four tested rules use a small set of descriptors and one reduced-capacity
-probe. In particular, the descriptors omit downstream landmark count;
-when the training cap is nonbinding, different capacities can receive
-identical descriptors. History and horizon also change together.
-Moreover, selecting by the sign of expected log loss ratio need not minimize
-expected scaled MSE: heterogeneous loss magnitudes matter even when each
-realized log ratio has the same sign as the corresponding raw-minus-KAHM
-loss difference. We therefore report the
-actual decision losses and costs as well as prediction error. The failed
-geometric increment motivates the separately frozen additive extension
-and new archive sources in Section~\ref{sec:utility-extension}. It does
-not justify retuning a diagnostic on the already inspected confirmation
-outcomes and reporting them as a new test.
+Retaining a raw forecast and adding a geometric correction makes zero
+correction available after a successful model fit. The additive study
+shows why this architectural property is weaker than a guarantee of
+usefulness. Validation can choose an unhelpful correction, and the shared
+geometric fit can fail before the correction weight is selected. Two
+natural-data configurations have such failures, so their full-roster
+geometric aggregate is undefined. The post-hoc analysis of the 22
+successful configurations is conditional on fitting success. It cannot
+replace the planned evaluation. On that subset, ridge is both more
+accurate and cheaper than the geometric alternatives.
 
-\paragraph{Limits of data, inference, and computation.}
-The eight source families in the original natural study were selected for diversity and feasibility,
-not sampled randomly from future applications. Four families per phase
-support bounded descriptive comparisons; related windows, settings, and
-seeds do not enlarge that number. Longer Hospital and Traffic regimes
-have only 21 and 29 initial training windows, and one NN5 regime retains
-seven test origins. Missing-window exclusion defines an available-window
-estimand. FRED-MD is a fixed retrospective snapshot whose upstream
-transformations and release-time revisions are not fully audited here.
+The supervised-geometry study finds that KAHM features can correct ridge
+on the three tested nonlinear laws and modestly improve the natural-data
+aggregate. The comparisons do not establish an incremental benefit from
+the learned diagonal proxy metric or from fitting donor-excluded
+residuals. Simpler matched geometries have favorable comparisons, and
+fixed-metric KAHM is more accurate and cheaper than learned-metric,
+donor-excluded KAHM on the archive. Donor exclusion prevents a model from
+fitting its own query response, but it does not make residuals from donor
+models identically distributed with residuals from the final model.
+The transport identity in Equation~\eqref{eq:target-donor-transport}
+explains this distinction under fixed maps and a common evaluation law;
+chronological distribution changes require further assumptions.
 
-The original natural candidates are local univariate forecasters with two capacity
-settings and finite grids. The study is not a comprehensive neural or
-pretrained forecasting benchmark. The MLP reaches its iteration cap in
-68 of 80 selected confirmation refits; all such fits and warnings remain
-reported. Equal landmark counts do not imply equal effective capacities,
-and that study's two settings jointly vary sample and model-size caps. CPU timings
-are implementation-specific, include material bookkeeping, and expose
-imports/launch separately. Process high-water RSS includes interpreter and
-input storage and cannot resolve incremental memory use. Model bytes,
-training memory, energy, and financial cost are different quantities.
+Direct training of reconstruction bandwidths and gate temperatures also
+produces mixed evidence. The synthetic analysis has two favorable, six
+adverse, and ten unresolved comparisons. None of the favorable primary
+intervals is against an equally trained non-KAHM local control. Three
+planned natural-data tasks have no eligible training-query windows,
+leaving the four-collection aggregate undefined. The descriptive result
+on the available seven series concerns a feasible subset, not the
+complete planned population. Absent query windows and a failed geometric
+fit are different limitations and require different methodological
+responses.
 
-The controlled Student intervals rely on their stated paired-difference
-assumptions. The original 29- and 12-contrast families and the new
-24-contrast additive extension and 18-contrast target-geometry study
-retain separate coverage claims, without a joint
-95\% guarantee across the entire paper.
-The branch reflection and saved-bank conditioning checks are descriptive;
-they supply neither a population Lipschitz bound nor a distribution-free
-KAHM performance certificate. Replaying fixed seeds and reconstructing
-saved losses verifies computation without producing new source evidence.
+\subsection{Scope of the stability guarantee}
+The bounded-feature construction limits one source of extreme residual
+corrections. The largest observed taskwise ratio of KAHM maximum absolute
+error to ridge maximum absolute error is 1.553, below the prespecified
+screen of five. No feature-, coefficient-, or correction-bound violation
+occurs. These implementation checks are consistent with the deterministic
+bound, but they do not convert it into a forecast-risk guarantee. A
+bounded correction can still be systematically inaccurate, and the raw
+ridge forecast is not bounded by the correction result.
 
-The scaling analysis compares two fixed preprocessing choices on those same
-observations. It does not test clipping, all alternative scalers, local-only
-natural models, or a new scaler-selection rule. Near-equal natural aggregate
-errors do not prove statistical equivalence or scale invariance. Conversely,
-an observed controlled change describes the complete refitted pipeline:
-partitioning, truncated directions, reference-energy regularization, gates,
-and finite decoder geometry can all change together. Further component
-attribution or a newly chosen procedure would require another specified study
-and fresh reserved evidence for a new transfer claim.
+The radial map is nonexpansive as a function of its feature input. This
+property does not bound sensitivity to the original history when the
+preceding reconstruction is highly sensitive. In particular, replacing
+a reconstruction by an affine fallback near a small signed denominator
+need not preserve continuity. Nor does the fixed-feature bound control
+changes caused by updating the geometry online. The adaptive experiment
+retains its extreme forecasts and unfavorable accuracy comparisons after
+the numerical solver correction. The fixed-geometry result therefore
+establishes a guarantee for a different, explicitly bounded procedure.
 
-\paragraph{Scope of the additive extension.}
-The new factorial separates the number of training episodes from the raw
-decoder's requested landmark count. It holds the declared geometric bank
-configuration and ridge-correction class fixed; it does not identify an
-optimal KAHM rank, reference count, or decoder family. More training data
-can also change the fitted partitions and residual targets. The correction
-learns in-sample residuals of a selected raw predictor, so insufficient
-residual structure, overfitting in either stage, the coarse penalty and
-mixing grids, and finite validation data can all affect its usefulness.
-A favorable comparison identifies a useful complete procedure under that
-protocol; an adverse comparison does not establish that every KAHM decoder
-or every residual-fitting construction must fail.
+\subsection{Statistical and external validity}
+The final experiment uses independent repetitions of four known laws.
+The nonlinear laws were already available during method development.
+The two additional-noise levels share underlying episodes and use a
+noise amplitude estimated from the fitting split. This pairing supports
+controlled comparisons but does not supply independent tasks for
+inference. The primary sample size is 24 repetition aggregates, regardless
+of the number of overlapping origins, horizons, or forecast cells.
+The paired-mean $t$ bounds rely on their stated approximation and are not
+distribution-free. The fixed repetition count is an experimental budget,
+not a demonstrated power calculation.
 
-The new archive evaluation contributes four selected collections, three
-series per collection, two requested capacities, and one fitting seed.
-Solar Weekly has simulation provenance. This is a bounded extension of
-source coverage, not a representative survey of forecasting domains.
-Actual landmark counts and retained kernel ranks can be below their
-requested values on short series. The initial chronological validation
-rule is applied before a pretest refit, which changes the baseline,
-residual targets, and correction together. No positive test guarantee
-follows from a 5\% validation margin, an exact zero-correction option,
-or a positive alignment computed after observing test outcomes. In fact,
-the shared geometric-bank fit fails on both capacities of one Car Parts
-series, before a zero-correction choice can be evaluated. Full-roster
-geometric and policy mean losses are therefore undefined. The amended
-22-configuration comparison is conditional on successful fitting, with
-only two Car Parts series, and cannot be presented as completion of the
-prespecified full-roster evaluation. The robust fallback and revised grouping rules in
-Section~\ref{sec:target-geometry} are changed procedures evaluated
-separately; they do not replace these historical failures.
+The six primary contrasts form one simultaneous family. Earlier studies
+have their own contrast families and sampling units; the paper does not
+claim joint 95\% coverage across all reported analyses. Failure to
+establish a 3\% improvement margin has several possible interpretations.
+For the matched RBF departure, the estimated gain is below the margin.
+For raw-input RBF forecasting, the estimate exceeds the margin but the
+lower bound remains below zero. Neither result establishes equality,
+and the latter does not establish that raw-input RBF is superior.
+Condition-specific summaries describe heterogeneity without selecting a
+new favorable subpopulation for confirmatory inference.
 
-The utility decision is also application-dependent. This study supplies
-measured loss--cost pairs and fixed policy outcomes; it does not impose a
-deployment latency budget, a memory ceiling, or an exchange rate between
-accuracy and resources. Component-sum policy costs expose required shared
-work but are not separately timed end-to-end executions. Actual serialized
-state is not a lower bound on model storage, and a single execution cannot
-resolve small timing differences as precisely as a repeated benchmark.
-These limits matter when translating a favorable error comparison into a
-claim that additional representation complexity is justified.
+The natural collections were selected for diversity and feasibility,
+not sampled randomly from future forecasting applications. Four reserved
+families in the original study provide four source-level observations;
+multiple windows, configurations, and fitting seeds do not enlarge that
+number. Several series yield few training or test windows. Excluding
+windows with unavailable values makes the evaluation conditional on
+window availability. The FRED-MD input is a retrospective snapshot whose
+release-time revisions and upstream transformations are not fully
+characterized here, and Solar Weekly has simulation provenance.
+Consequently, the evidence does not establish performance for arbitrary
+missing-data patterns, real-time macroeconomic vintages, or all natural
+forecasting domains.
 
-\paragraph{Scope of proxy-metric geometry and donor residuals.}
-The proxy-metric experiment tests one constrained diagonal metric, one fixed
-Gaussian proxy bandwidth, one 256-row metric cap, one regularization
-strength and a finite family of readouts. All metric fits converge under
-the optimizer's criterion, but the median regularized objective reduction
-is small. Convergence and a lower training proxy are not evidence of a
-useful forecast geometry. The experiment is not an exhaustive search over
-supervised metrics, and it does not train KAHM's reconstruction parameters
-directly against forecast error. Its three known laws, four selected
-collections, fixed contexts/horizons, and capped training sizes bound the
-conclusion. Neither overlapping windows nor multiple gates expand the
-number of independent natural collections.
+The tested models are local univariate forecasters with finite training
+caps, reference counts, decoder dimensions, and tuning grids. Equal
+requested landmark counts do not imply equal realized rank or effective
+capacity. The studies do not constitute a comprehensive comparison with
+neural or pretrained forecasting models, long-context multivariate
+methods, or all adaptive kernel algorithms. A failed procedure within
+these settings constrains that procedure; it is not an impossibility
+result for every predictor based on the representation.
 
-Donor exclusion prevents a predictor from fitting its own query label;
-it does not make donor and final-model residual distributions identical.
-The elementary identity in Equation~\eqref{eq:target-donor-transport}
-conditions on fixed maps under a common evaluation law. Chronological
-folds can have different laws and sample sizes, so their observed
-prediction disagreement supplies a diagnostic rather than an oracle-risk
-certificate. The new comparison also makes no pretest refit, holding the
-selected base fixed. This differs materially from the earlier utility
-study and avoids attributing all between-study changes to residual honesty.
+\subsection{Computational interpretation and practical use}
+Reported costs include the fitting and selection operations required by
+each procedure. Shared operations are charged once within a procedure,
+and selection policies pay for the candidates they evaluate. These
+measurements describe the supplied implementations on the recorded host.
+They do not establish minimum algorithmic costs, and small timing
+differences should not be interpreted with more precision than the
+measurement design supports. Serialized model size, owned array storage,
+process high-water memory, and transient fitting workspace measure
+different resources.
 
-The archive gain from learned-metric KAHM is 2.18\%, while the charged
-standalone procedure costs about 0.162 seconds per task versus 0.00130
-seconds for ridge on the recorded host. The ratio of approximately 125
-therefore accompanies small absolute times at the tested scale; it is
-neither an intrinsic algorithmic constant nor evidence of deployment
-infeasibility. Fixed-metric KAHM and simpler controls nevertheless supply
-better observed accuracy--cost pairs here. Computation includes the paid
-metric, donors and selection, and conservatively retains test bank
-transform costs when validation chooses zero correction. It does not
-measure peak incremental memory, streaming update latency or optimized
-production kernels.
-
-\paragraph{Scope of direct reconstruction training.}
-The earlier direct-training intervention trains bounded bandwidths and temperatures while
-holding references, local covariance, principal directions and original
-kernel regularization fixed. It tests one finite local search with three
-head penalties, four correction weights and finite A/B/C samples. The
-matched controls receive equal supervision and search ceilings within
-each intervention, but have different functional forms. Neither a
-successful optimizer termination nor a better B objective establishes
-an optimal representation or improved D prediction. A null or adverse
-comparison constrains this procedure, not every possible KAHM forecaster.
-Raw ridge, RBF and gradient boosting are practical comparators at this
-scale; the study is not a comprehensive neural or pretrained-model
-benchmark.
-
-The natural feasibility finding has a different cause from the earlier
-geometric fit failures. The three A-selected rideshare series have no
-complete B windows, so the declared training procedure cannot start.
-Numerical fallback during prediction does not repair absent training
-queries. Their membership was not changed after this finding. The
-planned four-collection efficacy aggregate is undefined; the available
-seven-series, three-collection description is conditional on feasibility.
-This transparent restriction prevents a completed-subset comparison from
-being presented as full source coverage. A future missing-data procedure
-must specify its interpolation or causal imputation and label-availability
-rules before evaluation on new evidence.
-
-The synthetic intervals rely on the stated paired-difference normal
-approximation, using twelve repetitions per known law and a separate
-18-contrast family, not a paper-wide confidence claim. Three available purposive archive collections support descriptive
-comparisons, not population intervals. Serialized state bytes measure
-retained model files rather than incremental memory. Warm component sums
-include eager query work and selected-state packing; a minimal deployment
-implementation could have different costs. No application latency limit,
-memory ceiling or accuracy--cost exchange rate is imposed here.
-
-\paragraph{What stability has and has not established.}
-The new cap acts on separately normalized common and departure blocks,
-with no later readout scaling. It removes one source of uncontrolled
-correction magnitude under the stated finite-feature assumptions. The
-largest taskwise maximum-error ratio to ridge is 1.553, below the fixed
-screen of five, with no feature-, coefficient- or correction-bound
-violation. This is compatible with worse average forecasting loss:
-bounded corrections can still be systematically unhelpful. The
-bound does not control the unbounded raw baseline, supply a population
-risk guarantee, or imply continuity across a local fallback boundary.
-It is not an online geometry-stability theorem. The separately evaluated
-adaptive prototype retains its extreme forecasts and failed accuracy
-decisions; the new fixed-bank experiment does not replace those outcomes.
-
-\paragraph{Scope of the final statistical decision.}
-The three nonlinear laws were already known during development, and the
-new seeds supply independent realizations conditional on that choice.
-The noise intervention shares underlying episodes across levels and uses
-an A-estimated amplitude. The linear control has a finite burn-in from
-fixed initial conditions; exact stationarity is not assumed. Conditional
-on the realized added-noise amplitude, the reserved linear process is
-Gaussian, while across repetitions that random scale induces a mixture.
-The chosen ten procedures, ranks, reference counts, readout penalties,
-feature bounds, noise levels and horizons delimit the comparison.
-The study does not evaluate long multivariate forecasting, an application
-selected independently of these results, or a comprehensive set of neural
-and pretrained models. In particular, useful performance against the
-common ablation is not sufficient evidence for deployment.
-
-The six one-sided Bonferroni bounds rely on the stated independent-paired-
-repetition approximation. Twenty-four repetitions provide a fixed budget,
-not a power calculation or a distribution-free result. The 3\% and 5\%
-margins are prospective research-allocation screens. The failure against
-raw RBF includes unresolved precision around the useful margin; it must
-not be described as a demonstrated raw-RBF victory or equivalence.
-Neither retrospective condition selection nor extra repetitions are used
-to reverse the result. The six-contrast family is separate from all
-historical families, with no paper-wide confidence guarantee.
-
-\paragraph{Research consequence.}
-The last bounded mechanism test has now been executed. Its outcome gives
-no basis to expand this KAHM forecasting-performance branch into another
-application search or another adaptive variant. The completed contribution
-concerns the relationship between reconstruction, a restricted decoder,
-regularization and prediction. Conditional raw-span distinctness, a
-correction bound and predictive utility are separate properties, and the
-record supplies explicit examples of why one does not establish the next.
-Any stronger impossibility statement would require a theorem for a
-specified representation, decoder class and evaluation law. The existing
-prediction-limit certificates \citep{KumarKargaran2026Limits,
-Anonymous2026Certificates} address such declared classes; the empirical
-stop decision here must not be substituted for their assumptions or
-interpreted as universal impossibility.
+The target-geometry study illustrates why both absolute and relative costs
+matter. Its learned-metric KAHM procedure takes about 0.162 seconds per
+task, compared with 0.00130 seconds for ridge: a large ratio at a small
+absolute scale. The final reconstruction experiment shows a different
+tradeoff: KAHM fits faster than boosted trees but predicts more slowly,
+and raw-input RBF is cheaper on both measures. An application would need
+to specify acceptable error, latency, memory, and updating costs before
+these tradeoffs could justify deployment. The experiments report the
+observed loss--cost pairs without imposing an unspecified exchange rate
+between accuracy and computation.
 
 \section{Conclusion}
-This paper reports completed theoretical and empirical investigations of
-KAHM forecasting representations. Exact normalized-kernel identities
-identify redundant or reparameterized constructions, and an irregular
-reference bank proves that a KAHM reconstruction departure can be a
-distinct raw basis function. A separately bounded feature map and centered
-ridge head give a uniform correction-magnitude bound. The final matched
-experiment then tests useful predictive value on 192 complete task suites,
-with 24 independent repetitions and a locally frozen six-contrast decision.
+KAHM reconstruction can supply useful features to a finite forecasting
+decoder, but its value depends on the reference geometry, the accessible
+feature span, regularization, and the prediction target. Exact identities
+identify normalized target transfer as a kernel-ridge ratio and show
+when matched reconstruction spans are redundant. An irregular reference
+set establishes that the spans can also differ. Separately, a bounded
+feature map and ridge residual decoder yield a uniform correction bound.
 
-The bounded KAHM departure improves the shared gate-and-coordinate basis
-by 12.58\%, but its 1.17\% gain over matched RBF departure is below the
-required useful-effect margin. The 3.92\% point gain over raw RBF does
-not establish that margin under simultaneous inference; boosted trees
-and the selected non-KAHM policy have lower aggregate error. Stability
-and linear-control noninferiority pass, while four required margin criteria
-are not established. The prespecified outcome ends this forecasting-performance
-branch. Earlier conditional gains, unavailable tasks, numerical failures,
-and amended adaptive development remain part of the scientific record.
-
-The resulting claim is precise: geometric reconstruction can supply
-useful functions to a finite forecasting decoder, but neither basis
-distinctness nor a bounded correction establishes a distinctive KAHM
-forecasting advantage. The paper and repository preserve the mathematical
-conditions, executable procedures, complete forecasts, independent-code
-checks and limitations that support this conclusion.
+The matched forecasting experiment establishes improvement over the
+common local-coordinate basis, but it does not establish the required
+practical advantage over the full comparison family. Complementary
+experiments identify conditional gains, unfavorable natural-data
+comparisons, incomplete task coverage, and limitations of online
+adaptation. Together, the results clarify what reconstruction contributes
+to prediction and why algebraic distinctness, numerical stability, and
+forecasting accuracy require separate evaluation.

@@ -1,6 +1,6 @@
 # Findings: forecast-trained KAHM reconstruction
 
-**Direct reconstruction training substantially improves KAHM over its own gate-only version on Van der Pol. The experiment does not establish distinctive predictive superiority over the matched alternatives, or an accuracy–cost advantage.** It establishes a fully specified, implemented and reproducible KAHM forecasting procedure, with its favorable and unfavorable results preserved. The interpretation below follows the frozen analysis; it does not select a new method from D outcomes. [Protocol](PROTOCOL.md) · [Machine-readable findings](results/summary.json)
+**Direct reconstruction training substantially improves KAHM over its own gate-only version on Van der Pol. The experiment does not establish distinctive predictive superiority over the matched alternatives, or an accuracy–cost advantage.** The study specifies and evaluates a KAHM forecasting procedure, with every planned task accounted for. The results follow the analysis fixed before D evaluation. [Protocol](PROTOCOL.md) · [Machine-readable findings](results/summary.json)
 
 ## Execution, coverage and verification
 
@@ -122,4 +122,4 @@ State size is the uncompressed serialized selected model, not process resident m
 
 ## What this study establishes
 
-The study supplies a concrete KAHM time-series forecasting construction, matched forecast supervision, chronological and episode protocols, complete failure accounting, replayable selected states, and a reproducible within-family training benefit on Van der Pol. It also narrows the open question: a KAHM-specific contribution must exceed equally supervised local alternatives and strong practical baselines on newly reserved evidence, with a declared useful resource tradeoff. The present results do not establish that broader claim. The [research roadmap](RESEARCH_ROADMAP.md) distinguishes the tested intervention from the still-unexecuted incremental-geometry direction.
+The study supplies a concrete KAHM time-series forecasting construction, matched forecast supervision, chronological and episode protocols, complete failure accounting, replayable selected states, and a reproducible within-family training benefit on Van der Pol. It also narrows the open question: a KAHM-specific contribution must exceed equally supervised local alternatives and strong practical baselines on newly reserved evidence, with a declared useful resource tradeoff. The present results do not establish that broader claim. Incremental geometry updates were not evaluated in this study.

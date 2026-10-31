@@ -1,201 +1,364 @@
 \section{Reconstruction algebra and bounded residual decoding}
 \label{app:reconstruction-mechanism}
 
-The results here concern fixed reference maps and a specified decoder class.
-They establish identities, conditional distinctness and correction bounds;
-none is an accuracy theorem for an arbitrary time-series law. The executable
-companion \path{extensions/reconstruction_mechanism/algebra.py} evaluates only
-fabricated reference banks and matrices, independently of forecast outcomes.
+This appendix analyzes fixed reference maps and their use by a specified
+decoder. It establishes normalized-kernel identities, conditions for equality
+or inequality of feature spans, and a bound on fitted residual corrections.
+None of these statements assumes a particular time-series distribution or
+guarantees a forecasting improvement. Unless another subscript is displayed,
+vector norms are Euclidean norms. The numerical examples can be evaluated
+with \path{extensions/reconstruction_mechanism/algebra.py}; their reference
+banks are constructed independently of forecasting outcomes.
 
 \subsection{Normalized kernel identities}
-Let the rows of $Q\in\R^{M\times p}$ be reference histories, $P$ a fixed
-principal-coordinate basis of rank $r$, and $W$ the positive projected
-covariance precision. For row-vector histories the inherited Gaussian kernel is
+
+Let $q_1,\ldots,q_M\in\R^d$ be reference histories, and let
+$Q\in\R^{M\times d}$ contain their transposes as rows. Let
+$P\in\R^{d\times r}$ have orthonormal columns, with $1\leq r\leq d$,
+and let $W\in\R^{r\times r}$ be a symmetric positive-definite precision
+matrix for the projected coordinates. For a column-vector query
+$x\in\R^d$, define the Gaussian kernel vector $k(x)\in\R^M$ by
 \[
- k_i(x)=\exp\!\left[-\frac{((x-q_i)P)W((x-q_i)P)^\top}{2r}\right].
+ k_i(x)=\exp\!\left[-\frac{
+ (P^\top(x-q_i))^\top W(P^\top(x-q_i))}{2r}\right],
+ \qquad i=1,\ldots,M.
 \]
-Write $k(x)$ as a row vector, $K$ for the reference Gram matrix and
-$C=(K+\lambda I)^{-1}$. The KAHM and matched RBF reconstructions are
+Let $K\in\R^{M\times M}$ be the reference Gram matrix, with
+$K_{ij}=k_i(q_j)$. For $\lambda>0$, set
+$C=(K+\lambda I_M)^{-1}$, where $I_M$ is the $M\times M$ identity
+matrix, and let $\mathbf1_M$ be the length-$M$ vector of ones.
+The matrix $K$ is symmetric positive semidefinite, so $C$ exists and is
+symmetric positive definite. The KAHM and matched positive-kernel
+reconstructions are
 \begin{equation}
- A_K(x)=\frac{k(x)CQ}{k(x)C\mathbf1},\qquad
- A_R(x)=\frac{k(x)Q}{k(x)\mathbf1}.
+ A_K(x)=\frac{Q^\top Ck(x)}{\mathbf1_M^\top Ck(x)},\qquad
+ A_R(x)=\frac{Q^\top k(x)}{\mathbf1_M^\top k(x)}.
  \label{eq:mechanism-normalized-maps}
 \end{equation}
-Both use the same references, projected distance and bandwidth. Multiplying
-$k(x)$ by a common positive scalar cancels from either ratio; this justifies
-the implemented maximum-log-kernel subtraction.
+The first expression is defined wherever its signed denominator is nonzero.
+The second denominator is positive for every finite query. The two maps
+share the references and projected Gaussian kernel. Multiplying $k(x)$
+by a common positive scalar cancels in either ratio, which justifies
+subtracting the largest log-kernel value before query evaluation.
 
 \begin{proposition}[Normalization and target transfer]
 \label{prop:mechanism-krr}
-Whenever $s(x)=k(x)C\mathbf1\ne0$, the weights
-$\alpha(x)=k(x)C/s(x)$ sum to one. For any reference target vector $y$,
+For a query satisfying $s(x)=\mathbf1_M^\top Ck(x)\ne0$, define the
+normalized weight vector $\alpha(x)=Ck(x)/s(x)$. Its entries sum to one.
+For any reference target vector $y\in\R^M$,
 \[
- \alpha(x)y=\frac{k(x)(K+\lambda I)^{-1}y}
- {k(x)(K+\lambda I)^{-1}\mathbf1}.
+ \alpha(x)^\top y=
+ \frac{k(x)^\top(K+\lambda I_M)^{-1}y}
+ {k(x)^\top(K+\lambda I_M)^{-1}\mathbf1_M}.
 \]
-This is exactly the ratio of two dual kernel-ridge predictions, one trained
-on $y$ and the other on the constant vector, under the displayed
-no-additional-intercept convention. Moreover, for an affine scalar function
-$f(q)=qb+c$,
+Thus target transfer is the ratio of two dual kernel-ridge predictions
+with regularization matrix $K+\lambda I_M$ and no additional intercept:
+one fitted to $y$, and one fitted to the constant target $\mathbf1_M$.
+For an affine scalar function $f(q)=q^\top b+c$, with
+$b\in\R^d$ and $c\in\R$, let $f(Q)=Qb+c\mathbf1_M$ be its reference
+values. Then
 \[
- \alpha(x)f(Q)-f(x)=\{A_K(x)-x\}b.
+ \alpha(x)^\top f(Q)-f(x)=\{A_K(x)-x\}^\top b.
 \]
 \end{proposition}
 \begin{proof}
-The first statement follows by summing the weights; the remaining identities
-follow by substitution and $\alpha(x)\mathbf1=1$.
+The definition gives
+$\mathbf1_M^\top\alpha(x)=s(x)/s(x)=1$. Because $C=C^\top$,
+$\alpha(x)^\top y=k(x)^\top Cy/s(x)$ and
+$s(x)=k(x)^\top C\mathbf1_M$, proving the ratio identity.
+For the affine function,
+\[
+ \alpha(x)^\top f(Q)
+ =\alpha(x)^\top Qb+c\alpha(x)^\top\mathbf1_M
+ =A_K(x)^\top b+c.
+\]
+Subtracting $x^\top b+c$ proves the final identity.
 \end{proof}
-Directly transferring these weights to future targets is therefore not an
-independent forecasting mechanism. Likewise, $A_K(x)b$ is normalized kernel
-ridge on the restricted pseudo-target $Qb$. The identity
-$A(x)+\{x-A(x)\}=x$ holds for every reconstruction and creates a linear
-redundancy if all three are appended without restriction. These observations
-do not rule out useful basis functions for a restricted decoder.
 
-\subsection{When reconstruction departures are redundant}
-Define the affine reconstruction in row-vector notation by
-$A_A(x)=\mu+(x-\mu)PP^\top$. With a common locality gate $g(x)$, let
-$d_K=g(A_K-A_A)$ and $d_R=g(A_R-A_A)$.
+This identifies direct target transfer as a normalized kernel-ridge
+construction. The ratio generally differs from the unnormalized
+kernel-ridge predictor because its denominator depends on the query.
+Similarly, $A_K(x)^\top b$ is normalized kernel ridge applied to the
+restricted reference target $Qb$. For any reconstruction $A$, the identity
+$A(x)+\{x-A(x)\}=x$ also implies a linear dependence among the raw input,
+reconstruction, and residual when all three are included as unrestricted
+linear features. These identities constrain claims about the resulting
+function class while allowing useful parameterizations for a restricted
+or regularized decoder.
 
-\begin{proposition}[A sufficient raw-span equivalence]
+\subsection{When reconstruction departures have the same span}
+
+Let $\mu\in\R^d$ be the reference center and define the affine
+reconstruction $A_A(x)=\mu+PP^\top(x-\mu)$. Fix a common scalar locality
+gate $g(x)$, and define column-vector departures
+\[
+ d_K(x)=g(x)\{A_K(x)-A_A(x)\},\qquad
+ d_R(x)=g(x)\{A_R(x)-A_A(x)\}.
+\]
+A feature span means the set of scalar functions obtained by finite linear
+combinations of its coordinate functions. Let $\mathcal S_0$ be the span
+of the gate $g(x)$ and the coordinates of $g(x)P^\top(x-\mu)$.
+It contains every coordinate of $g(x)A_A(x)$.
+
+\begin{proposition}[A sufficient condition for equal feature spans]
 \label{prop:mechanism-redundancy}
-Suppose $K\mathbf1=\kappa\mathbf1$ and the augmented reference-coordinate
-span is invariant under $C$: $C\mathbf1=a\mathbf1$,
-$CQ=QB+\mathbf1 c^\top$, where $a=(\kappa+\lambda)^{-1}$.
-Then
+Suppose $K\mathbf1_M=\kappa\mathbf1_M$ for a scalar $\kappa$ and
+$C$ leaves the augmented reference-coordinate space
+$\mathcal V=\operatorname{span}\{\mathbf1_M,Q_{:1},\ldots,Q_{:d}\}
+\subseteq\R^M$ invariant. Here $Q_{:j}$ denotes column $j$ of $Q$.
+Then there exist $B\in\R^{d\times d}$ and $c\in\R^d$ such that
 \[
- A_K=(A_R B+c^\top)/a,
- \qquad
- d_K=d_R B/a+gA_A(B/a-I)+gc^\top/a.
+ C\mathbf1_M=a\mathbf1_M,\qquad
+ CQ=QB+\mathbf1_M c^\top,\qquad a=(\kappa+\lambda)^{-1}>0.
 \]
-After redundant coordinate columns are removed, the augmented raw feature
-spans agree when both include the common gate and gated principal coordinates.
+For these coefficients,
+\[
+ A_K=\frac{B^\top A_R+c}{a},\qquad
+ d_K=\frac{B^\top}{a}d_R+
+ \left(\frac{B^\top}{a}-I_d\right)gA_A+\frac{gc}{a}.
+\]
+The span obtained by adjoining the coordinates of $d_K$ to
+$\mathcal S_0$ is the same as that obtained by adjoining the coordinates
+of $d_R$.
 \end{proposition}
 \begin{proof}
-Substitute the two assumed actions of $C$ into
-Equation~\eqref{eq:mechanism-normalized-maps}. The last two departure terms
-belong to the common feature span because
-$gA_A=g\mu+g(x-\mu)PP^\top$. The restriction of an invertible operator to
-an invariant finite-dimensional subspace is invertible, giving equality of
-the active augmented spans.
+The constant-row-sum assumption implies
+$(K+\lambda I_M)\mathbf1_M=(\kappa+\lambda)\mathbf1_M$,
+so $C\mathbf1_M=a\mathbf1_M$. Since $K$ is positive semidefinite,
+$\kappa\geq0$ and hence $a>0$. Invariance of $\mathcal V$ means each
+column of $CQ$ can be expressed using $Q$ and $\mathbf1_M$, which gives
+$B$ and $c$. Using symmetry of $C$ in
+Equation~\eqref{eq:mechanism-normalized-maps},
+\[
+ A_K(x)=
+ \frac{(CQ)^\top k(x)}{(C\mathbf1_M)^\top k(x)}
+ =\frac{B^\top Q^\top k(x)+c\mathbf1_M^\top k(x)}
+ {a\mathbf1_M^\top k(x)}
+ =\frac{B^\top A_R(x)+c}{a}.
+\]
+Subtract $A_A$ and multiply by $g$ to obtain the displayed departure
+identity. Since $gA_A=g\mu+P\{gP^\top(x-\mu)\}$, all its coordinates
+belong to $\mathcal S_0$. Thus the KAHM-augmented span is contained in
+the RBF-augmented span.
+
+For the reverse inclusion, the restriction of the invertible matrix $C$
+to the invariant finite-dimensional space $\mathcal V$ is injective and
+therefore surjective onto $\mathcal V$. Its images
+$C\mathbf1_M=a\mathbf1_M$ and the columns of $CQ$ consequently span
+$\mathcal V$. Hence there exist $D\in\R^{d\times d}$ and $e\in\R^d$ such that
+$Q=(CQ)D+\mathbf1_M e^\top$. Multiplying its transpose by
+$k(x)/(\mathbf1_M^\top k(x))$ gives
+$A_R(x)=aD^\top A_K(x)+e$. After multiplication by $g$ and subtraction
+of $gA_A$, this expresses each RBF departure coordinate using KAHM
+departure coordinates and $\mathcal S_0$. The spans therefore agree,
+including when the original reference-coordinate columns are redundant.
 \end{proof}
 
-For example, take one scalar bank $q=(-1,1)^\top$, $P=1$, $g=1$ and
-$A_A(x)=x$. If the off-diagonal Gram entry is $\rho$, then
+For example, take scalar references $q=(-1,1)^\top$, $P=1$, $g=1$,
+and $A_A(x)=x$. If the off-diagonal Gram entry is $\rho$, then
+$K\mathbf1_2=(1+\rho)\mathbf1_2$ and $Kq=(1-\rho)q$. Therefore
 \begin{equation}
- A_K=cA_R,\qquad d_K=cd_R+(c-1)x,\qquad
- c=\frac{1+\rho+\lambda}{1-\rho+\lambda}.
+ A_K=c_\rho A_R,\qquad
+ d_K=c_\rho d_R+(c_\rho-1)x,\qquad
+ c_\rho=\frac{1+\rho+\lambda}{1-\rho+\lambda}.
  \label{eq:mechanism-two-reference}
 \end{equation}
-Thus $\operatorname{span}(1,x,d_K)=\operatorname{span}(1,x,d_R)$ exactly.
-The source-compatible sample-variance precision is $1/2$, so $\rho=e^{-1}$;
-the inherited regularization iteration gives $\lambda=2.6519665429866075$
-and $c=1.224037566462905$. The saved numerical identity errors on the
-fabricated grid are below $6\times10^{-16}$.
+The coefficient $c_\rho$ is positive, so
+$\operatorname{span}(1,x,d_K)=\operatorname{span}(1,x,d_R)$.
+With the sample-variance precision $1/2$, $\rho=e^{-1}$.
+The regularization iteration used by the implementation yields
+$\lambda=2.6519665429866075$ and $c_\rho=1.224037566462905$.
+The maximum numerical identity error on the constructed query grid is
+below $6\times10^{-16}$.
 
-These are statements about raw spans. An isotropic ridge penalty is not
-invariant under a general nonorthogonal coordinate change. Separate nonlinear
-radial transforms can also destroy the displayed linear relation. The
-empirical comparison therefore concerns the complete reconstruction,
-normalization and decoder procedure; it cannot automatically attribute a
-forecast difference to additional raw function-space capacity.
+These are equalities between untransformed feature spans. An isotropic
+ridge penalty is not invariant under a general nonorthogonal change of
+coordinates. Applying separate nonlinear radial transformations can also
+remove the displayed linear relation. A forecasting comparison therefore
+evaluates the complete reconstruction, feature transformation, and fitting
+procedure, even when two untransformed feature sets have the same span.
 
 \subsection{An explicit distinct reconstruction basis}
+
 \begin{proposition}[Irregular scalar references]
 \label{prop:mechanism-distinct}
-Let $q_1<q_2<q_3$, $q_1+q_3\ne2q_2$, and use a Gaussian kernel with
-positive precision $t$. Suppose $v=C\mathbf1$ is componentwise positive.
-For one bank with gate one and affine reconstruction $x$,
+Let $q_1<q_2<q_3$ with $q_1+q_3\ne2q_2$, and define
+$k_i(x)=\exp\{-t(x-q_i)^2/2\}$ for precision $t>0$.
+Let $K_{ij}=\exp\{-t(q_i-q_j)^2/2\}$,
+$C=(K+\lambda I_3)^{-1}$ for $\lambda>0$, and suppose every entry of
+$v=C\mathbf1_3$ is positive. For the reconstructions in
+Equation~\eqref{eq:mechanism-normalized-maps}, with $Q=q=(q_1,q_2,q_3)^\top$,
+gate $g=1$, and $A_A(x)=x$,
 \[
  A_K\notin\operatorname{span}(1,x,A_R),\qquad
  d_K\notin\operatorname{span}(1,x,d_R).
 \]
+These are statements about scalar functions on the whole real line.
 \end{proposition}
 \begin{proof}
-Set $u=Cq$. The six unordered sums $q_i+q_j$, $i\le j$, are distinct.
-Products of the Gaussian translates satisfy
+Set $u=Cq$. Since $C$ is symmetric,
+$A_K(x)=(k(x)^\top u)/(k(x)^\top v)$, and positivity of $v$ makes
+its denominator positive for every $x$. The six sums $q_i+q_j$ with
+$i\leq j$ are distinct: strict ordering of the three references orders
+all the sums except possibly $q_1+q_3$ and $2q_2$, and their equality
+is excluded by assumption. Products of Gaussian translates satisfy
 \[
- k_i(x)k_j(x)=e^{-tx^2}e^{-t(q_i^2+q_j^2)/2}e^{t(q_i+q_j)x}.
+ k_i(x)k_j(x)=
+ e^{-tx^2}e^{-t(q_i^2+q_j^2)/2}e^{t(q_i+q_j)x}.
 \]
-The six real exponentials remaining after the common factor is removed are
-linearly independent: differentiating a zero linear combination at zero
-gives a nonsingular Vandermonde system.
+After removal of the common positive factor $e^{-tx^2}$, these products
+are nonzero multiples of exponentials with six distinct real exponents.
+Such exponentials are linearly independent. Indeed, differentiating a
+vanishing linear combination zero through fifth order at $x=0$ gives
+a Vandermonde system whose determinant is the product of the nonzero
+pairwise exponent differences.
 
-Suppose $A_K=cA_R+d$. Cross multiplication and coefficient matching give,
-with $w=u-dv$, $w_i=cq_i v_i$ and
-$w_i+w_j=c(q_i v_j+q_j v_i)$. If $c=0$, invertibility of $C$ implies
-$q=d\mathbf1$, a contradiction. Otherwise
-$(q_i-q_j)(v_i-v_j)=0$ forces $v$ to be constant, hence $K$ must have
-constant row sums. Its middle row instead exceeds either endpoint row,
-since the Gaussian decreases strictly with distance. This is again a
+Suppose first that $A_K=cA_R+d$ for scalars $c,d$. Define
+$w=u-dv$. Multiplication by the two positive denominators gives
+\[
+ \left(\sum_i k_iw_i\right)\left(\sum_j k_j\right)
+ =c\left(\sum_i k_iq_i\right)\left(\sum_j k_jv_j\right).
+\]
+Independence of the six products implies equality of their coefficients.
+The diagonal coefficients give $w_i=cq_iv_i$, and the off-diagonal
+coefficients give
+$w_i+w_j=c(q_iv_j+q_jv_i)$ for $i<j$.
+If $c=0$, all $w_i$ vanish, so $Cq=dC\mathbf1_3$. Invertibility of
+$C$ would imply $q=d\mathbf1_3$, contrary to the distinct references.
+If $c\ne0$, substituting the diagonal equations into the off-diagonal
+ones yields $(q_i-q_j)(v_i-v_j)=0$. Thus $v=a\mathbf1_3$ for some
+$a>0$, and $(K+\lambda I_3)v=\mathbf1_3$ implies that $K$ has
+constant row sums. This is impossible: its middle-row sum exceeds the
+first-row sum by $K_{23}-K_{13}>0$ and the last-row sum by
+$K_{12}-K_{13}>0$, since the Gaussian decreases strictly with positive
+distance. This rules out every affine relation $A_K=cA_R+d$.
+
+Both reconstructions are bounded functions of $x$. The RBF reconstruction
+is a convex combination of $q_1,q_2,q_3$. Also,
+\[
+ A_K(x)=\frac{\sum_i k_i(x)v_i\,(u_i/v_i)}
+ {\sum_i k_i(x)v_i}
+\]
+is a convex combination of the three finite numbers $u_i/v_i$.
+If $A_K=cA_R+d+bx$ held on the real line, boundedness of both
+reconstructions would force $b=0$. The affine relation already ruled out
+would then follow. This proves the first span statement. Finally,
+$d_K=A_K-x$ and $d_R=A_R-x$ imply
+$\operatorname{span}(1,x,d_R)=\operatorname{span}(1,x,A_R)$.
+Membership of $d_K$ in this span would imply membership of $A_K$, a
 contradiction.
-
-Both reconstructions are bounded on the real line: $A_R$ is a convex
-combination of the references, while
-$A_K=(\sum_i k_i v_i (u_i/v_i))/(\sum_i k_i v_i)$ is a convex combination
-of the fixed values $u_i/v_i$. Any putative additional linear term in $x$
-must consequently have zero coefficient. The statement for departures
-follows by adding the common coordinate $x$.
 \end{proof}
 
-The explicit fixture $q=(-1,0,2)^\top$ has inherited sample-variance
-precision $3/7$ and $\lambda=4.498274743339644$. Positivity of $C\mathbf1$
-can be certified without a query grid. Write $K=I+E$ and $a=1+\lambda$.
-If $a>2\|E\|_\infty$, the Neumann series gives
+A concrete example uses $q=(-1,0,2)^\top$, sample-variance precision
+$t=3/7$, and $\lambda=4.498274743339644$ from the specified
+regularization iteration. Positivity of $C\mathbf1_3$ can be verified
+without examining a query grid. Write $K=I_3+E$ and $a=1+\lambda$.
+For a matrix, let $\|\cdot\|_\infty$ denote the maximum absolute row
+sum; for a vector, it denotes the largest absolute entry. If
+$a>2\|E\|_\infty$, then the Neumann series for
+$aC=(I_3+E/a)^{-1}$ gives
 \[
- \|aC\mathbf1-\mathbf1\|_\infty
- \le \frac{\|E\|_\infty/a}{1-\|E\|_\infty/a}<1.
+ \|aC\mathbf1_3-\mathbf1_3\|_\infty
+ \leq\sum_{j=1}^{\infty}(\|E\|_\infty/a)^j
+ =\frac{\|E\|_\infty/a}{1-\|E\|_\infty/a}<1.
 \]
-Here $\|E\|_\infty=1.2314905926823394$, so the condition holds.
-On 81 fabricated queries in $[-3,4]$, the maximum least-squares residual
-of $d_K$ outside the sampled $(1,x,d_R)$ span is $0.05355670997078987$.
-This numerical witness supplements the analytic proof; it does not prove
-nonredundancy for every high-dimensional bank fitted in the forecasting study.
+Every entry of $aC\mathbf1_3$ is then strictly positive. In the example,
+$\|E\|_\infty=e^{-3/14}+e^{-6/7}=1.2314905926823394$, so the
+condition holds. On $81$ constructed queries in $[-3,4]$, the maximum
+absolute residual after least-squares projection of the sampled $d_K$
+values onto the sampled $(1,x,d_R)$ columns is
+$0.05355670997078987$. This numerical illustration supplements the
+analytic existence result. It does not establish distinctness for every
+higher-dimensional bank used in the forecasting experiments.
 
 \subsection{A bounded correction with a free intercept}
-For a feature block of width $p_b$, use the radial map
+
+For a feature block $v\in\R^{p_b}$ of positive width $p_b$, define
 \begin{equation}
- T_{R_b}(v)=\frac{v}{\sqrt{1+\|v\|_2^2/R_b^2}},\qquad R_b=\sqrt{p_b}.
+ T_{R_b}(v)=\frac{v}{\sqrt{1+\|v\|_2^2/R_b^2}},\qquad
+ R_b=\sqrt{p_b}.
  \label{eq:mechanism-radial}
 \end{equation}
-It has norm at most $R_b$. Its Jacobian has tangential eigenvalue
-$(1+\|v\|^2/R_b^2)^{-1/2}$ and radial eigenvalue
-$(1+\|v\|^2/R_b^2)^{-3/2}$, both in $(0,1]$, so the map is
-nonexpansive. Concatenating separately bounded blocks gives
-$\|\psi(x)\|\le R=(\sum_bR_b^2)^{1/2}$. This does not establish a
-Lipschitz constant for the preceding history-to-feature map, particularly
-across the signed-denominator fallback boundary.
+Its norm is at most $R_b$. To see its sensitivity to its own input, set
+$a=1+\|v\|_2^2/R_b^2$. Its Jacobian is
+$a^{-1/2}I-a^{-3/2}vv^\top/R_b^2$. For $v\ne0$, the eigenvalue in
+the direction of $v$ is $a^{-3/2}$, and each orthogonal direction has
+eigenvalue $a^{-1/2}$; at zero, the Jacobian is the identity. All its
+singular values are therefore at most one. Integrating the derivative
+along the segment between any two inputs proves
+$\|T_{R_b}(v)-T_{R_b}(v')\|_2\leq\|v-v'\|_2$.
+Thus the radial transformation is nonexpansive.
+
+Concatenating separately transformed blocks gives a feature vector
+$\psi(x)\in\R^p$, where $p=\sum_b p_b$, satisfying
+$\|\psi(x)\|_2\leq R=(\sum_bR_b^2)^{1/2}$. This norm bound holds
+wherever the preceding feature construction is defined. Nonexpansiveness
+of the radial transformation does not by itself give a Lipschitz constant
+for the full history-to-feature map, which includes the signed
+reconstruction denominator and its fallback rule.
 
 \begin{proposition}[Centered ridge correction bound]
 \label{prop:mechanism-correction-bound}
-For residual targets $e_i$ and bounded feature vectors $\psi_i$, minimize
+For $n\geq1$, let $e_i\in\R$ be residual targets and
+$\psi_i\in\R^p$ be training feature vectors. Fit $b\in\R$ and
+$w\in\R^p$ by minimizing
 \[
- n^{-1}\sum_{i=1}^n(e_i-b-\psi_i^\top w)^2+\alpha\|w\|^2,
- \qquad \alpha>0,
+ \frac1n\sum_{i=1}^n(e_i-b-\psi_i^\top w)^2+\alpha\|w\|_2^2,
+ \qquad\alpha>0,
 \]
-with a free intercept. Let $\bar e$, $\bar\psi$ be the training means,
-$e_c=e-\bar e\mathbf1$, and $\sigma_e=\|e_c\|/\sqrt n$. Then
+with no penalty on $b$. Define the training means
+$\bar e=n^{-1}\sum_i e_i$ and
+$\bar\psi=n^{-1}\sum_i\psi_i$, the residual vector
+$e=(e_1,\ldots,e_n)^\top$, its centered version
+$e_c=e-\bar e\mathbf1_n$, and its centered root mean square
+$\sigma_e=\|e_c\|_2/\sqrt n$. Suppose query features satisfy
+$\|\psi(x)\|_2\leq R$. Then, for any scalar $\gamma$,
 \begin{equation}
- \|w\|\le\frac{\sigma_e}{2\sqrt\alpha},\qquad
- |\gamma q(x)|\le |\gamma|\left[
- |\bar e|+(R+\|\bar\psi\|)\frac{\sigma_e}{2\sqrt\alpha}\right],
+ \|w\|_2\leq\frac{\sigma_e}{2\sqrt\alpha},\qquad
+ |\gamma q(x)|\leq|\gamma|\left[
+ |\bar e|+(R+\|\bar\psi\|_2)\frac{\sigma_e}{2\sqrt\alpha}\right],
  \quad q(x)=\bar e+(\psi(x)-\bar\psi)^\top w.
  \label{eq:mechanism-correction-bound}
 \end{equation}
 \end{proposition}
 \begin{proof}
-Centering eliminates the intercept. If the centered design has singular
-values $s$, its coefficient operator has singular values
-$s/(s^2+n\alpha)\le1/(2\sqrt{n\alpha})$. Multiplying by $\|e_c\|$
-gives the first inequality. The second follows from Cauchy--Schwarz and
-$\|\psi(x)-\bar\psi\|\le R+\|\bar\psi\|$.
+For fixed $w$, differentiating with respect to the intercept gives
+$b=\bar e-\bar\psi^\top w$. Let $\Psi_c\in\R^{n\times p}$ have
+row $i$ equal to $(\psi_i-\bar\psi)^\top$. Substituting the fitted
+intercept reduces the objective to
+$n^{-1}\|e_c-\Psi_cw\|_2^2+\alpha\|w\|_2^2$.
+Its unique minimizer is
+\[
+ w=(\Psi_c^\top\Psi_c+n\alpha I_p)^{-1}\Psi_c^\top e_c.
+\]
+For a singular value $s\geq0$ of $\Psi_c$, the corresponding singular
+value of the coefficient operator is $s/(s^2+n\alpha)$. The inequality
+$(s-\sqrt{n\alpha})^2\geq0$ implies
+\[
+ \frac{s}{s^2+n\alpha}\leq\frac{1}{2\sqrt{n\alpha}}.
+\]
+The operator norm is therefore at most $1/(2\sqrt{n\alpha})$, giving
+$\|w\|_2\leq\|e_c\|_2/(2\sqrt{n\alpha})
+=\sigma_e/(2\sqrt\alpha)$. Finally, the fitted intercept gives
+$q(x)=\bar e+(\psi(x)-\bar\psi)^\top w$.
+Cauchy--Schwarz and the triangle inequality yield
+\[
+ |q(x)|\leq|\bar e|+
+ (\|\psi(x)\|_2+\|\bar\psi\|_2)\|w\|_2
+ \leq|\bar e|+(R+\|\bar\psi\|_2)
+ \frac{\sigma_e}{2\sqrt\alpha}.
+\]
+Multiplication by $|\gamma|$ proves the correction bound.
 \end{proof}
-The numerical penalty therefore corresponds to sum-SSE penalty $n\alpha$;
-using $\alpha$ unchanged in a sum-SSE solve would implement a different
-procedure. In multiple horizons the bound applies separately to each
-selected $\alpha_h$ and $\gamma_h$. It is generic ridge algebra, not a
-KAHM-specific performance theorem. It bounds only the correction: the
-retained raw ridge baseline and the total forecast error are not globally
-bounded by it. The reserved study checks the feature, coefficient and
-correction inequalities on every saved task in addition to its separate
-error screen.
+
+The mean-squared-error objective corresponds to a summed-squared-error
+objective with penalty $n\alpha$. Keeping the numerical value $\alpha$
+unchanged when switching to a summed loss would define a different
+estimator. For multiple forecast horizons, the bound applies separately
+to each fitted residual vector and each selected pair
+$(\alpha_h,\gamma_h)$. This is a general property of ridge regression
+on bounded features, including the KAHM features considered here. It
+bounds the additive correction but does not bound the retained raw
+baseline or total forecast error. The experiment checks the feature,
+coefficient, and correction inequalities on every saved task and reports
+forecast errors separately.

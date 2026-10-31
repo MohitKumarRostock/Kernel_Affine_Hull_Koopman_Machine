@@ -1,4 +1,4 @@
-\section{Adaptive development: protocol, resources and preserved evidence}
+\section{Online adaptation: protocol and resource measurements}
 \label{app:adaptive-development}
 
 \paragraph{Inputs and temporal roles.}
@@ -10,8 +10,8 @@ T25851 and T108533 each contain 393 weekly observations, with histories 52
 and horizons $(1,2,4)$. The Sunspot input is the finite final 4,096-point
 crop of the previously selected daily T1 series, starting at original raw
 index 69,828; histories are 28 and horizons $(1,3,7)$. No interpolation is
-used. The preserved Monash-source archives and their versioned provenance
-remain part of the development evidence \citep{Godahewa2021Monash}.
+used. The source archives and version identifiers are documented with the
+reproduction materials \citep{Godahewa2021Monash}.
 
 At observation time $t$, the evaluator scores previously issued forecasts
 whose targets mature at $t$, releases the newly available labels, updates
@@ -19,12 +19,12 @@ the model, then issues forecasts for $t+h$. Initial fitting uses common
 joint-horizon complete rows, and calibration weights are selected before
 processing the first evaluation observation using only earlier targets.
 Matured earlier evaluation labels may update the model; the update rule and
-selected weights remain fixed. This is online causal evaluation, not a
-model frozen throughout the evaluation half. Scale factors use the fitting
+selected weights remain fixed. The model therefore uses labels from earlier evaluation times once
+they become available, while the update algorithm remains fixed. Scale factors use the fitting
 prefix only. Losses average origins within horizon, horizons within series,
 then series within collection; Dominick and Sunspot receive equal weight.
-The four synthetic seeds, rather than their overlapping forecast windows,
-are the independent simulation replications. No broad transfer intervals
+The four seeds define independent simulation replications; forecasts
+from overlapping windows within a stream are dependent. No broad transfer intervals
 are claimed from the two selected natural collections.
 
 \paragraph{Reference policy and calibration scope.}
@@ -44,20 +44,23 @@ the common raw ridge forecast. The same calibration rule therefore selects
 a ridge--KRR mixture for each horizon: weights one and zero recover KRR
 and ridge, respectively. All reported method losses include this selection.
 
-\paragraph{Fixed development decision.}
-Advancement requires one complete tier to satisfy all criteria. On recurring
+\paragraph{Prespecified accuracy and service criteria.}
+The decision to expand the evaluation requires one capacity setting
+to satisfy all accuracy and service criteria. On recurring
 streams, adaptive KAHM must reduce mean loss by at least 3\% against each
 of adaptive affine, adaptive RBF-local and kernel ridge, with wins on at
 least three of four paired seeds against each, and by at least 1\% against
 both fixed KAHM and raw ridge. On the natural aggregate, it must improve
-each of the three main comparators by at least 1\%; one same collection
-must improve all three by at least 3\%, and neither collection may be more
-than 5\% worse than any. KAHM must also meet the per-stream p99 screen,
+each of the three main comparators by at least 1\%; at least one collection must show improvements of at least 3\%
+against all three comparators, and neither collection may be more
+than 5\% worse than any. KAHM must also meet the per-stream 99th-percentile service-time screen,
 with no unexpected exception or cap violation in any method. These
-thresholds were fixed before the original run and retained through A1.
-The recurring gate fails at both tiers, yielding \textsc{Defer} after
-technical validity is restored. No accuracy result at one tier is paired
-with a resource result at the other to claim advancement.
+thresholds were fixed before the original run and were also used for
+the repeated evaluation after the numerical amendment, designated A1.
+Neither capacity setting meets the recurring-stream accuracy criteria.
+The protocol therefore classifies both settings as insufficient for
+expanding the experiment. Every criterion is evaluated within a single
+capacity setting.
 
 \input{generated/adaptive_development/resource_table}
 
@@ -73,29 +76,28 @@ host-specific engineering screen, not an application-derived service-level
 requirement. Different support sharing across horizons prevents interpreting
 the tier labels as equal memory or equal computation.
 
-\paragraph{Amendment and evidence provenance.}
-The original implementation used accumulated correction cross-products;
+\paragraph{Solver amendment and computational verification.}
+The original implementation accumulated correction cross-products;
 large rows entering and leaving a finite window produced cancellation in
-the reproduced failing state. A1 instead recomputes residuals against the
+the reproduced failing state. The amended implementation (A1) recomputes residuals against the
 current baseline from the same bounded replay, centers to eliminate the
 free intercept, equilibrates both data and penalty columns, and solves
 the augmented ridge objective with pivoted QR. It changes arithmetic, not
 the specified objective or advancement rule. The original 144 runs remain
 in \path{extensions/adaptive_development/archives/initial_attempt.zip}.
-The amended 144 runs must not be counted as an additional 144 independent
-experimental replications. The saved-evidence audit passes
+Because the amended runs repeat the same inputs, they do not increase
+the number of independent experimental replications. The verification program passes
 \ADAuditChecks{} computational consistency checks, covering chronology,
 coverage, calibration selection, aggregation, decision gates, resources,
 shared baselines and matched reference changes. It imports neither the
 forecasting model nor its analyzer, but remains an internal computational
 check rather than independent scientific replication.
 
-The development extension preserves the protocol, both source freezes,
-amendment, numerical diagnostic states, input hashes, all predictions,
-traces and summaries. The manuscript builder
+The reproduction materials contain both versions of the protocol and
+source, the numerical diagnostic states, input hashes, predictions,
+update traces, and summaries. The manuscript builder
 \path{extensions/tmlr_integration/build_adaptive_assets.py} reconstructs
 the displayed collection means and resource maxima from saved task
 records, checks them against the analysis and decision files, and records
-input/output hashes. It performs no model fitting. The original and A1
-execution freezes were local checkpoints; later dissemination of their
-records cannot retroactively make them public preregistration.
+input/output hashes. It performs no model fitting. Both execution checkpoints were recorded locally. The study was not
+publicly preregistered.

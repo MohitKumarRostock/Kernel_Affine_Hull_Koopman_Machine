@@ -1,15 +1,15 @@
-# Build the completed KAHM research preprint
+# Building the KAHM forecasting manuscript
 
-Entry point: `main.tex`.
+The entry point is `main.tex`. This directory contains the complete LaTeX manuscript, bibliography, official TMLR style, and all figures and tables required for compilation.
 
-This source package contains the complete LaTeX manuscript, bibliography, TMLR preprint style, and all generated figures/tables. It reports the completed reconstruction-mechanism study and earlier preserved results. No forecasting model or online service is required to compile it.
-
-Install TeX Live, `latexmk`, and Latin Modern fonts, then run in this directory:
+Install TeX Live with `latexmk`, pdfLaTeX, BibTeX, and Latin Modern fonts. From this directory, run:
 
 ```bash
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The manuscript uses `\usepackage[preprint]{tmlr}` and a Research preprint header. It has not been submitted for peer review. Anonymous author metadata is retained from the supplied manuscript. The first-page AI-assistance disclosure describes support for study design, implementation, verification, analysis and writing.
+The output is `main.pdf`. Compilation does not fit forecasting models or access an online service. The default source uses anonymous TMLR review mode.
 
-The final mechanism outcome is STOP_FORECASTING_PERFORMANCE_BRANCH. Useful performance over the common basis is established; the required advantage over matched reconstruction and practical controls is not. All generated numbers come from completed saved evidence. The separate reproduction package and public repository contain the scientific code and audits.
+The paper studies when KAHM reconstruction yields useful functions for a finite forecasting decoder. The mathematical analysis establishes conditional feature-span distinctness and a bound on residual correction magnitude. The empirical results support improvement over the common local-coordinate basis without establishing the prescribed advantage over all matched and competitive controls.
+
+Generated displays are derived from the saved study evidence. The public repository provides the experimental source, inputs, selected model states, and verification tools through the study-specific reproduction guides. Each scientific checkpoint identifies the original experiment; the manuscript source archive identifies the document edition built from that evidence.

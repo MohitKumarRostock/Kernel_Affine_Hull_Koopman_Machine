@@ -284,60 +284,68 @@ def _tree_files(root, directory):
 
 
 def source_readme(audit):
-    return f"""# Completed KAHM reconstruction-to-prediction research manuscript
+    return f"""# Kernel Affine Hull representations for time-series forecasting
 
-This archive is the complete editable source of the current unsubmitted
-research manuscript. It includes LaTeX, BibTeX, preserved local styles and
-notices, and all generated historical and new-study tables and figures.
-It reports completed findings; the protocol is supporting reproducibility.
-The frozen mechanism-study decision is `{audit['decision']}`.
+This archive contains the editable manuscript, bibliography, unmodified TMLR
+style files and their notices, and all tables and figures required for compilation.
+The manuscript uses anonymous TMLR review formatting.
 
-From this archive's root, with TeX Live, latexmk, pdfLaTeX, BibTeX and Latin Modern:
+## Compile the manuscript
+
+With TeX Live, latexmk, pdfLaTeX, BibTeX, and Latin Modern installed, run:
 
 ```bash
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-Forecasting models are not fitted to compile the manuscript. The source uses
-the supplied TMLR preprint style and accurately identifies an unsubmitted
-research draft. The template's original files and licenses remain intact.
-The companion `{REPRO_NAME}` preserves the full new-study evidence and its
-exact inherited numerical source. Historical evidence remains separately
-available in {REPOSITORY_URL}; its publication displays are included here.
+The PDF is written to `main.pdf`. Compilation uses the supplied displays and
+does not fit forecasting models or access external datasets.
 
-`{INVENTORY}` records every included byte size and SHA-256. Its evidence
-metadata binds this source package to the exact frozen study, completed
-decision, independent audit, and selected-state replay. Root code/data licenses
-and local third-party/template notices retain their respective scopes.
+## Evidence and reproducibility
+
+The paper studies reconstruction-derived feature spans, bounded residual
+corrections, and predictive accuracy. The principal experiment compares ten
+procedures on 192 task suites, with 24 independent repetition aggregates.
+The KAHM departure improves the common-coordinate basis but does not satisfy
+the complete prespecified forecasting-improvement criterion.
+
+`{INVENTORY}` records each included file's byte size and SHA-256 checksum.
+`STUDY_EVIDENCE.json` identifies the experimental evidence and its computational
+verification. `PRESENTATION_PROVENANCE.json` records text-only display formatting.
+These source inventories describe this manuscript package; the experimental
+source and input records retain their original identities.
+
+The complete fitting implementation and saved evidence are available in
+{REPOSITORY_URL}. The companion `{REPRO_NAME}` contains the principal study's
+frozen source, prepared inputs, predictions, selected states, and analysis.
+The anonymous saved-forecast supplement supports independent reconstruction of
+the principal loss comparisons without refitting or loading serialized models.
+Earlier studies have their own data, protocols, and reproduction instructions.
+
+Code, data, and bundled third-party materials retain their respective licenses.
 """
 
 
 def reproduction_readme(audit):
-    return f"""# Completed reconstruction-to-prediction mechanism experiment
+    return f"""# Reconstruction-derived features for time-series forecasting
 
-Start with `extensions/reconstruction_mechanism/FINDINGS.md` and the companion
-`{PDF_NAME}`. The declared decision is `{audit['decision']}`. All 192 task suites,
-ten procedures and 1,920 method/task predictions are retained, with 958,464
-scored target cells per method. Inference uses 24 independent repetition
-aggregates, not the individual overlapping forecasting windows.
+This package contains the implementation and evidence for the principal
+reconstruction-departure experiment. The study compares ten procedures on
+192 task suites, yielding 1,920 saved prediction arrays and 958,464 target
+values per method. Statistical inference uses 24 independent repetition
+aggregates. `extensions/reconstruction_mechanism/FINDINGS.md` describes the
+results and `MATHEMATICAL_BACKGROUND.md` defines the reconstruction maps,
+feature spaces, and correction bound.
 
-This archive contains the final study code, exact inherited numerical files,
-prepared inputs, frozen protocol, all predictions and selected model states,
-selection/guard/bound/cost records, complete analysis, and independent audit.
-Repository-relative paths are retained. The scientific freeze was local and
-prospective; it was not publicly preregistered. Post-execution reporting and
-packaging are identified separately from the unchanged frozen experiment.
+The package contains prepared inputs, the prospective local protocol and
+source record, predictions, selected model states, model-selection records,
+numerical diagnostics, measured resources, and the statistical analysis.
+The local protocol was recorded before final evaluation and was not a public
+preregistration. Other experiments in the manuscript have separate evidence.
 
-## Verify and reproduce saved findings
+## Reconstruct the reported results
 
-This downloadable reproduction ZIP already contains expanded new-study
-evidence. In a public GitHub source checkout, first restore the lossless parts
-using `python -m extensions.reconstruction_mechanism.evidence unpack`; that
-checkout also restores the separately retained adaptive-development evidence.
-The reproduction ZIP deliberately excludes transport parts and the separate
-adaptive evidence, avoiding archive recursion and duplicate storage.
-
-Use Python 3.12 and install the pinned study requirements in your own environment:
+Use Python 3.12 and install the recorded requirements in a dedicated environment:
 
 ```bash
 python -m pip install -r extensions/reconstruction_mechanism/requirements.txt
@@ -347,46 +355,48 @@ python -m extensions.reconstruction_mechanism.audit --output /tmp/kahm-mechanism
 python extensions/tmlr_integration/build_mechanism_assets.py --output /tmp/kahm-mechanism-displays
 ```
 
-The packager verifies byte inventories and runs only the new study's independent
-saved-prediction analysis. The independent audit separately reconstructs stored
-state inference and checks the fitting equations and selectors. It does not
-refit the forecasting candidates or execute a historical study's replay.
-Selected-state replay remains available using:
+The archive already contains expanded evidence. A GitHub checkout stores bulky
+evidence in checksum-verified parts; restore these with
+`python -m extensions.reconstruction_mechanism.evidence unpack` before running
+the commands above. The prediction analysis reconstructs losses, aggregation,
+and the six primary confidence bounds. The separate audit evaluates selected
+states with independently implemented arithmetic and checks fitting equations
+and selection consistency. Neither operation refits the forecasting candidates.
+
+## Replay selected fitted states
 
 ```bash
 python -m extensions.reconstruction_mechanism.run replay
 ```
 
-That explicit replay loads the supplied trusted Python states. Archive byte
-verification alone never unpickles them. Replay writes a new replay record;
-use a disposable extracted copy when preserving every supplied byte matters.
+Replay loads the supplied Python model states and evaluates their predictions.
+It writes a separate replay record. Checksums alone do not execute or unpickle
+model states. Arithmetic equality is assessed in the recorded software environment.
 
-## Optional fresh-process refits
+## Reproduce fitting
 
-To reproduce fitting, choose an unused output directory outside the supplied
-results and run each task from `prepared_inputs/manifest.json` in its own
-process. For example, replace TASK_ID and the output path below with a declared
-task identifier and a new destination:
+The task roster is `prepared_inputs/manifest.json`. Run each task in a fresh
+process, using its declared identifier and a new output directory. For example:
 
 ```bash
 python -m extensions.reconstruction_mechanism.run worker --task-id TASK_ID --output /tmp/new-kahm-fit/TASK_ID
 ```
 
-The worker checks the frozen source/inputs and never replaces an existing
-result. A fresh process pins one CPU and one numerical thread. Complete-run
-execution provenance is retained in `results/execution.json`; a source checkout
-with the recorded local Git freeze commit additionally supports the `run` CLI.
-Use the declared environment when assessing arithmetic reproducibility.
+Replace `TASK_ID` with a task identifier from the manifest. The worker checks
+the source and input record, uses one CPU and one numerical thread, and refuses
+to replace an existing task result. Complete-run provenance is recorded in
+`results/execution.json`. The complete `run` command additionally uses the
+recorded local Git checkpoint; individual task workers are available from
+an extracted package without that Git history.
 
 ## Scope and attribution
 
-The archive covers the completed new mechanism study and exact dependencies.
-It does not replace the separately preserved earlier experimental archives at
-{REPOSITORY_URL}. The editable integrated manuscript is supplied as
-`{SOURCE_NAME}`. No journal submission, acceptance, DOI or external replication
-is implied by publication. Original software follows LICENSE, generated data
-and non-code outputs follow DATA_LICENSE, and bundled upstream/template
-notices retain their own terms. `{INVENTORY}` inventories all included files.
+The full repository is {REPOSITORY_URL}. The editable manuscript is
+`{SOURCE_NAME}`. This package covers the reconstruction-departure experiment
+and its numerical dependencies; the other studies retain their own reproduction
+materials. Software follows `LICENSE`, generated data and non-code outputs
+follow `DATA_LICENSE`, and third-party notices retain their own terms.
+`{INVENTORY}` records the identity of every included file.
 """
 
 
@@ -555,7 +565,7 @@ def build(pdf, output, *, root=ROOT, overwrite=False):
         write_archive(staging / SOURCE_NAME, manuscript, kind="manuscript_source", audit=audit)
         write_archive(staging / REPRO_NAME, reproduction, kind="reconstruction_mechanism_reproduction", audit=audit)
         manifest = {"schema_version": 1, "source_repository": REPOSITORY_URL, "evidence": audit,
-                    "scope": "Completed research findings and reproducible artifacts; unsubmitted manuscript.",
+                    "scope": "Manuscript and computational evidence for reconstruction-derived forecasting features.",
                     "artifacts": {name: describe(staging / name) for name in PRODUCTS if name != RELEASE_NAME}}
         (staging / RELEASE_NAME).write_bytes(json_bytes(manifest))
         verify_release(staging)

@@ -1,25 +1,25 @@
-# KAHM: a focused development decision
+# Online KAHM adaptation: experimental findings
 
-Completed 31 October 2026 | Bounded online adaptation | Development evidence
+The study evaluates online adaptation under fixed reference and replay-storage quotas. The natural inputs were previously inspected, so their results provide development evidence.
 
-**Recommendation: defer the proposed adaptive-KAHM extension as evidence of forecasting effectiveness.** The repaired prototype fails the prespecified accuracy requirements at both capacity tiers. It does not support a manuscript claim that KAHM is an effective general solution for time-series forecasting.
+**Adaptive KAHM fails the prespecified accuracy requirements at both capacity tiers.** A numerically stable correction-head solver removes implementation exceptions, but severe extrapolation and unfavorable comparisons remain.
 
-| Capacity tier | Recurring gate | Natural gate | p99 screen | Decision |
+| Capacity tier | Recurring accuracy criterion | Natural accuracy criterion | 99th-percentile service criterion | Combined criterion |
 | --- | --- | --- | --- | --- |
-| 64 ref cap / 128 replay | Fail | Fail | Pass: 9.89 ms | DEFER |
-| 128 ref cap / 256 replay | Fail | Fail | Pass: 11.75 ms | DEFER |
+| 64 ref cap / 128 replay | Fail | Fail | Pass: 9.89 ms | Not satisfied |
+| 128 ref cap / 256 replay | Fail | Fail | Pass: 11.75 ms | Not satisfied |
 
-The completed amended study contains **144 runs and 387,900 scored forecasts**. All runs are technically valid: no unexpected model exceptions, no framework fallback forecasts and no observed capacity violations. The independent evidence audit passed 6,713,837 checks.
+The completed amended study contains **144 runs and 387,900 scored forecasts**. All runs are technically valid: no unexpected model exceptions, no framework fallback forecasts and no observed capacity violations. An independent-code evidence audit passed 6,713,837 checks. The state quotas bound storage; they do not bound feature or forecast magnitude.
 
 The central obstacle is predictive value. On the recurring generator, large-tier adaptive KAHM has mean scaled MSE **1.376e+08**, versus 3.3623 for raw ridge and 3.2079 for kernel ridge. The real-series results provide no consistent KAHM advantage over all controls.
 
 ![All six methods are retained. Lower scaled MSE is better. The recurring panel uses a logarithmic axis because of extreme adverse forecasts; the two natural panels use linear axes. Small/large labels give reference and replay quotas.](analysis/figures/collection_errors.png)
 
-One complete earlier attempt required a numerical amendment. Its source, failures and results are preserved in the package. The repeat is transparent development work after observed outcomes, not independent confirmation. Evidence: analysis/decision.json, collection_metrics.csv and audit.json.
+The initial complete execution required a numerical amendment, and both executions are retained. Because the amendment followed inspection of the initial outcomes and used the same inputs, the second execution is part of the same development study. The statistical and verification records are `analysis/decision.json`, `analysis/collection_metrics.csv`, and `analysis/audit.json`.
 
 ## 1. Question, design and controls
 
-The development question was whether a bounded adaptive KAHM representation improves forecasting performance beyond the same online update policy with simpler geometry, and beyond a practical kernel comparator. A positive answer would justify committing newly reserved data to a larger manuscript extension.
+The development question was whether a bounded adaptive KAHM representation improves forecasting performance beyond the same online update policy with simpler geometry, and beyond a practical kernel comparator. The protocol specified accuracy and resource criteria for evaluating this hypothesis.
 
 | Development inputs | Streams | Length each | History / horizons |
 | --- | --- | --- | --- |
@@ -34,7 +34,7 @@ The stationary and recurring synthetic streams share innovations within each of 
 
 Raw ridge is the common sliding-window baseline. Fixed KAHM retains its initial geometry while updating its heads. Adaptive KAHM updates geometry and heads. Adaptive affine and adaptive RBF-local use the same reference selection and refresh policy with different geometric features. Sliding-window Gaussian kernel ridge uses recursive add/delete inverse updates and a free intercept; it is not a reproduction of published KRLS-T.
 
-The small tier permits 64 shared geometric references and 128 replay rows per horizon; the large tier permits 128 and 256. There are four local models of rank at most two. Every 16 observations, an adaptive arm can refresh one local model, retaining half its initial references as anchors and replacing at most four recent references. It rebuilds the affected geometry and all residual heads coherently. Kernel ridge has up to 64 or 128 supports per horizon. These quotas are not equal byte allocations.
+The small tier permits 64 shared geometric references and 128 supervised replay rows per horizon; the large tier permits 128 references and 256 replay rows. A replay row is a history–target pair whose target has already been observed and is retained for updating the predictor. There are four local models of rank at most two. Every 16 observations, an adaptive arm can refresh one local model, retaining half its initial references as anchors and replacing at most four recent references. It rebuilds the affected geometry and all residual heads coherently. Kernel ridge has up to 64 or 128 supports per horizon. These quotas are not equal byte allocations.
 
 ### Strict target chronology and limited calibration
 
@@ -78,25 +78,25 @@ Calibration activates the KAHM correction on only 2/12 natural-data horizon/seri
 
 All per-series and per-horizon outcomes, calibration weights, resources and comparisons are retained in analysis/task_metrics.csv, horizon_metrics.csv, collection_metrics.csv and comparisons.csv. A value below one compares loss with the training-prefix scale; it does not by itself establish superiority over an evaluated seasonal-naive forecast. No window-level significance tests or broad transfer confidence intervals are claimed.
 
-## 3. Why this prototype failed the recurring screen
+## 3. Extrapolation on recurring-regime streams
 
-![All four recurring seeds and all six methods, after the numerical repair. The shared vertical axis is logarithmic when needed. Forecast origins are dependent; the four seeds are the replication units. No unfavorable seed is omitted.](analysis/figures/recurring_seed_results.png)
+![All four recurring seeds and all six methods, after the numerical repair. The shared vertical axis is logarithmic when needed. Forecast origins are dependent; the four seeds are the replication units. All four seeds are shown.](analysis/figures/recurring_seed_results.png)
 
 In the small tier, KAHM activates 0/12 recurring-condition corrections. A method that selects a zero contribution can recover the baseline but cannot establish the proposed geometric advantage. In the large tier, 9/12 corrections are active, but severe errors occur after regime changes.
 
-### A concrete failure, retained in the evaluation
+### An extreme forecast and its fitted state
 
 For recurring seed 20261101, the largest amended KAHM forecast error occurs at origin 1554, horizon 12. The forecast is **175,555.08** while the observed target is **-0.9815**; the raw baseline component is -0.4923. Evaluation targets for this stream range from -1.780 to 1.286. The burst is a severe forecasting failure relative to the scale of the observed series.
 
-The preserved diagnostic replay state (large KAHM, seed 20261101, origin 1554, horizon 12) explains why a numerical repair alone is insufficient. Its query's largest standardized feature is about 3.20 million, compared with about 392 in the current supervised replay. A fresh, correctly solved ridge objective still produces a correction of about 175,556. The adaptive affine arm also exhibits severe extrapolation under a fresh solve.
+The preserved diagnostic replay state (large KAHM, seed 20261101, origin 1554, horizon 12) explains why a numerical repair alone is insufficient. Its query's largest standardized feature is about 3.20 million, compared with about 392 among the supervised rows retained at that time. A fresh, correctly solved ridge objective still produces a correction of about 175,556. The adaptive affine arm also exhibits severe extrapolation under a fresh solve.
 
 These observations are consistent with extrapolation arising from the changing representation and delayed-label replay: a current query can lie far outside the feature range represented by its matured long-horizon training rows. Isolating the contribution of scaling, label delay and reference changes would require a dedicated intervention or ablation. The KAHM signed-denominator check is safe at the preserved diagnostic state, so that particular guard does not prevent the failure.
 
-These mechanism descriptions are post-run diagnostics, not additional advancement criteria. No clipping, normalization change, gamma retuning or error deletion was used. Evidence: AMENDMENT_DIAGNOSTICS.py/.json/.md, original preserved forecasts and analysis/post_run_diagnostics.json.
+These explanations are post-run diagnostics. They did not change the evaluated predictions, normalization, correction multipliers, or decision criteria. The corresponding records are `AMENDMENT_DIAGNOSTICS.py`, `AMENDMENT_DIAGNOSTICS.json`, `AMENDMENT_DIAGNOSTICS.md`, and `analysis/post_run_diagnostics.json`.
 
 ## 4. Runtime and bounded state
 
-The table reports the worst observed value across the 12 streams for each method/tier. A row's timing and memory maxima can come from different streams. The p99 is computed per stream before taking the worst value; it is not a pooled percentile that can hide a slow stream.
+The table reports the worst observed value across the 12 streams for each method/tier. A row's timing and memory maxima can come from different streams. Here p99 denotes the 99th percentile of per-observation service time. It is computed separately for each stream before taking the maximum across streams.
 
 | Method / tier | Worst p99 ms | Maximum ms | Max sampled owned NumPy KiB | Worker RSS MiB |
 | --- | --- | --- | --- | --- |
@@ -125,7 +125,7 @@ Evidence: analysis/task_metrics.csv and each results/*/summary.json and trace.js
 
 ## 5. Numerical amendment and audit
 
-A clean scientific interpretation required distinguishing numerical implementation failure from a poor fitted forecasting function. The first complete attempt was preserved before editing any frozen source. Only the correction-head solver was amended; the complete roster was then repeated.
+The two executions distinguish numerical implementation failure from the behavior of the fitted forecasting function. The first complete execution is archived with its exact source and evidence. Amendment A1 changes only the correction-head solver, after which the complete roster is repeated.
 
 | Evidence item | Original attempt | Amendment A1 repeat |
 | --- | --- | --- |
@@ -135,71 +135,48 @@ A clean scientific interpretation required distinguishing numerical implementati
 | Framework fallback forecasts | 8,659 | 0 |
 | Observed cap violations | 0 | 0 |
 | Independent consistency audit | Passed; 6,704,494 checks | Passed; 6,713,837 checks |
-| Prespecified decision | TECHNICAL_BLOCK | DEFER |
+| Prespecified decision | TECHNICAL_BLOCK | Not satisfied |
 
-### Repairing arithmetic without improving the model by decree
+### Stable solution of the correction-head objective
 
 The original failures were in correction-head normal equations. In a reproduced failing state, accumulated and freshly reconstructed feature cross-products differed by about 2.70 billion. The accumulated ridge matrix had a negative eigenvalue, while the fresh matrix's smallest eigenvalue was approximately one. Large standardized rows entering and leaving a finite window had caused subtractive cancellation.
 
-A1 recomputes current-baseline residuals from the same bounded replay, centers features and targets to eliminate the free intercept, and solves the augmented ridge objective with column equilibration and pivoted QR. The penalty rows receive the same variable transformation. The objective and alpha remain unchanged. The same implementation serves all four geometric arms; raw ridge, scalers, geometry, kernel settings, reference policy, gamma grid, chronology and decision rules are unchanged.
+A1 recomputes current-baseline residuals from the same bounded replay, centers features and targets to eliminate the free intercept, and solves the augmented ridge objective with column equilibration and pivoted QR. The penalty rows receive the same variable transformation. The fitted objective and ridge penalty remain unchanged. The same implementation serves all four geometric arms; raw ridge, scalers, geometry, kernel settings, reference policy, correction-multiplier grid, chronology and decision rules are unchanged.
 
-All 13 numerical and chronology tests passed before the repeat. They include agreement with independent batch objectives, stable eviction of huge transient features, unchanged raw baseline coefficients, coherent geometry rebuilds, matured-target checks and invariance of earlier forecasts to perturbations of later observations. Independent diff review found no blocking defect.
+All 13 numerical and chronology tests passed before the repeat. They include agreement with independent batch objectives, stable eviction of huge transient features, unchanged raw baseline coefficients, coherent geometry rebuilds, matured-target checks and invariance of earlier forecasts to perturbations of later observations.
 
 The saved-evidence audit reconstructs target values, forecast coverage, target timing, calibration selection, losses, aggregates, decision gates, timing summaries, capacity samples, shared baselines and matched adaptive reference updates. Its maximum shared-baseline discrepancy is 5.8e-11. It imports neither the forecasting model nor the original analyzer. This is independent computational consistency checking within the study, not external scientific replication.
 
 All first-attempt records remain in archives/initial_attempt.zip. A1 was made after observing those outcomes; the repeat is not a new independent experiment. Counting two executions as 288 independent experimental units would be incorrect. Evidence: AMENDMENT_A1.md, AMENDMENT_VALIDATION.json, AMENDMENT_TEST_LOG.txt, AMENDMENT_DIAGNOSTICS.* and analysis/audit.json.
 
-## 6. Decision for the manuscript
+## 6. Accuracy criteria and interpretation
 
-**Do not present this adaptive extension as support for a broad forecasting-effectiveness claim.** Both complete capacity tiers fail the recurring-mechanism and natural-data accuracy gates. A useful runtime result cannot compensate for the lack of comparative predictive value and the severe extrapolation bursts.
+Both capacity tiers fail the recurring-regime and natural-data accuracy criteria. Meeting the runtime criterion therefore does not establish the combined accuracy-and-resource requirement.
 
-### The fixed advancement requirements
+The recurring condition required at least 3% mean loss reduction relative to each of adaptive affine, adaptive RBF-local, and kernel ridge, with lower loss on at least three of four paired seeds in each comparison. It also required at least 1% improvement over fixed KAHM and raw ridge. The natural-data condition required at least 1% improvement on the equally weighted two-collection aggregate relative to each main comparator, at least 3% improvement relative to all three on the same collection, and no collection with loss more than 5% higher than any main comparator. The resource criterion required service-time p99 at or below 20 ms on every stream, with no unexpected exception or storage-cap violation in any procedure.
 
-The recurring condition required at least 3% mean loss reduction versus each of adaptive affine, adaptive RBF-local and kernel ridge, with wins on at least three of four paired seeds against each; it also required at least 1% gain versus fixed KAHM and raw ridge. The natural condition required at least 1% gain on the equal-collection aggregate against each main comparator, at least 3% against all three on one same collection, and no collection more than 5% worse against any of them. KAHM also needed p99 service at or below 20 ms on every stream, with no unexpected exception or cap violation in any method.
+These thresholds are fixed development criteria, not a calibrated hypothesis test or a universal definition of practical effectiveness. They were specified before the initial execution and retained after the numerical amendment. The recorded amended decision is `DEFER`, indicating that the accuracy criteria are not satisfied despite technically valid execution.
 
-These are conservative development triage thresholds, not a calibrated hypothesis test or a universal definition of practical effectiveness. They were fixed before the original run and retained through A1. The current decision is DEFER because the synthetic mechanism gate fails; it is no longer a technical block.
-
-| Manuscript choice | Recommendation |
-| --- | --- |
-| Lead claim: KAHM is generally effective for forecasting | Unsupported by this pilot. Do not add it on this evidence. |
-| Adaptive KAHM as a new main contribution | Defer until a revised method demonstrates stable, useful gains over the matched controls. |
-| Exploratory appendix or limitations section | Appropriate if clearly labeled as development evidence and both attempts are disclosed. |
-| Further work if pursued | First test a justified stability intervention; reserve independent sources only after the development protocol is settled. |
-
-### Suggested evidence-matched wording
-
-A focused development study evaluated bounded online adaptation of KAHM against a common ridge baseline, fixed KAHM, matched adaptive geometric controls and sliding-window kernel ridge. After a documented numerical correction that preserved the fitted objective, adaptive KAHM did not satisfy the prespecified accuracy criteria. Its correction was frequently suppressed on the selected natural series, while recurring-regime streams exposed severe extrapolation. These findings motivate further work on stability and task-specific benefit; they do not establish general forecasting effectiveness.
-
-### What this result can and cannot rule out
-
-The conclusion concerns this fixed, simpler adaptive prototype. It does not disprove KAHM as a representation or invalidate earlier forecast-trained experiments. Only one generator, four paired seeds and two previously inspected natural collections were used. No broad hyperparameter optimization was attempted. The prototype does not repeatedly optimize the earlier manuscript's forecast-trained kernel/gate parameters. A different stable design may perform better, but that remains an untested hypothesis.
-
-A proposed LaTeX appendix subsection is included as manuscript_addendum.tex. It is a draft for review, not a claim that the main manuscript has been revised or that an independent confirmation study has been completed.
+The results concern one fixed adaptive design, one synthetic generator with four paired seeds, and two previously inspected natural collections. The prototype does not repeatedly optimize the bandwidths and gate temperatures of the separate direct-training study. It therefore does not establish a general impossibility result for KAHM representations. It does show that storage quotas, correct linear algebra, and a low measured service-time percentile are insufficient to guarantee useful forecasting corrections.
 
 ## 7. Reproduction and provenance
 
-### What the package contains
+The [reproduction guide](REPRODUCING.md) provides copyable commands for recomputing the saved analysis and repeating the forecasting procedure. The evidence includes prepared inputs, issued forecasts, traces, selected calibration weights, summaries, analysis tables, independent-code checks, and the original execution archive.
 
-The ZIP contains this report; the frozen implementation, protocol, configuration and tests; 12 prepared input archives; the four original natural-data NPZs and source manifest needed for optional regeneration; all amended issued forecasts, traces and summaries; analysis CSVs and JSON; independent audit; original-attempt archive; executable numerical diagnostics; the optional LaTeX subsection; report/figure generators; licenses; and a per-file size/SHA-256 inventory.
+The initial and amended source checkpoints are local records. Their identities are:
 
-### Inspect without refitting
+| Record | Commit |
+| --- | --- |
+| Upstream parent | `88e9c568ee983856804a2b2da41f6290f259b8cd` |
+| Initial local checkpoint | `3d374de47d694f6ae3267e4b6ac82787755eeca5` |
+| Amendment A1 local checkpoint | `6027eb995ca91adeab23711b71a3ae1790c9654e` |
 
-Extract the package and use the directory containing its top-level README as the working directory. Install the pinned numerical dependencies from extensions/adaptive_development/requirements.txt in a suitable Python environment. To independently recompute the saved tables and decision, run:
+The initial archive hash appears in `archives/initial_attempt_record.json`. The A1 freeze SHA-256 is `140085b63b4af295cb6f631125e6a0c74aec84b7b2708c4fbed3fe21a98b35af`. These identities describe execution provenance, not public preregistration.
 
-python -m extensions.adaptive_development.analyze   --output /tmp/kahm_analysis  python -m extensions.adaptive_development.audit   --analysis /tmp/kahm_analysis   --output /tmp/kahm_analysis/audit.json The wrapped lines above show command arguments; use one shell command per invocation. Complete copyable commands are in the package README.
+### Data attribution
 
-For a full forecast replay, use the extension README commands with a fresh output directory. Preserve the supplied results. Numerical libraries and CPU dispatch can cause small floating-point differences; timing depends on the host and scheduling. Replaying saved evidence is computational verification, not an additional independent scientific replication. Optional --prepare regeneration uses the included original natural archives and deterministic synthetic generator.
+The Dominick data are weekly retailer SKU profit series from the Monash Time Series Forecasting Repository, version 2, DOI [10.5281/zenodo.4654802](https://doi.org/10.5281/zenodo.4654802), originally provided by the University of Chicago Kilts Center. This study uses series T7830, T25851, and T108533.
 
-### Source identities and amendment trail
+The Sunspot data are the daily series from the Monash repository, version 4, DOI [10.5281/zenodo.4654773](https://doi.org/10.5281/zenodo.4654773), originally provided by SILSO. The finite 4,096-observation crop of T1 begins at original raw index 69,828; no interpolation is performed.
 
-Upstream parent commit: 88e9c568ee983856804a2b2da41f6290f259b8cd Original local freeze commit: 3d374de47d694f6ae3267e4b6ac82787755eeca5 A1 local freeze commit: 6027eb995ca91adeab23711b71a3ae1790c9654e Original archive SHA-256 is retained in archives/initial_attempt_record.json. A1 freeze SHA-256: 140085b63b4af295cb6f631125e6a0c74aec84b7b2708c4fbed3fe21a98b35af RELEASE.json records the final local release identity. No public branch publication was performed.
-
-### Data sources, transformations and licenses
-
-[1] Godahewa et al., Dominick Dataset, version 2, Monash Time Series Forecasting Repository / Zenodo. DOI: 10.5281/zenodo.4654802. Original provider: University of Chicago Kilts Center. These are weekly retailer SKU profit series. This study reuses preserved series T7830, T25851 and T108533.
-
-[2] Godahewa et al., Sunspot Dataset (with Missing Values), version 4 (daily series), Monash / Zenodo. DOI: 10.5281/zenodo.4654773. Original provider: SILSO. The preserved final 4,096-observation crop of T1 starts at original raw index 69,828. The selected crop is finite; no interpolation is performed.
-
-The pinned archive records declare CC BY 4.0. Source checksums, creator metadata, prior selection and transformation notices are retained in DATA_PROVENANCE.md and the original source manifest/README. Code follows the repository MIT license (Mohit Kumar, 2026); DATA_LICENSE governs original research data and non-code outputs with its third-party exclusions. No dependency source code is bundled.
-
-AI tools assisted implementation, checks, analysis and report preparation. The report documents observed evidence and limitations; it is not a submitted manuscript or an external independent replication.
+The pinned archive metadata declare CC BY 4.0. Source hashes, creator metadata, selection, and transformations are recorded in `DATA_PROVENANCE.md` and the source manifest. Code follows the repository MIT license, while `DATA_LICENSE` states the scope of original non-code outputs and third-party exclusions. AI tools assisted implementation, checks, analysis, and report preparation.

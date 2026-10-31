@@ -4,105 +4,135 @@
 \subsection{Residual-target transport between fitted baselines}
 \label{app:target-transport}
 
-The following proposition makes an elementary consequence of
-conditional-expectation projection explicit for residual learning.
-It is not claimed as a new general statistical theorem or a KAHM
-performance guarantee. Condition on the development state and fix a
-representation $Z=\Gamma(X)$, final base $f_0$, and donor $f_d$.
-All expectations below use one evaluation law $Q$ with finite second
-moments. For a fixed positive-definite matrix $W$, write
-$\langle a,b\rangle_W=a^\top Wb$,
-$\|a\|_W^2=a^\top Wa$, and
-$R_W(f)=\E_Q\|Y-f(X)\|_W^2$. The study's equal-horizon mean squared
-error is obtained with $W=I/H$.
+The following projection identity distinguishes residuals of a donor
+baseline from residuals of the final baseline. Condition on the fitted
+state, including a measurable representation
+$\Gamma:\R^d\to\R^p$ and two predictors
+$f_0,f_d:\R^d\to\R^H$. Let $(X,Y)$ be a fresh evaluation pair,
+write $Z=\Gamma(X)$, and assume that $Y$, $f_0(X)$, and $f_d(X)$
+have finite second moments. All expectations below refer to this
+conditional evaluation distribution. For a fixed symmetric
+positive-definite matrix $W\in\R^{H\times H}$, define
+\[
+ \langle a,b\rangle_W=a^\top Wb,\qquad
+ \|a\|_W^2=a^\top Wa,\qquad
+ R_W(f)=\E\|Y-f(X)\|_W^2.
+\]
+Here $a,b\in\R^H$. The equal-coordinate mean squared loss uses
+$W=I_H/H$, where $I_H$ is the $H$-dimensional identity matrix.
 
 \begin{proposition}[Correction gain and donor mismatch]
 \label{prop:target-transport}
-Put $m_0(Z)=\E_Q[Y-f_0(X)\mid Z]$ and
-$b_d(Z)=\E_Q[f_0(X)-f_d(X)\mid Z]$. For every fixed
-square-integrable correction $q(Z)$,
+Define the conditional residual and conditional donor discrepancy by
+\[
+ m_0(Z)=\E[Y-f_0(X)\mid Z],\qquad
+ b_d(Z)=\E[f_0(X)-f_d(X)\mid Z].
+\]
+For every measurable correction $q:\R^p\to\R^H$ satisfying
+$\E\|q(Z)\|_2^2<\infty$,
 \begin{equation}
  R_W(f_0)-R_W(f_0+q\circ\Gamma)
- =\E_Q\|m_0\|_W^2-\E_Q\|q-m_0\|_W^2.
+ =\E\|m_0(Z)\|_W^2-\E\|q(Z)-m_0(Z)\|_W^2.
  \label{eq:target-general-gain}
 \end{equation}
-The donor's oracle correction is
-$q_d(Z)=\E_Q[Y-f_d(X)\mid Z]=m_0(Z)+b_d(Z)$. Consequently,
+The donor's optimal population correction is
+$q_d(Z)=\E[Y-f_d(X)\mid Z]=m_0(Z)+b_d(Z)$. Hence
 \begin{align}
  R_W(f_0)-R_W(f_0+q_d\circ\Gamma)
- &=\E_Q\|m_0\|_W^2-\E_Q\|b_d\|_W^2,\label{eq:target-transport-proof}\\
+ &=\E\|m_0(Z)\|_W^2-\E\|b_d(Z)\|_W^2,
+ \label{eq:target-transport-proof}\\
  R_W(f_0)-R_W(f_0+\widehat q\circ\Gamma)
- &=\E_Q\|m_0\|_W^2-\E_Q\|b_d+a\|_W^2,
- \quad a=\widehat q-q_d.\label{eq:target-fitted-transport}
+ &=\E\|m_0(Z)\|_W^2-\E\|b_d(Z)+a(Z)\|_W^2,
+ \label{eq:target-fitted-transport}
 \end{align}
-Furthermore,
-$\E_Q\|b_d\|_W^2\leq\E_Q\|f_0(X)-f_d(X)\|_W^2$.
+where $\widehat q$ is any square-integrable fitted correction and
+$a(Z)=\widehat q(Z)-q_d(Z)$. Moreover,
+\[
+ \E\|b_d(Z)\|_W^2\leq\E\|f_0(X)-f_d(X)\|_W^2.
+\]
 \end{proposition}
 
 \begin{proof}
-Write $Y-f_0(X)=m_0(Z)+\epsilon$, where
-$\E_Q[\epsilon\mid Z]=0$. Conditional orthogonality gives
+Set $\epsilon=Y-f_0(X)-m_0(Z)$. By the definition of conditional
+expectation, $\E[\epsilon\mid Z]=0$. Because $m_0(Z)-q(Z)$ is
+measurable with respect to $Z$ and $W$ is fixed,
+\[
+ \E\langle\epsilon,m_0(Z)-q(Z)\rangle_W
+ =\E\langle\E[\epsilon\mid Z],m_0(Z)-q(Z)\rangle_W=0.
+\]
+Expanding the squared norm of
+$Y-f_0(X)-q(Z)=\epsilon+m_0(Z)-q(Z)$ therefore gives
 \[
  R_W(f_0+q\circ\Gamma)
- =\E_Q\|\epsilon\|_W^2+\E_Q\|m_0-q\|_W^2.
+ =\E\|\epsilon\|_W^2+\E\|m_0(Z)-q(Z)\|_W^2.
 \]
-Subtract this equality from its $q=0$ counterpart to obtain
-Equation~\eqref{eq:target-general-gain}. Linearity of conditional
-expectation yields $q_d=m_0+b_d$; substituting $q_d$ and then
-$q_d+a$ proves the next two identities. Conditional Jensen's
-inequality for the convex quadratic norm proves the final bound.
+Set $q=0$ in this equality and subtract the general expression to
+obtain Equation~\eqref{eq:target-general-gain}. Linearity of conditional
+expectation gives
+$q_d(Z)=m_0(Z)+b_d(Z)$. Substituting this correction proves
+Equation~\eqref{eq:target-transport-proof}; substituting
+$\widehat q(Z)=q_d(Z)+a(Z)$ proves
+Equation~\eqref{eq:target-fitted-transport}.
+Finally, the function $v\mapsto v^\top Wv$ is convex. Conditional
+Jensen's inequality yields
+\[
+ \|\E[f_0(X)-f_d(X)\mid Z]\|_W^2
+ \leq\E[\|f_0(X)-f_d(X)\|_W^2\mid Z].
+\]
+Taking expectations proves the bound on donor discrepancy.
 \end{proof}
 
 The final term in Equation~\eqref{eq:target-fitted-transport} contains
-$2\E_Q\langle b_d,a\rangle_W$. It cannot be replaced by separate
+$2\E\langle b_d,a\rangle_W$. It cannot be replaced by separate
 nonnegative mismatch and estimation penalties without another
 orthogonality argument: approximation error may reinforce or partially
 cancel the donor discrepancy. Even an exact donor correction can harm
 the final base when its conditional mismatch exceeds the final base's
 predictable residual signal.
 
-For fixed donors $f_1,\ldots,f_K$ and deterministic weights
+For fixed square-integrable donors $f_1,\ldots,f_K$ and deterministic weights
 $\pi_k\geq0$ summing to one, let $\bar f=\sum_k\pi_k f_k$.
 Expanding around $\bar f$ gives
 \[
- \sum_k\pi_k\E_Q\|Y-f_k(X)-q(Z)\|_W^2
- =\E_Q\|Y-\bar f(X)-q(Z)\|_W^2
-  +\sum_k\pi_k\E_Q\|f_k(X)-\bar f(X)\|_W^2.
+ \sum_k\pi_k\E\|Y-f_k(X)-q(Z)\|_W^2
+ =\E\|Y-\bar f(X)-q(Z)\|_W^2
+  +\sum_k\pi_k\E\|f_k(X)-\bar f(X)\|_W^2.
 \]
 The cross term vanishes because the weighted donor deviations sum to
 zero. Hence the common-law population optimizer is
-$\E_Q[Y-\bar f(X)\mid Z]$, and the proposition applies with
+$\E[Y-\bar f(X)\mid Z]$, and the proposition applies with
 $f_d=\bar f$. This does not identify a finite OOF fit with that
 optimizer. Chronological folds can have different laws and sample
 sizes; a donor index depending on the observation must retain that
 joint law rather than being replaced by constant mixture weights.
 
-For a fixed realized correction $\delta(X)$, direct expansion also gives
+For a fixed realized correction $\delta(X)$ satisfying
+$\E\|\delta(X)\|_2^2<\infty$, direct expansion also gives
 \begin{equation}
  R_W(f_0)-R_W(f_0+\delta)
- =2\E_Q\langle Y-f_0(X),\delta(X)\rangle_W
-  -\E_Q\|\delta(X)\|_W^2.
+ =2\E\langle Y-f_0(X),\delta(X)\rangle_W
+  -\E\|\delta(X)\|_W^2.
  \label{eq:target-alignment-audit}
 \end{equation}
-The independent audit verifies its empirical counterpart from saved test
-predictions. It does not estimate the oracle $m_0$ or $b_d$.
+A separately implemented verification program checks its empirical
+counterpart from saved test predictions. It does not estimate the oracle $m_0$ or $b_d$.
 Donor/final disagreement is recorded separately on correction-training
 rows. The final baseline has seen those rows, so this diagnostic is not
 an unbiased estimate of future disagreement or predictive risk.
 
-\subsection{Exact prospective design and source roster}
+\subsection{Evaluation protocol and source roster}
 \label{app:target-protocol}
 
 The executable protocol is \path{extensions/target_geometry/PROTOCOL.md};
-its configuration, numerical dependencies, implementation and prepared
-roster are hashed before the full run. Development checks use separate
-seeds and do not enter confirmation. The new synthetic seeds are
-11200--11211. For law index $l$ and split index $s=0,1,2$, the inherited
-generator receives the first state value from
+its configuration, numerical dependencies, implementation, and prepared
+input roster were hashed before the full evaluation. Development checks use separate
+seeds and do not enter confirmation. The synthetic seeds are
+11200--11211. For law index $l$ and split index $s=0,1,2$, the generator in Appendix~\ref{c:app:methods} receives the first state value from
 \texttt{SeedSequence([seed,l,s,9027])}. Each task has 128/64/128
 training/validation/test episodes of length 72, history 12, offsets
 $1,4,12$ and stride four, yielding 13 origins per episode.
-These data retain the earlier numerical observation conventions.
+Observation generation follows the same law-specific conventions as
+the controlled study.
 
 For synthetic OOF targets, episode index modulo four assigns folds.
 Each donor excludes every row of the queried episodes. Within its
@@ -128,7 +158,7 @@ retained as a task failure.
 
 \begin{table}[!htbp]
 \centering\small\setlength{\tabcolsep}{4pt}
-\caption{New target-geometry archive collections and fixed roster.
+\caption{Archive collections and fixed target-geometry roster.
 $L$ is history length, $H$ the number of consecutive target steps, and
 $p$ the seasonal period. Selection uses only training-prefix eligibility
 and identifier hashes. These are 12 series from four selected collections,
@@ -151,12 +181,13 @@ The source records are respectively
 \href{https://doi.org/10.5281/zenodo.5121965}{10.5281/zenodo.5121965},
 \href{https://doi.org/10.5281/zenodo.4656626}{10.5281/zenodo.4656626}, and
 \href{https://doi.org/10.5281/zenodo.4656719}{10.5281/zenodo.4656719}.
-All pinned records declare CC BY 4.0; archive/member hashes, attribution,
+All selected archive versions declare CC BY 4.0; archive/member hashes, attribution,
 source exclusions and metadata are retained in
 \path{extensions/target_geometry/sources/manifest.json}.
 Bitcoin selections are activity indicators, not price forecasts.
-New collection identity does not imply a new broad application domain,
-real-time data-vintage reconstruction, or population representativeness.
+These collections broaden source coverage but are not sampled randomly
+from application domains. The study uses fixed archive versions and
+does not reconstruct historical data-release vintages.
 
 Training-prefix eligibility requires 96 finite windows and a positive
 seasonal-difference mean-square scale, with first-difference fallback.
@@ -175,8 +206,11 @@ The 18 primary contrasts use 12 paired repetition-level means each.
 For positive differences favoring the second method, they compare
 ridge with learned-OOF KAHM; identity-OOF KAHM with learned-OOF KAHM;
 identity-in-sample KAHM with identity-OOF KAHM; and learned-OOF affine,
-locality, and RBF-local with learned-OOF KAHM. Intervals use
-$\bar d\pm t_{11,1-0.05/(2\cdot18)}s_d/\sqrt{12}$ under their stated
+locality, and RBF-local with learned-OOF KAHM. For paired differences $d_1,\ldots,d_{12}$, let $\bar d$ be their
+mean and $s_d$ their sample standard deviation. The interval is
+$\bar d\pm t_{11,1-0.05/(2\cdot18)}s_d/\sqrt{12}$, where
+$t_{\nu,p}$ is the $p$ quantile of Student's $t$ distribution with
+$\nu$ degrees of freedom. Simultaneous coverage uses the stated
 normal approximation. No joint coverage is asserted with prior study
 families. Archive results and leave-one-source-out re-aggregations are
 descriptive; no window-based confidence interval is attached to four
@@ -192,8 +226,10 @@ residual targets fit its supervised objective. Its donor mask excludes
 whole synthetic episodes or natural origins separated by at most
 $L+H$. Queries with no admissible donor are omitted from the proxy;
 fewer than two admissible queries or donor groups invokes identity.
-The residual pooled scale is
-$[\mathrm{mean}_{i,h}(r_{ih}-\bar r_h)^2]^{1/2}$, before row subsampling.
+For $n_c$ eligible residual rows $r_i\in\R^H$, define
+$\bar r_h=n_c^{-1}\sum_{i=1}^{n_c}r_{ih}$. The pooled residual scale is
+$[ (n_cH)^{-1}\sum_{i=1}^{n_c}\sum_{h=1}^{H}(r_{ih}-\bar r_h)^2]^{1/2}$,
+computed before row subsampling.
 Constant residuals or absence of positive admissible input distances
 also invoke identity. Log-sum-exp evaluates kernel probabilities.
 L-BFGS-B uses \texttt{ftol=$10^{-10}$},
@@ -206,14 +242,13 @@ accuracy claim.
 Each bank caps every requested group count by the number of distinct
 sampled partition histories. If numerical clustering still has empty
 groups, all counts are halved down to one, with each reduction recorded.
-Rank-zero local models use their inherited center reconstruction.
+Rank-zero local models return their reference center.
 Unexpected geometry or correction errors return the fitted ridge
 forecast with the exception and incurred work retained. A failed
 supervised metric uses identity; a failed secondary raw RBF also uses
 ridge. A numerical failure of the secondary jointly fitted head is
-isolated to that arm and invokes the same ridge fallback. These are
-predefined procedures for the present study, distinct from the previous
-study's unchanged fit failures.
+isolated to that arm and invokes the same ridge fallback. These fallback rules are specified for this experiment; the additive
+study in Section~\ref{sec:utility-extension} used a different failure policy.
 
 KAHM, affine and locality codes import the archived reconstruction and
 coordinate formulas. The RBF-local gate for local model $c$ uses
@@ -239,8 +274,7 @@ retained model state, not an information-theoretic storage minimum.
 \subsection{Complete comparisons and diagnostic records}
 \label{app:target-results}
 
-The generated displays retain all prescribed primary contrasts and
-every source rather than selecting favorable outcomes. The independent
+The tables and figures report all primary contrasts and every source. The separately implemented
 analyzer recomputes losses from saved targets and predictions, checks
 the complete task/method roster, validates donor exclusions and
 selection records, sums charged dependencies, checks zero-correction
@@ -260,12 +294,11 @@ the simpler control. None establishes a learned-metric or OOF-target
 increment for KAHM. Table~\ref{tab:target-archive-sources} retains
 the source means, and Table~\ref{tab:target-archive-windows} records
 every series's windows and training loss scale. Individual-series
-losses are retained in \path{reports/task_metrics.csv} under the new
-extension. Learned-OOF KAHM's source-mean
+losses are retained in \path{reports/task_metrics.csv} in the target-geometry reproduction directory. Learned-OOF KAHM's source-mean
 reductions relative to ridge are 3.91\% for Australian electricity,
 1.38\% for Bitcoin indicators, 4.37\% for pedestrian counts, and
-0.85\% for air quality. These favorable source aggregates coexist
-with four individual-series losses. The complete leave-one-source-out
+0.85\% for air quality. The favorable source means coexist with higher loss on four
+individual series. The complete leave-one-source-out
 display in Table~\ref{tab:target-leave-one-source-out} concerns
 composition sensitivity of this roster, not uncertainty over new
 collections.

@@ -16,6 +16,6 @@ Raw + KAHM / std. & 0.1162 & 0.1594 & 0.0939 & 0.0094 & 0.0015 & 0.3804 \\
 Raw + KAHM / min--max & 0.2682 & 0.1934 & 0.0845 & 0.0084 & 0.0016 & 0.5561 \\
 \bottomrule
 \end{tabular}
-\caption{Contemporaneous, source-balanced warm method times (seconds) on the four formerly reserved sources. Each method independently performs its alpha search, selected refit, prediction, serialization, and cleanup. These totals exclude reused data preparation, current input loading, process startup, and additional sensitivity audits. Launch-to-result and audit elapsed times are recorded separately; the inherited partial import timer is not a complete cold-start measure. Every timing, including outliers, is retained. These single-execution observations are implementation-specific and should not be divided by timings from the earlier execution.}
+\caption{Contemporaneous, source-balanced warm method times (seconds) on the four formerly reserved sources. Each method independently performs its alpha search, selected refit, prediction, serialization, and cleanup. These totals exclude reused data preparation, current input loading, process startup, and additional sensitivity audits. Launch-to-result and audit elapsed times are recorded separately; the recorded import interval covers only part of initialization. Every timing, including outliers, is retained. These single-execution observations are implementation-specific. Cost ratios use reference methods measured in this same execution.}
 \label{tab:scaling-costs}
 \end{table}

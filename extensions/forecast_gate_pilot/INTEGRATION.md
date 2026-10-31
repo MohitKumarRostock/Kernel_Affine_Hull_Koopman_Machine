@@ -1,21 +1,9 @@
-# Historical pilot integration
+# Relationship between the gate-temperature pilot and later studies
 
-This directory preserves the completed nine-task exploratory gate-temperature
-pilot from the research continuation workbench, including its original freeze,
-source snapshot, predictions, limitations and numerical checks. Its original
-README records the source-code access situation at the time of execution.
-The upstream repository was subsequently recovered for the separate
-`extensions/direct_reconstruction` experiment. No historical output or frozen
-pilot file was revised to make the pilot appear to use that recovered code.
+The nine-task gate-temperature pilot is an exploratory experiment with three independent realizations per simulation law. It uses independently implemented generators, a limit of 160 objective evaluations per horizon and penalty, and trainable gate temperatures with a fixed reconstruction bank. Its design, source snapshot, predictions, and numerical checks are retained in this directory.
 
-The pilot uses independently implemented known-law generators and three
-seeds per law, a 160-evaluation budget, and gate temperatures only. The next
-study uses the inherited generators, twelve fresh seeds per law, a public
-pre-execution checkpoint, a 256-evaluation ceiling for both trainable modes,
-and a reconstruction/shape intervention. Their errors and costs must not be
-pooled. The pilot is exploratory, not part of the new simultaneous family.
+The subsequent [direct reconstruction study](../direct_reconstruction/README.md) uses the original study generators, 12 fresh repetitions per law, a public checkpoint before execution, and a 256-evaluation ceiling for its trainable local procedures. Its reconstruction intervention modifies local bandwidths as well as gate temperatures. The two studies therefore have different procedures, search budgets, and experimental units. Their errors and costs are not pooled, and the pilot is not part of the later simultaneous-comparison family.
 
-The preserved bounded-window ridge and cached-reconstruction modules are
-numerical building blocks. They have not been evaluated as an online KAHM
-forecasting system; no streaming accuracy, update-latency, or memory claim
-follows from their algebraic checks.
+The original pilot README records the source-code availability at the time of its execution and is included in the immutable pilot checkpoint. The [scientific guide](SCIENTIFIC_GUIDE.md) provides the current methods and reproduction entry point. The historical file identities distinguish the pilot implementation from the original code subsequently used in the direct reconstruction experiment.
+
+The pilot's sliding-window ridge and cached-reconstruction components are numerical building blocks for fixed or explicitly versioned feature maps. Their algebraic checks do not constitute an online forecasting experiment or establish streaming accuracy, latency, or memory bounds. The later [adaptive study](../adaptive_development/REPRODUCING.md) evaluates a separate complete chronological forecasting procedure and reports its outcomes independently.

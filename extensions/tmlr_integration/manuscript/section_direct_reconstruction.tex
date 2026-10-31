@@ -1,276 +1,213 @@
-\section{Training local reconstruction for the forecast}
+\section{Training local reconstruction for forecasting}
 \label{sec:direct-reconstruction}
 
-The shared proxy metric in Section~\ref{sec:target-geometry} does not train
-the deployed KAHM forecast. We next intervene on the reconstruction and
-gate parameters themselves. This section specifies a forecasting family
-and a matched evaluation, with historical pilot evidence kept separate.
-Its public execution checkpoint freezes the numerical implementation,
-analysis, exact task roster and prepared inputs before full evaluation.
-This is a prospective checkpoint informed by previous results, not an
-external registration or independent replication.
+The reconstruction-departure experiment uses fixed local geometry. A
+complementary experiment asks whether forecasting error can usefully train
+the KAHM reconstruction and its gates. We compare this intervention with
+gate training alone and with equally parameterized interventions in three
+non-KAHM local models. The implementation, task roster, prepared inputs,
+and analysis were publicly archived before evaluation on split D. The
+design was informed by earlier experiments; the archive is a prospective
+execution checkpoint, rather than an external preregistration.
 
-\subsection{A horizon-specific KAHM forecaster}
+\subsection{Horizon-specific reconstruction and residual prediction}
 
-For a scalar series observed through time $t$, write its history as
-$x_t=(y_{t-L+1},\ldots,y_t)^\top$ and its target at offset $h$ as $y_{t+h}$.
-Training-only standardization gives $z_t$. A shared local bank supplies
-reference columns $Q_c$, center $\mu_c$, principal basis $P_c$ and a fixed
-positive kernel regularizer $\lambda_c$. Three blocks request 2, 4 and
-8 local models, each with at most 24 references and rank at most two.
-As in Equation~\eqref{c:eq:local}, the predictor receives the gate and
-its gated principal coordinates. The complete forecast is
+For a scalar series observed through time $t$, let
+$x_t=(y_{t-L+1},\ldots,y_t)^\top\in\R^L$ be the history and
+$y_{t+h}$ the target at forecast offset $h$. Training standardization gives
+$z_t\in\R^L$. Each local model $c$ has $m_c$ reference histories stored as
+the rows of $Q_c\in\R^{m_c\times L}$, their mean
+$\mu_c=m_c^{-1}Q_c^\top\mathbf1$, and an orthonormal principal basis
+$P_c\in\R^{L\times r_c}$. Three partition blocks request 2, 4, and 8
+local models, respectively, with at most 24 references and effective
+rank $r_c\leq2$ per model. The reference sets, principal directions,
+and positive kernel regularizers $\lambda_c$ are fitted on split A.
+
+Let $f_{0,h}$ be a raw-history ridge forecast fitted on A. For gate family
+$g$, the corrected forecast is
 \begin{equation}
- \widehat y_{t+h}=f_{0,h}(x_t)+
- \gamma_h\{a_h+\beta_h^\top
-       \widetilde\Gamma_{g,h}(z_t;\theta_h)\},
+ \widehat y_{t+h}=f_{0,h}(x_t)+\gamma_h
+ \left\{a_h+\beta_h^\top
+       \widetilde\Gamma_{g,h}(z_t;\theta_h)\right\},
+ \qquad \gamma_h\in\{0,1/4,1/2,1\}.
  \label{eq:direct-forecast}
 \end{equation}
-where $f_0$ is a retained raw-history ridge baseline,
-$\widetilde\Gamma$ uses an A-fitted feature standardizer, and
-$\gamma_h\in\{0,1/4,1/2,1\}$. The baseline penalty is selected inside
-A, refitted on A, and held fixed. Every geometric arm therefore learns
-the residuals of the same deployed baseline; neither donor residuals nor
-a pretest refit is bundled into this intervention.
+Here $\Gamma_{g,h}$ concatenates the gates and gated principal coordinates
+of Equation~\eqref{c:eq:local}; the tilde denotes column standardization
+fitted on A. The scalar $a_h$ is an unpenalized intercept, and $\beta_h$
+is a coefficient vector of the same dimension as the feature map.
+The baseline penalty is selected by an inner split of A, after which
+the baseline is refitted on A and held fixed. Each local model therefore
+learns residuals of the same baseline.
 
-For each block $b$ and horizon $h$, a bounded log bandwidth
-$\xi_{b,h}\in[-\log4,\log4]$ modifies both the reference and query
-KAHM kernels:
+For block $b$ and horizon $h$, the parameter
+$\xi_{b,h}\in[-\log4,\log4]$ changes the kernel bandwidth. With
+$\Sigma_c$ the positive-definite covariance of the projected reference
+coordinates, define
+\[
+ D_{c,ij}=\frac{\|\Sigma_c^{-1/2}P_c^\top(q_{ci}-q_{cj})\|_2^2}{2r_c},
+ \qquad
+ d_{c,i}(z)=\frac{\|\Sigma_c^{-1/2}P_c^\top(z-q_{ci})\|_2^2}{2r_c},
+\]
+where $q_{ci}\in\R^L$ is reference $i$ as a column vector. For $r_c>0$,
 \begin{align}
- K_c(\xi)_{ij}&=\exp\{-D_{c,ij}\exp(-2\xi)\},&
- k_c(z;\xi)_i&=\exp\{-d_{c,i}(z)\exp(-2\xi)\},\nonumber\\
- a_c(z;\xi)&=(K_c(\xi)+\lambda_c I)^{-1}k_c(z;\xi),&
- r_c(z;\xi)&=\frac{Q_ca_c(z;\xi)}{\boldsymbol1^\top a_c(z;\xi)}.
+ K_c(\xi)_{ij}&=\exp\{-D_{c,ij}e^{-2\xi}\},&
+ k_c(z;\xi)_i&=\exp\{-d_{c,i}(z)e^{-2\xi}\},\nonumber\\
+ w_c(z;\xi)&=(K_c(\xi)+\lambda_c I_{m_c})^{-1}k_c(z;\xi),&
+ r_c^{\mathrm{K}}(z;\xi)&=
+ \frac{Q_c^\top w_c(z;\xi)}{\mathbf1^\top w_c(z;\xi)}.
  \label{eq:direct-kahm}
 \end{align}
-Here $D$ and $d$ are the inherited local covariance-whitened projected
-squared distances divided by twice the positive effective rank. A
-degenerate rank-zero local model uses its fixed center instead of a kernel
-solve. The regularizer,
-reference membership, covariance and principal directions remain fixed.
-A second bounded parameter $\eta_{b,h}$ multiplies each block's
-folding-score logits by $\exp(\eta_{b,h})$ before softmax. Thus the
-intervention changes the normalized signed KAHM reconstruction as well
-as its use in the forecasting gate. It does not learn every KAHM component.
+A rank-zero local model returns its center. A second parameter
+$\eta_{b,h}\in[-\log4,\log4]$ multiplies the block's gate logits by
+$e^{\eta_{b,h}}$ before softmax normalization. Thus $\theta_h$ contains
+three bandwidth parameters and three gate-temperature parameters.
+Zero parameters recover the fixed model.
 
-Both kernel matrices in Equation~\eqref{eq:direct-kahm} must change with
-bandwidth: changing only a query similarity would define a different
-procedure. For fixed reference columns, put $M=K+\lambda I$, $a=M^{-1}k$,
-$s=\boldsymbol1^\top a$ and $r=Qa/s$. At points where $M$ is invertible
-and $s\ne0$, ordinary matrix differentiation gives
+Bandwidth changes affect both the reference Gram matrix and the query
+kernel vector. To see their effects explicitly, suppress local indices,
+write $M=K+\lambda I$, $w=M^{-1}k$, $s=\mathbf1^\top w$, and
+$r=Q^\top w/s$. Differentiating $Mw=k$ and then the quotient gives
 \begin{equation}
- da=M^{-1}(dk-dM\,a),\qquad
- dr=\frac{(Q-r\boldsymbol1^\top)\,da}{s}.
+ dw=M^{-1}(dk-dM\,w),\qquad
+ dr=\frac{(Q^\top-r\mathbf1^\top)\,dw}{s}.
  \label{eq:direct-derivative}
 \end{equation}
-This identity explains both how a bandwidth can alter reconstruction
-and why signed-denominator cancellation matters. It is not a novelty
-claim for differentiating through a linear solve. The present bounded
-optimizer does not require analytic derivatives. Common log-kernel
-shifting protects underflow; a relative denominator guard of $10^{-10}$
-rejects unsafe A/B/C candidates. If a selected map is unsafe on D, its
-entire affected horizon falls back to the frozen baseline, with paid work
-and fallback recorded. Historical arithmetic and outcomes are unchanged.
+These identities require invertible $M$ and $s\ne0$. They also show why
+a small signed normalizer can amplify changes in the reconstruction.
+The implementation shifts query log kernels to avoid common underflow
+and rejects candidates for which
+$|\sum_i w_i|/\sum_i|w_i|\leq10^{-10}$ on A, B, or C. This ratio
+is defined as zero when all weights vanish. If a selected model fails this check on D, the
+baseline supplies forecasts for the entire affected horizon.
 
-\subsection{Actual forecast supervision and matched controls}
+\subsection{Selection, controls, and evaluation}
 
-For each candidate $\theta_h$ and $\alpha\in\{0.01,0.1,1\}$, a ridge
-head minimizes A residual sum of squares plus $\alpha\|\beta\|^2$,
-with an unpenalized intercept. The geometry objective is actual B
-forecast MSE for Equation~\eqref{eq:direct-forecast} at $\gamma_h=1$,
-divided by a positive A-only target-variance scale. C then selects the
-penalty and mixing weight, separately for each horizon. Zero correction
-is the first incumbent; only strict C improvement replaces it. D labels
-are never passed to the fitting API. A/B/C/D denote distinct roles,
-not four opportunities to inspect the final evaluation.
+For each geometry candidate and $\alpha\in\{0.01,0.1,1\}$, a ridge
+head minimizes the sum of squared A residuals plus
+$\alpha\|\beta_h\|_2^2$. Geometry training minimizes B forecast MSE
+at $\gamma_h=1$, normalized by an A-only target-variance scale.
+Split C chooses the penalty and correction weight separately for each
+horizon; the zero correction is retained unless a candidate has strictly
+smaller C error. Split D evaluates the selected forecasts. Its labels
+are unavailable to every fitting and selection step.
 
-The affine control trains a projection gain,
-$r_c=\mu_c+\exp(\xi_b)P_cP_c^\top(z-\mu_c)$.
-The locality control trains the balance between normal and center
-distance, with logit
-$-\exp(\xi_b)\|z-r_c^{\A}\|^2/v_c
--0.1\exp(-\xi_b)\|z-\mu_c\|^2/s_c$.
-The RBF-local control trains tangent/normal anisotropy, with logit
-\[
- -\frac{\exp(\xi_b)\|P_c^\top(z-\mu_c)\|^2+
- \exp(-\xi_b)\|(I-P_cP_c^\top)(z-\mu_c)\|^2}{2s_c}.
-\]
-The scales $s_c,v_c$ are fixed from A references. Each family uses the
-same three gate-temperature parameters $\eta_{b,h}$ and three shape
-parameters $\xi_{b,h}$. Identity parameters recover the fixed family;
-fixing $\xi=0$ gives its gate-only intervention. Equal parameter counts
-and data do not imply equal functional capacity.
+Affine, locality, and RBF-local controls each train three shape parameters
+and three gate temperatures. The shape changes are, respectively, a
+principal-projection gain, a balance between projection residual and
+center distance, and tangent/normal anisotropy. Appendix~\ref{app:direct-protocol}
+defines these maps. Fixed, gate-trained, and shape-trained versions of
+the four families give twelve geometric procedures. Raw ridge, raw
+Nystr\"om RBF, histogram boosting, seasonal naive, and a C-selected
+non-KAHM policy complete the 17-method comparison. The policy chooses
+one complete method from its C error and is charged for all candidate
+computations. Each geometry optimization has the same 256-evaluation
+ceiling per horizon and penalty. Equal parameter counts and evaluation
+limits do not imply equal function classes or wall time.
 
-Each gate-only and reconstruction/shape fit receives at most 256 actual
-objective evaluations per horizon and penalty, with the same bounded
-optimizer, zero initialization, stopping rule and finite-incumbent policy.
-The fixed, gate-trained and reconstruction/shape-trained versions of the
-four families give twelve geometric procedures. Raw ridge, raw history
-plus Nystr\"om RBF, histogram gradient boosting, phase-correct seasonal
-naive, and one C-selected non-KAHM policy complete the 17-method roster.
-The policy chooses one complete non-KAHM method by aggregate C loss and
-pays for all required candidates, counting shared nodes once. It is not
-a D-selected oracle. Appendix~\ref{app:direct-protocol} records the
-baseline grids, chronological rules, and cost scope.
+The synthetic evaluation uses twelve independent repetitions of each of
+the nonlinear AR, Van der Pol, and Duffing laws. A/B/C/D contain
+64/32/32/128 independent episodes of length 72. Histories have length 12
+and offsets are 1, 4, and 12; A/B/C are capped at 512/256/256 rows,
+and D contains 1,664 origins. The 18 primary contrasts compare
+reconstruction-trained KAHM with raw RBF, gate-trained KAHM, each of the
+three shape-trained local controls, and the non-KAHM policy on each law.
+Two-sided Bonferroni-adjusted Student intervals use twelve paired
+repetition differences and 11 degrees of freedom. Their simultaneous
+coverage relies on the stated normal approximation and applies only to
+this family.
 
-\subsection{Development evidence and reserved evaluation}
+The natural evaluation selects ten series from Dominick retail,
+rideshare prices, Wikipedia traffic, and Sunspot daily data
+\citep{Godahewa2021Monash}. Selection uses training-prefix eligibility
+and fixed identifier hashes. Chronological A/B/C/D segments contain
+50/20/15/15 percent of each series; missing windows are omitted without
+interpolation. The three selected rideshare series have no complete B
+windows. Consequently, the planned four-collection aggregate is
+undefined. The available seven series support a separate descriptive
+comparison that weights series equally within each of three collections
+and then weights the collections equally. Full source details, selection
+chronology, scaling, and the preceding nine-task gate-training pilot
+appear in Appendix~\ref{app:direct-protocol}.
 
-The preceding exploratory pilot trained gate temperatures alone on
-three fresh seeds per known law, with independently implemented
-generators and 160 objective evaluations. It reduced mean KAHM MSE by
-0.53\% on nonlinear AR, 30.21\% on Van der Pol and 11.29\% on Duffing
-relative to that pilot's fixed KAHM. The best directly trained local
-control remained more accurate on every law, and raw RBF was substantially
-stronger on Van der Pol and Duffing. All 99 selected forecasts and
-optimizer outcomes are preserved. These nine exploratory tasks do not
-enter the new inference family or supply unseen source-transfer evidence.
+\subsection{Predictive results and computational cost}
 
-The new simulation study uses the recovered inherited generators,
-twelve fresh seeds per law, and independent A/B/C/D episodes numbering
-64/32/32/128. Histories contain 12 observations and target offsets are
-1, 4 and 12. The three training/selection roles are capped at 512/256/256
-rows; D retains all 1,664 rows. Its 36 tasks are fresh repetitions of
-known laws. The natural study adds ten series from four previously unused
-Monash collections \citep{Godahewa2021Monash}: Dominick weekly retail,
-rideshare hourly prices, Wikipedia daily web traffic, and one long
-sunspot daily series. Series eligibility and deterministic hash selection
-use A only. The initial rideshare context was shortened from 48 to 24
-hours after an A-only availability check, before the public freeze and
-any forecast evaluation; the daily seasonal lag and eligibility threshold
-remain unchanged.
-
-Natural A/B/C/D boundaries are chronological 50/20/15/15 percent, with
-all targets inside their assigned segment and earlier observations
-available as history. Missing windows are omitted without interpolation.
-Thus the estimand concerns the retained available windows of these
-single-vintage archives. It does not establish historical real-time data
-release availability. Error scales use A-only seasonal differences,
-with the prespecified first-difference fallback. The planned aggregate weights series equally within collections and
-then weights four collections equally. A preparation audit after A-only
-selection found no complete B windows in all three selected rideshare
-series. These planned tasks remain feasibility failures, so the complete
-four-collection accuracy aggregate is undefined. An availability-conditioned
-description of the other seven series and three collections is reported
-separately; it does not replace that estimand.
-
-The synthetic primary family has 18 paired comparisons: on each law,
-reconstruction-trained KAHM versus raw RBF, gate-trained KAHM, each
-reconstruction-trained local control, and the non-KAHM policy. Two-sided
-Bonferroni $t$ intervals use twelve repetition-level paired differences
-and 11 degrees of freedom, under their normal approximation. Coverage
-concerns this family only. Natural results are descriptive, including
-leave-one-collection-out sensitivity; overlapping origins and ten series
-do not turn four purposively selected collections into a large source
-sample. All procedures, failures and fallback costs are retained.
-
-\subsection{Audited results and predictive contribution}
-
-All \DirectAvailableTasks{} feasible task suites complete, yielding
-\DirectAvailableOutputs{} task--method prediction records from
-\DirectPlannedOutputs{} planned outputs. The three preidentified
-rideshare tasks account for the 51 unavailable outputs; there are no
-additional task failures, invalid objective evaluations or numerical
-fallback events. The frozen audit passes 543,017 checks, including
-reconstruction of 144 generated episode batches and replay of all
-731 selected states on both C and D. A separately written calculation
-recomputes the scalar losses, A-only natural scales and all 18 paired
-intervals without importing the model or analyzer. These are consistency
-and replay checks, not independent experimental replications.
-
-Table~\ref{tab:direct-methods} reports every declared procedure.
-Relative to fixed KAHM, reconstruction training lowers mean synthetic
-MSE by 0.42\%, 61.81\% and 12.76\% on nonlinear AR, Van der Pol and
-Duffing, respectively. Relative to gate-only KAHM the reductions are
-0.09\%, 41.43\% and 5.51\%. The latter Van der Pol increment is resolved
-by the simultaneous analysis; the AR and Duffing gate increments are not.
-The fixed-map comparisons are descriptive, outside that primary family.
+All \DirectAvailableTasks{} feasible tasks completed, producing
+\DirectAvailableOutputs{} of \DirectPlannedOutputs{} planned
+method--task records. The 51 unavailable records belong to the three
+rideshare tasks. No additional task failures, invalid objective
+evaluations, or numerical fallbacks occurred. Replay of the saved
+selected states and a separate calculation of the losses and intervals
+verified the reported results; these checks establish computational
+consistency, not independent experimental replication.
 
 \begin{table}[t]
 \centering\small
 \setlength{\tabcolsep}{5pt}
-\caption{All procedures in the direct-reconstruction study. Synthetic
-entries are mean MSE over twelve repetitions per law. The last column is
-scaled MSE for seven available series, averaged within each of three
-available collections and then equally across collections. The planned
-four-collection aggregate is undefined. ``Reconstruction'' denotes the
-specified shape intervention for non-KAHM controls.}
+\caption{Direct-reconstruction forecasting results. Synthetic entries are
+mean MSE over twelve repetitions per law. Natural entries average scaled
+MSE equally over the three available collections, after averaging within
+collection. The planned four-collection aggregate is undefined.
+``Reconstruction'' denotes the corresponding shape intervention for
+non-KAHM controls.}
 \label{tab:direct-methods}
 \input{generated/direct_reconstruction/display_method_table}
 \end{table}
 
-The 18-contrast family yields \DirectPrimaryPositive{} positive,
-\DirectPrimaryNegative{} negative and \DirectPrimaryUnresolved{}
-unresolved intervals (Figure~\ref{fig:direct-primary}; complete numerical
-intervals in Table~\ref{tab:direct-primary}). The positive comparisons
-are KAHM versus raw RBF on nonlinear AR, with a 2.87\% mean reduction
-and absolute difference interval $[6.65\!\times\!10^{-6},2.776\!\times\!10^{-4}]$,
-and KAHM versus gate-only KAHM on Van der Pol, with a 41.43\% reduction
-and interval $[0.004349,0.007709]$. Differences are comparator minus KAHM,
-so a positive interval favors KAHM. These intervals are for absolute
-paired MSE differences, not percentages.
+Reconstruction training lowers KAHM's mean synthetic MSE relative to
+its fixed version by 0.42\%, 61.81\%, and 12.76\% on AR, Van der Pol,
+and Duffing, respectively. Relative to gate training alone, the
+reductions are 0.09\%, 41.43\%, and 5.51\%. Of the 18 primary
+intervals, \DirectPrimaryPositive{} favor KAHM,
+\DirectPrimaryNegative{} favor its comparator, and
+\DirectPrimaryUnresolved{} include zero
+(Figure~\ref{fig:direct-primary}). The favorable contrasts are against
+raw RBF on AR, with a 2.87\% reduction and absolute MSE-difference
+interval $[6.65\!\times\!10^{-6},2.776\!\times\!10^{-4}]$, and against
+gate-trained KAHM on Van der Pol, with a 41.43\% reduction and interval
+$[0.004349,0.007709]$. Differences are comparator MSE minus KAHM MSE.
 
-The adverse comparisons are equally material. On Van der Pol,
-shape-trained affine and the C-selected policy beat reconstruction-trained
-KAHM. The policy selects boosted trees in all twelve repetitions.
-On Duffing, raw RBF, shape-trained affine, shape-trained locality and
-the policy beat KAHM. No law resolves all six primary comparisons in
-KAHM's favor, and no positive primary interval is against an equally
-shape-trained non-KAHM local control. Unresolved differences do not
-establish equivalence. The experiment therefore identifies useful direct
-training within the KAHM family, especially on Van der Pol, without
-establishing distinctive superiority of its reconstruction rule.
+Shape-trained affine and the selected policy are more accurate than
+KAHM on Van der Pol; the policy selects boosting in all twelve
+repetitions. Raw RBF, shape-trained affine, shape-trained locality,
+and the policy outperform KAHM on Duffing. No favorable primary
+interval compares KAHM with an equally shape-trained non-KAHM local
+control. Direct training therefore improves KAHM in some settings,
+particularly Van der Pol, without establishing an advantage specific
+to its reconstruction rule. Intervals containing zero leave their
+comparisons unresolved and do not establish equivalence.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{generated/direct_reconstruction/primary_contrasts.pdf}
-\caption{All 18 predeclared comparisons with reconstruction-trained KAHM.
-Points and intervals are comparator-minus-KAHM MSE differences multiplied
-by 1,000. Blue intervals favor KAHM, orange favor the comparator, and gray
-include zero. The two-sided Bonferroni $t$ family uses twelve paired
-repetitions per law and 11 degrees of freedom. Panel scales differ.
-A positive result against gate-only KAHM identifies an intervention gain;
-it does not by itself distinguish KAHM from the trained local controls.}
+\caption{All 18 primary direct-reconstruction contrasts. Points and
+intervals show comparator-minus-KAHM MSE multiplied by 1,000. Blue
+intervals favor KAHM, orange intervals favor the comparator, and gray
+intervals contain zero. Two-sided Bonferroni-adjusted Student intervals
+use twelve paired repetitions per law and 11 degrees of freedom.
+Panel scales differ.}
 \label{fig:direct-primary}
 \end{figure}
 
-\paragraph{Available natural evidence.}
-The complete four-collection comparison remains undefined. On the
-explicitly conditional three-collection subset, KAHM has scaled MSE
-$0.371935$, compared with ridge's $0.385625$ (3.55\% lower), fixed KAHM's
-$0.394070$ and gate-only KAHM's $0.396192$. Raw RBF ($0.363007$), boosted
-trees ($0.352201$) and shape-trained RBF-local ($0.363835$) remain more
-accurate in aggregate. KAHM improves the C-selected policy's $0.382472$
-by 2.75\%; that policy's validation selection is not a test-set oracle.
-Source results are retained in Table~\ref{tab:direct-natural}.
+On the available natural collections, KAHM has scaled MSE $0.371935$,
+compared with $0.385625$ for ridge, a 3.55\% reduction. Raw RBF
+($0.363007$), boosting ($0.352201$), and shape-trained RBF-local
+($0.363835$) are more accurate. The ridge gain is concentrated in
+Dominick; excluding that collection leaves a 0.00229\% improvement
+across the other two collections. Twelve of the 21 available natural
+horizons select zero KAHM correction, including every Sunspot horizon.
+Table~\ref{tab:direct-natural} reports all collection-specific results.
 
-The ridge improvement is concentrated in Dominick: KAHM has scaled MSE
-$0.316351$, versus $0.357402$ for ridge. Excluding that collection leaves
-only a 0.00229\% mean improvement over ridge across the other two
-collections. C selects zero KAHM correction on twelve of the 21 available
-natural horizons, including every Sunspot horizon. These observations
-limit a broad transfer interpretation and show why an aggregate gain
-cannot be equated with a uniformly useful new representation.
-
-\paragraph{Optimization and measured resources.}
-The run retains \DirectOptimizations{} geometry optimizations and
-\DirectObjectiveEvaluations{} actual objective evaluations. There are
-2,491 optimizer convergence exits, 604 evaluation-budget exits and one
-abnormal optimizer stop; the best finite incumbent is retained in every
-case. No invalid objective evaluation or numerical fallback is observed.
-This accounting distinguishes a completed forecast from optimizer convergence.
-
-Mean charged synthetic pipeline time is 10.725 seconds for
-reconstruction-trained KAHM, versus 0.914 for gate-only KAHM, 0.0774 for
-fixed KAHM, 0.0172 for raw RBF and 0.653 for boosted trees. Equally
-shape-trained affine, locality and RBF-local take 6.973, 2.722 and
-2.766 seconds, respectively. On the seven available natural tasks,
-KAHM averages 7.929 seconds, versus 0.0130 for raw RBF and 0.655 for
-boosted trees. Its mean selected serialized state is 104.2 KiB there,
-versus 57.9 KiB for raw RBF and 383.3 KiB for boosted trees; zero-correction
-choices can omit a geometric bank, so these are selected-state measurements,
-not intrinsic storage lower bounds. Table~\ref{tab:direct-cost} and
-Figure~\ref{fig:direct-natural-cost} give the complete resource comparison.
-Costs include the recorded training, selection, query and state-packing
-work. They do not measure update latency or minimal deployment cost.
-The observed accuracy gains thus do not remove the need to justify
-KAHM-specific complexity against the stronger alternatives.
+The \DirectOptimizations{} geometry fits use
+\DirectObjectiveEvaluations{} objective evaluations. Of these fits,
+2,491 report convergence, 604 reach their evaluation budget, and one
+has an abnormal optimizer stop; each retains its best finite candidate.
+Mean synthetic pipeline time is 10.725\,s for reconstruction-trained
+KAHM, 0.914\,s for gate-trained KAHM, 0.0774\,s for fixed KAHM,
+0.0172\,s for raw RBF, and 0.653\,s for boosting. On the seven
+available natural tasks, KAHM averages 7.929\,s, compared with
+0.0130\,s for raw RBF and 0.655\,s for boosting.
+Table~\ref{tab:direct-cost} and Figure~\ref{fig:direct-natural-cost}
+report the complete accuracy and resource comparison. These costs
+include model fitting, selection, querying, and state serialization;
+they do not measure online update latency.

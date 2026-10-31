@@ -1,6 +1,6 @@
 # KAHM for time-series forecasting: target geometry
 
-This separately frozen research extension asks whether **residual-supervised
+This study asks whether **residual-supervised
 geometry improves a strong baseline**, and whether the improvement is specific
 to Kernel Affine Hull Machines (KAHMs).
 
@@ -11,9 +11,7 @@ transfer, not end-to-end optimization of KAHM, and a lower proxy objective does
 not guarantee a better forecast.
 
 The study compares in-sample and honestly held-out donor residuals on identical
-correction rows. Raw ridge is the main baseline. The previous geometric utility,
-scaling and natural-data studies remain intact, including their negative
-findings and failures.
+correction rows. Raw ridge is the main baseline. The comparison has its own procedure, evaluation roster, and statistical analysis, separate from the additive-correction, scaling, and natural-data studies.
 
 ## Research specification
 
@@ -22,14 +20,13 @@ findings and failures.
 - [Configuration](config.json): all numerical settings and primary contrasts.
 - [Theory](THEORY.md): squared-risk and residual-target transport identities,
   including the limits of cross-fitted residuals after a baseline changes.
-- [Source provenance](sources/README.md): four new archive collections, exact
+- [Source provenance](sources/README.md): four archive collections not used in the preceding studies, exact
   selected series, attribution and data licenses.
-- [Manuscript source](../tmlr_integration/manuscript/main.tex): the integrated,
-  unsubmitted research draft.
+- [Manuscript source](../tmlr_integration/manuscript/main.tex): the integrated research paper.
 
 The full roster has 36 synthetic tasks (three established laws, twelve fresh
 independent repetitions) and 12 archive tasks (three series from each of four
-new collections), with 16 forecasting procedures per task. The archive scores
+collections), with 16 forecasting procedures per task. The archive scores
 are descriptive and source-balanced. Twelve series do not establish twelve
 independent application domains. Bitcoin tasks concern activity indicators,
 not price forecasts.
@@ -51,9 +48,7 @@ python -m extensions.target_geometry.analysis \
 ```
 
 Existing outputs require explicit `--resume`; their source/configuration/roster
-must match. Failures and unsuccessful work are retained. Prepared arrays are
-derived from the pinned official records; `data.py prepare` is for an empty
-prepared destination, never a way to select another favorable roster.
+must match. Failures and unsuccessful work are retained. Prepared arrays are derived from the pinned official records. The `data.py prepare` command writes the prescribed roster into an empty destination.
 
 The small API primitives are `LearnedDiagonalMetric`,
 `RobustLocalFeatureBank`, and `RidgeHead` in [models.py](models.py). The experiment
@@ -68,5 +63,4 @@ in `PUBLICATION.json`. These are prospective execution records, not an external
 registration. The complete run has 48 tasks, 768 audited forecasts, no fallbacks and
 28 passing engineering checks. [Findings](FINDINGS.md) report the favorable
 ridge corrections together with unresolved metric/residual-stage increments,
-stronger local controls and measured costs. The scientific freeze is unchanged.
-See the [research roadmap](RESEARCH_ROADMAP.md) for bounded next hypotheses.
+stronger local controls and measured costs. The scientific source and inputs retain their recorded checkpoint hashes.

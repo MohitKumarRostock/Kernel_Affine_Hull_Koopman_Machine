@@ -1,135 +1,86 @@
-# Reproducibility
+# Reproducing the KAHM forecasting studies
 
-This repository provides a reproducible reference environment and experiment workflow for the Kernel Affine Hull Koopman Machine (KAHKM).
+This repository contains several experiments with distinct source checkpoints and computational environments. The current manuscript draws on the forecasting extensions under `extensions/`; the original Kernel Affine Hull Koopman Machine (KAHKM) experiments have a separate result map under `reproduction/`. Use the environment and entry point for the study being reproduced.
 
-The repository is intentionally independent of any particular journal, conference, or publication venue.
+## Principal reconstruction-departure experiment
 
-## Reference platform
+The [study README](extensions/reconstruction_mechanism/README.md) is the entry point for the ten-procedure, 192-task-suite experiment. Its evidence consists of exact prepared inputs, fitted model states, selected predictions, selection records, statistical summaries, and timing measurements.
 
-The reference computational environment is:
-
-- Apple Silicon (`arm64`)
-- Apple M1
-- macOS
-- Python 3.14
-- native ARM64 execution
-- Homebrew under `/opt/homebrew`
-
-The captured reference-platform metadata are stored under:
-
-`provenance/reference_arm64_environment/`
-
-## Python dependencies
-
-`requirements.txt` contains the direct Python dependencies used by the project.
-
-`requirements-lock-arm64.txt` records the complete resolved Python package environment used for the reference Apple Silicon configuration.
-
-Local virtual-environment directories are intentionally excluded from version control.
-
-## Creating the reference environment on Apple Silicon
-
-Install native Homebrew Python 3.14 if necessary:
+Use Python 3.12 and install:
 
 ```bash
-/opt/homebrew/bin/brew install python@3.14
+python -m pip install -r extensions/reconstruction_mechanism/requirements.txt
 ```
 
-Create the reference environment from a fresh clone:
+From the repository root, restore the lossless evidence and verify the scientific checkpoint:
+
+```bash
+python -m extensions.reconstruction_mechanism.evidence unpack
+python -m extensions.reconstruction_mechanism.run verify
+```
+
+Recompute the analysis in a separate output directory and check it with the independent evaluation implementation:
+
+```bash
+python -m extensions.reconstruction_mechanism.analyze --output /tmp/kahm-analysis
+python -m extensions.reconstruction_mechanism.audit \
+  --analysis-json /tmp/kahm-analysis/decision.json \
+  --output /tmp/kahm-audit.json
+```
+
+The study guide also describes selected-state replay and refitting. A new execution must use a separate results directory or disposable checkout. The original evidence is retained so that repeated computation can be distinguished from the reported experiment.
+
+## Evidence levels
+
+| Operation | What it checks |
+| --- | --- |
+| Hash verification | The source, inputs, and stored outputs have the recorded bytes. |
+| Analysis reconstruction | The reported losses, aggregates, and statistical contrasts follow from the saved forecasts. |
+| Selected-model replay | The saved fitted state reproduces its recorded forecasts in a specified numerical environment. |
+| Independent-code evaluation | A separate implementation evaluates saved states or statistics consistently with the original implementation. |
+| Refitting | Re-execution of the specified fitting and selection procedure yields reproducible results, subject to numerical and timing variation. |
+| External replication | A separate research team reproduces or independently tests the scientific findings. This is not claimed by the repository's internal checks. |
+
+A successful checksum or replay does not, by itself, validate a scientific interpretation. The manuscript supplies the assumptions, comparison design, and inferential scope needed to interpret the verified outputs.
+
+## Other forecasting studies
+
+| Study | Instructions |
+| --- | --- |
+| Controlled representations and decoder access | [Reproduction guide](extensions/predictive_geometry/REPRODUCING.md) |
+| Natural-data evaluation | [Study README](extensions/natural_forecasting/README.md) |
+| Input-scaling sensitivity | [Study README](extensions/scaling_sensitivity/README.md) |
+| Additive geometric corrections | [Study README](extensions/forecasting_utility/README.md) |
+| Supervised metric and donor residuals | [Study README](extensions/target_geometry/README.md) |
+| Direct forecast training | [Study README](extensions/direct_reconstruction/README.md) |
+| Online adaptation | [Study README](extensions/adaptive_development/REPRODUCING.md) |
+
+The corresponding protocols specify random seeds, chronology, selection rules, and failure handling. Raw forecasts and fitted states are retained where described. Some older audits verify a complete historical repository checkpoint, including its documentation. Those audits require that historical checkout or its corresponding archive; they should not be interpreted as checks of the present manuscript edition. Current scientific-source verification uses the study-specific frozen dependencies.
+
+Numerical package versions alone need not guarantee bitwise agreement. The direct reconstruction study documents CPU-dispatch sensitivity in Duffing generation and one raw-RBF selected-state replay. Such differences are reported against the original tolerances rather than treated as successful exact reproduction. Timing measurements depend on hardware, numerical libraries, and scheduling.
+
+## Original KAHKM experiments
+
+The original architecture's result-to-code mapping is [reproduction/reported_results.tsv](reproduction/reported_results.tsv). The map identifies generators, runners, settings, seeds, retained per-run outputs, and derived artifacts. Entries marked `PASS` identify retained reported results with a reproducibility chain; entries marked `REMOVE` identify legacy outputs excluded from that reported set.
+
+Its reference platform is native Apple Silicon macOS on an Apple M1, using Python 3.14. The direct dependencies are in `requirements.txt`; the resolved environment is in `requirements-lock-arm64.txt`. Platform metadata are recorded under `provenance/reference_arm64_environment/`.
+
+On that platform:
 
 ```bash
 bash scripts/bootstrap_arm64.sh
+.venv-arm64/bin/python scripts/verify_environment.py
 ```
 
-Activate it:
+The full evidence summary is [reproduction/REPRODUCIBILITY_EVIDENCE.md](reproduction/REPRODUCIBILITY_EVIDENCE.md), with a machine-readable counterpart in `reproduction/reproducibility_evidence.json`. The historical Duffing reference search has a documented gap in run accounting. A separate prospective 27-job campaign records all scheduled attempts, exit statuses, logs, and output checksums. These records support complete attempt accounting for that campaign, not for every historical execution in the repository.
+
+## Manuscript reproduction
+
+The manuscript source includes all generated displays. Compilation requires no model fitting:
 
 ```bash
-source .venv-arm64/bin/activate
+cd extensions/tmlr_integration/manuscript
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-Verify the environment and core project imports:
-
-```bash
-python scripts/verify_environment.py
-```
-
-A successful verification terminates with:
-
-```text
-ENVIRONMENT VERIFICATION PASSED
-```
-
-## Reference dependency versions
-
-The principal direct dependencies are:
-
-- NumPy 2.4.4
-- SciPy 1.17.1
-- scikit-learn 1.8.0
-- Matplotlib 3.10.9
-- Gymnasium 1.3.0
-- joblib 1.5.3
-- Numba 0.67.0
-- tqdm 4.70.1
-
-The lock file is authoritative for the complete resolved environment.
-
-## Environment provenance
-
-The `provenance/` directory records the software and computational environment used for the reference reproduction workflow.
-
-It intentionally excludes machine serial numbers, hardware UUIDs, credentials, local editor configuration, and virtual-environment directories.
-
-## Reproduction principles
-
-The repository follows these principles for reproducible experimental results:
-
-1. Experiment parameters are stored in version-controlled configuration or manifest files.
-2. Random seeds are explicit and recorded for every stochastic run.
-3. Training, tuning, and final evaluation data are separated explicitly.
-4. Prospective reproducibility campaigns use failure-preserving run ledgers that record every scheduled attempt, including failures.
-5. Raw unaggregated experimental outputs used as reproducibility evidence are retained where available, with historical gaps reported explicitly rather than inferred away.
-6. Aggregated results are derived programmatically from raw outputs.
-7. Tables and figures are generated programmatically.
-8. Every reported result is traceable to the runs that produced it.
-9. The exact source commit and execution environment are recorded.
-10. Release artifacts are protected by cryptographic checksums; the final immutable archival release is created only at the release stage.
-
-## Experimental reproduction
-
-Environment reproduction and scientific-result reproduction are treated as separate stages.
-
-The environment bootstrap establishes a validated computational environment. Experiment manifests, raw-data capture, run ledgers, result indexing, and full reproduction commands are maintained separately so that each stage can be audited independently.
-
-## Evidence map
-
-The current reviewer-facing evidence summary is:
-
-`reproduction/REPRODUCIBILITY_EVIDENCE.md`
-
-Its machine-readable counterpart is:
-
-`reproduction/reproducibility_evidence.json`
-
-The principal evidence layers are:
-
-- `reproduction/raw_data/DATASET_CARD.md` for canonical raw scientific inputs;
-- `reproduction/run_accounting/README.md` for the historical run-accounting audit;
-- `reproduction/prospective_campaigns/duffing_reference_27/README.md` for the prospective Duffing reference campaign;
-- `reproduction/reported_results.tsv` for result-level provenance and retention status.
-
-The historical and prospective evidence are deliberately distinguished. The
-historical run-accounting audit preserves a documented gap in the original
-Duffing reference-search archive. A separately labeled prospective campaign
-then reruns the complete 27-job grid from a frozen clean commit and records every
-attempt, exit status, log, and output checksum.
-
-This supports a strong failure-preserving claim for that prospective campaign.
-It does not establish that every failed execution attempt from every historical
-campaign was preserved.
-
-## Historical environments
-
-Development may have occurred under earlier or different Python environments. Such historical environments are not presented as the reference reproduction environment unless their provenance can be established independently.
-
-The reference environment documented here is the validated native Apple Silicon environment used for the reproducibility workflow.
+The [manuscript guide](extensions/tmlr_integration/README.md) identifies the source, display-generation scripts, and archived evidence associated with the paper.

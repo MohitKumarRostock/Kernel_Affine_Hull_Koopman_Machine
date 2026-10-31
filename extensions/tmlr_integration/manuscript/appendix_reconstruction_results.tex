@@ -1,98 +1,173 @@
 \section{Complete reconstruction-departure evaluation}
 \label{app:reconstruction-results}
 
-This appendix gives the numerical observation protocol, full method roster,
-descriptive condition results, stability accounting, selection frequencies
-and measured resources for Section~\ref{sec:reconstruction-mechanism}.
-The frozen implementation and complete arrays are under
-\path{extensions/reconstruction_mechanism}. All displays are generated
-from the completed independent analysis; their source and output hashes are
-recorded in
-\path{generated/reconstruction_mechanism/ASSET_PROVENANCE.json}.
+This appendix specifies the observation laws, fitting procedure, complete
+comparison set, stability checks, and resource measurements for
+Section~\ref{sec:reconstruction-mechanism}. The reproduction materials
+contain the implementation, saved predictions and model states, and
+machine-readable analyses under
+\path{extensions/reconstruction_mechanism}. All tables and figures in
+this appendix are generated from those analyses.
 
-\subsection{Observation laws and separation of roles}
+\subsection{Observation laws and data roles}
 
 The linear negative control is
 \[
  y_t=0.65y_{t-1}-0.15y_{t-2}+\epsilon_t,
  \qquad \epsilon_t\stackrel{\mathrm{iid}}\sim\mathcal N(0,0.1^2),
 \]
-with two initial zeros, 256 discarded stored values and 72 retained values
-beginning at $y_{256}$. The nonlinear AR uses
+where $\mathcal N(\mu,\sigma^2)$ denotes a normal distribution with
+mean $\mu$ and variance $\sigma^2$. The process starts with two zeros;
+256 stored values are discarded, and 72 values beginning at index 256
+are retained. The nonlinear autoregression is
 \[
  y_t=\tanh\{1.25y_{t-1}-0.65y_{t-2}
              +0.25\sin(3y_{t-1})+u_t\},
  \qquad u_t\stackrel{\mathrm{iid}}\sim U[-0.1,0.1],
 \]
-two initial values uniform on $[-0.8,0.8]$, and 80 discarded stored values.
-Van der Pol uses $\dot x=v$, $\dot v=(1-x^2)v-x$; Duffing uses
-$\dot x=v$, $\dot v=-0.2v+x-x^3+0.3\cos(1.2t+\varphi)$.
-The inherited float64 RK4 implementation has step 0.025, observation interval
-0.1 and burn time ten. Initial $x,v$ are independent uniform on $[-2,2]$;
-$\varphi$ is uniform on $[0,2\pi]$. Oscillator observations are
-$0.95\tanh(x)+U[-0.02,0.02]$. The numerical integrator and observation
-map define the tested laws; they are not exact continuous-ODE trajectories.
+where $U[a,b]$ denotes the uniform distribution on $[a,b]$. Its two
+initial values are independent draws from $U[-0.8,0.8]$, and 80 stored
+values are discarded before retaining an episode.
 
-For each law and repetition, all split episodes are generated once. Additional
-noise is $\eta s_A Z$, with $\eta\in\{0,0.1\}$,
-$Z\stackrel{\mathrm{iid}}\sim\mathcal N(0,1)$ and $s_A$ the population
-standard deviation of all unaugmented observed A episode values. Underlying
-episodes and $Z$ arrays are paired across the two levels. The noise changes
-both input histories and forecast targets. At zero added noise, the inherited
-oscillator sensor noise remains. On B/C/D, the augmented linear observations are Gaussian conditional
-on the realized A-estimated amplitude; across repetitions that random
-amplitude induces a variance mixture. Neither exact stationarity after
-finite burn-in nor a known-amplitude oracle interpretation of fitted ridge
-is assumed. The Gaussian additions also preclude carrying over a bounded-loss
-claim from the earlier bounded observation studies.
+The Van der Pol dynamics are $\dot x=v$ and
+$\dot v=(1-x^2)v-x$. The Duffing dynamics are $\dot x=v$ and
+$\dot v=-0.2v+x-x^3+0.3\cos(1.2t+\varphi)$. Here $x$ is position,
+$v$ is velocity, a dot denotes differentiation with respect to continuous
+time $t$, and the Duffing phase $\varphi$ is uniform on $[0,2\pi]$.
+Initial position and velocity are independent draws from $U[-2,2]$.
+The ordinary differential equations are integrated in float64 arithmetic
+using the classical fourth-order Runge--Kutta method with step 0.025,
+observation interval 0.1, and a discarded initial time interval of length
+ten. The scalar observation is $0.95\tanh(x)+\xi$, with independent
+sensor noise $\xi\sim U[-0.02,0.02]$. The resulting numerical
+integration and observation map define the tested simulation law; the
+observations are not exact continuous-time trajectories.
 
-The 24 repetition seeds are 946100--946123. Development seed 975001 is
-excluded. A/B/C/D base episodes and unit-noise arrays are generated from
-distinct independent random streams; the added-noise amplitude is estimated
-from A and shared across splits. Row caps and fitting seeds are paired between noise
-levels. All 13 within-episode origins, at indices $11,15,\ldots,59$, use only
-history through their origin and target offsets $(1,4,12)$. There are
-\RMTargetCells{} scored target cells per method across the complete roster,
-but only 24 independent aggregates in the primary inference. No individual
-origin, horizon or paired-noise task is promoted to an independent replicate.
+For each law and repetition, the episode sets A, B, C, and D are generated
+once. Additional noise has the form $\eta s_A Z$, where
+$\eta\in\{0,0.1\}$, $Z\sim\mathcal N(0,1)$ independently at each
+stored observation, and $s_A$ is the population standard deviation of
+all A episode values before this addition. The underlying episodes and
+$Z$ arrays are paired across the two noise levels. Added noise affects
+both histories and observed future targets. At $\eta=0$, the oscillator
+sensor noise is still present. The B/C/D linear observations are Gaussian
+conditional on the A-estimated noise amplitude, while their marginal law
+across repetitions is a variance mixture. Finite burn-in does not imply
+exact stationarity, and the added Gaussian noise means that the observed
+responses are not uniformly bounded.
 
-A fits every scaler, reference bank, kernel factor, raw predictor and decoder.
-B selects model settings separately for each horizon. C selects each
-non-ridge mixing coefficient, then one whole non-KAHM procedure. Selected
-states are serialized before reserved queries are passed to prediction, and
-targets enter the execution wrapper only after forecasts have been fixed.
-No parameter or selection is updated on D.
+The 24 repetition seeds are 946100--946123; the development seed 975001
+is excluded. Base episodes and standardized noise arrays for different
+sets use independent random streams. The additional-noise amplitude is
+estimated on A and shared across sets. The fitting seed and row selection
+are paired across noise levels. Using zero-based episode indices, the
+13 origins $11,15,\ldots,59$ each have a length-12 history ending at the
+origin and targets at offsets $1$, $4$, and $12$. A/B/C/D contain
+64/32/32/128 episodes. The first three sets retain 512/256/256 histories;
+D retains all 1,664 histories. This gives \RMTargetCells{} scored target
+values per method over the full experiment. Inference nevertheless uses
+24 independent repetition aggregates.
 
-\subsection{Fixed settings and complete descriptive losses}
+A fits every scaler, reference bank, kernel factor, baseline, and decoder.
+B selects model settings separately by horizon. C selects each candidate's
+mixing coefficients and then one complete non-KAHM procedure. Fitted
+states are saved before D histories are evaluated, and D targets are
+used only after predictions are fixed. No model or selection rule is
+updated on D.
 
-The common locality logit is
-$-\|z-\mu_j\|^2/(2s_j)$, where $s_j$ is the inherited mean squared
-local radius, floored at $10^{-6}$. Softmax normalization occurs separately
-within the 2-, 4- and 8-model blocks. Principal rank is two, there are at most
-24 references per local model, and the A bank cap is 512 rows. The inherited
-KAHM reference-energy regularization is unchanged. Reference and query kernels
-use the same projected covariance precision; the query log-kernel maximum is
-subtracted before exponentiation for both KAHM and positive RBF ratios.
+\subsection{Reference geometry and numerical evaluation}
 
-The inherited history scaler replaces standard deviations at or below
-$10^{-12}$ by one. The subsequent A feature scalers use
-$\max(\mathrm{sd},10^{-6})$. Raw ridge/RBF history scalers also use this
-$10^{-6}$ floor. Common and departure blocks are radially bounded separately,
-with no scaling after the transform. The unbounded ablations retain the same
-bounded common block and omit only the departure radial map. Their failures
-or successes cannot replace the bounded primary candidate.
+The geometric bank first standardizes each history coordinate using its
+A mean and standard deviation. A standard deviation at most $10^{-12}$
+is replaced by one. At most 512 A rows enter the bank fit. Separate
+$k$-means partitions request 2, 4, and 8 groups, using five initializations
+and at most 150 iterations. If there are too few distinct input rows,
+the requested group counts are reduced to the available number. An
+unresolved empty-group configuration is retried with halved group counts.
+Within each group, at most 24 reference rows are sampled without
+replacement. The references are stored in float32 and then used in
+float64 arithmetic. Each local model retains at most two principal
+directions of positive empirical variance. A group with no retained
+direction contributes an affine fallback and a zero departure.
 
-Every ridge head uses the mean-SSE objective and the five penalties
-$10^{-4},10^{-3},10^{-2},10^{-1},1$. The equivalent sum-SSE penalty is
-$n\alpha$, not $\alpha$. The raw RBF arm concatenates standardized histories
-with at most 64 Nystr\"om coordinates, then scales those concatenated columns
-using A alone. Bandwidth factors 0.5, 1 and 2 multiply the median positive
-landmark squared-distance scale; B selects bandwidth and penalty separately
-by horizon. Histogram gradient boosting uses 100 iterations, L2 penalty one,
-learning rates 0.05 or 0.1 and maximum leaves 7 or 15; B again selects separately
-by horizon. Persistence repeats the latest observed value before its common
-baseline mixing step. All non-ridge procedures use the same C mixing grid
-$\{0,1/4,1/2,1\}$, with deterministic tie order.
+For the row-stored references $Q_j$, define
+$\mu_j=n_j^{-1}\sum_{i=1}^{n_j}q_{ji}$ and
+\[
+ s_j=\max\left\{\frac1{n_j}\sum_{i=1}^{n_j}
+                \|q_{ji}-\mu_j\|_2^2,10^{-6}\right\}.
+\]
+This is the scale used in the common locality weights. The projected
+sample covariance is
+\[
+ S_j=\frac1{n_j-1}\sum_{i=1}^{n_j}
+       P_j^\top(q_{ji}-\mu_j)(q_{ji}-\mu_j)^\top P_j.
+\]
+Its inverse defines the shared Gaussian kernel in
+Section~\ref{sec:reconstruction-mechanism}. Kernels and references are
+identical between KAHM and positive-RBF reconstruction.
+
+The KAHM regularizer is fitted from reference reconstruction, without
+forecast targets. Suppress the local index $j$, let $Q\in\R^{n\times d}$
+contain the local references, and define the reference energy
+$\nu=\|Q\|_F^2/(nd)$, where $\|\cdot\|_F$ is the square root of the
+sum of squared matrix entries. Initialize $\lambda^{(0)}=2.5\nu$.
+At iteration $a$, compute
+\[
+ C^{(a)}=(K+\lambda^{(a)}I_n)^{-1},\qquad
+ \lambda^{(a+1)}=2\nu+
+     \frac{\|Q-KC^{(a)}Q\|_F^2}{nd}.
+\]
+The iteration stops when
+$|\lambda^{(a+1)}-\lambda^{(a)}|\le10^{-3}$ or after 100 inverse
+computations. The reconstruction uses the last computed $C^{(a)}$ and
+its corresponding $\lambda^{(a)}$, rather than the subsequent proposal
+$\lambda^{(a+1)}$. Nonfinite factors or a nonpositive regularizer invoke
+the recorded local fallback. This rule determines a reference-based
+regularizer; it does not optimize forecasting loss.
+
+For each query, the maximum log-kernel entry is subtracted before
+exponentiation. The resulting common positive rescaling leaves both
+normalized reconstruction ratios unchanged. Signed cancellation is
+checked using $\rho_j$ in Equation~\eqref{eq:mechanism-relative-denominator}.
+The affine fallback makes the corresponding departure zero if the ratio
+cannot be evaluated reliably. The experimental results below report how
+often this occurs.
+
+\subsection{Decoders, comparison grids, and descriptive losses}
+
+The common and departure feature columns are standardized separately
+using A, with each standard deviation replaced by its maximum with
+$10^{-6}$. The blocks are then radially bounded as specified in
+Equation~\eqref{eq:mechanism-main-radial}, with no subsequent scaling.
+The two unbounded-departure variants retain the bounded common block
+and omit only the departure's radial transformation.
+
+Every ridge head uses mean squared error plus
+$\alpha\|w\|_2^2$ and an unpenalized intercept, with
+$\alpha\in\{10^{-4},10^{-3},10^{-2},10^{-1},1\}$. Equivalently,
+the unnormalized sum-of-squares objective uses penalty $n\alpha$ for
+$n$ fitting rows. Raw-history ridge and RBF methods standardize their
+input coordinates on A with a $10^{-6}$ scale floor. The raw RBF method
+concatenates standardized histories with at most 64 Nystr\"om features,
+then standardizes the concatenated columns using A. The squared Gaussian
+bandwidth equals the median of all strictly positive squared landmark
+distances multiplied by $0.5$, $1$, or $2$, with no bandwidth floor. B
+selects this factor and the ridge penalty separately for each horizon.
+For a landmark Gram matrix whose largest eigenvalue is $\zeta_{\max}$,
+the Nystr\"om transform retains eigenvalues above
+$\max\{10^{-12},10^{-10}\zeta_{\max}\}$. The coordinate formula is
+given in Appendix~\ref{c:app:methods}; the bandwidth rule stated here
+is specific to this experiment.
+
+Histogram gradient boosting uses 100 iterations and L2 regularization
+one. B selects learning rate $0.05$ or $0.1$ and maximum leaf count
+7 or 15 separately by horizon. Persistence predicts the latest observed
+history value at every horizon. Every non-ridge candidate is then blended
+with ridge using a C-selected coefficient from $\{0,1/4,1/2,1\}$.
+Ties are resolved by the recorded candidate order. The non-KAHM policy
+chooses among ridge, raw RBF, boosting, persistence, the common basis,
+and the two RBF-departure variants; both KAHM variants are excluded.
+Table~\ref{tab:mechanism-all-methods} reports all methods and conditions.
 
 \begin{table}[!htbp]
 \centering\scriptsize
@@ -150,9 +225,8 @@ affects \RMKFallbackABC{} A/B/C rows and \RMKFallbackD{} D rows across all
 tasks; the corresponding RBF D count is \RMRFallbackD{}. Counts are unions
 over local models within a task and split, so the same row is not counted
 again merely because several local maps invoke their guard. The fixed local
-fallback sets the affected departure to zero. The complete valid analysis
-requires zero wholly failed methods and zero final prediction-cell recoveries;
-neither is hidden by removing a task or substituting a successful subset.
+fallback sets the affected departure to zero. No method fails completely, and no final prediction cell requires
+recovery. These checks cover the complete task roster.
 
 \begin{table}[!htbp]
 \centering\small
@@ -184,7 +258,7 @@ validation choices, not choices made from D errors.}
 \centering\small
 \setlength{\tabcolsep}{4pt}
 \caption{Mean charged resources over all 192 equal-sized task suites.
-Fit/select includes required A fitting, B selection and C calibration.
+Fitting and selection include required A fitting, B selection and C calibration.
 D prediction covers all 1,664 histories and three horizons. Shared computation
 nodes are charged once to every procedure requiring them; policy fitting pays
 the union of its non-KAHM candidates, while its prediction/state follow the
@@ -204,16 +278,14 @@ depend on the recorded machine and software environment. The peak whole-task
 process RSS is \RMPeakProcessMiB{} MiB; it includes imports, all ten arms,
 shared diagnostics and evidence arrays, and is not a per-method RAM estimate.
 Serialized state and owned array buffers omit transient workspace and do not
-measure online update latency. No cost ceiling was imposed without an
-application-derived requirement.
+measure online update latency. The study imposes no application-specific cost ceiling.
 
-The independent analyzer verifies the immutable local source/input freeze,
+The analysis program verifies the prospective source and input checksums,
 the complete task roster, exact target correspondence, A variance scales,
 policy predictions, nonfinite/failure accounting and all primary aggregation.
 The reporting builder separately reconstructs condition and repetition means
 and all six $t$ lower bounds before producing these displays. Numerical
 development checks, model replay and independent calculations are consistency
-checks; they do not constitute a new scientific replication. The protocol is
-locally prospective, informed by previous results, and explicitly not public
-preregistration. Neither these known-law repetitions nor the algebraic
+checks; they do not constitute a new scientific replication. The protocol was specified locally before evaluation and was informed
+by the earlier experiments. It was not publicly preregistered. Neither these known-law repetitions nor the algebraic
 distinctness certificate establishes a natural-application forecasting claim.

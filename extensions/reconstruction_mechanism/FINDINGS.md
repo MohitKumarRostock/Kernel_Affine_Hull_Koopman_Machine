@@ -1,54 +1,72 @@
-# Completed reconstruction-mechanism study
+# Reconstruction departures: experimental findings
 
-## Result and decision
+## Design and primary result
 
-**The bounded KAHM reconstruction departure improves the common gate-and-coordinate decoder, but the study does not establish the required KAHM-specific forecasting advantage. The frozen decision is `STOP_FORECASTING_PERFORMANCE_BRANCH`.**
+The experiment compares ten forecasting procedures in 192 task suites: 24 independent repetitions of four simulation laws at two added observation-noise levels. The saved evidence contains 1,920 task–procedure prediction arrays and 9,584,640 scored forecast values. Every planned task was evaluated, and no numerical amendment was required. Statistical inference uses the 24 independent repetition aggregates.
 
-The full experiment completed on 31 October 2026: 192 task suites, ten procedures, 1,920 saved task–procedure prediction arrays, and 9,584,640 scored forecast values. The inferential sample consists of 24 independent repetition aggregates. No task was replaced and no numerical amendment was needed.
+The bounded KAHM reconstruction departure improves the common gate-and-coordinate predictor. The study does not establish the prespecified improvement over all matched and competitive forecasting controls.
 
-| Comparison | KAHM point gain | Simultaneous lower bound on margin gap | Required condition |
+| Comparator | KAHM relative error reduction | Simultaneous lower bound on the margin contrast | Criterion satisfied |
 | --- | ---: | ---: | --- |
-| Common gate and coordinate basis | +12.5823% | 0.0029546109 | Passed |
-| Matched bounded RBF departure | +1.1693% | -0.0007861970 | Not established |
-| Raw history plus RBF | +3.9157% | -0.0000828607 | Not established |
-| Histogram gradient boosting | -1.7693% | -0.0019363039 | Not established |
-| C-selected non-KAHM policy | -6.0394% | -0.0029899472 | Not established |
-| Ridge on the linear control | -0.1990% | 0.0416102023 | Passed |
+| Common gate and coordinate basis | 12.5823% | 0.0029546109 | Yes |
+| Matched bounded RBF departure | 1.1693% | -0.0007861970 | No |
+| Raw history plus RBF | 3.9157% | -0.0000828607 | No |
+| Histogram gradient boosting | -1.7693% | -0.0019363039 | No |
+| Validation-selected non-KAHM procedure | -6.0394% | -0.0029899472 | No |
+| Ridge on the linear control | -0.1990% | 0.0416102023 | Yes |
 
-The first five rows average three nonlinear laws and two added-noise levels equally within each repetition. The reported point gain is `1 − mean_loss(KAHM)/mean_loss(comparator)`. Positive values favor KAHM. The required contrast is `0.97*loss(comparator) − loss(KAHM)`, so the one-sided lower bound must exceed zero to establish the chosen 3% useful margin. The final row is a separate linear-control comparison, using `1.05*loss(ridge) − loss(KAHM)` and a 5% noninferiority tolerance. All six lower bounds use a Bonferroni-adjusted paired t calculation with 23 degrees of freedom; they are not confidence bounds on the percentage gain.
+Here RBF denotes radial-basis-function features. Positive relative error reductions favor KAHM. For a comparator with aggregate loss $L_c$ and KAHM aggregate loss $L_K$, the percentage is $100(1-L_K/L_c)$. Each nonlinear repetition aggregate weights three laws and two added-noise levels equally; horizons are also averaged equally after normalization by the A-partition target variance.
 
-Only the common-basis useful-superiority condition and linear-control noninferiority condition pass. The matched RBF point gain is below 3%. The raw-RBF point gain is above 3%, but its simultaneous margin bound remains below zero; this is unresolved useful-margin evidence, not a demonstrated raw-RBF victory. KAHM has 1.77% higher aggregate loss than boosted trees and 6.04% higher loss than the C-selected policy.
+The first five comparisons test a 3% improvement through the repetition-level contrast $0.97L_c-L_K$. The linear comparison instead tests noninferiority within 5% of ridge through $1.05L_{\mathrm{ridge}}-L_K$. A criterion is satisfied when the corresponding one-sided lower confidence bound is positive. All six bounds use a Bonferroni-adjusted paired Student t calculation with 23 degrees of freedom. The tabulated bounds are in normalized-loss units, not percentage points.
 
-## What the mechanism study established
+Only the common-basis improvement and linear-control noninferiority criteria are satisfied. The 3.92% point gain over raw RBF exceeds the target margin, but its adjusted lower bound is negative. This leaves the required improvement unresolved; it does not establish equality or superiority of raw RBF. The negative gains against boosting and the selected non-KAHM procedure mean that KAHM has higher observed aggregate loss in those comparisons.
 
-The completed algebra gives both redundancy and distinctness results. Direct normalized KAHM target transfer is exactly a ratio of two dual kernel-ridge predictions. A symmetric two-reference bank can give the same augmented raw feature span as matched RBF. An irregular three-reference bank, under an explicit positivity condition, instead proves strict raw-span distinctness. The main empirical comparison concerns the complete reconstruction, separate block normalization, radial map and regularized decoder; raw-span identities alone do not determine fitted predictions.
+## Interpretation of the reconstruction contribution
 
-The bounded KAHM departure improves the common basis by 12.58% under the declared useful-effect test. Thus the result does not say that reconstruction features are useless. It says that the added KAHM procedure did not establish enough advantage over its matched reconstruction and competitive forecasting controls to justify extending this performance branch. Every nonlinear KAHM correction was active (432/432 task/horizon cells), so universal baseline recovery does not explain the outcome.
+The mathematical analysis identifies both redundancy and distinctness. Direct transfer of normalized KAHM weights to reference targets equals a ratio of two dual kernel-ridge predictions. A symmetric reference set can produce the same augmented raw feature span as matched RBF reconstruction. An irregular three-reference set satisfying the stated positivity condition produces a KAHM departure outside that span.
 
-## Stability and cost
+The fitted forecasting procedures also include coordinate standardization, separate radial transforms, ridge regularization, and validation-based selection. These operations matter: equality of raw feature spans does not imply identical predictions after regularization or nonlinear normalization. The empirical comparison therefore concerns the complete procedures defined in the protocol.
 
-All 192 tasks pass the fixed stability screens. The largest KAHM-to-ridge ratio of taskwise maximum absolute forecast errors is 1.5534, below the chosen engineering threshold of five. No feature-, coefficient- or correction-bound violations, local KAHM/RBF fallback rows, whole-method failures or final prediction-cell recoveries occur. The linear control activates KAHM corrections in 54/144 horizon cells and has a 0.1990% higher mean loss than ridge, within the declared noninferiority tolerance.
+The 12.58% improvement over the common basis demonstrates useful additional forecasting functions in this setting. It does not establish that KAHM supplies those functions more effectively than the matched and practical alternatives. All 432 nonlinear task–horizon KAHM corrections are active, so the observed comparison is not explained by universal selection of the uncorrected baseline.
 
-For mean-SSE ridge with a free intercept, the centered coefficient norm is bounded by `RMS(centered residual)/(2*sqrt(alpha))`. Separate radial maps give a uniform bound on correction magnitude. This controls the correction only: it does not bound the raw baseline, guarantee forecasting accuracy, or prove stability of online geometry changes.
+## Stability and computational cost
 
-On the recorded host, mean charged fit/selection time is 0.0833 s for bounded KAHM and 0.0658 s for matched bounded RBF. Prediction of all 1,664 D histories takes 29.245 ms and 25.758 ms respectively; these are batch costs, not per-forecast latency. Mean selected-state serialization is 118.81 KiB and 55.32 KiB. Shared computation is charged once to each method that needs it; policy fitting pays its full candidate union. Whole-process RSS, retained arrays, serialized bytes and per-method costs have distinct scopes. No application-specific resource ceiling was imposed.
+All 192 tasks satisfy the specified numerical stability checks. No violation of a feature, coefficient, or correction bound is recorded. There are no local KAHM/RBF reconstruction fallbacks, whole-method failures, or final prediction-cell recoveries. The largest taskwise ratio of maximum absolute forecast error for KAHM relative to ridge is 1.5534, below the specified threshold of five.
 
-## Reproducibility and scope
+On the linear control, KAHM corrections are active in 54 of 144 horizon cells. Mean loss is 0.1990% higher than ridge, which satisfies the 5% noninferiority criterion.
 
-The local checkpoint `6d666b0fa3d8e0ee90a357ea7970def94e9fdda7` froze 239 source/configuration/input files before reserved forecasts. Freeze SHA-256: `22d4c492ef7a591eb1f21eca5ff458a3f48d102fdc3cd63de597e5fd7b351bda`. This was a local prospective freeze, not public preregistration. The published result reports the completed study and preserves the protocol as audit evidence.
+The correction bound follows from the bounded feature construction and the mean-squared-error ridge objective with an unpenalized intercept. If $\alpha>0$ is the coefficient penalty and $e_c$ is the vector of centered training residuals, the coefficient norm is at most $\operatorname{RMS}(e_c)/(2\sqrt{\alpha})$. The [mathematical guide](MATHEMATICAL_BACKGROUND.md) defines the quantities and derives the resulting uniform correction bound. It applies to the correction, not to the baseline or the forecasting error.
 
-Selected-state replay reproduces all 1,920 saved prediction arrays exactly on the recorded environment. The internal audit independently reconstructs all 516,096 A/B/C/D windows, 4,032 selected ridge coefficient vectors, 9,408 selection decisions and all six primary statistics. Its maximum independent forecast discrepancy is 1.0521e-10; the six statistical contrasts agree exactly. The audit uses its own feature evaluation, ridge forward passes and tree traversal and does not refit the forecasters. Discarded B candidate coefficients were not saved, so their recorded selection tables are checked but their losses are not independently refitted. Saved nonlinear trajectories, partitions and principal subspaces are not independently regenerated. These are computational checks, not external scientific replication.
+| Mean resource measurement | Bounded KAHM | Matched bounded RBF |
+| --- | ---: | ---: |
+| Charged fitting and selection time | 0.0833 s | 0.0658 s |
+| Prediction time for 1,664 held-out histories at all three horizons | 29.245 ms | 25.758 ms |
+| Serialized selected model state | 118.81 KiB | 55.32 KiB |
 
-The nonlinear laws were known during development. New independent seeds are new realizations, not new applications. Two added-noise levels are paired; oscillator observations at zero added noise retain their inherited sensor noise. A random A-estimated noise amplitude also prevents treating all augmented linear-control realizations as one unconditional fixed-variance Gaussian law. The fixed methods, sample sizes, representation width, decoder grids, noise levels and horizons limit the conclusion. The chosen margins are research-allocation screens, and the paired t analysis is approximate. A failed finite procedure is not an impossibility theorem for every geometric representation or decoder.
+These measurements average all 192 tasks on the recorded host. Prediction times are batch costs. Shared computation is charged once to each procedure that requires it, and the selected non-KAHM procedure is charged for the union of its candidate fits. Serialized bytes, retained arrays, and whole-process resident memory measure different aspects of resource use. No application-specific resource ceiling was imposed.
 
-No additional application or adaptive experiment was undertaken after this result. This implements the declared stopping rule. The research contribution is the conditions connecting reconstruction, decoder access, stability and predictive utility, with the complete positive and negative evidence preserved.
+## Reproducibility
 
-## Evidence entry points
+The prospective local checkpoint `6d666b0fa3d8e0ee90a357ea7970def94e9fdda7` fixed 239 source, configuration, and input files before held-out forecasts were computed. The SHA-256 digest of `freeze.json` is `22d4c492ef7a591eb1f21eca5ff458a3f48d102fdc3cd63de597e5fd7b351bda`. This records a local prospective freeze, not a public preregistration.
 
-- [Frozen decision and six primary contrasts](analysis/decision.json)
-- [All condition means](analysis/condition_metrics.csv)
-- [Twenty-four repetition aggregates](analysis/replicate_metrics.csv)
-- [Independent audit](results/audit.json)
-- [Exact selected-state replay](results/replay.json)
-- [Algebra and proofs](ALGEBRA.md)
+Selected-state replay reproduces all 1,920 saved prediction arrays exactly in the recorded environment. The independent-code audit reconstructs 516,096 A/B/C/D windows, checks 4,032 selected ridge coefficient vectors and 9,408 selection decisions, and recomputes all six primary statistics. Its largest independent forecast discrepancy is $1.0521\times10^{-10}$; the six statistical contrasts agree exactly.
+
+The audit implements its own feature evaluation, ridge forward passes, and tree traversal. It does not refit the forecasters. Discarded B-candidate coefficients were not retained, so the audit checks their recorded selection tables without independently refitting their losses. It also does not independently regenerate the nonlinear trajectories, partitions, or principal subspaces. These checks establish computational consistency within the study and should not be interpreted as external replication.
+
+## Scope of the conclusion
+
+The nonlinear laws were known during development. Independent seeds provide new realizations under those laws, rather than new application domains. Noise levels are paired, and oscillator observations at zero added noise still contain the original sensor noise. The added-noise amplitude is estimated from A; this shared random amplitude also means that the augmented linear-control realizations do not form a single unconditional Gaussian law with fixed variance.
+
+The conclusions are limited by the selected methods, reference width, sample sizes, penalty grids, noise levels, and horizons. The 3% improvement and 5% noninferiority margins are study-design criteria, not application-derived utility thresholds. The paired t calculation is an approximation under its stated distributional assumptions.
+
+The protocol required all six accuracy conditions and the stability checks to be satisfied before further forecasting-performance experiments. Because four accuracy conditions were not established, the recorded combined decision is `STOP_FORECASTING_PERFORMANCE_BRANCH`; no subsequent application or adaptive experiment was used to replace this result. This decision concerns the evaluated procedures and does not prove that every geometric representation or decoder must fail.
+
+## Evidence
+
+- [Primary contrasts and combined decision](analysis/decision.json)
+- [Condition-level losses](analysis/condition_metrics.csv)
+- [Repetition aggregates](analysis/replicate_metrics.csv)
+- [Independent-code audit](results/audit.json)
+- [Selected-state replay](results/replay.json)
+- [Mathematical definitions and derivations](MATHEMATICAL_BACKGROUND.md)
 - [Reproduction commands](README.md)

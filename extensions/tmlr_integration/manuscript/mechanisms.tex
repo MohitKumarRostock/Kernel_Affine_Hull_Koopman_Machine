@@ -1,29 +1,36 @@
 \section{Geometry, predictive encoding, and decoder access}\label{c:sec:method}
 
 \paragraph{Matched reconstruction rules.}
-Let $z$ be a training-standardized input. The controlled study uses three
-$k$-means blocks with $2$, $4$, and $8$ local models. Each model $c$ has at
-most 24 shared reference rows $V_c$, their center $\mu_c$, and a common
-orthonormal principal basis $P_c$ of effective rank at most
-$\min(2,d-1,n_c-1)$. Scaling, partitions, references, bases, and scoring are
-held fixed when the reconstruction rule is changed. The two rules are
+Let $z\in\R^d$ be a column vector obtained by standardizing an input with
+training-set means and standard deviations. The controlled study fits three
+independent $k$-means partitions, with $2$, $4$, and $8$ local models,
+respectively. Index the resulting $14$ models by $c$. Model $c$ contains
+$n_c\leq24$ reference observations, stored as the rows of
+$V_c\in\R^{n_c\times d}$. Let $\mu_c\in\R^d$ be their mean and let
+$P_c\in\R^{d\times p_c}$ contain orthonormal principal directions, where
+$p_c\leq\min(2,d-1,n_c-1)$ is the effective local rank. Input scaling,
+partitions, references, principal directions, and the score construction
+are shared by the two reconstruction rules:
 \begin{equation}\label{c:eq:affine}
  r_c^{\A}(z)=\mu_c+P_cP_c^\top(z-\mu_c),\qquad
- r_c^{\K}(z)=V_c^\top
-       \left(\frac{k_c(z)B_c}{k_c(z)B_c\boldsymbol 1}\right)^\top.
+ r_c^{\K}(z)=
+ \frac{V_c^\top B_c k_c(z)}{\boldsymbol 1_{n_c}^\top B_c k_c(z)}.
 \end{equation}
-Here $k_c(z)$ is the Gaussian query-kernel row in the local covariance
-metric and $B_c$ is the fitted regularized inverse; their exact construction
-is given in Appendix~\ref{c:app:methods}. KAHM weights may be signed.
-The archived controlled experiments retain the upstream float32 references
-and replace an exactly zero denominator by one; a separate numerical
-analysis below examines Gaussian underflow. This common-bank substitution isolates a
-reconstruction component rather than comparing independently optimized
-complete systems.
+Here $k_c(z)\in\R^{n_c}$ contains the Gaussian similarities between the
+query and the reference observations in the local projected covariance
+metric; $B_c\in\R^{n_c\times n_c}$ is the symmetric regularized inverse of
+the reference kernel matrix; and $\boldsymbol 1_{n_c}$ is the vector of
+$n_c$ ones. Appendix~\ref{c:app:methods} specifies the kernel, regularizer,
+and treatment of degenerate banks. The normalized KAHM weights can be
+negative. In the controlled implementation, reference values are stored in
+32-bit floating-point precision, and an exactly zero reconstruction
+denominator is replaced by one. A separate numerical sensitivity analysis
+examines Gaussian underflow. Sharing the bank makes this a comparison of
+reconstruction operators within one specified procedure.
 
-\paragraph{What the predictor receives.}
-For either reconstruction, the matched discrepancy combines radial and
-angular errors:
+\paragraph{The features supplied to the predictor.}
+For either reconstruction $r_c$, define a radial discrepancy $q_c$ and an
+angular discrepancy $b_c$ by
 \begin{align}
  q_c(z)&=1-\exp\{-\|z-r_c(z)\|_2\},\qquad
  b_c(z)=\pi^{-1}\arccos\!\left(\clip\!\left(
@@ -31,72 +38,100 @@ angular errors:
  \nonumber\\[-2pt]
  T_c(z)&=\sqrt{\{q_c(z)^2+b_c(z)^2\}/2},\qquad
  w_c(z)=(1-T_c(z)+\tau)^\omega,\qquad
- \phi_c(z)=\frac{w_c(z)}{Z(z)},\quad
- Z(z)=\sum_{j\text{ in block}}w_j(z),\label{c:eq:phi}
+ \phi_c(z)=\frac{w_c(z)}{Z_{b(c)}(z)},\label{c:eq:phi}
 \end{align}
-with $\tau=10^{-6}$, $\omega=16$, and cosine zero when its denominator is
-zero. Affinities from the three blocks are concatenated. In addition to
-$\phi$, the ablations supply the full score $T$, one $\log Z$ per block,
-raw inputs, or gated local coordinates
+where $\clip(u,a,b)=\min\{b,\max\{a,u\}\}$, $\tau=10^{-6}$, and
+$\omega=16$. If the denominator in the cosine is zero, its value before
+clipping is defined to be zero. The index $b(c)\in\{1,2,3\}$ identifies
+the partition containing model $c$, and
+$Z_b(z)=\sum_{j:b(j)=b}w_j(z)$ is that partition's normalizing constant.
+Thus the affinities sum to one within each partition. Let
+$\phi(z)\in\R^{14}$ and $\mathbf T(z)\in\R^{14}$ be the concatenated
+affinity and score vectors, respectively. The feature comparisons provide
+the decoder with affinities, full scores, one $\log Z_b$ per partition,
+raw inputs, or gated local coordinates. The last construction is
 \begin{equation}\label{c:eq:local}
  \Gamma_{\rm local}(z)=
- \left[\phi(z),\{\phi_c(z)P_c^\top(z-\mu_c)\}_{c=1}^{14}\right].
+ \operatorname{col}\!\left(
+ \phi(z),\{\phi_c(z)P_c^\top(z-\mu_c)\}_{c=1}^{14}\right),
 \end{equation}
-This is the established local-tangent feature form \citep{Yu2010LTC}; the
-investigation concerns the choice and predictive role of the gates.
+where $\operatorname{col}$ concatenates its column-vector arguments. This
+is a local-tangent feature construction \citep{Yu2010LTC}; the study
+examines how the geometric gates affect prediction.
 
-These distinctions matter even before fitting. The outer normalization has
-the exact inverse
+Two information properties follow directly from these definitions. First,
+the score normalization has the inverse
 \begin{equation}\label{c:eq:inverse}
- T_c=1+\tau-\exp\{(\log\phi_c+\log Z)/\omega\}.
+ T_c(z)=1+\tau-
+ \exp\{(\log\phi_c(z)+\log Z_{b(c)}(z))/\omega\}.
 \end{equation}
-Thus $T$ and $(\phi,\log Z)$ retain the same information, without necessarily
-having the same fitted risk under a finite decoder. Likewise, positive
-gates and full column rank of the stack of $P_c^\top$ suffice to recover
-$z$ from Equation~\eqref{c:eq:local}: divide by each gate, add
-$P_c^\top\mu_c$, and solve the stacked linear system. Numerical full rank
-and positive inspected gates are observed in all 144 controlled forecasting
-banks; these retrospective checks do not guarantee stable inversion or
-population-wide gate bounds (Appendix~\ref{c:app:review-diagnostics}).
-Rank deficiency is not proof of information loss because the gates can
-also encode information.
+Consequently, $\mathbf T$ and the pair consisting of $\phi$ and all three
+log normalizers retain the same information in exact arithmetic. Their
+finite fitted decoders can nevertheless have different risks because the
+inverse is nonlinear. Second, suppose all gates are positive and the
+matrix formed by stacking $P_c^\top$ has full column rank $d$. Dividing
+the local-coordinate blocks by their gates recovers $P_c^\top(z-\mu_c)$.
+Adding $P_c^\top\mu_c$ then yields a full-rank linear system for $z$.
+Proposition~\ref{c:prop:local-injectivity} makes this argument precise.
+The $144$ inspected controlled forecasting banks have full numerical rank
+and positive gates on their evaluated inputs. These checks do not establish
+uniformly positive gates or a stable inverse on the entire input domain
+(Appendix~\ref{c:app:review-diagnostics}). Conversely, a rank-deficient
+stack does not by itself establish information loss, because the gates
+may encode additional distinctions between inputs.
 
 \paragraph{A controlled target intervention.}\label{c:sec:controlled}
-Let $S\sim\mathrm{Unif}\{-1,+1\}$, $T\sim\mathrm{Unif}[-1,1]$, and
-$\epsilon\sim\mathrm{Unif}[-0.1,0.1]$ be independent. Define
+Let $S$ take the values $-1$ and $+1$ with equal probability, let
+$T\sim\mathrm{Unif}[-1,1]$, and let
+$\epsilon\sim\mathrm{Unif}[-0.1,0.1]$. Assume these three variables are
+independent. For curvature $c\in\{0,1\}$ and target-mixture weight
+$\lambda\in\{0,\tfrac12,1\}$, define
 \begin{equation}\label{c:eq:branch}
- X=(T,c\cos(\pi T)+0.5S),\qquad
- Y_\lambda=\sqrt{1-\lambda}\,S+\sqrt{3\lambda}\,T+\epsilon,
- \quad c\in\{0,1\},\quad\lambda\in\{0,\tfrac12,1\}.
+ X=\begin{pmatrix}T\\c\cos(\pi T)+0.5S\end{pmatrix},\qquad
+ Y_\lambda=\sqrt{1-\lambda}\,S+\sqrt{3\lambda}\,T+\epsilon.
 \end{equation}
-Within each repetition and curvature, changing $\lambda$ leaves input
-samples, noise, and the fitted bank fixed. The signal variance is one and
-the Bayes MSE is $1/300$. Targets move from branch identity to signed
-position, while difficulty for a particular decoder may also change.
-A code invariant to $Q(t,x_2)=(-t,x_2)$ loses the odd conditional-mean
-component $\sqrt{3\lambda}T$ and has Bayes MSE at least $1/300+\lambda$.
-For an approximately invariant code and a $\kappa$-Lipschitz decoder,
+Here $S$ identifies the branch and $T$ gives position along it. Within each
+repetition and curvature, changing $\lambda$ leaves the input observations,
+noise, and fitted bank unchanged. The predictable signal has variance one,
+and the Bayes mean squared error is $\operatorname{Var}(\epsilon)=1/300$.
+As $\lambda$ increases, the target changes from branch identity to signed
+position. Its accessibility to a particular decoder can change even though
+the signal and noise variances remain fixed.
+
+Define the reflection $Q(x_1,x_2)=(-x_1,x_2)$. A representation satisfying
+$\Gamma(QX)=\Gamma(X)$ cannot retain the sign of the position component
+$\sqrt{3\lambda}T$. Its Bayes mean squared error is therefore at least
+$1/300+\lambda$. There is also a quantitative statement for an approximately
+invariant representation. Let $d_U$ be a pseudometric on its feature space,
+let $g$ be a decoder satisfying
+$|g(u)-g(v)|\leq\kappa d_U(u,v)$ for all feature values $u,v$, and define
 \begin{equation}\label{c:eq:symmetrybound}
  R(g\circ\Gamma)-R_X^{\rm Bayes}
  \geq\left(\sqrt\lambda-\kappa\delta_\Gamma/2\right)_+^2,
- \quad
+ \qquad
  \delta_\Gamma^2=\E[d_U(\Gamma(X),\Gamma(QX))^2].
 \end{equation}
-The measured reflection differences are descriptive; neither a population
-bound on $\delta_\Gamma$ nor a common Lipschitz budget for the fitted heads
-is asserted. Appendix~\ref{c:app:theory} supplies the precise assumptions
-and proofs, including why small local reconstruction residuals alone are
-insufficient: reconstructing $X$ from the query is different from
-reconstructing it through the predictor's retained code.
+In this expression $R(f)=\E[(Y_\lambda-f(X))^2]$,
+$R_X^{\rm Bayes}=1/300$, and $(a)_+=\max\{a,0\}$; the claim assumes the
+quantities are square-integrable. A pseudometric satisfies the usual
+metric inequalities but may assign distance zero to distinct points.
+Appendix~\ref{c:app:theory} proves both the exact and approximate statements.
+The measured reflection differences are descriptive estimates: they do not
+supply a population upper bound for $\delta_\Gamma$, and the fitted
+experimental decoders have no imposed common Lipschitz budget.
 
 On straight branches with the position target, affine-affinity ridge MSE
-is $\FlatWithinAffineMSE$, versus $\FlatWithinKAHMMSE$ for KAHM affinities,
-although affine reconstruction is nearly exact. The corresponding
-training-standardized reflection RMS is about $7.5\times10^{-9}$ for
-affine affinities and $1.40$ for KAHM. A locality-aware affine score reduces
-MSE to $\FlatWithinNativeAffineMSE$; affine local coordinates attain
-$0.00333$, close to the Bayes error. The evidence therefore identifies
-positional encoding as useful in this comparison, rather than an exclusive
-KAHM advantage. On curved branches, both codes substantially distinguish
-reflected positions. Full branch results, reconstruction diagnostics, and
-scoring controls appear in Appendix~\ref{c:app:tables}.
+is $\FlatWithinAffineMSE$, compared with $\FlatWithinKAHMMSE$ for KAHM
+affinities, even though the affine reconstruction is nearly exact. The
+corresponding training-standardized reflection root mean square is about
+$7.5\times10^{-9}$ for affine affinities and $1.40$ for KAHM affinities.
+A locality-aware affine score reduces MSE to
+$\FlatWithinNativeAffineMSE$, and affine local coordinates attain
+$0.00333$, close to the Bayes error. These results identify the value of
+retaining position in this comparison. They do not attribute that value
+exclusively to KAHM reconstruction. On curved branches, both affinity codes
+distinguish reflected positions. Appendix~\ref{c:app:tables} reports the
+complete branch results and the reconstruction and scoring diagnostics.
+The relevant distinction is whether the predictor can recover useful
+structure from its retained code; a small residual for a reconstruction
+that still receives the raw query does not establish that property.

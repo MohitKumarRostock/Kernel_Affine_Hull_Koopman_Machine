@@ -1,67 +1,96 @@
-# Reconstruction departures: completed KAHM forecasting study
+# Reconstruction departures for KAHM forecasting
 
-**Completed result: useful value beyond a common local-coordinate basis, but no established KAHM-specific practical advantage under the fixed comparison. The decision is `STOP_FORECASTING_PERFORMANCE_BRANCH`.**
+This experiment asks whether a KAHM reconstruction provides useful additional functions to a finite forecasting decoder. It compares a bounded KAHM reconstruction departure with a common gate-and-coordinate basis, a matched radial-basis-function (RBF) departure, raw-history RBF features, boosted trees, and other controls.
 
-KAHM's bounded departure lowers nonlinear aggregate error by 12.58% against the common basis and by 1.17% against matched bounded RBF. Only the first establishes the chosen 3% useful margin. The 3.92% raw-RBF point gain has an unresolved simultaneous useful-margin bound. KAHM error is 1.77% above boosting and 6.04% above the C-selected non-KAHM policy. All stability screens and linear-control noninferiority pass.
+The KAHM procedure reduces aggregate nonlinear normalized mean squared error by 12.58% relative to the common basis. Its 1.17% gain over matched RBF departures and 3.92% gain over raw-history RBF features do not establish the prespecified 3% improvement under the simultaneous analysis. Boosted trees and the validation-selected non-KAHM procedure have lower aggregate errors. The linear-control noninferiority criterion and all specified numerical stability checks are satisfied.
 
-Read the [complete findings](FINDINGS.md), [six-contrast decision](analysis/decision.json), [algebra](ALGEBRA.md), and [integrated manuscript](../tmlr_integration/README.md). The preserved [protocol](PROTOCOL.md) documents the experiment that was executed; it is supporting evidence for the completed results.
+Read the [mathematical background](MATHEMATICAL_BACKGROUND.md), [complete findings](FINDINGS.md), [six primary comparisons](analysis/decision.json), and [manuscript](../tmlr_integration/README.md).
 
-## Scope
+## Design and evidence
 
-The fixed study contains 24 independent repetitions × four laws × two added-noise levels = 192 suites, with ten procedures each. The three nonlinear laws are previously investigated simulations; independent fresh draws do not add new application domains. The inferential unit is a complete repetition aggregate, not any of the 9,584,640 scored values. The source/input freeze was local and prospective, not publicly preregistered. Earlier adaptive development remains separate and retains its original and amended attempts.
+The design has 24 independent repetitions, four simulation laws, and two added observation-noise levels, giving 192 task suites. Each suite evaluates ten procedures. The three nonlinear laws had been studied during method development; new seeds yield independent realizations under those laws, not new application domains.
+
+Independent base episodes are assigned to four partitions. Partition A fits the representation and predictors; B selects horizon-specific regularization; C selects correction strengths and a non-KAHM forecasting procedure; D evaluates the selected procedures. The added-noise amplitude is estimated from A and shared across the partitions. The primary statistical units are the 24 repetition aggregates, rather than individual windows or forecast values.
+
+The local prospective checkpoint fixes the scientific code, inputs, design, and statistical comparisons before the held-out forecasts were computed. It is not a public preregistration. The [original protocol](PROTOCOL.md), [algebra record](ALGEBRA.md), and `freeze.json` retain the exact bytes covered by that checkpoint. The current mathematical guide explains the same constructions for readers without changing those records.
 
 ## Restore and verify saved evidence
 
-Use Python 3.12 from the repository root. The public tree stores bulky exact evidence in lossless parts. Restoration verifies part, archive and per-file hashes and refuses to overwrite conflicting bytes.
+Use Python 3.12 from the repository root. Large evidence files are stored in lossless parts. Restoration checks each part, the combined archives, and every extracted file; it accepts identical existing files and refuses conflicting replacements.
 
 ```bash
-python -m extensions.reconstruction_mechanism.evidence unpack
 python -m pip install -r extensions/reconstruction_mechanism/requirements.txt
+python -m extensions.reconstruction_mechanism.evidence unpack
 python -m extensions.reconstruction_mechanism.run verify
-python -m extensions.reconstruction_mechanism.analyze --output /tmp/kahm-analysis-recheck
+```
+
+The standalone reproduction ZIP already contains the expanded mechanism evidence and does not require the unpack command. The repository transport contains the mechanism and adaptive studies; the standalone mechanism archive contains the principal study and its numerical dependencies.
+
+Recompute the saved-forecast analysis in a separate directory:
+
+```bash
+python -m extensions.reconstruction_mechanism.analyze --output /tmp/kahm-analysis
 python -m extensions.reconstruction_mechanism.audit \
-  --analysis-json /tmp/kahm-analysis-recheck/decision.json \
+  --analysis-json /tmp/kahm-analysis/decision.json \
   --output /tmp/kahm-independent-audit.json
+```
+
+The audit uses independent prediction and statistical code. It evaluates saved selected states and verifies recorded selection information; it does not refit all discarded candidate models. Its coverage and limitations are detailed in the [findings](FINDINGS.md).
+
+Replay every selected model and verify the evidence required by the packager:
+
+```bash
 python -m extensions.reconstruction_mechanism.run replay
 python -m extensions.reconstruction_mechanism.package_results audit
 ```
 
-The downloaded reproduction ZIP already contains expanded mechanism evidence; it does not require the transport unpack command and does not include the separate adaptive study. The repository's transport includes both studies. The mechanism audit imports neither the forecasting nor analysis code and does not refit models. It checks selected coefficients, independently evaluates saved predictions and recomputes all six contrasts; its verification limits are stated in [the findings](FINDINGS.md).
+These operations verify the recorded computation. They do not add independent experimental observations.
 
-## Tests and manuscript
+## Numerical checks and manuscript build
+
+The numerical tests use fabricated data or a development seed excluded from the research roster:
 
 ```bash
 python -m unittest extensions.reconstruction_mechanism.test_models \
   extensions.reconstruction_mechanism.test_inputs \
   extensions.reconstruction_mechanism.test_analysis -v
+```
+
+To regenerate the principal displays and compile the paper:
+
+```bash
 python extensions/tmlr_integration/build_mechanism_assets.py
+python -m extensions.tmlr_integration.format_manuscript_assets
 cd extensions/tmlr_integration/manuscript
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The 38 tests use fabricated data or development seed 975001, excluded from the research roster. Building the paper uses the bundled generated assets and needs no model fitting. [The dedicated workflow](../../.github/workflows/reconstruction-mechanism.yml) verifies the new saved evidence and packages the final manuscript. Historical studies keep their own frozen checks and documented CPU sensitivities.
+The bundled manuscript displays also permit compilation without restoring evidence or fitting models. The [continuous-integration workflow](../../.github/workflows/reconstruction-mechanism.yml) describes the automated verification sequence.
 
-## Refit the fixed experiment
+## Repeat the fitting experiment
 
-The study's original inputs, configuration and decision rules are immutable. To repeat the same fitting experiment, use a separate disposable checkout, restore the evidence, move the existing `results/` directory outside that checkout, and run:
+A repeated execution must preserve the reported outputs. In a separate disposable checkout, restore the evidence and move the existing `results/` directory outside the checkout. Then run:
 
 ```bash
 python -m extensions.reconstruction_mechanism.run run --freeze-commit FULL_CHECKOUT_COMMIT_SHA
 ```
 
-Supply the full commit of that checkout containing the exact `freeze.json`; this is a new execution of the fixed procedure, not a new confirmatory design. The runner verifies all frozen scientific files, creates a fresh process per task and refuses to overwrite task results. A/B/C supply fitting and selection; the model API never receives D labels. Archive the original outputs before any repetition, and keep repeated timing observations and predictions separate. To study another procedure, create and freeze a separate experiment rather than altering this completed one.
+Replace `FULL_CHECKOUT_COMMIT_SHA` with the full commit identifier of that checkout containing the exact `freeze.json`. The runner checks the frozen scientific files, creates a fresh process for each task, and refuses to overwrite task results. The fitting API receives A, B, and C information and D histories, but no D targets.
 
-## Files
+Refitting reproduces the fixed procedure; it is not a newly designed confirmatory experiment. Preserve its forecasts and resource measurements separately. New methods or altered designs require their own source and input records so that they cannot be confused with the reported experiment.
 
-| File or directory | Role |
+## File organization
+
+| File or directory | Purpose |
 | --- | --- |
-| `config.json`, `PROTOCOL.md`, `freeze.json` | Fixed design and prospective local source/input identities |
-| `algebra.py`, `ALGEBRA.md`, `algebra_results.json` | Completed structural checks and proofs |
-| `data.py`, `prepared_inputs/manifest.json` | Independent episode generation, paired noise, causal windows, exact input roster |
-| `models.py`, `run.py` | A/B/C-only fitting, reserved prediction, preserved states and replay |
-| `analyze.py`, `analysis/` | Frozen complete-roster analysis and all primary/secondary results |
-| `audit.py`, `results/audit.json` | Internal verification using independent evaluation code |
-| `evidence.py`, `PACKED_EVIDENCE.json`, `evidence_parts/` | Post-execution lossless transport and exact restoration |
-| `package_results.py` | Completed-result, LaTeX-source and expanded-evidence packaging |
+| `config.json`, `PROTOCOL.md`, `freeze.json` | Experimental design and prospective local source/input identities |
+| `MATHEMATICAL_BACKGROUND.md` | Definitions, identities, feature-span results, and correction bound |
+| `algebra.py`, `ALGEBRA.md`, `algebra_results.json` | Original structural checks and numerical examples |
+| `data.py`, `prepared_inputs/manifest.json` | Episode generation, paired noise, causal windows, and input roster |
+| `models.py`, `run.py` | Fitting, selection, held-out prediction, saved states, and replay |
+| `analyze.py`, `analysis/` | Statistical analysis and complete primary and secondary results |
+| `audit.py`, `results/audit.json` | Independent-code evaluation within the study |
+| `evidence.py`, `PACKED_EVIDENCE.json`, `evidence_parts/` | Lossless evidence storage and restoration |
+| `package_results.py` | Verification and packaging of the manuscript and principal reproduction archive |
 
-The last three utilities are post-execution verification/packaging tools and are not retroactively represented as prospectively frozen scientific code. Historical numerical dependencies are included unchanged under their original repository paths and licenses.
+Evidence transport, independent verification, and packaging utilities were added after experiment execution. Their provenance is recorded separately from the prospective scientific checkpoint.

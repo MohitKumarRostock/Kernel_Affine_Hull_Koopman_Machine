@@ -1,20 +1,19 @@
 \section{Preserving raw forecasts while testing geometric utility}
 \label{sec:utility-extension}
 
-The preceding studies motivate a distinct question. Does KAHM help when
-its contribution is a correction to an unchanged raw forecast, and how
-does that contribution depend on training data and the raw decoder?
-The extension separates these factors and tests a fixed adoption rule on
-four additional archive collections. Its protocol, candidate grid, data
-roster, and execution sources are frozen before its full model evaluations.
-This is a prospective execution freeze, not external preregistration.
-The earlier evidence and post-hoc scaling analysis remain separately
-reported; no outcome from those archives is reclassified as new confirmation.
+An additive experiment separates the contribution of KAHM features
+from changes to the raw predictor. It tests whether a local geometric
+correction improves a fixed raw forecast, how this improvement depends
+on training size and raw-decoder capacity, and whether a validation
+rule identifies useful corrections on four additional archive collections.
+The protocol, candidate grid, source roster, and implementation were
+archived before full evaluation. This was a prospective execution
+checkpoint informed by earlier findings, without external preregistration.
 
 \subsection{Forecasts, controls, and selection}
 \label{sec:utility-models}
 
-The raw baseline is the inherited finite Gaussian Nystr\"om predictor with
+The raw baseline is a finite Gaussian Nystr\"om predictor with
 appended linear history coordinates, column standardization, and a ridge
 head. Its requested $M$ landmarks and regularization are fitted using the raw history
 only. For each $g\in\{\mathrm{KAHM},\mathrm{affine},\mathrm{locality}\}$,
@@ -55,10 +54,11 @@ The 5\% threshold is a research sensitivity, not a test-set guarantee or
 an application-derived minimum. Every policy pays for the corrections
 it examines, including corrections it declines.
 
-\subsection{Training size, raw decoder capacity, and new sources}
+\subsection{Training size, raw-decoder capacity, and archive sources}
 \label{sec:utility-design}
 
-The synthetic factorial crosses the three inherited forecasting laws,
+The synthetic factorial crosses the three forecasting laws in
+Appendix~\ref{c:app:methods},
 $N\in\{32,128\}$ independent training episodes, and
 $M\in\{16,64\}$ raw RBF landmarks. Twelve fresh repetitions use seeds
 9100--9111, for 144 configurations. Within a law and repetition, the 32
@@ -132,7 +132,7 @@ appear in Appendix~\ref{app:utility-protocol}.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{generated/utility/synthetic_contrasts.pdf}
-\caption{Every primary contrast in the new factorial. Points and bars are
+\caption{All primary contrasts in the additive factorial experiment. Points and bars are
 mean control-minus-additive-KAHM MSE and the separate 95\% Bonferroni
 paired Student intervals over 12 complete repetitions. Positive values
 favor additive KAHM. Each panel has its own horizontal range in the same
@@ -143,7 +143,7 @@ joint claim with earlier interval families.}
 \end{figure}
 
 Table~\ref{tab:utility-synthetic} reports every law--data--capacity cell,
-including the simpler geometric controls. Figure~\ref{fig:utility-contrasts}
+including affine and locality corrections. Figure~\ref{fig:utility-contrasts}
 shows all primary intervals. Their lower endpoints exceed zero in
 \UtilityRawPositiveContrasts{} of 12 comparisons with raw RBF and
 \UtilityConcatPositiveContrasts{} of 12 comparisons with concatenated
@@ -185,24 +185,21 @@ All 144 synthetic configurations complete. On the archive roster, 22 of
 24 configurations complete every procedure. The two capacities for Car
 Parts series T1324 each have 23 training histories but only seven distinct
 histories. The declared eight-group bank produces fewer nonempty groups
-than requested, and the unchanged implementation raises an error rather
-than silently dropping a group. Concatenated KAHM and all three additive
+than requested, and the specified implementation reports a bank-fitting error. Concatenated KAHM and all three additive
 geometries fail on both configurations, producing eight failed model fits.
 Both declared policies also fail because their required correction
 candidate is unavailable. Raw ridge, raw RBF, naive, and boosting forecasts
 remain available on all 24 configurations. This is a shared bank-fitting
-failure; it does not isolate the KAHM kernel as its cause. No model was
-refitted under a changed configuration and no series was replaced.
+failure; it does not isolate the KAHM kernel as its cause. The failed fits remain unavailable under the specified configuration.
 
 Consequently, the full-roster KAHM and policy mean losses are undefined.
-The reporting amendment retains those failures and adds an explicitly
-post-hoc matched-success diagnostic on the 22 configurations where every
+A post-hoc analysis compares methods on the 22 configurations where every
 procedure completes. This subset has 11 series: three each from Weather,
 Solar, and COVID, and two from Car Parts. Sources retain equal weight,
 with the remaining Car Parts series now sharing that source's weight.
-This comparison conditions on successful fitting and changes the
-prespecified roster; it is not the original full-roster estimand or a new
-confirmatory transfer result. All-24 baseline outcomes remain visible.
+This analysis conditions on successful fitting and therefore estimates
+a different quantity from the planned full-roster comparison. Baseline
+results on all 24 configurations are reported alongside it.
 
 \input{generated/utility/archive_main}
 
@@ -213,9 +210,9 @@ all selected mixing weights appear in Appendix~\ref{app:utility-results}.
 Among the 22 completed archive comparisons, the KAHM policy adopts a
 correction on \UtilityKAHMAdoptions{} configurations and the all-geometry
 policy on \UtilityGeometryAdoptions{}. Their decisions use only validation
-outcomes. Their matched-success costs include searching corrections even
-when the selected test forecast is the raw baseline, but do not redefine
-the two failed policy evaluations as successful raw decisions.
+outcomes. Their costs include searching corrections even when validation selects
+the raw baseline. The policies remain undefined on the two failed
+configurations because their required candidates were unavailable.
 
 On the matched-success diagnostic, raw RBF, concatenated KAHM, and
 additive KAHM have scaled MSEs \UtilityRawLoss{}, \UtilityConcatLoss{},
@@ -245,5 +242,5 @@ diagnostic, not additional evidence. The saved-prediction decomposition
 likewise has KAHM alignment exceeding correction energy only on COVID,
 zero correction on Solar, and negative net gains on the other two sources
 (Table~\ref{tab:utility-residual}). The identity verifies how the realized
-corrections change squared error without estimating the oracle residual
-structure or rescuing the incomplete full-roster evaluation.
+corrections change squared error but does not estimate the oracle residual structure or provide losses
+for the failed configurations.

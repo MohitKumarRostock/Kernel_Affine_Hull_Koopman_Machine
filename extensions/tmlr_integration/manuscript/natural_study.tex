@@ -1,15 +1,17 @@
 \section{Natural forecasting: transfer, cost, and predicting benefit}\label{sec:natural}
 
-\subsection{A separate source-level evaluation}
+\subsection{Source allocation and chronological evaluation}
 The natural study fixes four development families (Electricity, NN5,
 Tourism, and FRED-MD) and four confirmation families (Traffic, Hospital,
 Saugeen River flow, and US births). Versions, licenses, eligibility rules,
 and chronological windows are specified in Appendix~\ref{sec:nf-protocol}.
-Training-prefix eligibility and a fixed salted ordering select 26 series.
+Eligibility depends only on the training prefix. A fixed hash of each
+source and series identifier then selects 26 eligible series.
 Two history--horizon regimes, two capacities, and two seeds yield 208 runs:
 128 development and 80 confirmation. Related series, windows, horizons,
 capacities, and seeds remain within their original source families.
-The units describing transfer breadth are the four confirmation families.
+Thus the transfer comparison covers four confirmation families,
+regardless of the number of configurations evaluated within them.
 
 Each series uses chronological 60/20/20 percent training/validation/test
 blocks, and every target horizon lies entirely within its split. All
@@ -26,9 +28,10 @@ are not pooled with the controlled-study confidence families.
 
 The twelve candidates include raw ridge and raw finite-RBF predictors;
 affine-, locality-, and KAHM-gated local predictors, with and without the
-full raw history; and seasonal naive, Holt, histogram boosting, and a small
-MLP. The primary matched pair is raw RBF ($R$) versus raw plus KAHM ($K$).
-The raw-augmented code is
+full raw history; and seasonal naive, Holt, histogram boosting, and a small multilayer perceptron (MLP). The primary matched pair is raw RBF ($R$) versus raw plus KAHM ($K$).
+Let $z(x)\in\R^d$ be the standardized history, $\phi_g(z)$ the
+vector of gates for family $g$, and $P_c$ and $\mu_c$ the local
+principal basis and reference mean. The raw-augmented code is
 \begin{equation}\label{eq:natural-raw}
  T_{\mathrm{raw}+g}(x)=\bigl(z(x),\,\phi_g(z(x)),\,
        (\phi_{g,c}(z(x))P_c^\top(z(x)-\mu_c))_c\bigr).
@@ -49,20 +52,25 @@ procedures, not equally timed or exhaustively tuned algorithms. Detailed
 heads, practical controls, capacity caps, and numerical conventions appear
 in Appendices~\ref{sec:nf-methods}--\ref{sec:nf-protocol}.
 
-\subsection{Which computational work is charged?}
+\subsection{Computational cost}
 Measured warm-library pipelines include required preparation/loading,
 preprocessing, validation search, selection bookkeeping, chosen refitting,
 forecasting, and serialization. Libraries are initialized beforehand;
 imports and process launch are separately exposed. Wall and CPU time,
 model bytes, and process high-water memory have distinct recorded scopes.
-Let $S_m$ denote method $m$'s search nodes, $F_m$ its final fit and forecast,
-and $m^*$ a validation-selected candidate. Its charged work is
+Let $\mathcal A$ be the candidate-method set, $S_m$ the computational
+steps required to search method $m$, $F_m$ the steps required for its
+final fit and forecasts, and $\mathcal D_{\rm data}$ the shared data
+preparation steps. If $c_v$ is the measured cost of step $v$, $m^*$ is
+the validation-selected method, and $c_{\rm decision}$ is the selection
+bookkeeping cost, the charged total is
 \begin{equation}\label{eq:main-cost}
  C_{\rm val}=\sum_{v\in\mathcal D_{\rm data}\cup
              (\bigcup_{m\in\mathcal A}S_m)\cup F_{m^*}}c_v
              +c_{\rm decision}.
 \end{equation}
-Unique dependency nodes are counted once. A diagnostic selector likewise
+The set unions ensure that a computational step shared by several
+methods is counted once. A diagnostic selector likewise
 pays for all required descriptors and probes, even when it rejects KAHM.
 Acquiring development labels and fitting the small diagnostic regressions
 are separate offline investments. No assumed deployment count is used to
@@ -121,15 +129,17 @@ to evaluate these procedures, not to fit a new selection rule.}
 \label{fig:accuracy-cost}
 \end{figure}
 
-\subsection{The frozen benefit diagnostic}
-Four fixed ridge diagnostics predict
+\subsection{Predicting when KAHM helps}
+Let $\ell_R$ and $\ell_K$ be the scaled test losses of raw RBF and
+raw plus KAHM on a development task. Four ridge diagnostics predict
 $\log[(\ell_R+10^{-12})/(\ell_K+10^{-12})]$ from metadata $M$,
 $M$ plus geometry $G$, $M$ plus a cheap validation probe $P$, or $M+P+G$.
-Metadata describe training size, horizon/history ratio, and lag-one
-autocorrelation; geometry adds gate entropy and an affine-projection
-residual. The paid probe compares reduced-capacity raw/KAHM fits on
-validation data. A positive estimated log benefit selects KAHM; ties
-select raw. Development standardization and training hold out whole source
+The vector $M$ describes training size, horizon/history ratio, and
+lag-one autocorrelation. The geometric vector $G$ contains gate entropy
+and an affine-projection residual; $P$ is the scalar log-loss ratio
+from a reduced-capacity validation probe. The paid probe compares reduced-capacity raw/KAHM fits on
+validation data. A positive estimated log benefit selects KAHM; all other estimates
+select raw RBF. Development standardization and training hold out whole source
 families. All variants are then fitted on development and frozen before
 confirmation; confirmation outcomes cannot choose the variant or threshold.
 

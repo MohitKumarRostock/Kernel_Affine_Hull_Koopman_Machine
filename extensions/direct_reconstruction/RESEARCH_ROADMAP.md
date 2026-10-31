@@ -1,40 +1,29 @@
-# Research roadmap after the direct-reconstruction experiment
+# Direct reconstruction training: scope and relation to subsequent studies
 
-The next scientific priority is to identify **what predictive information the KAHM reconstruction adds beyond matched affine, locality and RBF-local representations, after accounting for strong raw-input baselines and cost**. The completed study demonstrates a substantial training effect within KAHM on Van der Pol, but no positive primary interval against an equally shape-trained non-KAHM local control. Further complexity needs a specific, testable reason to improve prediction. [Findings](FINDINGS.md) · [Primary results](results/primary_contrasts.csv)
+The direct-training experiment evaluates a specified intervention on KAHM bandwidths and gate temperatures. The representation keeps its reference observations, principal directions, covariance estimates, and original reference regularization fixed. Forecasting error on the geometry-training partition determines the bounded parameters, and a separate validation partition selects the residual-predictor penalty and correction strength.
 
-## Status of the proposed directions
+## Findings and remaining questions
 
-| Direction | Current status | What remains open |
-|---|---|---|
-| Train geometry for the final forecast and horizon | **Implemented and tested**, for bounded KAHM bandwidths and temperatures with fixed references, covariance, principal directions and original regularization. The 18-comparison family gives two positive, six negative and ten unresolved intervals. | The benefit is conditional. Reference locations, partition memberships, covariance, principal directions and decoder family were held fixed. A distinctive advantage over matched alternatives is unestablished. |
-| Reduce useful geometry's cost through bounded incremental updates | **Not executed as a forecasting experiment.** The current study measures a static fitting and prediction pipeline. | Accuracy under changing data, label delays, update latency, incremental memory, reference refreshes and fallback behavior require a new protocol. Fixed-feature ridge identities do not demonstrate incremental KAHM geometry. |
-| Establish broad natural-source transfer | **Not established.** Three planned rideshare tasks lack B windows; the full four-collection aggregate is undefined. Seven available series provide descriptive evidence from three collections. | A new evaluation must state its feasibility and missing-data rules before source selection and reserve untouched evaluation evidence. |
+The complete adjusted synthetic comparison family has two favorable, six unfavorable, and ten unresolved intervals for KAHM. One favorable comparison identifies a substantial improvement over its own gate-only variant on Van der Pol. No favorable primary interval establishes superiority over an equally trained non-KAHM local control. The [findings](FINDINGS.md) report all methods, measured costs, and primary comparisons.
 
-These statuses concern the particular procedures and evidence in this repository. They neither prove that all KAHM forecasters fail nor promise that another intervention will succeed. [Frozen scope and interpretation rule](PROTOCOL.md)
+Three planned rideshare tasks contain no complete geometry-training windows. The full four-collection natural-data aggregate is therefore undefined. The seven available series provide descriptive evidence from three collections; they do not replace the complete planned aggregate. These restrictions remain part of the study's interpretation.
 
-## First: test a predictive mechanism
+The central unresolved issue is the incremental forecasting value of the KAHM construction after controlling for predictive supervision, decoder capacity, and simpler geometric features. A lower training loss or a gain over a restricted baseline does not, by itself, answer that question.
 
-A focused next question is whether a prespecified KAHM reconstruction feature contains forecast-relevant residual information that the matched controls cannot exploit with the same decoder and search opportunity. The present decoder receives affinities and gated principal coordinates. A possible development hypothesis is that directional reconstruction information, rather than only its folding-score gate, matters for a particular horizon or dynamical regime. That is an untested example, not an established explanation or a selected next method.
+## Distinct interventions in the research program
 
-Before a new confirmation run:
+| Study | Intervention | Evidence and scope |
+| --- | --- | --- |
+| Direct reconstruction training | Horizon-specific bandwidths and gate temperatures, with matched trainable local controls | Static forecasting with a fixed optimization budget; no established KAHM advantage over equally trained local alternatives |
+| [Online adaptation](../adaptive_development/REPRODUCING.md) | Reference refreshes and residual-predictor updates with finite storage | A separate chronological development study; both capacity tiers fail the stated accuracy criteria |
+| [Reconstruction departures](../reconstruction_mechanism/README.md) | Full-coordinate departures from affine reconstruction, radial feature bounds, and a centered ridge predictor | A separate matched experiment; improvement over the common basis, without establishing the prescribed advantage over all forecasting controls |
 
-1. Specify one mechanism and its predicted failure cases. Use the now-inspected studies for development and diagnosis only.
-2. Change one identified component. Match feature width or declared capacity, decoder family, supervision, selection information, numerical safeguards, and optimization opportunity across the local controls.
-3. Retain raw RBF, boosting and an explicitly selected non-KAHM policy. Improvement over ridge or KAHM's own fixed map alone is insufficient.
-4. Decide what would count as a useful effect and which resource limits matter for the intended application. Do not choose that threshold after inspecting evaluation losses.
+These interventions have different data, selection rules, and statistical units. Their outcomes are reported separately. The online study does not continually optimize the direct-training study's bandwidth and temperature parameters. The reconstruction-departure experiment evaluates a fixed geometry with a bounded correction and does not establish online geometry stability.
 
-This makes a negative result informative: it can reject the proposed mechanism or identify a decoder or regime limitation without being recast as a positive KAHM contribution.
+## Interpretation
 
-## Second: evaluate bounded updates if useful geometry warrants them
+A useful geometric representation must make relevant functions accessible to the chosen decoder. Deterministic features do not add information to an observed history, but they can change how efficiently a restricted predictor expresses a relationship. Exact feature-span arguments, finite-sample error, numerical stability, and measured computational cost address different parts of that claim.
 
-A subsequent streaming study should compare bounded KAHM updates, full geometry refreshes, and equally optimized simpler procedures under one chronological protocol. It should specify reference limits, eviction or replacement rules, refresh triggers, whether covariance and principal directions change, and which updates are exact or approximate. A bandwidth change alters both reference and query kernels; retaining an old factorization without a stated approximation defines a different procedure.
+The direct-training results support a conditional effect of forecast supervision within KAHM. They do not prove that every KAHM forecaster fails, and they do not justify assuming that additional parameters, references, or adaptation will improve prediction. A broader claim requires a specified target population, comparison set, selection budget, and evaluation procedure.
 
-At every forecast origin, only already available observations and matured labels may influence updates. Predictions should be recorded before future labels are revealed. Measure forecast error together with per-update and prediction latency, peak incremental memory, refresh frequency, and numerical fallback events. Include the work required to select, maintain and occasionally rebuild the procedure. A low-cost fixed-feature update is not evidence that useful KAHM geometry can be maintained at that cost.
-
-## Reserve evidence for either next study
-
-Publish the numerical code, analysis, candidate family, resource rules, roster and input provenance before evaluation. Declare which training or development-period availability information may determine eligibility; specify missing-history, missing-target and delayed-label handling. Preserve unavailable tasks and failed fits instead of replacing them after outcomes are seen.
-
-Use new independent seeds for new known-law claims and genuinely reserved collections or chronological evaluation periods for transfer claims. Existing D outcomes are now inspected and cannot supply another unseen confirmation. Keep simulation inference at the independent repetition level; related origins and series do not create additional independent source collections. Preserve predictions, selected states, optimizer or update logs, costs, and a complete audit trail. Any later change belongs to a documented amendment or a separately frozen study.
-
-The next result should answer a narrower question with stronger attribution, rather than increase the number of components without establishing what they contribute.
+The [integrated manuscript](../tmlr_integration/README.md) presents the resulting theoretical and empirical account. Each original protocol and scientific checkpoint continues to identify the exact procedure that produced its corresponding results.

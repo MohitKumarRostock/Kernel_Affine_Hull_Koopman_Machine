@@ -1,4 +1,7 @@
-# Reproducing the experiments and paper assets
+# Reproducing the controlled representation experiments
+
+This guide covers the controlled study in this directory. The [integrated manuscript](../tmlr_integration/README.md) combines its evidence with later studies, each of which has a separate reproduction procedure.
+
 
 ## Supported environment
 
@@ -14,7 +17,7 @@ reference setup. Full generated states and predictions occupy roughly 0.4 GB;
 allow at least 1 GB of free space for the run, source copies, summaries, and
 temporary files. Runtime depends on CPU and linear-algebra libraries. Validation
 results from the tested implementation are recorded separately in
-`VALIDATION.json` when the release check is complete.
+the historical `VALIDATION.json` record.
 
 CPU architecture, BLAS, and library versions can affect floating-point results,
 eigenspaces, and clustering. Exact byte equality is required for published
@@ -49,15 +52,14 @@ python -m reproduce full --workers 4 --run-dir runs/reproduction --resume
 
 Resume requires matching execution mode and orchestration/source manifests.
 Completed scientific jobs additionally check their original source signatures.
-An incomplete or corrupted job is not silently accepted. Use a new run directory
-after intentional code changes. Output locations cannot overlap the source,
+Incomplete or corrupted jobs fail validation. Executions using changed code require a new run directory. Output locations cannot overlap the source,
 historical archive, or manuscript directories.
 
 The saved-bank diagnostic command requires `--run-dir` pointing to an already
 completed full run. It inspects 192 banks and replays their original held-out
 inputs without refitting. A command without `--run-dir` performs only the
 paired-outcome checks; it cannot reconstruct bank rank or gate diagnostics from
-the compact archive. Keep such checks under `runs/review-diagnostics`. The
+the compact archive. The example writes those checks to `runs/review-diagnostics`. The
 normal `paper` command preserves the committed `review_*` assets while
 rebuilding the original paper tables and figures.
 
@@ -94,8 +96,7 @@ refits/validates heads consistently with that feature map.
 
 The original `protocol_freeze.json`, `followup_freeze.json`, and
 `numerical_sensitivity_freeze.json` are immutable historical records of internal
-freezes. They were not external preregistrations. The packaging layer never
-rewrites these files to make new output hashes look historical.
+freezes. They were not external preregistrations. Their exact hashes remain separate from those of subsequent executions.
 
 The capacity freeze hashes the original stage1 `records.json`, including its
 timings, because that record set supplied the capacity practical margins. New
@@ -105,8 +106,7 @@ stage1 execution necessarily has new timing metadata. Consequently:
 - `capacity_work/` retains the exact historical stage1 records solely as the
   evidence for the already frozen margins. Its capacity outcomes are generated
   anew in `results_capacity/` and `capacity_records.json`.
-- The unchanged sensitivity runner is directed to the **newly named current
-  execution manifest**, which hashes the newly generated phase4 banks and
+- The sensitivity runner uses a separate execution manifest, which hashes the newly generated phase4 banks and
   results. The original numerical freeze remains unchanged alongside it and
   is linked by its SHA-256 hash.
 - `execution_manifest.json` versions the new orchestration code independently
@@ -128,8 +128,7 @@ The capacity auditor also displays two historical source changes between the
 earlier numerical-margin freeze and the final pre-data amendment that added the
 secondary validation selector. These are the analysis specification and its
 auditor. The unchanged final `followup_freeze.json` binds both final versions;
-the original margin values were not changed. This recorded amendment is retained
-in audit output rather than hidden by rewriting an earlier freeze.
+the original margin values were not changed. The audit reports both source versions and their relationship to the margin specification.
 
 ## Outputs and audits
 
@@ -155,8 +154,7 @@ feature, head, and decoder width where relevant. It reports the maximum MSE
 drift and counts within `rtol=1e-6, atol=1e-10`. If any matched MSE exceeds that
 tolerance, the full command and fresh-run audit return a nonzero validation
 result, retain the execution outputs, and do not label the run a verified
-reproduction. Platform-dependent differences therefore remain visible; they
-are not silently replaced by archived results.
+reproduction. Platform-dependent differences are recorded alongside the original and repeated values.
 
 The prediction audit computes squared residuals and group averages independently
 of the model's own loss function. First-stage primary/selector predictions,
@@ -169,10 +167,7 @@ than accepting stored counts alone. Every reported comparison retains its
 original independent-unit definition.
 
 A completed job marker alone is insufficient: unreadable or truncated prediction
-archives fail the final audit. Preserve such a failed run for inspection and use
-a new run directory for a clean reproduction. `--resume` skips completed phases;
-it does not repair corrupted generated files. Do not edit a freeze or mark an
-unaudited execution complete to bypass the failure.
+archives fail the final audit. The failed run remains available for inspection. A separate run directory is required for a new execution; `--resume` skips completed phases and does not repair corrupted output files.
 
 The committed archive is sufficient to verify all reported aggregate means,
 both paired-statistical families, and the descriptive mechanism tables. Auditing
@@ -185,8 +180,7 @@ The parent repository installs the source workflow
 `ci/kahm-predictive-geometry.yml` at
 `.github/workflows/kahm-predictive-geometry.yml`. It runs smoke checks, archived
 paired diagnostics, and submission packaging on the research branches, and
-uploads the execution manifest, generated assets, and review packages. CI
-does not pretend that a reduced smoke fit reproduces the complete study.
+uploads the execution manifest, generated assets, and review packages. The smoke route verifies reduced execution examples; reproducing the complete study requires the full route.
 
 Source/data licenses and attribution are in `LICENSE` and
 `THIRD_PARTY_NOTICES.md`. Public repository citation metadata are separate from
@@ -208,10 +202,8 @@ the project-author field from the packaged `pyproject.toml`. This does not modif
 the corresponding public repository metadata or any scientific source.
 
 `study/` and `archive/` retain their exact original bytes, including generic
-historical scratch paths. No rewritten historical freeze is presented as an
-original record. Required license notices and published upstream attribution
-are retained and listed as narrow review-view exceptions; the manifest does
-not claim that legitimate attribution contains no names. The package excludes
+historical scratch paths. Historical source and input records retain their original identities. Required license notices and published upstream attribution
+are retained and listed as narrow review-view exceptions; these attributions identify software and data provenance. The package excludes
 Git history, `CITATION.cff`, prior named manuscript PDFs, caches and run outputs.
 See `REVIEWER_README.md` in the generated supplement and
 [TMLR_SUBMISSION.md](TMLR_SUBMISSION.md) for the complete packaging policy.

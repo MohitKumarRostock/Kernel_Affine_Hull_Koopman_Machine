@@ -401,34 +401,25 @@ def build(study: Path, output: Path) -> dict:
         numbers[f"Kvs{suffix}Lower"] = compact(row["simultaneous_one_sided_lower"])
     numbers["LinearLower"] = compact(primary[-1]["simultaneous_one_sided_lower"])
     numbers["LinearNIPassText"] = "passes" if linear_pass else "does not pass"
-    numbers["DecisionText"] = ("advance to separate application testing" if expected_decision == "ADVANCE_TO_APPLICATION"
-                               else "stop this forecasting-performance branch")
+    numbers["DecisionText"] = ("the overall improvement criterion is satisfied" if expected_decision == "ADVANCE_TO_APPLICATION"
+                               else "the overall improvement criterion is not satisfied")
     contents["numbers.tex"] = "% Complete saved-result macros; generated without fitting models.\n" + "\n".join(
         rf"\providecommand{{\RM{key}}}{{{value}}}" for key, value in numbers.items()) + "\n"
 
     summary = [
-        r"The bounded KAHM departure has nonlinear aggregate NMSE $\RMKNonlinearNMSE{}$.",
-        r"Its point relative gains over the common basis, matched bounded RBF departure, raw RBF, boosted trees and C-selected policy are",
-        r"$\RMKvsCommonGain{}\%$, $\RMKvsRBFDepartureGain{}\%$, $\RMKvsRawRBFGain{}\%$, $\RMKvsBoostingGain{}\%$ and $\RMKvsPolicyGain{}\%$, respectively.",
-        r"Positive values denote smaller mean KAHM loss; these percentages are point estimates, not confidence bounds.",
-        rf"{useful_passes} of the five useful-superiority conditions pass, and the linear-control noninferiority condition {numbers['LinearNIPassText']}.",
+        r"The bounded KAHM departure attains nonlinear aggregate normalized mean squared error $\RMKNonlinearNMSE{}$.",
+        r"Its point relative gains over the common basis, matched bounded RBF departure, raw RBF, boosted trees, and the C-selected non-KAHM procedure are",
+        r"$\RMKvsCommonGain{}\%$, $\RMKvsRBFDepartureGain{}\%$, $\RMKvsRawRBFGain{}\%$, $\RMKvsBoostingGain{}\%$, and $\RMKvsPolicyGain{}\%$, respectively.",
+        r"Positive gains denote smaller mean KAHM loss. These are point estimates; the simultaneous margin bounds are reported in Table~\ref{tab:mechanism-primary}.",
+        rf"Of the five nonlinear improvement criteria, {useful_passes} is satisfied; the linear-control noninferiority criterion {numbers['LinearNIPassText']}.",
     ]
-    summary.append(r"Every declared feature, coefficient, correction and maximum-error screen passes."
+    summary.append(r"All feature-, coefficient-, correction-, and maximum-error checks are satisfied."
                    if stable else
-                   r"The stability screen fails on \RMStabilityFailures{} task suites; these failures are retained in the reported decision.")
-    if read_bool(primary[0]["criterion_established"]):
-        summary.append(r"The comparison with the common basis establishes useful aggregate value for this bounded reconstruction-and-decoder procedure under the declared margin.")
+                   r"At least one stability check fails on \RMStabilityFailures{} task suites.")
     if expected_decision == "STOP_FORECASTING_PERFORMANCE_BRANCH":
-        summary.extend([
-            r"The frozen decision is therefore to \emph{stop this forecasting-performance branch}.",
-            r"The complete required KAHM-specific predictive advantage is not established at the chosen budget. This does not prove equivalence, make all reconstruction features useless, or establish impossibility for every time-series law.",
-            r"A favorable descriptive law, noise level or horizon cannot replace the aggregate specified before evaluation.",
-        ])
+        summary.append(r"The results therefore do not satisfy the prespecified overall improvement criterion.")
     else:
-        summary.extend([
-            r"All statistical and engineering conditions pass, giving the frozen decision to \emph{advance to separate application testing}.",
-            r"The demonstrated value is conditional on these known numerical laws, observation procedures and restricted decoders; it does not establish application effectiveness or justify online adaptation without further reserved evidence.",
-        ])
+        summary.append(r"The results satisfy the prespecified overall improvement criterion under the tested laws and observation procedures.")
     contents["result_summary.tex"] = "\n".join(summary) + "\n"
 
     # Descriptive condition summaries. There are no post-selection confidence bars.

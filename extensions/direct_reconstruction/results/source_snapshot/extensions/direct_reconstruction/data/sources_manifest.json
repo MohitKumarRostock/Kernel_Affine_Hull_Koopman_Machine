@@ -1,0 +1,1330 @@
+{
+  "schema_version": 1,
+  "study": "direct_reconstruction_reserved_natural_v1",
+  "selection_salt": "kahm-direct-reconstruction-reserved-natural-v1",
+  "selection_rule": "For each source: filter source metadata; require >=96 finite A windows and positive A-only loss scale; choose smallest SHA256(salt + NUL + source_key + NUL + series_name).",
+  "eligibility_information": "Only metadata, series length, and numerical values in the initial raw A prefix.",
+  "future_screening": "None. Retain selected tasks even if later segments contain no eligible windows; report such failures.",
+  "prior_inspected_collections_excluded": [
+    "Electricity weekly",
+    "NN5 daily",
+    "Tourism monthly",
+    "FRED-MD",
+    "Traffic weekly (road occupancy)",
+    "Hospital monthly",
+    "Saugeen River",
+    "US births",
+    "Weather",
+    "Solar Weekly",
+    "COVID-19 Deaths",
+    "Car Parts",
+    "Australian state electricity",
+    "Bitcoin activity indicators",
+    "Melbourne pedestrian counts",
+    "KDD2018 air quality"
+  ],
+  "pre_freeze_design_log": "PRE_FREEZE_DESIGN_LOG.md",
+  "split_rule": "Raw-index boundaries [0,floor(.50*n),floor(.70*n),floor(.85*n),n].",
+  "window_rule": "At origin t, X=y[t-L+1:t+1] oldest-to-newest; Y[j]=y[t+offsets[j]]. All requested targets must lie inside their segment; histories may overlap earlier segments. Exclude windows with nonfinite history or requested target; do not impute or require unused intermediate targets.",
+  "maturity_rule": "Prior-segment labels and inner-A training labels must be observed by the next segment's first query origin; observations at the origin are available.",
+  "row_caps": {
+    "A": 512,
+    "B": 128,
+    "C": 128,
+    "D": 128
+  },
+  "row_cap_rule": "If n>cap, select available row indices floor(j*(n-1)/(cap-1)), j=0,...,cap-1; otherwise keep every available row.",
+  "loss_scale_rule": "Mean squared lag-p differences using finite pairs wholly in raw A. If unavailable, nonfinite or nonpositive, use mean squared lag-1 differences wholly in A. Require a positive finite scale. Scaled MSE = raw MSE / this scale (no square root).",
+  "inner_A_rule": "The final 20% of retained chronological A origins form inner validation. Inner training uses earlier A rows satisfying origin+Hmax <= first validation origin. Purged rows remain available for final A fitting.",
+  "seasonal_naive_rule": "At origin t and target offset h, predict y[t+h-ceil(h/p)*p]. With p=1 this is persistence. All p<=L.",
+  "estimand": "Available finite windows within each selected series, equal-series means within each source, then equal-source means. These four chosen collections support descriptive comparisons, not population confidence intervals.",
+  "task_count": 10,
+  "source_count": 4,
+  "sources": [
+    {
+      "source_key": "dominick_weekly",
+      "record_id": 4654802,
+      "title": "Dominick Dataset",
+      "filename": "dominick_dataset.zip",
+      "expected_bytes": 12328941,
+      "expected_md5": "c84cefdce4775399b5eff23085c15013",
+      "n_select": 3,
+      "L": 52,
+      "p": 52,
+      "offsets": [
+        1,
+        2,
+        4
+      ],
+      "frequency": "weekly",
+      "original_source": "https://www.chicagobooth.edu/research/kilts/datasets/dominicks",
+      "description": "Weekly retailer SKU profit series.",
+      "doi": "10.5281/zenodo.4654802",
+      "record_url": "https://zenodo.org/records/4654802",
+      "metadata_url": "https://zenodo.org/api/records/4654802",
+      "download_url": "https://zenodo.org/api/records/4654802/files/dominick_dataset.zip/content",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "license_scope": "License declared by the pinned Zenodo archive record.",
+      "creators": [
+        {
+          "name": "Godahewa, Rakshitha",
+          "affiliation": "PhD Student at Monash University",
+          "orcid": "0000-0002-1333-7249"
+        },
+        {
+          "name": "Bergmeir, Christoph",
+          "affiliation": "Lecturer at Monash University",
+          "orcid": "0000-0002-3665-9021"
+        },
+        {
+          "name": "Webb, Geoff",
+          "affiliation": "Professor at Monash University",
+          "orcid": "0000-0001-9963-5169"
+        },
+        {
+          "name": "Montero-Manso, Pablo",
+          "affiliation": "Lecturer at University of Sydney",
+          "orcid": "0000-0003-3816-0985"
+        },
+        {
+          "name": "Hyndman, Rob",
+          "affiliation": "Professor at Monash University",
+          "orcid": "0000-0002-2140-5352"
+        }
+      ],
+      "publication_date": "2020-08-27",
+      "version": "2",
+      "archive_bytes": 12328941,
+      "archive_md5": "c84cefdce4775399b5eff23085c15013",
+      "archive_sha256": "3025a5e6abc152b700b13cc84d9056c99398651e508803b20f2fe76156f7bd96",
+      "tsf_member": "dominick_dataset.tsf",
+      "tsf_member_bytes": 75954427,
+      "tsf_member_sha256": "aba9ba781d9737e8ddd60a866f96a4f5e1823c521d27a96100191320ea0c8dec",
+      "tsf_header": [
+        "# Dataset Information",
+        "# This dataset contains 115704 weekly time series representing the profit of individual stock keeping units from a retailer.",
+        "#",
+        "# For more details, please refer to",
+        "# Dominicks dataset, 2019. https://www.chicagobooth.edu/research/kilts/datasets/dominicks.",
+        "#",
+        "@relation Dominick",
+        "@attribute series_name string",
+        "@frequency weekly",
+        "@missing false",
+        "@equallength false",
+        "@data"
+      ],
+      "source_series_count": 115704,
+      "metadata_eligible_series_count": 115704,
+      "A_eligible_series_count": 17082,
+      "selected_series_ids_in_hash_order": [
+        "T7830",
+        "T25851",
+        "T108533"
+      ],
+      "selected_task_ids": [
+        "dominick_weekly__01",
+        "dominick_weekly__02",
+        "dominick_weekly__03"
+      ]
+    },
+    {
+      "source_key": "rideshare_price_hourly",
+      "record_id": 5122114,
+      "title": "Rideshare Dataset (with Missing Values)",
+      "filename": "rideshare_dataset_with_missing_values.zip",
+      "expected_bytes": 1031826,
+      "expected_md5": "b5faa7112787bb6d42e5de56462de7c7",
+      "n_select": 3,
+      "L": 24,
+      "p": 24,
+      "offsets": [
+        1,
+        3,
+        6
+      ],
+      "frequency": "hourly",
+      "metadata_filter": {
+        "type": "price_mean"
+      },
+      "original_source": "https://www.kaggle.com/ravi72munde/uber-lyft-cab-prices",
+      "description": "Hourly rideshare mean-price series; other attribute types excluded.",
+      "provenance_note": "The archive description names a geography that has not been independently reconciled; no geography-dependent claim is made.",
+      "doi": "10.5281/zenodo.5122114",
+      "record_url": "https://zenodo.org/records/5122114",
+      "metadata_url": "https://zenodo.org/api/records/5122114",
+      "download_url": "https://zenodo.org/api/records/5122114/files/rideshare_dataset_with_missing_values.zip/content",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "license_scope": "License declared by the pinned Zenodo archive record.",
+      "creators": [
+        {
+          "name": "Godahewa, Rakshitha",
+          "affiliation": "PhD Student at Monash University",
+          "orcid": "0000-0002-1333-7249"
+        },
+        {
+          "name": "Bergmeir, Christoph",
+          "affiliation": "Lecturer at Monash University",
+          "orcid": "0000-0002-3665-9021"
+        },
+        {
+          "name": "Webb, Geoff",
+          "affiliation": "Professor at Monash University",
+          "orcid": "0000-0001-9963-5169"
+        },
+        {
+          "name": "Hyndman, Rob",
+          "affiliation": "Professor at Monash University",
+          "orcid": "0000-0002-2140-5352"
+        },
+        {
+          "name": "Montero-Manso, Pablo",
+          "affiliation": "Lecturer at University of Sydney",
+          "orcid": "0000-0003-3816-0985"
+        }
+      ],
+      "publication_date": "2021-07-22",
+      "version": "1",
+      "archive_bytes": 1031826,
+      "archive_md5": "b5faa7112787bb6d42e5de56462de7c7",
+      "archive_sha256": "5f83feec4970ff306108f50ac3c13f1adddbf96274226bc0b03655dfdab04567",
+      "tsf_member": "rideshare_dataset_with_missing_values.tsf",
+      "tsf_member_bytes": 6081008,
+      "tsf_member_sha256": "949888c855ad7b2b1c3c09ee7e4c143f1a4d8f5650099f5d4b39c3ae860e0a6e",
+      "tsf_header": [
+        "# Dataset Information",
+        "# This dataset contains various time series representations of attributes related to uber and lyft rideshare services for various locations in New York  between 26/11/2018 and 18/12/2018.",
+        "# For a given starting location, provider and service, the following types are represented: 'price_min', 'price_mean', 'price_max', 'distance_min', 'distance_mean', 'distance_max', 'surge_min', 'surge_mean', 'surge_max', 'api_calls', 'temp', 'rain', 'humidity', 'clouds' and 'wind'.",
+        "#",
+        "# For more details, please refer to",
+        "# RaviMunde, 2019. Uber & lyft cab prices. URL https://www.kaggle.com/ravi72munde/uber-lyft-cab-prices",
+        "# ravi72munde, 2018. scala-spark-cab-rides-predictions. URL https://github.com/ravi72munde/scala-spark-cab-rides-predictions",
+        "#",
+        "@relation rideshare",
+        "@attribute series_name string",
+        "@attribute source_location string",
+        "@attribute provider_name string",
+        "@attribute provider_service string",
+        "@attribute type string",
+        "@attribute start_timestamp date",
+        "@frequency hourly",
+        "@missing true",
+        "@equallength true",
+        "@data"
+      ],
+      "source_series_count": 2304,
+      "metadata_eligible_series_count": 144,
+      "A_eligible_series_count": 144,
+      "selected_series_ids_in_hash_order": [
+        "T1809",
+        "T1825",
+        "T2401"
+      ],
+      "selected_task_ids": [
+        "rideshare_price_hourly__01",
+        "rideshare_price_hourly__02",
+        "rideshare_price_hourly__03"
+      ]
+    },
+    {
+      "source_key": "wikipedia_daily",
+      "record_id": 4656080,
+      "title": "Kaggle Wikipedia Web Traffic Dataset (with Missing Values)",
+      "filename": "kaggle_web_traffic_dataset_with_missing_values.zip",
+      "expected_bytes": 145485324,
+      "expected_md5": "144bd663c10656115b2bab14c017c6a4",
+      "n_select": 3,
+      "L": 28,
+      "p": 7,
+      "offsets": [
+        1,
+        3,
+        7
+      ],
+      "frequency": "daily",
+      "original_source": "https://www.kaggle.com/c/web-traffic-time-series-forecasting",
+      "description": "Daily Wikipedia page-hit series; missing observations retained.",
+      "doi": "10.5281/zenodo.4656080",
+      "record_url": "https://zenodo.org/records/4656080",
+      "metadata_url": "https://zenodo.org/api/records/4656080",
+      "download_url": "https://zenodo.org/api/records/4656080/files/kaggle_web_traffic_dataset_with_missing_values.zip/content",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "license_scope": "License declared by the pinned Zenodo archive record.",
+      "creators": [
+        {
+          "name": "Godahewa, Rakshitha",
+          "affiliation": "PhD Student at Monash University",
+          "orcid": "0000-0002-1333-7249"
+        },
+        {
+          "name": "Bergmeir, Christoph",
+          "affiliation": "Lecturer at Monash University",
+          "orcid": "0000-0002-3665-9021"
+        },
+        {
+          "name": "Webb, Geoff",
+          "affiliation": "Professor at Monash University",
+          "orcid": "0000-0001-9963-5169"
+        },
+        {
+          "name": "Hyndman, Rob",
+          "affiliation": "Professor at Monash University",
+          "orcid": "0000-0002-2140-5352"
+        },
+        {
+          "name": "Montero-Manso, Pablo",
+          "affiliation": "Lecturer at University of Sydney",
+          "orcid": "0000-0003-3816-0985"
+        }
+      ],
+      "publication_date": "2020-06-13",
+      "version": "3",
+      "archive_bytes": 145485324,
+      "archive_md5": "144bd663c10656115b2bab14c017c6a4",
+      "archive_sha256": "44e10fc187475f673e2aac837f5f54cf32333fed25222d006f287355ec8699a9",
+      "tsf_member": "kaggle_web_traffic_dataset_with_missing_values.tsf",
+      "tsf_member_bytes": 409136715,
+      "tsf_member_sha256": "d986d64cd1aa4a3ac8d35c5bde80adb0acd80d2ec6532c9aabe0776af8be9f95",
+      "tsf_header": [
+        "# Dataset Information",
+        "# This dataset was used in the Kaggle Wikipedia Web Traffic forecasting competition.",
+        "# It contains 145063 daily time series representing the number of hits or web traffic for a set of Wikipedia pages from 2015-07-01 to 2017-09-10.",
+        "#",
+        "# For more details, please refer to",
+        "# Google, 2017. Web traffic time series forecasting. URL https://www.kaggle.com/c/web-traffic-time-series-forecasting",
+        "#",
+        "@relation Kaggle_Wikipedia_Web_Traffic",
+        "@attribute series_name string",
+        "@attribute start_timestamp date",
+        "@frequency daily",
+        "@horizon 59",
+        "@missing true",
+        "@equallength true",
+        "@data"
+      ],
+      "source_series_count": 145063,
+      "metadata_eligible_series_count": 145063,
+      "A_eligible_series_count": 130539,
+      "selected_series_ids_in_hash_order": [
+        "T81727",
+        "T132954",
+        "T138504"
+      ],
+      "selected_task_ids": [
+        "wikipedia_daily__01",
+        "wikipedia_daily__02",
+        "wikipedia_daily__03"
+      ]
+    },
+    {
+      "source_key": "sunspot_daily",
+      "record_id": 4654773,
+      "title": "Sunspot Dataset (with Missing Values)",
+      "filename": "sunspot_dataset_with_missing_values.zip",
+      "expected_bytes": 68865,
+      "expected_md5": "9d25d55656f0fa6ad78e905d5e236727",
+      "n_select": 1,
+      "L": 28,
+      "p": 1,
+      "offsets": [
+        1,
+        3,
+        7
+      ],
+      "frequency": "daily",
+      "tail": 4096,
+      "original_source": "https://www.sidc.be/silso/newdataset",
+      "description": "One daily sunspot-number series, fixed final 4096 observations.",
+      "doi": "10.5281/zenodo.4654773",
+      "record_url": "https://zenodo.org/records/4654773",
+      "metadata_url": "https://zenodo.org/api/records/4654773",
+      "download_url": "https://zenodo.org/api/records/4654773/files/sunspot_dataset_with_missing_values.zip/content",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "license_scope": "License declared by the pinned Zenodo archive record.",
+      "creators": [
+        {
+          "name": "Godahewa, Rakshitha",
+          "affiliation": "PhD Student at Monash University",
+          "orcid": "0000-0002-1333-7249"
+        },
+        {
+          "name": "Bergmeir, Christoph",
+          "affiliation": "Lecturer at Monash University",
+          "orcid": "0000-0002-3665-9021"
+        },
+        {
+          "name": "Webb, Geoff",
+          "affiliation": "Professor at Monash University",
+          "orcid": "0000-0001-9963-5169"
+        },
+        {
+          "name": "Hyndman, Rob",
+          "affiliation": "Professor at Monash University",
+          "orcid": "0000-0002-2140-5352"
+        },
+        {
+          "name": "Montero-Manso, Pablo",
+          "affiliation": "Lecturer at University of Sydney",
+          "orcid": "0000-0003-3816-0985"
+        }
+      ],
+      "publication_date": "2020-06-11",
+      "version": "4",
+      "archive_bytes": 68865,
+      "archive_md5": "9d25d55656f0fa6ad78e905d5e236727",
+      "archive_sha256": "f83d60e56830b30890d0c938dd87e3446658d5fc2b65164b8b3003d8d52ca19e",
+      "tsf_member": "sunspot_dataset_with_missing_values.tsf",
+      "tsf_member_bytes": 231660,
+      "tsf_member_sha256": "5e1cdc7bb0c5d35064032034a1fd4b90a85715d0e4676b5406d102ca75700b9b",
+      "tsf_header": [
+        "# Dataset Information",
+        "# This dataset contains a single very long daily time series of sunspot numbers from 1818-01-08 to 2020-05-31.",
+        "#",
+        "# For more details, please refer to",
+        "# Sunspot, 2015. Sunspot number version 2.0: new data and conventions. URL http://www.sidc.be/silso/newdataset",
+        "#",
+        "@relation Sunspot",
+        "@attribute series_name string",
+        "@attribute start_timestamp date",
+        "@frequency daily",
+        "@missing true",
+        "@equallength true",
+        "@data"
+      ],
+      "source_series_count": 1,
+      "metadata_eligible_series_count": 1,
+      "A_eligible_series_count": 1,
+      "selected_series_ids_in_hash_order": [
+        "T1"
+      ],
+      "selected_task_ids": [
+        "sunspot_daily__01"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "dominick_weekly__01",
+      "source_key": "dominick_weekly",
+      "series_id": "T7830",
+      "attributes": {
+        "series_name": "T7830"
+      },
+      "identifier_hash": "00029b9d0c57a1999093b8f9612ec73a64dd4a5b634ecf1a13c56f5f5861b91a",
+      "original_raw_length": 393,
+      "raw_length": 393,
+      "raw_start_index": 0,
+      "loss_scale": 124.59576944444446,
+      "loss_scale_method": "seasonal_mse",
+      "loss_scale_pair_count": 144,
+      "A_eligible_window_count": 141,
+      "L": 52,
+      "p": 52,
+      "Hmax": 4,
+      "offsets": [
+        1,
+        2,
+        4
+      ],
+      "npz_path": "data/dominick_weekly__01.npz",
+      "prepared_npz_sha256": "265cbc454494f1d322ec77f14972b477cfde3043779e2ae8587d0a6772cd764e",
+      "prepared_npz_bytes": 15800,
+      "split_bounds": [
+        0,
+        196,
+        275,
+        334,
+        393
+      ],
+      "segment_bounds": {
+        "A": [
+          0,
+          196
+        ],
+        "B": [
+          196,
+          275
+        ],
+        "C": [
+          275,
+          334
+        ],
+        "D": [
+          334,
+          393
+        ]
+      },
+      "split_counts": {
+        "A": {
+          "structurally_available_windows": 141,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 141,
+          "retained_windows": 141,
+          "cap": 512
+        },
+        "B": {
+          "structurally_available_windows": 76,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 76,
+          "retained_windows": 76,
+          "cap": 128
+        },
+        "C": {
+          "structurally_available_windows": 56,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 56,
+          "retained_windows": 56,
+          "cap": 128
+        },
+        "D": {
+          "structurally_available_windows": 56,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 56,
+          "retained_windows": 56,
+          "cap": 128
+        }
+      },
+      "inner_A": {
+        "validation_rule": "last 20% of chronologically ordered capped A rows (integer split at floor(4*n/5))",
+        "training_rule": "earlier A rows whose max-horizon label is observed by the first validation origin",
+        "first_validation_origin": 163,
+        "train_rows": 109,
+        "validation_rows": 29,
+        "purged_rows": 3
+      }
+    },
+    {
+      "task_id": "dominick_weekly__02",
+      "source_key": "dominick_weekly",
+      "series_id": "T25851",
+      "attributes": {
+        "series_name": "T25851"
+      },
+      "identifier_hash": "0004cfe23ec72e3f8ce7aaa70f60be8705cbe2fa3b2cdbf828a2ee03f303eed2",
+      "original_raw_length": 393,
+      "raw_length": 393,
+      "raw_start_index": 0,
+      "loss_scale": 105.66274166666668,
+      "loss_scale_method": "seasonal_mse",
+      "loss_scale_pair_count": 144,
+      "A_eligible_window_count": 141,
+      "L": 52,
+      "p": 52,
+      "Hmax": 4,
+      "offsets": [
+        1,
+        2,
+        4
+      ],
+      "npz_path": "data/dominick_weekly__02.npz",
+      "prepared_npz_sha256": "9a666d63b49a6195a7ff03ef853e12a3cb8de2b6568d3969df83c504d0f8e753",
+      "prepared_npz_bytes": 18256,
+      "split_bounds": [
+        0,
+        196,
+        275,
+        334,
+        393
+      ],
+      "segment_bounds": {
+        "A": [
+          0,
+          196
+        ],
+        "B": [
+          196,
+          275
+        ],
+        "C": [
+          275,
+          334
+        ],
+        "D": [
+          334,
+          393
+        ]
+      },
+      "split_counts": {
+        "A": {
+          "structurally_available_windows": 141,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 141,
+          "retained_windows": 141,
+          "cap": 512
+        },
+        "B": {
+          "structurally_available_windows": 76,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 76,
+          "retained_windows": 76,
+          "cap": 128
+        },
+        "C": {
+          "structurally_available_windows": 56,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 56,
+          "retained_windows": 56,
+          "cap": 128
+        },
+        "D": {
+          "structurally_available_windows": 56,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 56,
+          "retained_windows": 56,
+          "cap": 128
+        }
+      },
+      "inner_A": {
+        "validation_rule": "last 20% of chronologically ordered capped A rows (integer split at floor(4*n/5))",
+        "training_rule": "earlier A rows whose max-horizon label is observed by the first validation origin",
+        "first_validation_origin": 163,
+        "train_rows": 109,
+        "validation_rows": 29,
+        "purged_rows": 3
+      }
+    },
+    {
+      "task_id": "dominick_weekly__03",
+      "source_key": "dominick_weekly",
+      "series_id": "T108533",
+      "attributes": {
+        "series_name": "T108533"
+      },
+      "identifier_hash": "000a459d2bb2d1fbf2b9ac19c31c162b58c86a20959e184b07b96eab0d7fc0a8",
+      "original_raw_length": 393,
+      "raw_length": 393,
+      "raw_start_index": 0,
+      "loss_scale": 272.0578801696882,
+      "loss_scale_method": "seasonal_mse",
+      "loss_scale_pair_count": 144,
+      "A_eligible_window_count": 141,
+      "L": 52,
+      "p": 52,
+      "Hmax": 4,
+      "offsets": [
+        1,
+        2,
+        4
+      ],
+      "npz_path": "data/dominick_weekly__03.npz",
+      "prepared_npz_sha256": "3204ceb2802e2af68d0ffbc45655f875593a63e2cfd461fad9cd9e142dddc514",
+      "prepared_npz_bytes": 19857,
+      "split_bounds": [
+        0,
+        196,
+        275,
+        334,
+        393
+      ],
+      "segment_bounds": {
+        "A": [
+          0,
+          196
+        ],
+        "B": [
+          196,
+          275
+        ],
+        "C": [
+          275,
+          334
+        ],
+        "D": [
+          334,
+          393
+        ]
+      },
+      "split_counts": {
+        "A": {
+          "structurally_available_windows": 141,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 141,
+          "retained_windows": 141,
+          "cap": 512
+        },
+        "B": {
+          "structurally_available_windows": 76,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 76,
+          "retained_windows": 76,
+          "cap": 128
+        },
+        "C": {
+          "structurally_available_windows": 56,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 56,
+          "retained_windows": 56,
+          "cap": 128
+        },
+        "D": {
+          "structurally_available_windows": 56,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 56,
+          "retained_windows": 56,
+          "cap": 128
+        }
+      },
+      "inner_A": {
+        "validation_rule": "last 20% of chronologically ordered capped A rows (integer split at floor(4*n/5))",
+        "training_rule": "earlier A rows whose max-horizon label is observed by the first validation origin",
+        "first_validation_origin": 163,
+        "train_rows": 109,
+        "validation_rows": 29,
+        "purged_rows": 3
+      }
+    },
+    {
+      "task_id": "rideshare_price_hourly__01",
+      "source_key": "rideshare_price_hourly",
+      "series_id": "T1809",
+      "attributes": {
+        "series_name": "T1809",
+        "source_location": "Northeastern University",
+        "provider_name": "Uber",
+        "provider_service": "UberPool",
+        "type": "price_mean",
+        "start_timestamp": "2018-11-26 06-00-00"
+      },
+      "identifier_hash": "013a56baf94a21a9996358b740516780fe604cf281cddf079a60a37f23d8fe89",
+      "original_raw_length": 541,
+      "raw_length": 541,
+      "raw_start_index": 0,
+      "loss_scale": 0.67782437543089,
+      "loss_scale_method": "seasonal_mse",
+      "loss_scale_pair_count": 159,
+      "A_eligible_window_count": 130,
+      "L": 24,
+      "p": 24,
+      "Hmax": 6,
+      "offsets": [
+        1,
+        3,
+        6
+      ],
+      "npz_path": "data/rideshare_price_hourly__01.npz",
+      "prepared_npz_sha256": "60f8aab5aa3b54ce50997b8107aa5a05f29ba745f01ea2b9e2a8a727cc29d742",
+      "prepared_npz_bytes": 16400,
+      "split_bounds": [
+        0,
+        270,
+        378,
+        459,
+        541
+      ],
+      "segment_bounds": {
+        "A": [
+          0,
+          270
+        ],
+        "B": [
+          270,
+          378
+        ],
+        "C": [
+          378,
+          459
+        ],
+        "D": [
+          459,
+          541
+        ]
+      },
+      "split_counts": {
+        "A": {
+          "structurally_available_windows": 241,
+          "excluded_missing_windows": 111,
+          "finite_available_windows": 130,
+          "retained_windows": 130,
+          "cap": 512
+        },
+        "B": {
+          "structurally_available_windows": 103,
+          "excluded_missing_windows": 103,
+          "finite_available_windows": 0,
+          "retained_windows": 0,
+          "cap": 128
+        },
+        "C": {
+          "structurally_available_windows": 76,
+          "excluded_missing_windows": 51,
+          "finite_available_windows": 25,
+          "retained_windows": 25,
+          "cap": 128
+        },
+        "D": {
+          "structurally_available_windows": 77,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 77,
+          "retained_windows": 77,
+          "cap": 128
+        }
+      },
+      "inner_A": {
+        "validation_rule": "last 20% of chronologically ordered capped A rows (integer split at floor(4*n/5))",
+        "training_rule": "earlier A rows whose max-horizon label is observed by the first validation origin",
+        "first_validation_origin": 161,
+        "train_rows": 99,
+        "validation_rows": 26,
+        "purged_rows": 5
+      }
+    },
+    {
+      "task_id": "rideshare_price_hourly__02",
+      "source_key": "rideshare_price_hourly",
+      "series_id": "T1825",
+      "attributes": {
+        "series_name": "T1825",
+        "source_location": "Northeastern University",
+        "provider_name": "Uber",
+        "provider_service": "UberX",
+        "type": "price_mean",
+        "start_timestamp": "2018-11-26 06-00-00"
+      },
+      "identifier_hash": "032bc872dc5e9e7da67ad9231dd564ef323f728c4dd08bf62436745534f5b204",
+      "original_raw_length": 541,
+      "raw_length": 541,
+      "raw_start_index": 0,
+      "loss_scale": 1.0811883072822701,
+      "loss_scale_method": "seasonal_mse",
+      "loss_scale_pair_count": 157,
+      "A_eligible_window_count": 128,
+      "L": 24,
+      "p": 24,
+      "Hmax": 6,
+      "offsets": [
+        1,
+        3,
+        6
+      ],
+      "npz_path": "data/rideshare_price_hourly__02.npz",
+      "prepared_npz_sha256": "fb9c686289602b142c4e941fa6283997ae4b761ae2c3312b635ded21432284aa",
+      "prepared_npz_bytes": 16593,
+      "split_bounds": [
+        0,
+        270,
+        378,
+        459,
+        541
+      ],
+      "segment_bounds": {
+        "A": [
+          0,
+          270
+        ],
+        "B": [
+          270,
+          378
+        ],
+        "C": [
+          378,
+          459
+        ],
+        "D": [
+          459,
+          541
+        ]
+      },
+      "split_counts": {
+        "A": {
+          "structurally_available_windows": 241,
+          "excluded_missing_windows": 113,
+          "finite_available_windows": 128,
+          "retained_windows": 128,
+          "cap": 512
+        },
+        "B": {
+          "structurally_available_windows": 103,
+          "excluded_missing_windows": 103,
+          "finite_available_windows": 0,
+          "retained_windows": 0,
+          "cap": 128
+        },
+        "C": {
+          "structurally_available_windows": 76,
+          "excluded_missing_windows": 51,
+          "finite_available_windows": 25,
+          "retained_windows": 25,
+          "cap": 128
+        },
+        "D": {
+          "structurally_available_windows": 77,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 77,
+          "retained_windows": 77,
+          "cap": 128
+        }
+      },
+      "inner_A": {
+        "validation_rule": "last 20% of chronologically ordered capped A rows (integer split at floor(4*n/5))",
+        "training_rule": "earlier A rows whose max-horizon label is observed by the first validation origin",
+        "first_validation_origin": 161,
+        "train_rows": 97,
+        "validation_rows": 26,
+        "purged_rows": 5
+      }
+    },
+    {
+      "task_id": "rideshare_price_hourly__03",
+      "source_key": "rideshare_price_hourly",
+      "series_id": "T2401",
+      "attributes": {
+        "series_name": "T2401",
+        "source_location": "West End",
+        "provider_name": "Uber",
+        "provider_service": "Black SUV",
+        "type": "price_mean",
+        "start_timestamp": "2018-11-26 06-00-00"
+      },
+      "identifier_hash": "08a74d8aa72e87fb862d86e81fb8aa2373f58b95d736324fe1a1bf7a0592a91f",
+      "original_raw_length": 541,
+      "raw_length": 541,
+      "raw_start_index": 0,
+      "loss_scale": 2.0647423255589366,
+      "loss_scale_method": "seasonal_mse",
+      "loss_scale_pair_count": 156,
+      "A_eligible_window_count": 125,
+      "L": 24,
+      "p": 24,
+      "Hmax": 6,
+      "offsets": [
+        1,
+        3,
+        6
+      ],
+      "npz_path": "data/rideshare_price_hourly__03.npz",
+      "prepared_npz_sha256": "6e7d71e2862a6520da87e7f1615e186ce8537caa255d57bc02481981c9daa9ce",
+      "prepared_npz_bytes": 16575,
+      "split_bounds": [
+        0,
+        270,
+        378,
+        459,
+        541
+      ],
+      "segment_bounds": {
+        "A": [
+          0,
+          270
+        ],
+        "B": [
+          270,
+          378
+        ],
+        "C": [
+          378,
+          459
+        ],
+        "D": [
+          459,
+          541
+        ]
+      },
+      "split_counts": {
+        "A": {
+          "structurally_available_windows": 241,
+          "excluded_missing_windows": 116,
+          "finite_available_windows": 125,
+          "retained_windows": 125,
+          "cap": 512
+        },
+        "B": {
+          "structurally_available_windows": 103,
+          "excluded_missing_windows": 103,
+          "finite_available_windows": 0,
+          "retained_windows": 0,
+          "cap": 128
+        },
+        "C": {
+          "structurally_available_windows": 76,
+          "excluded_missing_windows": 51,
+          "finite_available_windows": 25,
+          "retained_windows": 25,
+          "cap": 128
+        },
+        "D": {
+          "structurally_available_windows": 77,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 77,
+          "retained_windows": 77,
+          "cap": 128
+        }
+      },
+      "inner_A": {
+        "validation_rule": "last 20% of chronologically ordered capped A rows (integer split at floor(4*n/5))",
+        "training_rule": "earlier A rows whose max-horizon label is observed by the first validation origin",
+        "first_validation_origin": 162,
+        "train_rows": 95,
+        "validation_rows": 25,
+        "purged_rows": 5
+      }
+    },
+    {
+      "task_id": "wikipedia_daily__01",
+      "source_key": "wikipedia_daily",
+      "series_id": "T81727",
+      "attributes": {
+        "series_name": "T81727",
+        "start_timestamp": "2015-07-01 00-00-00"
+      },
+      "identifier_hash": "0001f3b5557585956d061d7828b10199f4070e97fd716d19b2dcbff24cf5d2ca",
+      "original_raw_length": 803,
+      "raw_length": 803,
+      "raw_start_index": 0,
+      "loss_scale": 2650.5913705583757,
+      "loss_scale_method": "seasonal_mse",
+      "loss_scale_pair_count": 394,
+      "A_eligible_window_count": 367,
+      "L": 28,
+      "p": 7,
+      "Hmax": 7,
+      "offsets": [
+        1,
+        3,
+        7
+      ],
+      "npz_path": "data/wikipedia_daily__01.npz",
+      "prepared_npz_sha256": "6091820a43f243864bdab83732aba46cad1b5feb6b0d758f8fac9ba76d06f3f4",
+      "prepared_npz_bytes": 26268,
+      "split_bounds": [
+        0,
+        401,
+        562,
+        682,
+        803
+      ],
+      "segment_bounds": {
+        "A": [
+          0,
+          401
+        ],
+        "B": [
+          401,
+          562
+        ],
+        "C": [
+          562,
+          682
+        ],
+        "D": [
+          682,
+          803
+        ]
+      },
+      "split_counts": {
+        "A": {
+          "structurally_available_windows": 367,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 367,
+          "retained_windows": 367,
+          "cap": 512
+        },
+        "B": {
+          "structurally_available_windows": 155,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 155,
+          "retained_windows": 128,
+          "cap": 128
+        },
+        "C": {
+          "structurally_available_windows": 114,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 114,
+          "retained_windows": 114,
+          "cap": 128
+        },
+        "D": {
+          "structurally_available_windows": 115,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 115,
+          "retained_windows": 115,
+          "cap": 128
+        }
+      },
+      "inner_A": {
+        "validation_rule": "last 20% of chronologically ordered capped A rows (integer split at floor(4*n/5))",
+        "training_rule": "earlier A rows whose max-horizon label is observed by the first validation origin",
+        "first_validation_origin": 320,
+        "train_rows": 287,
+        "validation_rows": 74,
+        "purged_rows": 6
+      }
+    },
+    {
+      "task_id": "wikipedia_daily__02",
+      "source_key": "wikipedia_daily",
+      "series_id": "T132954",
+      "attributes": {
+        "series_name": "T132954",
+        "start_timestamp": "2015-07-01 00-00-00"
+      },
+      "identifier_hash": "000228e963bbd9c5c5dff25d3fd2f1167c95d06ee8f61723a602fe46d5a13c59",
+      "original_raw_length": 803,
+      "raw_length": 803,
+      "raw_start_index": 0,
+      "loss_scale": 1586.8857868020305,
+      "loss_scale_method": "seasonal_mse",
+      "loss_scale_pair_count": 394,
+      "A_eligible_window_count": 367,
+      "L": 28,
+      "p": 7,
+      "Hmax": 7,
+      "offsets": [
+        1,
+        3,
+        7
+      ],
+      "npz_path": "data/wikipedia_daily__02.npz",
+      "prepared_npz_sha256": "b1c930cd6b298f3dee8b57fceaf6bff26b518dcd164bba8610c01f6ecd5bcd69",
+      "prepared_npz_bytes": 25815,
+      "split_bounds": [
+        0,
+        401,
+        562,
+        682,
+        803
+      ],
+      "segment_bounds": {
+        "A": [
+          0,
+          401
+        ],
+        "B": [
+          401,
+          562
+        ],
+        "C": [
+          562,
+          682
+        ],
+        "D": [
+          682,
+          803
+        ]
+      },
+      "split_counts": {
+        "A": {
+          "structurally_available_windows": 367,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 367,
+          "retained_windows": 367,
+          "cap": 512
+        },
+        "B": {
+          "structurally_available_windows": 155,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 155,
+          "retained_windows": 128,
+          "cap": 128
+        },
+        "C": {
+          "structurally_available_windows": 114,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 114,
+          "retained_windows": 114,
+          "cap": 128
+        },
+        "D": {
+          "structurally_available_windows": 115,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 115,
+          "retained_windows": 115,
+          "cap": 128
+        }
+      },
+      "inner_A": {
+        "validation_rule": "last 20% of chronologically ordered capped A rows (integer split at floor(4*n/5))",
+        "training_rule": "earlier A rows whose max-horizon label is observed by the first validation origin",
+        "first_validation_origin": 320,
+        "train_rows": 287,
+        "validation_rows": 74,
+        "purged_rows": 6
+      }
+    },
+    {
+      "task_id": "wikipedia_daily__03",
+      "source_key": "wikipedia_daily",
+      "series_id": "T138504",
+      "attributes": {
+        "series_name": "T138504",
+        "start_timestamp": "2015-07-01 00-00-00"
+      },
+      "identifier_hash": "0002bc522d4ca84c415f28a1528605b4045313d3baf5550c518890bac0f03d79",
+      "original_raw_length": 803,
+      "raw_length": 803,
+      "raw_start_index": 0,
+      "loss_scale": 1869372218.8477159,
+      "loss_scale_method": "seasonal_mse",
+      "loss_scale_pair_count": 394,
+      "A_eligible_window_count": 367,
+      "L": 28,
+      "p": 7,
+      "Hmax": 7,
+      "offsets": [
+        1,
+        3,
+        7
+      ],
+      "npz_path": "data/wikipedia_daily__03.npz",
+      "prepared_npz_sha256": "e3574feabdb93823cc02c41b0d65d7bc27a89ea4cdb5e752a3ae1c3edb6c31f6",
+      "prepared_npz_bytes": 27375,
+      "split_bounds": [
+        0,
+        401,
+        562,
+        682,
+        803
+      ],
+      "segment_bounds": {
+        "A": [
+          0,
+          401
+        ],
+        "B": [
+          401,
+          562
+        ],
+        "C": [
+          562,
+          682
+        ],
+        "D": [
+          682,
+          803
+        ]
+      },
+      "split_counts": {
+        "A": {
+          "structurally_available_windows": 367,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 367,
+          "retained_windows": 367,
+          "cap": 512
+        },
+        "B": {
+          "structurally_available_windows": 155,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 155,
+          "retained_windows": 128,
+          "cap": 128
+        },
+        "C": {
+          "structurally_available_windows": 114,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 114,
+          "retained_windows": 114,
+          "cap": 128
+        },
+        "D": {
+          "structurally_available_windows": 115,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 115,
+          "retained_windows": 115,
+          "cap": 128
+        }
+      },
+      "inner_A": {
+        "validation_rule": "last 20% of chronologically ordered capped A rows (integer split at floor(4*n/5))",
+        "training_rule": "earlier A rows whose max-horizon label is observed by the first validation origin",
+        "first_validation_origin": 320,
+        "train_rows": 287,
+        "validation_rows": 74,
+        "purged_rows": 6
+      }
+    },
+    {
+      "task_id": "sunspot_daily__01",
+      "source_key": "sunspot_daily",
+      "series_id": "T1",
+      "attributes": {
+        "series_name": "T1",
+        "start_timestamp": "1818-01-08 00-00-00"
+      },
+      "identifier_hash": "6be050c63ddcff4b966bd3ab89e7a6bea946754978cc29adadc4cd256ba7b01b",
+      "original_raw_length": 73924,
+      "raw_length": 4096,
+      "raw_start_index": 69828,
+      "loss_scale": 196.28578407425502,
+      "loss_scale_method": "seasonal_mse",
+      "loss_scale_pair_count": 2047,
+      "A_eligible_window_count": 2014,
+      "L": 28,
+      "p": 1,
+      "Hmax": 7,
+      "offsets": [
+        1,
+        3,
+        7
+      ],
+      "npz_path": "data/sunspot_daily__01.npz",
+      "prepared_npz_sha256": "9deffa599b36523b3b9ee11fcabbf9008f640a37917c66dc383c003282430393",
+      "prepared_npz_bytes": 47046,
+      "split_bounds": [
+        0,
+        2048,
+        2867,
+        3481,
+        4096
+      ],
+      "segment_bounds": {
+        "A": [
+          0,
+          2048
+        ],
+        "B": [
+          2048,
+          2867
+        ],
+        "C": [
+          2867,
+          3481
+        ],
+        "D": [
+          3481,
+          4096
+        ]
+      },
+      "split_counts": {
+        "A": {
+          "structurally_available_windows": 2014,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 2014,
+          "retained_windows": 512,
+          "cap": 512
+        },
+        "B": {
+          "structurally_available_windows": 813,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 813,
+          "retained_windows": 128,
+          "cap": 128
+        },
+        "C": {
+          "structurally_available_windows": 608,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 608,
+          "retained_windows": 128,
+          "cap": 128
+        },
+        "D": {
+          "structurally_available_windows": 609,
+          "excluded_missing_windows": 0,
+          "finite_available_windows": 609,
+          "retained_windows": 128,
+          "cap": 128
+        }
+      },
+      "inner_A": {
+        "validation_rule": "last 20% of chronologically ordered capped A rows (integer split at floor(4*n/5))",
+        "training_rule": "earlier A rows whose max-horizon label is observed by the first validation origin",
+        "first_validation_origin": 1638,
+        "train_rows": 408,
+        "validation_rows": 103,
+        "purged_rows": 1
+      }
+    }
+  ]
+}

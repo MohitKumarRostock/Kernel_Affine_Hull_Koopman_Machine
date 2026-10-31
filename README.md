@@ -11,44 +11,70 @@ negative comparisons and failed historical fits as part of that evidence.
 
 ## Current manuscript and study
 
-**Kernel Affine Hull Machines for Time-Series Forecasting: Predictive Geometry,
-Residual Learning, and Cost** — an unsubmitted research draft.
+**Kernel Affine Hull Machines for Time-Series Forecasting: Forecast-Trained
+Local Geometry and Matched Evaluation** — an unsubmitted research draft.
 
-- [Revised manuscript PDF](extensions/tmlr_integration/review/KAHM_Prediction_Revised.pdf)
+- [Current manuscript PDF](extensions/tmlr_integration/review/KAHM_Forecast_Trained_Manuscript.pdf)
 - [Editable LaTeX and build guide](extensions/tmlr_integration/README.md)
-- [New target-geometry experiment](extensions/target_geometry/README.md)
-- [Audited findings](extensions/target_geometry/FINDINGS.md)
+- [Direct reconstruction study](extensions/direct_reconstruction/README.md)
+- [Protocol and scientific freeze](extensions/direct_reconstruction/PROTOCOL.md)
 - [Time-series research map](TIME_SERIES_RESEARCH.md)
-- [Focused next research questions](extensions/target_geometry/RESEARCH_ROADMAP.md)
+- [Preserved exploratory gate pilot](extensions/forecast_gate_pilot/INTEGRATION.md)
 
-The latest experiment was publicly frozen before execution and completed all
-48 tasks and 768 forecasts. KAHM residual correction improves ridge on the
-three synthetic laws and modestly improves the new archive aggregate.
-Learning the shared metric and using donor residuals do not establish an
-incremental synthetic benefit; simpler local controls remain stronger in
-several comparisons. The archive learned-metric KAHM result is **2.18% lower
-scaled MSE than ridge**, with **0.162 seconds versus 0.00130 seconds** of charged
-pipeline time per task on the recorded host. Fixed-metric in-sample KAHM gains
-**2.76%** at lower cost, and simpler corrections have lower aggregate error.
-These results support a conditional local-representation research program,
-without establishing broad or KAHM-specific forecasting superiority.
+The new procedure learns horizon-specific KAHM kernel bandwidths and gate
+temperatures against actual forecast error. Affine, locality and RBF-local
+controls receive matched supervision, parameter counts within each mode, and
+optimization ceilings. Raw ridge, raw-history-plus-RBF, histogram gradient
+boosting, seasonal naive and a validation-selected non-KAHM policy complete
+the 17-method comparison. The method retains the same fitted baseline and
+separates head fitting, geometry training, model selection and final evaluation.
 
-## Audit the new evidence without forecast refits
+The [public checkpoint](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/39174d06dffc7e28fed73dbbf866e539560dd021)
+precedes the reserved execution. The planned roster contains 36 fresh
+simulation repetitions and ten series from four unused archive collections.
+Three selected rideshare series have no complete geometry-training windows;
+they remain explicit feasibility failures. The planned four-collection
+accuracy aggregate is undefined. Available-case archive results have the
+narrower scope of seven series from three collections.
 
-Use Python 3.12. Prepared data, all final predictions, exact source hashes,
-recorded validation trials, and measured computation nodes are included.
+The completed run preserves **731 prediction records across 43 feasible
+tasks**, with no additional task failures or numerical fallbacks. Its
+18 adjusted synthetic comparisons give **2 improvements, 6 disadvantages
+and 10 unresolved differences** for reconstruction-trained KAHM. The clear
+within-KAHM gain is **41.43% versus gate-only KAHM on Van der Pol**, while
+matched affine and practical baseline comparisons remain stronger in key
+regimes. The available natural subset improves ridge by 3.55%, mostly through
+one collection, while raw RBF and boosting are both more accurate in aggregate
+and faster in the measured implementation. See the
+[complete findings](extensions/direct_reconstruction/FINDINGS.md).
+
+The preceding [proxy-metric findings](extensions/target_geometry/FINDINGS.md)
+and all historical negative comparisons remain preserved. Establishing an
+explicit KAHM forecasting procedure is distinct from demonstrating a
+predictive advantage over equally trained alternatives.
+
+## Audit saved evidence without forecast refits
+
+Use Python 3.12. The repository preserves exact prepared inputs, selected
+predictions and model states, optimizer traces, validation candidates,
+source hashes, unavailable-task records and measured computation nodes.
+Task archives are lossless containers of those original files.
 
 ```bash
-python -m pip install -r extensions/target_geometry/requirements.txt
-python -m extensions.target_geometry.freeze verify
-python -m extensions.target_geometry.analysis \
-  --run-dir extensions/target_geometry/results/v1 --output /tmp/kahm-target-audit
+python -m pip install -r extensions/direct_reconstruction/requirements.txt
+python extensions/direct_reconstruction/evidence.py unpack \
+  --run-dir extensions/direct_reconstruction/results
+python extensions/direct_reconstruction/analyze.py \
+  extensions/direct_reconstruction/results --verify-live-source
+python -m extensions.tmlr_integration.package_direct audit
 ```
 
-The study guide documents model refits into a new directory, the 28 engineering
-checks, and the distinction between recorded-grid verification and independent
-refitting. Source-balanced archive results cover four selected collections;
-repeated windows do not create additional independent domains.
+The audit reconstructs windows and losses, checks temporal availability,
+selection and costs, and replays every saved selected model. It does not
+independently refit every optimization candidate. Read the study guide for
+new fits and the distinction between independent repetitions, retrospective
+source evaluation and computational replay. No streaming adaptation or
+minimum deployment resource claim is made.
 
 ## Preserved KAHKM and historical study evidence
 

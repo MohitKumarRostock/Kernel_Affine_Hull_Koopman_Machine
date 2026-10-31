@@ -1,0 +1,217 @@
+{
+  "analysis": {
+    "aggregation": "arithmetic mean of task MSE over seeds within each law",
+    "failures": "retain task/method failures; missing methods invalidate complete-roster aggregates",
+    "horizon_metrics": "MSE separately at offsets 1,4,12",
+    "primary_metric": "equal-episode, equal-origin, equal-horizon MSE on D",
+    "selection_audit_scope": "replay recorded C candidate losses and selected predictions; no independent refit of every candidate",
+    "timing": "single numerical-library thread; reported complete charged component sums and observed task wall time",
+    "uncertainty": "none: three exploratory repetitions do not support a confirmatory claim"
+  },
+  "created_at_utc": "2026-10-31T07:13:09.277309+00:00",
+  "generator": {
+    "ar_burn_stored_states": 80,
+    "ar_initial": "two independent Uniform[-.8,.8]",
+    "ar_innovation": "iid Uniform[-.1,.1]",
+    "ar_law": "u[t+1]=tanh(1.25*u[t]-.65*u[t-1]+.25*sin(3*u[t])+eta[t+1])",
+    "cap_salt": 613148,
+    "dtype": "float64",
+    "duffing": "dx=v; dv=-.2*v+x-x**3+.3*cos(1.2*t+theta)",
+    "episode_length": 72,
+    "fit_salt": 613149,
+    "generator_salt": 613147,
+    "history": 12,
+    "new_implementation": true,
+    "ode_burn_time": 10.0,
+    "ode_first_observation_time": 10.0,
+    "ode_initial": "x,v iid Uniform[-2,2]; theta Uniform[0,2*pi] retained for both laws",
+    "ode_noise_drawn_before_integration": true,
+    "ode_observation_interval": 0.1,
+    "ode_rk4_step": 0.025,
+    "ode_sensor": ".95*tanh(x)+iid Uniform[-.02,.02]",
+    "offsets": [
+      1,
+      4,
+      12
+    ],
+    "origins_zero_based": [
+      11,
+      15,
+      19,
+      23,
+      27,
+      31,
+      35,
+      39,
+      43,
+      47,
+      51,
+      55,
+      59
+    ],
+    "source": "Supplied manuscript appendix_controlled.tex: Exact forecasting laws and target construction",
+    "van_der_pol": "dx=v; dv=(1-x*x)*v-x"
+  },
+  "laws": [
+    "nonlinear_ar",
+    "van_der_pol",
+    "duffing"
+  ],
+  "methods": [
+    "raw_ridge",
+    "raw_rbf",
+    "fixed_kahm",
+    "direct_kahm",
+    "fixed_affine",
+    "direct_affine",
+    "fixed_locality",
+    "direct_locality",
+    "fixed_rbf_local",
+    "direct_rbf_local",
+    "persistence"
+  ],
+  "mode": "run",
+  "model_config": {
+    "alpha_grid": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "bank_row_cap": 512,
+    "baseline_alpha_grid": [
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "blocks": [
+      2,
+      4,
+      8
+    ],
+    "gamma_grid": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "max_objective_evaluations": 160,
+    "max_references": 24,
+    "optimizer_ftol": 1e-10,
+    "optimizer_gtol": 1e-06,
+    "optimizer_maxiter": 40,
+    "rank": 2,
+    "raw_rbf_bandwidth_factors": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "raw_rbf_landmarks": 64,
+    "temperature_bound": 4.0
+  },
+  "not_confirmatory": true,
+  "runtime": {
+    "numpy": "2.3.5",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "scikit_learn": "1.8.0",
+    "scipy": "1.17.0",
+    "thread_environment": {
+      "BLIS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    }
+  },
+  "schema_version": 1,
+  "seeds": [
+    73101,
+    73102,
+    73103
+  ],
+  "source_sha256": {
+    "CONFIRMATORY_PROTOCOL_DRAFT.md": "43896e60b80c39a22f18224feee5ca8e07b5b60804f56b6fc48e8ee11fe8c9a4",
+    "README.md": "e5947d1e4e2f17ee97f4f50a11e8eb7ab9402fb82de70650c30bb82c4f8dfb27",
+    "attachment_integrity.json": "c7e41dfbf59a644067893f606c68d16a788431dadfcfb216cfa3e342c6a7d467",
+    "audit_pilot.py": "5eb732288f59615d0d66f4d61453619b60594d46800f10484ac41f44b6f9df39",
+    "check_geometry.json": "7f815217780c21c34146ba7403b1110d7da59aea2de5bfab09454de0402ec6ab",
+    "check_online.json": "93e170213a3904081aa97657683c4d22b40f76cd2a3dc3f2dfa840f1d801e5b0",
+    "geometry.py": "fe3b66aea7512dc4e3050355285d4dc677b96909a34a1ccd48b34445103380d4",
+    "online.py": "d6c477d420ce7f57416d355c1b62da7f1652001ef8d465015500ef64a57d0736",
+    "requirements.txt": "cfa889a8d30e9997012f953793fae40cb3bed01d74c29f5dea7b986387bdeea2",
+    "run_pilot.py": "0317a90ac979312ab4649ab2aff567a85eee8d92e7ab758b2ebd8155e8a7a2f9",
+    "test_geometry.py": "96506e37248a1f9373a02f91d1e8053150bf2026ef11769eae3635737dab2492",
+    "test_online.py": "62276cce685aa644ccac4dc7a826e015511cdf86e707625ac8857a8efcd010e4"
+  },
+  "split_episodes": {
+    "A": 64,
+    "B": 32,
+    "C": 32,
+    "D": 64
+  },
+  "split_roles": {
+    "A": "bank/reference construction, baseline/correction fitting",
+    "B": "direct forecast-geometry development objective; see geometry diagnostics",
+    "C": "selection of declared final settings, including zero correction",
+    "D": "untuned exploratory evaluation, never selects settings"
+  },
+  "split_row_caps": {
+    "A": 512,
+    "B": 256,
+    "C": 256,
+    "D": null
+  },
+  "study_status": "exploratory_known_law_pilot",
+  "tasks": [
+    {
+      "law": "nonlinear_ar",
+      "seed": 73101,
+      "task_id": "nonlinear_ar_73101"
+    },
+    {
+      "law": "nonlinear_ar",
+      "seed": 73102,
+      "task_id": "nonlinear_ar_73102"
+    },
+    {
+      "law": "nonlinear_ar",
+      "seed": 73103,
+      "task_id": "nonlinear_ar_73103"
+    },
+    {
+      "law": "van_der_pol",
+      "seed": 73101,
+      "task_id": "van_der_pol_73101"
+    },
+    {
+      "law": "van_der_pol",
+      "seed": 73102,
+      "task_id": "van_der_pol_73102"
+    },
+    {
+      "law": "van_der_pol",
+      "seed": 73103,
+      "task_id": "van_der_pol_73103"
+    },
+    {
+      "law": "duffing",
+      "seed": 73101,
+      "task_id": "duffing_73101"
+    },
+    {
+      "law": "duffing",
+      "seed": 73102,
+      "task_id": "duffing_73102"
+    },
+    {
+      "law": "duffing",
+      "seed": 73103,
+      "task_id": "duffing_73103"
+    }
+  ]
+}

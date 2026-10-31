@@ -1,0 +1,135 @@
+{
+  "development_smoke": {
+    "all_recorded_checks": 9224,
+    "archive_roster_checks": 1,
+    "archive_state_and_replay_checks": 52,
+    "completed_utc": "2026-10-31T07:49:14.866528+00:00",
+    "excluded_from_study": true,
+    "fallbacks": 0,
+    "model_hash_and_byte_checks": 17,
+    "objective_evaluations": 6865,
+    "optimization_count": 72,
+    "passed": true,
+    "replayed_forecast_matrices": 34,
+    "report_path": "validation/final_smoke_audit.json",
+    "report_sha256": "3178007cf6e3e1935d0233ae2653818b407051bffb37a467c3d28bd98dced24a",
+    "seed": 932001,
+    "selected_models": 17,
+    "suite_fit_cpu_seconds": 11.33953361,
+    "suite_fit_wall_seconds": 11.355916303000413
+  },
+  "freeze_sha256": "7747a339fb5537bf4524c8b77058b8e209fec0867f696dd99590f9ac990d8407",
+  "independent_numeric_cross_check": {
+    "available_method_outputs": 731,
+    "comparison": {
+      "all_18_intervals_match": true,
+      "all_731_task_losses_match": true,
+      "audit_passed": true,
+      "audit_sha256": "1e49bae05d523399cbf0cee24d0068147b7ddf5e714b8678f0f95e7af24f9cc2",
+      "full_four_collection_undefined_verified": true,
+      "max_primary_numeric_absolute_difference": 1.4210854715202004e-14,
+      "max_task_metric_absolute_difference": 1.4901161193847656e-08,
+      "passed": true,
+      "summary_sha256": "8de635d9141c26fe0d6a42dc6ff5c11fdeed0c5e4f424ff46dcdda3abbd681d4"
+    },
+    "execution_note": "The preserved historical script retains the absolute workspace paths used during this check; its two path constants identify the original run and report location. The main analyzer resolves repository-relative paths; strict numerical replay also requires compatible CPU-dispatched kernels.",
+    "imports_study_model_or_analyzer": false,
+    "primary_outcome_counts": {
+      "negative": 6,
+      "positive": 2,
+      "unresolved": 10
+    },
+    "report_path": "validation/independent_check.json",
+    "report_sha256": "98d7c3ab79e080ce9cde0209f8c5cfbe1cb120b8cc5caef14cdef4ab7d8b65c6",
+    "scope": "Independent direct reconstruction of task/aggregate losses, A-prefix scales, and all 18 paired intervals from saved D arrays.",
+    "script_path": "validation/independent_check.py",
+    "script_sha256": "54034d18c4bc03359d2cd273ee7acd873d972d2770e19e07b2917a7c430628f3"
+  },
+  "limitations": [
+    "Passing engineering checks does not imply a distinctive predictive contribution.",
+    "No independent refit of every hyperparameter candidate is claimed.",
+    "Public checkpoint timing cannot rule out an unrecorded private evaluation; fitting API excludes D targets and the preserved run follows the frozen design.",
+    "The three empty-B rideshare tasks remain unavailable; full four-collection aggregates are undefined.",
+    "Matching package versions alone does not guarantee bitwise generator replay across CPU dispatch paths; frozen checks and original outcomes remain unchanged.",
+    "The selected-state tolerance can also fail across CPU dispatch paths for a saved raw-RBF comparator; the preserved no-refit diagnostic measures roundoff-scale loss changes and does not relabel a failed strict replay as passed."
+  ],
+  "post_execution_evidence_audit": {
+    "anticipated_unavailable_tasks": 3,
+    "checks": {
+      "chronology": 237,
+      "cost": 5891,
+      "generator": 144,
+      "hash": 1579,
+      "input": 1184,
+      "loss": 86,
+      "optimization": 520284,
+      "replay": 3655,
+      "roster": 55,
+      "selection": 9632,
+      "zero_correction": 270
+    },
+    "complete_roster": false,
+    "passed": true,
+    "replayed_forecast_matrices": 1462,
+    "report_path": "results/audit_report.json",
+    "report_sha256": "1e49bae05d523399cbf0cee24d0068147b7ddf5e714b8678f0f95e7af24f9cc2",
+    "selected_models": 731,
+    "total_checks": 543017
+  },
+  "post_execution_platform_diagnostic": {
+    "forecasting_fits": 0,
+    "report_path": "validation/platform_replay_probe.json",
+    "report_sha256": "acf603c7e7127d669f740e4be93e7a2ab0a419e221cf2ce48ba3f6d4afa3df20",
+    "scope": "One new Duffing task: native bitwise regeneration succeeds; disabling AVX-512 produces roundoff-scale differences and fails the unchanged exact check. This is a post-execution environment diagnostic, not a replacement scientific audit."
+  },
+  "post_execution_selected_state_platform_diagnostic": {
+    "forecasting_fits": 0,
+    "report_path": "validation/raw_rbf_portability_diagnostic.json",
+    "report_sha256": "52e77b2b3988ec365561cb6c87a41fe47ee07499eaa471bcc649ab1414f56f96",
+    "scope": "One already selected Wikipedia raw-RBF state: altered NumPy dispatch crosses the unchanged pointwise replay tolerance on C/D, with relative MSE changes below 1e-14. Native replay passes. No predictions or inference results are replaced.",
+    "script_path": "validation/raw_rbf_cpu_probe.py",
+    "script_sha256": "edbc32f86ee3498a76924f609b3814d953f7c6c3cba8b41d92061c7fd1817310"
+  },
+  "post_publication_workflow": {
+    "corrected_test_invocation": "Both frozen test scripts run directly; the model test receives the repository root on PYTHONPATH.",
+    "frozen_scientific_file_hashes_preserved": 32,
+    "full_successful_hosted_workflow": "https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/actions/runs/41185641611",
+    "scope": "Tests, restoration, strict frozen evidence audit, manuscript compilation and packaging all pass on this hosted run. A duplicate run on another worker fails exact Duffing regeneration and two pointwise raw-RBF replay checks; the diagnostic records investigate these environment sensitivities without relaxing the checks.",
+    "tested_commit": "3340572db8ea52a8b14dacebc20b14ca56718148",
+    "tests_passed": 31
+  },
+  "pre_freeze_natural_input_audit": {
+    "checks": {
+      "chronology": 144,
+      "hash": 460,
+      "input": 320
+    },
+    "exact_timestamp_utc": null,
+    "passed": true,
+    "scope": "Reconstruction of prepared histories/targets, availability/caps, inner-A masks and A-only loss scales; no forecast fitting.",
+    "task_count": 10,
+    "timing_note": "Completed before the public freeze; exact timestamp was not separately recorded.",
+    "total_checks": 924
+  },
+  "public_freeze_commit": "39174d06dffc7e28fed73dbbf866e539560dd021",
+  "record_created_utc": "2026-10-31T08:18:46.590341+00:00",
+  "schema_version": 1,
+  "scope": "Engineering and evidence-consistency validation; these checks are distinct from the empirical accuracy results and paired-t assumptions.",
+  "unit_tests": {
+    "model_tests": {
+      "command": "python extensions/direct_reconstruction/test_model.py",
+      "passed": 18,
+      "reported_duration_seconds": 0.366,
+      "script_sha256": "02ffe6c091fb2b08d5da17128faa29e12d56abf4c3c1c4794b26e6f4d829f565",
+      "source": "Model implementation agent pre-freeze test execution; exact wall-clock timestamp was not separately recorded."
+    },
+    "protocol_tests": {
+      "command": "python extensions/direct_reconstruction/test_protocol.py",
+      "passed": 13,
+      "reported_duration_seconds": 0.014,
+      "script_sha256": "c2e0fa862280e5325c86009f54e0d452bbde316faa98d76de92ca28b5cbf3b8b",
+      "source": "Final runner-agent pre-freeze test execution; exact wall-clock timestamp was not separately recorded."
+    },
+    "total_passed": 31
+  }
+}

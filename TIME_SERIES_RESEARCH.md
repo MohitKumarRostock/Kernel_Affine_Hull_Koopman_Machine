@@ -1,94 +1,118 @@
 # KAHM for time-series research
 
-**Kernel Affine Hull Machines (KAHMs) provide local reconstruction geometry
-that can serve as a feature map or gate for forecasting. This repository
-studies when that geometry helps a finite predictor, whether the benefit
-survives matched simpler controls, and whether it justifies the full cost.**
+Kernel Affine Hull Machines supply local reconstruction geometry that can
+serve as a forecasting feature map. This repository specifies that use and
+tests its prediction accuracy, numerical feasibility and measured cost.
+A KAHM forecasting method and a demonstrated KAHM-specific performance
+advantage are separate scientific claims.
 
-The current extension starts from a competitive raw-history ridge forecast.
-It compares in-sample and held-out donor residuals on the same correction rows,
-then learns a constrained diagonal metric from a kernel residual-regression
-proxy. The identical learned metric is supplied to KAHM, affine, locality, and
-RBF-local gates. This tests the transfer of a supervised metric to KAHM's
-forecasting features; it is not end-to-end optimization of a KAHM forecast.
+## The current forecasting family
 
-The code, protocol, source roster, and dependencies were published before the
-new full execution. The [publication record](extensions/target_geometry/PUBLICATION.json)
-identifies that checkpoint. Favorable findings, unfavorable comparisons,
-unresolved differences, and operational failures belong to the evidence.
+The newest method receives only the observed history available at a forecast
+origin. An A-fitted local bank supplies reconstruction gates and principal
+coordinates. The forecast retains a raw ridge baseline and adds a separately
+regularized residual correction. For each horizon, bounded kernel bandwidths
+and gate temperatures are trained using the actual B forecast error. C selects
+head penalty and correction weight; D evaluates the frozen result.
 
-## Evidence from the completed extension
+The KAHM bandwidth changes both the reference kernel and query kernel.
+Reference membership, local principal directions, covariance estimates and
+original kernel regularizers remain fixed. The method therefore trains part
+of the reconstruction operator, not every KAHM component end to end.
 
-The [audited results](extensions/target_geometry/reports/summary.json) cover
-all **48 tasks and 768 task–method prediction records, with no fallbacks**.
-Learned-metric KAHM improves on ridge in each of the three synthetic laws under
-the declared 18-contrast interval family. Its improvement over the identity
-metric remains unresolved on all three laws, as does the change from in-sample
-to held-out donor residuals. Among the nine learned-metric comparisons with
-matched geometric controls, five favor the control and four remain unresolved;
-none establishes a KAHM advantage.
+Affine projection gain, locality balance and RBF-local anisotropy provide
+explicit matched shape interventions. All four families have the same data
+roles, parameter counts within each mode, and optimizer ceilings. Equal
+optimization opportunity does not mean equal functional capacity or cost.
+Raw ridge, raw-history-plus-RBF, gradient boosting, seasonal naive and a
+C-selected non-KAHM policy make the practical comparison explicit.
 
-Across the four selected archive collections, learned-metric KAHM reduces the
-source-balanced scaled MSE by **2.18%** relative to ridge. Its mean measured
-pipeline time is **0.162 s versus 0.00130 s**, or **124.9×** ridge. Identity-metric
-in-sample KAHM has a larger descriptive reduction, **2.76%**, and identity-metric
-in-sample RBF-local has the lowest aggregate loss, **3.27%** below ridge. The
-learned affine and locality controls also have lower aggregate losses than
-learned KAHM. These are descriptive results for the selected sources and one
-timing environment.
+## Evidence and its boundaries
 
-This evidence supports conditional usefulness of geometric residual features.
-It does not establish a predictive advantage specific to KAHM or to the new
-metric-learning step. The next priorities are to test geometry trained directly
-for the forecast and horizon, and to investigate bounded incremental updates
-that could make the representation less expensive. Both are **untested
-hypotheses**, requiring fresh evaluation sources and prospectively specified
-matched controls; retuning this completed roster would be development work.
+The [public freeze](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/39174d06dffc7e28fed73dbbf866e539560dd021)
+was published before the full reserved execution. It contains numerical code,
+independent analysis, protocol, source provenance and all 46 planned inputs.
+There are twelve fresh repetitions of each of three known laws and ten
+A-selected natural series from four previously unused collections.
+
+All three selected rideshare series lack complete B windows. Their membership
+was determined from A only; they remain feasibility failures. The planned
+four-collection accuracy aggregate is undefined. A seven-series description
+over three available collections is explicitly conditional on feasibility.
+No replacement series or revised split is used to complete the aggregate.
+
+The three synthetic laws support a predeclared family of 18 paired contrasts
+with Bonferroni t intervals over twelve repetitions per law. The natural
+collections were chosen purposively and receive descriptive analysis. Related
+windows and multiple horizons do not increase the number of independent
+sources. These are single-vintage archive evaluations, without a claim about
+historical real-time label releases or later revisions.
+
+The separate [nine-task gate pilot](extensions/forecast_gate_pilot/INTEGRATION.md)
+used independently implemented generators and a smaller search budget. It
+remains exploratory and is not pooled with the new repetitions. Earlier
+studies, including negative comparisons and fitting failures, retain their
+original artifacts and statistical families.
+
+## Result of the new intervention
+
+All 43 feasible task suites completed, preserving 731 selected models and
+prediction records. The 18 adjusted synthetic intervals give two KAHM gains,
+six disadvantages and ten unresolved differences. KAHM beats raw RBF on
+nonlinear AR by 2.87% and gate-only KAHM on Van der Pol by 41.43%. It does not
+establish superiority over any equally shape-trained local control in this
+family; affine wins on Van der Pol and Duffing, and locality also wins on
+Duffing. The selected non-KAHM policy wins on both oscillators.
+
+The natural available-case mean is 3.55% below ridge, but raw RBF, boosting and
+trained RBF-local are more accurate in aggregate. The ridge gain is concentrated
+in Dominick. Reconstruction-trained KAHM costs substantially more than the
+strong raw alternatives in this implementation. See the
+[full findings](extensions/direct_reconstruction/FINDINGS.md) and
+[updated research questions](extensions/direct_reconstruction/RESEARCH_ROADMAP.md).
 
 ## Start here
 
 | Resource | Purpose |
 |---|---|
-| [Target-geometry study](extensions/target_geometry/README.md) | Current question, model components, frozen evaluation, and reproduction commands |
-| [Execution protocol](extensions/target_geometry/PROTOCOL.md) · [configuration](extensions/target_geometry/config.json) | Exact controls, donor boundaries, primary contrasts, fallback rules, and timing scope |
-| [Audited summary](extensions/target_geometry/reports/summary.json) · [all primary contrasts](extensions/target_geometry/reports/primary_contrasts.csv) | Completed coverage, favorable and adverse comparisons, uncertainty, and resource results |
-| [Manuscript guide](TMLR.md) · [editable source](extensions/tmlr_integration/manuscript/main.tex) | Integrated, unsubmitted research draft and compiled review files |
-| [Residual-learning theory](extensions/target_geometry/THEORY.md) | Predictable residual signal, fitted-correction error, and donor-to-final mismatch |
-| [Research roadmap](extensions/target_geometry/RESEARCH_ROADMAP.md) | How the declared comparisons guide the next research decision |
-| [Earlier forecasting-utility study](extensions/forecasting_utility/README.md) | The preceding additive study, including its mixed results and fit failures |
-| [Earlier quick forecasting example](examples/forecasting_utility.py) | A small example of the earlier raw-forecast-plus-correction architecture; not the new benchmark |
-| [KAHM classification entry repository](https://github.com/MohitKumarRostock/KAHM) | Installation and the separate classification example with fair baselines |
+| [Direct reconstruction guide](extensions/direct_reconstruction/README.md) | Current method, costs, execution and audit commands |
+| [Frozen protocol](extensions/direct_reconstruction/PROTOCOL.md) | Exact objective, controls, source roster, chronology, failure rules and statistical family |
+| [Prepared source provenance](extensions/direct_reconstruction/data/README.md) | Licenses, identifiers, selection rules, original indices and availability |
+| [Audited summary](extensions/direct_reconstruction/results/summary.json) | Complete coverage, comparisons, unavailable tasks and resource results |
+| [Manuscript guide](TMLR.md) | Current integrated unsubmitted research draft |
+| [Previous proxy metric study](extensions/target_geometry/README.md) | Shared diagonal metric, donor residuals and their unresolved incremental value |
+| [Residual transport theory](extensions/target_geometry/THEORY.md) | Predictable residual signal, fitted-correction error and donor-to-final mismatch |
+| [Earlier additive utility study](extensions/forecasting_utility/README.md) | Preserved mixed results, failed fits and explicitly amended successful-subset analysis |
+| [KAHM classification repository](https://github.com/MohitKumarRostock/KAHM) | Separate classification implementation and examples |
 
-## What a forecasting claim must specify
-
-A useful comparison names the **history, future target, fitted representation,
-decoder, evaluation law, and complete resource scope**. The new study uses
-three established synthetic laws with independent new repetitions and four
-additional selected archive collections. The archive results describe those
-collections; they are not a representative survey of applications or the
-Monash leaderboard protocol.
+## What these measurements do and do not establish
 
 KAHM features are deterministic functions of the observed history. They can
 make existing structure easier for a finite learner to use, but do not add
-information to a history already retained in full. Better reconstruction,
-a lower metric-training objective, and an available zero correction each
-answer a different question from improved future prediction.
+information to history already retained in full. Reconstruction accuracy,
+a lower training objective and an available zero correction each answer a
+different question from improved future prediction.
 
-The matched controls determine whether a benefit is attributable to KAHM's
-reconstruction geometry or to the shared local features and supervised metric.
-The separate risk-certificate work addresses representation-class questions
-under explicit calibration and decoder assumptions. Its class-level bounds
-should not be interpreted as evidence of forecasting superiority.
+A distinctive predictive contribution requires a reserved-evidence advantage
+over matched alternatives and a practical comparison, with its resource
+scope stated. The implementation reports conservative sums of measured
+computation dependencies, selected-state packing/serialization and model
+bytes. It does not establish minimal production cost, per-method peak
+memory, or a deployment acceptance threshold.
+
+Bounded incremental geometry remains a further research direction. The
+preserved online module verifies fixed-feature sliding-window ridge algebra
+and cached KAHM reconstruction; it does not constitute a delayed-label
+streaming experiment. An adaptation study must jointly measure forecast
+accuracy, update latency, memory and refresh/fallback behavior on a new
+chronological protocol. The present evaluation cannot become unseen
+confirmation for a procedure redesigned after inspecting its outcomes.
 
 ## Preserved Koopman research
 
-KAHM names the local geometric construction. KAHKM names the earlier
-Kernel Affine Hull Koopman Machine architecture for soft-state dynamics.
-Their targets and decoders differ; results for one architecture do not
-automatically transfer to another.
-
-The earlier implementations, declared outcomes, and provenance remain
-versioned. The [original result mapping](reproduction/reported_results.tsv)
+KAHM names the local geometric construction. KAHKM names the earlier Kernel
+Affine Hull Koopman Machine architecture for soft-state dynamics. Their
+targets and decoders differ, so findings for one do not automatically transfer
+to the other. The [historical result map](reproduction/reported_results.tsv)
 and [reproducibility evidence](reproduction/REPRODUCIBILITY_EVIDENCE.md)
-identify the historical chains. The new extension does not overwrite earlier
-negative comparisons or retrospectively replace the earlier failed fits.
+identify the preserved implementations and output chains.

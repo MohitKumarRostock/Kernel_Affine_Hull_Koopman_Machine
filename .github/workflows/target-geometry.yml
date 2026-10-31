@@ -80,6 +80,8 @@ jobs:
           python -m extensions.target_geometry.build_assets
           --reports extensions/target_geometry/reports
           --output extensions/tmlr_integration/manuscript/generated/target_geometry
+      - name: Apply scientific manuscript captions and notation
+        run: python extensions/tmlr_integration/format_manuscript_assets.py
       - name: Install the manuscript compiler
         run: |
           sudo apt-get update

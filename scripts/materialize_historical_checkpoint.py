@@ -19,6 +19,16 @@ import subprocess
 import tempfile
 
 
+EDITORIAL_PATHS = frozenset({
+    "README.md",
+    "REPRODUCIBILITY.md",
+    "extensions/predictive_geometry/PAPER_READINESS.md",
+    "extensions/predictive_geometry/README.md",
+    "extensions/predictive_geometry/REPRODUCING.md",
+    "extensions/predictive_geometry/TMLR_SUBMISSION.md",
+})
+
+
 def safe_relative(value: str) -> str:
     path = PurePosixPath(value)
     if not value or path.is_absolute() or "\\" in value or any(p in {"", ".", ".."} for p in value.split("/")):
@@ -56,7 +66,7 @@ def regular_source(source: Path, relative: str) -> Path:
     return path
 
 
-def materialize(source: Path, checkpoint_relative: str, output: Path, prefixes: list[str]) -> dict:
+def materialize(source: Path, checkpoint_relative: str, output: Path, prefixes: list[str], *, verify_current_source: bool = False) -> dict:
     source = source.resolve()
     output = output.absolute()
     if output.exists() or output.is_symlink():
@@ -76,6 +86,15 @@ def materialize(source: Path, checkpoint_relative: str, output: Path, prefixes: 
         safe_relative(name)
         if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
             raise ValueError(f"Invalid SHA-256 entry: {name}")
+    current_files_verified = 0
+    if verify_current_source:
+        for name, expected_hash in expected.items():
+            if name in EDITORIAL_PATHS:
+                continue
+            path = regular_source(source, name)
+            if digest(path) != expected_hash:
+                raise ValueError(f"Current scientific or archival source differs from the historical checkpoint: {name}")
+            current_files_verified += 1
     prefixes = [safe_relative(p.rstrip("/")) for p in prefixes]
     tracked = git(source, "ls-files", "-z", "--", *prefixes).decode("utf-8").split("\0")
     selected = sorted({safe_relative(p) for p in tracked if p})
@@ -122,6 +141,11 @@ def materialize(source: Path, checkpoint_relative: str, output: Path, prefixes: 
             "checkpoint_path": checkpoint_relative,
             "checkpoint_sha256": digest(checkpoint_path),
             "historical_files_verified": len(expected),
+            "current_source_verification": {
+                "required": verify_current_source,
+                "files_verified": current_files_verified,
+                "editorial_exceptions": sorted(EDITORIAL_PATHS & expected.keys()) if verify_current_source else [],
+            },
             "historical_file_sha256": dict(sorted(expected.items())),
             "copied_current_study_file_sha256": copied,
             "scope": "Isolated historical source reconstruction plus explicitly selected current study files; no new execution or preregistration.",
@@ -134,6 +158,7 @@ def materialize(source: Path, checkpoint_relative: str, output: Path, prefixes: 
         "output": str(output), "historical_commit": commit,
         "historical_files_verified": len(expected),
         "current_study_files_copied": len(copied),
+        "current_source_files_verified": current_files_verified,
     }
 
 
@@ -142,11 +167,13 @@ def main() -> None:
     parser.add_argument("--source", type=Path, default=Path(__file__).resolve().parents[1], help="Complete source checkout; never modified.")
     parser.add_argument("--checkpoint", default="extensions/natural_forecasting/CHECKPOINT.json", help="Repository-relative historical checkpoint JSON.")
     parser.add_argument("--include", action="append", dest="prefixes", help="Tracked current study prefix to copy; repeat for multiple prefixes. Defaults to extensions/natural_forecasting.")
+    parser.add_argument("--verify-current-source", action="store_true", help="Require every current checkpoint file except the six named reader documents to retain its historical hash before materialization.")
     parser.add_argument("--output", type=Path, required=True, help="New directory outside the source checkout; existing paths are rejected.")
     arguments = parser.parse_args()
     try:
         result = materialize(arguments.source, arguments.checkpoint, arguments.output,
-                             arguments.prefixes or ["extensions/natural_forecasting"])
+                             arguments.prefixes or ["extensions/natural_forecasting"],
+                             verify_current_source=arguments.verify_current_source)
     except (ValueError, KeyError, OSError, RuntimeError) as error:
         parser.exit(1, f"Materialization failed: {error}\n")
     print(json.dumps(result, indent=2, sort_keys=True))

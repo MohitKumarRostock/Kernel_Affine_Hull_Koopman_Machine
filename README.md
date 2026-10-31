@@ -1,45 +1,46 @@
 # Kernel Affine Hull Koopman Machine
 
-## Completed KAHM reconstruction-to-prediction research
+## KAHM representations for time-series forecasting
 
 **Kernel Affine Hull Representations for Time-Series Forecasting: Distinctness,
-Stability, and Predictive Limits** reports the completed mechanism study,
-its algebra and stability results, and the earlier preserved experiments.
+Stability, and Predictive Limits** studies reconstruction-derived feature spaces,
+bounded residual corrections, and their empirical forecasting value. The
+manuscript uses anonymous TMLR review formatting.
 
-- [Current manuscript PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript.pdf)
-- [Editable LaTeX source ZIP](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
-- [Completed findings and six fixed comparisons](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/reconstruction_mechanism/FINDINGS.md)
-- [Study code, complete evidence and reproduction commands](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/reconstruction_mechanism/README.md)
-- [Research evidence and interpretation](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/TIME_SERIES_RESEARCH.md)
+- [Manuscript PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript.pdf)
+- [Editable LaTeX source](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
+- [Scientific findings and the six primary comparisons](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/reconstruction_mechanism/FINDINGS.md)
+- [Mathematical definitions and derivations](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/reconstruction_mechanism/MATHEMATICAL_BACKGROUND.md)
+- [Implementation, evidence, and reproduction commands](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/REPRODUCIBILITY.md)
+- [Manuscript build and anonymous numerical supplement](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/tmlr_integration/README.md)
+- [Compilation and evidence-verification results](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/tmlr_integration/TMLR_SUBMISSION_VALIDATION.json)
 
-The final fixed experiment contains **192 complete task suites**, ten
-procedures and **24 independent repetition aggregates**. Bounded KAHM
-reconstruction departures reduce nonlinear aggregate normalized MSE by
-**12.58% against the common gate-and-coordinate basis**. Their **1.17% gain
-against matched bounded RBF** does not establish the chosen 3% useful
-margin. The **3.92% raw-RBF point gain** has an unresolved simultaneous
-useful-margin bound. KAHM error is **1.77% higher than boosted trees** and
-**6.04% higher than the validation-selected non-KAHM policy**.
+The principal experiment compares ten procedures on **192 task suites**, using
+**24 independent repetition aggregates** for inference. Bounded KAHM reconstruction
+departures reduce nonlinear aggregate normalized mean squared error by **12.58%**
+relative to the shared local-coordinate basis. The **1.17%** gain over matched
+bounded RBF reconstruction does not establish the prespecified 3% improvement
+margin. The **3.92%** point gain over raw-input RBF forecasting has an unresolved
+simultaneous margin bound. Boosted trees and the validation-selected non-KAHM
+procedure have lower aggregate error.
 
-All declared stability screens and linear-control noninferiority pass, but
-only two of the six required comparisons pass overall. The fixed decision
-is **STOP_FORECASTING_PERFORMANCE_BRANCH**. The study establishes conditional
-basis distinctness, bounded corrections and useful value beyond the common
-basis; it does not establish the required KAHM-specific practical forecasting
-advantage. This is a result for the declared procedures and known laws,
-not a universal impossibility claim.
+The correction bounds, numerical stability checks, and linear-control
+noninferiority criterion are satisfied. Two of the six required comparisons
+are established, so the overall improvement criterion is not satisfied.
+The results distinguish useful reconstruction features from a practical
+forecasting advantage specific to KAHM.
 
-The completed evidence includes **1,920 prediction arrays and 9,584,640 scored
-values**. The source/input checkpoint was prospective and local; its later
-publication is not public preregistration. Exact saved-state replay and an
-independent-code internal audit accompany the results. Lossless evidence
-parts preserve the original bytes and the earlier adaptive study.
+The evidence contains **1,920 prediction arrays and 9,584,640 forecast values**.
+The source and input record was specified locally before evaluation and was
+not a public preregistration. The anonymous saved-forecast supplement independently
+reconstructs all eight numerical analysis tables and the six primary confidence
+bounds without fitting models or loading serialized model objects. Full fitting,
+selected-state replay, numerical diagnostics, and the earlier studies have
+separate reproduction instructions.
 
-Use the [current research branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-reconstruction-mechanism)
-for the complete paper, code and audit commands. The manuscript is a
-**research preprint, not submitted for peer review**. Earlier research
-branches and their original evidence remain available. The original
-Koopman implementation and its documentation follow below.
+Use the [research branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-reconstruction-mechanism)
+for the manuscript and its computational evidence. The original Koopman-machine
+implementation and its documentation follow below.
 
 ## Original Koopman-machine software
 

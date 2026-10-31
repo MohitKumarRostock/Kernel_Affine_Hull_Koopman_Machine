@@ -6,10 +6,10 @@
 \usepackage{hyperref}
 \usepackage{url}
 \hypersetup{hidelinks,
- pdftitle={Kernel Affine Hull Machines for Time-Series Forecasting: Forecast-Trained Local Geometry and Matched Evaluation},
+ pdftitle={Kernel Affine Hull Representations for Time-Series Forecasting: Distinctness, Stability, and Predictive Limits},
  pdfauthor={Anonymous authors},
- pdfsubject={Unsubmitted research draft: predictive usefulness and measured costs of KAHM forecasting features}}
-\lhead{Unsubmitted research draft}
+ pdfsubject={Completed research: reconstruction algebra, bounded corrections and matched forecasting evaluation}}
+\lhead{Research preprint}
 \newtheorem{proposition}{Proposition}
 \allowdisplaybreaks
 \newcommand{\R}{\mathbb{R}}
@@ -25,163 +25,200 @@
 \input{generated/utility/numbers}
 \input{generated/target_geometry/numbers}
 \input{generated/direct_reconstruction/result_macros}
+\input{generated/reconstruction_mechanism/numbers}
 
-\title{Kernel Affine Hull Machines for Time-Series Forecasting:\\
-Forecast-Trained Local Geometry and Matched Evaluation\thanks{AI tools assisted with protocol development, implementation, numerical and statistical verification, analysis, and writing. The authors are responsible for the scientific content. This manuscript has not been submitted; anonymous author metadata is retained pending the authors' final publication preparation.}}
+\title{Kernel Affine Hull Representations\\
+for Time-Series Forecasting:\\
+Distinctness, Stability, and Predictive Limits\thanks{AI tools assisted with protocol development, implementation, numerical and statistical verification, analysis, and writing. The authors are responsible for the scientific content. This research preprint has not been submitted for peer review. Anonymous author metadata is retained from the supplied manuscript.}}
 \author{Anonymous authors}
 \begin{document}
 \maketitle
 \begin{abstract}
-We formulate Kernel Affine Hull Machines (KAHMs) as time-series forecasters
-with local reconstruction gates, principal coordinates, a retained baseline
-and a finite residual decoder. The central question is whether the KAHM
-reconstruction adds predictive value beyond equally supervised local
-alternatives at its measured cost. Controlled interventions identify when
-reconstruction scores omit predictive position; historical natural-source,
-scaling and residual-learning studies delimit transfer and preserve fitting
-failures. A shared supervised metric based on a residual-regression proxy
-does not establish the value of its additional complexity.
-We therefore train local KAHM kernel bandwidths and gate temperatures
-against the actual forecast error for each horizon, with affine, locality
-and RBF-local controls receiving matched supervision and optimization
-ceilings. A public code, analysis and input freeze precedes 36 fresh
-simulation repetitions and ten planned natural-series tasks. All 43 feasible
-tasks yield 731 audited prediction records; three A-selected rideshare
-tasks lack geometry-training windows and remain unavailable.
-Across 18 simultaneous synthetic comparisons, two favor reconstruction-trained
-KAHM, six favor the comparator and ten are unresolved. KAHM reduces mean
-error by 2.87\% relative to raw RBF on nonlinear AR and by 41.43\% relative
-to gate-only KAHM on Van der Pol, but matched affine controls and a
-validation-selected non-KAHM policy remain stronger in key comparisons.
-The planned four-collection natural aggregate is undefined. On the
-explicitly available seven-series, three-collection subset, KAHM improves
-ridge by 3.55\% while raw RBF, boosted trees and trained RBF-local have
-lower aggregate error. KAHM's mean charged pipeline time there is 7.93
-seconds, versus 0.013 for raw RBF and 0.655 for boosted trees.
-These results establish a fully specified, reproducible KAHM forecasting
-construction and a useful direct-training intervention in one tested
-regime, while leaving distinctive superiority over matched alternatives
-and efficient incremental geometry unestablished.
+We investigate when Kernel Affine Hull Machine (KAHM) reconstruction
+supplies useful functions for a finite time-series forecast decoder.
+Exact identities show that direct normalized target transfer is a
+kernel-ridge ratio and that some symmetric banks give redundant raw
+features. An irregular-reference construction proves that KAHM
+reconstruction departures can instead extend the raw feature span of the
+common affine coordinates and matched RBF reconstruction. A separately bounded feature map and centered
+ridge readout give a uniform correction-magnitude bound; this generic
+stability result does not guarantee forecast accuracy.
+We then complete a locally frozen, matched experiment with ten procedures,
+192 task suites and 24 independent repetitions across three known
+nonlinear laws and a linear base-law control, at two added-noise levels.
+The bounded KAHM departure reduces nonlinear aggregate normalized MSE by
+\RMKvsCommonGain\% against the shared gate-and-coordinate basis, meeting
+the fixed 3\% useful-effect criterion. Its point gains against matched
+RBF departure and raw RBF are \RMKvsRBFDepartureGain\% and
+\RMKvsRawRBFGain\%; neither establishes the required 3\% margin under
+the six-comparison simultaneous analysis. KAHM error is 1.77\% higher
+than boosted trees and 6.04\% higher than the validation-selected
+non-KAHM policy. All declared stability screens and the linear-control
+noninferiority condition pass. Thus two of six required comparisons
+pass and the fixed decision stops this forecasting-performance branch.
+The earlier direct-training and amended online-development results
+remain separate, including unfavorable comparisons and failures.
+The completed evidence establishes conditional basis distinctness,
+bounded corrections and a useful reconstruction contribution beyond the
+common basis, while leaving a distinctive practical KAHM forecasting
+advantage unestablished. The conclusion is restricted to the declared
+procedures and known laws; it is not an impossibility theorem for all
+geometric predictors.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
-A time-series forecaster must retain the aspects of its observed history
-that predict a future value at a specified horizon. Kernel Affine Hull
-Machines (KAHMs) provide nonlinear reconstruction maps from local reference
-observations \citep{Kumar2024KAHM}. This paper develops their role as
-forecasting representations: a history is encoded by local reconstruction
-affinities and principal coordinates, a finite decoder predicts a target,
-and a temporal protocol determines whether the added geometry is useful.
-The object evaluated is the complete forecasting procedure, including
-supervision, selection, numerical failures, and computational cost.
+A useful forecasting representation must make target-relevant structure
+accessible to the decoder that is actually fitted. Kernel Affine Hull
+Machines (KAHMs) construct nonlinear reconstruction maps from local
+reference observations \citep{Kumar2024KAHM}. Accurate reconstruction alone
+does not show that these maps help predict a future observation. Nor does
+algebraic nonlinearity establish a useful statistical contribution at a
+specified sample size and computation budget. This paper studies those
+questions separately: whether a reconstruction supplies a distinct basis,
+whether its correction can be controlled, and whether the complete fitted
+procedure improves reserved forecasts beyond matched alternatives.
 
-Reconstruction and prediction are different requirements. A local
-reconstructor can recover every point on an affine line while its zero
-residual discards position along that line. A decoder receiving only the
-residual cannot use that position. Conversely, retaining raw history does
-not ensure that a regularized decoder benefits from appended features.
-The appropriate predictive question is whether a specified KAHM map and
-decoder improve held-out forecasts beyond equally supervised alternatives.
-Neither accurate reconstruction nor a favorable comparison with one weak
-baseline establishes a KAHM-specific contribution.
+The distinction begins with the decoder's inputs. A local reconstructor can
+recover every point on an affine line while its zero residual discards
+position. Existing local KAHM forecasters already expose gated principal
+coordinates as well as reconstruction scores, so a new experiment must
+account for those coordinates. We therefore examine full-coordinate
+\emph{reconstruction departures}: the difference between a nonlinear
+reconstruction and its matched local affine projection, multiplied by the
+same locality gate. The common gate and principal-coordinate block is
+identical in the KAHM and RBF arms. An affine departure is identically zero,
+providing the nested common-feature control. Deterministic reconstruction
+cannot add information beyond the observed history; it can change the
+functions available to a restricted, regularized decoder.
 
-We formulate a horizon-specific KAHM forecaster with a retained baseline
-and a separately regularized geometric correction. In the newest
-intervention, local kernel bandwidths and gate temperatures are trained
-against the actual final forecast error. Each candidate head is fitted on
-support data A, geometry is trained on separate queries B, and head penalty
-and correction weight are selected on C. The selected procedure is frozen
-for D. Affine, locality and RBF-local controls receive the same data roles,
-parameter counts within each intervention, and optimization ceilings.
-Raw ridge, a raw-input RBF model, gradient boosting and a C-selected
-non-KAHM policy make the practical comparison explicit. This formulation
-trains part of the reconstruction operator; it does not train reference
-membership, principal directions or all KAHM parameters end to end.
+The algebra makes this candidate testable without assuming it is novel or
+useful. Directly transferring normalized KAHM weights to reference targets
+is exactly a normalized kernel-ridge ratio. Some symmetric reference banks
+also yield identical augmented raw KAHM and RBF feature spans. An explicit
+irregular three-reference construction, by contrast, proves that raw
+KAHM departures need not lie in the common-plus-RBF span. These results
+establish conditional basis distinctness, not a new general regression
+principle. Ridge penalties and the separately bounded feature transforms
+are not invariant under arbitrary reparameterizations, so empirical
+attribution concerns the complete declared procedure
+(Appendix~\ref{app:reconstruction-mechanism}).
 
-The empirical record is cumulative but not pooled
-(Table~\ref{tab:evidence-status}). Controlled interventions identify when
-local position matters and finite-decoder studies demonstrate conditional
-gains. Natural-source evaluations limit their transfer. A scaling
-sensitivity reuses inspected data. An additive correction study exposes
-both weak incremental benefit and fitting failures, which remain visible.
-A subsequent shared metric uses a Gaussian residual-regression proxy,
-not the final KAHM forecast objective. Its 48 tasks and 768 forecasts
-support KAHM gains over ridge but leave incremental metric and donor-target
-benefits unresolved; matched simpler controls win several comparisons.
-On that study's four archive collections, learned-metric KAHM improves
-ridge by 2.18\%, while fixed-metric KAHM improves it by 2.76\% at lower
-cost. Those results motivate a more direct intervention rather than
-establishing the value of the extra metric complexity.
+Stability is a second requirement. A preceding online development study
+completed 144 amended runs and 387,900 scored forecasts. A documented
+solver repair removed numerical exceptions, yet extreme corrections
+remained and were reproduced by a fresh solve in an examined state
+(Section~\ref{sec:adaptive-development}). A correct linear solve does not
+control extrapolation of its input features. The final fixed-geometry
+experiment therefore uses A-fitted blockwise normalization, an explicit
+radial bound, and centered ridge residual heads. We prove a uniform bound
+on the correction's magnitude, with the free intercept and mean-SSE
+penalty convention stated explicitly. It is generic ridge algebra; it
+neither bounds the raw baseline nor guarantees accuracy, and it does not
+retroactively repair the earlier adaptive procedure.
 
-A separately preserved nine-task exploratory pilot then trains gate
-temperatures directly for the forecast. It improves mean KAHM error on
-all three known laws while leaving simpler trained controls ahead. The
-new reconstruction experiment therefore uses twelve fresh repetitions
-per law and ten series from four previously unused collections, with
-its code, analysis, roster and prepared inputs published before full
-execution. Fresh draws from known laws and retrospective evaluation on
-new collections support different claims; neither is an independent
-replication by another research group.
+The final experiment compares ten complete forecasting procedures across
+three previously studied nonlinear laws and a linear Gaussian base-law
+control, at two added observation-noise levels. Twenty-four independent
+repetitions give 192 task suites. Separate episode splits A, B, C and D, generated from independent base
+episodes and unit-noise streams with a shared A-estimated noise amplitude,
+respectively fit the maps, select horizon-specific hyperparameters,
+calibrate correction strengths and a non-KAHM policy, and evaluate the
+frozen choices. Prepared inputs, scientific source and the six-contrast
+analysis were frozen locally before reserved forecasts were computed.
+This is a prospective local checkpoint, not public preregistration.
+The five nonlinear contrasts require a useful improvement of at least
+3\% over the common block, matched RBF departure, raw RBF, boosted trees
+and the C-selected non-KAHM policy. A sixth contrast requires
+noninferiority within 5\% of ridge on the linear control. These are
+prespecified research-allocation margins, not application-derived
+utility thresholds. Section~\ref{sec:reconstruction-mechanism} reports
+the complete result and its fixed decision.
+
+The cumulative evidence remains separated by study
+(Table~\ref{tab:evidence-status}). Historical controlled interventions
+identify information lost by reconstruction scores and show conditional
+finite-decoder gains. Natural-source and scaling studies delimit transfer.
+An additive correction study preserves failed fits and an explicitly
+amended successful-subset analysis. Shared proxy-metric learning does not
+establish its added value. Direct training of KAHM bandwidths and gate
+temperatures against forecast error yields two favorable, six unfavorable
+and ten unresolved synthetic comparisons; none of its favorable primary
+intervals is against an equally trained non-KAHM local control. Three
+planned natural tasks lack training-query windows, leaving that full
+aggregate undefined. The adaptive development study fails its accuracy
+criteria at both capacity tiers. These findings motivate the final
+mechanism test; they are not pooled with it as additional independent
+observations.
 
 \begin{table}[t]
 \centering
-\caption{Evidence stages and their interpretation. Each retains its own
-procedure, data, error scale and statistical family. Historical results
-are not overwritten or pooled with the new study.}
+\caption{Completed evidence stages and their interpretation. Procedures,
+normalizations, populations and statistical families remain distinct.
+The final mechanism experiment is a completed fixed-protocol evaluation;
+evidence is not pooled across stages.}
 \label{tab:evidence-status}
 \small
 \begin{tabular}{@{}p{0.22\linewidth}p{0.36\linewidth}p{0.35\linewidth}@{}}
 \toprule
 Stage & Question & Evidential status \\
 \midrule
-Controlled mechanism and capacity & Does the encoding retain predictive
-position, and can the decoder exploit it? & Target intervention and fresh
-known-law samples; conditional gains. \\
-Natural-source study & Does raw-plus-KAHM improve a practical raw-input
-predictor? & Separate reserved collections; unfavorable aggregate. \\
-Scaling sensitivity & Does rescaling alter the fitted comparison? &
-Paired reuse of inspected data; exploratory transfer evidence. \\
-Additive correction & Does retaining the raw pathway improve utility? &
-Fresh protocol; historical failures and an amended successful-subset
-analysis remain explicit. \\
+Controlled mechanism and capacity & Does the code retain predictive
+position and can the decoder exploit it? & Target interventions and
+fresh known-law samples; conditional gains. \\
+Natural-source study & Does raw-plus-KAHM improve practical raw-input
+prediction? & Separate reserved collections; unfavorable aggregate. \\
+Scaling sensitivity & Does rescaling change the comparison? & Paired
+reuse of inspected data; exploratory transfer evidence. \\
+Additive correction & Does the retained raw pathway improve utility? &
+Failed fits and an amended successful-subset analysis remain explicit. \\
 Proxy metric and donors & Do supervised metric fitting and excluded donor
 residuals help? & Public execution freeze; 48 tasks, 768 forecasts;
 no established KAHM-specific advantage. \\
-Gate-temperature pilot & Does the actual forecast objective improve gates?
-& Nine exploratory tasks; distinct generator code and search budget. \\
-Direct reconstruction & Do horizon-specific kernel bandwidths add value
-beyond matched trained controls? & New public execution freeze; 36
-simulation and 10 chronological archive tasks. \\
+Gate-temperature pilot & Does forecast supervision improve gates? & Nine
+exploratory tasks; distinct generator and search budget. \\
+Direct reconstruction training & Do trained bandwidths outperform matched
+trained controls? & Public freeze; 43 feasible of 46 planned tasks;
+2 favorable, 6 adverse and 10 unresolved synthetic comparisons. \\
+Budgeted online adaptation & Does maintained geometry justify its cost? &
+144 amended development runs; both accuracy decisions defer;
+inspected natural inputs and preserved initial failure. \\
+Reconstruction departures & Do distinct, bounded reconstruction functions
+improve a fixed decoder? & Local prospective freeze; 192 task suites,
+24 independent repetitions and six fixed margin contrasts. \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The contribution is threefold. First, the paper specifies how KAHM
-reconstruction becomes a time-series forecaster, including local
-coordinates, a finite correction head, horizon-specific training and a
-numerical fallback. Second, it separates representation information from
-decoder access and clarifies donor-to-final residual mismatch with an
-elementary risk identity. Third, it supplies comparative experiments and
-replayable evidence that test the predictive contribution of the KAHM
-rule under matched supervision. Local coordinates, differentiable ridge
-solves \citep{Bertinetto2019Solvers} and supervised representation learning
-are established ideas; we
-do not claim them as new universal principles. The scientific conclusion
-must follow the observed comparison, including negative results and cost,
-rather than a presumption that nonlinear reconstruction is superior.
+The contribution is a completed investigation of three separable
+properties. First, exact identities, a redundancy condition and an
+irregular-bank construction identify what the normalized KAHM map can
+add to the chosen raw feature span. Second, an explicit bounded-feature
+readout gives a reproducible correction guarantee under its stated
+assumptions. Third, a matched, fixed-budget experiment tests whether this
+procedure supplies useful forecasting value, with complete selection,
+failure and cost accounting. The earlier empirical record supplies
+context and counterexamples, while retaining its original inferential
+scope. Local coordinates, learned forecasting representations,
+differentiable ridge solves \citep{Bertinetto2019Solvers} and residual
+correction are established ideas. The research claim concerns these
+specific geometric constructions and their observed predictive limits.
 
-The stages intentionally vary estimands and implementations. Historical
-capacity studies use local-only features and different reference budgets;
-natural studies use raw augmentation and their own validation limits;
-the newest experiment freezes the baseline and learns a correction from
-its in-sample residuals. Between-study changes cannot be attributed to a
-single component. The sections that follow state those distinctions and
-report each evaluation on its own terms.
+A new realization of a known simulation law is not a new application.
+Likewise, a failed finite procedure is not an impossibility theorem for
+all decoders on a representation. The final experiment's stopping rule
+makes those boundaries operational: an adverse or unresolved result at
+the fixed budget ends this forecasting-performance branch without
+selecting a favorable subset or expanding the same experiment. The
+stronger general question is which representation and decoder conditions
+permit prediction, a question that requires its own formal assumptions
+and evidence rather than an unsupported performance claim.
 
 \input{related_work}
 \input{utility_question}
 \input{mechanisms}
+\input{section_reconstruction_mechanism}
 \input{section_direct_reconstruction}
+\input{section_adaptive_development}
 \input{controlled_results}
 \input{natural_study}
 \input{scaling_sensitivity}
@@ -248,13 +285,45 @@ scientific files and all 46 prepared input sets before model evaluation.
 The three anticipated rideshare availability failures remain in its roster;
 its planned four-collection efficacy aggregate is undefined. This freeze
 is separate from the exploratory gate pilot and from all previous
-execution checkpoints. The new reproduction bundle includes that frozen
+execution checkpoints. The separate direct-reconstruction reproduction bundle includes that frozen
 extension, exact inherited numerical dependencies, selected fitted states,
 optimizer trials, predictions and failure records, as well as the
 separately preserved pilot. Repository task archives losslessly contain
 original execution files; unpacking verifies their identities before the
 frozen audit consumes them. These post-execution containers are packaging,
 not revisions of the scientific protocol or recorded outcomes.
+
+The final reconstruction-mechanism study has a separate local checkpoint
+\texttt{6d666b0fa3d8e0ee90a357ea7970def94e9fdda7}. Its freeze records
+239 source, configuration and input files, including the complete
+192-task prepared roster, before the first reserved forecast. Publication
+of this local record after execution does not make it public
+preregistration. All ten procedures finish on every task, giving 1,920
+saved task--procedure prediction arrays and 9,584,640 scored forecast
+values. The inferential units remain 24 independent repetition
+aggregates. The frozen analyzer imports no forecasting implementation
+and reconstructs every loss and all six fixed contrasts from saved
+predictions. A separate internal audit uses independently written
+feature evaluation, ridge forward passes and tree traversal; it checks
+selected normal equations, window chronology, B/C selections and the
+six primary statistics without refitting the forecasters. Recorded
+scores for discarded B candidates can be checked for selection
+consistency, but their unsaved coefficients are not independently
+replayed. This is computational verification, not external replication.
+
+Selected-state replay reproduces all 1,920 prediction arrays exactly on
+the recorded environment. Per-method resource charges, query norm and
+signed-denominator diagnostics, all selected multipliers and complete
+condition/horizon tables accompany the data. Post-execution lossless
+archives may replace bulky loose evidence files in the public tree;
+their inventories and restoration helper verify every original byte
+before the frozen checks run. Packaging changes neither source hashes
+nor scientific outcomes. The manuscript asset builders reconstruct the
+adaptive and final-mechanism displays from their separate saved records.
+The current source ZIP compiles independently of the forecasting code,
+and the new reproduction ZIP covers the completed mechanism study and
+its exact inherited dependencies. Historical studies retain their own
+reproduction packages and their documented numerical sensitivities.
 
 \bibliography{references}
 \bibliographystyle{tmlr}
@@ -268,4 +337,10 @@ not revisions of the scientific protocol or recorded outcomes.
 \input{appendix_target_geometry}
 \FloatBarrier
 \input{appendix_direct_reconstruction}
+\FloatBarrier
+\input{appendix_adaptive_development}
+\FloatBarrier
+\input{appendix_reconstruction_mechanism}
+\FloatBarrier
+\input{appendix_reconstruction_results}
 \end{document}

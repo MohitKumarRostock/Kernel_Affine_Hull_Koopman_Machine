@@ -1,0 +1,406 @@
+{
+  "activation_is_a_gate": false,
+  "analysis_utc": "2026-10-31T11:58:38.724150+00:00",
+  "claim_scope": "Fixed known numerical laws and the declared observed-noise levels. Fresh draws are not new application evidence. The 3%/5% margins and 5x maximum-error screen are research-allocation choices. Failure to pass does not prove equivalence or universal impossibility.",
+  "completed_valid_tasks": 192,
+  "decision": "STOP_FORECASTING_PERFORMANCE_BRANCH",
+  "expected_tasks": 192,
+  "failed_contrasts": [
+    "nonlinear_vs_rbf_departure",
+    "nonlinear_vs_raw_rbf",
+    "nonlinear_vs_raw_hgb",
+    "nonlinear_vs_nonkahm_policy"
+  ],
+  "failed_stability_tasks": [],
+  "family_alpha": 0.05,
+  "family_size": 6,
+  "feature_bound_evidence": "model-reported diagnostic norms, independently consistency-checked",
+  "independence_unit": "repetition aggregate, not windows or paired-noise tasks",
+  "independent_repetitions": 24,
+  "interval": "Bonferroni six one-sided paired-repetition t lower bounds, df=23",
+  "linear_noninferiority_margin": 0.05,
+  "loss_normalization": "A retained-target variance by horizon, ddof=0, floor=1e-12",
+  "point_estimates": [
+    {
+      "mean_nmse": 0.059046150504105915,
+      "method": "ridge",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.001226946721407891,
+      "scope": "nonlinear"
+    },
+    {
+      "mean_nmse": 0.031146333218278238,
+      "method": "raw_rbf",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.0007752982725729431,
+      "scope": "nonlinear"
+    },
+    {
+      "mean_nmse": 0.029406436230034503,
+      "method": "raw_hgb",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.0009872351409280348,
+      "scope": "nonlinear"
+    },
+    {
+      "mean_nmse": 0.05920874384688005,
+      "method": "persistence",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.0012581248365719868,
+      "scope": "nonlinear"
+    },
+    {
+      "mean_nmse": 0.03423419102762588,
+      "method": "common",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.0011717526312446957,
+      "scope": "nonlinear"
+    },
+    {
+      "mean_nmse": 0.02992673211866349,
+      "method": "kahm_departure",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.0009513631164797976,
+      "scope": "nonlinear"
+    },
+    {
+      "mean_nmse": 0.030280794578206607,
+      "method": "rbf_departure",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.0010232458116678663,
+      "scope": "nonlinear"
+    },
+    {
+      "mean_nmse": 0.030245469013986146,
+      "method": "kahm_unbounded",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.0010929857554996408,
+      "scope": "nonlinear"
+    },
+    {
+      "mean_nmse": 0.030161591913474495,
+      "method": "rbf_unbounded",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.0009635741669832636,
+      "scope": "nonlinear"
+    },
+    {
+      "mean_nmse": 0.0282222644614236,
+      "method": "nonkahm_policy",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.0009532375799985792,
+      "scope": "nonlinear"
+    },
+    {
+      "mean_nmse": 0.896319962782434,
+      "method": "ridge",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.050087512132743706,
+      "scope": "linear"
+    },
+    {
+      "mean_nmse": 0.8981576786610228,
+      "method": "raw_rbf",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.05059579010855924,
+      "scope": "linear"
+    },
+    {
+      "mean_nmse": 0.8986419184985474,
+      "method": "raw_hgb",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.049575303904564265,
+      "scope": "linear"
+    },
+    {
+      "mean_nmse": 0.897128939492034,
+      "method": "persistence",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.05137776022432927,
+      "scope": "linear"
+    },
+    {
+      "mean_nmse": 0.8970809456166234,
+      "method": "common",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.05042293918090352,
+      "scope": "linear"
+    },
+    {
+      "mean_nmse": 0.8981036300863985,
+      "method": "kahm_departure",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.05085977222468177,
+      "scope": "linear"
+    },
+    {
+      "mean_nmse": 0.8978489745771915,
+      "method": "rbf_departure",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.05042705309518858,
+      "scope": "linear"
+    },
+    {
+      "mean_nmse": 0.8984880931703455,
+      "method": "kahm_unbounded",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.050985153480023596,
+      "scope": "linear"
+    },
+    {
+      "mean_nmse": 0.8982372268515523,
+      "method": "rbf_unbounded",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.05015833363854311,
+      "scope": "linear"
+    },
+    {
+      "mean_nmse": 0.8987801058985855,
+      "method": "nonkahm_policy",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.050263397422538894,
+      "scope": "linear"
+    },
+    {
+      "mean_nmse": 0.2683646035736879,
+      "method": "ridge",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.012457172362505209,
+      "scope": "all_descriptive"
+    },
+    {
+      "mean_nmse": 0.24789916957896438,
+      "method": "raw_rbf",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.012665304362570594,
+      "scope": "all_descriptive"
+    },
+    {
+      "mean_nmse": 0.24671530679716266,
+      "method": "raw_hgb",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.012343553562620919,
+      "scope": "all_descriptive"
+    },
+    {
+      "mean_nmse": 0.26868879275816854,
+      "method": "persistence",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.0127766244583421,
+      "scope": "all_descriptive"
+    },
+    {
+      "mean_nmse": 0.24994587967487528,
+      "method": "common",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.012768665521704525,
+      "scope": "all_descriptive"
+    },
+    {
+      "mean_nmse": 0.24697095661059723,
+      "method": "kahm_departure",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.012914011019556327,
+      "scope": "all_descriptive"
+    },
+    {
+      "mean_nmse": 0.2471728395779528,
+      "method": "rbf_departure",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.012763451062589339,
+      "scope": "all_descriptive"
+    },
+    {
+      "mean_nmse": 0.247306125053076,
+      "method": "kahm_unbounded",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.012942548599293807,
+      "scope": "all_descriptive"
+    },
+    {
+      "mean_nmse": 0.2471805006479939,
+      "method": "rbf_unbounded",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.012658617299119606,
+      "scope": "all_descriptive"
+    },
+    {
+      "mean_nmse": 0.24586172482071408,
+      "method": "nonkahm_policy",
+      "n_repetitions": 24,
+      "sample_sd_nmse": 0.012423781373322777,
+      "scope": "all_descriptive"
+    }
+  ],
+  "primary_candidate": "kahm_departure",
+  "primary_comparators": [
+    "common",
+    "rbf_departure",
+    "raw_rbf",
+    "raw_hgb",
+    "nonkahm_policy"
+  ],
+  "primary_contrasts": [
+    {
+      "candidate": "kahm_departure",
+      "candidate_mean_nmse": 0.02992673211866349,
+      "comparator": "common",
+      "comparator_factor": 0.97,
+      "comparator_mean_nmse": 0.03423419102762588,
+      "contrast_id": "nonlinear_vs_common",
+      "criterion": "useful_superiority",
+      "criterion_established": true,
+      "critical_t": 2.582017198304117,
+      "df": 23,
+      "family_alpha": 0.05,
+      "family_size": 6,
+      "margin": 0.03,
+      "margin_gap_mean": 0.003280433178133616,
+      "margin_gap_sample_sd": 0.0006181975669406882,
+      "margin_gap_se": 0.00012618904993622775,
+      "n_repetitions": 24,
+      "p_bonferroni": 4.466408483960112e-18,
+      "p_one_sided": 7.4440141399335195e-19,
+      "point_relative_gain": 0.12582330061447655,
+      "positive_margin_repetitions": 24,
+      "scope": "nonlinear",
+      "simultaneous_one_sided_lower": 0.002954610880960619
+    },
+    {
+      "candidate": "kahm_departure",
+      "candidate_mean_nmse": 0.02992673211866349,
+      "comparator": "rbf_departure",
+      "comparator_factor": 0.97,
+      "comparator_mean_nmse": 0.030280794578206607,
+      "contrast_id": "nonlinear_vs_rbf_departure",
+      "criterion": "useful_superiority",
+      "criterion_established": false,
+      "critical_t": 2.582017198304117,
+      "df": 23,
+      "family_alpha": 0.05,
+      "family_size": 6,
+      "margin": 0.03,
+      "margin_gap_mean": -0.0005543613778030833,
+      "margin_gap_sample_sd": 0.00043987242659778656,
+      "margin_gap_se": 8.978858309036873e-05,
+      "n_repetitions": 24,
+      "p_bonferroni": 1.0,
+      "p_one_sided": 0.9999986612024978,
+      "point_relative_gain": 0.011692640978382407,
+      "positive_margin_repetitions": 3,
+      "scope": "nonlinear",
+      "simultaneous_one_sided_lower": -0.0007861970435537735
+    },
+    {
+      "candidate": "kahm_departure",
+      "candidate_mean_nmse": 0.02992673211866349,
+      "comparator": "raw_rbf",
+      "comparator_factor": 0.97,
+      "comparator_mean_nmse": 0.031146333218278238,
+      "contrast_id": "nonlinear_vs_raw_rbf",
+      "criterion": "useful_superiority",
+      "criterion_established": false,
+      "critical_t": 2.582017198304117,
+      "df": 23,
+      "family_alpha": 0.05,
+      "family_size": 6,
+      "margin": 0.03,
+      "margin_gap_mean": 0.0002852111030664008,
+      "margin_gap_sample_sd": 0.0006983595010111978,
+      "margin_gap_se": 0.00014255203620850896,
+      "n_repetitions": 24,
+      "p_bonferroni": 0.1720742553411634,
+      "p_one_sided": 0.02867904255686057,
+      "point_relative_gain": 0.03915713259302778,
+      "positive_margin_repetitions": 15,
+      "scope": "nonlinear",
+      "simultaneous_one_sided_lower": -8.286070607724054e-05
+    },
+    {
+      "candidate": "kahm_departure",
+      "candidate_mean_nmse": 0.02992673211866349,
+      "comparator": "raw_hgb",
+      "comparator_factor": 0.97,
+      "comparator_mean_nmse": 0.029406436230034503,
+      "contrast_id": "nonlinear_vs_raw_hgb",
+      "criterion": "useful_superiority",
+      "criterion_established": false,
+      "critical_t": 2.582017198304117,
+      "df": 23,
+      "family_alpha": 0.05,
+      "family_size": 6,
+      "margin": 0.03,
+      "margin_gap_mean": -0.0014024889755300215,
+      "margin_gap_sample_sd": 0.0010128314359090262,
+      "margin_gap_se": 0.00020674335111895982,
+      "n_repetitions": 24,
+      "p_bonferroni": 1.0,
+      "p_one_sided": 0.9999996788061082,
+      "point_relative_gain": -0.01769326567010454,
+      "positive_margin_repetitions": 0,
+      "scope": "nonlinear",
+      "simultaneous_one_sided_lower": -0.0019363038637542026
+    },
+    {
+      "candidate": "kahm_departure",
+      "candidate_mean_nmse": 0.02992673211866349,
+      "comparator": "nonkahm_policy",
+      "comparator_factor": 0.97,
+      "comparator_mean_nmse": 0.0282222644614236,
+      "contrast_id": "nonlinear_vs_nonkahm_policy",
+      "criterion": "useful_superiority",
+      "criterion_established": false,
+      "critical_t": 2.582017198304117,
+      "df": 23,
+      "family_alpha": 0.05,
+      "family_size": 6,
+      "margin": 0.03,
+      "margin_gap_mean": -0.002551135591082602,
+      "margin_gap_sample_sd": 0.0008325773965540396,
+      "margin_gap_se": 0.00016994914941102023,
+      "n_repetitions": 24,
+      "p_bonferroni": 1.0,
+      "p_one_sided": 0.9999999999998874,
+      "point_relative_gain": -0.06039443289781676,
+      "positive_margin_repetitions": 0,
+      "scope": "nonlinear",
+      "simultaneous_one_sided_lower": -0.002989947217699012
+    },
+    {
+      "candidate": "kahm_departure",
+      "candidate_mean_nmse": 0.8981036300863985,
+      "comparator": "ridge",
+      "comparator_factor": 1.05,
+      "comparator_mean_nmse": 0.896319962782434,
+      "contrast_id": "linear_noninferiority_vs_ridge",
+      "criterion": "linear_noninferiority",
+      "criterion_established": true,
+      "critical_t": 2.582017198304117,
+      "df": 23,
+      "family_alpha": 0.05,
+      "family_size": 6,
+      "margin": 0.05,
+      "margin_gap_mean": 0.0430323308351571,
+      "margin_gap_sample_sd": 0.0026982695374727695,
+      "margin_gap_se": 0.0005507819629419883,
+      "n_repetitions": 24,
+      "p_bonferroni": 6.317831217369079e-29,
+      "p_one_sided": 1.0529718695615132e-29,
+      "point_relative_gain": -0.001989989488159427,
+      "positive_margin_repetitions": 24,
+      "scope": "linear",
+      "simultaneous_one_sided_lower": 0.041610202334325185
+    }
+  ],
+  "primary_nonlinear_active_horizon_cells": 432,
+  "primary_nonlinear_horizon_cells": 432,
+  "reason": "The fixed-budget experiment did not establish every required useful-effect/noninferiority and stability condition; stop this forecasting-performance branch.",
+  "resource_cost_is_a_gate": false,
+  "schema_version": "reconstruction-mechanism-analysis-v1",
+  "scored_target_cells_per_method": 958464,
+  "stability_gate_pass": true,
+  "statistical_gate_pass": false,
+  "superiority_margin": 0.03,
+  "task_errors": [],
+  "technical_complete": true
+}

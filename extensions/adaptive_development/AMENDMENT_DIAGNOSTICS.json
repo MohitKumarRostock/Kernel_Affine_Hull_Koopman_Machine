@@ -1,0 +1,249 @@
+{
+  "amendment_regression_checks": {
+    "checks": [
+      {
+        "budget": "small",
+        "completed_through": 1280,
+        "errors": [],
+        "finite_components": true,
+        "method": "fixed_kahm",
+        "previous_failure_time": 1279,
+        "task_id": "synthetic_recurring__20261101"
+      },
+      {
+        "budget": "small",
+        "completed_through": 1160,
+        "errors": [],
+        "finite_components": true,
+        "method": "fixed_kahm",
+        "previous_failure_time": 1159,
+        "task_id": "synthetic_recurring__20261102"
+      },
+      {
+        "budget": "small",
+        "completed_through": 1161,
+        "errors": [],
+        "finite_components": true,
+        "method": "fixed_kahm",
+        "previous_failure_time": 1160,
+        "task_id": "synthetic_recurring__20261103"
+      },
+      {
+        "budget": "small",
+        "completed_through": 1686,
+        "errors": [],
+        "finite_components": true,
+        "method": "adaptive_kahm",
+        "previous_failure_time": 1685,
+        "task_id": "synthetic_recurring__20261103"
+      },
+      {
+        "baseline": -0.49228317515622116,
+        "budget": "large",
+        "correction": 175555.57476163152,
+        "horizon": 12,
+        "method": "adaptive_kahm",
+        "origin": 1554,
+        "qualification": "Adverse extrapolation remains; this is not an efficacy rerun.",
+        "task_id": "synthetic_recurring__20261101"
+      },
+      {
+        "baseline": -0.6180891189941673,
+        "budget": "large",
+        "correction": 40726.982090932164,
+        "horizon": 12,
+        "method": "adaptive_affine",
+        "origin": 1555,
+        "qualification": "Adverse extrapolation remains; this is not an efficacy rerun.",
+        "task_id": "synthetic_recurring__20261101"
+      }
+    ],
+    "models_sha256": "9fe5382814a280f1853f87f94ea69357393453fc7ed9e0fa5369f1b229d7d068"
+  },
+  "cases": [
+    {
+      "accumulated_ridge_min_eigenvalue": -40524.050331283775,
+      "budget": "small",
+      "failure_state_qualification": "The failed update had pushed current rows and solved the horizon-1 raw baseline; its correction coefficients are retained from the preceding successful solve. The framework's issued forecast used its recorded seasonal fallback.",
+      "feature_diagnostics": {
+        "minimum_relative_denominator": 0.5524228630731965,
+        "negative_weight_entries": 19,
+        "unsafe_rows": 0
+      },
+      "feature_scale": [
+        0.392403213855008,
+        5.925771815605017e-12,
+        0.3469356788063165,
+        0.4034141191077181,
+        0.2694085828238802,
+        0.2756159266343316,
+        7.179883050760811e-12,
+        2.6858234249172546e-11,
+        0.24350642199133932,
+        0.24755865322488252,
+        0.3449392795537036,
+        0.34677720789653244
+      ],
+      "feature_scale_min": 5.925771815605017e-12,
+      "fresh_augmented_svd_correction": 0.042934703514384734,
+      "fresh_augmented_svd_objective": 3.56268909802923,
+      "fresh_centered_svd_correction": 0.042934703514384664,
+      "fresh_centered_svd_objective": 3.5626890980292303,
+      "fresh_ridge_condition_number": 3607567.026223196,
+      "fresh_ridge_min_eigenvalue": 1.0000000001057736,
+      "horizon": 1,
+      "horizon_index": 0,
+      "max_abs_accumulated_minus_fresh_ff": 2696619758.007539,
+      "method": "fixed_kahm",
+      "origin": 1279,
+      "original_gamma": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "original_recorded_forecast": {
+        "baseline": -0.938209471515368,
+        "correction": 0.0,
+        "framework_fallback": 1.0,
+        "gamma": 0.0,
+        "prediction": -0.938209471515368,
+        "truth": 0.05867391339745143
+      },
+      "original_update_error": {
+        "message": "9-th leading minor of the array is not positive definite",
+        "time": 1279,
+        "type": "LinAlgError"
+      },
+      "query_feature_max_abs": 1.2050458099806451,
+      "query_feature_safe": true,
+      "replay_feature_max_abs": 1122.1013976318097,
+      "retained_original_correction": 0.01960357314121123,
+      "retained_original_objective": 4.178957747367749,
+      "task_id": "synthetic_recurring__20261101",
+      "valid_replay_rows": 128
+    },
+    {
+      "accumulated_ridge_min_eigenvalue": 0.9558357042233017,
+      "budget": "large",
+      "failure_state_qualification": "All updates through this forecast state succeeded.",
+      "feature_diagnostics": {
+        "minimum_relative_denominator": 0.354429512438621,
+        "negative_weight_entries": 57,
+        "unsafe_rows": 0
+      },
+      "feature_scale": [
+        3.416958990589475e-07,
+        0.17548344585069695,
+        0.1172153280171746,
+        0.1228884156153567,
+        1.6108518584522765e-07,
+        4.6917250697195516e-07,
+        0.29418582758317113,
+        0.2729726566419148,
+        0.18447628779595637,
+        0.38969688077505804,
+        0.29709796412832634,
+        0.06565961041786916
+      ],
+      "feature_scale_min": 1.6108518584522765e-07,
+      "fresh_augmented_svd_correction": 175555.5747616266,
+      "fresh_augmented_svd_objective": 39.234858135453244,
+      "fresh_centered_svd_correction": 175555.57476162392,
+      "fresh_centered_svd_objective": 39.23485813545324,
+      "fresh_ridge_condition_number": 281398.5921427431,
+      "fresh_ridge_min_eigenvalue": 0.9558358644821018,
+      "horizon": 12,
+      "horizon_index": 2,
+      "max_abs_accumulated_minus_fresh_ff": 0.004088003479409963,
+      "method": "adaptive_kahm",
+      "origin": 1554,
+      "original_gamma": [
+        0.5,
+        0.5,
+        1.0
+      ],
+      "original_recorded_forecast": {
+        "baseline": -0.49228317515622116,
+        "correction": 175470.09381945225,
+        "framework_fallback": 0.0,
+        "gamma": 1.0,
+        "prediction": 175469.6015362771,
+        "truth": -0.9815481914482496
+      },
+      "original_update_error": null,
+      "query_feature_max_abs": 3195081.8698309013,
+      "query_feature_safe": true,
+      "replay_feature_max_abs": 391.52614378534037,
+      "retained_original_correction": 175470.09381945225,
+      "retained_original_objective": 39.23485813829473,
+      "task_id": "synthetic_recurring__20261101",
+      "valid_replay_rows": 256
+    },
+    {
+      "accumulated_ridge_min_eigenvalue": 0.9999999999997958,
+      "budget": "large",
+      "failure_state_qualification": "All updates through this forecast state succeeded.",
+      "feature_diagnostics": {
+        "minimum_relative_denominator": 1.0,
+        "negative_weight_entries": 0,
+        "unsafe_rows": 0
+      },
+      "feature_scale": [
+        1.2701612600128889e-06,
+        0.18299050537846423,
+        0.04507161371094556,
+        0.1594875369104516,
+        4.965023227881228e-06,
+        2.2334181843957664e-06,
+        0.2914306851299652,
+        0.27085160881702436,
+        0.045040508283491355,
+        0.171913981343191,
+        0.43196619608867143,
+        0.3021508556384271
+      ],
+      "feature_scale_min": 1.2701612600128889e-06,
+      "fresh_augmented_svd_correction": 40726.98209094965,
+      "fresh_augmented_svd_objective": 38.310844612235066,
+      "fresh_centered_svd_correction": 40726.98209093928,
+      "fresh_centered_svd_objective": 38.31084461223507,
+      "fresh_ridge_condition_number": 856498603.576165,
+      "fresh_ridge_min_eigenvalue": 0.999999999999213,
+      "horizon": 12,
+      "horizon_index": 2,
+      "max_abs_accumulated_minus_fresh_ff": 0.00013458728790283203,
+      "method": "adaptive_affine",
+      "origin": 1555,
+      "original_gamma": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "original_recorded_forecast": {
+        "baseline": -0.6180891189941673,
+        "correction": 40727.037841927835,
+        "framework_fallback": 0.0,
+        "gamma": 0.5,
+        "prediction": 20362.900831844923,
+        "truth": -0.9365897294762229
+      },
+      "original_update_error": null,
+      "query_feature_max_abs": 661282.71976282,
+      "query_feature_safe": true,
+      "replay_feature_max_abs": 23077.39072847632,
+      "retained_original_correction": 40727.037841927835,
+      "retained_original_objective": 38.31084461223668,
+      "task_id": "synthetic_recurring__20261101",
+      "valid_replay_rows": 256
+    }
+  ],
+  "diagnostic_script_sha256": "e69435ac7cb79ee038468ecd5511bfe7ce8e82f5478e1829231085aed38ebd96",
+  "environment": {
+    "numpy": "2.3.5",
+    "python": "3.12.14",
+    "scipy": "1.17.0"
+  },
+  "original_archive_sha256": "6ec5bb7cae6336fb53d417b82d907c16b43fc25db2d99af32ce04647c20cdbe3",
+  "original_models_sha256": "721f8fe6935cbea0ec43d624b52ada10dee1a0e7eb7ef92ca052f26d3f096bc4",
+  "status": "Post-observation numerical diagnosis; no efficacy selection or threshold changes."
+}

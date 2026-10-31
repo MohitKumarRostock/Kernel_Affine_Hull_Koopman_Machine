@@ -1,0 +1,201 @@
+\section{Reconstruction algebra and bounded residual decoding}
+\label{app:reconstruction-mechanism}
+
+The results here concern fixed reference maps and a specified decoder class.
+They establish identities, conditional distinctness and correction bounds;
+none is an accuracy theorem for an arbitrary time-series law. The executable
+companion \path{extensions/reconstruction_mechanism/algebra.py} evaluates only
+fabricated reference banks and matrices, independently of forecast outcomes.
+
+\subsection{Normalized kernel identities}
+Let the rows of $Q\in\R^{M\times p}$ be reference histories, $P$ a fixed
+principal-coordinate basis of rank $r$, and $W$ the positive projected
+covariance precision. For row-vector histories the inherited Gaussian kernel is
+\[
+ k_i(x)=\exp\!\left[-\frac{((x-q_i)P)W((x-q_i)P)^\top}{2r}\right].
+\]
+Write $k(x)$ as a row vector, $K$ for the reference Gram matrix and
+$C=(K+\lambda I)^{-1}$. The KAHM and matched RBF reconstructions are
+\begin{equation}
+ A_K(x)=\frac{k(x)CQ}{k(x)C\mathbf1},\qquad
+ A_R(x)=\frac{k(x)Q}{k(x)\mathbf1}.
+ \label{eq:mechanism-normalized-maps}
+\end{equation}
+Both use the same references, projected distance and bandwidth. Multiplying
+$k(x)$ by a common positive scalar cancels from either ratio; this justifies
+the implemented maximum-log-kernel subtraction.
+
+\begin{proposition}[Normalization and target transfer]
+\label{prop:mechanism-krr}
+Whenever $s(x)=k(x)C\mathbf1\ne0$, the weights
+$\alpha(x)=k(x)C/s(x)$ sum to one. For any reference target vector $y$,
+\[
+ \alpha(x)y=\frac{k(x)(K+\lambda I)^{-1}y}
+ {k(x)(K+\lambda I)^{-1}\mathbf1}.
+\]
+This is exactly the ratio of two dual kernel-ridge predictions, one trained
+on $y$ and the other on the constant vector, under the displayed
+no-additional-intercept convention. Moreover, for an affine scalar function
+$f(q)=qb+c$,
+\[
+ \alpha(x)f(Q)-f(x)=\{A_K(x)-x\}b.
+\]
+\end{proposition}
+\begin{proof}
+The first statement follows by summing the weights; the remaining identities
+follow by substitution and $\alpha(x)\mathbf1=1$.
+\end{proof}
+Directly transferring these weights to future targets is therefore not an
+independent forecasting mechanism. Likewise, $A_K(x)b$ is normalized kernel
+ridge on the restricted pseudo-target $Qb$. The identity
+$A(x)+\{x-A(x)\}=x$ holds for every reconstruction and creates a linear
+redundancy if all three are appended without restriction. These observations
+do not rule out useful basis functions for a restricted decoder.
+
+\subsection{When reconstruction departures are redundant}
+Define the affine reconstruction in row-vector notation by
+$A_A(x)=\mu+(x-\mu)PP^\top$. With a common locality gate $g(x)$, let
+$d_K=g(A_K-A_A)$ and $d_R=g(A_R-A_A)$.
+
+\begin{proposition}[A sufficient raw-span equivalence]
+\label{prop:mechanism-redundancy}
+Suppose $K\mathbf1=\kappa\mathbf1$ and the augmented reference-coordinate
+span is invariant under $C$: $C\mathbf1=a\mathbf1$,
+$CQ=QB+\mathbf1 c^\top$, where $a=(\kappa+\lambda)^{-1}$.
+Then
+\[
+ A_K=(A_R B+c^\top)/a,
+ \qquad
+ d_K=d_R B/a+gA_A(B/a-I)+gc^\top/a.
+\]
+After redundant coordinate columns are removed, the augmented raw feature
+spans agree when both include the common gate and gated principal coordinates.
+\end{proposition}
+\begin{proof}
+Substitute the two assumed actions of $C$ into
+Equation~\eqref{eq:mechanism-normalized-maps}. The last two departure terms
+belong to the common feature span because
+$gA_A=g\mu+g(x-\mu)PP^\top$. The restriction of an invertible operator to
+an invariant finite-dimensional subspace is invertible, giving equality of
+the active augmented spans.
+\end{proof}
+
+For example, take one scalar bank $q=(-1,1)^\top$, $P=1$, $g=1$ and
+$A_A(x)=x$. If the off-diagonal Gram entry is $\rho$, then
+\begin{equation}
+ A_K=cA_R,\qquad d_K=cd_R+(c-1)x,\qquad
+ c=\frac{1+\rho+\lambda}{1-\rho+\lambda}.
+ \label{eq:mechanism-two-reference}
+\end{equation}
+Thus $\operatorname{span}(1,x,d_K)=\operatorname{span}(1,x,d_R)$ exactly.
+The source-compatible sample-variance precision is $1/2$, so $\rho=e^{-1}$;
+the inherited regularization iteration gives $\lambda=2.6519665429866075$
+and $c=1.224037566462905$. The saved numerical identity errors on the
+fabricated grid are below $6\times10^{-16}$.
+
+These are statements about raw spans. An isotropic ridge penalty is not
+invariant under a general nonorthogonal coordinate change. Separate nonlinear
+radial transforms can also destroy the displayed linear relation. The
+empirical comparison therefore concerns the complete reconstruction,
+normalization and decoder procedure; it cannot automatically attribute a
+forecast difference to additional raw function-space capacity.
+
+\subsection{An explicit distinct reconstruction basis}
+\begin{proposition}[Irregular scalar references]
+\label{prop:mechanism-distinct}
+Let $q_1<q_2<q_3$, $q_1+q_3\ne2q_2$, and use a Gaussian kernel with
+positive precision $t$. Suppose $v=C\mathbf1$ is componentwise positive.
+For one bank with gate one and affine reconstruction $x$,
+\[
+ A_K\notin\operatorname{span}(1,x,A_R),\qquad
+ d_K\notin\operatorname{span}(1,x,d_R).
+\]
+\end{proposition}
+\begin{proof}
+Set $u=Cq$. The six unordered sums $q_i+q_j$, $i\le j$, are distinct.
+Products of the Gaussian translates satisfy
+\[
+ k_i(x)k_j(x)=e^{-tx^2}e^{-t(q_i^2+q_j^2)/2}e^{t(q_i+q_j)x}.
+\]
+The six real exponentials remaining after the common factor is removed are
+linearly independent: differentiating a zero linear combination at zero
+gives a nonsingular Vandermonde system.
+
+Suppose $A_K=cA_R+d$. Cross multiplication and coefficient matching give,
+with $w=u-dv$, $w_i=cq_i v_i$ and
+$w_i+w_j=c(q_i v_j+q_j v_i)$. If $c=0$, invertibility of $C$ implies
+$q=d\mathbf1$, a contradiction. Otherwise
+$(q_i-q_j)(v_i-v_j)=0$ forces $v$ to be constant, hence $K$ must have
+constant row sums. Its middle row instead exceeds either endpoint row,
+since the Gaussian decreases strictly with distance. This is again a
+contradiction.
+
+Both reconstructions are bounded on the real line: $A_R$ is a convex
+combination of the references, while
+$A_K=(\sum_i k_i v_i (u_i/v_i))/(\sum_i k_i v_i)$ is a convex combination
+of the fixed values $u_i/v_i$. Any putative additional linear term in $x$
+must consequently have zero coefficient. The statement for departures
+follows by adding the common coordinate $x$.
+\end{proof}
+
+The explicit fixture $q=(-1,0,2)^\top$ has inherited sample-variance
+precision $3/7$ and $\lambda=4.498274743339644$. Positivity of $C\mathbf1$
+can be certified without a query grid. Write $K=I+E$ and $a=1+\lambda$.
+If $a>2\|E\|_\infty$, the Neumann series gives
+\[
+ \|aC\mathbf1-\mathbf1\|_\infty
+ \le \frac{\|E\|_\infty/a}{1-\|E\|_\infty/a}<1.
+\]
+Here $\|E\|_\infty=1.2314905926823394$, so the condition holds.
+On 81 fabricated queries in $[-3,4]$, the maximum least-squares residual
+of $d_K$ outside the sampled $(1,x,d_R)$ span is $0.05355670997078987$.
+This numerical witness supplements the analytic proof; it does not prove
+nonredundancy for every high-dimensional bank fitted in the forecasting study.
+
+\subsection{A bounded correction with a free intercept}
+For a feature block of width $p_b$, use the radial map
+\begin{equation}
+ T_{R_b}(v)=\frac{v}{\sqrt{1+\|v\|_2^2/R_b^2}},\qquad R_b=\sqrt{p_b}.
+ \label{eq:mechanism-radial}
+\end{equation}
+It has norm at most $R_b$. Its Jacobian has tangential eigenvalue
+$(1+\|v\|^2/R_b^2)^{-1/2}$ and radial eigenvalue
+$(1+\|v\|^2/R_b^2)^{-3/2}$, both in $(0,1]$, so the map is
+nonexpansive. Concatenating separately bounded blocks gives
+$\|\psi(x)\|\le R=(\sum_bR_b^2)^{1/2}$. This does not establish a
+Lipschitz constant for the preceding history-to-feature map, particularly
+across the signed-denominator fallback boundary.
+
+\begin{proposition}[Centered ridge correction bound]
+\label{prop:mechanism-correction-bound}
+For residual targets $e_i$ and bounded feature vectors $\psi_i$, minimize
+\[
+ n^{-1}\sum_{i=1}^n(e_i-b-\psi_i^\top w)^2+\alpha\|w\|^2,
+ \qquad \alpha>0,
+\]
+with a free intercept. Let $\bar e$, $\bar\psi$ be the training means,
+$e_c=e-\bar e\mathbf1$, and $\sigma_e=\|e_c\|/\sqrt n$. Then
+\begin{equation}
+ \|w\|\le\frac{\sigma_e}{2\sqrt\alpha},\qquad
+ |\gamma q(x)|\le |\gamma|\left[
+ |\bar e|+(R+\|\bar\psi\|)\frac{\sigma_e}{2\sqrt\alpha}\right],
+ \quad q(x)=\bar e+(\psi(x)-\bar\psi)^\top w.
+ \label{eq:mechanism-correction-bound}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Centering eliminates the intercept. If the centered design has singular
+values $s$, its coefficient operator has singular values
+$s/(s^2+n\alpha)\le1/(2\sqrt{n\alpha})$. Multiplying by $\|e_c\|$
+gives the first inequality. The second follows from Cauchy--Schwarz and
+$\|\psi(x)-\bar\psi\|\le R+\|\bar\psi\|$.
+\end{proof}
+The numerical penalty therefore corresponds to sum-SSE penalty $n\alpha$;
+using $\alpha$ unchanged in a sum-SSE solve would implement a different
+procedure. In multiple horizons the bound applies separately to each
+selected $\alpha_h$ and $\gamma_h$. It is generic ridge algebra, not a
+KAHM-specific performance theorem. It bounds only the correction: the
+retained raw ridge baseline and the total forecast error are not globally
+bounded by it. The reserved study checks the feature, coefficient and
+correction inequalities on every saved task in addition to its separate
+error screen.

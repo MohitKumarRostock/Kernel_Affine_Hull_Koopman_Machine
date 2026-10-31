@@ -1,0 +1,258 @@
+\section{Reconstruction departures as predictive bases}
+\label{sec:reconstruction-mechanism}
+
+The earlier interventions change how local reconstructions control a
+forecasting representation. We now test whether the reconstruction itself
+supplies useful functions to a restricted decoder once a shared local
+affine basis is retained. This section evaluates one specified construction against
+a fixed comparison family within a bounded experimental budget.
+Every feature is a deterministic function of the observed history: additional
+basis functions do not add statistical information beyond that history.
+
+\subsection{A distinct mechanism, with explicit cases of redundancy}
+
+Let $z$ be an A-standardized history, and let a fixed local bank supply
+reference rows $Q_j$, principal directions $P_j$, center $\mu_j$ and a positive
+regularizer $\lambda_j$. The KAHM and matched positive-kernel reconstructions are
+\begin{equation}
+ A_{K,j}(z)=\frac{k_j(z)(K_j+\lambda_jI)^{-1}Q_j}
+ {k_j(z)(K_j+\lambda_jI)^{-1}\mathbf1},\qquad
+ A_{R,j}(z)=\frac{k_j(z)Q_j}{k_j(z)\mathbf1}.
+ \label{eq:mechanism-main-maps}
+\end{equation}
+Both maps use the same reference histories and covariance-whitened projected
+Gaussian kernel. The affine reconstruction is
+$A_{A,j}(z)=\mu_j+(z-\mu_j)P_jP_j^\top$ in row-vector notation.
+Shared gates $g_j(z)$ use a blockwise softmax of squared center-distance logits;
+the gate does not depend on which reconstruction is being compared.
+
+The common basis $\psi_0$ contains all $g_j$ and all gated principal
+coordinates $g_j(z)(z-\mu_j)P_j$. The reconstruction departures are
+\begin{equation}
+ d_K(z)=\operatorname{concat}_j
+       g_j(z)\{A_{K,j}(z)-A_{A,j}(z)\},\qquad
+ d_R(z)=\operatorname{concat}_j
+       g_j(z)\{A_{R,j}(z)-A_{A,j}(z)\}.
+ \label{eq:mechanism-main-departures}
+\end{equation}
+The full history-coordinate departures enter the decoder, including their
+components outside the local principal subspaces. Substituting the affine
+reconstruction makes the departure identically zero and recovers the common
+basis. Thus the common-only arm is an ablation of the added basis; the RBF arm
+is the comparison with matched reference, kernel, gate and feature dimensions.
+
+The reconstruction identity alone does not establish a new predictive function
+class. Transferring normalized KAHM weights directly to reference targets is
+exactly a ratio of two kernel-ridge predictions, one for the target and one for
+the constant vector (Proposition~\ref{prop:mechanism-krr}). Symmetric two-point
+reference banks can also make $d_K$ and $d_R$ linearly interchangeable after
+the common coordinates are included
+(Proposition~\ref{prop:mechanism-redundancy}). Conversely,
+Proposition~\ref{prop:mechanism-distinct} proves a strict raw-span distinction
+for an irregular three-point scalar bank. The inherited-compatible example
+$Q=(-1,0,2)^\top$ supplies such a certificate. This proves existence of a
+distinct reconstruction basis, not predictive superiority for every fitted
+bank. Feature transformations and isotropic ridge penalties can change fitted
+forecasts even when two raw spans coincide; the empirical estimand is the
+complete specified procedure.
+
+\subsection{A bounded residual decoder}
+
+Each feature block is centered and scaled using A alone. It then passes through
+the radial map
+\begin{equation}
+ T_R(v)=\frac{v}{\sqrt{1+\|v\|_2^2/R^2}},\qquad
+ R=\sqrt{\text{block width}}.
+ \label{eq:mechanism-main-radial}
+\end{equation}
+The map is nonexpansive and has norm at most $R$. The common and departure
+blocks are transformed separately, with no subsequent standardization:
+\[
+ \psi_K=[T_{R_0}(\widetilde\psi_0),T_{R_d}(\widetilde d_K)],\qquad
+ \psi_R=[T_{R_0}(\widetilde\psi_0),T_{R_d}(\widetilde d_R)].
+\]
+Consequently, appending a departure cannot rescale the common block. Three
+bank partitions with 2, 4 and 8 local models, rank two and at most 24 references
+per local model give 42 common and 168 departure coordinates. The bank is
+unsupervised and fixed from A; this experiment does not further optimize its
+references, directions or kernels against B targets.
+
+For each horizon, a raw-history ridge baseline $f_{0,h}$ is retained and
+\begin{equation}
+ \widehat y_{t+h}=f_{0,h}(x_t)+\gamma_h q_h(x_t),\qquad
+ q_h(x)=b_h+\psi(x)^\top w_h.
+ \label{eq:mechanism-main-forecast}
+\end{equation}
+The correction fits A baseline residuals using mean squared error plus
+$\alpha_h\|w_h\|^2$, with a free intercept. B selects
+$\alpha_h\in\{10^{-4},10^{-3},10^{-2},10^{-1},1\}$ separately by horizon.
+C then selects $\gamma_h\in\{0,1/4,1/2,1\}$, again separately by horizon.
+There is no refit on B or C, and D targets never enter either selection API.
+
+The free intercept matters to stability. If $\bar e_h$ and
+$\sigma_{e,h}$ are the A residual mean and centered RMS, and $\bar\psi$ is
+the A feature mean after bounding, Proposition~\ref{prop:mechanism-correction-bound}
+gives
+\begin{equation}
+ \|w_h\|\le\frac{\sigma_{e,h}}{2\sqrt{\alpha_h}},\qquad
+ |\gamma_h q_h(x)|\le |\gamma_h|\left[
+ |\bar e_h|+(R+\|\bar\psi\|)
+ \frac{\sigma_{e,h}}{2\sqrt{\alpha_h}}\right].
+ \label{eq:mechanism-main-correction-bound}
+\end{equation}
+Here $R$ is the radius of the concatenated bounded features. This generic
+ridge bound limits the correction, not the raw baseline or total forecast
+error. It does not establish a global input Lipschitz constant through a
+signed-denominator fallback boundary. For the unnormalized signed
+reconstruction weights, define
+\begin{equation}
+ a_j(z)=k_j(z)(K_j+\lambda_jI)^{-1},\qquad
+ \rho_j(z)=\frac{|a_j(z)\mathbf1|}{\|a_j(z)\|_1}
+ \quad\text{when }\|a_j(z)\|_1>0.
+ \label{eq:mechanism-relative-denominator}
+\end{equation}
+This dimensionless ratio measures signed cancellation and is invariant to
+common positive rescaling of the query kernel. If $\rho_j\le10^{-10}$,
+or required quantities are undefined or nonfinite, the local reconstruction
+is replaced by its affine map, making that local departure zero. Every
+affected row remains recorded.
+
+\subsection{A fixed test of useful basis value}
+
+The primary candidate is the bounded KAHM departure. Its five primary
+comparators are the common basis, bounded RBF departure, raw-history-plus-RBF,
+histogram gradient boosting, and a C-selected non-KAHM policy. Raw ridge,
+persistence, and KAHM/RBF ablations that omit only the departure bound complete
+the ten-method roster. All non-ridge arms use C-selected mixing with the common
+baseline. The policy selects one complete calibrated non-KAHM procedure by C
+normalized error; neither KAHM arm is eligible. It is not a D oracle.
+Raw RBF and boosting receive the same A/B/C roles and horizon-specific model
+selection. Their exact grids and the accounting of their costs are recorded
+in Appendix~\ref{app:reconstruction-results}.
+
+The roster contains four laws, two added-noise levels and 24 fresh repetition
+seeds: 192 task suites. The nonlinear AR, Van der Pol and Duffing laws are the
+inherited numerical observation laws already investigated earlier. A stable
+linear Gaussian AR(2) base law is the negative control. Added Gaussian
+observation noise has standard deviation $\eta$ times the standard deviation
+of all unaugmented A episode values, with $\eta\in\{0,0.1\}$; it affects
+both histories and observed future targets. The underlying episodes, unit-noise
+arrays, retained rows and fitting seed are paired across noise levels. The
+oscillator observations already contain inherited sensor noise at $\eta=0$.
+Fresh realizations of these known laws are not new application evidence.
+
+A/B/C/D contain 64/32/32/128 length-72 episodes, generated from independent
+base-episode and unit-noise streams. The augmented splits share the
+A-estimated noise amplitude.
+History length is 12, horizons are $(1,4,12)$, and origin stride is four.
+The first three roles retain 512/256/256 rows; D retains all 1,664 origins.
+The protocol, analysis, executable sources and prepared inputs were frozen
+locally before reserved forecasts, at commit \texttt{\RMFreezeShort{}}.
+This was not public preregistration or independent replication. Historical
+studies retain their own estimands and are not pooled with this experiment.
+
+For task $t$, method $m$ and horizon $h$, the loss scale is
+$v_{th}=\max\{\Var_A(Y_h),10^{-12}\}$, using the retained A target rows
+and population variance convention. The task loss is
+\[
+ L_{tm}=\frac13\sum_{h\in\{1,4,12\}}
+ \frac{\MSE_{D,t,m,h}}{v_{th}}.
+\]
+Each repetition averages its six nonlinear law/noise conditions equally.
+For each comparator $m$, the primary useful-effect contrast is
+$d_{rm}=0.97L_{rm}-L_{rK}$. The linear-control aggregate instead averages
+its two noise levels and uses
+$d_{r,\mathrm{lin}}=1.05L_{r,\mathrm{ridge}}-L_{rK}$.
+Every one-sided lower bound
+\[
+ \bar d-t_{1-0.05/6,23}\,s_d/\sqrt{24}
+\]
+must be strictly positive. These are six Bonferroni-adjusted paired-mean
+$t$ comparisons, with independent repetitions as the sampling units.
+Their finite-sample interpretation relies on the paired-mean approximation;
+overlapping windows and paired noise levels do not increase the sample size.
+The 3\% improvement margin and 5\% linear tolerance are chosen research
+allocation thresholds, not application-derived requirements or a definition
+of universal effectiveness. Twenty-four repetitions is a fixed budget, not
+a demonstrated power calculation.
+
+The complete gate also requires finite, technically complete outputs, the
+feature/coefficient/correction bounds, and a taskwise maximum absolute KAHM
+error no more than five times the ridge maximum. The last requirement is a
+coarse engineering screen. No activation-rate or runtime-ratio threshold is
+used. A wholly failed method or any final prediction-cell recovery blocks an
+efficacy conclusion. Once technically complete, failure to satisfy every
+condition stops this forecasting-performance branch; a pass supports separate
+reserved application testing. Neither a favorable subset nor extra repetitions
+may be selected after D to change this decision.
+
+\subsection{Completed mechanism-study results}
+
+\input{generated/reconstruction_mechanism/result_summary}
+
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{3.5pt}
+\caption{All six fixed primary contrasts for bounded KAHM departure.
+The first five rows use the nonlinear aggregate and
+$\bar d=0.97L_m-L_K$; the last uses the linear-control aggregate and
+$\bar d=1.05L_m-L_K$. ``Gain'' is the point estimate
+$100(1-L_K/L_m)$; a negative value favors the comparator. The lower bound
+is for the absolute margin gap, not the percentage gain. All six
+one-sided Bonferroni bounds use 24 independent repetitions and 23 degrees
+of freedom. Each required bound must exceed zero.}
+\label{tab:mechanism-primary}
+\input{generated/reconstruction_mechanism/primary_table}
+\end{table}
+
+The positive common-basis comparison and the failed overall decision are
+compatible. A bounded reconstruction departure supplies useful functions to
+this decoder, while the matched positive-RBF reconstruction supplies much of
+the same predictive value. KAHM's point improvement over that matched arm is
+below the prespecified 3\% threshold. Its point improvement over raw RBF
+exceeds 3\%, but the simultaneous lower bound remains below zero, so that
+useful-effect claim is unresolved. Boosting and the selected policy have
+smaller aggregate point losses. The evidence therefore supports useful
+reconstruction features without establishing the required KAHM-specific
+practical advantage.
+
+Figure~\ref{fig:mechanism-conditions} retains every declared law and noise
+level for the matched reconstruction control and selected practical policy.
+The complete ten-method condition table and all horizon-level results remain
+available in the appendix and repository. These descriptive comparisons
+characterize where a restricted decoder benefits or loses; they are not a
+new selection rule for a favorable forecasting niche.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{generated/reconstruction_mechanism/law_noise_contrasts.pdf}
+\caption{Descriptive conditionwise gains of bounded KAHM departure over the
+matched bounded RBF departure and C-selected non-KAHM policy. Each point is
+$100(1-\overline L_K/\overline L_m)$ over all 24 repetitions of that
+condition; positive values favor KAHM. Panels have separate horizontal
+scales and numeric labels show each value. There are no conditionwise
+confidence claims or post-D selection.
+The dashed divider separates the nonlinear laws from the linear base-law
+negative control.}
+\label{fig:mechanism-conditions}
+\end{figure}
+
+The maximum taskwise KAHM-to-ridge maximum-error ratio is
+\RMMaxErrorRatio{}, against the declared limit of five. The saved checks
+record \RMFeatureViolations{} feature-bound, \RMCoefficientViolations{}
+coefficient-bound and \RMCorrectionViolations{} correction-bound violations.
+C activates the bounded KAHM correction on \RMKActiveNonlinear{} of
+432 nonlinear task/horizon cells and \RMKActiveLinear{} of 144 linear-control
+cells. Activation means a nonzero selected mixing coefficient; it is not
+evidence that the correction improves D loss. Mean charged fit-and-selection
+time is \RMKFitSeconds{} seconds for bounded KAHM departure and
+\RMRFitSeconds{} seconds for its matched bounded RBF departure; detailed
+costs and accounting boundaries appear in Appendix~\ref{app:reconstruction-results}.
+
+The functional certificate, deterministic correction bound and empirical
+decision answer different questions. Distinct functions may still be
+unhelpful at the observed sample size and decoder penalty. A bounded correction
+may still be inaccurate. Conversely, an unresolved useful-effect contrast does
+not show that the two representations are identical. The complete evidence
+therefore supports conclusions about this specified reconstruction-to-prediction
+mechanism, with the declared law, noise, data and decoder restrictions.

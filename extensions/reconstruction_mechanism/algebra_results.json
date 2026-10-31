@@ -1,0 +1,176 @@
+{
+  "algebra_decision": "GO_TO_ONE_MATCHED_FORECAST_STUDY",
+  "bounded_feature_and_ridge_witness": {
+    "all_query_features_finite": true,
+    "alpha": 0.01,
+    "block_widths": [
+      3,
+      4
+    ],
+    "coefficient_norm": 0.8212715682145327,
+    "coefficient_norm_bound": 5.824037145141213,
+    "equivalent_sum_loss_penalty": 0.31,
+    "feature_norm_bound": 2.6457513110645907,
+    "feature_width": 7,
+    "maximum_abs_query_correction": 1.6423729791866015,
+    "maximum_pointwise_bound_violation": -6.013122287999178,
+    "maximum_query_feature_norm": 2.6457513110645907,
+    "penalty_convention": "mean squared residual + alpha times squared coefficient norm; free intercept",
+    "query_rows": 115,
+    "scope": "Fabricated matrices and residuals only, with finite queries up to 1e300; no forecasting task or accuracy claim.",
+    "training_centered_residual_rms": 1.1648074290282429,
+    "training_feature_mean_norm": 0.036373076536951626,
+    "training_residual_mean": -0.08694828528523502,
+    "training_rows": 31,
+    "uniform_abs_correction_bound": 15.707740346565748
+  },
+  "decision_scope": "No universal structural redundancy: an explicit valid one-bank construction differs from affine and same-kernel RBF reconstruction features. This does not establish predictive value or distinctness for every fitted bank.",
+  "fixtures": {
+    "nonsymmetric_reference_witness": {
+      "affine_target_identity_max_abs_error": 8.881784197001252e-16,
+      "analytic_distinctness_conditions": {
+        "all_unordered_reference_pair_sums_distinct": true,
+        "positive_inverse_times_one_by_sufficient_neumann_condition": true,
+        "proof_location": "ALGEBRA.md, Proposition 4",
+        "reference_kernel_row_sums_nonconstant": true,
+        "unordered_reference_pair_sums": [
+          -2.0,
+          -1.0,
+          0.0,
+          1.0,
+          2.0,
+          4.0
+        ]
+      },
+      "bounded_combined_sample_rank": 4,
+      "bounded_kahm_departure_residual_to_common_plus_rbf_span": 0.030865651064610533,
+      "departure_second_difference_at_0_half_1": 0.03663952717336366,
+      "inverse_times_one": [
+        0.156024201781775,
+        0.1461228865978924,
+        0.16647229363087862
+      ],
+      "largest_offdiagonal_row_sum": 1.2314905926823394,
+      "maximum_normalized_weight_sum_error": 2.220446049250313e-16,
+      "minimum_relative_denominator_on_grid": 0.9498537386440643,
+      "neumann_positivity_condition_passed": true,
+      "normalized_krr_identity_max_abs_error": 2.220446049250313e-16,
+      "precision": 0.4285714285714285,
+      "raw_kahm_departure_residual_to_common_plus_rbf_span": 0.05355670997078987,
+      "raw_kahm_departure_residual_to_common_span": 0.3745146966502808,
+      "references": [
+        -1.0,
+        0.0,
+        2.0
+      ],
+      "row_sums_of_reference_kernel": [
+        1.952473448239236,
+        2.2314905926823396,
+        1.5697285469107967
+      ],
+      "sample_rank_common": 2,
+      "sample_rank_common_plus_both": 4,
+      "sample_rank_common_plus_kahm": 3,
+      "sample_rank_common_plus_rbf": 3,
+      "sample_rank_scope": "Numerical witness on the declared fabricated grid; not a proof about every fitted study bank.",
+      "source_regularizer": 4.498274743339644,
+      "source_regularizer_converged": true,
+      "source_regularizer_iterations": 4
+    },
+    "three_reference_distinctness": {
+      "affine_target_identity_max_abs_error": 8.881784197001252e-16,
+      "bounded_combined_sample_rank": 4,
+      "bounded_kahm_departure_residual_to_common_plus_rbf_span": 0.0240379327219592,
+      "departure_second_difference_at_0_half_1": 0.05005457787708956,
+      "inverse_times_one": [
+        0.16785148634070152,
+        0.15091715220350366,
+        0.16785148634070154
+      ],
+      "largest_offdiagonal_row_sum": 1.2130613194252668,
+      "maximum_normalized_weight_sum_error": 2.220446049250313e-16,
+      "minimum_relative_denominator_on_grid": 0.8198687381655516,
+      "neumann_positivity_condition_passed": true,
+      "normalized_krr_identity_max_abs_error": 2.220446049250313e-16,
+      "precision": 1.0,
+      "raw_kahm_departure_residual_to_common_plus_rbf_span": 0.007848549162640328,
+      "raw_kahm_departure_residual_to_common_span": 0.39562525662385273,
+      "references": [
+        0.0,
+        1.0,
+        2.0
+      ],
+      "row_sums_of_reference_kernel": [
+        1.741865942949246,
+        2.213061319425267,
+        1.741865942949246
+      ],
+      "sample_rank_common": 2,
+      "sample_rank_common_plus_both": 4,
+      "sample_rank_common_plus_kahm": 3,
+      "sample_rank_common_plus_rbf": 3,
+      "sample_rank_scope": "Numerical witness on the declared fabricated grid; not a proof about every fitted study bank.",
+      "source_regularizer": 4.276973775904365,
+      "source_regularizer_converged": true,
+      "source_regularizer_iterations": 4
+    },
+    "two_reference_degeneracy": {
+      "affine_target_identity_max_abs_error": 8.881784197001252e-16,
+      "bounded_combined_sample_rank": 4,
+      "bounded_kahm_departure_residual_to_common_plus_rbf_span": 0.021832299468309002,
+      "departure_identity_max_abs_error": 5.551115123125783e-16,
+      "departure_second_difference_at_0_half_1": -0.03393052642667416,
+      "exact_reparameterization_multiplier": 1.224037566462905,
+      "inverse_times_one": [
+        0.24876574971800774,
+        0.24876574971800774
+      ],
+      "largest_offdiagonal_row_sum": 0.3678794411714422,
+      "maximum_normalized_weight_sum_error": 2.220446049250313e-16,
+      "minimum_relative_denominator_on_grid": 0.8474533373392052,
+      "neumann_positivity_condition_passed": true,
+      "normalized_krr_identity_max_abs_error": 4.440892098500626e-16,
+      "precision": 0.5000000000000001,
+      "raw_kahm_departure_residual_to_common_plus_rbf_span": 8.881784197001252e-16,
+      "raw_kahm_departure_residual_to_common_span": 0.36903954042329,
+      "reconstruction_identity_max_abs_error": 4.440892098500626e-16,
+      "references": [
+        -1.0,
+        1.0
+      ],
+      "row_sums_of_reference_kernel": [
+        1.3678794411714423,
+        1.3678794411714423
+      ],
+      "sample_rank_common": 2,
+      "sample_rank_common_plus_both": 3,
+      "sample_rank_common_plus_kahm": 3,
+      "sample_rank_common_plus_rbf": 3,
+      "sample_rank_scope": "Numerical witness on the declared fabricated grid; not a proof about every fitted study bank.",
+      "source_regularizer": 2.6519665429866075,
+      "source_regularizer_converged": true,
+      "source_regularizer_iterations": 4
+    }
+  },
+  "forecast_evaluation_inputs_accessed": false,
+  "forecast_model_fits": 0,
+  "query_grid": {
+    "count": 81,
+    "start": -3.0,
+    "stop": 4.0
+  },
+  "required_attribution_caveats": [
+    "Transferring normalized KAHM weights directly to target values is exactly a normalized kernel-ridge ratio, not a distinct predictor to beat.",
+    "Some symmetric banks give identical augmented raw feature spans after reparameterization.",
+    "Isotropic ridge and separate bounded feature transforms need not be invariant under those reparameterizations.",
+    "The actual tested object is the fixed reconstruction-plus-normalization-plus-decoder procedure; numerical sample ranks do not prove global function-space equality.",
+    "Bounded corrections do not imply forecasting accuracy or a globally bounded raw baseline."
+  ],
+  "schema_version": 1,
+  "source_sha256": {
+    "extensions/direct_reconstruction/model.py": "5562cd2d64a6353ded0c2ff1b0a3d3a2d5da9a044066d26fc11e997376986986",
+    "extensions/predictive_geometry/study/vendor/upstream/kxx_matrix.py": "6a11db30dee4c630930303361c94138ca7e58fc2818d22df31f72631c4a553d3",
+    "extensions/reconstruction_mechanism/algebra.py": "04c12bc9a028798be3072929178be08335e197facdc6188b3bebece2954c17b8"
+  },
+  "status": "passed"
+}

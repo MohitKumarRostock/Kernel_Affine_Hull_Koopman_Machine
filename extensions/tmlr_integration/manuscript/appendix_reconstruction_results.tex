@@ -1,0 +1,219 @@
+\section{Complete reconstruction-departure evaluation}
+\label{app:reconstruction-results}
+
+This appendix gives the numerical observation protocol, full method roster,
+descriptive condition results, stability accounting, selection frequencies
+and measured resources for Section~\ref{sec:reconstruction-mechanism}.
+The frozen implementation and complete arrays are under
+\path{extensions/reconstruction_mechanism}. All displays are generated
+from the completed independent analysis; their source and output hashes are
+recorded in
+\path{generated/reconstruction_mechanism/ASSET_PROVENANCE.json}.
+
+\subsection{Observation laws and separation of roles}
+
+The linear negative control is
+\[
+ y_t=0.65y_{t-1}-0.15y_{t-2}+\epsilon_t,
+ \qquad \epsilon_t\stackrel{\mathrm{iid}}\sim\mathcal N(0,0.1^2),
+\]
+with two initial zeros, 256 discarded stored values and 72 retained values
+beginning at $y_{256}$. The nonlinear AR uses
+\[
+ y_t=\tanh\{1.25y_{t-1}-0.65y_{t-2}
+             +0.25\sin(3y_{t-1})+u_t\},
+ \qquad u_t\stackrel{\mathrm{iid}}\sim U[-0.1,0.1],
+\]
+two initial values uniform on $[-0.8,0.8]$, and 80 discarded stored values.
+Van der Pol uses $\dot x=v$, $\dot v=(1-x^2)v-x$; Duffing uses
+$\dot x=v$, $\dot v=-0.2v+x-x^3+0.3\cos(1.2t+\varphi)$.
+The inherited float64 RK4 implementation has step 0.025, observation interval
+0.1 and burn time ten. Initial $x,v$ are independent uniform on $[-2,2]$;
+$\varphi$ is uniform on $[0,2\pi]$. Oscillator observations are
+$0.95\tanh(x)+U[-0.02,0.02]$. The numerical integrator and observation
+map define the tested laws; they are not exact continuous-ODE trajectories.
+
+For each law and repetition, all split episodes are generated once. Additional
+noise is $\eta s_A Z$, with $\eta\in\{0,0.1\}$,
+$Z\stackrel{\mathrm{iid}}\sim\mathcal N(0,1)$ and $s_A$ the population
+standard deviation of all unaugmented observed A episode values. Underlying
+episodes and $Z$ arrays are paired across the two levels. The noise changes
+both input histories and forecast targets. At zero added noise, the inherited
+oscillator sensor noise remains. On B/C/D, the augmented linear observations are Gaussian conditional
+on the realized A-estimated amplitude; across repetitions that random
+amplitude induces a variance mixture. Neither exact stationarity after
+finite burn-in nor a known-amplitude oracle interpretation of fitted ridge
+is assumed. The Gaussian additions also preclude carrying over a bounded-loss
+claim from the earlier bounded observation studies.
+
+The 24 repetition seeds are 946100--946123. Development seed 975001 is
+excluded. A/B/C/D base episodes and unit-noise arrays are generated from
+distinct independent random streams; the added-noise amplitude is estimated
+from A and shared across splits. Row caps and fitting seeds are paired between noise
+levels. All 13 within-episode origins, at indices $11,15,\ldots,59$, use only
+history through their origin and target offsets $(1,4,12)$. There are
+\RMTargetCells{} scored target cells per method across the complete roster,
+but only 24 independent aggregates in the primary inference. No individual
+origin, horizon or paired-noise task is promoted to an independent replicate.
+
+A fits every scaler, reference bank, kernel factor, raw predictor and decoder.
+B selects model settings separately for each horizon. C selects each
+non-ridge mixing coefficient, then one whole non-KAHM procedure. Selected
+states are serialized before reserved queries are passed to prediction, and
+targets enter the execution wrapper only after forecasts have been fixed.
+No parameter or selection is updated on D.
+
+\subsection{Fixed settings and complete descriptive losses}
+
+The common locality logit is
+$-\|z-\mu_j\|^2/(2s_j)$, where $s_j$ is the inherited mean squared
+local radius, floored at $10^{-6}$. Softmax normalization occurs separately
+within the 2-, 4- and 8-model blocks. Principal rank is two, there are at most
+24 references per local model, and the A bank cap is 512 rows. The inherited
+KAHM reference-energy regularization is unchanged. Reference and query kernels
+use the same projected covariance precision; the query log-kernel maximum is
+subtracted before exponentiation for both KAHM and positive RBF ratios.
+
+The inherited history scaler replaces standard deviations at or below
+$10^{-12}$ by one. The subsequent A feature scalers use
+$\max(\mathrm{sd},10^{-6})$. Raw ridge/RBF history scalers also use this
+$10^{-6}$ floor. Common and departure blocks are radially bounded separately,
+with no scaling after the transform. The unbounded ablations retain the same
+bounded common block and omit only the departure radial map. Their failures
+or successes cannot replace the bounded primary candidate.
+
+Every ridge head uses the mean-SSE objective and the five penalties
+$10^{-4},10^{-3},10^{-2},10^{-1},1$. The equivalent sum-SSE penalty is
+$n\alpha$, not $\alpha$. The raw RBF arm concatenates standardized histories
+with at most 64 Nystr\"om coordinates, then scales those concatenated columns
+using A alone. Bandwidth factors 0.5, 1 and 2 multiply the median positive
+landmark squared-distance scale; B selects bandwidth and penalty separately
+by horizon. Histogram gradient boosting uses 100 iterations, L2 penalty one,
+learning rates 0.05 or 0.1 and maximum leaves 7 or 15; B again selects separately
+by horizon. Persistence repeats the latest observed value before its common
+baseline mixing step. All non-ridge procedures use the same C mixing grid
+$\{0,1/4,1/2,1\}$, with deterministic tie order.
+
+\begin{table}[!htbp]
+\centering\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{All ten procedures, every declared law and both added-noise levels.
+Entries are mean horizon-averaged A-variance-normalized D MSE over 24
+repetitions; lower is better. The first six columns enter the nonlinear
+aggregate with equal weight. The final two form the separate linear control.
+These conditionwise summaries are descriptive. ``Unbounded'' omits only the
+departure radial bound. Persistence and raw nonlinear controls include their
+C-selected blend with ridge.}
+\label{tab:mechanism-all-methods}
+\input{generated/reconstruction_mechanism/law_noise_table}
+\end{table}
+
+The machine-readable files \texttt{horizon\_metrics.csv} and
+\texttt{condition\_horizon\_metrics.csv} retain every method, law, noise
+level and horizon, including raw MSE and the A-only loss scale. They are not
+pooled with historical losses that use different normalizations. The
+\texttt{replicate\_contrasts.csv} file contains all 24 margin-gap values for
+each primary contrast, allowing the six lower bounds to be recomputed without
+importing any forecasting model.
+
+\subsection{Stability, numerical safeguards and correction activation}
+
+The bounded-feature checks cover 192 tasks for each of three bounded
+procedures. Coefficient and correction checks additionally distinguish the
+three horizons, giving 576 checks per procedure for each inequality. The
+independent analyzer checks the recorded fitted-state bound formulas and
+recomputes actual D corrections as the saved forecast minus the saved raw
+ridge forecast. It does not claim to reconstruct the fitted coefficient
+matrices from summary statistics alone. Table~\ref{tab:mechanism-bounds}
+reports maxima over the complete roster; maxima in different columns need
+not come from the same task or horizon.
+
+\begin{table}[!htbp]
+\centering\small
+\setlength{\tabcolsep}{5pt}
+\caption{Observed ratios to the deterministic bounded-feature and
+ridge-readout limits. Feature ratios concern the common block for the
+common procedure and the respective departure block for the two appended
+procedures; the readout bound uses the complete concatenated feature radius.
+A zero correction with a zero bound contributes ratio zero. ``Violations''
+sums failed feature, coefficient and correction checks at the fixed numerical
+tolerances. These are implementation checks, not confidence intervals for
+forecast risk.}
+\label{tab:mechanism-bounds}
+\input{generated/reconstruction_mechanism/bounds_table}
+\end{table}
+
+The maximum taskwise ratio of KAHM maximum absolute error to ridge maximum
+absolute error is \RMMaxErrorRatio{}, and \RMStabilityFailures{} tasks fail
+at least one declared stability screen. Local KAHM reconstruction fallback
+affects \RMKFallbackABC{} A/B/C rows and \RMKFallbackD{} D rows across all
+tasks; the corresponding RBF D count is \RMRFallbackD{}. Counts are unions
+over local models within a task and split, so the same row is not counted
+again merely because several local maps invoke their guard. The fixed local
+fallback sets the affected departure to zero. The complete valid analysis
+requires zero wholly failed methods and zero final prediction-cell recoveries;
+neither is hidden by removing a task or substituting a successful subset.
+
+\begin{table}[!htbp]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{C-selected correction activation. Nonlinear and linear counts have
+432 and 144 task/horizon cells, respectively. The four mixing-weight columns
+combine all 576 cells. A policy choice of raw ridge is counted as zero
+correction; raw ridge itself has no mixing selection. Nonzero mixing is not
+an empirical guarantee of D improvement, and no minimum activation frequency
+was part of the decision.}
+\label{tab:mechanism-activation}
+\input{generated/reconstruction_mechanism/activation_table}
+\end{table}
+
+\begin{table}[!htbp]
+\centering\small
+\setlength{\tabcolsep}{8pt}
+\caption{Whole-procedure choices made by the C-selected non-KAHM policy.
+Each task contributes one choice across all horizons after each candidate's
+own horizon-wise C mixing selection. Both KAHM arms are excluded. These are
+validation choices, not choices made from D errors.}
+\label{tab:mechanism-policy}
+\input{generated/reconstruction_mechanism/policy_table}
+\end{table}
+
+\subsection{Measured costs and reproducibility limits}
+
+\begin{table}[!htbp]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{Mean charged resources over all 192 equal-sized task suites.
+Fit/select includes required A fitting, B selection and C calibration.
+D prediction covers all 1,664 histories and three horizons. Shared computation
+nodes are charged once to every procedure requiring them; policy fitting pays
+the union of its non-KAHM candidates, while its prediction/state follow the
+selected complete procedure. State denotes serialized selected objects;
+arrays count their owned NumPy buffers. These are measured implementation
+costs, not minimum deployment complexity.}
+\label{tab:mechanism-resources}
+\input{generated/reconstruction_mechanism/resource_table}
+\end{table}
+
+Each task runs serially in a fresh process with one assigned CPU and one
+numerical thread. The charged primitive-node costs exclude diagnostic-only
+rank calculations; full-suite timings, including diagnostics, are retained
+separately. Node accounting includes model candidates that are actually
+evaluated, rather than only the winning hyperparameters. Wall and CPU times
+depend on the recorded machine and software environment. The peak whole-task
+process RSS is \RMPeakProcessMiB{} MiB; it includes imports, all ten arms,
+shared diagnostics and evidence arrays, and is not a per-method RAM estimate.
+Serialized state and owned array buffers omit transient workspace and do not
+measure online update latency. No cost ceiling was imposed without an
+application-derived requirement.
+
+The independent analyzer verifies the immutable local source/input freeze,
+the complete task roster, exact target correspondence, A variance scales,
+policy predictions, nonfinite/failure accounting and all primary aggregation.
+The reporting builder separately reconstructs condition and repetition means
+and all six $t$ lower bounds before producing these displays. Numerical
+development checks, model replay and independent calculations are consistency
+checks; they do not constitute a new scientific replication. The protocol is
+locally prospective, informed by previous results, and explicitly not public
+preregistration. Neither these known-law repetitions nor the algebraic
+distinctness certificate establishes a natural-application forecasting claim.

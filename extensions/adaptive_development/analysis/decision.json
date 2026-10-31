@@ -1,0 +1,42 @@
+{
+  "cap_violations": [],
+  "capacity_tiers": [
+    {
+      "budget": "small",
+      "decision": "DEFER",
+      "mechanism_gate": false,
+      "natural_aggregate_gate": false,
+      "natural_gate": false,
+      "no_source_harm_above_five_percent": false,
+      "p99_allowance_gate": true,
+      "same_source_beats_all_comparators": false,
+      "worst_kahm_stream_p99_ms": 9.894550160970539,
+      "zero_framework_failures": true
+    },
+    {
+      "budget": "large",
+      "decision": "DEFER",
+      "mechanism_gate": false,
+      "natural_aggregate_gate": false,
+      "natural_gate": false,
+      "no_source_harm_above_five_percent": false,
+      "p99_allowance_gate": true,
+      "same_source_beats_all_comparators": false,
+      "worst_kahm_stream_p99_ms": 11.753387959033716,
+      "zero_framework_failures": true
+    }
+  ],
+  "completed_runs": 144,
+  "config_sha256": "a3052e0dff9fc4df96c6430832ac9294d2d09a694bbb6b9cc2ebb29bbe39d331",
+  "decision": "DEFER",
+  "expected_runs": 144,
+  "framework_errors": 0,
+  "framework_fallback_forecasts": 0,
+  "interpretation": "Gate is conservative development triage, not a hypothesis-test rejection of KAHM. No independent natural-source confirmation is claimed.",
+  "memory_scope": "Capacity tiers match stated quotas, not byte footprints; kernel has M supports per horizon, geometry shares M across horizons. Unique NumPy state and whole-process peak RSS are separate measurements.",
+  "scope": "One generator, four paired seeds, two previously inspected collections, one fixed implementation and finite calibration gamma grid; no bandwidth/penalty search.",
+  "scored_forecasts": 387900,
+  "study_type": "development",
+  "technical_validity": true,
+  "timing_scope": "Single-thread serial fresh worker processes; p99 assessed per stream. 20 ms allowance monitored, not enforced. Warm adaptive state maintained even at zero selected correction."
+}

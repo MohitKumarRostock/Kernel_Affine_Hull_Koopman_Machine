@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - 'extensions/target_geometry/**'
-      - 'extensions/tmlr_integration/manuscript/**'
       - 'extensions/tmlr_integration/package_target.py'
       - 'extensions/tmlr_integration/package_utility.py'
       - 'extensions/natural_forecasting/**'
@@ -14,7 +13,6 @@ on:
   pull_request:
     paths:
       - 'extensions/target_geometry/**'
-      - 'extensions/tmlr_integration/manuscript/**'
       - 'extensions/tmlr_integration/package_target.py'
       - 'extensions/tmlr_integration/package_utility.py'
       - 'extensions/natural_forecasting/**'
@@ -22,6 +20,9 @@ on:
       - 'extensions/predictive_geometry/study/**'
       - '.github/workflows/target-geometry.yml'
   workflow_dispatch:
+
+# The completed reconstruction-mechanism workflow owns current manuscript
+# builds. Historical numerical/source changes retain every check below.
 
 permissions:
   contents: read

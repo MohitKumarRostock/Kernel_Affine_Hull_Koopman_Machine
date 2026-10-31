@@ -1,0 +1,24 @@
+% Generated from saved task-level resource measurements.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{5pt}
+\caption{Measured service and state by method/tier. P99 is first computed per stream, then maximized across the 12 streams. Other columns also report maxima; they may occur on different streams. Owned NumPy buffers exclude Python objects and temporary work arrays; worker RSS includes interpreter, libraries and evidence storage. Neither is a precise incremental deployment footprint.}
+\label{tab:adaptive-development-resources}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Method & Tier & P99 (ms) & Max (ms) & NumPy (KiB) & RSS (MiB) \\
+\midrule
+Raw ridge & Small & 0.55 & 1.77 & 300.34 & 150.48 \\
+Raw ridge & Large & 1.26 & 4.54 & 465.72 & 150.48 \\
+Fixed KAHM & Small & 4.98 & 29.01 & 466.29 & 150.48 \\
+Fixed KAHM & Large & 8.61 & 27.24 & 685.38 & 150.48 \\
+Adaptive KAHM & Small & 9.89 & 49.10 & 518.95 & 150.48 \\
+Adaptive KAHM & Large & 11.75 & 23.60 & 824.52 & 150.48 \\
+Adaptive affine & Small & 9.56 & 24.75 & 509.83 & 150.48 \\
+Adaptive affine & Large & 7.00 & 13.44 & 791.39 & 150.48 \\
+Adaptive RBF-local & Small & 5.05 & 12.05 & 509.83 & 150.48 \\
+Adaptive RBF-local & Large & 4.58 & 8.00 & 791.39 & 150.48 \\
+Sliding-window KRR & Small & 3.15 & 3.95 & 477.34 & 150.48 \\
+Sliding-window KRR & Large & 3.42 & 13.49 & 1011.72 & 150.48 \\
+\bottomrule
+\end{tabular}
+\end{table}

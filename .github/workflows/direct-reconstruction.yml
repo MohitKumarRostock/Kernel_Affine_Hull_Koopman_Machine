@@ -5,17 +5,19 @@ on:
     paths:
       - 'extensions/direct_reconstruction/**'
       - 'extensions/forecast_gate_pilot/**'
-      - 'extensions/tmlr_integration/manuscript/**'
       - 'extensions/tmlr_integration/package_direct.py'
       - '.github/workflows/direct-reconstruction.yml'
   pull_request:
     paths:
       - 'extensions/direct_reconstruction/**'
       - 'extensions/forecast_gate_pilot/**'
-      - 'extensions/tmlr_integration/manuscript/**'
       - 'extensions/tmlr_integration/package_direct.py'
       - '.github/workflows/direct-reconstruction.yml'
   workflow_dispatch:
+
+# This historical workflow still checks changes to its own study and packager.
+# Current-manuscript-only changes belong to reconstruction-mechanism.yml;
+# they do not introduce a new CPU-sensitive replay gate for the old experiment.
 
 permissions:
   contents: read

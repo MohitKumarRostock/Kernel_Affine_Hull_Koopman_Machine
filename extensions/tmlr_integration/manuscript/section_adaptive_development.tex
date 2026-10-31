@@ -1,0 +1,107 @@
+\section{Budgeted online adaptation: a completed development decision}
+\label{sec:adaptive-development}
+\input{generated/adaptive_development/numbers}
+
+\paragraph{Question and scope.}
+A subsequent development study tested whether updates to local KAHM geometry under fixed reference and
+replay budgets provide enough predictive benefit to justify a larger evaluation.
+The complete design comprises twelve streams, six methods and two capacity
+tiers: \ADRunCount{} runs and \ADForecastCount{} scored forecasts after the
+numerical amendment described below. Four stationary nonlinear AR streams
+are paired by innovations with four recurring A/B streams; the latter
+alternate regimes every 256 observations, and both regimes occur in the
+initial fitting prefix. Regime labels are never supplied to the forecasters.
+Three Dominick weekly series and one Sunspot daily series are deliberately
+reused from previously inspected inputs. This supplies development evidence
+from one generator and two selected natural collections, with no claim of
+new-source confirmation. Appendix~\ref{app:adaptive-development} records
+the chronology, decision thresholds and source identities.
+
+\paragraph{A simpler adaptive prototype.}
+All geometric methods retain a sliding-window raw ridge baseline and
+residual heads. Fixed KAHM updates its heads with unchanged initial geometry;
+adaptive KAHM, affine and RBF-local share the bounded reference-refresh
+policy. Each adaptive refresh coherently re-encodes replay histories and
+rebuilds residual heads. The sixth method is sliding-window Gaussian kernel
+ridge with a free intercept and recursive add/delete inverse updates. Its
+forecast also uses the calibrated blend with raw ridge: correction weight
+one gives the kernel prediction and zero gives raw ridge. Thus the reported
+KRR arm is a selected forecasting procedure, not an unblended kernel forecast
+on every horizon, and it is not the published KRLS-T algorithm.
+The small tier allows 64 shared
+geometric references and 128 replay rows per horizon, and the large tier
+allows 128 and 256. Kernel supports are capped separately per horizon;
+these quotas are not equal byte or computational allocations. Bandwidths
+and gate temperatures are fixed, so this prototype is not a streaming
+reproduction of the forecast-trained model in the preceding study.
+
+\paragraph{Chronology and numerical amendment.}
+The first 35\% of each stream initializes the model, 35--50\% supplies
+chronological calibration, and the latter half supplies evaluation.
+Only matured labels enter an update. Forecasts are recorded before their
+targets arrive and remain immutable. Each horizon selects a correction
+weight from $\{0,0.25,0.5,1\}$ on matured calibration targets, then retains
+that weight during evaluation. The original complete attempt had four
+correction-head failures and 8,659 framework fallback forecasts. Amendment
+A1 replaces accumulated correction normal equations with a centered,
+column-equilibrated augmented ridge solve using pivoted QR, preserving
+the objective, penalties, data, scalers, reference policy and decision
+rules. All geometric arms receive the repair, and the full roster is
+repeated. The amended runs have no unexpected model exceptions, framework
+fallback forecasts or observed cap violations. Both attempts are preserved;
+their source freezes were local checkpoints, not public preregistration.
+The repeat follows observed outcomes and is not independent confirmation.
+
+\input{generated/adaptive_development/loss_table}
+
+\paragraph{Predictive outcome.}
+Table~\ref{tab:adaptive-development-loss} reports MSE divided by an
+initial-prefix seasonal-difference scale. The scale and online schedule
+differ from earlier sections, precluding direct comparisons of their
+numerical scores. Both complete tiers fail the recurring and natural-data
+accuracy criteria and receive the decision \textsc{Defer}. Adaptive KAHM's
+natural mean loss exceeds kernel ridge by \ADSmallKRRExcess\% at the small
+tier and \ADLargeKRRExcess\% at the large tier. At each tier, only two of
+twelve natural horizon/series combinations activate a KAHM correction;
+every Sunspot horizon selects zero. Small-tier recurring corrections are
+all zero, while nine of twelve large-tier recurring corrections are active.
+Baseline recovery at zero correction does not demonstrate added geometric
+value. The descriptive advancement criteria are development triage rules,
+not a hypothesis test or a universal definition of effectiveness.
+
+\paragraph{Extrapolation persists after the numerical repair.}
+For recurring seed 20261101, origin 1554 and horizon 12, large-tier adaptive
+KAHM predicts $\ADPeakPrediction$ when the target is $\ADPeakTruth$.
+At the preserved diagnostic state, the largest absolute standardized query
+feature is about $\ADQueryFeatureMagnitude\times10^6$, compared with
+$\ADReplayFeatureMagnitude$ in the current supervised replay. A fresh
+centered SVD solve reproduces the large correction. The minimum relative
+signed denominator, defined by the ratio in
+Equation~\eqref{eq:mechanism-relative-denominator}, is
+$\ADRelativeDenominator$, safely above its $10^{-10}$
+guard. Adaptive affine also exhibits severe extrapolation under a fresh
+solve. These post-run observations identify a representation--decoder
+stability problem in the examined states. They are consistent with a
+query falling outside the observed feature range of matured-label replay, but do not
+isolate the causal contributions of scaling, label delay and geometry
+refreshes. No forecasts were removed, clipped or retuned to obtain the
+reported decision.
+
+\paragraph{Cost and research consequence.}
+Adaptive KAHM passes the monitored 20\,ms p99 screen on every stream:
+the worst per-stream values are \ADSmallPninetyNine{} and
+\ADLargePninetyNine{}\,ms. There are nevertheless \ADOverruns{} service
+intervals above 20\,ms among \ADServiceSteps{} evaluation observation
+steps; the screen is not an enforced per-step deadline. Service includes
+updates, geometry refreshes, feature/head rebuilds and prediction, but
+excludes evidence serialization and scoring. The eager prototype maintains
+geometry even when its correction is disabled. Resource details appear
+in Table~\ref{tab:adaptive-development-resources}.
+This result establishes measured implementation feasibility under the
+stated screen while withholding support for an adaptive forecasting
+advantage. The fixed-geometry reconstruction-departure experiment in
+Section~\ref{sec:reconstruction-mechanism} subsequently tests a distinct
+readout and an explicit correction bound. Its result is reported separately,
+rather than treated as a repair or confirmation of the adaptive prototype.
+The development outcome does not rule out every other adaptive or
+forecast-trained KAHM formulation.

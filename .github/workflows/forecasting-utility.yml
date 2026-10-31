@@ -5,15 +5,20 @@ on:
     paths:
       - 'extensions/forecasting_utility/**'
       - 'extensions/tmlr_integration/**'
+      - '!extensions/tmlr_integration/manuscript/**'
       - 'examples/forecasting_utility.py'
       - '.github/workflows/forecasting-utility.yml'
   pull_request:
     paths:
       - 'extensions/forecasting_utility/**'
       - 'extensions/tmlr_integration/**'
+      - '!extensions/tmlr_integration/manuscript/**'
       - 'examples/forecasting_utility.py'
       - '.github/workflows/forecasting-utility.yml'
   workflow_dispatch:
+
+# Preserve this historical study's source, asset-generation and packaging
+# checks; current manuscript validation belongs to reconstruction-mechanism.yml.
 
 permissions:
   contents: read

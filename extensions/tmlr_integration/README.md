@@ -1,73 +1,53 @@
-# KAHM time-series forecasting: forecast-trained local geometry
+# KAHM reconstruction and prediction: completed-results manuscript
 
-This is an **unsubmitted research draft** with anonymous author metadata
-retained pending author publication preparation. The integrated manuscript
-preserves all previous studies and adds the separate exploratory gate pilot
-and directly forecast-trained reconstruction experiment.
+**Kernel Affine Hull Representations for Time-Series Forecasting: Distinctness, Stability, and Predictive Limits** integrates completed algebra, the fixed reconstruction-departure experiment and the prior studies. The final mechanism decision is **STOP_FORECASTING_PERFORMANCE_BRANCH**: useful value over the common basis is established, but the required KAHM-specific practical advantage is not.
 
-- [Current manuscript PDF](review/KAHM_Forecast_Trained_Manuscript.pdf)
-- [Editable manuscript](manuscript/main.tex)
-- [Direct reconstruction study](../direct_reconstruction/README.md)
-- [Frozen protocol](../direct_reconstruction/PROTOCOL.md)
-- [Previous proxy-metric findings](../target_geometry/FINDINGS.md)
+- [Manuscript PDF](review/KAHM_Reconstruction_Prediction_Manuscript.pdf)
+- [Editable LaTeX source ZIP](review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
+- [Source entry point](manuscript/main.tex)
+- [Completed findings](../reconstruction_mechanism/FINDINGS.md)
+- [Evidence restoration and independent verification](../reconstruction_mechanism/README.md)
+- [Preserved adaptive development](../adaptive_development/FINDINGS.md)
 
-The method fits a fixed baseline and geometric residual head, trains selected
-KAHM reconstruction parameters against forecast error on B, selects on C,
-and evaluates on D. Matched local controls and practical raw-input models
-receive explicitly stated training and optimization opportunities. The
-planned roster has 36 simulation and ten natural tasks. Three rideshare tasks
-lack B windows and remain feasibility failures, making the complete
-four-collection accuracy aggregate undefined.
+## Build the current paper
 
-## Audit and rebuild the current draft
-
-From the repository root:
+All generated figures/tables, bibliography and styles are included. No forecast fitting is required. Install TeX Live with `latexmk` and Latin Modern fonts, then:
 
 ```bash
-python -m pip install -r extensions/direct_reconstruction/requirements.txt
-python extensions/direct_reconstruction/evidence.py unpack \
-  --run-dir extensions/direct_reconstruction/results
-python extensions/direct_reconstruction/analyze.py \
-  extensions/direct_reconstruction/results --verify-live-source
-python -m extensions.tmlr_integration.package_direct audit
 cd extensions/tmlr_integration/manuscript
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-All generated historical and current displays are included. The frozen
-analyzer recomputes the five new TeX tables/macros from saved predictions;
-no forecasting refits are required. The manuscript uses the bundled TMLR
-preprint style, an **Unsubmitted research draft** header, and an accurate
-AI-assistance disclosure. No journal submission has been made.
+The source uses TMLR preprint mode and a **Research preprint** header. It has not been submitted for peer review. Anonymous author metadata is retained from the supplied source, and the AI-assistance disclosure remains explicit.
 
-## Current deliverables
+To regenerate the two newest sets of manuscript displays from saved evidence, first restore the repository's exact evidence parts as described in the study guide, then run:
 
 ```bash
-python -m extensions.tmlr_integration.package_direct build \
-  --pdf /absolute/path/to/main.pdf --output /absolute/path/to/release
-python -m extensions.tmlr_integration.package_direct verify /absolute/path/to/release
+python extensions/tmlr_integration/build_adaptive_assets.py
+python extensions/tmlr_integration/build_mechanism_assets.py
 ```
 
-| Deliverable | Scope |
-|---|---|
-| `KAHM_Forecast_Trained_Manuscript.pdf` | Complete integrated manuscript |
-| `KAHM_Forecast_Trained_Manuscript_Source.zip` | Editable LaTeX, bibliography, styles and all generated displays |
-| `KAHM_Direct_Reconstruction_Reproduction.zip` | New frozen experiment, exact numerical dependencies, inputs, predictions, selected models, traces, failure records and separate preserved pilot |
-| `RELEASE_MANIFEST.json` | Byte sizes, SHA-256 hashes and evidence accounting |
+Each builder checks aggregation and records input/output hashes. Historical sources and outcomes are unchanged. The new statistical family is not pooled with earlier ones.
 
-The packager runs the frozen analyzer on a disposable copy, replays selected
-models, compares regenerated reports and tables exactly, and verifies byte
-inventories. It does not refit candidate forecasters. The reproduction ZIP
-contains unpacked evidence so its audit is directly runnable; the repository
-uses lossless task archives to keep publication manageable. The prospective
-scientific freeze is distinct from post-execution packaging inventories.
+## Package the completed release
 
-The [evidence-only CI workflow](../../.github/workflows/direct-reconstruction.yml)
-checks numerical contracts, replays saved evidence, compiles the manuscript
-and packages review files. Its tests use fabricated/development data; it does
-not rerun the reserved forecast fits. Earlier packagers retain their stated
-historical scope and must not be used to claim a complete reproduction bundle
-for the newest study.
+```bash
+python -m extensions.reconstruction_mechanism.package_results audit
+python -m extensions.reconstruction_mechanism.package_results build \
+  --pdf /absolute/path/to/main.pdf --output /absolute/path/to/release
+python -m extensions.reconstruction_mechanism.package_results verify /absolute/path/to/release
+```
+
+| Artifact | Scope |
+| --- | --- |
+| `KAHM_Reconstruction_Prediction_Manuscript.pdf` | Complete final-results research preprint |
+| `KAHM_Reconstruction_Prediction_Manuscript_Source.zip` | All editable LaTeX, bibliography, styles and generated displays; compiles independently |
+| `KAHM_Reconstruction_Mechanism_Reproduction.zip` | Expanded new mechanism evidence, numerical dependencies, saved predictions/states and audits |
+| `RELEASE_MANIFEST.json` | Exact byte inventories, source provenance and completed-result accounting |
+
+The reproduction ZIP covers the final mechanism study. It does not claim to include every historical study's complete data. The repository preserves the earlier studies separately; its new lossless transport contains both mechanism and adaptive evidence. The new packager recomputes only the new frozen analysis and verifies independent audit/replay records, without invoking old CPU-sensitive forecast replays. Historical packagers remain available for their original scope.
+
+[Current CI](../../.github/workflows/reconstruction-mechanism.yml) restores evidence, verifies the scientific freeze, independently audits results, compiles the full manuscript, verifies archives and replays selected states from the extracted reproduction package. It does not refit or retune the reserved forecasting experiment.
 
 ## Historical study documentation
 

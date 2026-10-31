@@ -1,5 +1,9 @@
 \section{Related work}\label{sec:related}
 \paragraph{Reconstruction geometry and local prediction.}
+Prediction from delay coordinates using local approximation predates the
+present representations \citep{Farmer1987Prediction}. The question here is
+which specific reconstruction-derived basis, together with its fitted
+decoder, improves on matched alternatives.
 KAHMs were introduced for geometrically informed classification, including
 a differential-privacy application \citep{Kumar2024KAHM}, and developed for
 collaborative learning \citep{Kumar2025Collaborative}. Earlier geometric
@@ -19,6 +23,36 @@ regression proxy follows supervised metric learning
 \citep{Weinberger2007Metric}; the contribution is a controlled test of
 transfer to KAHM, rather than the invention of metric learning.
 
+\paragraph{Reconstruction objectives and predictive dynamics.}
+Reconstruction and forecasting objectives have already been combined in
+learned dynamical representations. \citet{Lusch2018Embeddings} train
+autoencoder coordinates with reconstruction, latent linearity and multistep
+prediction losses. \citet{Liu2023Koopa} instead optimize a residual Koopman
+forecaster without the canonical binding reconstruction loss. These precedents
+preclude a novelty claim based merely on connecting a reconstruction map to
+future prediction. Our final experiment fixes the geometric bank, exposes
+full reconstruction departures to a restricted residual readout, and tests
+their value against a same-kernel RBF reconstruction with matched block
+standardization and radial bounding.
+The direct-target weight-transfer identity in
+Proposition~\ref{prop:mechanism-krr} further identifies a normalized
+kernel-ridge reparameterization that must not be renamed as an independent
+forecasting principle. The conditional distinctness and redundancy results
+in Appendix~\ref{app:reconstruction-mechanism} locate the narrower basis
+question actually tested.
+
+\paragraph{Bounded online kernel models.}
+Fixed-budget kernel recursive least squares already couples support
+management with nonlinear tracking \citep{VanVaerenbergh2010Budget}.
+Our separate adaptive development experiment uses a simpler FIFO
+sliding-window kernel-ridge comparator with a calibration-selected blend
+with raw ridge. It is not an implementation of that paper's pruning and
+label-update rule, and its outcome does not compare against the full class
+of modern adaptive kernel methods. Likewise, the centered-ridge correction
+bound in Proposition~\ref{prop:mechanism-correction-bound} is elementary
+regularization algebra; it does not establish predictive superiority or
+stability of an arbitrary geometry-refresh process.
+
 \paragraph{Target information and finite fitting.}
 Supervised dimension reduction asks which features preserve the input--target
 relationship \citep{Fukumizu2004SDR}. Predictive $\mathcal V$-information
@@ -27,9 +61,12 @@ distinguishes information accessible to a restricted observer
 make a related distinction without estimating unrestricted Bayes risk.
 Nystr\"om approximation \citep{Williams2001Nystrom,Rudi2015Nystrom} changes
 both fitting and computation; equal requested landmark counts do not
-equate function classes, realized ranks, or costs. Retaining an affinity
-normalizer gives an elementary invertible reparameterization, not a new
-information-recovery theorem.
+equate function classes, realized ranks, or costs. Retaining the outer
+affinity normalizer $Z$ gives the elementary invertible reparameterization
+in Equation~\eqref{c:eq:inverse}, not a new information-recovery theorem.
+This affinity normalizer is distinct from the signed reconstruction sum
+$kC\mathbf1$ and its relative-cancellation guard in
+Equation~\eqref{eq:mechanism-relative-denominator}.
 
 \paragraph{Forecast evaluation and selection.}
 Residual correction and additive fitting under squared error are
@@ -64,3 +101,10 @@ The present target intervention, encoding ablations, fresh capacity
 comparison, and reserved natural-source evaluation address finite fitted
 procedures. Their paired-MSE intervals and measured selection costs do not
 extend the earlier class-risk or minimum-feasible-cost certificates.
+In particular, \citet{KumarKargaran2026Limits} already evaluate their
+certificates on fixed four-state designs and independent Van der Pol
+datasets. The finite-procedure comparisons here do not supply a new
+impossibility certificate: a failure of one candidate and fixed comparison
+would not exclude all predictors based on a representation. Conversely,
+a zero lower risk certificate does not demonstrate that an accurate
+predictor exists.

@@ -6,12 +6,14 @@ on:
       - 'extensions/tmlr_integration/package.py'
       - 'extensions/tmlr_integration/package_tests.py'
       - 'extensions/scaling_sensitivity/**'
+      - 'scripts/materialize_historical_checkpoint.py'
       - '.github/workflows/tmlr-integration.yml'
   pull_request:
     paths:
       - 'extensions/tmlr_integration/package.py'
       - 'extensions/tmlr_integration/package_tests.py'
       - 'extensions/scaling_sensitivity/**'
+      - 'scripts/materialize_historical_checkpoint.py'
       - '.github/workflows/tmlr-integration.yml'
   workflow_dispatch:
 
@@ -32,7 +34,7 @@ env:
 
 jobs:
   preserved-evidence:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v7
@@ -40,22 +42,40 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@v7
         with:
-          python-version: '3.12'
+          python-version: '3.12.14'
           cache: pip
           cache-dependency-path: extensions/natural_forecasting/requirements.txt
       - name: Install pinned analysis dependencies
         run: python -m pip install -r extensions/natural_forecasting/requirements.txt
-      - name: Restore both saved natural and sensitivity artifacts
+      - name: Materialize the exact historical source checkpoint
+        run: |
+          python - <<'PY'
+          import json, re, subprocess
+          from pathlib import Path
+          checkpoint = json.loads(Path('extensions/natural_forecasting/CHECKPOINT.json').read_text())
+          commit = checkpoint['checkpoint_commit']
+          if not re.fullmatch(r'[0-9a-f]{40}', commit):
+              raise ValueError('Invalid historical commit identifier')
+          subprocess.run(['git', 'fetch', '--no-tags', '--refetch', '--no-filter', '--depth=1', 'origin', commit], check=True)
+          PY
+          python scripts/materialize_historical_checkpoint.py \
+            --verify-current-source \
+            --include extensions/natural_forecasting \
+            --include extensions/scaling_sensitivity \
+            --include extensions/tmlr_integration \
+            --output "$RUNNER_TEMP/kahm-historical-evidence"
+      - name: Run current packaging and synthetic scientific tests
+        run: |
+          python -m unittest extensions.tmlr_integration.package_tests -v
+          python -m unittest extensions.scaling_sensitivity.test_natural extensions.scaling_sensitivity.test_controlled extensions.scaling_sensitivity.test_analysis extensions.scaling_sensitivity.test_reference -v
+      - name: Restore saved natural and sensitivity artifacts in the historical tree
+        working-directory: ${{ runner.temp }}/kahm-historical-evidence
         run: |
           python extensions/natural_forecasting/package.py restore-reference extensions/natural_forecasting/reference/natural_v1.zip.parts.json
           python -m extensions.scaling_sensitivity.reference restore
-      - name: Check preserved source and review archive defenses
-        run: |
-          python extensions/tmlr_integration/package.py check-source
-          python -m unittest extensions.tmlr_integration.package_tests -v
-          python -m unittest extensions.scaling_sensitivity.test_natural extensions.scaling_sensitivity.test_controlled extensions.scaling_sensitivity.test_analysis extensions.scaling_sensitivity.test_reference -v
-      - name: Restore and audit saved evidence without forecasting fits
-        run: |
-          python extensions/tmlr_integration/package.py audit .
-      # The current revised manuscript and its complete new extension artifact
-      # are compiled, checked and packaged by forecasting-utility.yml.
+      - name: Verify all scientific source and historical checkpoints
+        working-directory: ${{ runner.temp }}/kahm-historical-evidence
+        run: python extensions/tmlr_integration/package.py check-source
+      - name: Audit saved evidence without forecasting fits
+        working-directory: ${{ runner.temp }}/kahm-historical-evidence
+        run: python extensions/tmlr_integration/package.py audit .

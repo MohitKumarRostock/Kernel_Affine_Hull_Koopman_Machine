@@ -1,0 +1,1103 @@
+{
+  "chronology": "At observed time t, score saved forecasts with target t, then release only matured labels, update, and issue immutable predictions for t+h. Calibration selection uses target times before eval_start.",
+  "evidence_status": "Focused development study; no confirmation or population-transfer claim.",
+  "excluded_smoke_seed": 20261099,
+  "model_input_restriction": "Only values and declared history/offset metadata enter models. analysis_regimes and analysis_innovations are audit-only.",
+  "natural_collection_count": 2,
+  "natural_series_count": 4,
+  "parent_commit": "88e9c568ee983856804a2b2da41f6290f259b8cd",
+  "schema_version": 1,
+  "source_manifest_path": "extensions/direct_reconstruction/data/sources_manifest.json",
+  "source_manifest_sha256": "6d146da7e454bd1095a0bcab5bdf512b8f2c1c24066082046665756abb3c9419",
+  "study": "bounded_adaptive_kahm_development_v1",
+  "synthetic_seeds": [
+    20261101,
+    20261102,
+    20261103,
+    20261104
+  ],
+  "synthetic_stream_count": 8,
+  "task_count": 12,
+  "tasks": [
+    {
+      "bytes": 33709,
+      "collection": "synthetic_stationary",
+      "eval_start": 1024,
+      "filename": "synthetic_stationary__20261101.npz",
+      "fit_end": 716,
+      "history": 12,
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "kind": "synthetic",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "burn_in": 256,
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 1022,
+          "12": 1011,
+          "4": 1019
+        },
+        "contractivity_note": "The deterministic recurrence has sum of absolute lag derivatives at most 0.925 in A and 0.55 in B. This is a stability check, not a predictive advantage claim.",
+        "equation": "y_t = mu_s + a_s*(y_(t-1)-mu_s) + 0.10*(y_(t-2)-mu_s) + b_s*tanh(1.5*(y_(t-1)-mu_s)) + 0.20*epsilon_t",
+        "eval_start": 1024,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 1023,
+          "12": 1012,
+          "4": 1020
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 2046,
+          "12": 2035,
+          "4": 2043
+        },
+        "evidence_status": "Fresh synthetic development repetitions from a newly specified simple law; not independent real-source confirmation.",
+        "excluded_smoke_seed": false,
+        "finite_observations": 2048,
+        "fit_end": 716,
+        "generator": "paired_regime_tanh_ar_v1",
+        "initial_complete_origins": [
+          11,
+          703
+        ],
+        "initial_complete_row_count": 693,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 714,
+          "12": 703,
+          "4": 711
+        },
+        "lag2_coefficient": 0.1,
+        "license": "CC-BY-4.0 under repository DATA_LICENSE",
+        "loss_scale": 0.04425042105884661,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 2048,
+        "noise_distribution": "Independent standard normal innovations from NumPy PCG64, multiplied by 0.20.",
+        "noise_standard_deviation": 0.2,
+        "observable_regime_qualification": "Regime changes alter the observable conditional mean and dynamics. Their identity is not perfectly observable under noise; no regime labels or transition warnings enter forecasting.",
+        "raw_values_sha256": "cb1fa4b532f604945508e8da5172e16d67c10ea7193e70ff87dff3331e15b1dd",
+        "regime_parameters": {
+          "A": {
+            "a": 0.3,
+            "b": 0.35,
+            "mu": -0.75
+          },
+          "B": {
+            "a": 0.45,
+            "b": -0.25,
+            "mu": 0.75
+          }
+        },
+        "regime_period": 256,
+        "regime_schedule": "stationary",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 715,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "seed": 20261101,
+        "tanh_scale": 1.5
+      },
+      "scale": 0.04425042105884661,
+      "seasonal_lag": 1,
+      "sha256": "64a4fcf59bd73cc0a9430a7323f276425df62de7a8b0eea2dd7fbdc0504f979b",
+      "task_id": "synthetic_stationary__20261101"
+    },
+    {
+      "bytes": 33698,
+      "collection": "synthetic_stationary",
+      "eval_start": 1024,
+      "filename": "synthetic_stationary__20261102.npz",
+      "fit_end": 716,
+      "history": 12,
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "kind": "synthetic",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "burn_in": 256,
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 1022,
+          "12": 1011,
+          "4": 1019
+        },
+        "contractivity_note": "The deterministic recurrence has sum of absolute lag derivatives at most 0.925 in A and 0.55 in B. This is a stability check, not a predictive advantage claim.",
+        "equation": "y_t = mu_s + a_s*(y_(t-1)-mu_s) + 0.10*(y_(t-2)-mu_s) + b_s*tanh(1.5*(y_(t-1)-mu_s)) + 0.20*epsilon_t",
+        "eval_start": 1024,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 1023,
+          "12": 1012,
+          "4": 1020
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 2046,
+          "12": 2035,
+          "4": 2043
+        },
+        "evidence_status": "Fresh synthetic development repetitions from a newly specified simple law; not independent real-source confirmation.",
+        "excluded_smoke_seed": false,
+        "finite_observations": 2048,
+        "fit_end": 716,
+        "generator": "paired_regime_tanh_ar_v1",
+        "initial_complete_origins": [
+          11,
+          703
+        ],
+        "initial_complete_row_count": 693,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 714,
+          "12": 703,
+          "4": 711
+        },
+        "lag2_coefficient": 0.1,
+        "license": "CC-BY-4.0 under repository DATA_LICENSE",
+        "loss_scale": 0.04691854867796148,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 2048,
+        "noise_distribution": "Independent standard normal innovations from NumPy PCG64, multiplied by 0.20.",
+        "noise_standard_deviation": 0.2,
+        "observable_regime_qualification": "Regime changes alter the observable conditional mean and dynamics. Their identity is not perfectly observable under noise; no regime labels or transition warnings enter forecasting.",
+        "raw_values_sha256": "e4d344d941a61228cf9e091572e54fa8425f760880667395304f7c7c13bc5de8",
+        "regime_parameters": {
+          "A": {
+            "a": 0.3,
+            "b": 0.35,
+            "mu": -0.75
+          },
+          "B": {
+            "a": 0.45,
+            "b": -0.25,
+            "mu": 0.75
+          }
+        },
+        "regime_period": 256,
+        "regime_schedule": "stationary",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 715,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "seed": 20261102,
+        "tanh_scale": 1.5
+      },
+      "scale": 0.04691854867796148,
+      "seasonal_lag": 1,
+      "sha256": "06ba9db7c7bf800b6b507f4ffe7f93cd72506b9b980e6e43c781f131d3194892",
+      "task_id": "synthetic_stationary__20261102"
+    },
+    {
+      "bytes": 33700,
+      "collection": "synthetic_stationary",
+      "eval_start": 1024,
+      "filename": "synthetic_stationary__20261103.npz",
+      "fit_end": 716,
+      "history": 12,
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "kind": "synthetic",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "burn_in": 256,
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 1022,
+          "12": 1011,
+          "4": 1019
+        },
+        "contractivity_note": "The deterministic recurrence has sum of absolute lag derivatives at most 0.925 in A and 0.55 in B. This is a stability check, not a predictive advantage claim.",
+        "equation": "y_t = mu_s + a_s*(y_(t-1)-mu_s) + 0.10*(y_(t-2)-mu_s) + b_s*tanh(1.5*(y_(t-1)-mu_s)) + 0.20*epsilon_t",
+        "eval_start": 1024,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 1023,
+          "12": 1012,
+          "4": 1020
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 2046,
+          "12": 2035,
+          "4": 2043
+        },
+        "evidence_status": "Fresh synthetic development repetitions from a newly specified simple law; not independent real-source confirmation.",
+        "excluded_smoke_seed": false,
+        "finite_observations": 2048,
+        "fit_end": 716,
+        "generator": "paired_regime_tanh_ar_v1",
+        "initial_complete_origins": [
+          11,
+          703
+        ],
+        "initial_complete_row_count": 693,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 714,
+          "12": 703,
+          "4": 711
+        },
+        "lag2_coefficient": 0.1,
+        "license": "CC-BY-4.0 under repository DATA_LICENSE",
+        "loss_scale": 0.04754751118565753,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 2048,
+        "noise_distribution": "Independent standard normal innovations from NumPy PCG64, multiplied by 0.20.",
+        "noise_standard_deviation": 0.2,
+        "observable_regime_qualification": "Regime changes alter the observable conditional mean and dynamics. Their identity is not perfectly observable under noise; no regime labels or transition warnings enter forecasting.",
+        "raw_values_sha256": "221eda1dbd46a87c63c6495a7e91b61e58ab74dc5aec54d5535d7e4299de01ff",
+        "regime_parameters": {
+          "A": {
+            "a": 0.3,
+            "b": 0.35,
+            "mu": -0.75
+          },
+          "B": {
+            "a": 0.45,
+            "b": -0.25,
+            "mu": 0.75
+          }
+        },
+        "regime_period": 256,
+        "regime_schedule": "stationary",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 715,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "seed": 20261103,
+        "tanh_scale": 1.5
+      },
+      "scale": 0.04754751118565753,
+      "seasonal_lag": 1,
+      "sha256": "1aea361c73ef2f03de6e7351662309a60ac8ae3df4463e208953d0ad6f384c92",
+      "task_id": "synthetic_stationary__20261103"
+    },
+    {
+      "bytes": 33700,
+      "collection": "synthetic_stationary",
+      "eval_start": 1024,
+      "filename": "synthetic_stationary__20261104.npz",
+      "fit_end": 716,
+      "history": 12,
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "kind": "synthetic",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "burn_in": 256,
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 1022,
+          "12": 1011,
+          "4": 1019
+        },
+        "contractivity_note": "The deterministic recurrence has sum of absolute lag derivatives at most 0.925 in A and 0.55 in B. This is a stability check, not a predictive advantage claim.",
+        "equation": "y_t = mu_s + a_s*(y_(t-1)-mu_s) + 0.10*(y_(t-2)-mu_s) + b_s*tanh(1.5*(y_(t-1)-mu_s)) + 0.20*epsilon_t",
+        "eval_start": 1024,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 1023,
+          "12": 1012,
+          "4": 1020
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 2046,
+          "12": 2035,
+          "4": 2043
+        },
+        "evidence_status": "Fresh synthetic development repetitions from a newly specified simple law; not independent real-source confirmation.",
+        "excluded_smoke_seed": false,
+        "finite_observations": 2048,
+        "fit_end": 716,
+        "generator": "paired_regime_tanh_ar_v1",
+        "initial_complete_origins": [
+          11,
+          703
+        ],
+        "initial_complete_row_count": 693,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 714,
+          "12": 703,
+          "4": 711
+        },
+        "lag2_coefficient": 0.1,
+        "license": "CC-BY-4.0 under repository DATA_LICENSE",
+        "loss_scale": 0.04708332060770077,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 2048,
+        "noise_distribution": "Independent standard normal innovations from NumPy PCG64, multiplied by 0.20.",
+        "noise_standard_deviation": 0.2,
+        "observable_regime_qualification": "Regime changes alter the observable conditional mean and dynamics. Their identity is not perfectly observable under noise; no regime labels or transition warnings enter forecasting.",
+        "raw_values_sha256": "7009f995b3f7693873d8962c078df73866c7d7e89671e6aaf5bbf81a36bf9837",
+        "regime_parameters": {
+          "A": {
+            "a": 0.3,
+            "b": 0.35,
+            "mu": -0.75
+          },
+          "B": {
+            "a": 0.45,
+            "b": -0.25,
+            "mu": 0.75
+          }
+        },
+        "regime_period": 256,
+        "regime_schedule": "stationary",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 715,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "seed": 20261104,
+        "tanh_scale": 1.5
+      },
+      "scale": 0.04708332060770077,
+      "seasonal_lag": 1,
+      "sha256": "362b0ca387a0822f1867ce0d7558187a2cb7680848bb25b426e5fa8ecd499dc0",
+      "task_id": "synthetic_stationary__20261104"
+    },
+    {
+      "bytes": 33856,
+      "collection": "synthetic_recurring",
+      "eval_start": 1024,
+      "filename": "synthetic_recurring__20261101.npz",
+      "fit_end": 716,
+      "history": 12,
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "kind": "synthetic",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "burn_in": 256,
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 1022,
+          "12": 1011,
+          "4": 1019
+        },
+        "contractivity_note": "The deterministic recurrence has sum of absolute lag derivatives at most 0.925 in A and 0.55 in B. This is a stability check, not a predictive advantage claim.",
+        "equation": "y_t = mu_s + a_s*(y_(t-1)-mu_s) + 0.10*(y_(t-2)-mu_s) + b_s*tanh(1.5*(y_(t-1)-mu_s)) + 0.20*epsilon_t",
+        "eval_start": 1024,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 1023,
+          "12": 1012,
+          "4": 1020
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 2046,
+          "12": 2035,
+          "4": 2043
+        },
+        "evidence_status": "Fresh synthetic development repetitions from a newly specified simple law; not independent real-source confirmation.",
+        "excluded_smoke_seed": false,
+        "finite_observations": 2048,
+        "fit_end": 716,
+        "generator": "paired_regime_tanh_ar_v1",
+        "initial_complete_origins": [
+          11,
+          703
+        ],
+        "initial_complete_row_count": 693,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 714,
+          "12": 703,
+          "4": 711
+        },
+        "lag2_coefficient": 0.1,
+        "license": "CC-BY-4.0 under repository DATA_LICENSE",
+        "loss_scale": 0.05811905550282179,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 2048,
+        "noise_distribution": "Independent standard normal innovations from NumPy PCG64, multiplied by 0.20.",
+        "noise_standard_deviation": 0.2,
+        "observable_regime_qualification": "Regime changes alter the observable conditional mean and dynamics. Their identity is not perfectly observable under noise; no regime labels or transition warnings enter forecasting.",
+        "raw_values_sha256": "d4811895095258d23355ab15b19445dfd038d149febe064db0d5f3b60e4b7ee9",
+        "regime_parameters": {
+          "A": {
+            "a": 0.3,
+            "b": 0.35,
+            "mu": -0.75
+          },
+          "B": {
+            "a": 0.45,
+            "b": -0.25,
+            "mu": 0.75
+          }
+        },
+        "regime_period": 256,
+        "regime_schedule": "recurring",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 715,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "seed": 20261101,
+        "tanh_scale": 1.5
+      },
+      "scale": 0.05811905550282179,
+      "seasonal_lag": 1,
+      "sha256": "f25ee3a5cb313bcbb324a00575bdb06b8f7a0fe02e4910b06039870cd890bd66",
+      "task_id": "synthetic_recurring__20261101"
+    },
+    {
+      "bytes": 33867,
+      "collection": "synthetic_recurring",
+      "eval_start": 1024,
+      "filename": "synthetic_recurring__20261102.npz",
+      "fit_end": 716,
+      "history": 12,
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "kind": "synthetic",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "burn_in": 256,
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 1022,
+          "12": 1011,
+          "4": 1019
+        },
+        "contractivity_note": "The deterministic recurrence has sum of absolute lag derivatives at most 0.925 in A and 0.55 in B. This is a stability check, not a predictive advantage claim.",
+        "equation": "y_t = mu_s + a_s*(y_(t-1)-mu_s) + 0.10*(y_(t-2)-mu_s) + b_s*tanh(1.5*(y_(t-1)-mu_s)) + 0.20*epsilon_t",
+        "eval_start": 1024,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 1023,
+          "12": 1012,
+          "4": 1020
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 2046,
+          "12": 2035,
+          "4": 2043
+        },
+        "evidence_status": "Fresh synthetic development repetitions from a newly specified simple law; not independent real-source confirmation.",
+        "excluded_smoke_seed": false,
+        "finite_observations": 2048,
+        "fit_end": 716,
+        "generator": "paired_regime_tanh_ar_v1",
+        "initial_complete_origins": [
+          11,
+          703
+        ],
+        "initial_complete_row_count": 693,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 714,
+          "12": 703,
+          "4": 711
+        },
+        "lag2_coefficient": 0.1,
+        "license": "CC-BY-4.0 under repository DATA_LICENSE",
+        "loss_scale": 0.05923136745195927,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 2048,
+        "noise_distribution": "Independent standard normal innovations from NumPy PCG64, multiplied by 0.20.",
+        "noise_standard_deviation": 0.2,
+        "observable_regime_qualification": "Regime changes alter the observable conditional mean and dynamics. Their identity is not perfectly observable under noise; no regime labels or transition warnings enter forecasting.",
+        "raw_values_sha256": "7003432813cd5e8a4e393b62e8101c4e7b629ef6d800b42d055563409dce7e01",
+        "regime_parameters": {
+          "A": {
+            "a": 0.3,
+            "b": 0.35,
+            "mu": -0.75
+          },
+          "B": {
+            "a": 0.45,
+            "b": -0.25,
+            "mu": 0.75
+          }
+        },
+        "regime_period": 256,
+        "regime_schedule": "recurring",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 715,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "seed": 20261102,
+        "tanh_scale": 1.5
+      },
+      "scale": 0.05923136745195927,
+      "seasonal_lag": 1,
+      "sha256": "b489d5a38c8e53517ad424eddb490626a10895b44bcfeb480c2101a4694e89a3",
+      "task_id": "synthetic_recurring__20261102"
+    },
+    {
+      "bytes": 33877,
+      "collection": "synthetic_recurring",
+      "eval_start": 1024,
+      "filename": "synthetic_recurring__20261103.npz",
+      "fit_end": 716,
+      "history": 12,
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "kind": "synthetic",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "burn_in": 256,
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 1022,
+          "12": 1011,
+          "4": 1019
+        },
+        "contractivity_note": "The deterministic recurrence has sum of absolute lag derivatives at most 0.925 in A and 0.55 in B. This is a stability check, not a predictive advantage claim.",
+        "equation": "y_t = mu_s + a_s*(y_(t-1)-mu_s) + 0.10*(y_(t-2)-mu_s) + b_s*tanh(1.5*(y_(t-1)-mu_s)) + 0.20*epsilon_t",
+        "eval_start": 1024,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 1023,
+          "12": 1012,
+          "4": 1020
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 2046,
+          "12": 2035,
+          "4": 2043
+        },
+        "evidence_status": "Fresh synthetic development repetitions from a newly specified simple law; not independent real-source confirmation.",
+        "excluded_smoke_seed": false,
+        "finite_observations": 2048,
+        "fit_end": 716,
+        "generator": "paired_regime_tanh_ar_v1",
+        "initial_complete_origins": [
+          11,
+          703
+        ],
+        "initial_complete_row_count": 693,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 714,
+          "12": 703,
+          "4": 711
+        },
+        "lag2_coefficient": 0.1,
+        "license": "CC-BY-4.0 under repository DATA_LICENSE",
+        "loss_scale": 0.062189158800110944,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 2048,
+        "noise_distribution": "Independent standard normal innovations from NumPy PCG64, multiplied by 0.20.",
+        "noise_standard_deviation": 0.2,
+        "observable_regime_qualification": "Regime changes alter the observable conditional mean and dynamics. Their identity is not perfectly observable under noise; no regime labels or transition warnings enter forecasting.",
+        "raw_values_sha256": "d48266d2c3477c636b18557adb7a72dcdab34fe03e04a764f7e09dcc9c47ef6f",
+        "regime_parameters": {
+          "A": {
+            "a": 0.3,
+            "b": 0.35,
+            "mu": -0.75
+          },
+          "B": {
+            "a": 0.45,
+            "b": -0.25,
+            "mu": 0.75
+          }
+        },
+        "regime_period": 256,
+        "regime_schedule": "recurring",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 715,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "seed": 20261103,
+        "tanh_scale": 1.5
+      },
+      "scale": 0.062189158800110944,
+      "seasonal_lag": 1,
+      "sha256": "94a3b7cf01b4fca3d8928ad8df35aeaa389a92377db2d4c52a8da6c20e802930",
+      "task_id": "synthetic_recurring__20261103"
+    },
+    {
+      "bytes": 33857,
+      "collection": "synthetic_recurring",
+      "eval_start": 1024,
+      "filename": "synthetic_recurring__20261104.npz",
+      "fit_end": 716,
+      "history": 12,
+      "horizons": [
+        1,
+        4,
+        12
+      ],
+      "kind": "synthetic",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "burn_in": 256,
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 1022,
+          "12": 1011,
+          "4": 1019
+        },
+        "contractivity_note": "The deterministic recurrence has sum of absolute lag derivatives at most 0.925 in A and 0.55 in B. This is a stability check, not a predictive advantage claim.",
+        "equation": "y_t = mu_s + a_s*(y_(t-1)-mu_s) + 0.10*(y_(t-2)-mu_s) + b_s*tanh(1.5*(y_(t-1)-mu_s)) + 0.20*epsilon_t",
+        "eval_start": 1024,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 1023,
+          "12": 1012,
+          "4": 1020
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 2046,
+          "12": 2035,
+          "4": 2043
+        },
+        "evidence_status": "Fresh synthetic development repetitions from a newly specified simple law; not independent real-source confirmation.",
+        "excluded_smoke_seed": false,
+        "finite_observations": 2048,
+        "fit_end": 716,
+        "generator": "paired_regime_tanh_ar_v1",
+        "initial_complete_origins": [
+          11,
+          703
+        ],
+        "initial_complete_row_count": 693,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 714,
+          "12": 703,
+          "4": 711
+        },
+        "lag2_coefficient": 0.1,
+        "license": "CC-BY-4.0 under repository DATA_LICENSE",
+        "loss_scale": 0.05654718258194679,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 2048,
+        "noise_distribution": "Independent standard normal innovations from NumPy PCG64, multiplied by 0.20.",
+        "noise_standard_deviation": 0.2,
+        "observable_regime_qualification": "Regime changes alter the observable conditional mean and dynamics. Their identity is not perfectly observable under noise; no regime labels or transition warnings enter forecasting.",
+        "raw_values_sha256": "395d7b128e04165ab9f425856a10855c2732238b1191f3a8ca06edb13e6653e9",
+        "regime_parameters": {
+          "A": {
+            "a": 0.3,
+            "b": 0.35,
+            "mu": -0.75
+          },
+          "B": {
+            "a": 0.45,
+            "b": -0.25,
+            "mu": 0.75
+          }
+        },
+        "regime_period": 256,
+        "regime_schedule": "recurring",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 715,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "seed": 20261104,
+        "tanh_scale": 1.5
+      },
+      "scale": 0.05654718258194679,
+      "seasonal_lag": 1,
+      "sha256": "c34c86b8fd3c45acb2f4080ba764c8e3a7b06e0f462a9ed1a55f0b976c1f2411",
+      "task_id": "synthetic_recurring__20261104"
+    },
+    {
+      "bytes": 2666,
+      "collection": "dominick_weekly",
+      "eval_start": 196,
+      "filename": "dominick_weekly__01.npz",
+      "fit_end": 137,
+      "history": 52,
+      "horizons": [
+        1,
+        2,
+        4
+      ],
+      "kind": "natural",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 194,
+          "2": 193,
+          "4": 191
+        },
+        "changes_from_parent": "Use every chronological raw observation, without old capped A/B/C/D window subsampling; new 35% initial-fit, 15% calibration, 50% online-evaluation schedule; initial-fit-only loss scale.",
+        "creators": [
+          {
+            "affiliation": "PhD Student at Monash University",
+            "name": "Godahewa, Rakshitha",
+            "orcid": "0000-0002-1333-7249"
+          },
+          {
+            "affiliation": "Lecturer at Monash University",
+            "name": "Bergmeir, Christoph",
+            "orcid": "0000-0002-3665-9021"
+          },
+          {
+            "affiliation": "Professor at Monash University",
+            "name": "Webb, Geoff",
+            "orcid": "0000-0001-9963-5169"
+          },
+          {
+            "affiliation": "Lecturer at University of Sydney",
+            "name": "Montero-Manso, Pablo",
+            "orcid": "0000-0003-3816-0985"
+          },
+          {
+            "affiliation": "Professor at Monash University",
+            "name": "Hyndman, Rob",
+            "orcid": "0000-0002-2140-5352"
+          }
+        ],
+        "eval_start": 196,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 196,
+          "2": 195,
+          "4": 193
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 391,
+          "2": 390,
+          "4": 388
+        },
+        "evidence_status": "Previously inspected natural development source; selected intentionally using prior favorable/unfavorable KAHM findings, not new source-transfer confirmation.",
+        "finite_observations": 393,
+        "fit_end": 137,
+        "initial_complete_origins": [
+          51,
+          132
+        ],
+        "initial_complete_row_count": 82,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 135,
+          "2": 134,
+          "4": 132
+        },
+        "license": "CC-BY-4.0",
+        "license_scope": "License declared by the pinned Zenodo archive record.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "loss_scale": 136.08282823529413,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 393,
+        "original_raw_length": 393,
+        "raw_start_index": 0,
+        "raw_values_sha256": "573fbfe4f918028a565cb76fb7db54ae282eb089c8c82b5f919bdf4abd84b693",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 85,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "selection_reason": "All three preserved Dominick series give the favorable development collection; the preserved Sunspot series gives an unfavorable collection. No new outcome-based series selection.",
+        "series_id": "T7830",
+        "source_archive_sha256": "3025a5e6abc152b700b13cc84d9056c99398651e508803b20f2fe76156f7bd96",
+        "source_doi": "10.5281/zenodo.4654802",
+        "source_frequency": "weekly",
+        "source_manifest_sha256": "6d146da7e454bd1095a0bcab5bdf512b8f2c1c24066082046665756abb3c9419",
+        "source_npz": "extensions/direct_reconstruction/data/dominick_weekly__01.npz",
+        "source_npz_sha256": "265cbc454494f1d322ec77f14972b477cfde3043779e2ae8587d0a6772cd764e",
+        "source_record_url": "https://zenodo.org/records/4654802",
+        "source_title": "Dominick Dataset",
+        "source_version": "2"
+      },
+      "scale": 136.08282823529413,
+      "seasonal_lag": 52,
+      "sha256": "eadb8f085f8ff56e5ba94b7419e60a61b04f51dc015e2ad168eca449dc7cdf23",
+      "task_id": "dominick_weekly__01"
+    },
+    {
+      "bytes": 3121,
+      "collection": "dominick_weekly",
+      "eval_start": 196,
+      "filename": "dominick_weekly__02.npz",
+      "fit_end": 137,
+      "history": 52,
+      "horizons": [
+        1,
+        2,
+        4
+      ],
+      "kind": "natural",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 194,
+          "2": 193,
+          "4": 191
+        },
+        "changes_from_parent": "Use every chronological raw observation, without old capped A/B/C/D window subsampling; new 35% initial-fit, 15% calibration, 50% online-evaluation schedule; initial-fit-only loss scale.",
+        "creators": [
+          {
+            "affiliation": "PhD Student at Monash University",
+            "name": "Godahewa, Rakshitha",
+            "orcid": "0000-0002-1333-7249"
+          },
+          {
+            "affiliation": "Lecturer at Monash University",
+            "name": "Bergmeir, Christoph",
+            "orcid": "0000-0002-3665-9021"
+          },
+          {
+            "affiliation": "Professor at Monash University",
+            "name": "Webb, Geoff",
+            "orcid": "0000-0001-9963-5169"
+          },
+          {
+            "affiliation": "Lecturer at University of Sydney",
+            "name": "Montero-Manso, Pablo",
+            "orcid": "0000-0003-3816-0985"
+          },
+          {
+            "affiliation": "Professor at Monash University",
+            "name": "Hyndman, Rob",
+            "orcid": "0000-0002-2140-5352"
+          }
+        ],
+        "eval_start": 196,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 196,
+          "2": 195,
+          "4": 193
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 391,
+          "2": 390,
+          "4": 388
+        },
+        "evidence_status": "Previously inspected natural development source; selected intentionally using prior favorable/unfavorable KAHM findings, not new source-transfer confirmation.",
+        "finite_observations": 393,
+        "fit_end": 137,
+        "initial_complete_origins": [
+          51,
+          132
+        ],
+        "initial_complete_row_count": 82,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 135,
+          "2": 134,
+          "4": 132
+        },
+        "license": "CC-BY-4.0",
+        "license_scope": "License declared by the pinned Zenodo archive record.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "loss_scale": 144.8235576470588,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 393,
+        "original_raw_length": 393,
+        "raw_start_index": 0,
+        "raw_values_sha256": "2a434c8c86cc3041607cb89f3e0b354e8fe083f946e0cd538603e439f9eccbe6",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 85,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "selection_reason": "All three preserved Dominick series give the favorable development collection; the preserved Sunspot series gives an unfavorable collection. No new outcome-based series selection.",
+        "series_id": "T25851",
+        "source_archive_sha256": "3025a5e6abc152b700b13cc84d9056c99398651e508803b20f2fe76156f7bd96",
+        "source_doi": "10.5281/zenodo.4654802",
+        "source_frequency": "weekly",
+        "source_manifest_sha256": "6d146da7e454bd1095a0bcab5bdf512b8f2c1c24066082046665756abb3c9419",
+        "source_npz": "extensions/direct_reconstruction/data/dominick_weekly__02.npz",
+        "source_npz_sha256": "9a666d63b49a6195a7ff03ef853e12a3cb8de2b6568d3969df83c504d0f8e753",
+        "source_record_url": "https://zenodo.org/records/4654802",
+        "source_title": "Dominick Dataset",
+        "source_version": "2"
+      },
+      "scale": 144.8235576470588,
+      "seasonal_lag": 52,
+      "sha256": "00629bc408d5fb1e50244c4c8ca5a73cb372c3ccef5e9aefbe0ce40a411eb31c",
+      "task_id": "dominick_weekly__02"
+    },
+    {
+      "bytes": 3483,
+      "collection": "dominick_weekly",
+      "eval_start": 196,
+      "filename": "dominick_weekly__03.npz",
+      "fit_end": 137,
+      "history": 52,
+      "horizons": [
+        1,
+        2,
+        4
+      ],
+      "kind": "natural",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 194,
+          "2": 193,
+          "4": 191
+        },
+        "changes_from_parent": "Use every chronological raw observation, without old capped A/B/C/D window subsampling; new 35% initial-fit, 15% calibration, 50% online-evaluation schedule; initial-fit-only loss scale.",
+        "creators": [
+          {
+            "affiliation": "PhD Student at Monash University",
+            "name": "Godahewa, Rakshitha",
+            "orcid": "0000-0002-1333-7249"
+          },
+          {
+            "affiliation": "Lecturer at Monash University",
+            "name": "Bergmeir, Christoph",
+            "orcid": "0000-0002-3665-9021"
+          },
+          {
+            "affiliation": "Professor at Monash University",
+            "name": "Webb, Geoff",
+            "orcid": "0000-0001-9963-5169"
+          },
+          {
+            "affiliation": "Lecturer at University of Sydney",
+            "name": "Montero-Manso, Pablo",
+            "orcid": "0000-0003-3816-0985"
+          },
+          {
+            "affiliation": "Professor at Monash University",
+            "name": "Hyndman, Rob",
+            "orcid": "0000-0002-2140-5352"
+          }
+        ],
+        "eval_start": 196,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 196,
+          "2": 195,
+          "4": 193
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 391,
+          "2": 390,
+          "4": 388
+        },
+        "evidence_status": "Previously inspected natural development source; selected intentionally using prior favorable/unfavorable KAHM findings, not new source-transfer confirmation.",
+        "finite_observations": 393,
+        "fit_end": 137,
+        "initial_complete_origins": [
+          51,
+          132
+        ],
+        "initial_complete_row_count": 82,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 135,
+          "2": 134,
+          "4": 132
+        },
+        "license": "CC-BY-4.0",
+        "license_scope": "License declared by the pinned Zenodo archive record.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "loss_scale": 93.48350352941176,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 393,
+        "original_raw_length": 393,
+        "raw_start_index": 0,
+        "raw_values_sha256": "832ced29cb861912a792a35f25101637317cc39d74adcd469bc5d7265d2c27ce",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 85,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "selection_reason": "All three preserved Dominick series give the favorable development collection; the preserved Sunspot series gives an unfavorable collection. No new outcome-based series selection.",
+        "series_id": "T108533",
+        "source_archive_sha256": "3025a5e6abc152b700b13cc84d9056c99398651e508803b20f2fe76156f7bd96",
+        "source_doi": "10.5281/zenodo.4654802",
+        "source_frequency": "weekly",
+        "source_manifest_sha256": "6d146da7e454bd1095a0bcab5bdf512b8f2c1c24066082046665756abb3c9419",
+        "source_npz": "extensions/direct_reconstruction/data/dominick_weekly__03.npz",
+        "source_npz_sha256": "3204ceb2802e2af68d0ffbc45655f875593a63e2cfd461fad9cd9e142dddc514",
+        "source_record_url": "https://zenodo.org/records/4654802",
+        "source_title": "Dominick Dataset",
+        "source_version": "2"
+      },
+      "scale": 93.48350352941176,
+      "seasonal_lag": 52,
+      "sha256": "f0118611847fb9e6c37a8f98daf4d5f06ed292691e51d3cb5780f3f1da31cb3f",
+      "task_id": "dominick_weekly__03"
+    },
+    {
+      "bytes": 7161,
+      "collection": "sunspot_daily",
+      "eval_start": 2048,
+      "filename": "sunspot_daily__01.npz",
+      "fit_end": 1433,
+      "history": 28,
+      "horizons": [
+        1,
+        3,
+        7
+      ],
+      "kind": "natural",
+      "metadata": {
+        "boundary_convention": "Half-open initial fit [0,fit_end); calibration forecast origins [fit_end,eval_start); evaluation origins [eval_start,n).",
+        "calibration_scored_origin_last_by_horizon": {
+          "1": 2046,
+          "3": 2044,
+          "7": 2040
+        },
+        "changes_from_parent": "Use every chronological raw observation, without old capped A/B/C/D window subsampling; new 35% initial-fit, 15% calibration, 50% online-evaluation schedule; initial-fit-only loss scale.",
+        "creators": [
+          {
+            "affiliation": "PhD Student at Monash University",
+            "name": "Godahewa, Rakshitha",
+            "orcid": "0000-0002-1333-7249"
+          },
+          {
+            "affiliation": "Lecturer at Monash University",
+            "name": "Bergmeir, Christoph",
+            "orcid": "0000-0002-3665-9021"
+          },
+          {
+            "affiliation": "Professor at Monash University",
+            "name": "Webb, Geoff",
+            "orcid": "0000-0001-9963-5169"
+          },
+          {
+            "affiliation": "Professor at Monash University",
+            "name": "Hyndman, Rob",
+            "orcid": "0000-0002-2140-5352"
+          },
+          {
+            "affiliation": "Lecturer at University of Sydney",
+            "name": "Montero-Manso, Pablo",
+            "orcid": "0000-0003-3816-0985"
+          }
+        ],
+        "eval_start": 2048,
+        "evaluation_scored_origin_counts_if_finite": {
+          "1": 2047,
+          "3": 2045,
+          "7": 2041
+        },
+        "evaluation_scored_origin_last_by_horizon": {
+          "1": 4094,
+          "3": 4092,
+          "7": 4088
+        },
+        "evidence_status": "Previously inspected natural development source; selected intentionally using prior favorable/unfavorable KAHM findings, not new source-transfer confirmation.",
+        "finite_observations": 4096,
+        "fit_end": 1433,
+        "initial_complete_origins": [
+          27,
+          1425
+        ],
+        "initial_complete_row_count": 1399,
+        "initial_matured_origin_last_by_horizon": {
+          "1": 1431,
+          "3": 1429,
+          "7": 1425
+        },
+        "license": "CC-BY-4.0",
+        "license_scope": "License declared by the pinned Zenodo archive record.",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "loss_scale": 150.9546089385475,
+        "loss_scale_scope": "Initial fitting observations [0,fit_end), before calibration and evaluation.",
+        "missingness_rule": "No imputation. Forecast only from finite history; score each horizon only when its individual target is finite. Availability and method failures remain distinct.",
+        "n": 4096,
+        "original_raw_length": 73924,
+        "raw_start_index": 69828,
+        "raw_values_sha256": "2195d94fae13eb91795c3b7d0762892b4435b3be7df378fba7c9347ad74c3184",
+        "scale_method": "seasonal_mse",
+        "scale_pair_count": 1432,
+        "scale_rule": "Mean squared seasonal differences; if unavailable/nonpositive/nonfinite use mean squared first differences; if still invalid use 1.0. No square root.",
+        "selection_reason": "All three preserved Dominick series give the favorable development collection; the preserved Sunspot series gives an unfavorable collection. No new outcome-based series selection.",
+        "series_id": "T1",
+        "source_archive_sha256": "f83d60e56830b30890d0c938dd87e3446658d5fc2b65164b8b3003d8d52ca19e",
+        "source_doi": "10.5281/zenodo.4654773",
+        "source_frequency": "daily",
+        "source_manifest_sha256": "6d146da7e454bd1095a0bcab5bdf512b8f2c1c24066082046665756abb3c9419",
+        "source_npz": "extensions/direct_reconstruction/data/sunspot_daily__01.npz",
+        "source_npz_sha256": "9deffa599b36523b3b9ee11fcabbf9008f640a37917c66dc383c003282430393",
+        "source_record_url": "https://zenodo.org/records/4654773",
+        "source_title": "Sunspot Dataset (with Missing Values)",
+        "source_version": "4"
+      },
+      "scale": 150.9546089385475,
+      "seasonal_lag": 1,
+      "sha256": "8a0f8e5baaff6f8ad60869fbed7087b0cc6bab005c6d55b9fe266234a901117f",
+      "task_id": "sunspot_daily__01"
+    }
+  ]
+}

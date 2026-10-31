@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - 'extensions/target_geometry/**'
-      - 'extensions/tmlr_integration/manuscript/**'
       - 'extensions/tmlr_integration/package_target.py'
       - 'extensions/tmlr_integration/package_utility.py'
       - 'extensions/natural_forecasting/**'
@@ -14,7 +13,6 @@ on:
   pull_request:
     paths:
       - 'extensions/target_geometry/**'
-      - 'extensions/tmlr_integration/manuscript/**'
       - 'extensions/tmlr_integration/package_target.py'
       - 'extensions/tmlr_integration/package_utility.py'
       - 'extensions/natural_forecasting/**'
@@ -22,6 +20,9 @@ on:
       - 'extensions/predictive_geometry/study/**'
       - '.github/workflows/target-geometry.yml'
   workflow_dispatch:
+
+# The completed reconstruction-mechanism workflow owns current manuscript
+# builds. Historical numerical/source changes retain every check below.
 
 permissions:
   contents: read
@@ -40,7 +41,9 @@ env:
 
 jobs:
   audit-manuscript-package:
-    runs-on: ubuntu-latest
+    # Exact synthetic-input hashes were recorded with Python 3.12.14 and
+    # glibc 2.39; Ubuntu 24.04 supplies that glibc generation.
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
@@ -48,7 +51,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@v7
         with:
-          python-version: '3.12'
+          python-version: '3.12.14'
           cache: pip
           cache-dependency-path: extensions/target_geometry/requirements.txt
       - name: Install the frozen numerical dependencies
@@ -77,6 +80,8 @@ jobs:
           python -m extensions.target_geometry.build_assets
           --reports extensions/target_geometry/reports
           --output extensions/tmlr_integration/manuscript/generated/target_geometry
+      - name: Apply scientific manuscript captions and notation
+        run: python extensions/tmlr_integration/format_manuscript_assets.py
       - name: Install the manuscript compiler
         run: |
           sudo apt-get update

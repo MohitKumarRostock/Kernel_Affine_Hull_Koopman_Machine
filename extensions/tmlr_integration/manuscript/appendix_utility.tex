@@ -1,64 +1,81 @@
-\section{Additive forecasting: interpretation and research record}
+\section{Additive forecasting: theory and experimental protocol}
 \label{app:utility}
 
 \subsection{Oracle residual structure and finite correction}
 \label{app:utility-projection}
-Condition on development data and the fitted maps $f_0$ and $\Gamma$.
-For $e=Y-f_0(X)$, suppose $\E\|e\|_2^2<\infty$, let $Z=\Gamma(X)$,
-and put $q^*(Z)=\E[e\mid Z]$. For any square-integrable $q(Z)$,
-conditional expectation makes the cross term zero, giving
+Condition on the fitted baseline $f_0:\R^d\to\R^{d_y}$ and
+representation $\Gamma:\R^d\to\R^p$. Let $(X,Y)$ be a fresh
+history--response pair under the conditional evaluation distribution,
+let $e=Y-f_0(X)$, and assume $\E\|e\|_2^2<\infty$.
+Write $Z=\Gamma(X)$ and $q^*(Z)=\E[e\mid Z]$. For any measurable
+$q:\R^p\to\R^{d_y}$ with finite second moment, the difference
+$q^*(Z)-q(Z)$ is measurable with respect to $Z$. Consequently,
+\[
+ \E\langle e-q^*(Z),q^*(Z)-q(Z)\rangle
+ =\E\langle\E[e-q^*(Z)\mid Z],q^*(Z)-q(Z)\rangle=0.
+\]
+Here $\langle a,b\rangle=a^\top b$ is the Euclidean inner product.
+Expanding $e-q=(e-q^*)+(q^*-q)$ gives
 \[
  \E\|e-q(Z)\|_2^2
  =\E\|e-q^*(Z)\|_2^2+\E\|q^*(Z)-q(Z)\|_2^2.
 \]
-Taking $q=0$ and then the infimum over $q$ proves
-Equation~\eqref{eq:utility-oracle}. This standard projection argument
-establishes an oracle notion of residual predictive structure, not its
-estimability with a finite sample, a specified ridge head, or a given
-computation budget. The conditional distribution and expectations are
-those of the evaluation law given the frozen fitted state. A deterministic
-feature of $X$ cannot create new information absent from that history;
-the comparison is with the particular baseline $f_0$, not with the
-unrestricted raw-history Bayes predictor.
+Conditional Jensen's inequality gives
+$\E\|q^*(Z)\|_2^2\leq\E\|e\|_2^2$, so $q^*$ is an admissible
+square-integrable correction. The second term is nonnegative and
+vanishes for $q=q^*$. Taking $q=0$
+and then subtracting the minimum risk proves
+Equation~\eqref{eq:utility-oracle}. This identity describes residual
+structure available to an unrestricted predictor of $Z$. It does not
+show that a finite fitted ridge correction can estimate $q^*$ reliably.
+The comparison is with the chosen baseline $f_0$; a deterministic map
+of $X$ cannot supply information absent from the raw history.
 
-\subsection{Residual alignment for a frozen correction}
+\subsection{Residual alignment for a fixed correction}
 \label{app:utility-alignment}
-This subsection records a standard squared-loss calculation; it is not
-claimed as a new general learning principle. Condition on development data
-and all random choices used to fit a baseline $f_0$ and a correction $q$.
-Suppose $\E\|Y-f_0(X)\|_2^2<\infty$ and
-$\E\|q(X)\|_2^2<\infty$. Write
+Condition on all data and random choices used to fit a baseline $f_0$
+and a correction $q:\R^d\to\R^{d_y}$. In this subsection, $q$ denotes
+the complete map from history to correction, including any fitted
+feature transformation. Assume
+$\E\|Y-f_0(X)\|_2^2<\infty$ and $\E\|q(X)\|_2^2<\infty$, and define
 \[
+ R(f)=\E\|Y-f(X)\|_2^2,\qquad
  A=\E\langle Y-f_0(X),q(X)\rangle,\qquad
  B=\E\|q(X)\|_2^2.
 \]
-Expanding the squared norm yields
+The expectation is over a fresh evaluation pair conditional on the
+fitted maps. Expanding the squared error yields, for every scalar
+mixing weight $\gamma$,
 \[
- \E\|Y-f_0(X)-\gamma q(X)\|_2^2
- =R(f_0)-2\gamma A+\gamma^2B.
+ R(f_0+\gamma q)=R(f_0)-2\gamma A+\gamma^2B.
 \]
-If $B=0$, then $q(X)=0$ almost surely, so $A=0$ and the correction changes
-no population forecast. If $B>0$, minimization over $\gamma\in[0,1]$ gives
-$\gamma^*=\clip(A/B,0,1)$. A positive weight improves risk precisely when
-$A>0$ and $0<\gamma<2A/B$. Thus a useful correction must align with the
-baseline's residual under the evaluation law, with its scale controlled.
-The same identity holds for a loss averaged across target coordinates
-after both $A$ and $B$ are divided by their common coordinate count.
+If $B=0$, then $q(X)=0$ almost surely; the Cauchy--Schwarz inequality
+also gives $A=0$, so every weight has the same risk. If $B>0$, completing
+the square gives
+\[
+ -2\gamma A+\gamma^2B=B(\gamma-A/B)^2-A^2/B.
+\]
+Thus the risk-minimizing weight over $[0,1]$ is
+$\gamma^*=\min\{1,\max\{0,A/B\}\}$. A weight
+$\gamma\in(0,1]$ strictly improves the baseline exactly when
+$A>0$ and $\gamma<2A/B$. For mean squared loss averaged over target
+coordinates, the same identities hold after dividing $R$, $A$, and
+$B$ by $d_y$.
 
-This oracle calculation uses population quantities unavailable to the
-fitted selector. Empirical residual fitting, regularization, and validation
-introduce estimation and selection effects. Inclusion of $\gamma=0$ makes
-the original forecast feasible; it does not imply that the selected test
-forecast is no worse. In particular, correlation with training residuals
-does not prove positive $A$ on a new episode or source.
+The fitted selector does not observe the population values $A$ and $B$.
+Its residual estimates, regularization, and validation choices introduce
+sampling error. Including $\gamma=0$ therefore makes the baseline an
+available candidate, but does not guarantee that the selected correction
+improves future risk. Positive alignment with training residuals alone
+is insufficient to establish $A>0$ on evaluation data.
 
 \subsection{Distinction from representation-class certificates}
 \label{app:utility-scope}
 The empirical difference in Equation~\eqref{eq:utility-delta} compares two
-frozen fitted forecasts. The certificate manuscript instead studies the
-infimum of risk over a declared representation--decoder class, and can
-exclude that entire class under its assumptions
-\citep{Anonymous2026Certificates}. The additive study does not transfer
+fitted forecasts held fixed during evaluation. A class-level risk bound instead concerns the infimum of risk over
+a specified representation--decoder class. A positive lower bound can
+exclude an accuracy requirement for the entire class when the bound
+and its assumptions apply. The additive study does not transfer
 such a class-level guarantee to its forecasts. A certificate for a residual
 component would not automatically certify the complete additive forecast;
 the baseline and correction together would have to satisfy the declared
@@ -66,16 +83,15 @@ representation, metric, and sensitivity constraint. Neither mean test
 differences nor a zero-correction option establishes necessity of the
 additional features among all possible decoders.
 
-\subsection{Extension protocol and source roster}
+\subsection{Protocol and source roster}
 \label{app:utility-protocol}
 
 The executable configuration and protocol for this extension are stored
-in \path{extensions/forecasting_utility}. They define a distinct study
-from the original controlled, natural-source, and scaling studies. The
-execution freeze hashes the configuration, protocol, source and dependency
-files, archive metadata, and training-prefix-selected roster before full
-model evaluation. Its purpose is to make subsequent deviations and
-recomputation auditable; it is not external review or registration.
+in \path{extensions/forecasting_utility}. These files specify the additive experiment independently of the
+controlled, natural-source, and scaling evaluations. A pre-evaluation checkpoint records hashes of the configuration,
+protocol, source and dependency files, archive metadata, and roster
+selected from training-prefix information. The checkpoint records the procedure used for evaluation and permits
+verification of later changes. The study was not externally preregistered.
 
 \begin{table}[ht]
 \centering\small\setlength{\tabcolsep}{4pt}
@@ -157,8 +173,7 @@ warnings, split origins, saved forecasts, and wall/CPU timing components
 are retained. Saved test forecasts permit independent reconstruction of
 both episode-level synthetic losses and original-unit and scaled
 archive-source losses. A task or method failure is recorded with its
-exception and does not silently select a replacement source, seed, or
-model. The completeness audit distinguishes requested configurations,
+exception, without replacing its source, seed, or model. The completeness audit distinguishes requested configurations,
 successful outputs, and failures before producing the manuscript assets.
 
 \subsection{Complete controlled comparisons and source-level results}
@@ -166,26 +181,24 @@ successful outputs, and failures before producing the manuscript assets.
 
 Table~\ref{tab:utility-failures} retains every incomplete configuration.
 The failed series is also retained in the original roster and window
-table. Full-roster geometry and policy losses remain undefined. The
-separate reporting amendment creates a post-hoc matched-success
-diagnostic on 22 configurations and 11 series, without changing a fitted
-model, source, or validation rule. The archive displays below use that
+table. Full-roster geometry and policy losses remain undefined. A post-hoc matched-success analysis uses the 22 configurations and
+11 series for which every method completed. The archive displays below use that
 diagnostic support unless explicitly marked as full-roster coverage.
 
 \input{generated/utility/failures}
 
-The new controlled means in Table~\ref{tab:utility-synthetic} are
+The controlled means in Table~\ref{tab:utility-synthetic} are
 supplemented by every practical control and fixed policy in
 Table~\ref{tab:utility-synthetic-controls}. Table~\ref{tab:utility-intervals}
-gives all 24 primary interval endpoints. The raw and concatenated
-contrasts form this extension's family only; intervals are not
-retroactively pooled with the original studies' inference.
+gives all 24 primary interval endpoints. The raw and concatenated contrasts form a single family for this
+experiment. Its simultaneous coverage does not extend to interval
+families from the other studies.
 
 \input{generated/utility/synthetic_controls}
 \input{generated/utility/synthetic_intervals}
 \FloatBarrier
 
-The new matched-success archive diagnostic is resolved by source in
+The matched-success archive comparison is reported by source in
 Table~\ref{tab:utility-archive-sources}. Window counts and effective
 decoder sizes appear in Tables~\ref{tab:utility-windows}
 and~\ref{tab:utility-decoder-sizes}. Counts are shared across methods,
@@ -194,8 +207,7 @@ The selected weights and policy decisions in
 Tables~\ref{tab:utility-gamma} and~\ref{tab:utility-policy-choices}
 describe related task configurations, not independent draws of a
 universal adoption probability. Table~\ref{tab:utility-leave-one}
-retains every leave-one-source-out re-aggregation without selecting
-the most favorable subset.
+reports all four leave-one-source-out aggregates.
 
 \input{generated/utility/archive_sources}
 \input{generated/utility/archive_windows}

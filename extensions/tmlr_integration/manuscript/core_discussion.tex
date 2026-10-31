@@ -1,0 +1,80 @@
+\section{Discussion and conclusion}\label{sec:discussion}
+
+The central results distinguish three properties of a reconstruction
+representation. Algebraic distinctness means that its coordinates permit
+functions unavailable to a specified comparison span. A bounded correction
+means that a fitted residual head cannot exceed a stated magnitude under
+the feature-norm assumption. Predictive usefulness means that the complete
+procedure achieves lower loss under a specified evaluation distribution.
+None of these properties implies the next one without additional
+assumptions or evidence.
+
+The principal experiment supports a contribution from reconstruction
+departures beyond the shared locality and principal-coordinate features.
+It does not establish the prespecified practical advantage specific to
+KAHM across the comparison family. The matched RBF reconstruction
+achieves much of the same benefit, and both boosting and the selected
+non-KAHM procedure have lower aggregate point loss. Failure to establish
+a margin does not establish equality of two methods. Likewise, the
+irregular-bank example demonstrates existence of distinct raw spans,
+not distinctness for every bank fitted in the experiment.
+
+The correction bound provides a precise magnitude guarantee for the
+specified decoder. It does not establish robustness of the full
+history-to-feature map: signed normalization and the affine fallback may
+still be sensitive to the input. The baseline and targets are not
+uniformly bounded, so the theorem gives no uniform forecast-error bound.
+Its applicability to other bounded features also limits a claim of
+methodological novelty based on the bound alone.
+
+The empirical scope is finite. Twenty-four independent repetitions
+quantify variability under four fixed simulation laws; they are not
+24 independent application domains. The observation maps, finite burn-in,
+history length, horizons, model grids, and resource settings are part of
+the tested procedures. The simultaneous intervals use a paired-mean
+$t$ approximation, and the 3\% improvement and 5\% noninferiority margins
+express research criteria rather than application-specific requirements.
+The supporting natural-data and adaptive studies impose further limits
+on extrapolation of the simulated gains. The experiments are not a
+comprehensive comparison with neural, pretrained, long-context
+multivariate, or modern adaptive forecasting methods.
+
+Computation must also be interpreted at the level measured. Fitting
+costs include the candidates evaluated during selection. Prediction time,
+serialized state size, owned array storage, and whole-process peak memory
+measure different resources and cannot be substituted for one another.
+The measurements characterize the supplied implementations on the
+recorded environment; they do not establish minimum algorithmic costs
+or satisfy an unspecified deployment budget.
+
+KAHM reconstruction can therefore supply useful features to a finite
+forecasting decoder, with a value that depends on geometry, feature
+parameterization, regularization, and target structure. The contribution
+of the present study is to characterize these dependencies and evaluate
+them against matched alternatives. A general forecasting advantage
+specific to KAHM remains unestablished by the reported evidence.
+
+\section*{Reproducibility and research transparency}
+
+The anonymous saved-forecast supplement contains predictions and
+evaluation targets for all 192 task suites, along with fitting targets
+that determine the loss-normalization scales. Its standalone program,
+\path{verify_saved_forecasts.py}, reconstructs eight numerical analysis
+tables and all six primary contrasts, verifies array identities, and
+checks that each policy forecast equals its recorded selected procedure.
+The supplement includes all ten procedures and all declared conditions,
+regardless of predictive performance. The companion \emph{Supplementary
+Studies} provides the complete methods and results for the supporting
+investigations summarized in Section~\ref{sec:supporting-evidence}.
+
+The principal study's locally recorded source and input inventory
+contains 239 files. The saved evidence contains 1,920 prediction arrays
+and 9,584,640 forecast values. The recorded selected-state replay and
+separately implemented calculations provide computational consistency
+checks. Reconstructing scores from saved forecasts, replaying selected
+states, and refitting all model candidates are distinct operations.
+The anonymous numeric supplement performs the first; it does not refit
+models or reproduce feature-bound calculations and resource timings.
+The complete fitting specification and numerical conventions are given
+in Appendix~\ref{app:reconstruction-results}. The prospective record was
+local, informed by the supporting studies, and not publicly preregistered.

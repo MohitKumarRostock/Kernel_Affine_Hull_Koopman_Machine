@@ -1,0 +1,113 @@
+\documentclass[10pt]{article}
+\usepackage{tmlr}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,microtype,enumitem,longtable,array}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{hyperref}
+\usepackage{url}
+\hypersetup{hidelinks,
+ pdftitle={Kernel Affine Hull Features for Time-Series Forecasting: Supplementary Studies},
+ pdfauthor={Anonymous authors},
+ pdfsubject={Supporting theory, forecasting protocols, complete results, and reproducibility}}
+\newtheorem{proposition}{Proposition}
+\allowdisplaybreaks
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\MSE}{\operatorname{MSE}}
+\newcommand{\K}{\mathrm{K}}
+\newcommand{\A}{\mathrm{A}}
+\newcommand{\clip}{\operatorname{clip}}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\theproposition}{S\arabic{proposition}}
+\input{generated/controlled/claim_numbers}
+\input{generated/natural_numbers}
+\input{generated/scaling/numbers}
+\input{generated/utility/numbers}
+\input{generated/target_geometry/numbers}
+\input{generated/direct_reconstruction/result_macros}
+\title{Kernel Affine Hull Features\\
+for Time-Series Forecasting:\\Supplementary Studies}
+\author{Anonymous authors}
+\begin{document}
+\maketitle
+\begin{abstract}
+This document presents supporting studies of Kernel Affine Hull Machine
+representations for forecasting. It defines the evaluated encodings and
+decoders, establishes the supporting information and residual-risk
+identities, and specifies the controlled, natural-data, scaling, additive,
+metric-learning, reconstruction-training, and online-adaptation experiments.
+Complete comparison families, source-level results, resource measurements,
+and unsuccessful or unavailable configurations accompany their protocols.
+The studies use different procedures and evaluation populations. Their
+results are interpreted separately from the bounded reconstruction-departure
+experiment in the accompanying main paper.
+\end{abstract}
+
+\section{Scope, evidence, and notation}\label{supp:scope}
+The supporting experiments examine different ways in which reconstruction
+geometry can affect fitted forecasts.\footnote{AI tools assisted with
+protocol development, implementation, numerical and statistical
+verification, analysis, and manuscript preparation. The authors are
+responsible for the scientific claims, evidence, and final text.}
+They test information retention, finite-decoder access, source transfer,
+residual correction, supervised geometry, and online adaptation. None is
+a replication of the main paper's bounded reconstruction-departure
+procedure. Their candidate sets, tuning rules, data populations, cost
+scopes, and loss normalizations remain specific to each study.
+
+Sections~\ref{sec:utility-question} and~\ref{c:sec:method} define the common
+interpretive framework and controlled representations.
+Sections~\ref{c:sec:capacity}--\ref{sec:scaling} describe the controlled,
+natural-data, and scaling comparisons.
+Sections~\ref{sec:utility-extension}--\ref{sec:adaptive-development}
+examine residual correction, learned metrics, direct reconstruction
+training, and online updates. The appendices give complete proofs,
+source rosters, numerical specifications, comparison tables, and
+reproducibility details. All crossreferences in this document are local;
+the prefix S distinguishes its sections, equations, propositions, tables,
+and figures from those of the main paper.
+
+Vectors are columns, and reference matrices store one transposed
+observation per row. For a vector $v$, $v^\top$ denotes transpose,
+$\|v\|_2$ denotes the Euclidean norm, and $\|v\|_1$ is the sum of its
+absolute coordinates. The identity matrix $I$ and all-ones vector
+$\mathbf1$ have the dimensions specified by their surrounding products.
+Expectations, variances, and covariances refer to the probability law
+stated in each result. A history contains only observations available at
+its forecast origin; a horizon-$h$ target occurs $h$ steps later.
+Fitted transformations use only the data permitted by each protocol.
+
+\input{supporting/utility_question}
+\input{supporting/mechanisms}
+\input{supporting/controlled_results}
+\input{supporting/natural_study}
+\input{supporting/scaling_sensitivity}
+\input{supporting/utility_extension}
+\input{supporting/section_target_geometry}
+\input{supporting/section_direct_reconstruction}
+\input{supporting/section_adaptive_development}
+\FloatBarrier
+\bibliography{references}
+\bibliographystyle{tmlr}
+\clearpage
+\appendix
+\renewcommand{\thesection}{S\Alph{section}}
+\input{supporting/appendix_controlled}
+\FloatBarrier
+\input{supporting/appendix_natural}
+\FloatBarrier
+\input{supporting/appendix_scaling}
+\FloatBarrier
+\input{supporting/appendix_utility}
+\FloatBarrier
+\input{supporting/appendix_target_geometry}
+\FloatBarrier
+\input{supporting/appendix_direct_reconstruction}
+\FloatBarrier
+\input{supporting/appendix_adaptive_development}
+\FloatBarrier
+\end{document}

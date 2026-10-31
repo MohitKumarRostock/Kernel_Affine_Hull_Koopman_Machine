@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "recorded_at": "2026-10-31T09:57:48.231015+00:00",
+  "tests": 10,
+  "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python3 -m unittest extensions.adaptive_development.tests_models extensions.adaptive_development.tests_protocol -v",
+  "test_scope": [
+    "sliding raw and current-residual ridge versus batch",
+    "recursive kernel versus dense batch",
+    "KAHM algebra and regularizer",
+    "matched reference content",
+    "geometry refresh coherence",
+    "caps and label maturity",
+    "prediction parameter immutability",
+    "future perturbation",
+    "calibration timing",
+    "zero-correction baseline recovery"
+  ],
+  "reported_accuracy_inspected": false,
+  "timing_only_smoke": {
+    "seed": 20261099,
+    "method": "adaptive_kahm",
+    "tier": "large",
+    "observations": 768,
+    "framework_errors": 0,
+    "p99_service_ms": 7.4330221895070325,
+    "scope": "Excluded stream; model service timing only was inspected. This smoke preceded metadata-only reference hash additions."
+  }
+}

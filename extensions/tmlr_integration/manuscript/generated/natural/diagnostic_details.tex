@@ -23,7 +23,7 @@ Confirmation: Metadata + probe + geometry & 0.1847 & 0.04196 & 58.6 & 71.9 \\
 
 {\small\setlength{\tabcolsep}{4pt}
 \begin{longtable}{lrrrr}
-\caption{One-off diagnostic development costs. Acquisition sums the union of both matched predictors' complete search/final nodes and each variant's metadata/probe/geometry dependencies within every development task. Summing standalone tasks can conservatively repeat preparation across seeds/tasks. Acquire and total denote wall time; CPU covers acquisition. Do not add the four rows: their developmental labels and some features can be shared. Ridge fitting is measured separately; no deployment-count amortization is assumed.}\label{tab:offline-costs}\\
+\caption{One-off diagnostic development costs. Acquisition sums the union of both matched predictors' complete search/final nodes and each variant's metadata/probe/geometry dependencies within every development task. Summing standalone tasks can conservatively repeat preparation across seeds/tasks. Acquire and total denote wall time; CPU covers acquisition. The rows share development labels and some features, so their costs are not additive. Ridge fitting is measured separately; no deployment-count amortization is assumed.}\label{tab:offline-costs}\\
 \toprule
 Variant & Acquire (s) & CPU (s) & Ridge (ms) & Total (s) \\
 \midrule

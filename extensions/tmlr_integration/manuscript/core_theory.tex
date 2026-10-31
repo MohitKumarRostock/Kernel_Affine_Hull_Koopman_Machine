@@ -1,0 +1,147 @@
+\section{Normalized reconstruction and feature spans}
+\label{sec:reconstruction-theory}
+
+The reconstruction formulas permit two different questions: whether a
+particular map is an established kernel predictor, and whether its
+coordinates give a linear decoder functions unavailable from the matched
+reconstruction. We answer these questions for fixed reference geometry.
+The results concern exact functions before feature standardization,
+radial transformation, or penalized fitting.
+
+Consider one local model from Section~\ref{sec:reconstruction-method} and
+suppress its index. Write $M$ for its number of references,
+$Q\in\R^{M\times d}$ for their row-stored coordinates, and
+$C=(K+\lambda I_M)^{-1}$ for its regularized inverse, with $\lambda>0$.
+The matrix $K$ is the symmetric positive-semidefinite Gaussian Gram
+matrix. The vector $\mathbf1_M$ contains $M$ ones, and $k(z)\in\R^M$
+contains the kernel similarities of a query $z$ to the references.
+Let $A_K$, $A_R$, and $A_A$ denote the KAHM, positive-kernel RBF, and
+affine reconstructions in Equation~\eqref{eq:mechanism-main-maps}.
+
+\subsection{The meaning of normalized target transfer}
+
+\begin{proposition}[Normalization and target transfer]
+\label{prop:mechanism-krr}
+For a query with $s(z)=\mathbf1_M^\top Ck(z)\ne0$, define
+$\omega(z)=Ck(z)/s(z)$. Then $\mathbf1_M^\top\omega(z)=1$, and for
+every vector of reference targets $y\in\R^M$,
+\begin{equation}
+ \omega(z)^\top y
+ =\frac{k(z)^\top(K+\lambda I_M)^{-1}y}
+ {k(z)^\top(K+\lambda I_M)^{-1}\mathbf1_M}.
+ \label{eq:main-target-transfer}
+\end{equation}
+This is the ratio of two kernel-ridge predictions with regularization
+matrix $K+\lambda I_M$ and no additional intercept. For an affine scalar
+function $f(q)=q^\top b+c$, where $b\in\R^d$ and $c\in\R$, its
+reference values $f(Q)=Qb+c\mathbf1_M$ satisfy
+\[
+ \omega(z)^\top f(Q)-f(z)=\{A_K(z)-z\}^\top b.
+\]
+\end{proposition}
+
+The proof uses symmetry of $C$ and the fact that the normalized weights
+sum to one. The numerator in Equation~\eqref{eq:main-target-transfer}
+fits the supplied targets, while the denominator fits the constant
+target. Because the denominator varies with the query, the ratio
+generally differs from the ordinary unnormalized kernel-ridge predictor.
+The affine identity also specifies the effect of reconstruction error on
+an affine target: only its component in the target direction $b$ enters.
+The complete proof is in Appendix~\ref{app:reconstruction-mechanism}.
+
+\subsection{Equal spans under reference symmetry}
+
+For a fixed common gate $g(z)$, define
+$d_K(z)=g(z)\{A_K(z)-A_A(z)\}$ and
+$d_R(z)=g(z)\{A_R(z)-A_A(z)\}$. Let $\mathcal S_0$ be the linear
+span of the scalar gate and the coordinates of
+$g(z)P^\top(z-\mu)$, where $\mu$ and $P$ are the reference center
+and principal directions. The coordinates of
+$g(z)A_A(z)=g(z)\mu+P\{g(z)P^\top(z-\mu)\}$ belong to
+$\mathcal S_0$. Adjoining a vector-valued feature to a span means
+adjoining each of its scalar coordinate functions. A common intercept
+may be adjoined to both spans without changing the equality below.
+
+\begin{proposition}[A sufficient condition for equal feature spans]
+\label{prop:mechanism-redundancy}
+Suppose $K\mathbf1_M=\kappa\mathbf1_M$ for a scalar $\kappa$, and
+$C$ leaves
+$\mathcal V=\operatorname{span}\{\mathbf1_M,Q_{:1},\ldots,Q_{:d}\}$
+invariant. Here $Q_{:i}$ is column $i$ of $Q$, and invariance means
+$C\mathcal V\subseteq\mathcal V$. Then
+\[
+ \operatorname{span}(\mathcal S_0,d_K)
+ =\operatorname{span}(\mathcal S_0,d_R).
+\]
+More explicitly, there are $B\in\R^{d\times d}$ and $c\in\R^d$
+such that, with $a=(\kappa+\lambda)^{-1}>0$,
+\[
+ C\mathbf1_M=a\mathbf1_M,\qquad
+ CQ=QB+\mathbf1_Mc^\top,\qquad
+ A_K(z)=\{B^\top A_R(z)+c\}/a.
+\]
+\end{proposition}
+
+Invariance supplies the displayed representation of $CQ$. Substitution
+in the normalized reconstruction expresses each KAHM departure using
+RBF departures and the common affine features. The restriction of $C$
+to the finite-dimensional space $\mathcal V$ is invertible onto that
+space, which gives the reverse inclusion. This argument also covers
+redundant reference-coordinate columns; it does not require $B$ to be
+invertible. Appendix~\ref{app:reconstruction-mechanism} gives the full
+proof.
+
+A two-reference example makes the role of the common coordinates
+explicit. Take scalar references $(-1,1)$, $g=1$, $P=1$, and
+$A_A(z)=z$. If $\rho$ is the off-diagonal Gram entry, then
+\[
+ A_K=c_\rho A_R,\qquad
+ d_K=c_\rho d_R+(c_\rho-1)z,\qquad
+ c_\rho=\frac{1+\rho+\lambda}{1-\rho+\lambda}>0.
+\]
+The departures differ, but adjoining the coordinate $z$ makes their
+augmented spans equal. Thus a nonlinear reconstruction formula alone
+does not establish an additional raw basis.
+
+\subsection{An irregular reference bank gives a distinct basis}
+
+\begin{proposition}[Irregular scalar references]
+\label{prop:mechanism-distinct}
+Let $q_1<q_2<q_3$ satisfy $q_1+q_3\ne2q_2$, and let
+$k_i(z)=\exp\{-t(z-q_i)^2/2\}$ for a precision $t>0$.
+Set $K_{ij}=\exp\{-t(q_i-q_j)^2/2\}$ and
+$C=(K+\lambda I_3)^{-1}$ for $\lambda>0$.
+Suppose every entry of $C\mathbf1_3$ is positive. With
+$Q=(q_1,q_2,q_3)^\top$, $g=1$, and $A_A(z)=z$,
+\[
+ A_K\notin\operatorname{span}(1,z,A_R),\qquad
+ d_K\notin\operatorname{span}(1,z,d_R).
+\]
+These spans consist of scalar functions on the whole real line.
+\end{proposition}
+
+The six products of kernel functions have distinct exponential factors
+because their exponents contain the six distinct sums $q_i+q_j$ for
+$i\le j$. Their linear independence rules out an affine relation
+between $A_K$ and $A_R$: such a relation would force $K$ to have
+constant row sums, whereas its middle row has a strictly larger sum
+than either outer row. Positivity of $C\mathbf1_3$ makes both
+reconstructions bounded, excluding an additional nonzero multiple of
+$z$. Appendix~\ref{app:reconstruction-mechanism} provides every step
+of this argument.
+
+For the explicit references $(-1,0,2)$, the sample-variance precision is
+$t=3/7$. The reference-based regularization rule gives
+$\lambda=4.498274743339644$, for which positivity of $C\mathbf1_3$
+follows from the matrix bound in the appendix. This supplies a concrete
+example satisfying the proposition. It does not assert distinctness
+for every higher-dimensional bank fitted in the forecasting experiment.
+
+Together, the propositions delimit the algebraic contribution. Some
+reference geometries yield equal augmented spans, while an irregular
+geometry can supply a distinct function. Neither conclusion determines
+forecasting accuracy. A general change of feature coordinates changes
+an isotropic ridge penalty, and separate nonlinear radial transformations
+can remove a raw linear span relation. The empirical comparison
+therefore evaluates the complete feature transformation and fitted
+decoder as well as the reconstruction map.

@@ -1,0 +1,103 @@
+\section{Online adaptation: protocol and resource measurements}
+\label{app:adaptive-development}
+
+\paragraph{Inputs and temporal roles.}
+The eight synthetic streams contain 2,048 retained observations each, after
+256 regime-A burn-in observations. Four seeds, 20261101--20261104, pair
+stationary and recurring schedules by innovations. Histories and horizons
+are respectively 12 and $(1,4,12)$. The retained Dominick series T7830,
+T25851 and T108533 each contain 393 weekly observations, with histories 52
+and horizons $(1,2,4)$. The Sunspot input is the finite final 4,096-point
+crop of the previously selected daily T1 series, starting at original raw
+index 69,828; histories are 28 and horizons $(1,3,7)$. No interpolation is
+used. The source archives and version identifiers are documented with the
+reproduction materials \citep{Godahewa2021Monash}.
+
+At observation time $t$, the evaluator scores previously issued forecasts
+whose targets mature at $t$, releases the newly available labels, updates
+the model, then issues forecasts for $t+h$. Initial fitting uses common
+joint-horizon complete rows, and calibration weights are selected before
+processing the first evaluation observation using only earlier targets.
+Matured earlier evaluation labels may update the model; the update rule and
+selected weights remain fixed. The model therefore uses labels from earlier evaluation times once
+they become available, while the update algorithm remains fixed. Scale factors use the fitting
+prefix only. Losses average origins within horizon, horizons within series,
+then series within collection; Dominick and Sunspot receive equal weight.
+The four seeds define independent simulation replications; forecasts
+from overlapping windows within a stream are dependent. No broad transfer intervals
+are claimed from the two selected natural collections.
+
+\paragraph{Reference policy and calibration scope.}
+The geometric bank contains four local models of rank at most two. Every
+16 observations, an adaptive arm considers one local model in round-robin
+order, retains half its initial references as anchors, and replaces at most
+four other references with observed histories assigned to that local model.
+The affected geometry and all residual heads are rebuilt coherently from
+their bounded replay. No bandwidth, penalty, history, reference-policy or
+refresh search is performed. The kernel comparator uses an initial-prefix
+median-distance bandwidth, regularizer 0.1 and FIFO supports, with recorded
+inverse-residual checks and rebuilds. Calibration selects only the four
+possible horizon-specific correction weights stated in
+Section~\ref{sec:adaptive-development}.
+For the kernel comparator, the correction is its kernel forecast minus
+the common raw ridge forecast. The same calibration rule therefore selects
+a ridge--KRR mixture for each horizon: weights one and zero recover KRR
+and ridge, respectively. All reported method losses include this selection.
+
+\paragraph{Prespecified accuracy and service criteria.}
+The decision to expand the evaluation requires one capacity setting
+to satisfy all accuracy and service criteria. On recurring
+streams, adaptive KAHM must reduce mean loss by at least 3\% against each
+of adaptive affine, adaptive RBF-local and kernel ridge, with wins on at
+least three of four paired seeds against each, and by at least 1\% against
+both fixed KAHM and raw ridge. On the natural aggregate, it must improve
+each of the three main comparators by at least 1\%; at least one collection must show improvements of at least 3\%
+against all three comparators, and neither collection may be more
+than 5\% worse than any. KAHM must also meet the per-stream 99th-percentile service-time screen,
+with no unexpected exception or cap violation in any method. These
+thresholds were fixed before the original run and were also used for
+the repeated evaluation after the numerical amendment, designated A1.
+Neither capacity setting meets the recurring-stream accuracy criteria.
+The protocol therefore classifies both settings as insufficient for
+expanding the experiment. Every criterion is evaluated within a single
+capacity setting.
+
+\input{generated/adaptive_development/resource_table}
+
+\paragraph{Resource scope.}
+Workers execute serially in fresh processes with one numerical thread and
+the same CPU affinity. Initialization and calibration are measured
+separately. The service interval covers history/pair assembly, all matured
+horizon updates, feature/head rebuilds, kernel inverse audits and prediction;
+scoring, serialization and state inspection are excluded. Buffer-state
+samples and whole-worker peak RSS have the distinct scopes stated in
+Table~\ref{tab:adaptive-development-resources}. The 20\,ms allowance is a
+host-specific engineering screen, not an application-derived service-level
+requirement. Different support sharing across horizons prevents interpreting
+the tier labels as equal memory or equal computation.
+
+\paragraph{Solver amendment and computational verification.}
+The original implementation accumulated correction cross-products;
+large rows entering and leaving a finite window produced cancellation in
+the reproduced failing state. The amended implementation (A1) recomputes residuals against the
+current baseline from the same bounded replay, centers to eliminate the
+free intercept, equilibrates both data and penalty columns, and solves
+the augmented ridge objective with pivoted QR. It changes arithmetic, not
+the specified objective or advancement rule. The original 144 runs remain
+in \path{extensions/adaptive_development/archives/initial_attempt.zip}.
+Because the amended runs repeat the same inputs, they do not increase
+the number of independent experimental replications. The verification program passes
+\ADAuditChecks{} computational consistency checks, covering chronology,
+coverage, calibration selection, aggregation, decision gates, resources,
+shared baselines and matched reference changes. It imports neither the
+forecasting model nor its analyzer, but remains an internal computational
+check rather than independent scientific replication.
+
+The reproduction materials contain both versions of the protocol and
+source, the numerical diagnostic states, input hashes, predictions,
+update traces, and summaries. The manuscript builder
+\path{extensions/tmlr_integration/build_adaptive_assets.py} reconstructs
+the displayed collection means and resource maxima from saved task
+records, checks them against the analysis and decision files, and records
+input/output hashes. It performs no model fitting. Both execution checkpoints were recorded locally. The study was not
+publicly preregistered.

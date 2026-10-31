@@ -1,7 +1,7 @@
-# Bounded sensitivity to geometry input scaling
+# Sensitivity to geometry input scaling
 
 This extension compares training z-score geometry scaling with training min-max
-scaling to `[-1, 1]` in the integrated predictive-geometry manuscript. It is a
+scaling to `[-1, 1]` in the integrated manuscript. It is a
 paired **post-hoc sensitivity analysis** on already inspected natural sources
 and synthetic draws. The original studies and their recorded results remain
 unchanged. No scaler or benefit diagnostic is selected using these new test
@@ -10,8 +10,7 @@ outcomes.
 The protocol and execution code were published at commit
 `c5b8817a9157de685fd1c70a22d83542a7bdf766` before any sensitivity data fits.
 `protocol_freeze.json` checks 609 execution-source and original-evidence files;
-`EXECUTION_CHECKPOINT.json` records that publication boundary. This is a new
-execution checkpoint, not new independent source confirmation.
+`EXECUTION_CHECKPOINT.json` records that publication boundary. The checkpoint preceded these fits, but the observations had already been evaluated. The analysis therefore provides sensitivity evidence rather than independent source confirmation.
 
 ## Fixed design
 
@@ -41,10 +40,15 @@ source counts inferred from overlapping windows, horizons, or random seeds.
 
 ## Restore and audit the recorded evidence
 
-From the repository root, using Python 3.12 and the pinned dependencies in
-`extensions/natural_forecasting/requirements.txt`:
+Use Python 3.12 and the dependencies in `extensions/natural_forecasting/requirements.txt`. The integrated audit checks the original 217-file natural-study checkpoint, including historical documentation. Create an isolated source view from a complete checkout:
 
 ```bash
+python scripts/materialize_historical_checkpoint.py \
+  --include extensions/natural_forecasting \
+  --include extensions/scaling_sensitivity \
+  --include extensions/tmlr_integration \
+  --output /tmp/kahm-scaling-reference
+cd /tmp/kahm-scaling-reference
 python extensions/natural_forecasting/package.py restore-reference \
   extensions/natural_forecasting/reference/natural_v1.zip.parts.json
 python -m extensions.scaling_sensitivity.reference restore
@@ -52,11 +56,9 @@ python extensions/tmlr_integration/package.py check-source
 python extensions/tmlr_integration/package.py audit .
 ```
 
-The first restoration is needed only when the original natural reference run
-has not been expanded. Sensitivity restoration checks every shard, the joined
-archive, and its file inventory; it refuses to replace differing existing
-files. The anonymous review supplement already contains the expanded evidence.
-For that supplement, use the integrated package audit directly.
+The helper verifies every historical hash without changing the current checkout or any scientific freeze. A shallow or partial clone requires the historical objects and selected study prefixes to be populated first; see the [natural-study guide](../natural_forecasting/README.md#create-an-isolated-historical-source-tree). An expanded standalone historical review supplement can use the integrated audit directly.
+
+The natural restoration is needed only when its reference run is absent. Sensitivity restoration verifies every part, the combined archive, and the file inventory, accepting identical files and refusing conflicting replacements.
 
 `analysis.py` independently reconstructs natural losses, input/target scaler
 statistics, source hierarchies, archived parity, cost-node sums, and all
@@ -109,11 +111,9 @@ Natural method times are newly measured search, selection cleanup, selected
 refit, forecast, and serialization costs. Current data loading, launch-to-result
 wall time, and extra sensitivity audits are separate; original source
 preparation is reused. Launch-to-result includes child execution and
-communication, not isolated startup overhead. The inherited import timer begins
+communication, not isolated startup overhead. The recorded import timer begins
 after some adapter dependencies have loaded and does not measure full cold
-startup. Compare these times against the raw references measured in this same
-execution. Do not divide new timings by an archived baseline time from the
-earlier study. Controlled banks are shared, so their timing records are
+startup. Comparable time ratios use the raw references measured in this same execution. Ratios against earlier archived timings would mix different executions and measurement conditions. Controlled banks are shared, so their timing records are
 execution diagnostics, not standalone deployment comparisons.
 
 The frozen benefit diagnostic is not reevaluated for min-max geometry. The

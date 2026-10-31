@@ -1,113 +1,36 @@
-# Current KAHM time-series manuscript
+# Manuscript for TMLR review
 
-The current manuscript is **Kernel Affine Hull Machines for Time-Series
-Forecasting: Forecast-Trained Local Geometry and Matched Evaluation**.
+**Kernel Affine Hull Representations for Time-Series Forecasting: Distinctness, Stability, and Predictive Limits** studies the relationship between geometric reconstruction and forecasting with a finite decoder.
 
-Read [the revised PDF](extensions/tmlr_integration/review/KAHM_Forecast_Trained_Manuscript.pdf),
-[the editable source](extensions/tmlr_integration/manuscript/main.tex), and
-[the complete build guide](extensions/tmlr_integration/README.md).
-It is an unsubmitted research draft in TMLR preprint style.
+- [Manuscript PDF](extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript.pdf)
+- [Editable LaTeX source](extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
+- [Build instructions](extensions/tmlr_integration/README.md)
+- [Principal experimental findings](extensions/reconstruction_mechanism/FINDINGS.md)
+- [Reproduction instructions](extensions/reconstruction_mechanism/README.md)
+- [Document and supplement verification](extensions/tmlr_integration/TMLR_SUBMISSION_VALIDATION.json)
 
-## Direct forecast-trained reconstruction
+## Contribution and scope
 
-The [current experiment](extensions/direct_reconstruction/README.md) trains
-KAHM kernel bandwidths and gate temperatures for the actual forecast and
-horizon, with equally supervised affine, locality and RBF-local alternatives.
-Its [public freeze](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/39174d06dffc7e28fed73dbbf866e539560dd021)
-contains the numerical implementation, independent analysis and all 46
-planned input sets before evaluation. Three rideshare tasks are retained as
-availability failures; they prevent a complete four-collection aggregate.
-The seven-series archive subset is explicitly availability-conditioned.
+The paper gives exact identities for normalized KAHM reconstruction, sufficient conditions for redundancy with a matched RBF feature span, and an explicit construction in which those spans differ. It then derives a uniform correction bound for bounded features followed by centered ridge regression. The mathematical claims state their assumptions separately from the empirical forecasting claims.
 
-The manuscript defines the complete forecasting family and separates its
-methodological specification from any comparative superiority supported by
-actual results. The [new packager](extensions/tmlr_integration/package_direct.py)
-produces the complete editable manuscript and a self-contained reproduction
-bundle for this extension and its separate exploratory gate pilot.
+The principal experiment evaluates ten procedures in 192 task suites. The KAHM procedure improves the shared local-coordinate basis by 12.58% in aggregate nonlinear normalized mean squared error. Its 1.17% gain over matched RBF departures and 3.92% gain over raw-history RBF features do not establish the prespecified 3% improvement under the simultaneous analysis. Boosted trees and the validation-selected non-KAHM procedure have lower aggregate errors. These findings establish useful behavior in a specified comparison while limiting claims of practical KAHM superiority.
 
-The completed comparison yields 2 positive, 6 negative and 10 unresolved
-adjusted intervals for reconstruction-trained KAHM. It demonstrates a 41.43%
-Van der Pol improvement over gate-only KAHM, while matched and practical
-comparators remain stronger in important settings. The
-[full findings](extensions/direct_reconstruction/FINDINGS.md) report all
-procedures, unavailable tasks, source dependence and costs.
+The manuscript also reports controlled representation experiments, natural-data evaluations, direct reconstruction training, and online adaptation. Each study retains its own experimental units, loss normalization, feasibility restrictions, and inferential scope. Incomplete coverage and adverse results are reported explicitly.
 
-## Previous shared proxy-metric study
+## Anonymous numerical supplement
 
-The [new study](extensions/target_geometry/README.md) compares a ridge baseline,
-matched local geometric corrections, in-sample versus excluded-donor residuals,
-and a training-only supervised metric shared across KAHM, affine, locality and
-RBF-local gates. The public checkpoint
-[`0d7ee3c`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/0d7ee3c17515eb1d922cdd302facd2b7874dc9a9)
-preceded the 48-task execution. All 768 forecasts are retained and independently
-audited, with no fallback forecasts or missing tasks.
+The [saved-forecast package builder](extensions/tmlr_integration/package_tmlr_review.py) produces `KAHM_TMLR_Saved_Forecasts.zip`, an approximately 80.8 MB anonymous archive. It covers all 192 tasks, all ten procedures, eight numerical tables, and the six primary statistical contrasts. From the repository root, after restoring the mechanism evidence:
 
-Learned-metric KAHM improves ridge by 11.18%, 53.26% and 19.44% on the three
-synthetic laws under the 18-comparison analysis. Neither the metric increment
-nor the OOF target increment is resolved there, and five matched-control
-comparisons favor simpler geometries. On four new archive collections, its
-scaled MSE is 1.2721 versus ridge's 1.3005 (2.18% lower), at 0.162 versus
-0.00130 seconds of charged pipeline time. Fixed-metric in-sample KAHM reaches
-1.2646, and simpler corrections remain stronger. These descriptive archive
-results do not establish a KAHM-specific advantage.
+```bash
+python extensions/tmlr_integration/package_tmlr_review.py --output-dir /tmp/kahm-tmlr-review
+```
 
-See [the complete findings](extensions/target_geometry/FINDINGS.md),
-[the residual transport identity](extensions/target_geometry/THEORY.md), and
-[the focused research roadmap](extensions/target_geometry/RESEARCH_ROADMAP.md).
-The new reproduction bundle covers this extension; it does not replace older
-studies or their independently preserved failures. The historical natural study
-still reports 4.26% higher error and 2.30 times the cost for its tested KAHM
-augmentation, and the additive-utility study retains its eight failed model
-fits and post-hoc matched-success diagnostic.
+Use a new output directory. After unpacking the resulting ZIP, install its `requirements.txt` and run `python verify_saved_forecasts.py` from the extracted supplement directory. The [standalone verifier](extensions/tmlr_integration/verify_saved_forecasts.py) checks numerical records and recomputes losses and comparisons from saved forecast arrays. The ZIP is a downloadable review artifact; the repository stores its construction and verification programs.
 
-## Historical study context
+These checks reproduce the saved-forecast analysis. They do not refit models, repeat feature-bound audits, remeasure computation time, or rerun earlier studies. The public study guides describe those separate reproduction procedures.
 
-## New bounded scaling sensitivity
+## Review format and reproducibility
 
-The updated manuscript now includes a fixed, paired comparison of training
-z-score geometry scaling and unclipped min-max scaling to `[-1, 1]`, covering
-all 208 original natural configurations and all 24 original controlled draws
-per law. The public execution checkpoint preceded the new fits, but the data
-had already been inspected, so the paper labels this **post-hoc sensitivity**.
+The source uses the official TMLR style in anonymous review mode. The paper includes an explicit disclosure of AI assistance. Its public repository provides the scientific source and experimental provenance, including the local prospective checkpoint for the principal experiment. That checkpoint is not described as public preregistration. Independent-code checks within the study are distinguished from external replication.
 
-On the four formerly reserved natural sources, raw plus KAHM changes from
-**0.8419228 to 0.8421913** source-balanced scaled MSE (**+0.0319%**). It remains
-**4.29% above raw RBF** and **8.00% above raw ridge**. The main controlled
-KAHM-local comparisons also retain their ordering. Min-max improves Duffing
-at 256 landmarks by 7.35%, yet KAHM still trails raw and both local controls.
-A secondary score-only-versus-affine ordering does reverse on Van der Pol;
-the paper explicitly distinguishes that result from the main comparisons.
-
-See the [sensitivity findings](extensions/scaling_sensitivity/FINDINGS.md),
-[fixed protocol and reproduction guide](extensions/scaling_sensitivity/README.md),
-and [complete audited summary](extensions/scaling_sensitivity/analysis/summary.json).
-All 1,664 new natural method runs and 1,440 controlled head fits are retained.
-The original frozen benefit diagnostic was not retuned.
-
-## Reproduce and prepare review files
-
-The [integrated guide](extensions/tmlr_integration/README.md) supplies commands to
-restore the saved natural run, audit both studies without forecasting fits,
-compile the paper, and build deterministic anonymous source and review ZIPs.
-The review export preserves scientific bytes and recorded outcomes while
-omitting identifying overviews; it explicitly distinguishes its post-study
-source inventory from the original execution freezes.
-
-The original TMLR checkpoint remains at
-`a67c40190458bab7b3e56b4fac76770798d074b3`. The completed standalone natural
-study remains at `750805cef68711e0aeb9c7c14a2d6cd5a785bf30`. The integrated
-manuscript before this sensitivity remains at
-`ede33f83cb2e6a5eae687282cec93c60cd31d46d`; the new execution freeze is
-`c5b8817a9157de685fd1c70a22d83542a7bdf766`. Original scientific source code,
-results, and manuscript checkpoints are preserved. The CI workflow restores
-both reference artifacts, checks the original and new freezes, compiles the
-integrated paper, and verifies and audits the anonymous review export.
-
-## Research status
-
-This is an unpublished draft prepared for substantive author review. The
-computational validation does not certify author approval or acceptance by a
-journal. The paper includes a first-page disclosure of AI assistance with
-protocol development, implementation, verification, analysis, and writing.
-The authors must verify the scientific content, settle authorship and required
-funding/conflict declarations, and approve any eventual submission.
+The public repository is author-identifying. An anonymous submission must therefore use the review PDF and an anonymous supporting artifact, without directing reviewers to an identifying version of the work. TMLR's current [author guidelines](https://jmlr.org/tmlr/author-guide.html) and [editorial policies](https://jmlr.org/tmlr/editorial-policies.html) describe the submission requirements. The repository records the research materials; it does not assert submission, acceptance, or journal endorsement.

@@ -1,0 +1,998 @@
+{
+  "base_commit": "3103485c906297003ff46da1104929df3002b6e2",
+  "created_utc": "2026-10-31T11:47:17.073070+00:00",
+  "environment": {
+    "cpu_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "machine": "x86_64",
+    "packages": {
+      "numpy": "2.3.5",
+      "scikit-learn": "1.8.0",
+      "scipy": "1.17.0",
+      "threadpoolctl": "3.6.0"
+    },
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "python_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "thread_environment": {
+      "BLIS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "PYTHONHASHSEED": null
+    }
+  },
+  "files": [
+    {
+      "path": "extensions/direct_reconstruction/PRE_FREEZE_DESIGN_LOG.md",
+      "sha256": "58121bd99f95ef2ebc2dc3e7bbab33763f7422ad8c528cc43528d7c022bd3e50"
+    },
+    {
+      "path": "extensions/direct_reconstruction/PROTOCOL.md",
+      "sha256": "d091ce03f33bf4acefe56897e44da4c2233496505b3e832cd7b1b06b764a4212"
+    },
+    {
+      "path": "extensions/direct_reconstruction/analyze.py",
+      "sha256": "bb4f6f55440bf58fbeacfdd4581bf3e89c9108239c6b0a2afed70a8aa1c549ea"
+    },
+    {
+      "path": "extensions/direct_reconstruction/data/sources_manifest.json",
+      "sha256": "6d146da7e454bd1095a0bcab5bdf512b8f2c1c24066082046665756abb3c9419"
+    },
+    {
+      "path": "extensions/direct_reconstruction/model.py",
+      "sha256": "5562cd2d64a6353ded0c2ff1b0a3d3a2d5da9a044066d26fc11e997376986986"
+    },
+    {
+      "path": "extensions/direct_reconstruction/prepare_sources.py",
+      "sha256": "8a40b36d3aa898e350f972a08ddcbb240b8490ed9300a0a07fbc5e501e7d2b0c"
+    },
+    {
+      "path": "extensions/direct_reconstruction/requirements.txt",
+      "sha256": "e41761634c8ff5c8e256ab6df77ee9e5b3114019d74f6638a8ea40515af9b6b4"
+    },
+    {
+      "path": "extensions/direct_reconstruction/run.py",
+      "sha256": "f81177b992b120deafa1dd4aa7e335ee19e6781bf3af44f6c2c822c748ac34c1"
+    },
+    {
+      "path": "extensions/direct_reconstruction/test_model.py",
+      "sha256": "02ffe6c091fb2b08d5da17128faa29e12d56abf4c3c1c4794b26e6f4d829f565"
+    },
+    {
+      "path": "extensions/direct_reconstruction/test_protocol.py",
+      "sha256": "c2e0fa862280e5325c86009f54e0d452bbde316faa98d76de92ca28b5cbf3b8b"
+    },
+    {
+      "path": "extensions/natural_forecasting/__init__.py",
+      "sha256": "410bfd9350cfe11da0a81aeeb9e79f6e96d653a1a46563b66e34c051cfe5ac84"
+    },
+    {
+      "path": "extensions/natural_forecasting/models.py",
+      "sha256": "78945ec52b2bad13a2574ed267e3e892a9ede4a325538331b6000f57ebf1f9c1"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/datasets.py",
+      "sha256": "e02fff2811d09f41d1d340a989ef32a46d2776038d0e54045e3266b5f4f6dfb3"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/geometry.py",
+      "sha256": "25fe690a62dac4cee60bb41464102d18cb3de1a6e016b722f9bdc85445ea8fde"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/heads.py",
+      "sha256": "25f8875ad7554e80f0a1d6281eaae891dc1743ba9ffaba115e49d3a11331d250"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/autoencoder.py",
+      "sha256": "a6463135338252db8881518fbf027aa901212a1321ad3c250bca5cc58b5b1228"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/autoencoder_filtering_extended.py",
+      "sha256": "7961d065022ac27e75bcdf3d4b85ca900da85e7953cea994da2948f59372dd21"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/combine_multiple_autoencoders_extended.py",
+      "sha256": "b7e81e2182ca458c3dc67ff3793a2957e9b914d81e6479ed089f8f28116c75e7"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/dim_reduce.py",
+      "sha256": "b6fb4ab1d77a48d5e4fee55aefcbe18adb7f6ee17e93180fbd5451feeb96f036"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/distance_matrix.py",
+      "sha256": "d241f1b323cdffbdec65ffc193fc6bf368d98b29a5f7d58e55300c721d1de50a"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/extensions/certified_forecasting/experiments/run_oscillators.py",
+      "sha256": "8b3ac1a285e3128848e16d1d69192822795cdc9d7180d1802cf23dd4c1339ab2"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/extensions/certified_forecasting/src/certified_forecasting/__init__.py",
+      "sha256": "85f475fd0437b5d2a0b6c941f2b9200c63bcd4808d2ccdb5d2e0c2b0c9e3625f"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/extensions/certified_forecasting/src/certified_forecasting/data.py",
+      "sha256": "a0ece522777c5c08e74d25c3b2c0c7556c198f226656b20132bfada1592dda2e"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/extensions/certified_forecasting/src/certified_forecasting/features.py",
+      "sha256": "d8b93176f611e765dd7a37b0e15bbef7ff26309c2423cd1d45c1aece0358be87"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/extensions/certified_forecasting/src/certified_forecasting/models.py",
+      "sha256": "1a29e02de9e5bb03b370fd9591fa2894e22784eafe0d3fb9e6fc8d341656698e"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/kernel_affine_hull_koopman_machines.py",
+      "sha256": "242f1dcafa487773bd829f6789d957b16b3a477d8e08cc525f46562218131152"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/kernel_regularized_least_squares.py",
+      "sha256": "566433afa74cf8e8c4798e3c5cec23ea0d1f2acee4b77546317aa5cbd2df59bf"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/kxa_matrix.py",
+      "sha256": "00a614f6c39922adbba0ab988e9465684ea96e566e7f1a9fa897c1676adaff82"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/kxx_matrix.py",
+      "sha256": "6a11db30dee4c630930303361c94138ca7e58fc2818d22df31f72631c4a553d3"
+    },
+    {
+      "path": "extensions/predictive_geometry/study/vendor/upstream/parallel_autoencoders.py",
+      "sha256": "bd339cade78a6e5416448edf7bf485a4edfab1ee2b6cb873a0852ecc1fdcef69"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/ALGEBRA.md",
+      "sha256": "06124723e2e6b87aeea231c22e557112ceda0846677930fa10af1f18bbb9408a"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/DEVELOPMENT_CHECKS.json",
+      "sha256": "d2e65d89f384d0e593bff0b0322bc2a37e877dddbebaa7706ee016e89053d2c5"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/PROTOCOL.md",
+      "sha256": "de34611761066558c1f093ad9a0033892512c8a9a5292e5e2174be01582e5da6"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/algebra.py",
+      "sha256": "04c12bc9a028798be3072929178be08335e197facdc6188b3bebece2954c17b8"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/algebra_results.json",
+      "sha256": "b5b559fea028a0105404e7b03bcccb8fdd09b46ef4e9a72a5fbcf9a2104ad22c"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/analyze.py",
+      "sha256": "069e2c1837080b15663f5bba02a5270ae87239b9b5c0653f53148929a6f2746d"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/config.json",
+      "sha256": "165b98deb5fb0526405c594c5386c0f66af48e7e311f3986e36ce602af5f26db"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/data.py",
+      "sha256": "7a76b1f80f0fc0045ad766972589c9ae6439ea04714471c4ba343b943c6c2c0b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/models.py",
+      "sha256": "f4c55ce5a93a35c322247a068444ab9e37de5e07b039fbf2290ee914818e0dd2"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/manifest.json",
+      "sha256": "d27f0f4467124eb925ec09bb52366829d395e961f500925bcdf104f626187c90"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946100.npz",
+      "sha256": "089458835fc16d6a97a8a4b1f35f5f892652ee75bd913be57dd1af335221529b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946101.npz",
+      "sha256": "52ad3bce2c0bab829f9e23a32b77fa8e9f76ccc062b5ea52db530be29801f3e5"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946102.npz",
+      "sha256": "489efbaf77204252189180f431fc7a7552ea0ed83d923c2861de19d2564ab9a6"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946103.npz",
+      "sha256": "da9dea85f7714cd682bae586ba58c98e46a84508a295a89ac40f392307270414"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946104.npz",
+      "sha256": "9454ea180cb7efab3840bbc86bd82b0726acd673720039426a1efd4c3adf1da8"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946105.npz",
+      "sha256": "b90c77e6e1b66d389fa2b8653f5b7d752d61e290c76e76ce0a3b335f6ea331d7"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946106.npz",
+      "sha256": "b96cc1630eaa55464197a9e13ca13cfe9533e585450a22ab27d3b3501fc68f2c"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946107.npz",
+      "sha256": "7353a8349fc1ab87c8056a0e7aa306775972e407380274c9493afcebd71a7f58"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946108.npz",
+      "sha256": "6365c591b643f147ba11a86e466f99d01e69ad5045d30ea8ce595d86df17e9cc"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946109.npz",
+      "sha256": "0316c5b6eeaaf076a6c903d8fc0e1d2d5d0a615ba961b5a58579db8410feb835"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946110.npz",
+      "sha256": "a4210d413659a83aa50f59135911ece9fd6eece2886b0517eeba1716427c767b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946111.npz",
+      "sha256": "2c453fd841d0fdf13614dd30844da52a7043628a29be6d566ae96d31a87bc8c0"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946112.npz",
+      "sha256": "fc0459f2348807aac52c7ceb48a0fbf24b523c954e5a8093b27d5d5b2dd4a8ca"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946113.npz",
+      "sha256": "f64ff476bea2549606bb61cb3f175ec3785f53c3e3d10ce8ff27034ccaadac63"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946114.npz",
+      "sha256": "37413f1a92fc0bdfb37b1bacb9546be7b3c73900ee60d32d4bae7cf2277dccb1"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946115.npz",
+      "sha256": "ccfd34c7c1d8185f96516cc07335b31930c6354bf777d7e4e5da10d7299a833c"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946116.npz",
+      "sha256": "a109a5318df435a2c1286c0d77301381d0774539ca517def6cef340d623a158e"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946117.npz",
+      "sha256": "fd4f363006d69b6be3e10acf202e957bd4a6166c7ea49176a090d9d2455497ff"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946118.npz",
+      "sha256": "9c0978603fa4ae2577f2d549250ffd92dbe0610a1b4d5b0df846120465d09514"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946119.npz",
+      "sha256": "ed95ddcf9443fa3047fc0b78ca8390a9fa3ec8e4df3613ede4c14358c79a67d5"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946120.npz",
+      "sha256": "b475c09d4e6dc3a9971b8c2cec0106f1e74eb3db3f5f798b676b2c644f2f92e0"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946121.npz",
+      "sha256": "43545eca5f53e4e8c128844a25839f65b06fb9f28e13bcf300fd0ed079c9d492"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946122.npz",
+      "sha256": "c2564ae33adbbad9dec18d2944f8df1535f8424405b621fbe07310ecd77d17f4"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise0__seed946123.npz",
+      "sha256": "1c39f2ba394d53e261759ffc93a886720b5f77ba7a5edaf0597b47263ee28ddd"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946100.npz",
+      "sha256": "6c9cdcba9093cb37b056c983e106215168592b262982a5a6d4d32bd59a8abfd1"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946101.npz",
+      "sha256": "57bd095257d9b2818c2c622ba41b6a5956f59bf638dc2f54b849bba47a5c83e4"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946102.npz",
+      "sha256": "af9025d87bdbeb41b553ac565e85c2619419295bbf37ea9332805adfd1d64eea"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946103.npz",
+      "sha256": "f95315ab2daa980f1ebdd6476014df2380bd983df6f6fb3d395c29836d625a87"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946104.npz",
+      "sha256": "acb8b8d4771695a2fc4a76b6ad880c5996d4b5b0d32a5191374e2ca313d7e795"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946105.npz",
+      "sha256": "720a9ebcca9ce381c8a8ea8ca764411f14c7440186d442312fc08db97668793d"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946106.npz",
+      "sha256": "1a304bb4c1d48335ab8f6ab231a432cf2677bff9300873756797f2af0abd7b09"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946107.npz",
+      "sha256": "5d48011d247dc1b7599c733443c47e4790331ec205c88a8b88a3659195ebc67a"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946108.npz",
+      "sha256": "ad8156f4e4b9cc5211f4c8db3acaf3abfe3f5b2e1afc833fe4244d9261111ade"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946109.npz",
+      "sha256": "1be0cdad13a4a960589f1af6c15b4f15592e2913a85057f5557a4b4541c51bf9"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946110.npz",
+      "sha256": "cceb003d099da4c5975d399523a91b0e77ddc69efde875e0ced8a30ddb5066ae"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946111.npz",
+      "sha256": "8c88f7d70aebb87f60cf09081c577b18bd93a663a9b936d8b3d4b7d60f2d7193"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946112.npz",
+      "sha256": "64385f7b59b1e6c9bdba685403d3d9c58669f824f450d0970608b5a9450b4b5c"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946113.npz",
+      "sha256": "cf5e5c2644eb0ee66ef1f508073c3320c76e1c4dd12db0972318e3c323bc9df9"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946114.npz",
+      "sha256": "02c738e550896f015f9e6838fc66b6ab4ca6ed222d5a6edbc2f51e5ebf468e1c"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946115.npz",
+      "sha256": "5137811568395ef6b9a3bf6af88b1ad73b91cf76882abe14588e50605177dcc0"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946116.npz",
+      "sha256": "6135ac7f61709c9e166adb3caebf19c2a6a724d5f39bc4a3f66e4769f3387894"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946117.npz",
+      "sha256": "3196e60e9ebf32fe62e2e05913b4e2a5bf72ae04209988d38d42cbb44aef889a"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946118.npz",
+      "sha256": "24f04627e493b4a7dee2ad382ae3c340c768cb49686507bf9ab47415c91c828b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946119.npz",
+      "sha256": "0dcc930a251c5a20bb9af47a63caa8679c65ccc56e61734764301fa6deeaf308"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946120.npz",
+      "sha256": "dcc63613a35e3a44e1b23ae26518db3effe8637110f488a50ccfc9fb20eaf499"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946121.npz",
+      "sha256": "5aae41c23b0446c87fa0b94bde1fe6f06c906dac30d6122670c3d747a36bf61f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946122.npz",
+      "sha256": "7862f312066bddaadacadd431334bfccc24e4ed97ae5c48e30c8654d08001e32"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/duffing__noise1__seed946123.npz",
+      "sha256": "8092b5e6614f557201c9efae6a78818a9dbec9391ed4c00b80ebf9cf48ff7f7b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946100.npz",
+      "sha256": "25707667ac3f18e40fa76ed69267cce5267f9bf64f85713ccaece7cfd6f278ff"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946101.npz",
+      "sha256": "aefc0d1e1a4a97d49fc2a939a145bfc75e61a8fe09613fb7aa2ee84e7202989f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946102.npz",
+      "sha256": "e3654eb7d97c168cbe1bb9af00485b3d62ff8f0ac0bd7ad78bc596117940a9ed"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946103.npz",
+      "sha256": "64bd5348f45ccbcdeff696a414ee15059813b1d104c690433ec0847c48e9d348"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946104.npz",
+      "sha256": "c67205f029f66fa2b74f9bff552b92efd68736edfda2f3619a5978347a0fbb4f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946105.npz",
+      "sha256": "a06e63ecf951b629856539a4a16075c1c5078e8bb99466444f47b49dafa4577e"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946106.npz",
+      "sha256": "cc3ebd013d1ada8cd6ee62a113e8cdb425f3cf638aa4e90a98f822597a506bd1"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946107.npz",
+      "sha256": "80cd34806c4217126beb870b1fbc6e6fdb2530aeb136cace85f840efd5593b98"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946108.npz",
+      "sha256": "a75d44dfda3d4160c480c03350f2f4083c77e9dd8a6454bff5b2ed7762b7d915"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946109.npz",
+      "sha256": "404bec1788452b2098e64ad80b5072f1724363e4351108f84e368de6d2aac370"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946110.npz",
+      "sha256": "16f3d87ec304ff29c09e5162620b466447af7db07f678c0919a068649abf3bd1"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946111.npz",
+      "sha256": "fcd518f48ac66c5798d4df72e266b3ecd3c95db5f5f3990d0d2a4928b21b75e2"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946112.npz",
+      "sha256": "03b89dab1d34f93b05b6402f1897a3fecbb76a1776af5acaabcb8beaad9960e2"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946113.npz",
+      "sha256": "1625b657935aeb42551faedaac15ce1e974b8c47ca2bdbcdb82a33f561260a4d"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946114.npz",
+      "sha256": "f268fa815a239a270b1e6e8f2f3725887a695e9da4021498d398c78830e1c6a4"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946115.npz",
+      "sha256": "a9b774d632163804c19f390437fc192bb9d16c0062a0635b65eaab50056d733f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946116.npz",
+      "sha256": "8efcabb4732817df1c4b66e26d76663bb7b693a59e6e81b3380b0862c5f5ee7d"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946117.npz",
+      "sha256": "1d65253473c01b675709e0bb23e34e24d3ceb255c94cf2989bbc6ceb76b1aedc"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946118.npz",
+      "sha256": "46dc716633bc87d9c88149115350afe4933bb80a2d63de9eb6c45b8179b0e764"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946119.npz",
+      "sha256": "6cf3c7d592707d1eebe316301ed609ebc82a7dbbc856b14e0f49db80d72dd5a5"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946120.npz",
+      "sha256": "2ca31b2d0e0061d48b6ddf3f7490eac40a93ab235e8faf28b6b3fd591946e871"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946121.npz",
+      "sha256": "d067a982267563fb758ff7b1bc71d69379660e6ae5925dcdf1a41673260cb2c5"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946122.npz",
+      "sha256": "f522cfbc79ccaf0e81bb0d5f3317b2ce35c9fdd953dd72294dbd7046917ebd54"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise0__seed946123.npz",
+      "sha256": "9dd143cf871023a0ba37f0906da39d6cd61fb83a1aa5adc99eb4c40e1ae19297"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946100.npz",
+      "sha256": "d6fd64bcdbbd1020515bfe3edb6622530117e7580291e4b71d1a328f0f3bc812"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946101.npz",
+      "sha256": "c719a66e602f410f70235800c16e300c06036803cab9dad11081638290bb17de"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946102.npz",
+      "sha256": "c3a2bb813356d743137ea3d29edffd1a8d96aaf5fd1f0906646d9f67a9897969"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946103.npz",
+      "sha256": "2d3e32d216baf8a47f88216bd228322b6d5e75a46583b32d356536b107a79ab8"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946104.npz",
+      "sha256": "bf5dfbf1e4cd3be31af721acc13a116c5d6f9fe1e644f685291dc27326c40383"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946105.npz",
+      "sha256": "410e6cec0589eab0a1ae237f6777f475180c192cc545668c1b444f864598ea1d"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946106.npz",
+      "sha256": "bf01699422a3bd36549c29213aa0e91e5b06ddc5592728c7894485e98f15aeaf"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946107.npz",
+      "sha256": "7ed6edd58e2d4189f8f7bad3f0defcd5fde2e908ba494d63b09405df4fa0bd60"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946108.npz",
+      "sha256": "05dd54cb7dc70c514c5bd94635adf0b5a0d1e8ba5418d4963fec3fef2e69f6b1"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946109.npz",
+      "sha256": "5b51a80c9698bf81ca6c276f4b859c85299bfa7f28232d6dbd5157314926d507"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946110.npz",
+      "sha256": "99e63c7a8f2622b4cad0817f040234ccd4c34e6543e029026ad82e0c1467209d"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946111.npz",
+      "sha256": "f930f649c55a26ea706f3fa804f641fba37a6664c20662af445dd097a86adb73"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946112.npz",
+      "sha256": "8aa99f87fdf5aedb6622c6eb38159ede2c150da92ac837ad18458c579a7f042c"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946113.npz",
+      "sha256": "a02e0a414afcd3eefb4d1fa873f25f0546f5924ee230fe3be6ac650eee029c66"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946114.npz",
+      "sha256": "b9b6945e7b100256e9b193f91868dbdb13306b6a5919f2fd1e5204b42f2e04d7"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946115.npz",
+      "sha256": "8e7e0100f83775a703af1d902ecd8e6872dc4c6af28282b27875c795e29979a5"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946116.npz",
+      "sha256": "6e455738b82056cf93dc79a99c5d799201061d4ba270c58bdbd277dbd491517a"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946117.npz",
+      "sha256": "c28d8114ba64f64f451b331dee7d39ee3bd3df4d209d71de4063a4dd8b9fb4a0"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946118.npz",
+      "sha256": "18412698ed3779aef1f373b5dec71d8307359db484dc28c22659f748db21d08e"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946119.npz",
+      "sha256": "217ec797e05afe21558dd295acac1a488cbc5abc5943679bc7bd3241c30d6858"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946120.npz",
+      "sha256": "3373c84be90d8cf27b3ddc5e96d0be7b6d689ff8c7498e7b83968d9c13ae424d"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946121.npz",
+      "sha256": "af8c064dca52448737705b57f69eeba8674ed5a7a2c85e4b465dce48c2810409"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946122.npz",
+      "sha256": "6db049685437c7798e905098adf4b87fb3c6c78b2268679ed74fd431e812033b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/linear_ar__noise1__seed946123.npz",
+      "sha256": "44fda15871a6f8fe13cafb383f6e4e668537aebddea1abb7560e06cd1f813802"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946100.npz",
+      "sha256": "2c59d847620fbee9b2a402dc2bf62be10cfdb55d40d04f6f88d51cbc9a775d4f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946101.npz",
+      "sha256": "98b5f22fd9922affbba211c74955bdafa15fca042629ac30bf04f7a062d7c472"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946102.npz",
+      "sha256": "935c69c671a1beb775e4e374e461b46cc5afc111925c1f93460c85eb1a2c09ee"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946103.npz",
+      "sha256": "0a0793d23e18024161539371ec6b73b2c1842230e449d309a37c034c9cfa27d4"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946104.npz",
+      "sha256": "9e70d5431d027431ee94bd208614d36ef2cd594dacd77c28c811630c42cef985"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946105.npz",
+      "sha256": "8534a3465348abab1b4672a41b3688a6a2189382cfa7842f3a87ce2c0dab0031"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946106.npz",
+      "sha256": "2d0b55acbad1bb1edaadc4881e208ec9bb694257714984b262aac66ccf591ff5"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946107.npz",
+      "sha256": "1a340d7c11f3c05146cb298dc1da53fc7ba2a2607f4fc1a6cae64c57ac7b5364"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946108.npz",
+      "sha256": "a755f4c1cb27402e8abdaf5fc7f9e4405ecadc6864f13b5db6d1473d050b8c70"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946109.npz",
+      "sha256": "1a75bf6e4dfb0dc0337e287df81f46e24b75b09a8942d76cbe29711386deb628"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946110.npz",
+      "sha256": "6a7dcde6df4c69077041ea5bc5afcc221b9c23aaa1724116260ef908d19a523f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946111.npz",
+      "sha256": "2344d4e671c167bdbd2c34e2555df9ae8c2a6ee12a0023807bea41811b84e7f4"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946112.npz",
+      "sha256": "c09fb9eb3d378469cbdb289dafaf6888331897072f506ee2a6edb865d28ac5e6"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946113.npz",
+      "sha256": "acab0f89d91b8f02817816c95180aebc7eb2abe19bf9985684b9d0d318f4cef3"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946114.npz",
+      "sha256": "33fc9cb68392f3a8dfd454f3318fc23e5ef53a9cf50d9cd8888c6281008cf34a"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946115.npz",
+      "sha256": "f4b8102b2887c35aef5cdfbc153dd91ff5bc4bf55000d9af3ab85b611363450f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946116.npz",
+      "sha256": "5471e6f13cce1836467e614260f7ea66f9516cc1997e1bcbc0efee302a46049d"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946117.npz",
+      "sha256": "a72a697300aa045d60f81443bb4faf1a52d12945ce0a5c38923fbe8d756534ac"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946118.npz",
+      "sha256": "bd5418e4a2246a11bf34201664c9c70bc00e6d7ac46bc302c560222b63fc55d2"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946119.npz",
+      "sha256": "88f3cf3267470f29a3bf815521d328b8caab84a417868bc2215e6b2ed01a16ec"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946120.npz",
+      "sha256": "d95c94fd0449b563643ed8772a0a3d4e9e0c660e4aa43cf606c903a5f4f1cdfe"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946121.npz",
+      "sha256": "9f7f139c59dc0a848c1561cb08bad033b049d39789b2ec6be143132ffa98cf0b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946122.npz",
+      "sha256": "3c679d17ce01a39583d533bc6f9b3fc057ebd07bbafc2f96c15827569f940042"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise0__seed946123.npz",
+      "sha256": "f015d933c8957a6a33d158a8c39d3ee84de594441a9d89507241eab827103df0"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946100.npz",
+      "sha256": "b6cc2b929de3a35e0b34dcf7c7884ef9b894790125d68cf99b339760ef4a1d4e"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946101.npz",
+      "sha256": "319d1d6eb27a42309845662aec1585590abf29f7d8524e934f1e806912d43572"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946102.npz",
+      "sha256": "36134292742375baf1bed494d1d36cd4a5e8319359e2762a68463d269571b225"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946103.npz",
+      "sha256": "436f92f72f0b6bcb31b7bf7aa076420b80f858b97131a3f6b5a066a7bc0f5ac6"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946104.npz",
+      "sha256": "7e693f7326656a01d66fd362a0655c1d3e0be42e0ac17d229fb140b419c9791b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946105.npz",
+      "sha256": "2f194e6b8cffa5703494d039a1829d3040db38e60545b0a05ceec8b32f8431ca"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946106.npz",
+      "sha256": "71276ad805c5e1b671f4adcce2a19b946624ba78d204aea2d0531ca06b646794"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946107.npz",
+      "sha256": "0e08b6cbe7d540f12b6c11d2c2db5a5138c7a7b52ab622cde8fb5bb533b04545"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946108.npz",
+      "sha256": "2bcc6b8950d2dd5cff6d180bfa282e225a5378c85ee16ccc11d4731b52cf8537"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946109.npz",
+      "sha256": "449e68615f90762cf24976450ba73925b15609b9e57f160443e640a639981f24"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946110.npz",
+      "sha256": "195f4f0bc125db5e4291e4e3d972849cd6f4e44038ef39a99848580d0d58cc78"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946111.npz",
+      "sha256": "0c217427827f7b43da894025883b4a7eaad4f7bff8e71994447ddbb5753650cc"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946112.npz",
+      "sha256": "b903bf9af724e076fcd4f36bfdeae020cfd20ebdb6b308ac9a5ad96ab1ca1dc9"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946113.npz",
+      "sha256": "35b502dcbd11a54b27a294be0e93f5fd92fe1aca821d54401b29dd7b1e1ebc78"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946114.npz",
+      "sha256": "add659b7175247938042e07b58db51a131d71b7471083f2a4e36033b90d3ff92"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946115.npz",
+      "sha256": "b043b95ed661864419adc9ff67e9edc945404e0629526fe8efd51e5896d0fa5f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946116.npz",
+      "sha256": "ce4831d5ddb26b3aa5f64163952d1ce30b9f352f721aafe965c8985d7ef988a0"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946117.npz",
+      "sha256": "ff57785c5edfa0fc2d2608b12cc00ec83cf0ca17fbe68be7be6edce6437f3246"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946118.npz",
+      "sha256": "288e935fa55800a9ad7c27327758e3dd20fcb370801b955e3ac48ec28fcc4f5f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946119.npz",
+      "sha256": "97cf0db7d4ea082d0708aa1e5179429f1fd17ee88f11febd0f5c71ec13d94ba5"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946120.npz",
+      "sha256": "04e79fa0fcac468eb5e195d6276e03481322fc38ce7dd272a47343285a04d703"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946121.npz",
+      "sha256": "7b0130a8de8ec24647cfd9acd72909ee8e3f8d43832a34b7a2271fae8faff2c0"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946122.npz",
+      "sha256": "78ca74ab310e8a52afc15e3480da9f247e135a7a71ad1b0bf7780afc68ddafbf"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/nonlinear_ar__noise1__seed946123.npz",
+      "sha256": "55173c0053399e561333d930a43974ebea55788656409cffa191dd3771c30d39"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946100.npz",
+      "sha256": "cd5fd063ae449657bdeb90d727ab117534d37d5aae1cbced02f482c924516b92"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946101.npz",
+      "sha256": "740f7297d839eccd32b9a715b72ad1abe147761990023e69ca4fd0b1028952b4"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946102.npz",
+      "sha256": "24620b92f94b05956df0a2805090f1961b9d95e80b3f01f6f36316e4372f7471"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946103.npz",
+      "sha256": "a427183269cbdc2c979f46bac33285665b834d14fa7fa22ac1e197b304c771e7"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946104.npz",
+      "sha256": "8810490b816360ac6d229905bfd7e506f4c05b8e051f34286fc4d54af325e2b5"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946105.npz",
+      "sha256": "5801c77ea123e11295e56091f6263b31f99d30352237bac357733a29689af187"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946106.npz",
+      "sha256": "9d364f550ed4f4714bc1804f81273da4fe42702a25f9836ac037aab264a70f19"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946107.npz",
+      "sha256": "c8f1a849b75a549635cd0744debcabfdf376164cb5c243f8553d6665f1aa8868"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946108.npz",
+      "sha256": "155c619b8cabe36a84418a1ceae5c2c2eda529f681d4414ba3209f0c98cf7c29"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946109.npz",
+      "sha256": "cc751de12d426541447f34a834580ad152320c7edaa04d587eaa1b83fe364813"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946110.npz",
+      "sha256": "32515db9350104b4e965bd102cbc24dc8ea47933100f2d13530633cf4ae19b5a"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946111.npz",
+      "sha256": "057df7fe252ce865661f09e0f8875867b5522c758c2d53b222b53c543cffa7b0"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946112.npz",
+      "sha256": "b121c6ad82225a2c4b2362e853aa66af3fa53dda8dbeb1a4f245bac6c7cf1db2"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946113.npz",
+      "sha256": "272b9eccec87885d32268cef6a027bc454bde755ef8219b59958093608e65018"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946114.npz",
+      "sha256": "22a04057a36083c3af25d83677240d150d41dc0a86fff271bf4987b0902190d6"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946115.npz",
+      "sha256": "5dcbac509a5add6f21c10ab463d864faed39e6d351ee55fedc7e7f952b34c2a1"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946116.npz",
+      "sha256": "8aece946ad6a91282abd99ab6137b911a5133d4894b8614fa600039620089387"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946117.npz",
+      "sha256": "7c838ef1840048eefb5234acdbcef6e0b245b799b76da8b79cec312b9e9a9f82"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946118.npz",
+      "sha256": "402027fb8984e250402aa86c662f41088db561f51b41b18623ae836971140227"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946119.npz",
+      "sha256": "c2ea9c1e46abc1242e7f8c5fbe1bc672674910c2febce1e586bfc50275e3f928"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946120.npz",
+      "sha256": "eb1325eeb8db19ed9ea09b2fd657f6b369f08decf554c78c875a7ee699a410c4"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946121.npz",
+      "sha256": "691538663b0da84b7a66b16b029458115861e8be9583dcf9fcffb1bafc4ac964"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946122.npz",
+      "sha256": "5c6f7dfe6168ef475cec659bcc2f4095fe41de8e44b93c94d419416f50bbd2d6"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise0__seed946123.npz",
+      "sha256": "3270d810270796b8598601e5747de7a1942d8eacd15dbcaadd61e68d4cb1b802"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946100.npz",
+      "sha256": "f9cd09f155c0789db90577c5c22ef955150084b24851de04244154f7b1f28705"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946101.npz",
+      "sha256": "c2fe2cd0827b0a199131dfcc6e0ea6f68bc3d6d74a3cc1c464acf5978c03446b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946102.npz",
+      "sha256": "76760676a58ca92834e591163221066d979d5cca32f488291d369efe2ff184c5"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946103.npz",
+      "sha256": "c4717551b10c05f98076d9980982181375bf7c859eb39a2050778a91fbbc5c34"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946104.npz",
+      "sha256": "b9bb518e7cef7269fd9c223dfb10259f380534265c58dddc48abd6a7682c9a7e"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946105.npz",
+      "sha256": "d0ee8a10f38f21a23a3fdd5af9d2c67d4140517d510a822dcc528841cf84a5de"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946106.npz",
+      "sha256": "2a522ef1500c2ed2ca9c29c8230a60bd2be682dde9e4d24dbcb48fd3b7f3f7af"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946107.npz",
+      "sha256": "c9e538ed76fd028f59911bbe3e90c95cad2acb229d91a908f6addcebbeead6a4"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946108.npz",
+      "sha256": "56b6f0271b410bcc9d4f7abc8952cc8dab3fa4d2e571d495a53774f3860aa653"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946109.npz",
+      "sha256": "57a8ab75cf594b8ebf15f9d0aa4e3d4ca451624db62a66e2ed473f838a07053d"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946110.npz",
+      "sha256": "dbb376afd6b11512ebf30e72878d8486cd9a137cae9b371f9e2746719854cd2b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946111.npz",
+      "sha256": "80779a0203635632ce4ef36f0fd6d04907a73bed8ff82d2de00e4bbfa23dfc3c"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946112.npz",
+      "sha256": "ef89017360d612bb4750056e794ddad6473392427b788a3aea3972ba842f7893"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946113.npz",
+      "sha256": "489fb01b7e1750e36ceed3755c826d8b45fd7a5aef42a959cf469f502a86b0f9"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946114.npz",
+      "sha256": "49db63e1a5c041bb46305af3f59210c8c406c6d5b242621fc5f65ac2ca30f81a"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946115.npz",
+      "sha256": "095a97767a6e19af4f45501b6ad59d6d78c9d78586e1010d0cd448179697f165"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946116.npz",
+      "sha256": "a2b39c8def5400f329c4c9ceedf50bf9436ffaa818c70d954fe233732e1b906b"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946117.npz",
+      "sha256": "b7f38adf7fc87ff8a1e0c61caa0b2decb161e35b5d8978352c303862ba7e690f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946118.npz",
+      "sha256": "fd2053a07497234789b0a338e7b6b8e1a69ca7ef647aededf98148b7080df6ff"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946119.npz",
+      "sha256": "60c3c63d6716d00d0e7ad70d3b10dbc922d654f9c49315ebb69a35d676ab4db8"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946120.npz",
+      "sha256": "66b765217df872d587ed100ef0e06a61fddad51f21b586c78581b0bc52f15c16"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946121.npz",
+      "sha256": "7378634ec875dbb9cc3cc7094d1efec538cdc49cd464d24c45ccd8ce59224fca"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946122.npz",
+      "sha256": "29929bac093645095d9ea38236831aeec103ed30d4113ef99358d6136163df7f"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/prepared_inputs/tasks/vanderpol__noise1__seed946123.npz",
+      "sha256": "a0905a234b0cfc17e2b01ef177cdb31a644576a0f8c6405c5a9c1a42fca989aa"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/requirements.txt",
+      "sha256": "f8e8b1f1fb956cfb1ac5206a207ec22cb874d56de0c020e1e5fd1f2d4ad7e4c2"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/run.py",
+      "sha256": "a40f8ca13346c71b323bf795d3f89f164d5a5c33e3cef75a46cf750b2d0fc87d"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/test_analysis.py",
+      "sha256": "3980bb13c9a1999d373977b8f9fe9cfa31211483f87d2be173cf7d034f0f7dbf"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/test_inputs.py",
+      "sha256": "d049819f4af951fca289c9e6660836d1973333ca911df0eb274484f02b84cbde"
+    },
+    {
+      "path": "extensions/reconstruction_mechanism/test_models.py",
+      "sha256": "5a6a03fbc1f9c7136958de3ca7907b513c2bd6adb1fe8e3e9ef629a2909e2961"
+    },
+    {
+      "path": "extensions/target_geometry/__init__.py",
+      "sha256": "3b60f085873f501238d4797bcc5b6ce1d4395597871fbf8369a2c421345b2ada"
+    },
+    {
+      "path": "extensions/target_geometry/models.py",
+      "sha256": "b10a6532012139de85667a59a44da3698704159188800578e64ed606a35ace48"
+    }
+  ],
+  "public_preregistration": false,
+  "publication_contract": "Publish final completed research, not a roadmap-only draft",
+  "schema_version": "reconstruction-mechanism-v1",
+  "status": "Local prospective source/configuration/input freeze; no reserved model outcomes evaluated",
+  "task_count": 192
+}

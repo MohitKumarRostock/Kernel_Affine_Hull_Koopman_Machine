@@ -1,0 +1,112 @@
+\section{Supporting evidence and limits of transfer}
+\label{sec:supporting-evidence}
+
+Complementary studies examine the information retained by geometric
+features, access by finite decoders, transfer to natural series, and
+learning or updating the geometry. They use different representations,
+baselines, splits, loss scales, and sampling units from the bounded
+reconstruction-departure experiment. Their outcomes therefore describe
+separate fitted procedures; they are not pooled into its confidence
+family. Table~\ref{tab:supporting-evidence} summarizes the evidence.
+The companion \emph{Supplementary Studies} document provides the complete
+definitions, proofs, protocols, comparison tables, and failure accounting.
+
+\begin{table}[t]
+\centering\small
+\caption{Scope and outcomes of the supporting studies. Counts describe
+the corresponding design, not independent forecasting domains. Natural
+source aggregates and post-hoc sensitivities are descriptive.}
+\label{tab:supporting-evidence}
+\begin{tabular}{@{}p{0.23\linewidth}p{0.28\linewidth}p{0.42\linewidth}@{}}
+\toprule
+Study & Evaluation scope & Interpretation \\
+\midrule
+Information and decoder capacity & Target interventions and 24 full
+repetitions per forecasting setting & Retaining local position can help;
+KAHM gains depend on the law and decoder. \\
+Natural transfer and scaling & Eight source families; four reserved for
+confirmation; 208 configurations & Raw plus KAHM has higher reserved-source
+loss than raw RBF. A post-hoc scaling change preserves that ordering. \\
+Additive correction & 144 synthetic and 24 archive configurations & Some
+synthetic gains; two incomplete archive configurations prevent the planned
+full-roster comparison. \\
+Proxy metric and donor residuals & 48 tasks and 16 procedures & Corrections
+improve ridge, but incremental benefits of the learned metric and donor
+residuals are unresolved. \\
+Direct reconstruction training & 46 planned tasks; 43 feasible & Training
+helps KAHM in some settings; equally trained local controls remain
+competitive or better. \\
+Online adaptation & Twelve streams, six methods, two capacities & Both
+capacity settings fail their accuracy criteria; extreme extrapolation
+persists after a solver correction. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Information and finite-decoder access.}
+In a controlled branch construction, the same observations and noise
+support targets that vary from branch identity to signed position.
+An affine reconstruction can be nearly exact while its discrepancy-based
+code loses the position required for prediction. Affine local coordinates
+recover accurate prediction in that example, so the benefit is not
+exclusive to nonlinear reconstruction. In a separate finite-decoder
+comparison, KAHM local features outperform raw and affine local features
+on Van der Pol at both 64 and 256 Gaussian landmarks. Raw histories
+perform better on nonlinear autoregression, and both controls perform
+better on Duffing. The inferential units are 24 independent full
+repetitions per setting, with separate multiplicity adjustments for the
+original and follow-up studies.
+
+\paragraph{Natural-data transfer and model selection.}
+The reserved-source comparison uses Traffic, Hospital, Saugeen River
+flow, and US births. Raw-history augmentation with KAHM features has
+4.26\% higher source-balanced scaled MSE than raw RBF and costs 2.30
+times as much in the measured warm-library workflow. Raw ridge is more
+accurate than both. The favorable development mean is strongly
+influenced by FRED-MD, and it does not establish a KAHM-specific benefit.
+Adding geometric descriptors to metadata and a paid validation probe
+changes none of the 80 confirmation decisions. The post-hoc min--max
+scaling analysis reuses these sources and simulation draws; it changes
+individual errors but does not reverse the principal mean-loss orderings.
+
+\paragraph{Residual correction and learned geometry.}
+An additive correction preserves the fitted raw baseline as a candidate,
+but validation can select a correction that worsens test error. The
+synthetic factorial resolves gains over raw RBF in five of twelve
+comparisons, while a simpler geometric correction has lower mean error
+in every Van der Pol and Duffing cell. On the archive roster, the two
+capacities of one Car Parts series produce eight failed geometric fits
+and four unavailable policy outputs. The planned full-roster geometric
+and policy losses are consequently undefined. A post-hoc comparison on
+22 successful configurations gives additive KAHM only a 0.31\% gain
+over raw RBF at 13.29 times its measured model-pipeline cost; ridge is
+more accurate and cheaper on that subset.
+
+The donor-residual study completes all 48 tasks. Its learned-metric,
+out-of-fold KAHM procedure improves the ridge reference on the three
+synthetic laws and has 2.18\% lower descriptive archive loss. However,
+the metric-versus-identity and donor-versus-in-sample intervals include
+zero. No adjusted comparison with an equally trained geometric control
+favors KAHM. These results support residual correction in the evaluated
+settings without identifying the proposed metric or KAHM reconstruction
+as the necessary source of that improvement.
+
+\paragraph{Training and adaptation.}
+Direct reconstruction training produces two favorable, six unfavorable,
+and ten unresolved primary contrasts. Neither favorable contrast is
+against an equally shape-trained non-KAHM local control. Three selected
+rideshare series have no eligible training-query windows, leaving the
+planned four-collection natural aggregate undefined; results on the
+seven available series form a separate descriptive comparison. A
+nine-task gate-training pilot uses a separate generator and budget and
+does not contribute to those intervals.
+
+The online study meets its declared 99th-percentile service-time screen,
+but both capacity settings fail the recurring-stream and natural-data
+accuracy criteria. A corrected ridge solver removes computational
+exceptions while retaining an extreme forecast that a fresh solve also
+reproduces. Thus a nonvanishing reconstruction denominator and an accurate
+linear solve do not by themselves control feature extrapolation. The
+bounded, fixed-geometry decoder analyzed in the main experiment is a
+different procedure; its correction bound does not validate a repair of
+the online method.

@@ -129,9 +129,9 @@ of test histories, exceed the final fitting range under the original hierarchy.
 The largest absolute min-max coordinate is **3.1990**. The corresponding
 development figures are 21.45%, 49.26%, and **1.8638**. There are no constant
 input coordinates in the final natural refits. These diagnostics confirm that
-the tested transformation did not silently clip future observations.
+future observations outside the fitted range were not clipped by the transformation.
 
-## Verification and manuscript decision
+## Verification and interpretation
 
 - All **1,040** standard natural/raw-reference prediction arrays are bit-for-bit
   equal to their archived versions, with identical selected alpha values.
@@ -147,12 +147,7 @@ the tested transformation did not silently clip future observations.
   with digests. Replaying compact losses is distinguished from regenerating and
   checking omitted controlled predictions.
 
-The manuscript therefore retains its original main conclusions, adds a main
-scaling section and a detailed appendix, and states the preprocessing condition
-explicitly. This specific alternative does not explain away the adverse
-natural comparison. The results support sensitivity-aware, conditional claims;
-they do not justify choosing a new default scaler from these inspected test
-outcomes or claiming a general KAHM adoption rule.
+The tested scaling alternative does not account for the unfavorable aggregate natural-data comparison. The results support conclusions conditional on preprocessing and the evaluated procedure. Because the data had already been inspected, they do not validate selection of a new default scaler or a general rule for KAHM adoption.
 
 Exact results are in [analysis/summary.json](analysis/summary.json),
 [analysis/AUDIT.json](analysis/AUDIT.json), and the adjacent CSV files.

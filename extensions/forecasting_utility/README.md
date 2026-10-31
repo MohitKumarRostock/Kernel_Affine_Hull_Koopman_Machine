@@ -1,12 +1,10 @@
 # When do KAHM features help forecasting?
 
-**Status:** all 168 scheduled tasks have been attempted and independently
-accounted for. There are 166 fully completed tasks, 1,336 successful standalone
+The study accounts for all 168 scheduled tasks. There are 166 fully completed tasks, 1,336 successful standalone
 forecasts, eight geometric fit failures, and four dependent policy failures.
-The manuscript remains an unsubmitted research draft.
 
 This extension studies the empirical utility of Kernel Affine Hull Machine
-(KAHM) features for time-series forecasting. It preserves a selected raw-history
+(KAHM) features for time-series forecasting. It retains a selected raw-history
 forecast, fits a geometric correction to its training residuals, and uses
 validation data to choose how much correction to add. Setting the mixing
 coefficient to zero returns the raw forecast exactly.
@@ -57,7 +55,7 @@ See [the reporting amendment](REPORTING_AMENDMENT.md),
 [audited summary](reports/summary.json), and
 [synthetic primary contrasts](reports/synthetic_primary_contrasts.csv).
 Full-roster baseline results and method coverage are retained separately from
-the common-support table. No failed fit was replaced, repaired, or rerun.
+the common-support table. The reported accounting includes those original failed fits.
 
 ## Research design
 
@@ -129,8 +127,7 @@ python -m extensions.forecasting_utility.reporting \
 
 The reporting command verifies complete accounting while preserving the original
 analyzer's `complete: false` status for model failures. Running the frozen
-`analysis` command directly returns exit code 1 for that truthful status; it
-must not be interpreted as an unverified prediction record. The audit verifies
+`analysis` command directly returns exit code 1 because the full model roster is incomplete. That status is distinct from the checksum and numerical verification of the forecasts that were produced. The audit verifies
 the exact task roster, saved targets and predictions,
 selected validation settings, split hashes, charged computation nodes, and
 gamma-zero equality. Synthetic confidence intervals use 12 complete
@@ -157,8 +154,7 @@ python -m extensions.forecasting_utility.reporting \
 
 Only an explicit `--resume` can reuse a matching run directory, and completed
 tasks are preserved. Hash verification rejects changed scientific inputs.
-To investigate another design, create a separately named study and disclose
-its relationship to this one; do not rewrite the original freeze.
+A different design requires a separate source and input record, so its outcomes remain distinguishable from this fixed experiment.
 
 Models are timed one task at a time with one numerical-library thread. Reports
 distinguish model-only work from data-inclusive pipeline time. Rejected
@@ -177,13 +173,9 @@ For this empirical study, useful structure means a correction that improves a
 specified fitted predictor on reserved outcomes. Complexity is assessed using
 the declared validation rule and measured error-cost tradeoffs. These results
 do not estimate unrestricted Bayes risk or certify that every cheaper decoder
-class is inadequate. Those stronger questions belong to the separate
-risk-certificate work.
+class is inadequate. An exclusion claim about every cheaper decoder would require a specified decoder class and additional assumptions.
 
-This is an unsubmitted research draft. The paper preserves the original
-negative archive findings and distinguishes this extension from the original
-confirmation and the post-hoc scaling sensitivity. No submission, acceptance,
-or author approval is asserted by these artifacts.
+The analysis distinguishes this additive-correction experiment from the original natural-data confirmation and the post-hoc scaling study. Incomplete coverage and unfavorable results remain part of the empirical conclusion.
 
 ## Tests and licensing
 
@@ -197,4 +189,4 @@ Code inherits the repository's MIT license. Original research outputs inherit
 its CC BY 4.0 terms. Third-party data and source files retain their own notices
 and attribution. See [LICENSE](../../LICENSE), [DATA_LICENSE](../../DATA_LICENSE),
 and the pinned dataset metadata. Repository citation information is provided
-in [CITATION.cff](CITATION.cff); there is no invented DOI or publication claim.
+in [CITATION.cff](CITATION.cff).

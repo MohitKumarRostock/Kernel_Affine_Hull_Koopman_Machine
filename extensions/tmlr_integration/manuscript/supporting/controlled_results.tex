@@ -1,0 +1,67 @@
+\section{Conditional gains in controlled forecasting}\label{c:sec:capacity}
+
+The controlled forecasting laws are nonlinear autoregression (AR),
+Van der Pol, and Duffing. Each repetition independently generates 128
+training, 128 validation, and 512 test episodes of length 72. Histories
+have length 12 and predict offsets 1, 4, and 12 at 13 origins per episode.
+Entire episodes stay within a split; MSE averages origins and horizons
+within episodes and then episodes. Appendix~\ref{c:app:methods} specifies
+the numerical generators and fitting rules.
+
+The first study has 24 full data-and-fit repetitions in each of nine
+primary settings: six target functions on the branch construction and three forecasting laws. Adding
+local coordinates to KAHM affinities improves ridge prediction beyond the
+fixed practical margin in \LocalPracticalBenefitCount{} settings. On Van
+der Pol, mean MSE falls from $\VDPPhiRidgeMSE$ to
+$\VDPKAHMLocalRidgeMSE$, although affine local coordinates perform better
+with the same ridge head. The first study uses 95\% Bonferroni-adjusted paired Student intervals
+for a family of 29 contrasts. This supports retaining local position,
+while leaving the complete representation--decoder choice unresolved.
+
+A follow-up specifies its candidate models, practical margins, and
+analysis before generating 24 additional independent repetitions per
+forecasting law. It compares raw histories, affine local features, KAHM local features,
+and full KAHM scores with 64 or 256 Gaussian Nystr\"om landmarks. The
+head appends linear coordinates to the finite nonlinear basis, standardizes
+basis columns, and uses an ordinary Euclidean ridge penalty. Validation
+selects among three bandwidth multipliers and seven penalties; the fitted
+model uses training observations only. Equal landmark counts do not imply
+equal realized ranks, function classes, or computational costs.
+
+Table~\ref{c:tab:all-capacity} reports the complete comparison family. KAHM local features outperform raw and affine local features
+on Van der Pol at both widths in every repetition. At 256 landmarks,
+mean MSEs are $\VDPKAHMWideMSE$, $\VDPRawWideMSE$, and
+$\VDPAffineWideMSE$, respectively: descriptive reductions of
+\VDPRawWideRelativeGain\% and \VDPAffineWideRelativeGain\% relative to the
+controls. The two simultaneous lower endpoints, $0.00075496$ and
+$0.00018100$, exceed the prespecified practical margin $0.00014891$; both
+64-landmark comparisons also clear it. Raw inputs win on AR at both
+widths, and both controls win on Duffing. KAHM--affine differences on AR
+remain unresolved. The separate 29- and 12-contrast families do not imply
+a joint 95\% coverage statement. Their inferential units are complete
+repetitions, not windows or horizons (Appendix~\ref{c:app:statistics}).
+
+\paragraph{Numerical sensitivity and an adverse natural-data check.}
+\label{c:sec:numerical}
+The original Gaussian query evaluation can produce an all-zero row before
+signed normalization. Writing $\ell_j$ for a query log-kernel entry, replacing
+$\exp\ell_j$ by
+$\exp(\ell_j-\max_i\ell_i)$ preserves exact normalized weights whenever
+the denominator is nonzero (Proposition~\ref{c:prop:inner-scaling}). In a
+post-hoc check reusing the 24 Van der Pol follow-up samples and banks, with
+affected heads refitted and validation-tuned, exactly zero normalizers fall
+from \NumericalOriginalZeroCount{} among \NumericalQueryClusterCount{}
+query--local-model evaluations to zero. KAHM-local mean MSE changes by
+less than $4\times10^{-13}$ at either width, whereas full-score losses
+improve by roughly $0.37$--$0.39\%$. Row scaling addresses this underflow
+pathway; it does not prevent signed cancellation or establish stability on independently generated data.
+
+On a fixed grouped split of Airfoil Self-Noise \citep{Brooks1989Airfoil},
+raw RBF obtains mean group-weighted MSE $\AirfoilRawRBFMSE$ dB$^2$,
+compared with $\AirfoilKAHMLocalRBFMSE$ for KAHM-local RBF. The validation selector chooses
+raw RBF in all 24 fits. These seeds characterize fitting variability on
+one static-regression dataset and split, not independent natural
+forecasting evidence. Together, the controlled results motivate testing
+local features as conditional candidates. The branch symmetry result does not explain the Van der Pol gain,
+and these simulations do not establish transfer to new source families;
+Section~\ref{sec:natural} examines that question separately.

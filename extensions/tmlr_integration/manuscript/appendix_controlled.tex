@@ -1,619 +1,771 @@
-% Supporting theory and exact methods. The main document invokes \appendix.
-\section{Supporting Mathematical Statements}\label{c:app:theory}
+\section{Supporting mathematical statements}\label{c:app:theory}
 
-The statements in this appendix make the interpretation of the experiments
-precise. They are elementary supporting results; we do not claim a new
-KAHM approximation theorem. All conditional expectations below are understood
-up to almost-sure equality. For scalar square-integrable $Y$, write
-$m(X)=\E[Y\mid X]$ and
-$R_X^{\mathrm{Bayes}}=\E[(Y-m(X))^2]$.
-When a representation has been learned from independent training data,
-the statements apply conditionally on that fitted representation.
+This appendix separates information retained by a representation from the
+functions accessible to a specified decoder. Let $X\in\R^d$ be a random
+input and let $Y\in\R$ satisfy $\E[Y^2]<\infty$. All conditional
+expectations are defined up to almost-sure equality. Write
+$m(X)=\E[Y\mid X]$ for the conditional mean and
+$R(f)=\E[(Y-f(X))^2]$ for the risk of an input-based predictor $f$.
+For a measurable representation $U=\Gamma(X)$, define
+\[
+ R_X^{\mathrm{Bayes}}=\E[(Y-m(X))^2],\qquad
+ R_U^{\mathrm{Bayes}}=\E[(Y-\E[Y\mid U])^2].
+\]
+These are the minimum squared-error risks among all square-integrable
+predictors measurable with respect to $X$ and $U$, respectively. Let
+$P_X$ and $P_U$ denote the distributions of $X$ and $U$. For a function
+$h$ of $X$, the notation
+$\|h\|_{L^2(P_X)}=(\E|h(X)|^2)^{1/2}$ denotes its population root mean
+square; the analogous definition applies to functions of $U$. We omit
+the distribution in this norm when the argument determines it. If the
+representation is learned, the statements apply conditional on its fitted
+state and under the resulting evaluation distribution.
 
 \begin{proposition}[Information retained by a representation]
 \label{c:prop:representation-risk}
-For a measurable representation $U=\Gamma(X)$,
+For every measurable representation $U=\Gamma(X)$,
 \[
  R_U^{\mathrm{Bayes}}-R_X^{\mathrm{Bayes}}
  =\E[(m(X)-\E[m(X)\mid U])^2].
 \]
-For any square-integrable prediction $f(U)$,
+For every square-integrable prediction $f(U)$,
 \[
  R(f\circ\Gamma)-R_X^{\mathrm{Bayes}}
- =\|m-f\circ\Gamma\|_{L^2}^2.
+ =\|m-f\circ\Gamma\|_{L^2(P_X)}^2.
 \]
 \end{proposition}
 \begin{proof}
-Write $Y-f(U)=(Y-m(X))+(m(X)-f(U))$.
-The cross term has expectation zero after conditioning on $X$.
-Minimizing the second term over $U$-measurable predictions gives the
-conditional expectation $\E[m(X)\mid U]$.
+Decompose the prediction error as
+$Y-f(U)=(Y-m(X))+(m(X)-f(U))$. Because $U$ is a function of $X$, the
+second term is measurable with respect to $X$. The cross term therefore
+vanishes:
+\[
+ \E[(Y-m(X))(m(X)-f(U))]
+ =\E\!\left[\E[Y-m(X)\mid X](m(X)-f(U))\right]=0.
+\]
+Expanding the squared error gives the second identity. Among all
+$U$-measurable predictions, the second term is minimized by the
+conditional expectation $\E[m(X)\mid U]$. The tower property gives
+$\E[m(X)\mid U]=\E[Y\mid U]$, which proves the first identity.
 \end{proof}
 
 \begin{proposition}[Restoring the outer score normalizer]
 \label{c:prop:normalizer-inverse}
-Let $T_1,\ldots,T_C\in[0,1]$, $\omega>0$, and $\tau>0$. Define
+Let $C$ be the number of scores in one partition. For
+$\mathbf T=(T_1,\ldots,T_C)^\top\in[0,1]^C$, $\omega>0$, and $\tau>0$,
+define
 \[
  \ell_c=\omega\log(1-T_c+\tau),\qquad
- z=\log\sum_{j=1}^{C}\exp(\ell_j),\qquad
- \phi_c=\exp(\ell_c-z).
+ \zeta=\log\sum_{j=1}^{C}\exp(\ell_j),\qquad
+ \phi_c=\exp(\ell_c-\zeta).
 \]
-Then $T$ and $(\phi,z)$ generate the same information in exact arithmetic,
-and
+The vector $\mathbf T$ and the pair $(\phi,\zeta)$ generate the same
+sigma-algebra in exact arithmetic. The inverse is
 \[
- T_c=1+\tau-\exp\{(\log\phi_c+z)/\omega\}.
+ T_c=1+\tau-\exp\{(\log\phi_c+\zeta)/\omega\},
+ \qquad c=1,\ldots,C.
 \]
-For multiple separately normalized blocks, one $z$ is required per block.
+For several separately normalized partitions, the inverse requires one
+log normalizer $\zeta$ per partition.
 \end{proposition}
 \begin{proof}
-Strict positivity of $1-T_c+\tau$ implies $\phi_c>0$.
-Hence $\log\phi_c+z=\ell_c$, which gives the inverse.
-Both directions are measurable. Applying this argument to each block
-gives the multiple-block statement.
+Since $1-T_c+\tau\geq\tau>0$, each $\ell_c$ is finite and each
+$\phi_c$ is strictly positive. Taking logarithms gives
+$\log\phi_c+\zeta=\ell_c=\omega\log(1-T_c+\tau)$, from which the
+inverse follows. Both the forward and inverse maps are continuous on
+their stated domains and hence measurable. Each object is therefore a
+measurable function of the other, which proves equality of their
+generated sigma-algebras. Applying the same argument separately to each
+partition proves the final statement.
 \end{proof}
 
 If scores are clipped before normalization, the inverse restores the
-clipped scores. It does not restore discarded reconstruction vectors or
-guarantee equal finite-head performance. In particular, the inverse is
-nonlinear, so affine function classes on $T$ and on $(\phi,z)$ need not
-coincide. This proposition concerns the outer association normalizer,
-not the signed denominator in the KAHM reconstruction.
+clipped scores. It does not recover discarded reconstruction vectors.
+Moreover, the inverse is nonlinear, so linear decoders on $\mathbf T$
+and on $(\phi,\zeta)$ need not express the same functions or achieve
+the same fitted risk. The proposition concerns the outer affinity
+normalizer; the signed denominator inside a KAHM reconstruction is a
+different quantity.
 
 \begin{proposition}[A sufficient condition for an injective local code]
 \label{c:prop:local-injectivity}
-Fix a fitted bank with bases $P_c$ and centers $\mu_c$. Suppose its gates
-are measurable and strictly positive, and let $A$ be the matrix obtained by vertically
-stacking the matrices $P_c^\top$. If $A$ has full column rank $d$, then
+Let $\mathcal X\subseteq\R^d$ be an input domain. For
+$c=1,\ldots,C$, fix a center $\mu_c\in\R^d$, a basis matrix
+$P_c\in\R^{d\times p_c}$, and a measurable gate
+$\phi_c:\mathcal X\to(0,\infty)$. Form
+$A\in\R^{(\sum_c p_c)\times d}$ by stacking the matrices $P_c^\top$.
+If $A$ has full column rank $d$, then the code
 \[
- z\longmapsto
- \left[\phi(z),\{\phi_c(z)P_c^\top(z-\mu_c)\}_c\right]
+ \Gamma_{\rm local}(z)=\operatorname{col}\!\left(
+ \phi(z),\{\phi_c(z)P_c^\top(z-\mu_c)\}_{c=1}^{C}\right)
 \]
-is injective. In particular, this code and $z$ generate the same
-information, and their Bayes risks agree for every square-integrable
+is injective on $\mathcal X$ and has a measurable inverse on its image.
+Here $\operatorname{col}$ concatenates column-vector blocks and
+$\phi=(\phi_1,\ldots,\phi_C)^\top$. For a random input in
+$\mathcal X$, this code and the input generate the same sigma-algebra
+and consequently have the same Bayes risk for every square-integrable
 target.
 \end{proposition}
 \begin{proof}
-The code contains both $\phi_c(z)>0$ and its product with
-$P_c^\top(z-\mu_c)$. Division and addition of the fixed vector
-$P_c^\top\mu_c$ recover $P_c^\top z$ for every $c$. Stacking these
-vectors gives $Az$. Full column rank gives the measurable inverse
-$z=(A^\top A)^{-1}A^\top(Az)$. Conversely, the code is a measurable
-function of $z$, so the generated information and Bayes risks agree.
+The code contains each strictly positive $\phi_c(z)$ and the vector
+$\phi_c(z)P_c^\top(z-\mu_c)$. Dividing that vector by its gate and
+adding the known vector $P_c^\top\mu_c$ recovers $P_c^\top z$.
+Stacking the recovered vectors yields $Az$. Full column rank implies
+that $A^\top A$ is invertible, so
+$z=(A^\top A)^{-1}A^\top(Az)$. This explicitly defines an inverse,
+proving injectivity. Division by a positive coordinate and multiplication
+by fixed matrices are measurable operations. Hence the inverse is
+measurable on the code's image. The code itself is a measurable function
+of $z$, so the generated sigma-algebras coincide. Their classes of
+measurable predictors, and thus their Bayes risks, coincide as well.
 \end{proof}
 
-The gates in Equation~\eqref{c:eq:phi} are strictly positive in exact
-arithmetic because $\tau>0$. The rank assumption is a sufficient
-condition, not a necessary one: when $A$ is rank deficient, the gates
-themselves may retain additional information. It must be checked for
-each fitted bank. Very small gates and an ill-conditioned $A$ can make
-the displayed inverse numerically unstable, and its existence does not
-make it accessible to every finite decoder or fitting procedure.
+The gates in Equation~\eqref{c:eq:phi} are positive in exact arithmetic
+because $\tau>0$. Full rank of the basis stack is sufficient, not
+necessary: the gates may encode information absent from a rank-deficient
+linear stack. The condition must be assessed for each fitted bank.
+Very small gates and an ill-conditioned $A$ can make the displayed
+inverse sensitive to numerical perturbations. Existence of the inverse
+also does not ensure that a particular finite decoder can approximate it.
 
 \begin{proposition}[A score symmetry and its prediction consequence]
 \label{c:prop:exact-symmetry}
-Let $Q$ be orthogonal on a preprocessed input space. Suppose that each
-group's reconstruction obeys $r_c(Qx)=Qr_c(x)$ and that $Q$ preserves
-group identities. The radial--angular score in Section~\ref{c:sec:method},
-its block affinities, and the block log normalizer are invariant under $Q$.
+Let $Q:\R^d\to\R^d$ be an orthogonal linear map on the preprocessed
+input space. Suppose each reconstruction satisfies
+$r_c(Qx)=Qr_c(x)$ and $Q$ preserves the identities of the local models
+and their partitions. Then each radial--angular score, each block
+affinity, and each block log normalizer in Section~\ref{c:sec:method}
+is invariant under $Q$.
 
-For the branch law in Equation~\eqref{c:eq:branch}, let
-$Q(x_1,x_2)=(-x_1,x_2)$. Any representation $U=\Gamma(X)$ satisfying
-$\Gamma(QX)=\Gamma(X)$ almost surely has
+For the branch distribution in Equation~\eqref{c:eq:branch}, let
+$Q(x_1,x_2)=(-x_1,x_2)$. Any measurable representation $U=\Gamma(X)$
+satisfying $\Gamma(QX)=\Gamma(X)$ almost surely obeys
 \[
  R_U^{\mathrm{Bayes}}
  =\frac{1}{300}+\lambda
-  +(1-\lambda)\E[(S-\E[S\mid U])^2].
+ +(1-\lambda)\E[(S-\E[S\mid U])^2].
 \]
-Consequently $R_U^{\mathrm{Bayes}}\geq 1/300+\lambda$, with equality
-when $U$ determines $S$.
+In particular, $R_U^{\mathrm{Bayes}}\geq1/300+\lambda$, with equality
+whenever $U$ determines $S$ almost surely.
 \end{proposition}
 \begin{proof}
-Orthogonality preserves norms and inner products, including the zero-norm
-convention for the angle. Equivariance therefore preserves each radial
-and angular discrepancy, hence its combined score. Block normalization
-and its log normalizer are deterministic functions of those scores.
+Orthogonality preserves Euclidean norms and inner products. Equivariance
+of $r_c$ therefore preserves both
+$\|x-r_c(x)\|_2$ and the cosine between $x$ and $r_c(x)$, including the
+specified zero-norm convention. Each radial and angular discrepancy,
+and hence their combined score, is unchanged. The affinities and log
+normalizers are fixed functions of the scores within each partition,
+so they are also unchanged.
 
-For the branch law, replacing $T$ by $-T$ leaves the joint distribution
-of $(S,T)$ unchanged and leaves $U$ unchanged. Thus $\E[T\mid U]=0$.
-Also $S$ is even under this reflection, whereas $T$ is odd. It follows
-that $\E[(S-\E[S\mid U])T]=0$. Expanding the square in
-Proposition~\ref{c:prop:representation-risk}, using
-$\E[T^2]=1/3$ and $\Var(\epsilon)=1/300$, yields the displayed identity.
+For the branch distribution, $X_1=T$ and
+$S=2\{X_2-c\cos(\pi X_1)\}$. Thus $X$ determines both latent signal
+variables, and
+$m(X)=\sqrt{1-\lambda}\,S+\sqrt{3\lambda}\,T$. Replacing $T$ by $-T$
+preserves its joint law with $S$ and leaves $U$ unchanged. For every
+bounded measurable function $a$ of $U$, this symmetry gives
+$\E[T a(U)]=-\E[T a(U)]$, so $\E[T\mid U]=0$. Since $S$ is unchanged
+by the reflection, the same argument gives
+$\E[(S-\E[S\mid U])T]=0$. It follows that
+\[
+ m(X)-\E[m(X)\mid U]
+ =\sqrt{1-\lambda}\,(S-\E[S\mid U])+\sqrt{3\lambda}\,T.
+\]
+The two terms on the right are orthogonal in $L^2$. Their squared
+norms are $(1-\lambda)\E[(S-\E[S\mid U])^2]$ and
+$3\lambda\E[T^2]=\lambda$. Finally, the independent noise has variance
+$1/300$, so Proposition~\ref{c:prop:representation-risk} yields the
+claimed identity and lower bound.
 \end{proof}
 
-The first assertion also holds when $Q$ permutes reconstructors within a
-group whose score is their minimum. Permuting distinct groups, however,
-can permute the affinity coordinates rather than leaving the representation
-unchanged. Nor does a raw-input reflection necessarily commute with a
-training-fitted scaler. Finite learned partitions and reference sets need
-not satisfy the proposition's assumptions. The measured near-invariance
-of one learned code is therefore a diagnostic, not a proof that its
-Bayes risk equals the exact-symmetry lower bound. Tiny nonzero differences
-could in principle be used by an unrestricted decoder.
+The first assertion also applies when $Q$ permutes reconstructors whose
+scores are combined by a minimum within a fixed group. Permuting distinct
+groups can instead permute the output coordinates and need not leave the
+representation unchanged. Moreover, a reflection of raw inputs need not
+commute with a fitted scaler. Finite fitted partitions and reference sets
+need not have the symmetry assumed by the proposition. A measured small
+reflection difference is consequently a diagnostic, rather than a proof
+of the exact Bayes lower bound. An unrestricted decoder could in principle
+use arbitrarily small nonzero feature differences.
 
 \begin{proposition}[Approximate symmetry under a decoder budget]
 \label{c:prop:approx-symmetry}
 Let $Q$ be a measurable, distribution-preserving involution on the input
-space: $Q^2X=X$ almost surely and $QX$ has the law of $X$.
-Let $d_U$ be a measurable pseudometric on the representation space and
-$g$ be $\kappa$-Lipschitz for this pseudometric. Assume
-$m,g\circ\Gamma\in L^2$ and
+space: $Q(QX)=X$ almost surely and $QX$ has distribution $P_X$.
+Let $d_U$ be a measurable pseudometric on the representation space. For
+$\kappa\geq0$, suppose the decoder $g$ satisfies
+$|g(u)-g(v)|\leq\kappa d_U(u,v)$ for all $u,v$. Assume
+$m,g\circ\Gamma\in L^2(P_X)$ and
 \[
- \delta_\Gamma^2
- =\E[d_U(\Gamma(X),\Gamma(QX))^2]<\infty.
+ \delta_\Gamma^2=
+ \E[d_U(\Gamma(X),\Gamma(QX))^2]<\infty.
 \]
-With $m_o=(m-m\circ Q)/2$,
+Define the odd part of the conditional mean by
+$m_o=(m-m\circ Q)/2$. Then
 \[
  R(g\circ\Gamma)-R_X^{\mathrm{Bayes}}
- \geq (\|m_o\|_{L^2}-\kappa\delta_\Gamma/2)_+^2.
+ \geq\bigl(\|m_o\|_{L^2(P_X)}-\kappa\delta_\Gamma/2\bigr)_+^2,
 \]
-For the branch law, $\|m_o\|_{L^2}=\sqrt\lambda$.
+where $(a)_+=\max\{a,0\}$. For the branch distribution,
+$\|m_o\|_{L^2(P_X)}=\sqrt\lambda$.
 \end{proposition}
 \begin{proof}
-The operator $Vh=h\circ Q$ is an isometric involution on $L^2(P_X)$.
-The even and odd components $h_e=(h+Vh)/2$ and $h_o=(h-Vh)/2$
-are orthogonal. In particular, with $f=g\circ\Gamma$,
+For $h\in L^2(P_X)$, define $Vh=h\circ Q$. Distribution preservation
+implies $\|Vh\|_{L^2}=\|h\|_{L^2}$, and the involution assumption
+implies $V^2h=h$. Set $h_e=(h+Vh)/2$ and $h_o=(h-Vh)/2$.
+Then $Vh_e=h_e$ and $Vh_o=-h_o$. If $a_e$ is any even function and
+$b_o$ any odd function, distribution preservation gives
+$\E[a_e(X)b_o(X)]=\E[a_e(QX)b_o(QX)]
+=-\E[a_e(X)b_o(X)]$, proving orthogonality.
+For $f=g\circ\Gamma$, this yields
 \[
  \|m-f\|_{L^2}^2
  =\|m_e-f_e\|_{L^2}^2+\|m_o-f_o\|_{L^2}^2
  \geq\|m_o-f_o\|_{L^2}^2.
 \]
-The Lipschitz condition gives
-$|f_o(X)|\leq\kappa d_U(\Gamma(X),\Gamma(QX))/2$, so
-$\|f_o\|_{L^2}\leq\kappa\delta_\Gamma/2$.
-Apply the reverse triangle inequality and
-Proposition~\ref{c:prop:representation-risk}.
-For the branch law, $m_o(X)=\sqrt{3\lambda}\,T$ and
-$\E[T^2]=1/3$.
+The Lipschitz assumption bounds the odd component of the prediction:
+\[
+ |f_o(X)|=\tfrac12|g(\Gamma(X))-g(\Gamma(QX))|
+ \leq\tfrac\kappa2d_U(\Gamma(X),\Gamma(QX)).
+\]
+Therefore $\|f_o\|_{L^2}\leq\kappa\delta_\Gamma/2$. The reverse
+triangle inequality gives
+$\|m_o-f_o\|_{L^2}\geq
+(\|m_o\|_{L^2}-\kappa\delta_\Gamma/2)_+$.
+Combine the last three inequalities with
+Proposition~\ref{c:prop:representation-risk}. For the branch law,
+$m_o(X)=\sqrt{3\lambda}\,T$ and $\E[T^2]=1/3$, which proves the
+final assertion.
 \end{proof}
 
-An empirical reflection distance is not automatically a population upper
-bound for $\delta_\Gamma$. A valid numerical lower bound obtained from
-this proposition would need uncertainty control in that direction and a
-verified decoder Lipschitz constant for the same metric. Neither is
-asserted for the experiment's unconstrained diagnostic heads.
+Using this proposition as a numerical risk lower bound requires a
+population upper bound for $\delta_\Gamma$ and a verified Lipschitz
+constant for the decoder in the same metric. An empirical reflection
+distance alone provides neither. The experimental diagnostic decoders
+are not constrained to a common Lipschitz budget.
 
 \begin{proposition}[Reconstruction through the predictor's representation]
 \label{c:prop:reconstruction-bridge}
-Suppose a version of $m$ is $L$-Lipschitz on a domain containing $X$ and
-$h(U)$ almost surely, and
-$\E\|X-h(U)\|_2^2\leq\varepsilon_{\mathrm{rec}}^2$.
+Let $U=\Gamma(X)$, and let $h$ be a measurable map from the representation
+space into $\R^d$. Suppose a version of $m$ is $L$-Lipschitz in Euclidean
+distance on a domain containing $X$ and $h(U)$ almost surely. Assume
+\[
+ \E\|X-h(U)\|_2^2\leq\varepsilon_{\mathrm{rec}}^2<\infty.
+\]
 Then
 \[
  R_U^{\mathrm{Bayes}}-R_X^{\mathrm{Bayes}}
  \leq L^2\varepsilon_{\mathrm{rec}}^2.
 \]
-If $h$ is additionally $L_h$-Lipschitz from the declared representation
-metric and $\kappa\geq LL_h$, the same upper bound applies to the
-infimum excess risk over $\kappa$-Lipschitz decoders:
+If $h$ additionally satisfies
+$\|h(u)-h(v)\|_2\leq L_h d_U(u,v)$ for a representation metric $d_U$,
+then for every $\kappa\geq LL_h$,
 \[
- \inf_{\operatorname{Lip}(g)\leq\kappa}
+ \inf_{\operatorname{Lip}_{d_U}(g)\leq\kappa}
  \{R(g\circ\Gamma)-R_X^{\mathrm{Bayes}}\}
  \leq L^2\varepsilon_{\mathrm{rec}}^2.
 \]
-If a particular decoder
-$f$ instead satisfies
+The infimum is over square-integrable decoders with Lipschitz constant at
+most $\kappa$ relative to $d_U$. Finally, if a particular decoder $f$
+satisfies
 $\|m\circ h-f\|_{L^2(P_U)}\leq\delta_{\mathrm{head}}$, then
 \[
  R(f\circ\Gamma)-R_X^{\mathrm{Bayes}}
- \leq (L\varepsilon_{\mathrm{rec}}+\delta_{\mathrm{head}})^2.
+ \leq(L\varepsilon_{\mathrm{rec}}+\delta_{\mathrm{head}})^2.
 \]
 \end{proposition}
 \begin{proof}
-Conditional expectation is the $L^2$ projection onto the
-$U$-measurable functions. The admissible prediction $m(h(U))$ gives
+The Lipschitz assumption gives
+$\|m(X)-m(h(U))\|_{L^2}\leq L\varepsilon_{\mathrm{rec}}$.
+Since $m(X)$ is square-integrable, this also proves that $m(h(U))$ is
+a square-integrable $U$-measurable prediction. Conditional expectation
+minimizes squared error among such predictions, so
 \[
  \E[(m(X)-\E[m(X)\mid U])^2]
- \leq \E[(m(X)-m(h(U)))^2]
- \leq L^2\E\|X-h(U)\|_2^2.
+ \leq\E[(m(X)-m(h(U)))^2]
+ \leq L^2\varepsilon_{\mathrm{rec}}^2.
 \]
-For the constrained statement, $m\circ h$ has Lipschitz constant at
-most $LL_h$. For a particular $f$, the triangle inequality in $L^2$
-gives $\|m-f\circ\Gamma\|_{L^2}
-\leq L\varepsilon_{\mathrm{rec}}+\delta_{\mathrm{head}}$.
-Use Proposition~\ref{c:prop:representation-risk} in each case.
+The first assertion follows from
+Proposition~\ref{c:prop:representation-risk}. If $h$ is $L_h$-Lipschitz,
+then
+$|m(h(u))-m(h(v))|\leq LL_h d_U(u,v)$.
+Thus $m\circ h$ is an admissible decoder in the constrained infimum
+whenever $\kappa\geq LL_h$, proving the second assertion. For the
+specified decoder $f$, the triangle inequality gives
+\[
+ \|m-f\circ\Gamma\|_{L^2(P_X)}
+ \leq\|m(X)-m(h(U))\|_{L^2}
+      +\|m(h(U))-f(U)\|_{L^2}
+ \leq L\varepsilon_{\mathrm{rec}}+\delta_{\mathrm{head}}.
+\]
+Squaring and applying Proposition~\ref{c:prop:representation-risk}
+proves the last bound.
 \end{proof}
 
-The essential assumption is the existence of $h$ as a function of the
-retained representation. A KAHM reconstruction evaluated on the raw query
-is not such a function merely because its residual is small. The domain
-assumption also matters: a conditional mean initially defined only on the
-support of $X$ must have the specified Lipschitz version at $h(U)$.
+The reconstruction must be a function of the retained code $U$. A KAHM
+map evaluated directly on $X$ need not have this property, even if its
+reconstruction error is small. The domain condition is also substantive:
+a conditional mean defined only on the support of $X$ must admit the
+stated Lipschitz version at the reconstructed points $h(U)$.
 
-\begin{proposition}[Common scaling of an inner kernel row]
+\begin{proposition}[Common scaling of an inner kernel vector]
 \label{c:prop:inner-scaling}
-Let $k$ be a finite kernel row, let $B$ be the fixed fitted matrix, and
-suppose $kB\boldsymbol 1\ne0$. For every real $a>0$,
+Let $k\in\R^n$ be a finite kernel vector and let $B\in\R^{n\times n}$
+be a fixed fitted matrix. If $\boldsymbol1_n^\top Bk\ne0$, then for
+every real $a>0$,
 \[
- \frac{akB}{akB\boldsymbol 1}
- =\frac{kB}{kB\boldsymbol 1}.
+ \frac{B(ak)}{\boldsymbol1_n^\top B(ak)}
+ =\frac{Bk}{\boldsymbol1_n^\top Bk}.
 \]
-Thus evaluating a Gaussian query row by
+Consequently, evaluating a Gaussian query vector with entries
 $\exp(\ell_j-\max_i\ell_i)$ preserves its normalized signed weights
-in exact arithmetic whenever the original denominator is nonzero.
+in exact arithmetic whenever all log-kernel values $\ell_j$ are finite
+and the original denominator is nonzero.
 \end{proposition}
 \begin{proof}
-The common factor cancels from numerator and denominator.
-For finite log-kernel values, the centered exponential row is the
-original row times $a=\exp(-\max_i\ell_i)>0$ in real arithmetic.
+Linearity gives $B(ak)=aBk$ and
+$\boldsymbol1_n^\top B(ak)=a\boldsymbol1_n^\top Bk$. The nonzero
+factor $a$ cancels. For finite log-kernel values, each centered
+exponential is the original exponential multiplied by the common
+positive real factor $a=\exp(-\max_i\ell_i)$.
 \end{proof}
 
-This statement neither rescales the training kernel nor permits replacing
-$B$. It does not address a genuinely zero signed denominator or prevent
-cancellation. The purpose of the implemented change is to avoid evaluating
-an entire query row as floating-point zero before normalization.
+This identity concerns evaluation of the query vector with the training
+kernel and fitted matrix $B$ held fixed. It does not resolve a genuinely
+zero denominator or prevent cancellation between signed weights. Its
+numerical purpose is to avoid rounding an entire Gaussian query vector
+to zero before normalization.
 
-\section{Generators, Shared Components, and Decoders}\label{c:app:methods}
+\section{Generators, shared components, and decoders}\label{c:app:methods}
 
-\subsection{Exact forecasting laws and target construction}
+\subsection{Forecasting laws and target construction}
 
-The nonlinear AR generator starts with independent
-$u_0,u_1\sim\mathrm{Unif}[-0.8,0.8]$ and uses
+The nonlinear autoregressive (AR) generator starts with independent
+$u_0,u_1\sim\mathrm{Unif}[-0.8,0.8]$ and evolves according to
 \[
  u_{t+1}=\tanh\{1.25u_t-0.65u_{t-1}
-                   +0.25\sin(3u_t)+\eta_{t+1}\},
- \qquad\eta_t\stackrel{\mathrm{iid}}\sim\mathrm{Unif}[-0.1,0.1].
+                   +0.25\sin(3u_t)+\eta_{t+1}\},\qquad
+ \eta_t\stackrel{\mathrm{iid}}\sim\mathrm{Unif}[-0.1,0.1].
 \]
-The first 80 stored values are discarded; the next 72 are the episode.
-Each episode uses an independent initial state and innovation sequence.
+Here $t$ is a discrete time index, and the innovations $\eta_t$ are
+independent of the initial conditions. The first $80$ stored values are
+discarded and the next $72$ form one episode. Episodes use independent
+initial states and innovation sequences.
 
-The Van der Pol and Duffing systems respectively use
+The Van der Pol and Duffing generators use position $x$ and velocity $v$,
+with derivatives taken with respect to continuous time:
 \begin{align*}
  \dot x&=v,& \dot v&=(1-x^2)v-x,\\
- \dot x&=v,& \dot v&=-0.2v+x-x^3+0.3\cos(1.2t+\theta).
+ \dot x&=v,& \dot v&=-0.2v+x-x^3+0.3\cos(1.2t+\theta),
 \end{align*}
-Initial positions and velocities are independent
-$\mathrm{Unif}[-2,2]$ draws for each episode, and
-$\theta\sim\mathrm{Unif}[0,2\pi]$ is independently sampled for each
-episode. The phase draw is unused for Van der Pol but is retained in
-the common generator's random-stream order. Both systems are integrated
-using float64 classical fourth-order Runge--Kutta with step $0.025$,
-burn-in time 10, and observation interval $0.1$. At the 72 observation
-times, the sensor is
+respectively. Initial position and velocity are independent
+$\mathrm{Unif}[-2,2]$ draws for each episode. The forcing phase
+$\theta\sim\mathrm{Unif}[0,2\pi]$ is also sampled independently for each
+episode. The common random-number procedure draws this phase for both
+systems, although it is used only by Duffing. Integration uses classical
+fourth-order Runge--Kutta in 64-bit floating-point precision, with step
+$0.025$, burn-in time $10$, and observation interval $0.1$.
+At the $72$ retained observation times, the sensor is
 \[
- u_t=0.95\tanh(x_t)+\eta_t,
- \qquad \eta_t\stackrel{\mathrm{iid}}\sim\mathrm{Unif}[-0.02,0.02].
+ u_j=0.95\tanh(x_j)+\eta_j,\qquad
+ \eta_j\stackrel{\mathrm{iid}}\sim\mathrm{Unif}[-0.02,0.02],
 \]
-Sensor noise is sampled before numerical integration in the frozen
-generator. These define numerical data laws. We do not treat the
-resulting samples as exact solutions of the continuous equations or
-assume stationarity after burn-in.
+where $x_j$ is the simulated position at observation $j$. The sensor
+noise is independent of the initial conditions and is drawn before
+integration in the specified random-number sequence. These procedures
+define numerical observation laws. The samples are not assumed to be
+exact continuous-time solutions or stationary after burn-in.
 
 For all three laws, zero-based forecast origins are
-$11,15,\ldots,59$. At origin $t$, the input is
-$(u_{t-11},\ldots,u_t)$ and the three targets are
-$(u_{t+1},u_{t+4},u_{t+12})$. There are 13 origins per episode.
-Training, validation, and test contain respectively 128, 128, and 512
-independently generated episodes. They therefore contain 1,664, 1,664,
-and 6,656 rows, but rows within an episode are dependent.
+$t\in\{11,15,\ldots,59\}$. At origin $t$, the input column is
+$(u_{t-11},\ldots,u_t)^\top$ and the target column is
+$(u_{t+1},u_{t+4},u_{t+12})^\top$. Each episode provides $13$ origins.
+Training, validation, and test sets contain $128$, $128$, and $512$
+independent episodes, respectively, yielding $1{,}664$, $1{,}664$, and
+$6{,}656$ rows. Rows from the same episode are dependent.
 
-The branch law is Equation~\eqref{c:eq:branch}. Training has 1,024 points
-for the primary study, with the first 256 points giving the secondary
-nested sample-size condition. Validation and test have 512 and 2,048
-independent points. At each repetition, the same latent draws of
-$S,T,\epsilon$ generate both curvatures; within each curvature and
-training size, one fitted bank serves all three target mixtures.
-Latent labels never train the partitions. Since $T=X_1$ and
-$S=2\{X_2-c\cos(\pi X_1)\}$, the raw inputs determine the signal.
-Its variance is $(1-\lambda)+3\lambda/3=1$, and the independent
-noise variance is $1/300$. The support bound
-$|Y|\leq\sqrt{1-\lambda}+\sqrt{3\lambda}+0.1\leq2.1$
-justifies the common clipping range.
+The branch distribution is defined in Equation~\eqref{c:eq:branch}.
+The primary training set contains $1{,}024$ independent points; its
+first $256$ points form the secondary, nested training-size condition.
+Validation and test contain $512$ and $2{,}048$ independent points.
+Within a repetition, the same draws of $S,T,\epsilon$ generate both
+curvatures. For each curvature and training size, one bank is fitted
+and reused for all three target mixtures. The latent branch labels
+are not used to fit the partitions. Since $T=X_1$ and
+$S=2\{X_2-c\cos(\pi X_1)\}$, the raw input determines the signal.
+Its variance is $(1-\lambda)+3\lambda/3=1$, while the independent
+noise variance is $1/300$. For every $\lambda\in[0,1]$,
+$|Y_\lambda|\leq\sqrt{1-\lambda}+\sqrt{3\lambda}+0.1\leq2.1$,
+which justifies a common clipping interval across target mixtures.
 
-The master random seed is 20261030. Separate phase identifiers and
-child streams determine pilot, first confirmation, natural fitting,
-and fresh capacity inputs and fits. The capacity phase identifier is
-4. The archive contains the executable stream rules and the realized
-identifiers. Reusing a replicate label across phases does not reuse its
-observations. Common randomness within a repetition supports pairing;
-it does not create additional independent repetitions.
+The master random seed is $20261030$. Phase identifiers and child streams
+determine separate pilot, first-stage confirmation, natural-data fitting,
+and capacity-study inputs and fits. The capacity study uses phase
+identifier $4$. The executable stream rules and realized identifiers
+are recorded in the archive. A repeated replication label across
+phases does not imply repeated observations. Shared randomness within
+a repetition permits paired comparisons, but does not increase the
+number of independent repetitions.
 
-\subsection{Training the common bank and defining the locality control}
+\subsection{The common bank and the locality control}
 
-The input mean and population-standard-deviation convention
-($1/n$ variance divisor) are fitted on all training rows. A standard
-deviation at most $10^{-12}$ is replaced by one. At most 1,600 training
-rows, sampled without replacement, are used for clustering and
-reference selection. Each of the three independent $k$-means block
-fits uses five initializations and at most 150 iterations. Its
-cluster counts are 2, 4, and 8. At most 24 reference rows per cluster
-are sampled without replacement and converted to float32 before
-the unchanged upstream autoencoder is called. The effective requested
-rank is $\min(2,d-1,n_c-1)$, subject to upstream numerical rank
-determination. The common reference mean and the resulting upstream
-principal basis define the affine control.
+Input means and standard deviations are fitted to all training rows,
+using the population variance divisor $1/n$ for $n$ training observations.
+A standard deviation at most $10^{-12}$ is replaced by one. Clustering
+and reference selection use at most $1{,}600$ training rows, sampled
+without replacement. Each of the three $k$-means fits uses five
+initializations and at most $150$ iterations; the cluster counts are
+$2$, $4$, and $8$. Within each cluster, at most $24$ reference rows are
+sampled without replacement and converted to 32-bit floating-point
+precision before fitting the local KAHM map. The requested local rank
+is $\min(2,d-1,n_c-1)$, where $d$ is the input dimension and $n_c$
+the number of retained references. The reference mean and the principal
+basis obtained by this fit are also used by the affine control.
 
-For completeness, the pinned local KAHM fit can be written as follows.
-Let $H\in\R^{d\times n_c}$ contain the float32 reference columns,
-and set $q_i=P_c^\top H_i$. The basis is obtained from the centered
-reference covariance with divisor $n_c-1$, retaining eigenvalues
-above machine epsilon. The requested rank is reduced if a retained
-projected coordinate has range below $10^{-3}$, until that condition
-is removed or rank one is reached. With effective rank $r_c$ and
-unbiased projected covariance $\Sigma_c$, the training kernel is
+The local fit is defined as follows. Let
+$H\in\R^{d\times n_c}$ contain the reference columns, so that
+$H=V_c^\top$ in the notation of Section~\ref{c:sec:method}.
+A principal basis is obtained from the centered reference covariance
+with divisor $n_c-1$, retaining eigenvalues above machine epsilon.
+The requested rank is reduced whenever a retained projected coordinate
+has range below $10^{-3}$, until the condition is removed or rank one
+is reached. Let $p_c$ be the resulting rank, let
+$P_c\in\R^{d\times p_c}$ be the retained basis, and write
+$q_i=P_c^\top H_{:i}\in\R^{p_c}$ for projected reference $i$.
+Let $\Sigma_c$ be the projected sample covariance with divisor $n_c-1$.
+The training Gram matrix is
 \[
- K_{ij}=\exp\left\{-\frac{(q_i-q_j)^\top\Sigma_c^{-1}(q_i-q_j)}{2r_c}\right\}.
+ K_{ij}=\exp\left\{-\frac{
+ (q_i-q_j)^\top\Sigma_c^{-1}(q_i-q_j)}{2p_c}\right\},
+ \qquad i,j=1,\ldots,n_c.
 \]
-Writing $\nu=\|H\|_F^2/(dn_c)$, initialize $\rho_0=2.5\nu$ and iterate
+The regularizer is determined from the input references alone. Define
+$\nu=\|H\|_F^2/(dn_c)$, where $\|H\|_F^2$ is the sum of the squares
+of all entries of $H$. Starting at $\rho_0=2.5\nu$, the algorithm
+iterates
 \[
- B_j=(K+\rho_j I)^{-1},\qquad
+ B_j=(K+\rho_jI_{n_c})^{-1},\qquad
  \rho_{j+1}=2\nu+
-       \frac{\|H-H(KB_j)^\top\|_F^2}{dn_c}.
+ \frac{\|H-H(KB_j)^\top\|_F^2}{dn_c},\qquad j=0,1,\ldots.
 \]
-The routine stops when $|\rho_{j+1}-\rho_j|\leq10^{-3}$ or after 100
-iterations, returning the last computed $B_j$. This regularizer is
-determined from reference inputs alone, independently of the supervised
-target. Query kernels use the same projected covariance metric and
-$1/(2r_c)$ Gaussian scale. A cluster with fewer than two usable
-references or no positive empirical-variance direction has the recorded
-center reconstruction fallback; other numerical failures are not
-silently replaced by another method.
+It stops when $|\rho_{j+1}-\rho_j|\leq10^{-3}$ or after $100$
+iterations and returns the last computed inverse $B_j$ as $B_c$.
+Future targets do not enter this iteration. Query kernels use the
+same projected covariance and Gaussian scale $1/(2p_c)$.
+If a cluster has fewer than two usable references or no positive
+empirical-variance direction, its reconstruction is the reference
+center and its local coordinate block is empty. Other numerical
+failures are recorded as failures of the prescribed procedure.
 
-The two reconstruction methods have the same input basis but not
-identical functional capacity. KAHM uses its nonlinear query weights
-to combine full-dimensional reference vectors; it need not remain
-inside the truncated affine PCA plane. A shared basis does not make
-its reconstruction an affine projection. The experiment isolates the
-reconstruction operator within the specified bank, not all possible
-advantages of independently optimized complete systems.
+Although the two reconstructions share their input basis, their output
+ranges differ. KAHM combines full-dimensional reference vectors with
+nonlinear query-dependent weights and need not remain in the truncated
+affine principal subspace. The affine reconstruction always remains in
+that subspace. The comparison therefore isolates a reconstruction
+operator within a common fitted bank, rather than equating the functional
+capacity of the two maps.
 
-The alternative affine locality score is essential to interpreting
-the straight-branch comparison. In standardized input space, let
+The locality-aware affine score gives a separate control for position
+along an otherwise well-reconstructed affine set. For model $c$, let
+$z_{c1},\ldots,z_{cn_c}\in\R^d$ be its standardized reference vectors.
+Define
 \begin{align*}
- s_c&=\max\left\{\frac1{n_c}\sum_{i\in c}\|z_i-\mu_c\|_2^2,10^{-6}\right\},\\
- v_c&=\max\left\{\frac1{n_c}\sum_{i\in c}
-       \|(I-P_cP_c^\top)(z_i-\mu_c)\|_2^2,
+ s_c&=\max\left\{\frac1{n_c}\sum_{i=1}^{n_c}
+       \|z_{ci}-\mu_c\|_2^2,10^{-6}\right\},\\
+ v_c&=\max\left\{\frac1{n_c}\sum_{i=1}^{n_c}
+       \|(I_d-P_cP_c^\top)(z_{ci}-\mu_c)\|_2^2,
        0.05s_c,10^{-6}\right\}.
 \end{align*}
-It uses
+The score and its within-partition affinities are
 \[
- b_c(z)=\frac{\|z-r_c^{\A}(z)\|_2^2}{v_c}
-               +0.1\frac{\|z-\mu_c\|_2^2}{s_c},\qquad
- \psi_c(z)=\frac{\exp(-b_c(z))}{\sum_{j\text{ in block}}\exp(-b_j(z))}.
+ \beta_c(z)=\frac{\|z-r_c^{\A}(z)\|_2^2}{v_c}
+             +0.1\frac{\|z-\mu_c\|_2^2}{s_c},\qquad
+ \psi_c(z)=\frac{\exp\{-\beta_c(z)\}}
+ {\sum_{j:b(j)=b(c)}\exp\{-\beta_j(z)\}},
 \]
-This retains a center-distance term that distinguishes positions along
-an otherwise exactly reconstructed line. It changes the scoring rule
-and is a secondary control, not part of the primary reconstruction
-substitution. A radial-basis locality control similarly normalizes
-$\exp\{-\|z-\mu_c\|_2^2/(2\operatorname{median}_j s_j)\}$ within a block.
+where $b(c)$ identifies the partition. The center-distance term can
+distinguish positions along a line even when affine reconstruction is
+exact. This secondary control changes the score rather than the
+reconstruction alone. A radial-basis locality control instead normalizes
+$\exp\{-\|z-\mu_c\|_2^2/(2\operatorname{median}_{j:b(j)=b(c)}s_j)\}$
+within each partition, where $\operatorname{median}$ is the sample median
+of the local scales in that partition.
 
-There are 14 stored affinity coordinates and three block-sum constraints,
-giving an affine-dimension upper bound of 11 for the concatenated
-affinities. Appending the three log normalizers gives 17 stored
-coordinates. Local augmentation gives 28 coordinates for the
-two-dimensional branches and 42 for the 12-dimensional forecasting
-histories. The added coordinates are
-$\phi_c P_c^\top(z-\mu_c)$, computed from the original query in the
-shared basis; full reconstruction vectors are not passed to these heads.
+The representation has $14$ stored affinity coordinates and three
+within-partition sum constraints, so its affine dimension is at most
+$11$. Appending the three log normalizers gives $17$ stored coordinates.
+Local augmentation has $28$ coordinates for the two-dimensional branch
+inputs and $42$ for the twelve-dimensional forecasting histories.
+The additional coordinates are the entries of
+$\phi_c(z)P_c^\top(z-\mu_c)$, computed directly from the query in the
+shared basis. Full reconstruction vectors are not inputs to these
+controlled-study decoders.
 
-For reconstruction diagnostics, each query's squared reconstruction
-distance is divided by input dimension. The best-model diagnostic
-takes the minimum across local models in each block; the weighted
-diagnostic takes the sum with that reconstruction's own affinity weights.
-Both then average across queries, blocks, and repetitions. Thus the
-weighted summary is an affinity-weighted average of individual errors,
-not the reconstruction error of the affinity-weighted vector. These
-descriptive summaries are not additional primary forecast contrasts.
+Reconstruction diagnostics divide each query's squared reconstruction
+error by the input dimension. The best-model statistic takes the minimum
+error over local models within each partition. The weighted statistic
+averages those individual errors with the reconstruction's own affinity
+weights. Both statistics then average over queries, partitions, and
+repetitions. In particular, the weighted statistic is not the error of
+an affinity-weighted reconstruction vector. These geometric summaries
+are descriptive and are separate from the primary forecast contrasts.
 
-\subsection{Ridge and finite nonlinear heads}
+\subsection{Ridge and finite nonlinear decoders}
 
-Each input feature column is standardized using training data alone.
-Standard deviations below $10^{-8}$ are replaced by one. The ridge
-fit minimizes mean squared training error plus
-$\alpha\|W\|_F^2$, with an unpenalized intercept. The fixed penalty
-grid is
+Each input feature column is standardized using training data alone,
+replacing standard deviations below $10^{-8}$ by one. The ridge decoder
+minimizes the average sum of squared target-coordinate errors plus
+$\alpha\|W\|_F^2$, where $W$ is the coefficient matrix from standardized
+features to target coordinates. Its intercept is unpenalized. Validation
+selects the penalty from
 \[
  \alpha\in\{10^{-8},10^{-6},10^{-4},10^{-3},10^{-2},10^{-1},1\}.
 \]
-Validation chooses the penalty. Forecast horizons share that choice;
-the three branch targets choose separately.
+Forecast horizons share the selected penalty, whereas the three branch
+target mixtures are selected separately.
 
-The nonlinear head first selects $M$ training rows without replacement
-as landmarks in the standardized input-feature space. For a fixed
-budget, the common seed selects the same row indices across the
-representations, though their feature values differ. Let $b^2$ be the
-median strictly positive squared landmark distance, excluding distances
-at most $10^{-14}$; if no such distance exists, use $b^2=1$.
-For bandwidth multiplier $a\in\{0.25,1,4\}$, the squared bandwidth is
-$\max(b^2a^2,10^{-12})$. Form the Gaussian landmark matrix $K_{MM}$,
-symmetrize it, and retain eigenvalues exceeding
-$\max(10^{-10}\lambda_{\max},10^{-12})$. If
-$K_{MM}=V\Lambda V^\top$ on the retained subspace, the nonlinear
-coordinates are $K_{xM}V\Lambda^{-1/2}$. Concatenate these coordinates
-with the standardized linear input features; standardize the full
-resulting basis on training data and fit the same ridge objective.
-Validation selects a bandwidth--penalty pair using the fixed nested
-iteration order, so ties are deterministic. The first stage uses
-$M=64$; the fresh follow-up uses both $64$ and $256$.
+The nonlinear decoder selects $M$ training observations without
+replacement as landmarks in the standardized feature space. For a fixed
+$M$, a common seed selects the same row indices across representations,
+although the landmark feature values differ. Let $b^2$ be the median
+pairwise squared landmark distance among distances greater than
+$10^{-14}$; set $b^2=1$ if no such pair exists. For each bandwidth
+multiplier $a\in\{0.25,1,4\}$, define
+$\sigma_a^2=\max(b^2a^2,10^{-12})$ and the kernel
+$k_a(u,v)=\exp\{-\|u-v\|_2^2/(2\sigma_a^2)\}$.
+Let $K_{MM}$ be the corresponding $M\times M$ landmark Gram matrix.
+After numerical symmetrization, retain eigenvalues exceeding
+$\max(10^{-10}\lambda_{\max},10^{-12})$, where $\lambda_{\max}$ is
+the largest eigenvalue. Let $V$ contain the retained eigenvectors and
+$\Lambda$ be the diagonal matrix of retained positive eigenvalues.
+If $k_M(u)$ is the column of similarities from a standardized query
+$u$ to the landmarks, its Nystr\"om coordinates are
+$\Lambda^{-1/2}V^\top k_M(u)$.
 
-Because basis columns are standardized and assigned an ordinary Euclidean
-ridge penalty, this is a finite nonlinear diagnostic with a linear
-component. It is not an exact kernel-ridge estimator with its standard
-RKHS norm. Effective dimension can be smaller than input dimension
-plus $M$ after the eigenvalue cutoff. Increasing $M$ can change the
-sampled landmark set, median-distance bandwidth, retained rank, and
-validation-selected hyperparameters. It does not isolate only a
-dimension parameter while holding the realized basis fixed.
+These coordinates are concatenated with the standardized linear input
+features. The resulting feature columns are standardized again using
+training data, and the same ridge objective is fitted. Validation
+selects the bandwidth--penalty pair. Candidates are evaluated in
+ascending bandwidth multiplier and then ascending penalty order; the
+first minimizing pair resolves a tie. The first-stage study uses
+$M=64$, and the fresh capacity study uses both $M=64$ and $M=256$.
 
-Predictions are clipped to the known target range for both validation
-and test evaluation, but the ridge objective itself is the un-clipped
-training least-squares objective. The selected coefficients remain
-fitted on training data; validation observations are not used in a
-final combined fit. The secondary capacity selector chooses the lowest
-validation MSE among the eight complete representation--budget pipelines.
-Its fixed tie order is ascending budget followed by the configured
-feature order. The test split chooses neither hyperparameters nor
-the complete pipeline.
+Standardizing the basis columns and imposing an ordinary Euclidean
+coefficient penalty produces a finite nonlinear decoder with a linear
+component. It does not reproduce the usual reproducing-kernel Hilbert
+space norm of exact kernel ridge regression. The realized dimension may
+be smaller than the input dimension plus $M$ because of the eigenvalue
+cutoff. Changing $M$ can also change the landmark sample, median-distance
+bandwidth, retained rank, and validation-selected parameters. The
+capacity comparison therefore concerns complete procedures at different
+landmark budgets.
 
-\subsection{Airfoil grouping and the scope of its repetitions}
+Predictions are clipped for validation and test evaluation to $[-1,1]$
+for the three forecasting laws and to $[-2.1,2.1]$ for the branch targets.
+These intervals contain the corresponding target supports. Clipping is
+not part of the training least-squares objective. Coefficients remain
+fitted to training data after validation; there is no combined
+training--validation refit. A secondary selector chooses the lowest
+validation MSE among eight complete representation--budget procedures.
+Its tie order is increasing budget followed by the configured feature
+order. Test outcomes enter neither parameter selection nor selection
+of the complete procedure.
 
-The Airfoil snapshot contains 1,503 rows with five covariates and sound
-pressure as the target. Exact joint equality of the four non-frequency
-covariates defines 106 operating-setting groups. A fixed permutation
-with seed 2026103007 allocates 64, 21, and 21 groups to training,
-validation, and test, giving 905, 295, and 303 rows. All frequency rows
-within a setting stay together. The training objective weights rows
-equally; validation and test average within a group before weighting
-groups equally. The outcomes are reported in squared decibels.
+\subsection{Airfoil grouping and the interpretation of repetitions}
 
-The 24 seeds repeat fitting on this same observed cohort and split.
-They characterize fitting variability conditional on those data.
-No primary synthetic-experiment interval is applied to Airfoil, and
-the 24 fits are not treated as 24 independent draws of natural tasks,
-test cohorts, or physical operating-condition populations. A population
-claim would require a justified sampling model or independent cohorts.
+The Airfoil snapshot has $1{,}503$ observations, five covariates, and
+sound pressure as the target. Exact joint equality of the four
+non-frequency covariates defines $106$ operating-setting groups.
+A permutation with seed $2026103007$ allocates $64$, $21$, and $21$
+groups to training, validation, and test, yielding $905$, $295$, and
+$303$ observations. All frequencies from one setting remain in the
+same split. Training weights observations equally. Validation and
+test first average losses within a setting and then weight settings
+equally. Reported errors are in squared decibels.
 
-\section{Estimands, Multiplicity, and Descriptive Diagnostics}\label{c:app:statistics}
+The $24$ fitting seeds use this same cohort and split. They quantify
+fitting variability conditional on these observations and do not
+constitute $24$ independent natural tasks, test cohorts, or populations
+of physical operating conditions. The synthetic comparison intervals
+are not applied to Airfoil. A claim about a population of operating
+conditions would require an appropriate sampling model or independently
+sampled cohorts.
+
+\section{Estimands, multiplicity, and descriptive diagnostics}\label{c:app:statistics}
 
 \subsection{The unit of paired inference}
 
-For forecast method $A$ and repetition $r$, the reported loss is
+For method $a$ and repetition $r$, the forecasting loss is
 \[
- \widehat L_{r,A}=\frac1{512}\sum_{j=1}^{512}
-      \frac1{13\cdot3}\sum_{o=1}^{13}\sum_{h\in\{1,4,12\}}
-              (\widehat y_{r,A,j,o,h}-y_{r,j,o,h})^2.
+ \widehat L_{r,a}=\frac1{512}\sum_{j=1}^{512}
+ \frac1{13\cdot3}\sum_{o=1}^{13}\sum_{h\in\{1,4,12\}}
+ (\widehat y_{r,a,j,o,h}-y_{r,j,o,h})^2.
 \]
-For branches it is the mean noisy-target squared error over 2,048
-test points. The conditional-mean target loss is a separate secondary
-diagnostic. Each method and target at a given repetition shares the
-declared test draws, yielding a paired contrast. The independent units
-for the primary intervals are the 24 complete train--validation--test
-repetitions. Overlapping windows, horizons, reference groups, candidate
-fits, and three target mixtures are not extra replication units.
+Here $j$ indexes test episodes, $o$ indexes forecast origins within an
+episode, $h$ is the forecast horizon, $\widehat y$ is the fitted prediction,
+and $y$ is the observed target. For the branch experiments,
+$\widehat L_{r,a}$ is instead the average noisy-target squared error over
+$2{,}048$ independent test points. Loss against the branch conditional
+mean is reported as a separate diagnostic. Methods within a repetition
+share the same test draws, so their losses can be differenced in pairs.
+The $24$ complete training--validation--test repetitions are the independent
+units used for primary inference. Overlapping windows, horizons, local
+models, candidate fits, and target mixtures are not additional replication
+units.
 
-For each primary paired contrast $D_r$, let $\overline D$ be its sample
-mean and $s_D$ its unbiased sample standard deviation over 24 repetitions.
-For family size $F$, the interval is
+For a primary contrast, let $D_r$ be its paired loss difference in
+repetition $r$. Define
+$\overline D=24^{-1}\sum_{r=1}^{24}D_r$ and
+$s_D^2=23^{-1}\sum_{r=1}^{24}(D_r-\overline D)^2$.
+For a family of $F$ contrasts, the reported interval is
 \[
  \overline D\ \mathbin{\pm}\
- t_{23,\,1-0.05/(2F)}\,\frac{s_D}{\sqrt{24}}.
+ t_{23,\,1-0.05/(2F)}\,\frac{s_D}{\sqrt{24}},
 \]
-The critical values are approximately 3.545808 for $F=29$ and 3.180663
-for $F=12$. Under independent normal paired differences, each marginal
-Student interval has its exact nominal coverage, and the Bonferroni
-union bound gives family coverage at least 95\%. Under other laws,
-the Student coverage is approximate. Twenty-four repetitions do not
-guarantee an adequate normal approximation. The results are not
-distribution-free certificates. Dependence between contrasts is
-allowed by Bonferroni; independence of windows is never used.
+where $t_{\nu,p}$ denotes the $p$ quantile of the Student $t$
+distribution with $\nu$ degrees of freedom. The critical values are
+approximately $3.545808$ for $F=29$ and $3.180663$ for $F=12$.
+For independent normally distributed paired differences, the marginal
+Student intervals have exact nominal coverage, and the Bonferroni
+inequality gives simultaneous coverage of at least $95\%$ within a
+family. For other distributions, the Student coverage is approximate;
+$24$ repetitions do not by themselves ensure a reliable normal
+approximation. Bonferroni permits dependence between contrasts and
+does not require independence of the windows within a repetition.
 
-The synthetic estimand includes training and validation randomness,
-as well as finite test-sample variation, under each declared numerical
-generator. It is not an average over an independently sampled population
-of forecasting tasks. The sample size of 24 was fixed as a resource
-decision, not justified by an unreported prospective power calculation.
-
+The synthetic estimand averages over training, validation, and finite
+test-sample randomness under each specified numerical generator.
+It does not average over an independently sampled population of
+forecasting tasks. The replication count was set by the computational
+budget rather than a prospective power calculation.
 
 \subsection{Primary controlled contrasts}
-The first stage compares geometry, normalizer retention, and local-coordinate
-retention within each of its nine settings:
-\begin{align*}
- G&=R(\phi^{\A},\mathrm{ridge})-R(\phi^{\K},\mathrm{ridge}),\\
- N&=R(\phi^{\K},\mathrm{ridge})-R([\phi^{\K},\log Z^{\K}],\mathrm{ridge}),\\
- L&=R(\phi^{\K},\mathrm{ridge})-R(\Gamma_{\mathrm{local}}^{\K},\mathrm{ridge}).
-\end{align*}
-Here $R$ denotes the test loss of the indicated complete fitted procedure.
-Positive values favor the second procedure in each difference. The 27
-cellwise contrasts and $G(c,0)-G(c,1)$ at the two curvatures form the 29-member
-family. On straight branches, the position-target geometry advantage is
-$\FlatWithinGeometryGain$ with simultaneous interval $[0.96255,0.99350]$.
-The target interaction is $\FlatAlignmentInteraction$ with interval
-$[-0.99351,-0.96257]$: the advantage is larger when position matters.
-This direction is not evidence that branch identity favors KAHM.
 
-The normalizer inverse is checked numerically to about $2.8\times10^{-16}$.
-Nonetheless, the first-stage Van der Pol full-score RBF MSE is $0.00158$,
-versus $0.01273$ for the information-equivalent $[\phi,\log Z]$ coordinates.
-These secondary fitted-head comparisons illustrate accessibility and
-regularization differences; they do not estimate the representations' Bayes risks.
+The first-stage experiment has nine settings: six curvature--target
+combinations for the branch law and the three forecasting laws.
+Let $\widehat L_r(\mathcal F,H)$ denote the test loss from features
+$\mathcal F$ and decoder type $H$ in repetition $r$ of a specified setting.
+The paired contrasts are
+\begin{align*}
+ G_r&=\widehat L_r(\phi^{\A},\mathrm{ridge})
+       -\widehat L_r(\phi^{\K},\mathrm{ridge}),\\
+ N_r&=\widehat L_r(\phi^{\K},\mathrm{ridge})
+       -\widehat L_r([\phi^{\K},\log Z^{\K}],\mathrm{ridge}),\\
+ L_r&=\widehat L_r(\phi^{\K},\mathrm{ridge})
+       -\widehat L_r(\Gamma_{\mathrm{local}}^{\K},\mathrm{ridge}).
+\end{align*}
+The superscripts identify the reconstruction used to form the features;
+$\log Z^{\K}$ denotes the vector of three partition log normalizers.
+Thus $G_r$ tests the reconstruction substitution, $N_r$ tests retention
+of the score normalizers, and $L_r$ tests retention of local coordinates.
+A positive value favors the second procedure in each difference. Let
+$G(c,\lambda)=\E[G_r(c,\lambda)]$ for a branch setting and define the
+target interaction as $I_c=G(c,0)-G(c,1)$. Its paired estimator uses
+$G_r(c,0)-G_r(c,1)$ within each repetition. The $27$ setting-specific
+contrasts and the two curvature-specific interactions form the
+$29$-comparison family.
+
+On straight branches, the estimated geometry advantage for the position
+target is $\FlatWithinGeometryGain$, with simultaneous interval
+$[0.96255,0.99350]$. The estimated target interaction is
+$\FlatAlignmentInteraction$, with interval $[-0.99351,-0.96257]$.
+The negative interaction means the advantage is larger for position
+than for branch identity; it does not imply a KAHM advantage on the
+branch-identity target.
+
+The normalizer inverse is numerically accurate to about
+$2.8\times10^{-16}$. Nevertheless, the first-stage Van der Pol MSE
+with a nonlinear decoder is $0.00158$ for full scores and $0.01273$
+for the information-equivalent $[\phi,\log Z]$ features. These
+secondary comparisons illustrate differences in finite decoding and
+regularization. They do not estimate the corresponding Bayes risks.
 
 \subsection{Comparison families and practical margins}
 
-The first-stage family contains the 27 $G,N,L$ contrasts over nine
-settings and the two interactions
-$I_c=G(c,\lambda=0)-G(c,\lambda=1)$. A positive interaction would
-favor a larger reconstruction advantage for the branch-identity target.
-Negative $I_c$ is the opposite direction of this hypothesis, not a
-literal statement that one fitted method is uniformly harmful.
-The cell margin is 5\% of the mean raw-ridge MSE from two pilot
-repetitions. Each interaction margin is the mean of its two endpoint
-cell margins. All pilot outcomes are excluded from confirmation
-estimates. The margins are recorded design thresholds, not externally
-validated application tolerances; their scale estimate has only two
-pilot observations.
+The $29$-comparison family uses a setting-specific practical margin
+of $5\%$ of the mean raw-ridge MSE from two pilot repetitions.
+An interaction uses the mean of the margins for its two endpoint
+settings. Pilot outcomes are excluded from the confirmatory estimates.
+These margins are design thresholds with a scale estimated from two
+pilot observations; they are not externally validated application
+tolerances. A positive interaction $I_c$ would mean a larger
+reconstruction advantage for branch identity, so a negative interaction
+has the opposite interpretation.
 
-The fresh capacity family contains 12 differences: raw minus KAHM
-local and affine local minus KAHM local, for three systems and two
-budgets. Each law's margin is 5\% of its first-stage mean raw-RBF
-MSE, using the complete 24 first-stage confirmation repetitions.
-The margins, candidate list, and 24 fresh replication streams were
-frozen before phase-4 data were generated. Conditional on the completed
-first stage, they are fixed for this follow-up. The follow-up is
-explicitly data-motivated; it is not retroactively part of the initial
-29-comparison plan. Its separate 95\% family does not imply joint
-95\% coverage with the first family.
+The capacity study has a separate family of $12$ differences: raw
+features minus KAHM local features and affine local features minus KAHM
+local features, each evaluated on three systems at two landmark budgets.
+For each law, the practical margin is $5\%$ of the first-stage mean
+raw-RBF MSE across all $24$ first-stage repetitions. The margins,
+candidates, and $24$ fresh replication streams were fixed before
+capacity-study observations were generated. Thus they are fixed
+conditional on the first-stage results that motivated the follow-up.
+The capacity study has its own $95\%$ simultaneous interval family;
+this does not imply joint $95\%$ coverage across both stages.
 
-We call a difference a practical benefit at the declared threshold
-only when its simultaneous lower endpoint exceeds its fixed margin.
-An interval strictly above zero but not above the margin establishes
-a positive difference under the interval assumptions without resolving
-that practical threshold. A negative interval indicates an adverse
-difference for the candidate. An interval containing zero leaves the
-direction unresolved. An interval entirely within the fixed band
-$[-\delta,\delta]$ can support that band; failure to exclude zero
-alone cannot. Percent changes in the paper are descriptive ratios of
-means, without an asserted ratio confidence interval.
+We report a benefit at the declared practical threshold when the
+simultaneous lower endpoint exceeds its fixed margin $\delta$.
+An interval above zero whose lower endpoint does not exceed $\delta$
+supports a positive difference under the interval assumptions but
+leaves that practical threshold unresolved. An entirely negative
+interval favors the comparator, and an interval containing zero
+leaves the sign unresolved. An interval contained in
+$[-\delta,\delta]$ supports that practical band; merely failing to
+exclude zero does not establish equivalence. Percentage changes are
+descriptive ratios of mean losses, without ratio confidence intervals.
 
-The capacity family has no primary interaction testing whether the
-advantage changes with landmark budget. A positive interval at one
-budget and an unresolved interval at another would not prove a budget
-interaction. All declared cells, including adverse and unresolved
-results, are retained. There were no omitted failed prescribed
-repetitions in the completed archives.
+There is no primary interaction test for a change in advantage with
+landmark budget. A positive interval at one budget and an unresolved
+interval at another would therefore not establish such an interaction.
+All specified settings are reported, including adverse and unresolved
+comparisons, and every prescribed repetition completed successfully.
 
 \subsection{Reflection, reconstruction, and numerical checks}
 
-Reflection is applied to the raw branch input before the frozen scaler
-and geometry. For a $p$-coordinate feature vector, the stored-coordinate
-diagnostic is
-$\{\E_n\|\Gamma(X)-\Gamma(QX)\|_2^2/p\}^{1/2}$.
-The standardized diagnostic first divides each coordinate by its
-training-only standard deviation, replacing values at most $10^{-12}$
-by one. This threshold differs from the fitted heads' $10^{-8}$ rule.
-Thus the reported per-coordinate RMS, its standardization, and its
-finite-sample approximation are not silently identified with the
-population metric or a known Lipschitz budget in
-Proposition~\ref{c:prop:approx-symmetry}. Values in
-Table~\ref{c:tab:reflection-details} are averages of per-repetition RMS
-diagnostics, not a single pooled RMS.
+The reflection diagnostic applies $Q$ to the raw branch input before
+input scaling and feature construction. For a $p$-coordinate feature
+vector, it reports
+\[
+ \left\{\frac1p\E_n\|\Gamma(X)-\Gamma(QX)\|_2^2\right\}^{1/2},
+\]
+where $\E_n$ denotes the average over the diagnostic sample. The
+standardized version first divides feature coordinates by their
+training-set standard deviations, replacing values at most $10^{-12}$
+by one. This differs from the $10^{-8}$ threshold used to standardize
+decoder inputs. The statistic is a sample per-coordinate root mean
+square under this chosen scaling. It is not the population quantity
+$\delta_\Gamma$ in Proposition~\ref{c:prop:approx-symmetry} with an
+independently verified decoder Lipschitz constant. Values in
+Table~\ref{c:tab:reflection-details} average the root mean squares
+computed separately for each repetition.
 
-The post-hoc numerical check retains all 24 phase-4 Van der Pol
-banks and all train/validation/test observations. It changes only
-query-row Gaussian evaluation as in Proposition~\ref{c:prop:inner-scaling},
-before multiplication by the unchanged fitted $B$. The training
-kernel, regularizer, principal basis, reference values, covariance
-metric, partition, and scaler are unchanged. Heads are fitted on the
-stabilized training features and retuned on the same validation split.
-The 96 outcomes cover two encodings, two budgets, and 24 repetitions.
-They are descriptive reuse of phase-4 data; no third confirmatory
-family or new confidence claim is attached.
+The numerical sensitivity analysis reuses all $24$ capacity-study
+Van der Pol banks and their training, validation, and test observations.
+It changes only evaluation of the Gaussian query vector according to
+Proposition~\ref{c:prop:inner-scaling}, before multiplication by the
+same fitted inverse $B$. The training kernel, regularizer, principal
+basis, reference values, covariance metric, partition, and input
+scaler are held fixed. Decoders are fitted to the stabilized training
+features and selected using the same validation observations.
+The $96$ outcomes comprise two encodings, two landmark budgets, and
+$24$ repetitions. Because the analysis reuses observations examined
+in the capacity study, its comparisons are descriptive and are outside
+the two primary interval families.
 
-The independently checked test count of 99,762 zero normalizers refers
-to query--local-model pairs among 2,236,416 evaluations, not distinct
-test observations. Of those pairs, 99,687 already had all Gaussian
-entries equal to floating-point zero; the remaining 75 zeros arose
-in later arithmetic. The stabilized count was zero. Local-feature
-losses were effectively unchanged, while full-score losses and some
-predictions changed. This addresses that particular underflow pathway
-as an explanation of the local-feature benefit; it is not a proof of
-numerical robustness of every KAHM encoding or of signed normalization
-in general.
+The test calculations contain $99{,}762$ zero reconstruction
+normalizers among $2{,}236{,}416$ query--local-model evaluations.
+Of these, $99{,}687$ have all Gaussian entries rounded to zero before
+normalization, and the remaining $75$ arise in subsequent arithmetic.
+After stabilized query evaluation, the zero count is zero. Local-feature
+mean losses are effectively unchanged, whereas full-score losses and
+some individual predictions change. These results assess this specific
+underflow mechanism as an explanation for the local-feature benefit;
+they do not establish numerical robustness for every KAHM encoding or
+for signed normalization in general.
 
-% Retrospective supporting checks; no new primary confidence claim.
 \subsection{Retrospective influence and coordinate-recovery diagnostics}\label{c:app:review-diagnostics}
-These descriptive checks were added after the original study. They reuse the declared
-paired repetitions and do not change the primary estimates, margins, or comparison
-families. For each of the 41 primary contrasts, we compute bias-corrected sample
+These analyses were conducted after the primary evaluation and use the same
+paired repetitions. They assess sensitivity of the reported estimates and
+coordinate recovery without defining an additional confirmatory comparison family. For each of the 41 primary contrasts, we compute bias-corrected sample
 skewness and delete each repetition once. Each deletion recomputes the Student
 interval with 23 remaining repetitions, 22 degrees of freedom, and the original
 family size (29 or 12). The range of deletion endpoints is an influence diagnostic,
@@ -637,8 +789,8 @@ differences exceeding the margin; it is not a mean-effect confidence statement.}
 \centering
 \includegraphics[width=.96\textwidth]{generated/controlled/figures/review_paired_differences.pdf}
 \caption{The 24 original paired differences for each Van der Pol capacity comparison,
-in units of $10^{-3}$ MSE. The dashed line is the frozen practical margin.
-No resampling, refitting, or new primary analysis is performed.}
+in units of $10^{-3}$ MSE. The dashed line is the prespecified practical margin. Each point corresponds
+to one complete original repetition.}
 \label{c:fig:review-paired}
 \end{figure}
 
@@ -652,8 +804,11 @@ input from the gated local coordinates and gates:
 division by $\phi_c$ recovers $P_c^\top(z-\mu_c)$, after which one solves for $z$.
 A deficient stack does not establish information loss in the full code, because the
 gates can carry additional information. Numerical ranks use the threshold
-$\sigma_1\max\{\text{rows}(A),d\}\epsilon_{64}$; they are finite-precision diagnostics,
-not exact rank proofs. Small singular values and small gates can make coordinate
+$\sigma_1\max\{n_A,d\}\epsilon_{64}$, where $\sigma_1$ is the largest
+singular value of $A$, $n_A$ is its number of rows, and
+$\epsilon_{64}=2^{-52}$ is the machine precision for 64-bit floating-point
+arithmetic. These ranks are finite-precision diagnostics rather than exact
+rank proofs. Small singular values and small gates can make coordinate
 recovery sensitive to perturbations. Test-sample gate minima are not population
 lower bounds, and these computations do not guarantee a well-conditioned inverse
 or easy decoding by any particular fitted head.
@@ -661,7 +816,9 @@ or easy decoding by any particular fitted head.
 \caption{Retrospective diagnostics over 24 stored banks per row. Rank ranges concern
 the stacked local bases in input dimension $d$. The smallest singular value and
 gate entries are minima over the inspected banks (and, for gates, their original
-test observations); $\kappa_2$ is the largest stack condition number. A dash means
+test observations). The condition number $\kappa_2$ is the ratio of the
+largest to the smallest singular value for a full-column-rank stack; the
+table reports its maximum over the inspected banks. A dash means
 that not every stack in that row has full numerical column rank. KAHM and affine
 representations share the basis stack. Computational reproduction supplies no new
 independent statistical replications.}
@@ -723,8 +880,8 @@ Tables~\ref{c:tab:reconstruction-details} and
 \ref{c:tab:reflection-details} give descriptive input-geometry summaries.
 The two complete primary comparison families follow. Their values
 are generated from the archived outcomes, with each difference,
-standard error, interval, and frozen margin independently recomputed
-by the paper-asset script before it writes these tables.
+standard error, interval, and prespecified margin recomputed
+from the archived per-repetition losses by the table-generation program.
 
 \begin{table}[!htbp]
  \caption{Held-out reconstruction errors per standardized input coordinate,
@@ -742,8 +899,8 @@ by the paper-asset script before it writes these tables.
 \begin{table}[!htbp]
  \caption{Branch reflection differences at training size 1,024, averaged
  over 24 banks. The statistic is a per-coordinate RMS, with and without
- training-only coordinate scaling. The raw reflection precedes the
- frozen pipeline. These values neither establish exact information
+ training-only coordinate scaling. The raw reflection is applied before the fitted
+ input scaling and feature construction. These values neither establish exact information
  loss for the learned code nor certify a decoder-specific population
  risk bound.}
  \label{c:tab:reflection-details}
@@ -754,8 +911,8 @@ by the paper-asset script before it writes these tables.
 \begin{table}[!htbp]
  \caption{Complete representation means in the fresh capacity study,
  with MSE multiplied by $10^3$. The full-score KAHM representation is
- a prespecified secondary control. These point estimates do not add
- hypotheses to the 12-comparison primary family.}
+ a prespecified secondary control. These descriptive point estimates are reported alongside the separate
+12-comparison primary family.}
  \label{c:tab:capacity-means-details}
  \centering\small\setlength{\tabcolsep}{4pt}
  \input{generated/controlled/tables/capacity_secondary}
@@ -764,10 +921,11 @@ by the paper-asset script before it writes these tables.
 \clearpage
 \subsection{Selected pipelines and realized dimensions}
 
-The validation-selected pipeline and the retained nonlinear basis are
-distinct summaries: the former describes the operational model choice,
-whereas the latter records the realized dimensions behind the nominal
-landmark budgets.
+The selected procedure identifies which representation and landmark
+budget minimize validation error. The retained nonlinear basis records the
+realized feature dimension after the eigenvalue cutoff. Both are reported
+because a nominal landmark budget does not uniquely determine the fitted
+feature dimension.
 
 \begin{table}[!htbp]
  \caption{Secondary validation-only selection among the eight complete

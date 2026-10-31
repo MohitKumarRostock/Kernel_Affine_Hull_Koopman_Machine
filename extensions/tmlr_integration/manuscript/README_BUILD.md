@@ -1,42 +1,33 @@
-# Compile the integrated anonymous manuscript
+# Building the KAHM forecasting documents
 
-This is the editable source of *Kernel Affine Hull Features for Prediction:
-Conditional Gains, Costs, and Limits of Transfer*. It consolidates two unpublished
-research studies and a separate bounded scaling sensitivity in the official
-TMLR anonymous review format.
+**Kernel Affine Hull Features for Time-Series Forecasting: Distinctness, Bounded Corrections, and Predictive Limits** has two document entry points:
 
-From this directory, using TeX Live, latexmk, pdfLaTeX, BibTeX, and Latin Modern:
+- `main.tex` contains the focused manuscript, including the core mathematical proofs and the principal experimental protocol.
+- `supplement.tex` contains the self-contained *Supporting Studies* document, with the complementary methods, results, technical appendices, and references.
+
+Both documents use anonymous TMLR review mode. The main manuscript summarizes the complementary findings and their limitations; the supporting document provides their detailed evidence.
+
+## Compile
+
+Install TeX Live with `latexmk`, pdfLaTeX, BibTeX, and Latin Modern fonts. From this directory, run:
 
 ```bash
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
 ```
 
-The source archive places these files at its root. It contains all required
-generated tables, number macros, and vector figures; forecasting experiments
-are not required to compile it. The official `tmlr.sty`, `tmlr.bst`, and
-`fancyhdr.sty` remain unmodified. Their exact upstream commit and hashes are
-recorded in `TEMPLATE_PROVENANCE.json`. Do not add `accepted` or `preprint`
-options to the review build.
+The outputs are `main.pdf` and `supplement.pdf`. The source contains the bibliography, official TMLR style files, and every figure and table needed by the two entry points. Compilation does not fit forecasting models or require an online service.
 
-The main paper explains the controlled mechanism, all primary capacity
-contrasts, the independent natural-source comparison, measured computational
-costs, and the unsuccessful frozen diagnostic. Proofs, exact generators,
-method specifications, full source and policy tables, fitting warnings, and
-other diagnostics follow the references. The scaling sensitivity reuses the
-original draws and natural sources and is explicitly post-hoc. No result is
-pooled across distinct inference units or statistical comparison families.
+In a distributed source ZIP, these files are under `manuscript/`. `SOURCE_FILE_MANIFEST.json` identifies the included file bytes. `TEMPLATE_PROVENANCE.json` records the original style-file hashes; the style and its license are retained without modification.
 
-`ASSET_PROVENANCE.json` records the source hashes for the copied study assets
-and newly generated confirmation/scaling tables and number macros. In a full research
-checkout with the saved natural run restored, regenerate these assets using
-`python extensions/tmlr_integration/build_assets.py` from the repository root.
-The complete review supplement also includes that script and its inputs.
-Verification of an extracted archive should precede rebuilding because
-compilation creates auxiliary files.
+## Interpretation and numerical reproduction
 
-The review source omits the author block, contact information, and identifying
-current-study links. Published references and required third-party attribution
-remain. The separate review supplement includes the anonymously cited related
-manuscript and its supplement. The AI-assistance disclosure is on the first
-page and records the actual scope of assistance. Scientific author review and
-approval remain necessary before journal submission.
+The main paper characterizes normalized target transfer, conditional feature-span distinctness, and a bound on forecast-correction magnitude. The principal experiment establishes improvement over the common local-coordinate basis but does not establish the specified advantage over every comparator. Complete proofs and the principal design accompany the main text. The supporting document retains the conditional gains, unfavorable comparisons, and incomplete evaluations from the complementary studies.
+
+The separate saved-forecast supplement contains the principal experiment's numeric forecasts, normalization targets, reported tables, and standalone verifier. Its numerical checks recompute losses and statistical comparisons from saved arrays. They do not refit models, repeat model selection, rerun feature-bound checks, or measure computation time.
+
+## Attribution and review files
+
+The editable source archive retains the required `LICENSE`, `DATA_LICENSE`, and `LICENSE_TMLR.txt` attribution. Some attribution identifies the original authors. Consequently, the source archive is **not an anonymous review upload**, even though its default PDFs use anonymous review mode.
+
+The intended review files are the separately compiled main PDF and `KAHM_TMLR_Submission_Supplement.zip`. The latter contains the supporting-study PDF and the unchanged saved-forecast supplement. Document compilation and archive integrity checks do not establish scientific correctness or a journal decision.

@@ -1,0 +1,53 @@
+% Optional exploratory appendix subsection. Review before inclusion.
+
+% This file uses standard LaTeX table commands; no main manuscript is overwritten.
+
+\section{Focused development study of bounded adaptive KAHM}
+
+\label{sec:adaptive-development}
+
+We evaluated a bounded online KAHM prototype against a common raw-history ridge baseline, fixed KAHM, matched adaptive affine and RBF-local controls, and sliding-window Gaussian kernel ridge. The study used four paired stationary/recurring synthetic seeds, three previously inspected Dominick series, and one previously inspected Sunspot series, at two capacity tiers. These are reference/replay quotas, not equal-byte allocations. This is development evidence rather than independent source confirmation. Kernel bandwidths and gate temperatures remain fixed; this simpler prototype is not a streaming reproduction of the earlier forecast-trained model.
+
+The original complete attempt encountered four correction-head numerical failures. A documented amendment replaced accumulated correction normal equations with a stable direct solve of the same bounded-replay, free-intercept ridge objective. All other modeling, calibration, chronology and advancement rules were retained, and the complete 144-run roster was repeated. Both attempts are preserved. The amended evaluation contains 387,900 scored forecasts, with no unexpected model exceptions or capacity violations.
+
+Loss is MSE scaled by the initial-prefix mean squared seasonal difference, averaged across horizons and then streams. The natural aggregate gives the two collections equal weight. All forecasts were issued causally; horizon mixing weights were selected from a fixed calibration grid and then held fixed.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Amended development results (64 references; 128 replay rows). Lower scaled MSE is better.}
+\label{tab:adaptive-small}
+\begin{tabular}{lrrrr}
+\hline
+Method & Recurring & Dominick & Sunspot & Natural mean \\
+\hline
+Raw ridge & 3.4583 & 1.6144 & 2.3697 & 1.9920 \\
+Fixed KAHM & 3.4583 & 1.6134 & 2.3697 & 1.9915 \\
+Adaptive KAHM & 3.4583 & 1.6135 & 2.3697 & 1.9916 \\
+Adaptive affine & 3.4583 & 1.6137 & 3.4004 & 2.5071 \\
+Adaptive RBF-local & 3.4583 & 1.6160 & 2.3697 & 1.9928 \\
+Sliding-window KRR & 3.3578 & 0.8685 & 2.3897 & 1.6291 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Amended development results (128 references; 256 replay rows). Lower scaled MSE is better.}
+\label{tab:adaptive-large}
+\begin{tabular}{lrrrr}
+\hline
+Method & Recurring & Dominick & Sunspot & Natural mean \\
+\hline
+Raw ridge & 3.3623 & 0.8471 & 2.1045 & 1.4758 \\
+Fixed KAHM & 3.4031 & 0.8464 & 2.1045 & 1.4754 \\
+Adaptive KAHM & $1.376\times 10^{8}$ & 0.8444 & 2.1045 & 1.4744 \\
+Adaptive affine & $1.061\times 10^{6}$ & 0.8446 & 2.2085 & 1.5266 \\
+Adaptive RBF-local & 3.7036 & 0.8460 & 2.1045 & 1.4752 \\
+Sliding-window KRR & 3.2079 & 0.5954 & 2.1045 & 1.3499 \\
+\hline
+\end{tabular}
+\end{table}
+
+Adaptive KAHM did not satisfy the prespecified accuracy criteria at either tier. On the natural data, calibration frequently suppressed its correction; recurring regimes exposed severe extrapolation that persisted under a fresh correctly solved ridge objective. These findings motivate further work on stability and task-specific benefit, but do not establish general forecasting effectiveness. The conclusion concerns this fixed prototype and does not rule out other forecast-trained or adaptive KAHM formulations.

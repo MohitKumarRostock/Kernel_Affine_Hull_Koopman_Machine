@@ -1,0 +1,114 @@
+\section{Bounded residual forecasting}\label{sec:bounded-decoder}
+
+\subsection{Separate bounded feature blocks}
+
+
+Each feature block is centered and scaled coordinatewise using A alone;
+feature standard deviations are floored at $10^{-6}$. A tilde denotes
+this coordinatewise standardization. For a vector $v\in\R^p$, define
+\begin{equation}
+ T_R(v)=\frac{v}{\sqrt{1+\|v\|_2^2/R^2}},\qquad R=\sqrt p.
+ \label{eq:mechanism-main-radial}
+\end{equation}
+This radial map has norm at most $R$ and is nonexpansive with respect to
+its argument. If the common and departure block dimensions are $p_0$
+and $p_d$, respectively, set $R_0=\sqrt{p_0}$ and $R_d=\sqrt{p_d}$.
+The bounded feature vectors are
+\[
+ \psi_K(z)=\operatorname{concat}\bigl(
+       T_{R_0}(\widetilde\psi_0(z)),T_{R_d}(\widetilde d_K(z))\bigr),
+ \qquad
+ \psi_R(z)=\operatorname{concat}\bigl(
+       T_{R_0}(\widetilde\psi_0(z)),T_{R_d}(\widetilde d_R(z))\bigr).
+\]
+The two blocks are transformed separately and are not standardized again.
+Consequently, appending a departure does not rescale the common features.
+Three partitions with 2, 4, and 8 local models, local rank two, and at
+most 24 references per local model give $p_0=42$ and $p_d=168$ for the
+12-dimensional histories in this experiment. The geometry is fitted
+without targets on A and remains fixed during selection and evaluation.
+
+\subsection{Fitting and calibrating the correction}
+
+For horizon $h$, let $f_{0,h}$ be the raw-history ridge baseline. Given
+an unstandardized history $x$, let $\psi(x)$ denote the chosen bounded
+feature vector after applying its A-fitted input scaler. The forecast is
+\begin{equation}
+ \widehat y_{t+h}=f_{0,h}(x_t)+\gamma_h q_h(x_t),\qquad
+ q_h(x)=b_h+\psi(x)^\top w_h.
+ \label{eq:mechanism-main-forecast}
+\end{equation}
+Here $b_h\in\R$ is a free intercept, $w_h$ is the coefficient vector,
+and $\gamma_h$ controls the correction strength. For $n_A$ fitting
+histories, the residual targets are
+$e_{ih}=y_{i,h}-f_{0,h}(x_i)$, where $y_{i,h}$ is the observed future
+at horizon $h$ for fitting history $i$. The correction minimizes
+\[
+ \frac1{n_A}\sum_{i=1}^{n_A}
+       \{e_{ih}-b_h-\psi(x_i)^\top w_h\}^2
+       +\alpha_h\|w_h\|_2^2.
+\]
+Set B selects $\alpha_h\in\{10^{-4},10^{-3},10^{-2},10^{-1},1\}$
+by forecast error separately for each horizon. Set C then selects
+$\gamma_h\in\{0,1/4,1/2,1\}$. Neither selection step refits the
+geometry or decoder, and set D is reserved for final evaluation.
+
+\subsection{A uniform bound including the intercept}
+
+Define the fitting residual mean, centered root mean square, and feature
+mean as
+\[
+ \bar e_h=\frac1{n_A}\sum_i e_{ih},\qquad
+ \sigma_{e,h}=\left[\frac1{n_A}\sum_i(e_{ih}-\bar e_h)^2\right]^{1/2},
+ \qquad
+ \bar\psi=\frac1{n_A}\sum_i\psi(x_i).
+\]
+\begin{proposition}[Centered ridge correction bound]
+\label{prop:mechanism-correction-bound}
+For the mean-squared-error objective above with $n_A\geq1$,
+$\alpha_h>0$, and an unpenalized intercept, suppose that the feature
+map satisfies $\|\psi(x)\|_2\leq R$ on its input domain.
+For any scalar $\gamma_h$, the fitted coefficients and correction satisfy
+\begin{equation}
+ \|w_h\|_2\le\frac{\sigma_{e,h}}{2\sqrt{\alpha_h}},\qquad
+ |\gamma_h q_h(x)|\le |\gamma_h|\left[
+ |\bar e_h|+(R+\|\bar\psi\|_2)
+ \frac{\sigma_{e,h}}{2\sqrt{\alpha_h}}\right].
+ \label{eq:mechanism-main-correction-bound}
+\end{equation}
+\end{proposition}
+For a concatenated bounded common and departure vector,
+$R=\sqrt{R_0^2+R_d^2}$; for the common-only vector, $R=R_0$.
+The free intercept contributes the residual-mean term and cannot be
+omitted. This bound controls the correction, not the baseline, total
+forecast error, or sensitivity of the preceding reconstruction to changes
+in the history.
+
+
+\paragraph{Proof idea.}
+Eliminating the intercept gives
+$b_h=\bar e_h-\bar\psi^\top w_h$. If $\Psi_c$ is the matrix whose
+rows are $(\psi(x_i)-\bar\psi)^\top$ and $e_c$ is the centered
+residual vector, then
+$w_h=(\Psi_c^\top\Psi_c+n_A\alpha_h I)^{-1}\Psi_c^\top e_c$.
+The coefficient operator has singular values
+$s/(s^2+n_A\alpha_h)\leq1/(2\sqrt{n_A\alpha_h})$.
+This yields the coefficient bound. Applying Cauchy--Schwarz to
+$q_h(x)=\bar e_h+(\psi(x)-\bar\psi)^\top w_h$ yields the
+correction bound. Appendix~\ref{app:reconstruction-mechanism} gives
+the complete argument, including the nonexpansiveness of the radial map.
+
+The theorem applies separately to each selected horizon and is a property
+of bounded-feature ridge regression. A summed-squared-error objective
+would need penalty $n_A\alpha_h$ to define the same estimator. The
+radial transformation is nonexpansive in its own input, but this does
+not give a Lipschitz bound for the preceding signed reconstruction or
+for its fallback boundary.
+
+\paragraph{Baseline recovery and predictive gain.}
+The calibration grid includes $\gamma_h=0$, which recovers the same
+fitted baseline exactly. This is an available forecast rather than a
+guarantee that a finite calibration set selects the best future forecast.
+The coefficient and correction bounds likewise make no claim about
+prediction accuracy. The experiment therefore evaluates error, numerical
+coverage, and the correction inequalities as separate outcomes.

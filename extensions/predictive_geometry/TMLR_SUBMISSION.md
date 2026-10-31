@@ -1,10 +1,8 @@
-# Preparing the TMLR submission
+# Controlled-study archives and review materials
 
-The manuscript uses the official unmodified TMLR style in anonymous submission
-mode. The packaging command creates an editable manuscript bundle and an
-executable reproducibility supplement. It does not upload or submit either file.
+This guide describes the archival packaging tools for the controlled representation study. The current paper combines this study with later forecasting evidence and is available through the [integrated manuscript guide](../tmlr_integration/README.md). The exporter in this directory covers the controlled study alone.
 
-## Build and verify
+## Build and verify the controlled-study package
 
 From this extension directory, after installing `requirements.txt`:
 
@@ -15,100 +13,40 @@ python -m reproduce paper
 python -m reproduce submission --output-dir dist/tmlr
 ```
 
-The package command writes:
+The commands verify archived results, generate paired-outcome diagnostics, compile the standalone controlled-study paper, and create its source and reproduction archives. They do not submit a paper to a journal.
 
 | File | Contents |
-|---|---|
-| `TMLR_Manuscript_Source.zip` | Anonymous LaTeX source, exact official TMLR styles/license, bibliography, figures, tables and build instructions; `main.tex` is at the ZIP root |
-| `TMLR_Reproducibility_Supplement.zip` | Complete scientific snapshot, all compact historical records, executable runners/auditors, pinned dependencies/environment, Airfoil data, manuscript sources and any provided anonymized related manuscripts |
-| `TMLR_PACKAGE_MANIFEST.json` | ZIP byte sizes, ZIP SHA-256 hashes and per-bundle content digests |
+| --- | --- |
+| `TMLR_Manuscript_Source.zip` | LaTeX source, official TMLR style, bibliography, figures, tables, and build instructions for the standalone controlled study |
+| `TMLR_Reproducibility_Supplement.zip` | Scientific source snapshot, compact historical records, runners, auditors, pinned dependencies, and supplied data |
+| `TMLR_PACKAGE_MANIFEST.json` | Archive sizes, SHA-256 hashes, and content digests |
 
-The diagnostic command above checks archived paired outcomes only and leaves
-the manuscript's committed full diagnostic assets intact. To regenerate both
-the paired analysis and saved-bank rank/gate checks, first complete a full run:
+The first diagnostic command checks saved paired outcomes. Reconstructing rank and gate diagnostics from fitted banks additionally requires a complete run:
 
 ```bash
 python -m reproduce full --workers 4 --run-dir runs/full-review
 python -m reproduce review-diagnostics --run-dir runs/full-review --output manuscript/generated
 python -m reproduce paper
-python -m reproduce submission --output-dir dist/tmlr
 ```
 
-Saved-bank checks are never promised by an invocation without `--run-dir`.
-The normal paper build preserves the committed `review_*` assets.
+The full route repeats the published seeds and retains fitted banks and predictions. It provides computational reproduction, not independent confirmation. Its environment, job counts, and audit scope are described in [REPRODUCING.md](REPRODUCING.md).
 
-`manuscript/main.pdf`, built separately by the paper command, is the submission
-PDF. The prior named PDF is never copied into either ZIP. A source ZIP is a
-convenience for rebuilding; TMLR's principal manuscript upload is the PDF.
-The combined ZIP size is required to be below 100,000,000 bytes. Each ZIP uses
-sorted names, fixed timestamps, stable permissions and deterministic content
-manifests. ZIP byte equality is expected for unchanged inputs and the same
-compression implementation; content digests are independent of ZIP metadata.
+## Verify an extracted archive
 
-Extract the supplement into an empty directory and verify it before regenerating
-assets:
+Extract the reproduction ZIP into an empty directory. From its root:
 
 ```bash
 python scripts/package_tmlr_submission.py --verify-dir .
 python -m reproduce audit
 python -m reproduce smoke
-python -m reproduce full --workers 4 --run-dir runs/full-review
 ```
 
-See the generated `REVIEWER_README.md` and [REPRODUCING.md](REPRODUCING.md)
-for environment installation, resource needs, full job counts and audit scope.
-The full route regenerates the prescribed seeds; it does not add independent
-statistical confirmation. No network access is needed after dependencies are
-installed. The review diagnostic route is descriptive reuse of archived
-outcomes and does not alter either prespecified comparison family.
+The packager verifies `study/SNAPSHOT.json` and `archive/MANIFEST.json`, then retains the included scientific source and archive bytes. Each archive manifest records its full file inventory, content hashes, and any metadata transformation used for an anonymous review view. Historical protocol records retain their original identities.
 
-## Exact evidence and the review view
+The source package and reproduction package have different purposes. The source package compiles the document; the reproduction package supplies the controlled experiment and its archived numerical evidence. Neither is a complete reproduction package for all studies in the integrated manuscript.
 
-The package command first verifies `study/SNAPSHOT.json` and
-`archive/MANIFEST.json`. It preserves every distributed `study/` and `archive/`
-file byte-for-byte, including protocol freezes, margins, statistical outcomes,
-source code and generic historical scratch paths. All nine inputs required by
-the paper-asset generator are included. Historical hash records are evidence
-of recorded internal plans, not external preregistrations or independent
-timestamp attestations. New executions retain separate provenance.
+## Document and attribution scope
 
-Each `SUBMISSION_MANIFEST.json` contains a complete file inventory, SHA-256
-hashes, a content-tree digest and a source-to-package mapping. The selected
-source-tree digest identifies all included original files before optional
-review metadata transformations; it does not claim to identify unrelated
-repository contents. No link to a mutable current-study branch is required.
+The anonymous export omits Git history, first-party citation metadata, prior named PDFs, caches, environments, and generated run directories. Its recorded transformations concern review metadata, not scientific source or experimental outcomes. Software licenses, ordinary published references, official template attribution, and immutable upstream-source provenance retain their accurate scope.
 
-The review view excludes Git history, `CITATION.cff`, prior named PDFs, local
-caches, environments and generated run directories. It removes the optional
-author field from the staged `pyproject.toml`; the manifest records both the
-original source hash and transformed package hash. That metadata view does not
-rewrite the repository's authorship records or any scientific file.
-
-Required license/copyright notices, ordinary published bibliography entries,
-official style-file attribution and unchanged upstream provenance are retained.
-The manifest explicitly lists these narrow exceptions. They document software
-and literature sources, and are not an assertion about who submitted the paper.
-The mechanical scan rejects unexpected first-party author/contact metadata and
-current-study branch links. It does not promise zero names or make identity
-inference impossible. Reviewers can inspect the published attributions without
-assuming that the software's rights holders are the submitting authors.
-
-Any related manuscripts distributed in `submission/related_work/` must be
-prepared as anonymous PDFs before packaging. Their inclusion does not assert
-an archival publication status. Inspect text, metadata, hyperlinks, bookmarks
-and embedded files as part of preparing those PDFs.
-
-## Submission checks
-
-The final PDF should show anonymous authors, the TMLR review heading, readable
-figures/tables, resolved references and an appendix after the references.
-Use the official style without custom margin, font or layout modifications.
-Read the current [TMLR author guide](https://jmlr.org/tmlr/author-guide.html)
-and [submission instructions](https://jmlr.org/tmlr/submissions.html).
-
-OpenReview requires the actual author list and other author-specific declarations
-outside the anonymous PDF. The repository does not fabricate authorship,
-conflicts, funding, submission status or overlap declarations. The scientific
-scope remains the declared synthetic laws and secondary static-data check;
-formatting, a successful build and computational reproduction do not by
-themselves establish acceptance.
+A mechanical metadata scan does not guarantee that authorship cannot be inferred from scientific content. The public repository is author-identifying. The integrated manuscript and any associated supplement require their own document and anonymity checks; the historical exporter does not certify later materials.

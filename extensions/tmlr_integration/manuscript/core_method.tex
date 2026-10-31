@@ -1,0 +1,128 @@
+\section{Forecasting features from local reconstruction}
+\label{sec:reconstruction-method}
+\label{sec:reconstruction-mechanism}
+
+Let $(y_t)$ be a scalar observed series. At forecast origin $t$, the
+available history is $x_t=(y_{t-d+1},\ldots,y_t)^\top\in\R^d$,
+and the target at horizon $h\geq1$ is $y_{t+h}$. A forecasting procedure
+maps the history to a separate prediction for each $h$ in a specified
+finite horizon set $\mathcal H$. The representation and decoder are
+fitted using a set A of history--target pairs. Distinct episode sets B,
+C, and D are used for model selection, correction calibration, and
+final evaluation, respectively; Section~\ref{sec:experiment} specifies
+their construction.
+
+Vectors are columns. The notation $v^\top$ denotes transpose,
+$\|v\|_2$ the Euclidean norm, and $\|v\|_1$ the sum of absolute
+coordinates. The matrix $I_p$ is the $p\times p$ identity, and
+$\mathbf1_n$ is the length-$n$ vector of ones; omitted subscripts are
+determined by the displayed products. Expectations and variances refer
+to the probability law specified for each statement or experiment.
+All feature-space statements condition on a fixed fitted reference bank.
+
+\subsection{Reference banks and reconstruction maps}
+
+
+Let $z\in\R^d$ be the coordinatewise standardized version of a history
+$x$, using means and scales estimated on A. A local reference bank is a collection of fitted models indexed by
+$j$. Model $j$ has $n_j$ reference histories stored as the rows of
+$Q_j\in\R^{n_j\times d}$, center $\mu_j\in\R^d$, and orthonormal
+principal directions $P_j\in\R^{d\times r_j}$. Here $r_j$ is its local
+rank and $P_j^\top P_j=I_{r_j}$. Write $q_{ji}\in\R^d$ for reference
+$i$, so row $i$ of $Q_j$ is $q_{ji}^\top$. Let $S_j$ be the sample
+covariance matrix of the projected references $P_j^\top q_{ji}$. For
+positive rank and positive-definite $S_j$, the shared Gaussian kernel is
+\[
+ \kappa_j(z,z')=\exp\!\left\{
+ -\frac{[P_j^\top(z-z')]^\top S_j^{-1}[P_j^\top(z-z')]}{2r_j}
+ \right\}.
+\]
+Define the kernel vector $k_j(z)\in\R^{n_j}$ by
+$[k_j(z)]_i=\kappa_j(z,q_{ji})$, and the Gram matrix
+$K_j\in\R^{n_j\times n_j}$ by
+$[K_j]_{i\ell}=\kappa_j(q_{ji},q_{j\ell})$.
+With a positive reconstruction regularizer $\lambda_j$, set
+$C_j=(K_j+\lambda_j I_{n_j})^{-1}$. The Gaussian Gram matrix and its
+regularized inverse $C_j$ are symmetric. The regularizer is fitted from A
+by the reference-reconstruction rule specified in
+Appendix~\ref{app:reconstruction-results}.
+
+The KAHM and matched positive-kernel reconstructions are
+\begin{equation}
+ A_{K,j}(z)=\frac{Q_j^\top C_j k_j(z)}
+ {\mathbf1^\top C_j k_j(z)},\qquad
+ A_{R,j}(z)=\frac{Q_j^\top k_j(z)}{\mathbf1^\top k_j(z)}.
+ \label{eq:mechanism-main-maps}
+\end{equation}
+Both take values in $\R^d$. The first is defined when its signed
+denominator is nonzero; the second has a positive denominator for finite
+inputs. The matched affine reconstruction is
+$A_{A,j}(z)=\mu_j+P_jP_j^\top(z-\mu_j)$.
+\subsection{Common features and reconstruction departures}
+
+Models are grouped into partitions. If $\mathcal J_b$ indexes the models
+in partition $b$, their shared locality weights are
+\[
+ g_j(z)=\frac{\exp\{-\|z-\mu_j\|_2^2/(2s_j)\}}
+ {\sum_{\ell\in\mathcal J_b}
+       \exp\{-\|z-\mu_\ell\|_2^2/(2s_\ell)\}},
+ \qquad j\in\mathcal J_b,
+\]
+where $s_j>0$ is the fitted local squared-radius scale. These weights,
+called gates, sum to one within each partition and do not depend on the
+reconstruction being compared.
+
+The common feature vector $\psi_0(z)$ contains all gates $g_j(z)$ and
+all weighted principal-coordinate vectors $g_j(z)P_j^\top(z-\mu_j)$.
+Define the reconstruction departures by
+\begin{equation}
+ \begin{split}
+ d_K(z)&=\operatorname{concat}_{j}
+       \bigl[g_j(z)\{A_{K,j}(z)-A_{A,j}(z)\}\bigr],\\
+ d_R(z)&=\operatorname{concat}_{j}
+       \bigl[g_j(z)\{A_{R,j}(z)-A_{A,j}(z)\}\bigr].
+ \end{split}
+ \label{eq:mechanism-main-departures}
+\end{equation}
+The operator $\operatorname{concat}$ stacks its column-vector arguments
+in a fixed order. Each departure retains all history coordinates,
+including components outside the local principal subspace. Substituting
+the affine map for the nonlinear reconstruction makes the departure
+identically zero. The common-feature procedure is therefore the nested
+control without reconstruction departures. The RBF departure is matched
+to the KAHM departure in references, kernels, gates, and feature dimension.
+
+
+The affine control is nested at the level of the raw feature construction.
+The comparison with positive-kernel RBF reconstruction additionally holds
+fixed the number and locations of references, the projected kernel, the
+locality weights, and the decoder architecture. The difference between
+the two raw departure blocks is therefore the use of $C_j$ in the
+normalized reconstruction. This matching does not assert equality of
+fitted predictions, and it does not compare KAHM with every possible
+kernel or nonlinear decoder.
+
+\subsection{Defined evaluation of signed normalizations}
+
+To guard against cancellation in the signed KAHM normalization, define
+\begin{equation}
+ a_j(z)=C_j k_j(z),\qquad
+ \rho_j(z)=\frac{|\mathbf1^\top a_j(z)|}{\|a_j(z)\|_1}
+ \quad\text{when }\|a_j(z)\|_1>0.
+ \label{eq:mechanism-relative-denominator}
+\end{equation}
+The ratio is invariant to a common positive rescaling of the query kernel.
+When $\rho_j(z)\le10^{-10}$, or a required quantity is undefined or
+nonfinite, the local reconstruction is replaced by its affine map, making
+that raw departure zero. The same finite-value checks apply to the positive
+RBF map. All affected rows are recorded. This fallback gives a defined
+feature vector where the original ratio cannot be evaluated reliably;
+it does not establish continuity across the fallback boundary.
+
+
+A zero raw departure under fallback need not remain zero after A-fitted
+feature centering. The fallback defines the input to the subsequent
+transformation; the norm bound in Section~\ref{sec:bounded-decoder}
+applies to that transformed input. The algebraic propositions in
+Section~\ref{sec:reconstruction-theory} concern the exact ratios on their stated
+domains, rather than the piecewise numerical fallback procedure.

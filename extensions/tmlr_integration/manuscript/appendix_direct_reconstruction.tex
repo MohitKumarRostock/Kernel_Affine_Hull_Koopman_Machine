@@ -1,19 +1,75 @@
 \section{Direct reconstruction protocol and reproducibility}
 \label{app:direct-protocol}
 
-The complete protocol is versioned under
-\path{extensions/direct_reconstruction/PROTOCOL.md}. Its scientific
-freeze contains the model, preparation and execution code, independent
-analysis, numerical tests, inherited numerical dependencies, exact input
-roster, source provenance and prepared arrays. The published checkpoint
-precedes full D evaluation. The preserved pilot under
-\path{extensions/forecast_gate_pilot} has its own earlier source freeze
-and is not relabelled as part of this evaluation.
+The protocol in \path{extensions/direct_reconstruction/PROTOCOL.md}
+specifies the model, input preparation, optimization, analysis, and
+exact task roster. Its public checkpoint includes the implementation,
+numerical dependencies, source metadata, and prepared input arrays and
+precedes evaluation on D. The exploratory gate-training pilot has a
+separate design and does not contribute observations to the primary
+interval family.
+
+\paragraph{Local shape controls and gate normalization.}
+Use the row-stored reference matrix, principal basis, and center from
+Section~\ref{sec:direct-reconstruction}. Let $b(c)$ be the partition
+block containing local model $c$, and set
+\[
+ a_c(z)=\mu_c+P_cP_c^\top(z-\mu_c),\quad
+ u_c(z)=P_c^\top(z-\mu_c),\quad
+ n_c(z)=(I_L-P_cP_c^\top)(z-\mu_c).
+\]
+The scalars $t_c$ and $e_c$ are the positive reference-radius and
+projection-residual scales in Equation~\eqref{eq:nf-locality-gates}.
+For a horizon-specific shape parameter $\xi_b$, the affine control uses
+\[
+ r_c^{\mathrm A}(z;\xi_b)=\mu_c+e^{\xi_b}P_cP_c^\top(z-\mu_c).
+\]
+Both this reconstruction and the KAHM reconstruction determine a folding
+score $s_c$ through Equation~\eqref{eq:nf-folding-gates}. Their gate
+logit is
+$\ell_c(z)=16\log[1-\operatorname{clip}_{[0,1]}s_c(z)+10^{-6}]$.
+The other two controls use logits
+\begin{align*}
+ \ell_c^{\mathrm{loc}}(z;\xi_b)
+ &=-e^{\xi_b}\frac{\|n_c(z)\|_2^2}{e_c}
+   -0.1e^{-\xi_b}\frac{\|z-\mu_c\|_2^2}{t_c},\\
+ \ell_c^{\mathrm{RBF}}(z;\xi_b)
+ &=-\frac{e^{\xi_b}\|u_c(z)\|_2^2+
+                e^{-\xi_b}\|n_c(z)\|_2^2}{2t_c}.
+\end{align*}
+For every family, the temperature parameter $\eta_b$ gives the gate
+\[
+ \phi_c(z)=\frac{\exp\{e^{\eta_b}\ell_c(z)\}}
+ {\sum_{j\in\mathcal C_b}\exp\{e^{\eta_b}\ell_j(z)\}},
+ \qquad c\in\mathcal C_b.
+\]
+Both parameters lie in $[-\log4,\log4]$. The fixed model sets both to
+zero, the gate-trained model fixes $\xi_b=0$, and the shape-trained
+model fits both. The principal coordinates $u_c$ themselves remain
+fixed in all three procedures.
+
+The optimizer is L-BFGS-B with numerical forward differences, at most
+40 iterations, at most 20 line-search steps per iteration, function
+tolerance $10^{-10}$, and gradient tolerance $10^{-6}$. Its 256-evaluation
+ceiling counts actual objective calls, including calls used for numerical
+differentiation. A zero parameter vector initializes every optimization,
+and the best finite evaluated parameter vector supplies the fitted state.
+
+\paragraph{Exploratory gate-training pilot.}
+The pilot used three independent seeds per law, separately implemented
+generators, and at most 160 objective evaluations. Gate-temperature
+training reduced mean KAHM MSE relative to its fixed version by 0.53\%
+on nonlinear AR, 30.21\% on Van der Pol, and 11.29\% on Duffing. The
+best directly trained local control was more accurate on every law;
+raw RBF was also substantially stronger on Van der Pol and Duffing.
+The reproduction materials contain all 99 method--task prediction
+records and their optimization outcomes. These nine exploratory tasks
+are excluded from the direct-reconstruction interval family.
 
 \paragraph{Chronology and seasonal prediction.}
-Synthetic seeds are 84200--84211 for each law, with the inherited
+Synthetic seeds are 84200--84211 for each law, with
 72-observation episodes and thirteen forecast origins per episode.
-Development checks use seed 932001, outside the reported roster.
+Implementation checks use seed 932001, outside the evaluation roster.
 Whole-episode inner validation selects the raw baseline in A. For natural
 data, inner A training targets must have matured by its first
 validation query. Every outer target lies inside its segment. A history
@@ -23,18 +79,43 @@ imputation or label-based series replacement is used.
 
 Dominick has history 52, offsets $(1,2,4)$ and seasonal period 52.
 Rideshare uses only \texttt{price\_mean} series, history 24, offsets
-$(1,3,6)$ and period 24. Wikipedia has history 28, offsets $(1,3,7)$ and
+$(1,3,6)$ and period 24. An A-only availability check reduced the
+proposed history from 48 to 24 before the public checkpoint and any
+forecast evaluation; the seasonal period and eligibility threshold
+were unchanged. Wikipedia has history 28, offsets $(1,3,7)$ and
 period 7. Sunspot uses the last 4,096 observations independent of their
 values, history 28, offsets $(1,3,7)$ and period one. Each of the first
 three collections contributes three hash-selected eligible series;
 sunspot contributes its single series. Every source record, archive
 checksum, selected identifier, original origin index, split boundary and
-training-only scale is preserved. Natural row caps are 512/128/128/128.
+training-only scale is included in the reproduction records. Natural row caps are 512/128/128/128.
 The minimum A eligibility is 96 complete windows with a positive finite
 scale. A later unavailable segment remains a recorded failure. The three selected
 rideshare series have no complete B windows, identified during preparation
 after A-only selection; all three are retained as planned feasibility
 failures. This precludes a complete four-collection accuracy aggregate.
+
+Synthetic task MSE averages squared errors over the three offsets and
+all D origins. Natural task MSE is divided by an A-only scale: the mean
+of finite squared differences at the collection's seasonal period. If
+this mean is unavailable, nonfinite, or nonpositive, the corresponding
+first-difference mean is used. A task with no positive finite scale is
+ineligible. The scale remains fixed throughout selection and evaluation.
+All source-level means weight the selected series equally.
+
+For a primary synthetic comparison, let $d_r$ be comparator MSE minus
+reconstruction-trained KAHM MSE in repetition $r$, for $r=1,\ldots,12$.
+With sample mean $\bar d$ and sample standard deviation $s_d$, the
+95\% Bonferroni-adjusted interval is
+\[
+ \bar d\ \pm\ t_{11,1-0.05/(2\cdot18)}\frac{s_d}{\sqrt{12}},
+\]
+where $t_{\nu,q}$ denotes the $q$ quantile of Student's $t$ distribution
+with $\nu$ degrees of freedom. Under independent normal paired
+differences, these intervals jointly cover all eighteen population mean
+differences with probability at least 95\%; otherwise the coverage
+uses a normal approximation. The statistical unit is the complete
+repetition, not an individual forecast origin.
 
 Seasonal naive predicts each offset from the most recent observed value
 with the appropriate seasonal phase. For period $p$ this is
@@ -48,7 +129,7 @@ the required seasonal lag. The selected source records are
 attribution and archive-license metadata.
 
 \paragraph{Baseline and correction selection.}
-Raw RBF and boosting retain the frozen ridge state for a logged
+Raw RBF and boosting retain the fitted ridge state for a recorded
 horizon-wise D fallback; a D failure cannot change their C forecast or
 the C-selected policy. Its baseline cost and serialized bytes are included.
 Raw ridge uses penalties $10^{-4},10^{-3},10^{-2},10^{-1},1,10,100$,
@@ -63,7 +144,7 @@ grid jointly across horizons without external early stopping, using
 a separate fitted tree ensemble per target. All local corrections use the
 same A residual targets, sum-loss penalties $0.01,0.1,1$, A-standardized
 features and unpenalized intercept. C chooses their mixing weights
-separately by horizon with a strict zero-first rule. A budget exit or
+separately by horizon with the zero-correction tie-breaking rule. A budget exit or
 nonfinite trial is logged; the best finite incumbent is retained.
 
 The affine gain and locality/RBF anisotropy are deliberately different
@@ -91,23 +172,22 @@ times and ratios describe this implementation and host, not intrinsic
 algorithmic constants. A whole-process high-water RSS is not a
 per-method memory estimate.
 
-This study does not impose a deployment budget or match alternatives by
-measured wall time. It also does not test delayed-label updates or drift.
-The preserved bounded-window ridge prototype maintains a fixed feature
-map and has a different intercept convention; numerical agreement with
-batch ridge does not demonstrate useful incremental KAHM geometry.
-Prediction, update latency and incremental memory remain joint endpoints
-for a further chronological adaptation study.
+The evaluation compares fixed computational search budgets rather than
+equal measured wall times. It does not evaluate delayed-label updates
+or drifting streams; those questions are addressed separately in
+Section~\ref{sec:adaptive-development}.
 
-\paragraph{Independent evidence checks.}
-The audit verifies frozen inputs and scientific source, reconstructs
+\paragraph{Computational verification.}
+The verification program checks archived inputs and source files, reconstructs
 windows from retained raw episodes or series, recomputes C/D losses,
 checks all method and candidate rosters, replays strict selection,
 checks exact zero correction, reconstructs cost dependencies and
-replays serialized selected predictions. It does not independently
-refit every optimization trial or turn recorded consistency into
-external replication. Per-task and per-horizon outputs remain available
-regardless of the direction of the aggregate comparison.
+replays serialized selected predictions. The program passes 543,017 consistency checks, including reconstruction
+of 144 generated episode batches and replay of 731 selected states on
+C and D. A separate calculation recomputes scalar losses, A-only
+natural scales, and all 18 intervals without importing the model or
+its analyzer. Neither check independently refits every optimization
+trial or supplies an external experimental replication.
 
 Bitwise regeneration also depends on the numerical environment. The
 recorded execution uses NumPy 2.3.5 on an AVX512-capable x86-64 host.
@@ -115,16 +195,15 @@ A post-execution diagnostic reproduces all four episode batches of one
 declared Duffing task exactly on that host, but disabling AVX512 dispatch
 changes some values at floating-point roundoff scale. Package versions
 and single-thread execution alone therefore do not guarantee identical
-regenerated bytes on other processors. The frozen exact checks remain
-unchanged, and the archived input arrays retain their canonical hashes.
-Selected-state prediction replay has its separately declared numerical
-tolerance. The preserved diagnostic records this environment limitation;
-it does not refit models or amend any reported result.
+regenerated bytes on other processors. The archived input arrays therefore provide the exact evaluated inputs.
+Regeneration checks compare their bytes exactly, whereas selected-state
+prediction replay uses an absolute and relative tolerance of $10^{-10}$.
 A separate raw-RBF state probe crosses the declared $10^{-10}$ absolute
 and relative replay tolerances under altered dispatch, while changing
 its C/D mean squared errors by less than $10^{-14}$ relatively.
-Native and one compatible hosted audit pass; these cross-processor
-failures remain documented rather than silently accepted.
+Verification succeeds on the original host and on one compatible hosted
+environment. The altered-dispatch failures identify a limitation of
+strict numerical replay across processor configurations.
 
 
 \subsection{Complete comparisons and resource records}
@@ -133,7 +212,8 @@ failures remain documented rather than silently accepted.
 \centering\small
 \setlength{\tabcolsep}{4pt}
 \caption{The complete 18-comparison family for reconstruction-trained
-KAHM. Gain is $100(\overline L_{\rm control}-\overline L_{\rm KAHM})/
+KAHM. With $\overline L$ denoting mean MSE across twelve repetitions,
+gain is $100(\overline L_{\rm control}-\overline L_{\rm KAHM})/
 \overline L_{\rm control}$. Intervals are absolute paired MSE differences,
 not percentage intervals; their positive direction favors KAHM.}
 \label{tab:direct-primary}

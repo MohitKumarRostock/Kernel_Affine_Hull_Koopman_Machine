@@ -1,0 +1,79 @@
+\section{Introduction}\label{sec:introduction}
+
+A reconstruction of an observed history and a prediction of its future
+solve different problems. Kernel Affine Hull Machines (KAHMs) construct
+nonlinear reconstruction maps from local reference observations
+\citep{Kumar2024KAHM}. A small reconstruction error does not establish
+that the resulting representation is useful for forecasting. For example,
+a reconstruction residual that vanishes along an affine line loses
+position along that line, although the future target may vary with
+position. Conversely, a deterministic feature cannot add information to
+the history from which it is computed, but it can make useful functions
+available to a restricted decoder.
+
+This distinction raises three questions. Does the reconstruction supply
+functions that a simpler matched representation cannot express? Can the
+magnitude of a fitted forecast correction be controlled? Does the
+resulting procedure improve prediction at the available sample size and
+computational budget? Each question requires its own evidence. A
+comparison of function spans concerns algebraic expressiveness; a
+correction bound concerns the size of one prediction component; a
+forecasting comparison concerns the complete fitted and selected procedure.
+
+We investigate these questions through \emph{reconstruction departures}.
+For each local model, a departure is the difference between its nonlinear
+reconstruction and its affine projection, multiplied by a locality weight.
+The decoder also receives the locality weights and weighted principal
+coordinates. These common features retain principal-coordinate position
+within each local model and are shared
+by all reconstruction comparisons. Replacing the nonlinear map with its
+affine projection makes the raw departure zero. A positive-kernel RBF
+reconstruction, using the same references, kernel, and locality weights,
+provides a closely matched nonlinear alternative. A residual decoder
+then adds a calibrated correction to a fixed raw-history ridge forecast.
+
+The algebraic analysis identifies both redundancy and distinctness.
+Normalized transfer of KAHM reconstruction weights to reference targets
+is exactly a ratio of two kernel-ridge predictions. Under a
+constant-row-sum and invariant-subspace condition, KAHM and RBF departures
+have the same augmented raw feature span. An irregular three-reference
+construction shows that the spans can also differ. These results concern
+untransformed functions. They do not equate fitted ridge predictions under
+different parameterizations, nor do they establish an advantage for every
+reference bank or target.
+
+The second contribution is a uniform magnitude bound for the residual
+correction. Each feature block is standardized on the fitting set and
+mapped into a bounded ball before ridge regression is fitted with an
+unpenalized intercept. The coefficient and correction bounds account for
+the empirical residual mean and the scaling of the penalty. They apply
+to bounded features generally and therefore support the specified KAHM
+construction without implying a property unique to KAHM. In particular,
+they do not bound the raw baseline or the total forecast error.
+
+The principal experiment compares ten procedures over four simulation
+laws, two added-noise levels, and 24 independent repetitions. Fitting,
+hyperparameter selection, correction calibration, and final evaluation
+use separate episode sets. The protocol and prepared inputs were recorded
+locally before the final forecasts were computed; this was not a public
+preregistration. Five simultaneous comparisons test a 3\% nonlinear-loss
+improvement margin, and a sixth tests noninferiority to ridge on a linear
+control with a 5\% tolerance.
+
+The bounded KAHM departure improves on common local-coordinate features,
+but the full prespecified improvement criterion is not satisfied.
+The gain over matched RBF departures is below the required margin, and
+the margin over raw RBF forecasting remains unresolved. Boosted trees
+and the validation-selected non-KAHM procedure have lower aggregate
+loss. Supporting controlled, natural-data, and adaptive studies show why
+this distinction matters beyond the principal experiment. Their findings
+are summarized in Section~\ref{sec:supporting-evidence}; their complete
+methods and results appear in the companion \emph{Supplementary Studies}.
+
+The paper thus contributes a characterization of the reconstruction
+feature space, a correction bound for a specified residual decoder,
+and an empirical evaluation that separates a useful reconstruction
+feature from an established advantage specific to KAHM. Full proofs of
+the central results and the complete principal experimental protocol
+are included in Appendices~\ref{app:reconstruction-mechanism}
+and~\ref{app:reconstruction-results}.

@@ -48,9 +48,11 @@ jobs:
       - name: Install declared numerical dependencies
         run: python -m pip install -r extensions/direct_reconstruction/requirements.txt
       - name: Check numerical contracts and chronological protocol
-        run: >-
-          python -m unittest extensions.direct_reconstruction.test_model
-          extensions.direct_reconstruction.test_protocol -v
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python extensions/direct_reconstruction/test_model.py -v
+          python extensions/direct_reconstruction/test_protocol.py
       - name: Restore exact execution files from lossless task archives
         run: >-
           python -m extensions.direct_reconstruction.evidence unpack

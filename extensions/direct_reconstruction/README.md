@@ -96,10 +96,15 @@ The task archives are post-execution packaging; the scientific freeze and
 outcomes remain byte-identical.
 
 ```bash
-python -m unittest extensions.direct_reconstruction.test_model \
-  extensions.direct_reconstruction.test_protocol -v
+PYTHONPATH=. python extensions/direct_reconstruction/test_model.py -v
+python extensions/direct_reconstruction/test_protocol.py
 python extensions/direct_reconstruction/run.py smoke --output /tmp/kahm-direct-smoke
 ```
+
+Run these commands from the repository root. The frozen model test imports
+the repository package; the frozen protocol test imports sibling modules
+and therefore runs as a script. These invocation choices preserve the
+scientific source hashes.
 
 Preparation saves inputs and a scientific freeze without fitting a forecaster:
 

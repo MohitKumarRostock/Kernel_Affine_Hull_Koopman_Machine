@@ -42,12 +42,40 @@ Protocols were frozen locally before production, without public preregistration.
 The historical [fixed-cap experiment](extensions/reconstruction_mechanism/README.md)
 retains its original evidence and saved-forecast schema.
 
+## Cross-fitted residual correction with a full-training common predictor
+
+An additional synthetic study evaluates episode-wise out-of-fold residuals
+around a common predictor fitted on all designated training episodes. Its
+computational reproduction establishes two of the four original primary
+criteria. Cross-fitted KAHM reduces nonlinear standardized MSE by **9.1968%**
+relative to the identical common-plus-bias baseline. Its **2.8662%** reduction
+against independently selected cross-fitted RBF does not establish the
+prescribed 3% margin, and its error is **5.1246% higher** than the expanded
+non-KAHM policy. Linear performance satisfies the prescribed 5% noninferiority
+criterion. In the secondary residual-target comparison, cross-fitted KAHM has
+3.6873% higher error than the in-sample correction.
+
+The independent audit covers all 192 task suites and 8,064 retained forecast
+arrays. The reproduction reuses the original 24 simulation repetition units
+and adds no independent repetitions. It verifies its newly retained execution
+without authenticating the unavailable original completed-run records. The
+numerical package contains one analysis ZIP and sixteen standalone records
+ZIPs, with 3,311 retained files and an exact size/SHA-256 index.
+
+[Results](extensions/crossfit_residual_reproduction_20261101/reporting/RESULTS.md)
+· [Protocol](extensions/crossfit_residual_reproduction_20261101/PROTOCOL.md)
+· [Primary comparisons](extensions/crossfit_residual_reproduction_20261101/reporting/published_tables/primary_contrasts.csv)
+· [Independent audit](extensions/crossfit_residual_reproduction_20261101/verification/reproduction_audit.json)
+· [Archive manifest](extensions/crossfit_residual_reproduction_20261101/reporting/ARCHIVE_MANIFEST.json)
+· [Archive delivery verification](extensions/crossfit_residual_reproduction_20261101/reporting/archive_delivery_verification.json)
+
 ## Repository organization
 
 | Location | Contents |
 | --- | --- |
 | `extensions/tmlr_integration/` | Main paper and supporting-study source, generated displays, compiled PDFs, and submission-package instructions |
 | `extensions/dimension_forecasting/` | Principal dimension-selected comparison, source and phase records, complete analysis, and independent audit |
+| `extensions/crossfit_residual_reproduction_20261101/` | Cross-fitted and in-sample residual correction study, same-cohort computational reproduction, audited results, and complete numerical archive index |
 | `extensions/reconstruction_mechanism/` | Historical fixed-cap comparison, algebraic examples, saved evidence, and verification tools |
 | `extensions/predictive_geometry/` | Controlled representation and decoder experiments |
 | `extensions/natural_forecasting/` | Natural-data evaluation and dataset provenance |

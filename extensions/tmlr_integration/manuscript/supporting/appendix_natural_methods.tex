@@ -14,7 +14,7 @@ decoder bases are fitted on the training portion of each fit.
 \label{sec:nf-reference-geometry}
 
 Write $z(x)=D^{-1}(x-\bar x)$, where $\bar x$ and the diagonal scales $D$ are
-training means and population standard deviations.  A standard deviation at
+training means and empirical standard deviations with divisor $n$.  A standard deviation at
 most $10^{-12}$ is replaced by one; all entries of $D$ are therefore positive. The symbol $\mathbf1$
 denotes a vector of ones of the required dimension. Unless specified
 otherwise, $\|\cdot\|$ is the Euclidean norm for vectors,
@@ -38,7 +38,8 @@ before subsequent double-precision calculations, and let $\mu_c=m_c^{-1}Q_c^\top
 Each $q_{cj}\in\R^d$ is a column vector. The orthonormal columns of $P_c\in\mathbb R^{d\times r_c}$ are leading
 eigenvectors of the centered reference covariance.  The requested rank is
 $\min(2,d-1,m_c-1)$; only eigenvalues above double-precision machine epsilon
-are retained.  The implementation further reduces a rank greater
+are retained. This is the constrained rank policy of this supporting
+study, not the native default cap twenty. The implementation further reduces a rank greater
 than one if the smallest projected coordinate range is below $10^{-3}$.
 A reference set with no usable direction has $r_c=0$ and uses its center as
 its reconstruction.  Other numerical failures remain recorded failures.

@@ -58,6 +58,24 @@ Both take values in $\R^d$. The first is defined when its signed
 denominator is nonzero; the second has a positive denominator for finite
 inputs. The matched affine reconstruction is
 $A_{A,j}(z)=\mu_j+P_jP_j^\top(z-\mu_j)$.
+
+\paragraph{Local dimension.}
+For a supplied cap $c\geq1$, the native construction initializes the local
+dimension at
+\[
+ r_j^{\mathrm{init}}=\min\{c,d,n_j-1\}.
+\]
+The default cap is $c=20$ \citep[Appendix B]{Kumar2025Collaborative}.
+The stored rank $r_j$ can be smaller because the native PCA retains only
+positive-variance directions and reduces the requested dimension when a
+projected reference coordinate has insufficient range. The range rule
+stops at requested rank one; it does not impose the range threshold on
+every possible rank-one model. Appendix~\ref{app:reconstruction-results}
+gives the exact numerical rules and the explicit rank-zero wrapper.
+There is no additional $d-1$ cap in this native policy. In particular,
+full ambient rank is permitted, and a cap of twenty does not imply twenty
+stored directions when $d<20$ or $n_j\leq20$.
+
 \subsection{Common features and reconstruction departures}
 
 Models are grouped into partitions. If $\mathcal J_b$ indexes the models
@@ -89,8 +107,9 @@ in a fixed order. Each departure retains all history coordinates,
 including components outside the local principal subspace. Substituting
 the affine map for the nonlinear reconstruction makes the departure
 identically zero. The common-feature procedure is therefore the nested
-control without reconstruction departures. The RBF departure is matched
-to the KAHM departure in references, kernels, gates, and feature dimension.
+control without reconstruction departures. Within a fixed bank, the RBF
+departure is matched to the KAHM departure in references, kernels, gates,
+and feature dimension.
 
 
 The affine control is nested at the level of the raw feature construction.
@@ -100,7 +119,10 @@ locality weights, and the decoder architecture. The difference between
 the two raw departure blocks is therefore the use of $C_j$ in the
 normalized reconstruction. This matching does not assert equality of
 fitted predictions, and it does not compare KAHM with every possible
-kernel or nonlinear decoder.
+kernel or nonlinear decoder. When complete procedures select their caps
+independently, their selected banks and common-feature dimensions can
+differ. We therefore distinguish those primary forecasting comparisons
+from secondary comparisons that hold the KAHM-selected bank fixed.
 
 \subsection{Defined evaluation of signed normalizations}
 

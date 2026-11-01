@@ -285,12 +285,20 @@ minimizes squared error among such predictions, so
  \leq L^2\varepsilon_{\mathrm{rec}}^2.
 \]
 The first assertion follows from
-Proposition~\ref{c:prop:representation-risk}. If $h$ is $L_h$-Lipschitz,
-then
-$|m(h(u))-m(h(v))|\leq LL_h d_U(u,v)$.
-Thus $m\circ h$ is an admissible decoder in the constrained infimum
-whenever $\kappa\geq LL_h$, proving the second assertion. For the
-specified decoder $f$, the triangle inequality gives
+Proposition~\ref{c:prop:representation-risk}. For the globally constrained
+decoder claim, let $D\subseteq\R^d$ be the stated Lipschitz domain of $m$.
+The scalar extension
+\[
+ \widetilde m(x)=\inf_{z\in D}\{m(z)+L\|x-z\|_2\}
+\]
+is finite, agrees with $m$ on $D$, and is globally $L$-Lipschitz;
+in particular, it is continuous and measurable. If $h$ is
+$L_h$-Lipschitz, then $g=\widetilde m\circ h$ is measurable and satisfies
+$|g(u)-g(v)|\leq LL_h d_U(u,v)$ on the entire representation domain.
+Moreover, $g(U)=m(h(U))$ almost surely, so it is square-integrable and
+has the same risk bound. It is therefore admissible whenever
+$\kappa\geq LL_h$, proving the second assertion. For the specified
+decoder $f$, the triangle inequality gives
 \[
  \|m-f\circ\Gamma\|_{L^2(P_X)}
  \leq\|m(X)-m(h(U))\|_{L^2}
@@ -775,6 +783,7 @@ descriptive results accompany the executable artifact.
 All four Van der Pol comparisons retain lower endpoints above the fixed practical
 margin after any one-repetition deletion. This does not establish a distribution-free
 mean guarantee or remove the normal-approximation qualification of the primary analysis.
+
 \begin{table}[htbp]
 \caption{Retrospective Van der Pol influence diagnostics. Lower endpoints are multiplied
 by $10^3$; the fixed margin on this scale is $0.148907$. Skewness is the bias-corrected
@@ -785,6 +794,7 @@ differences exceeding the margin; it is not a mean-effect confidence statement.}
 \centering\small\setlength{\tabcolsep}{4pt}
 \input{generated/controlled/tables/review_paired_diagnostics}
 \end{table}
+
 We also inspect the 120 first-stage primary banks and 72 capacity banks from a
 completed computational reproduction using the published seeds. No bank or head is
 refitted for these diagnostics. Replayed test inputs, targets, and groups are checked

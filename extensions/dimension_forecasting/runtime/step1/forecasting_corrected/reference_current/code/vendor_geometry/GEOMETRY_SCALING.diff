@@ -1,0 +1,269 @@
+--- pinned/extensions/direct_reconstruction/model.py
++++ tanh_derivative/extensions/direct_reconstruction/model.py
+@@ -30,6 +30,7 @@
+ from sklearn.ensemble import HistGradientBoostingRegressor
+ 
+ from extensions.target_geometry.models import RobustLocalFeatureBank
++from extensions.geometry_scaling import GEOMETRY_SCALERS, transform_geometry
+ from extensions.predictive_geometry.study import geometry as historical_geometry
+ 
+ 
+@@ -152,8 +153,11 @@
+     Working caches are excluded from the serialized deployment state.
+     """
+ 
+-    def __init__(self, seed=0, config=None):
++    def __init__(self, seed=0, config=None, geometry_scaling="standard"):
+         self.seed = int(seed)
++        self.geometry_scaling = str(geometry_scaling)
++        if self.geometry_scaling not in GEOMETRY_SCALERS:
++            raise ValueError("Unsupported geometry scaler")
+         self.config = {**DEFAULT_CONFIG, **(config or {})}
+         self.nodes = {}
+         self.diagnostics = {"warnings": [], "local_models": [],
+@@ -167,9 +171,11 @@
+                 source = RobustLocalFeatureBank(
+                     "affine", seed=self.seed, cluster_counts=tuple(self.config["blocks"]),
+                     rank=int(self.config["rank"]), max_refs=int(self.config["max_references"]),
+-                    max_fit=int(self.config["bank_row_cap"])).fit(x)
++                    max_fit=int(self.config["bank_row_cap"]),
++                    geometry_scaling=self.geometry_scaling).fit(x)
+             self.diagnostics["warnings"] = [str(item.message) for item in seen]
+             self.mean, self.scale = source.mean_.copy(), source.scale_.copy()
++            self.geometry_scaler = copy.deepcopy(getattr(source, "geometry_scaler_", None))
+             self.models, self.block_slices = [], []
+             for b, block in enumerate(source.blocks_):
+                 start = len(self.models)
+@@ -250,7 +256,8 @@
+             raise ValueError("Query dimension differs from fitted bank")
+         common_name = f"transform_common_{split_name}" if split_name else "prediction_common"
+         with timed(self.nodes, common_name):
+-            z = (x - self.mean) / self.scale
++            z = ((x - self.mean) / self.scale if self.geometry_scaler is None
++                 else transform_geometry(x, self.geometry_scaler))
+             local = []
+             for model in self.models:
+                 centered = z - model["center"]
+@@ -377,13 +384,19 @@
+             excluded |= {"q", "whitening", "uq", "inverse", "lambda_original", "reference_distance", "factor_error"}
+         for model in self.models:
+             models.append({key: value for key, value in model.items() if key not in excluded})
+-        return {"mean": self.mean, "scale": self.scale, "models": models,
+-                "block_slices": self.block_slices, "config": {
+-                    "relative_denominator_tolerance": self.config["relative_denominator_tolerance"]}}
++        state = {"mean": self.mean, "scale": self.scale, "models": models,
++                 "block_slices": self.block_slices, "config": {
++                     "relative_denominator_tolerance": self.config["relative_denominator_tolerance"]}}
++        # Preserve the standard deployment state exactly.
++        if self.geometry_scaler is not None:
++            state["geometry_scaler"] = copy.deepcopy(self.geometry_scaler)
++        return state
+ 
+     @classmethod
+     def from_state(cls, state):
+-        bank = cls(config=state["config"])
++        scaler = state.get("geometry_scaler")
++        bank = cls(config=state["config"], geometry_scaling="standard" if scaler is None else scaler["mode"])
++        bank.geometry_scaler = copy.deepcopy(scaler)
+         bank.mean, bank.scale = state["mean"], state["scale"]
+         bank.models, bank.block_slices = state["models"], state["block_slices"]
+         return bank
+--- pinned/extensions/geometry_scaling.py
++++ tanh_derivative/extensions/geometry_scaling.py
+@@ -0,0 +1,92 @@
++"""Training-fitted geometry scaling; targets and raw heads are untouched.
++
++Tanh standardization uses the historical population-standard-deviation rule.
++There is no second standardization after applying the nonlinear map.
++"""
++from __future__ import annotations
++
++import numpy as np
++
++GEOMETRY_SCALERS = ("standard", "minmax", "tanh_z_1", "tanh_z_0p5", "tanh_z_2", "tanh_raw")
++TANH_MULTIPLIERS = {"tanh_z_1": 1.0, "tanh_z_0p5": 0.5, "tanh_z_2": 2.0}
++
++
++def fit_minmax_geometry(x):
++    """Fit on every supplied A history before reference/partition subsampling."""
++    x = np.asarray(x, dtype=np.float64)
++    if x.ndim != 2 or not len(x) or not np.isfinite(x).all():
++        raise ValueError("Need finite nonempty A histories")
++    minimum, maximum = x.min(axis=0), x.max(axis=0)
++    span = maximum - minimum
++    if not np.isfinite(span).all():
++        raise FloatingPointError("Nonfinite A coordinate range")
++    return {"mode": "minmax", "minimum": minimum, "maximum": maximum,
++            "range": span, "constant": span == 0.0,
++            "clip": False, "fit_rows": int(len(x))}
++
++
++def transform_minmax_geometry(x, state):
++    """Use the frozen training range, with no query clipping.
++
++    Exactly constant training coordinates map to zero for every query,
++    including later observations different from that training constant.
++    """
++    if state["mode"] != "minmax" or state["clip"] is not False:
++        raise ValueError("Only the fixed unclipped min--max arm is supported")
++    x = np.asarray(x, dtype=np.float64)
++    if x.ndim != 2 or x.shape[1] != len(state["minimum"]):
++        raise ValueError("Geometry query width differs from fitted scaler")
++    span = np.where(state["constant"], 1.0, state["range"])
++    z = 2.0 * ((x - state["minimum"]) / span) - 1.0
++    z[:, state["constant"]] = 0.0
++    if not np.isfinite(z).all():
++        raise FloatingPointError("Nonfinite min--max geometry query")
++    return z
++
++
++def fit_geometry_scaler(x, mode):
++    """Fit only on all supplied training histories, before bank subsampling."""
++    x = np.asarray(x, dtype=np.float64)
++    if x.ndim != 2 or not len(x) or not np.isfinite(x).all():
++        raise ValueError("Need finite nonempty training histories")
++    if mode == "minmax":
++        return fit_minmax_geometry(x)
++    if mode == "tanh_raw":
++        return {"mode": mode, "fit_rows": int(len(x)), "width": int(x.shape[1]),
++                "fitted_location_scale": False, "post_tanh_rescale": False}
++    if mode not in TANH_MULTIPLIERS:
++        raise ValueError("Unsupported alternative geometry scaler")
++    mean, raw_std = x.mean(axis=0), x.std(axis=0)
++    if not np.isfinite(mean).all() or not np.isfinite(raw_std).all():
++        raise FloatingPointError("Nonfinite training geometry statistics")
++    return {"mode": mode, "fit_rows": int(len(x)), "width": int(x.shape[1]),
++            "mean": mean, "raw_standard_deviation": raw_std,
++            "scale": np.where(raw_std > 1e-12, raw_std, 1.0),
++            "standard_deviation_floor": 1e-12, "ddof": 0,
++            "multiplier": TANH_MULTIPLIERS[mode], "fitted_location_scale": True,
++            "post_tanh_rescale": False}
++
++
++def transform_geometry(x, state):
++    """Apply the frozen transformation without clipping or restandardization."""
++    if state["mode"] == "minmax":
++        return transform_minmax_geometry(x, state)
++    x = np.asarray(x, dtype=np.float64)
++    if x.ndim != 2 or x.shape[1] != state["width"] or not np.isfinite(x).all():
++        raise ValueError("Need finite geometry queries of the fitted width")
++    if state.get("post_tanh_rescale") is not False:
++        raise ValueError("Tanh output must not be restandardized")
++    if state["mode"] == "tanh_raw":
++        argument = x
++    elif state["mode"] in TANH_MULTIPLIERS:
++        if state["multiplier"] != TANH_MULTIPLIERS[state["mode"]]:
++            raise ValueError("Tanh multiplier differs from declared mode")
++        argument = state["multiplier"] * ((x - state["mean"]) / state["scale"])
++    else:
++        raise ValueError("Unknown geometry transformation")
++    if not np.isfinite(argument).all():
++        raise FloatingPointError("Nonfinite tanh argument")
++    z = np.tanh(argument)
++    if not np.isfinite(z).all() or np.any(np.abs(z) > 1.0):
++        raise FloatingPointError("Invalid tanh output")
++    return z
+--- pinned/extensions/natural_forecasting/models.py
++++ tanh_derivative/extensions/natural_forecasting/models.py
+@@ -31,6 +31,7 @@
+ 
+ from extensions.predictive_geometry.study import geometry as historical_geometry
+ from extensions.predictive_geometry.study import heads as historical_heads
++from extensions.geometry_scaling import GEOMETRY_SCALERS, fit_geometry_scaler, transform_geometry
+ 
+ 
+ REPRESENTATIONS = ("raw", "affine_local", "locality_local", "kahm_local")
+@@ -139,13 +140,16 @@
+ 
+     def __init__(self, gate="kahm", *, seed=0, cluster_counts=(2, 4, 8), rank=2,
+                  max_refs=24, max_fit=512, omega=16.0, tau=1e-6,
+-                 query_mode="stable"):
++                 query_mode="stable", geometry_scaling="standard"):
+         self.gate, self.seed = gate, int(seed)
+         self.cluster_counts = tuple(int(c) for c in cluster_counts)
+         self.rank, self.max_refs = int(rank), int(max_refs)
+         self.max_fit = None if max_fit is None else int(max_fit)
+         self.omega, self.tau = float(omega), float(tau)
+         self.query_mode = query_mode
++        self.geometry_scaling = str(geometry_scaling)
++        if self.geometry_scaling not in GEOMETRY_SCALERS:
++            raise ValueError("Unsupported geometry scaler")
+         if gate not in {"affine", "locality", "kahm"}:
+             raise ValueError("gate must be affine, locality, or kahm")
+         if query_mode not in {"stable", "historical"}:
+@@ -167,6 +171,9 @@
+             raise ValueError("Fewer training rows than requested clusters")
+         self.n_training_rows_, self.n_features_in_ = x.shape
+         self.mean_, self.scale_ = _standardizer(x, 1e-12)
++        # Fit the alternative on ALL supplied A rows, before max_fit.
++        if self.geometry_scaling != "standard":
++            self.geometry_scaler_ = fit_geometry_scaler(x, self.geometry_scaling)
+         z = self.scale_inputs(x)
+         rng = np.random.default_rng(self.seed)
+         self.fit_indices_ = (np.sort(rng.choice(len(z), self.max_fit, replace=False))
+@@ -240,6 +247,8 @@
+         x = _matrix(x)
+         if x.shape[1] != len(self.mean_):
+             raise ValueError("Query dimension differs from fitted inputs")
++        if self.geometry_scaling != "standard":
++            return transform_geometry(x, self.geometry_scaler_)
+         return (x - self.mean_) / self.scale_
+ 
+     def transform(self, x, *, diagnostics=False):
+--- pinned/extensions/reconstruction_mechanism/models.py
++++ tanh_derivative/extensions/reconstruction_mechanism/models.py
+@@ -25,6 +25,7 @@
+ from sklearn.ensemble import HistGradientBoostingRegressor
+ 
+ from extensions.direct_reconstruction.model import SharedBank
++from extensions.geometry_scaling import GEOMETRY_SCALERS, transform_geometry
+ from extensions.predictive_geometry.study import geometry as historical_geometry
+ 
+ 
+@@ -280,7 +281,8 @@
+     local, diagnostics = [], {"local_models": [], "gate_fallback_rows": [],
+                               "coordinate_fallback_rows": [], "kernel_fallback_rows": []}
+     with timed(nodes, f"common_raw_{tag}"):
+-        z = (x - bank["mean"]) / bank["scale"]
++        z = ((x - bank["mean"]) / bank["scale"] if bank.get("geometry_scaler") is None
++             else transform_geometry(x, bank["geometry_scaler"]))
+         logits = np.empty((len(x), len(bank["models"])))
+         for j, model in enumerate(bank["models"]):
+             with np.errstate(over="ignore", invalid="ignore"):
+@@ -705,12 +707,15 @@
+             per_method[method] = {**self.resources["per_method"][method],
+                                   "predict": _node_cost(nodes, _dependencies(nodes, method, self.selected_policy, prediction=True))}
+         return {"predictions": prediction, "diagnostics": diagnostics,
++                "uncalibrated_predictions": {m: candidates[m] for m in GEOMETRY_METHODS},
+                 "resources": {"predict_nodes": nodes, "per_method": per_method,
+                               "charging": "Each procedure pays every required shared node once; policy fitting pays candidate union."}}
+ 
+ 
+-def fit_suite(xa, ya, xb, yb, xc, yc, *, seed, config=None):
++def fit_suite(xa, ya, xb, yb, xc, yc, *, seed, config=None, geometry_scaling="standard"):
+     """Fit and freeze all procedures from A/B/C; no reserved targets accepted."""
++    if geometry_scaling not in GEOMETRY_SCALERS:
++        raise ValueError("Unsupported geometry scaler")
+     config = copy.deepcopy({**DEFAULT_CONFIG, **(config or {})})
+     xa, ya, xb, yb, xc, yc = [_matrix(value, name) for value, name in
+                              zip((xa, ya, xb, yb, xc, yc), ("xa", "ya", "xb", "yb", "xc", "yc"))]
+@@ -745,11 +750,17 @@
+         candidates_c["persistence"] = np.repeat(xc[:, -1:], ya.shape[1], axis=1)
+     failed_methods, heads, geometry = set(), {}, None
+     try:
+-        bank = _InstrumentedBank(seed=seed, config=config).fit(xa)
++        bank = _InstrumentedBank(seed=seed, config=config, geometry_scaling=geometry_scaling).fit(xa)
+         nodes.update(bank.nodes)
+         diagnostics["bank"] = bank.diagnostics
+         diagnostics["bank"].update(
+-            history_standardizer="Inherited A mean/std; std<=1e-12 replaced by1; not the subsequent feature scale floor",
++            history_standardizer=("Inherited A mean/std; std<=1e-12 replaced by1; not the subsequent feature scale floor"
++                                  if geometry_scaling == "standard" else
++                                  "A-fitted per-coordinate minmax [-1,1]; unclipped queries; constant A coordinates zero"
++                                  if geometry_scaling == "minmax" else
++                                  "Direct raw tanh; no fitted location/scale; no post-tanh standardization"
++                                  if geometry_scaling == "tanh_raw" else
++                                  "A-fitted population mean/std followed by declared tanh multiplier; no post-tanh standardization"),
+             local_radius="Inherited mean squared centered reference radius, floored at1e-6",
+             gate="Blockwise softmax(-0.5*squared standardized center distance/local radius)")
+         state = bank.state("kahm")

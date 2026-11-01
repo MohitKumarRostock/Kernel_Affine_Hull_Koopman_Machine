@@ -8,7 +8,7 @@ The research examines whether local reconstruction gives a finite forecasting de
 
 **A bounded residual predictor controls correction magnitude.** The principal experiment uses a radial bound on each feature block and a centered ridge residual predictor. The resulting bound applies uniformly to the correction under the stated assumptions. It does not bound the baseline prediction or guarantee a small forecasting error.
 
-**The empirical benefit is conditional.** In the principal experiment, KAHM reduces aggregate nonlinear error by 12.58% relative to the common gate and local-coordinate features. Its gains over matched RBF departures and raw-history RBF features do not establish the prescribed 3% improvement under the simultaneous analysis. Boosted trees and the validation-selected non-KAHM procedure perform better in aggregate. The evidence therefore supports the usefulness of reconstruction features in one comparison without establishing a distinctive practical KAHM advantage.
+**Dimension selection changes predictive behavior.** The principal comparison selects one local cap per geometric procedure on validation data. KAHM improves the nonlinear aggregate by 3.26% relative to a fixed cap of two, while native cap twenty increases error by 8.39%. Three of the six primary criteria are established: improvements over common features and raw-input RBF, and linear-control noninferiority. The tuned RBF and boosting margins are not established, and the selected non-KAHM procedure has lower mean error. Matched-bank comparisons show that the dimension-selection gain accompanies improved common-feature loss and a weaker additional KAHM benefit.
 
 ## Studies and interpretation
 
@@ -21,7 +21,8 @@ The research examines whether local reconstruction gives a finite forecasting de
 | [Target-adapted geometry](extensions/target_geometry/README.md) | Do a supervised metric and donor residuals improve KAHM prediction? | Selected gains over ridge do not establish the incremental value of the learned metric or a KAHM-specific advantage. |
 | [Direct reconstruction training](extensions/direct_reconstruction/README.md) | Does optimizing local bandwidths for forecasting outperform equally trained controls? | Two of 18 adjusted synthetic comparisons favor KAHM, six favor a comparator, and ten remain unresolved. No favorable comparison is against an equally trained non-KAHM local control. |
 | [Online adaptation](extensions/adaptive_development/REPRODUCING.md) | Do maintained geometry and residual predictors justify their cost? | Both capacity tiers fail the prescribed accuracy criteria; severe extrapolation remains after a numerical solver repair. |
-| [Reconstruction departures](extensions/reconstruction_mechanism/README.md) | Do distinct, bounded reconstruction features improve a matched forecasting procedure? | The common-feature comparison and linear-control noninferiority criterion are satisfied; the four other useful-improvement criteria are not established. |
+| [Historical fixed-cap reconstruction departures](extensions/reconstruction_mechanism/README.md) | Do distinct, bounded reconstruction features improve a matched forecasting procedure? | The common-feature comparison and linear-control noninferiority criterion are satisfied; the four other useful-improvement criteria are not established. |
+| [Local dimension selection](extensions/dimension_forecasting/README.md) | How does validation-selected local geometry affect complete procedures and matched reconstruction contrasts? | Dimension selection improves KAHM over cap two; native cap twenty is worse. Three of six primary criteria are established; the full criterion is not established. |
 
 The studies use different procedures, populations, normalization conventions, and selection budgets. Their numerical scores should be interpreted within the corresponding protocol, and their observations are not pooled as independent evidence for a single test.
 
@@ -37,10 +38,10 @@ The predefined study decision required every accuracy condition and stability ch
 
 - [Focused paper, Supporting Studies, and editable source](extensions/tmlr_integration/README.md)
 - [Mathematical definitions and derivations](extensions/reconstruction_mechanism/MATHEMATICAL_BACKGROUND.md)
-- [Complete principal results](extensions/reconstruction_mechanism/FINDINGS.md)
-- [Evidence restoration, analysis, and replay](extensions/reconstruction_mechanism/README.md)
+- [Complete principal results](extensions/dimension_forecasting/FINDINGS.md)
+- [Evidence restoration, analysis, and replay](extensions/dimension_forecasting/README.md)
 - [Earlier Koopman result provenance](reproduction/reported_results.tsv)
 
-The focused manuscript contains the core proofs and principal experimental protocol. The separate, self-contained *Supporting Studies* document retains the complementary methods, results, and technical appendices. The review supplement combines that PDF with the unchanged principal saved-forecast archive. The editable source preserves required author-identifying license attribution and is distributed separately from the anonymous review files.
+The focused manuscript contains the core proofs and principal experimental protocol. The separate, self-contained *Supporting Studies* document retains the complementary methods, results, and technical appendices. The current dimension-study records and historical fixed-cap saved-forecast archive have distinct scopes, as specified in the document guide. The editable source preserves required author-identifying license attribution and is distributed separately from the anonymous review files.
 
 KAHM is the local reconstruction used in the forecasting representations. KAHKM is the earlier Koopman architecture. The distinction is maintained throughout the result documentation.

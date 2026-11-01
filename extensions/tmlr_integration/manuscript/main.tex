@@ -6,7 +6,7 @@
 \usepackage{hyperref}
 \usepackage{url}
 \hypersetup{hidelinks,
- pdftitle={Kernel Affine Hull Features for Time-Series Forecasting: Distinctness, Bounded Corrections, and Predictive Limits},
+ pdftitle={Kernel Affine Hull Features for Time-Series Forecasting: Feature Spans, Bounded Corrections, and Matched Evaluation},
  pdfauthor={Anonymous authors},
  pdfsubject={Reconstruction feature spaces, bounded residual forecasts, and matched empirical evaluation}}
 \newtheorem{proposition}{Proposition}
@@ -24,39 +24,46 @@
 \input{generated/utility/numbers}
 \input{generated/target_geometry/numbers}
 \input{generated/direct_reconstruction/result_macros}
-\input{generated/reconstruction_mechanism/numbers}
+\input{generated/dimension_forecasting/numbers}
 
 \title{Kernel Affine Hull Features\\
 for Time-Series Forecasting:\\
-Distinctness, Bounded Corrections, and Predictive Limits\thanks{AI tools assisted with protocol development, implementation, numerical and statistical verification, analysis, and manuscript preparation. The authors are responsible for the scientific claims, the accuracy of the evidence, and the final text.}}
+Feature Spans, Bounded Corrections,\\
+and Matched Evaluation\thanks{AI tools assisted with protocol development, implementation, numerical and statistical verification, analysis, and manuscript preparation. The authors are responsible for the scientific claims, the accuracy of the evidence, and the final text.}}
 \author{Anonymous authors}
 \begin{document}
 \maketitle
 \begin{abstract}
 Kernel Affine Hull Machines (KAHMs) reconstruct observations from local
 reference sets. We study whether these reconstructions provide useful
-features for a finite-dimensional forecasting decoder. Direct transfer of
-normalized KAHM weights to reference targets is a ratio of kernel-ridge
-predictions. We give sufficient conditions under which KAHM and matched
+features for a finite-dimensional forecasting decoder. We interpret
+normalized target transfer as a ratio of kernel-ridge predictions,
+connecting the established KAHM construction to rescaled kernel
+interpolation. We give sufficient conditions under which KAHM and matched
 radial-basis-function (RBF) reconstructions generate the same augmented
 feature span, and construct an irregular reference set for which the spans
 differ. Separately, bounded features and a ridge residual decoder yield a
 uniform bound on the forecast correction, including its free intercept.
 A prospectively specified experiment compares ten procedures on 192 task
 suites: three nonlinear simulation laws and a linear control, two
-observation-noise levels, and 24 independent repetitions. The bounded
-KAHM departure improves aggregate nonlinear normalized mean squared
-error by \RMKvsCommonGain\% over common local-coordinate features.
-Its gains over matched RBF reconstruction and raw-input RBF forecasting
-are \RMKvsRBFDepartureGain\% and \RMKvsRawRBFGain\%; neither establishes
-the prespecified 3\% margin under simultaneous inference. Boosted trees
-and a validation-selected non-KAHM procedure attain lower aggregate
-error. The correction bounds and linear-control noninferiority criterion
-are satisfied. Supporting studies identify conditional gains, unfavorable
-natural-data comparisons, and limitations of adaptation. Reconstruction
-can therefore supply useful forecasting features, but algebraic
-distinctness and bounded corrections do not establish a practical
-advantage specific to KAHM.
+observation-noise levels, and 24 independent repetitions. Local dimension
+is selected before correction calibration, independently for each geometric
+procedure. Bounded KAHM departure reduces aggregate nonlinear normalized
+mean squared error by \DFGainCommon\% relative to common local-coordinate
+features and \DFGainRawRBF\% relative to raw-input RBF forecasting;
+both establish a prespecified 3\% margin under simultaneous inference.
+Its gains over independently selected RBF departures and boosted trees
+are \DFGainRBF\% and \DFGainHGB\%, below that margin. A selected non-KAHM
+procedure attains lower error. Dimension selection improves KAHM by
+\DFDimensionGain\% relative to a fixed cap of two, while a default cap
+of twenty increases error in these twelve-dimensional histories.
+Matched-bank controls attribute the dimension improvement to stronger
+common features despite a smaller incremental departure benefit.
+Correction bounds and linear-control noninferiority hold, but the joint
+performance criterion is not established. Supporting studies delimit
+transfer to natural series and adaptive procedures. The evidence supports
+conditional forecasting value without establishing a general advantage
+specific to KAHM.
 \end{abstract}
 
 \input{core_introduction}

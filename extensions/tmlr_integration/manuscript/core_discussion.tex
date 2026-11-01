@@ -11,13 +11,27 @@ assumptions or evidence.
 
 The principal experiment supports a contribution from reconstruction
 departures beyond the shared locality and principal-coordinate features.
-It does not establish the prespecified practical advantage specific to
-KAHM across the comparison family. The matched RBF reconstruction
-achieves much of the same benefit, and both boosting and the selected
-non-KAHM procedure have lower aggregate point loss. Failure to establish
+It establishes the specified margins over independently selected common
+features and raw RBF, but not the complete practical-advantage criterion
+across the comparison family. RBF reconstruction achieves much of the
+same benefit. KAHM's point improvement over boosting is below the
+specified margin, and the selected non-KAHM procedure has lower
+aggregate loss. Failure to establish
 a margin does not establish equality of two methods. Likewise, the
 irregular-bank example demonstrates existence of distinct raw spans,
 not distinctness for every bank fitted in the experiment.
+
+Local dimension affects several parts of the predictor simultaneously.
+It changes the common-coordinate basis, projected covariance and kernel,
+and reconstruction departure. In these experiments, selecting the cap
+improves the complete KAHM procedure relative to cap two, whereas the
+native default cap twenty increases aggregate error. The matched-bank
+decomposition shows that stronger common features account for the selected
+procedure's gain despite a smaller incremental benefit from departures.
+Full ambient local rank remains a valid native construction, but it is not
+an empirical guarantee of better forecasting. Since the history dimension
+is twelve, the observed cap-twenty procedure permits full ambient rank,
+not evidence about a binding twenty-dimensional cap on longer histories.
 
 The correction bound provides a precise magnitude guarantee for the
 specified decoder. It does not establish robustness of the full
@@ -43,6 +57,8 @@ Computation must also be interpreted at the level measured. Fitting
 costs include the candidates evaluated during selection. Prediction time,
 serialized state size, owned array storage, and whole-process peak memory
 measure different resources and cannot be substituted for one another.
+The dimension-selected procedure pays for every evaluated cap; charging
+only its winning bank would understate its selection cost.
 The measurements characterize the supplied implementations on the
 recorded environment; they do not establish minimum algorithmic costs
 or satisfy an unspecified deployment budget.
@@ -56,25 +72,35 @@ specific to KAHM remains unestablished by the reported evidence.
 
 \section*{Reproducibility and research transparency}
 
-The anonymous saved-forecast supplement contains predictions and
-evaluation targets for all 192 task suites, along with fitting targets
-that determine the loss-normalization scales. Its standalone program,
-\path{verify_saved_forecasts.py}, reconstructs eight numerical analysis
-tables and all six primary contrasts, verifies array identities, and
-checks that each policy forecast equals its recorded selected procedure.
-The supplement includes all ten procedures and all declared conditions,
-regardless of predictive performance. The companion \emph{Supplementary
-Studies} provides the complete methods and results for the supporting
-investigations summarized in Section~\ref{sec:supporting-evidence}.
+The accompanying computational materials retain the protocol, source
+freeze, fitted states, predictions, input and target arrays, selection
+records, and analysis for all 192 task suites under
+\path{extensions/dimension_forecasting}. The analysis program verifies the
+source and stage inventories before reconstructing the 27 numerical
+tables and six primary contrasts. Every cap, all ten procedures, and all
+declared conditions are retained regardless of predictive performance.
+The complete prediction inventory contains 31,104 arrays and 155,271,168
+forecast values, including fixed-cap, selected, matched-bank, calibrated,
+and unit-calibration views. The ten calibrated primary procedures alone
+account for 1,920 arrays and 9,584,640 forecast values.
 
-The principal study's locally recorded source and input inventory
-contains 239 files. The saved evidence contains 1,920 prediction arrays
-and 9,584,640 forecast values. The recorded selected-state replay and
-separately implemented calculations provide computational consistency
-checks. Reconstructing scores from saved forecasts, replaying selected
-states, and refitting all model candidates are distinct operations.
-The anonymous numeric supplement performs the first; it does not refit
-models or reproduce feature-bound calculations and resource timings.
-The complete fitting specification and numerical conventions are given
-in Appendix~\ref{app:reconstruction-results}. The prospective record was
-local, informed by the supporting studies, and not publicly preregistered.
+An independent audit regenerates episodes from the pinned generators and
+independently checks seeds, noise, windows, and target construction,
+the selection and calibration calculations, all 18,816 stored local
+bases, and all 261,450 rows of the released analysis tables. Numerical
+parity checks against the original full comparison suite use manufactured
+inputs before the source freeze. These are computational consistency
+checks, not an independent scientific replication. Reconstructing scores
+from saved forecasts, replaying fitted states, and refitting candidates
+remain distinct operations. The archived arrays define the reported
+scores; reproducing floating-point states requires compatible numerical
+libraries and arithmetic.
+
+The standalone manuscript source includes its generated displays and
+compiles without the numerical archives. Its asset builder reads the
+sealed study tables and records their checksums. The companion
+\emph{Supplementary Studies} gives the complete methods and results for
+the supporting investigations in Section~\ref{sec:supporting-evidence}.
+The complete principal fitting specification is in
+Appendix~\ref{app:reconstruction-results}. The prospective specification
+was local, informed by earlier studies, and not publicly preregistered.

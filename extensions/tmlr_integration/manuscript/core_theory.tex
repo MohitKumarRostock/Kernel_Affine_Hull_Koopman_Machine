@@ -49,6 +49,13 @@ The affine identity also specifies the effect of reconstruction error on
 an affine target: only its component in the target direction $b$ enters.
 The complete proof is in Appendix~\ref{app:reconstruction-mechanism}.
 
+The quotient normalization has an established interpolation antecedent.
+When $K$ is invertible, setting $\lambda=0$ in the quotient gives the
+rescaled kernel interpolant of \citet{DeMarchi2017Rescaled}, wherever
+its denominator is nonzero. Proposition~\ref{prop:mechanism-krr}
+interprets the existing KAHM weights with positive regularization;
+it does not introduce a new normalization principle.
+
 \subsection{Equal spans under reference symmetry}
 
 For a fixed common gate $g(z)$, define
@@ -61,6 +68,12 @@ $g(z)A_A(z)=g(z)\mu+P\{g(z)P^\top(z-\mu)\}$ belong to
 $\mathcal S_0$. Adjoining a vector-valued feature to a span means
 adjoining each of its scalar coordinate functions. A common intercept
 may be adjoined to both spans without changing the equality below.
+
+Because $gA_A$ already belongs coordinatewise to $\mathcal S_0$,
+adjoining a departure gives the same raw span as adjoining the
+corresponding gated reconstruction. Subtracting $A_A$ specifies a
+parameterization; the span comparison concerns the additional functions
+supplied by the nonlinear map.
 
 \begin{proposition}[A sufficient condition for equal feature spans]
 \label{prop:mechanism-redundancy}

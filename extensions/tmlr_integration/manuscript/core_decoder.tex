@@ -23,10 +23,13 @@ The bounded feature vectors are
 \]
 The two blocks are transformed separately and are not standardized again.
 Consequently, appending a departure does not rescale the common features.
-Three partitions with 2, 4, and 8 local models, local rank two, and at
-most 24 references per local model give $p_0=42$ and $p_d=168$ for the
-12-dimensional histories in this experiment. The geometry is fitted
-without targets on A and remains fixed during selection and evaluation.
+For $J$ local models with stored ranks $r_j$, the dimensions are
+$p_0=J+\sum_j r_j$ and $p_d=Jd$. The principal experiment requests
+partitions with 2, 4, and 8 models and at most 24 references per model.
+All fitted banks contain $J=14$ models, so $p_d=168$ for its
+12-dimensional histories, whereas $p_0$ varies with the local ranks.
+Each candidate geometry is fitted without targets on A and remains fixed
+during selection and evaluation. All bounds use its actual dimensions.
 
 \subsection{Fitting and calibrating the correction}
 
@@ -49,9 +52,25 @@ at horizon $h$ for fitting history $i$. The correction minimizes
        +\alpha_h\|w_h\|_2^2.
 \]
 Set B selects $\alpha_h\in\{10^{-4},10^{-3},10^{-2},10^{-1},1\}$
-by forecast error separately for each horizon. Set C then selects
-$\gamma_h\in\{0,1/4,1/2,1\}$. Neither selection step refits the
-geometry or decoder, and set D is reserved for final evaluation.
+by forecast error separately for each horizon and candidate cap.
+For each geometric procedure $m$, let $\widehat y^{(c)}_{m,h}$ be its
+B prediction after this penalty selection, with $\gamma_h=1$. One cap
+is selected across horizons by
+\begin{equation}
+ \widehat c_m=\mathop{\arg\min}_{c\in\{1,2,4,8,12,20\}}
+ \frac1{|\mathcal H|}\sum_{h\in\mathcal H}
+ \frac{\MSE_B(Y_h,\widehat y^{(c)}_{m,h})}
+ {\max\{\Var_A(Y_h),10^{-12}\}}.
+ \label{eq:dimension-cap-selection}
+\end{equation}
+Here $\Var_A$ is the empirical variance of the retained A targets with
+divisor $n_A$; exact ties select the smallest cap. The common, bounded
+KAHM, bounded RBF, and two unbounded-departure procedures each make
+their own choice. These choices are fixed before accessing C.
+Set C then selects $\gamma_h\in\{0,1/4,1/2,1\}$ separately by
+horizon. Neither selection step refits the geometry or decoder, and
+set D is reserved for final evaluation. The cap objective uses
+uncalibrated B forecasts, so C does not enter dimension selection.
 
 \subsection{A uniform bound including the intercept}
 
@@ -98,7 +117,7 @@ $q_h(x)=\bar e_h+(\psi(x)-\bar\psi)^\top w_h$ yields the
 correction bound. Appendix~\ref{app:reconstruction-mechanism} gives
 the complete argument, including the nonexpansiveness of the radial map.
 
-The theorem applies separately to each selected horizon and is a property
+The proposition applies separately to each selected horizon and is a property
 of bounded-feature ridge regression. A summed-squared-error objective
 would need penalty $n_A\alpha_h$ to define the same estimator. The
 radial transformation is nonexpansive in its own input, but this does

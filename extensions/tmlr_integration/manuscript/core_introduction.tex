@@ -25,16 +25,19 @@ For each local model, a departure is the difference between its nonlinear
 reconstruction and its affine projection, multiplied by a locality weight.
 The decoder also receives the locality weights and weighted principal
 coordinates. These common features retain principal-coordinate position
-within each local model and are shared
-by all reconstruction comparisons. Replacing the nonlinear map with its
+within each local model and are shared by reconstructions fitted to the
+same bank. Replacing the nonlinear map with its
 affine projection makes the raw departure zero. A positive-kernel RBF
 reconstruction, using the same references, kernel, and locality weights,
 provides a closely matched nonlinear alternative. A residual decoder
 then adds a calibrated correction to a fixed raw-history ridge forecast.
 
 The algebraic analysis identifies both redundancy and distinctness.
-Normalized transfer of KAHM reconstruction weights to reference targets
-is exactly a ratio of two kernel-ridge predictions. Under a
+Normalized target transfer interprets the established KAHM construction
+\citep{Kumar2024KAHM} as a ratio of two kernel-ridge predictions,
+with an antecedent in rescaled kernel interpolation
+\citep{Deparis2014Rescaled,DeMarchi2017Rescaled}. The feature-span
+comparison asks a separate question. Under a
 constant-row-sum and invariant-subspace condition, KAHM and RBF departures
 have the same augmented raw feature span. An irregular three-reference
 construction shows that the spans can also differ. These results concern
@@ -42,8 +45,9 @@ untransformed functions. They do not equate fitted ridge predictions under
 different parameterizations, nor do they establish an advantage for every
 reference bank or target.
 
-The second contribution is a uniform magnitude bound for the residual
-correction. Each feature block is standardized on the fitting set and
+We also analyze the magnitude of the fitted residual correction using
+the spectral form of centered ridge regression. Each feature block is
+standardized on the fitting set and
 mapped into a bounded ball before ridge regression is fitted with an
 unpenalized intercept. The coefficient and correction bounds account for
 the empirical residual mean and the scaling of the penalty. They apply
@@ -54,26 +58,39 @@ they do not bound the raw baseline or the total forecast error.
 The principal experiment compares ten procedures over four simulation
 laws, two added-noise levels, and 24 independent repetitions. Fitting,
 hyperparameter selection, correction calibration, and final evaluation
-use separate episode sets. The protocol and prepared inputs were recorded
-locally before the final forecasts were computed; this was not a public
+use separate episode sets. Each geometric procedure selects its local
+dimension cap using B before C calibrates the correction. Fixed-cap and
+shared-bank comparisons distinguish the complete selection procedure from
+the contribution of its reconstruction map. The source and analysis were
+frozen locally before generating the experimental data, all fitted states
+were fixed before generating final-evaluation episodes, and forecasts were
+sealed before their targets were released. This was not a public
 preregistration. Five simultaneous comparisons test a 3\% nonlinear-loss
 improvement margin, and a sixth tests noninferiority to ridge on a linear
 control with a 5\% tolerance.
 
-The bounded KAHM departure improves on common local-coordinate features,
-but the full prespecified improvement criterion is not satisfied.
-The gain over matched RBF departures is below the required margin, and
-the margin over raw RBF forecasting remains unresolved. Boosted trees
-and the validation-selected non-KAHM procedure have lower aggregate
-loss. Supporting controlled, natural-data, and adaptive studies show why
+The bounded KAHM departure establishes the specified improvement over
+common local-coordinate features and raw RBF forecasting, together with
+linear-control noninferiority. Its gains over independently selected RBF
+departures and boosted trees are below the 3\% margin, and the selected
+non-KAHM procedure has lower aggregate loss. Thus three of the six criteria
+are established, rather than the complete comparison family. Dimension
+selection improves the complete KAHM procedure relative to a fixed cap of
+two, but matched-bank decomposition shows a stronger common-feature
+predictor and a smaller incremental contribution from departures.
+Increasing the cap to twenty does not improve the aggregate in these
+twelve-dimensional histories. Supporting controlled, natural-data, and
+adaptive studies show why
 this distinction matters beyond the principal experiment. Their findings
 are summarized in Section~\ref{sec:supporting-evidence}; their complete
 methods and results appear in the companion \emph{Supplementary Studies}.
 
-The paper thus contributes a characterization of the reconstruction
-feature space, a correction bound for a specified residual decoder,
-and an empirical evaluation that separates a useful reconstruction
-feature from an established advantage specific to KAHM. Full proofs of
+The paper thus contributes sufficient conditions for equality of matched
+reconstruction feature spans, an explicit example of distinct spans,
+an intercept-inclusive correction bound for the specified residual
+decoder, and a dimension-aware evaluation of their forecasting value. These findings
+separate a useful reconstruction feature from an established advantage
+specific to KAHM. Full proofs of
 the central results and the complete principal experimental protocol
 are included in Appendices~\ref{app:reconstruction-mechanism}
 and~\ref{app:reconstruction-results}.

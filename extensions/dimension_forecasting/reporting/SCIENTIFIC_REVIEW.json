@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "reviewer": "independent scientific audit agent /root/tanh_audit",
+  "completed_utc": "2026-11-01T12:00:47.240059+00:00",
+  "review_type": "Scientific report text and interpretation review against completed independent numerical audits",
+  "reviewed_files": {
+    "builder": {
+      "path": "reporting/build_report_spec.py",
+      "sha256": "01e2cb7ca0d307c16b6bea4ff83176cdde1adea52cc152220dcd54a582345860"
+    },
+    "specification": {
+      "path": "reporting/report_specification.json",
+      "sha256": "8084cc8a34cc7fe67c7a1eeea647906b1f859c21b218482dc913980a10a2bb4f"
+    },
+    "pdf": {
+      "filename": "KAHM_Dimension_Selection_Research_Report.pdf",
+      "sha256": "f8cba1274b35998408304aedfb6073090d74f06cc7419bb249376847e2678789",
+      "pages": 6
+    }
+  },
+  "evidence": {
+    "forecasting": {
+      "path": "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/audit/post_release/final_results_audit.json",
+      "sha256": "f547e02901d52f5e93445ad796ef0b6c1c3efe0ff13ca13edbf50bdb7566021e",
+      "status": "passed"
+    },
+    "certificates": {
+      "path": "/workspace/scratch/775596cc378e/kahm_risk_repository/extensions/dimension_certificates/audit/post_release/final_results_audit.json",
+      "sha256": "c292ad9774774c95595fe7a9ffd8f5a90a9b97a41bacfb46e2246f2979680990",
+      "status": "passed"
+    }
+  },
+  "scope": [
+    "Reported values and counts checked against previously completed independent audits and their audited tables.",
+    "Primary margin criteria, secondary comparisons, matched-bank loss decomposition, actual-rank interpretation, certificate allocation and certificate utility reviewed.",
+    "Scientific prose reviewed for accurate scope, limitations and distinction between empirical improvement and certified improvement."
+  ],
+  "requested_wording_corrections": {
+    "abstract_scope": {
+      "specification": true,
+      "pdf_text": true
+    },
+    "standardized_metric_label": {
+      "specification": true,
+      "pdf_text": true
+    },
+    "inclusive_acceptance_threshold": {
+      "specification": true,
+      "pdf_text": true
+    },
+    "loss_decomposition_label": {
+      "specification": true,
+      "pdf_text": true
+    }
+  },
+  "relative_figure_paths": [
+    "figures/forecast_dimension_selection.png",
+    "figures/primary_margin_bounds.png"
+  ],
+  "conclusions": [
+    "No substantive numerical or inferential error remains in the reviewed report.",
+    "Three of six forecasting primary criteria are established; the complete criterion is not established.",
+    "Dimension selection improves the principal nonlinear aggregate without establishing stronger KAHM-specific reconstruction gains or broad superiority over competitors.",
+    "The certificate study reports unchanged selected-forecast tolerance decisions and no positive dimension-policy improvement certificate.",
+    "Approximate paired-t inference, finite-sample certificate guarantees, consistency diagnostics and descriptive comparisons are appropriately distinguished.",
+    "The report presents scientific findings and limitations in a manner suitable for a TMLR research discussion; this is not an editorial acceptance assessment."
+  ],
+  "limitations": {
+    "new_experiments_performed": false,
+    "new_numerical_tests_performed": false,
+    "final_check": "Requested wording confirmed in specification and extracted final PDF text; file identities recorded.",
+    "visual_layout_review_included": false,
+    "visual_layout_review_owner": "root"
+  }
+}

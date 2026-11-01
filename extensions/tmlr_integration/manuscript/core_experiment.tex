@@ -1,4 +1,4 @@
-\section{Matched forecasting evaluation}\label{sec:experiment}
+\section{Dimension selection and forecasting comparisons}\label{sec:experiment}
 
 \subsection{Comparison procedures}
 
@@ -8,7 +8,7 @@ comparators are the common features, bounded RBF departure, raw-history
 RBF forecasting, histogram gradient boosting, and a validation-selected
 non-KAHM procedure. Raw ridge, persistence, and KAHM and RBF variants that
 omit only the departure bound complete the ten-method comparison.
-The principal experiment uses the bounded features and fixed geometry
+The principal experiment uses the bounded features and candidate geometries
 defined in Sections~\ref{sec:reconstruction-method}
 and~\ref{sec:bounded-decoder}. All non-ridge candidates are calibrated on C by blending their forecasts
 with the same ridge baseline. The selection policy chooses one complete,
@@ -16,6 +16,33 @@ calibrated non-KAHM procedure using horizon-averaged normalized C error;
 neither KAHM variant is eligible. Raw RBF and boosting have the same
 A/B/C roles and horizon-specific hyperparameter selection.
 Appendix~\ref{app:reconstruction-results} specifies their grids and costs.
+
+The primary comparison uses each geometric procedure's independently
+B-selected cap from Equation~\eqref{eq:dimension-cap-selection}.
+Three secondary designs isolate the role of that choice. First, a fixed
+cap of two uses the explicit restriction
+$\min\{2,d-1,n_j-1\}$. Second, the native default cap twenty uses
+$\min\{20,d,n_j-1\}$. Third, all reconstruction controls use the
+bounded KAHM procedure's selected bank, while retaining their own
+penalty and calibration choices. Only the third design, and comparisons
+within a fixed-cap bank, match references, projected kernels, gates,
+feature dimensions, transformation rules, and decoder grids. Primary
+independently selected procedures need not share a bank.
+
+All six native caps and the fixed-cap-two bank are fitted separately.
+At history dimension twelve, native caps twelve and twenty produce
+identical banks and forecasts; ascending tie resolution therefore never
+selects twenty. The fixed-cap-two and native-cap-two results are also
+identical in this experiment. These identities are verified before final
+evaluation and retained as internal controls. The stored common-feature
+width ranges from 28 to 182 across candidates; either departure adds 168
+coordinates. Thus dimension selection changes the common feature block
+as well as the projected kernel and reconstruction departure.
+Raw RBF forecasting instead uses 12 history coordinates and at most
+64 Nystr\"om coordinates. Its comparison, and those with boosting and
+the selection policy, assess complete procedures with different
+representations and search spaces. They are not feature- or
+computation-matched ablations.
 
 \subsection{Observation laws and independent evaluation roles}
 
@@ -37,10 +64,13 @@ on A and shared across sets. Histories have length 12, horizons are
 $\mathcal H=\{1,4,12\}$, and consecutive forecast origins are four
 steps apart. A, B, and C retain at most 512, 256, and 256 histories,
 respectively; D retains all 1,664 origins. The protocol, executable source,
-analysis, and prepared inputs were recorded before reserved forecasts
-were computed. This was a prospective local specification informed by
-earlier studies, rather than public preregistration or external
-replication. Results from other studies are not pooled with this one.
+and analysis were frozen before generating these data. B choices are
+saved before C calibration; all fitted states are sealed before generating
+D. D inputs and targets are stored separately, and all forecasts are
+sealed before target release. Fresh random streams are disjoint from
+the earlier studies' streams. This is a prospective local specification
+informed by those studies, rather than public preregistration or external
+replication. Their losses are not pooled with this experiment.
 
 
 \begin{table}[t]
@@ -55,7 +85,7 @@ setting or correction weight.}
 Set & Episodes & Histories & Role \\
 \midrule
 A & 64 & 512 & Fit scalers, reference geometry, baseline, and candidate decoders. \\
-B & 32 & 256 & Choose hyperparameters separately for each forecast horizon. \\
+B & 32 & 256 & Choose penalties per horizon and one dimension cap per geometric procedure. \\
 C & 32 & 256 & Choose correction weights and one complete non-KAHM procedure. \\
 D & 128 & 1,664 & Evaluate fixed forecasts and compute the reported losses. \\
 \bottomrule
@@ -116,7 +146,25 @@ or selecting favorable conditions after inspecting D.
 
 \subsection{Predictive results}
 
-\input{generated/reconstruction_mechanism/result_summary}
+Table~\ref{tab:dimension-aggregate} gives the complete ten-procedure
+comparison for the primary selected context. Bounded KAHM departure has
+nonlinear mean loss 0.028912, compared with 0.031775 for common features,
+0.029122 for bounded RBF departure, 0.031429 for raw RBF, 0.029619 for
+boosting, and 0.027778 for the selected non-KAHM procedure. The respective
+point gains are \DFGainCommon\%, \DFGainRBF\%, \DFGainRawRBF\%,
+\DFGainHGB\%, and $-\DFWorsePolicy\%$.
+
+\begin{table}[t]
+\centering\small
+\caption{All ten primary procedures after independent B selection and C
+calibration. Entries average A-variance-normalized D MSE over 24
+repetitions and, within each panel, equally over its law--noise conditions
+and three horizons. The nonlinear and linear panels have different loss
+scales and are not pooled for inference. ``Unbounded'' removes only the
+departure's radial bound. Lower is better.}
+\label{tab:dimension-aggregate}
+\input{generated/dimension_forecasting/aggregate_table}
+\end{table}
 
 \begin{table}[t]
 \centering\small
@@ -131,30 +179,29 @@ All bounds use 24 independent repetitions, 23 degrees of freedom, and
 a one-sided Bonferroni adjustment for six comparisons. A criterion is
 satisfied only when its lower bound is positive.}
 \label{tab:mechanism-primary}
-\input{generated/reconstruction_mechanism/primary_table}
+\input{generated/dimension_forecasting/primary_table}
 \end{table}
 
-The improvement over the common basis shows that the bounded
-reconstruction departure provides useful functions to this decoder.
-The matched RBF reconstruction provides much of the same benefit:
-KAHM's point improvement over it is below the 3\% margin. KAHM's
-point improvement over raw RBF exceeds 3\%, but the simultaneous lower
-bound remains below zero, leaving that margin unresolved. Boosting and
-the selected non-KAHM procedure have smaller aggregate point losses.
-Thus the results support reconstruction features without establishing
-the required practical advantage specific to KAHM.
+The simultaneous lower bounds establish the 3\% margins over common
+features and raw RBF, and the 5\% linear-control noninferiority criterion
+(Table~\ref{tab:mechanism-primary}). They do not establish the other
+three margins. In particular, the positive point improvement over boosting
+does not reach 3\%, and the selected non-KAHM procedure has lower mean
+loss than KAHM. Three of the six criteria are established; the complete
+joint criterion is not established. Failure to establish an improvement
+margin does not establish equality of the procedures.
 
 Figure~\ref{fig:mechanism-conditions} shows every law and noise level
-for the matched reconstruction control and the selected non-KAHM
+for the independently selected RBF reconstruction and the selected non-KAHM
 procedure. These descriptive comparisons show how the relative error
 varies across the declared conditions. The appendix gives all ten
 methods, and the accompanying data include every horizon-specific result.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{generated/reconstruction_mechanism/law_noise_contrasts.pdf}
+\includegraphics[width=\linewidth]{generated/dimension_forecasting/law_noise_contrasts.pdf}
 \caption{Condition-specific gains of bounded KAHM departure over the
-matched bounded RBF departure and the C-selected non-KAHM procedure.
+independently selected bounded RBF departure and the C-selected non-KAHM procedure.
 Each point is $100(1-\overline L_K/\overline L_m)$, where the bars denote
 mean loss over 24 repetitions of that condition. Positive values favor
 KAHM. The panels use different horizontal scales, and labels give the
@@ -164,20 +211,94 @@ the linear negative control.}
 \label{fig:mechanism-conditions}
 \end{figure}
 
+\subsection{Dimension changes the complete feature representation}
+
+Table~\ref{tab:dimension-sensitivity} compares the specified cap rules on
+the same episodes. B-selected KAHM improves on fixed cap two by
+\DFDimensionGain\%, with lower repetition-average loss in 21 of 24
+repetitions. Its mean paired difference is $-0.000973$ with a secondary,
+unadjusted 95\% paired-$t$ interval $[-0.001229,-0.000717]$.
+Native cap twenty instead increases loss by 8.39\%, with higher loss in
+all 24 repetition aggregates; its corresponding difference is 0.002507
+with interval $[0.002024,0.002991]$. These intervals are descriptive
+secondary analyses outside the six-comparison primary family.
+
+\begin{table}[t]
+\centering\small
+\caption{Nonlinear mean SMSE under fixed and selected dimension rules.
+Within each fixed row, the three procedures share a bank. In the final
+row, each selects its own cap on B. The last column compares that row's
+KAHM loss with fixed cap two. Native caps twelve and twenty are exact
+aliases because the history dimension is twelve.}
+\label{tab:dimension-sensitivity}
+\input{generated/dimension_forecasting/dimension_table}
+\end{table}
+
+The bounded KAHM cap counts across the 144 nonlinear tasks are
+15, 22, 68, 31, and 8 for caps 1, 2, 4, 8, and 12, respectively.
+Cap four is the most frequent selection, but the variation does not support
+a universal fixed-cap recommendation. No experiment here measures a
+binding cap of twenty in an ambient dimension greater than twenty.
+
+To interpret the selected procedure, let $L_K^{(c)}$ and $L_0^{(c)}$
+denote KAHM and common-feature loss using the same bank rule $c$, each
+with its own fitted head and C calibration. Relative to the fixed cap-two
+bank, the exact loss decomposition is
+\[
+ L_K^{(c)}-L_K^{(2)}
+ =\{L_0^{(c)}-L_0^{(2)}\}
+  +\{(L_K^{(c)}-L_0^{(c)})-(L_K^{(2)}-L_0^{(2)})\}.
+\]
+For the KAHM-selected bank, the complete change $-0.000973$ comprises
+a common-feature improvement of $-0.002150$ and a weakening of the
+incremental departure benefit by $+0.001177$. The departure still reduces
+loss relative to this matched common control: its increment changes from
+$-0.004967$ to $-0.003790$. Native cap twenty similarly strengthens the
+common predictor but loses more of the departure's incremental benefit,
+producing a net deterioration. This decomposition concerns the complete
+fitted predictors; it is not an orthogonal variance decomposition or a
+causal attribution to individual coordinates.
+
+Using the KAHM-selected bank, bounded KAHM improves over matched bounded
+RBF by 0.68\%, compared with 0.72\% for independently selected RBF.
+The matched difference is $-0.000198$, with secondary unadjusted interval
+$[-0.000325,-0.000072]$. Its sign does not establish the primary 3\%
+margin. Bounded KAHM also has 2.28\% lower loss than its unbounded
+counterpart on the same bank, versus 1.71\% when those procedures select
+their caps independently. Setting only the calibration weights to one
+retains a 3.39\% selected-versus-fixed-cap-two improvement; the direction
+of the dimension result therefore does not depend on C shrinkage alone.
+
+The heterogeneity is substantial. Selection improves fixed-cap-two KAHM
+in five of the six nonlinear law--noise cells, but slightly worsens Duffing
+with added noise. At Van der Pol with no additional Gaussian noise,
+KAHM has loss 0.009347 versus 0.003801 for boosting; the non-KAHM policy
+selects boosting in all 24 repetitions of this condition. Native cap
+twenty improves the first two horizon averages relative to cap two but
+worsens horizon twelve. Appendix~\ref{app:reconstruction-results}
+reports every method, condition, and horizon aggregate.
+
 \subsection{Numerical checks and measured resources}
 
 The maximum taskwise KAHM-to-ridge maximum-error ratio is
-\RMMaxErrorRatio{}, below the limit of five. There are
-\RMFeatureViolations{} feature-bound, \RMCoefficientViolations{}
-coefficient-bound, and \RMCorrectionViolations{} correction-bound
-violations. C selects a nonzero KAHM correction weight in
-\RMKActiveNonlinear{} of 432 nonlinear task--horizon combinations and
-\RMKActiveLinear{} of 144 linear-control combinations. This activation
+\DFMaxErrorRatio{}, below the limit of five. There are no feature-bound,
+coefficient-bound, or bounded-correction violations. All 192 tasks complete
+without a failed method or recovered final forecast. Across 18,816 local
+models, no model requires an additional positive-eigenvalue or projected-range
+rank reduction, a rank-zero fallback, or a numerical query guard. Native
+cap twenty stores rank twelve in 2,685 of its 2,688 local models; three
+two-reference models have rank one. The stacked local bases have ambient
+rank twelve for every bank, including the small-cap banks. C selects a
+nonzero KAHM correction weight in
+\DFKActiveNonlinear{} of 432 nonlinear task--horizon combinations and
+\DFKActiveLinear{} of 144 linear-control combinations. This activation
 frequency describes calibration choices, not a guarantee of lower D loss.
-Mean charged fitting and selection time is \RMKFitSeconds{} seconds
-for bounded KAHM departure and \RMRFitSeconds{} seconds for bounded RBF
-departure. Appendix~\ref{app:reconstruction-results} reports prediction
-time, retained model size, and the accounting boundaries.
+Mean charged fitting and selection time is \DFKFitSeconds{} seconds
+for selected bounded KAHM departure and \DFRFitSeconds{} seconds for
+selected bounded RBF departure. These costs include all six native cap
+candidates. The fixed-cap-two and native-cap-twenty KAHM costs are 0.085
+and 0.101 seconds. Appendix~\ref{app:reconstruction-results} reports
+retained state sizes, full-suite timing scope, and the accounting boundaries.
 
 The algebraic example, deterministic bound, and empirical comparisons
 answer different questions. A distinct feature can be poorly aligned

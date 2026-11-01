@@ -1,0 +1,170 @@
+{
+  "status": "passed",
+  "completed_utc": "2026-11-01T11:19:33.575575+00:00",
+  "scope": "Tiny separate seed/count fixture; no terminal targets loaded/scored by test or worker",
+  "assertions": 25,
+  "fixture_root": "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final",
+  "tasks": 2,
+  "candidate_fits": 14,
+  "stage_commands": [
+    {
+      "script": "study_seals.py",
+      "arguments": [
+        "freeze",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final"
+      ],
+      "returncode": 0,
+      "seconds": 0.1854568910002854,
+      "stdout": "{\"phase\": \"freeze\", \"status\": \"frozen\", \"task_count\": 2, \"file_count\": 127}\n",
+      "stderr": ""
+    },
+    {
+      "script": "prepare_dimension_data.py",
+      "arguments": [
+        "d",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final",
+        "--freeze-file",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/freeze.json",
+        "--fit-lock",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/FIT_LOCK.json"
+      ],
+      "returncode": 1,
+      "seconds": 0.1272577720010304,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/prepare_dimension_data.py\", line 173, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/prepare_dimension_data.py\", line 170, in main\n    prepare_d(args.root,args.freeze_file,args.fit_lock)\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/prepare_dimension_data.py\", line 120, in prepare_d\n    verify_fit_lock(root,fit_lock,freeze_file,full_hash=True)\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/study_contract.py\", line 121, in verify_fit_lock\n    lock=json.loads(Path(fit_lock).read_text())\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 1027, in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/FIT_LOCK.json'\n"
+    },
+    {
+      "script": "prepare_dimension_data.py",
+      "arguments": [
+        "abc",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final",
+        "--freeze-file",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/freeze.json"
+      ],
+      "returncode": 0,
+      "seconds": 0.16524859499986633,
+      "stdout": "{\"stage\": \"prepare_abc\", \"repetition\": 0, \"completed_tasks\": 2}\n",
+      "stderr": ""
+    },
+    {
+      "script": "study_seals.py",
+      "arguments": [
+        "fits",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final"
+      ],
+      "returncode": 1,
+      "seconds": 0.14771738099989307,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/study_seals.py\", line 282, in <module>\n    main()\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/study_seals.py\", line 276, in main\n    result = functions[args.phase](root)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/study_seals.py\", line 145, in fits_lock\n    require({p.name for p in (root / \"results\").iterdir() if p.is_dir()} == {t[\"task_id\"] for t in tasks},\n                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 1056, in iterdir\n    for name in os.listdir(self):\n                ^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/results'\n"
+    },
+    {
+      "script": "run_dimension_stage.py",
+      "arguments": [
+        "--phase",
+        "fit",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final",
+        "--freeze-file",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/freeze.json",
+        "--workers",
+        "2"
+      ],
+      "returncode": 0,
+      "seconds": 3.5641280519994325,
+      "stdout": "{\"phase\": \"fit\", \"completed\": 1, \"total\": 2, \"failed\": 0}\n{\"phase\": \"fit\", \"completed\": 2, \"total\": 2, \"failed\": 0}\n",
+      "stderr": ""
+    },
+    {
+      "script": "study_seals.py",
+      "arguments": [
+        "fits",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final"
+      ],
+      "returncode": 0,
+      "seconds": 0.19195032400057244,
+      "stdout": "{\"phase\": \"fits\", \"status\": \"sealed\", \"task_count\": 2, \"file_count\": 31}\n",
+      "stderr": ""
+    },
+    {
+      "script": "prepare_dimension_data.py",
+      "arguments": [
+        "d",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final",
+        "--freeze-file",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/freeze.json",
+        "--fit-lock",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/FIT_LOCK.json"
+      ],
+      "returncode": 0,
+      "seconds": 0.18161774899999727,
+      "stdout": "{\"stage\": \"prepare_d\", \"repetition\": 0, \"completed_tasks\": 2}\n",
+      "stderr": ""
+    },
+    {
+      "script": "study_seals.py",
+      "arguments": [
+        "release",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final"
+      ],
+      "returncode": 1,
+      "seconds": 0.15958435099855706,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/study_seals.py\", line 282, in <module>\n    main()\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/study_seals.py\", line 276, in main\n    result = functions[args.phase](root)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/study_seals.py\", line 232, in target_release\n    prediction_lock = read(root / \"PREDICTION_LOCK.json\")\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/code/study_seals.py\", line 41, in read\n    return json.loads(Path(path).read_text())\n                      ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 1027, in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/PREDICTION_LOCK.json'\n"
+    },
+    {
+      "script": "run_dimension_stage.py",
+      "arguments": [
+        "--phase",
+        "predict",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final",
+        "--freeze-file",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/freeze.json",
+        "--fit-lock",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final/FIT_LOCK.json",
+        "--workers",
+        "2"
+      ],
+      "returncode": 0,
+      "seconds": 2.516911020999032,
+      "stdout": "{\"phase\": \"predict\", \"completed\": 1, \"total\": 2, \"failed\": 0}\n{\"phase\": \"predict\", \"completed\": 2, \"total\": 2, \"failed\": 0}\n",
+      "stderr": ""
+    },
+    {
+      "script": "study_seals.py",
+      "arguments": [
+        "predictions",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final"
+      ],
+      "returncode": 0,
+      "seconds": 0.11335783699905733,
+      "stdout": "{\"phase\": \"predictions\", \"status\": \"sealed\", \"task_count\": 2, \"file_count\": 7}\n",
+      "stderr": ""
+    },
+    {
+      "script": "study_seals.py",
+      "arguments": [
+        "release",
+        "--root",
+        "/workspace/scratch/775596cc378e/kahm_repository/extensions/dimension_forecasting/verification/staged_chain_fixture_final"
+      ],
+      "returncode": 0,
+      "seconds": 0.09829971399994974,
+      "stdout": "{\"phase\": \"release\", \"status\": \"sealed\", \"task_count\": 2, \"file_count\": 4}\n",
+      "stderr": ""
+    }
+  ],
+  "forbidden_transitions_rejected": [
+    "D generation without fitlock",
+    "fitseal before allfits",
+    "targetrelease before predictionlock"
+  ]
+}

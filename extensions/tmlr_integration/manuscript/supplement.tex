@@ -59,6 +59,22 @@ a replication of the main paper's bounded reconstruction-departure
 procedure. Their candidate sets, tuning rules, data populations, cost
 scopes, and loss normalizations remain specific to each study.
 
+\paragraph{Construction policy and scope.}
+Local dimension is a property of the specified procedure. The native
+KAHM initialization is $\min\{20,d,n_c-1\}$ for ambient dimension $d$
+and $n_c$ local references, followed by the native positive-eigenvalue
+and projected-range rules \citep[Appendix B]{Kumar2025Collaborative}.
+The supporting procedures below instead use their explicitly stated
+small-rank caps, usually two, with any additional ambient-dimension
+restriction shown in the corresponding methods. Those caps define the
+reported experiments; they are not the native default. In particular,
+the shared reference construction in Section~\ref{sec:nf-reference-geometry}
+uses $\min\{2,d-1,n_c-1\}$. Its natural-data results therefore concern
+that constrained representation. They do not evaluate the main paper's
+native-cap-twenty or B-selected dimension procedures. The main paper's
+fresh simulated dimension comparison and the studies here have separate
+sampling units and confidence families; their losses are not pooled.
+
 Sections~\ref{sec:utility-question} and~\ref{c:sec:method} define the common
 interpretive framework and controlled representations.
 Sections~\ref{c:sec:capacity}--\ref{sec:scaling} describe the controlled,

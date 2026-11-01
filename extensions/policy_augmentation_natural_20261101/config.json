@@ -1,0 +1,175 @@
+{
+  "OOF_RBF_omitted": "Single natural series does not provide independent episodes; no artificial episode folds",
+  "analysis": {
+    "failures": "stop on unexpected numerical/data failure; preserve attempted rows; no replacement or post-hoc common-support claim",
+    "primary": "SMSE: each horizon MSE / full-A corresponding target population variance floored at1e-12; horizons equally weighted; series equally within frequency; frequencies equally overall",
+    "sampling_unit": "series; 32 origins and3 horizons are dependent repeated measurements",
+    "secondary": "study-specific seasonal MASE with A-only lag52 Weekly/24 Hourly scale and frequency MASE lag1 Weekly/24 Hourly; both floored at1e-12; neither is official full-horizon M4 evaluation",
+    "uncertainty": "descriptive only; no independent-series CI, p-value, or population generalization"
+  },
+  "caps": [
+    1,
+    2,
+    4,
+    8,
+    12
+  ],
+  "chronology": "12 intervening origins purged between A/B/C/D; previous max-horizon target strictly earlier than next first origin; D outcomes released after prediction seal",
+  "direct_controls": {
+    "drift": "At each origin y_t + h*(y_t-y_start)/(t-start), start=earliest history observation used by A",
+    "seasonal_naive": {
+      "Hourly": 24,
+      "Weekly": 52
+    }
+  },
+  "execution": {
+    "affinity": "workers share allowed CPU indices[3:6] when available; otherwise retain current allowed set",
+    "cpu_offset": 3,
+    "fresh_process_per_task": true,
+    "numerical_threads": 1,
+    "stop_on_unexpected_failure": true,
+    "workers": 3
+  },
+  "extra_rbf": {
+    "alpha_grid": [
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0
+    ],
+    "bandwidth_factors": [
+      0.25,
+      0.5,
+      1.0,
+      2.0,
+      4.0
+    ],
+    "gamma_grid": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "history_scalers": [
+      "standard",
+      "minmax",
+      "tanh_z_1"
+    ],
+    "interpretation": "bounded centered Nystrom RBF slope on the same full-A in-sample residuals and shared common+B bias; bandwidth factors multiply median squared reference distance",
+    "landmarks": 64
+  },
+  "history": 12,
+  "horizons": [
+    1,
+    4,
+    12
+  ],
+  "model": {
+    "alpha_grid": [
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0
+    ],
+    "bank_row_cap": 512,
+    "blocks": [
+      2,
+      4,
+      8
+    ],
+    "feature_scale_floor": 1e-06,
+    "gamma_grid": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "max_references": 24,
+    "raw_hgb_l2_regularization": 1.0,
+    "raw_hgb_learning_rates": [
+      0.05,
+      0.1
+    ],
+    "raw_hgb_max_iter": 100,
+    "raw_hgb_max_leaf_nodes": [
+      7,
+      15
+    ],
+    "raw_rbf_bandwidth_factors": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "raw_rbf_landmarks": 64,
+    "relative_denominator_tolerance": 1e-10,
+    "target_variance_floor": 1e-12
+  },
+  "policy_orders": {
+    "P0": [
+      "legacy__ridge",
+      "legacy__raw_rbf",
+      "legacy__raw_hgb",
+      "legacy__persistence",
+      "legacy__common",
+      "legacy__rbf_departure",
+      "legacy__rbf_unbounded",
+      "residual__shared_bias",
+      "residual__insample_rbf",
+      "direct__seasonal_naive",
+      "direct__drift"
+    ],
+    "P0plus": [
+      "legacy__ridge",
+      "legacy__raw_rbf",
+      "legacy__raw_hgb",
+      "legacy__persistence",
+      "legacy__common",
+      "legacy__rbf_departure",
+      "legacy__rbf_unbounded",
+      "residual__shared_bias",
+      "residual__insample_rbf",
+      "direct__seasonal_naive",
+      "direct__drift",
+      "extra__extra_rbf"
+    ],
+    "P1": [
+      "legacy__ridge",
+      "legacy__raw_rbf",
+      "legacy__raw_hgb",
+      "legacy__persistence",
+      "legacy__common",
+      "legacy__rbf_departure",
+      "legacy__rbf_unbounded",
+      "residual__shared_bias",
+      "residual__insample_rbf",
+      "direct__seasonal_naive",
+      "direct__drift",
+      "residual__insample_kahm"
+    ]
+  },
+  "purge_origins": 12,
+  "rows": {
+    "A_max": 512,
+    "A_min": 256,
+    "B": 64,
+    "C": 64,
+    "D": 32
+  },
+  "scalers": [
+    "standard",
+    "minmax",
+    "tanh_z_1"
+  ],
+  "schema": "kahm-policy-augmentation-natural-v1",
+  "selection": "same B selection/C calibration and calibrated-C family choice as simulation; no post-C refit",
+  "source": {
+    "M4_commit": "6c1067e5a57161249b17289a565178dc7a3fb3ca",
+    "Test_files_downloaded": false,
+    "publication_commit": "2acd4f5f8b4970ef0e066f1b91a3636d36ad932f",
+    "repository": "https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine",
+    "source_url": "https://github.com/Mcompetitions/M4-methods"
+  },
+  "status": "external benchmark-development evidence; no public preregistration or independent-source inference"
+}

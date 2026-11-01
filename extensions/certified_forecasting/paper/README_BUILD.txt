@@ -1,116 +1,124 @@
 A Hierarchy of Risk Certificates for Forecasting Representations
+Authors: Mohit Kumar and Somayeh Kargaran
+Source package date: 2026-11-01
+
+SCIENTIFIC SCOPE
+
+The manuscript develops a normalized scalar Lipschitz block hierarchy. Pairs
+are its first member; under the stated sampling, boundedness, and compactness
+conditions, expected block scores increase toward the class optimum. Exact
+examples describe the limits of fixed block sizes. Independent-block
+calibration, stratification, and fitted-risk upper bounds support decisions
+over declared representation--decoder classes. The main paper contains all
+proofs. The experimental supplement gives implementation details, protocols,
+and complete secondary tables.
+
+Local PCA dimension is specified separately from retained feature count.
+The native initial request is min(cap, ambient dimension, local reference
+count minus one), with default cap 20 and the stated numerical reductions.
+The fixed-cap reference forecasting, scaling, matched-geometry, budget,
+PenDigits, and speech studies use cap 2. The learned two-lag mechanism is
+already ambient dimension 2 and has a separate experimental role.
+
+Supplement Section S9 reports a targeted synthetic comparison of cap 2,
+native cap 20, and validation-selected cap. The 26 fitting repetitions use
+one selected bank per policy and retain all four prefixes before independent
+calibration. One study-wide 0.05 allocation covers 4,680 designated one-sided
+statements. Selected cap improves descriptive test error on five laws and
+ties on the sixth; the selected forecasts' tolerance decisions are unchanged.
+The comparison does not establish general forecasting superiority or improved
+class-exclusion resolution. Earlier studies retain their own confidence scope.
 
 PACKAGE CONTENTS
 
-This package contains the editable main manuscript and experimental supplement,
-their compiled PDFs, bibliography, all included figures and tables, and the
-retained detailed study sources. main.tex and supplement.tex are the two
-compilation entry points. The sections directory contains the article,
-appendices, and detailed study text; supplement_sections contains generated
-copies for the supplement. The compiled files are main.pdf and supplement.pdf.
+main.tex and supplement.tex are the compilation entry points. Their compiled
+outputs are main.pdf and supplement.pdf. sections/ contains the article,
+appendices, and detailed study text. supplement_sections/ contains generated
+supplement copies. The final source fragment is named 12_dimension_policy.tex
+because twelve fragments feed nine numbered supplement sections.
+
+The bibliography, JMLR preprint style, figures, and tables are bundled.
+dimension_study/ contains the nine audited analysis CSVs, frozen design and
+schedule, aggregate metrics, source-freeze metadata, numerical-archive
+identity, and independent audit receipt for the dimension study. Its
+provenance.json records each input's SHA-256 and origin. These inputs are
+sufficient to regenerate every new manuscript table without loading fitted
+models or the large numerical-records archive.
 
 BUILD
 
-Inside the complete repository, from extensions/certified_forecasting, run:
-
-    python scripts/build_manuscript.py
-
-The standalone manuscript source package places the same script beside
-main.tex. From that directory, run:
+From this directory, run:
 
     python build_manuscript.py
 
-The script deterministically regenerates supplement_sections from the retained
-original study sources, expands table inputs, qualifies cross-document
-references, and compiles the main paper before the supplement. It checks for
-undefined references or citations, duplicate labels, and overfull boxes.
-Use --prepare-only to regenerate the supplement sources without compiling.
+The helper first runs build_dimension_assets.py, which checks all bundled
+dimension-study input hashes and generates the new tables and numeric macros.
+It then expands the detailed study sources, qualifies references to the main
+paper, and compiles main.pdf before supplement.pdf. It rejects undefined
+references or citations, duplicate labels, and overfull boxes.
 
-For a manual build of the already generated sources, run in this directory:
+To regenerate tables and supplement sources without compiling:
+
+    python build_manuscript.py --prepare-only
+
+To regenerate only dimension-study assets:
+
+    python build_dimension_assets.py
+
+Both helpers accept --paper PATH. The manuscript builder also works from the
+repository's scripts/ directory with its sibling paper/ directory. It does
+not require a workspace-specific absolute path. Generated table hashes are
+recorded in tables/dimension_policy_assets_manifest.json.
+
+For a manual build after source preparation:
 
     latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
     latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
 
-The build requires Python 3.9 or later, latexmk, pdfLaTeX, BibTeX, amsmath, mathtools,
-enumitem, microtype, booktabs, lastpage, xr, and the standard PSNFSS times
-package. The supplement reads main.aux for cross-references, so preserve that
-file between the two compilation steps. The bundled
-jmlr2e.sty is the JMLR formatting dependency. The document uses its preprint
-option, 11-point text, and the standard JMLR text dimensions.
+Dependencies are Python 3.9 or later, latexmk, pdfLaTeX, BibTeX, amsmath,
+mathtools, enumitem, microtype, booktabs, longtable, lastpage, xr, needspace,
+and the standard PSNFSS times package. The supplied jmlr2e.sty provides the
+preprint layout and author formatting. The supplement reads main.aux, which
+must remain available between compilation steps.
 
-MANUSCRIPT
+RESEARCH SOURCE AND NUMERICAL RECORDS
 
-The main manuscript has 50 pages, including appendices and references; the
-experimental supplement has 23 pages. The main abstract has 186
-whitespace-delimited words. Its central result is a normalized scalar
-Lipschitz block hierarchy: pairs are its first member, population expectations
-increase, and compactness and bounded targets give convergence to the optimal
-class risk. Exact examples state the limits of fixed block sizes. Independent
-block calibration, stratification, and fitted-risk upper bounds support
-representation-class decisions.
+The historical research extension is pinned at commit:
 
-The revised introduction centers the representation-assessment question,
-identifies the inherited KAHM ingredients, and states the hierarchy's
-relationship to earlier risk bounds. A complete eight-law comparison and
-learned-KAHM decision study are complemented by fresh calibration of all forty
-archived KAHM banks. That new study compares four block sizes, two learned
-partitions, and a common-sample empirical-minimum comparator under one 0.05
-failure allocation over 1,760 endpoints. It supplies new evidence conditional
-on fixed banks, not forty new representation-learning replications. It uses
-KL lower calibration, while the earlier learned pair study used empirical
-Bernstein lower calibration; block-size effects are compared within the new
-study. An independent numerical audit reconstructs all 143,440 optimization
-programs, 1,760 endpoints, and 880 decisions. All optimization stopping-limit
-cases and the disclosed auxiliary-log provenance exception are retained.
+    d6d74d1953a4310b73065a556df816e5ab5e3ebc
 
-The main text consolidates secondary forecasting and explicit-feature decision
-studies. Their complete earlier text, tables, and figures are compiled in
-supplement.pdf together with inherited KAHM reconstruction details and the
-full experimental protocols. The broader scaling, matched-geometry, and speech
-studies retain their adverse and inconclusive outcomes. All theorem,
-proposition, and corollary statements and their proofs remain in main.pdf.
-The result archives and exact reproduction commands remain public. No font
-sizes or text dimensions were changed to reduce page count.
+https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/d6d74d1953a4310b73065a556df816e5ab5e3ebc/extensions/certified_forecasting
 
-RESEARCH SOFTWARE AND DATA
+That commit contains the reference forecasting and certificate studies. It
+does not contain the new dimension-policy study or the present manuscript
+sources. Its docs/STUDY_GUIDE.md and docs/REPRODUCIBILITY.md identify study
+commands, public-data sources, checksums, and independent sampling units.
+The standalone author archive retains revision_review/, documenting the earlier scoped theory,
+calibration, and provenance review; those records keep their original dates
+and evidential limits.
 
-Repository:
-https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine
+The dimension study is supplied separately in the accompanying research
+extension extensions/dimension_certificates. Its PROTOCOL.md, config.json,
+FINDINGS.md, and audit records define the new comparison. The source freeze
+has SHA-256:
 
-Research branch and extension:
-https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/certified-soft-state-forecasting/extensions/certified_forecasting
+    0a92dfb3d0f086541d989d36277620b49c103975d8608f7dc4f956bfe9b3a9ff
 
-Start with the extension README.md and docs/STUDY_GUIDE.md. The extension's
-docs/REPRODUCIBILITY.md specifies environments, reproduction commands,
-experiment configurations, data sources, and provenance. Separate study
-directories document the certificate-comparison, controlled-decision, and
-speech experiments. Frozen experiment records retain their original source
-hashes; exact historical source verification uses the recorded source snapshot
-or historical checkout identified by that guide.
+The separate KAHM_Risk_Dimension_Numerical_Records.zip has SHA-256:
 
-The new learned-hierarchy study distributes its two largest gzip evidence
+    f0286e44b6587b4a917dffa73b52356c99a2718c28a6c70fe47617b575b59be1
+
+It contains production records under extensions/dimension_certificates/
+runs/20261101 and a file manifest. The complete independent numerical audit
+reconstructs all 4,680 designated endpoints, all 26 repetitions' scores and
+selection rules, and all nine analysis tables (9,020 rows). Complete forecast
+and target arrays for prespecified repetition zero of each law support an
+additional 288 prediction-to-loss checks. The full campaign is audited at
+score level; full-array checks cover those six jobs. No true population-risk
+coverage estimate is inferred from test-error containment.
+
+The historical learned-hierarchy extension distributes its largest evidence
 files as exact byte parts in results/learned_kahm_hierarchy_v1/archive_parts.
-Before auditing these retained records, run from the extension directory:
-
-    python scripts/restore_hierarchy_payloads.py
-
-The helper verifies each part and each reconstructed original against its
-SHA-256 hash. The restored files preserve the exact frozen bytes; this
-packaging step does not modify the study. Manuscript compilation uses the
-included tables and figures and does not require this restoration.
-
-The public audio and trajectory archives remain at their attributed sources.
-The repository provides acquisition instructions, checksums, and eligibility
-rules. Statistical conclusions depend on the sampling units and assumptions
-stated in the manuscript; per-window counts do not replace independent groups.
-
-TABLES AND FIGURES
-
-The extension contains scripts/make_paper_assets.py, make_scaling_assets.py,
-and make_matched_assets.py for the forecasting, scaling, and matched-geometry
-assets. Experiment-specific analyzers provide the other tables and figures.
-Their commands and required result directories are specified in
-extensions/certified_forecasting/docs/REPRODUCIBILITY.md. Asset generation uses
-stored complete result records. It does not select configurations using test
-performance. All numerical table entries and figure data in this package
-correspond to those experiment records.
+Its scripts/restore_hierarchy_payloads.py verifies and reconstructs them for
+a full historical audit. Neither those files nor the dimension numerical
+archive are required to compile this self-contained manuscript package.

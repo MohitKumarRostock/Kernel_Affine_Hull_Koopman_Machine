@@ -92,6 +92,40 @@ not prove a model inaccurate. A positive class obstruction does not prove that
 a proposed refinement will help; paired episode-loss comparisons check actual
 improvement separately.
 
+## Local dimension and certificate utility
+
+Local KAHM construction starts from `min(cap, input dimension, local reference
+count - 1)` and applies the native eigenvalue and projected-range checks.
+The requested cap and stored local rank are reported separately. The historical
+broad forecasting experiments in this extension use an explicit cap of two;
+the two-dimensional learned-mechanism experiments already permit their full
+ambient dimension. Those configurations remain identifiable in the manuscript.
+
+The separate [dimension-policy experiment](../dimension_certificates/README.md)
+compares cap two, native cap twenty and validation-selected caps on six bounded
+synthetic laws. Validation selects one complete history/cap bank, and all four
+prefixes of that bank remain fixed before calibration. This preserves the
+nested representation classes. The experiment uses a single failure allocation
+of 0.05 across 4,680 designated one-sided endpoints in 26 repetitions.
+
+Dimension selection lowers mean test MSE on five laws and ties cap two on the
+sixth. It improves in 18 individual repetitions and ties in eight. Nevertheless,
+selected-forecast tolerance decisions are identical under all three dimension
+policies, and none of the 234 dimension-policy improvement endpoints is positive.
+The 132 positive improvement endpoints concern adjacent retained prefixes.
+These results distinguish observed prediction accuracy from certified
+acceptance and exclusion; they do not replace the other decoder or application
+studies. [Scientific findings](../dimension_certificates/FINDINGS.md) and the
+complete analysis tables give the exact outcomes and confidence scope.
+
+The current manuscript and experimental supplement include this targeted
+comparison. Large numerical records are distributed separately as
+`KAHM_Risk_Dimension_Numerical_Records.zip`; the dimension-study README provides
+restoration and independent-audit commands. The earlier public experimental
+revision and the accompanying current manuscript sources are distinct records.
+
+## Retained-block geometry
+
 The block norm matches the maximum Euclidean distance across feature blocks.
 This preserves every earlier predictor when a block is appended and leaves the
 class unchanged under exact feature duplication. Ordinary Euclidean/Frobenius

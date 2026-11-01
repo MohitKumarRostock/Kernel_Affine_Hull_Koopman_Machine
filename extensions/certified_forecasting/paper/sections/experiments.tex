@@ -19,7 +19,9 @@ have lengths $m\in\{4,12\}$, horizons are $\{1,4,12\}$, and the 13 common
 zero-based origins are $11,15,\ldots,59$. Within-episode windows may be
 dependent. Geometry is relearned in each repetition, with budget $\kappa=4$,
 ridge coefficient $10^{-4}$, affinity exponent $16$, and prefix dimensions
-$2,6,14,30$. Geometry fitting uses at most 1600 histories and 24 local points.
+$2,6,14,30$. Every local KAHM uses the explicit cap $r_{\max}=2$;
+this is distinct from the retained coordinate count. Geometry fitting uses
+at most 1600 histories and 24 local points.
 
 Each repetition freezes 40 candidates: retained KAHM, RBF, and affine-hull
 features; hard KAHM assignments; ordinary Frobenius-budget and exact-duplicate
@@ -72,7 +74,7 @@ Theorem~\ref{thm:replication-invariance}. Zero-ridge numerical checks reproduce
 matching minimum training risks within their solver gaps. The main duplicate
 candidate uses zero ridge, whereas primary models use $10^{-4}$; their fitted
 errors are therefore not evidence for ridge-estimator invariance.
-All 800 main-study candidates completed; the constrained block fits have
+All 800 fixed-cap reference candidates completed; the constrained block fits have
 recorded first-order optimality gaps below $10^{-7}$. These numerical
 optimization guarantees are separate from the risk guarantees, which require
 the sampling assumptions in Section~\ref{sec:theory}. Appendix~\ref{app:protocols}

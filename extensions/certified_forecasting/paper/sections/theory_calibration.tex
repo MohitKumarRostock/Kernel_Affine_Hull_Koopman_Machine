@@ -83,7 +83,7 @@ $\mathbb EV_1\geq\bar V-\operatorname{rad}_{\rm EB}$ with failure
 probability at most $\alpha$. A joint claim for both directions requires
 allocation to both events.
 
-\begin{theorem}[Simultaneous two-sided episode certificate]
+\begin{theorem}[Simultaneous class and fitted-risk certificate]
 \label{thm:episode-certificate}
 Suppose the $J$ candidates and $H$ horizons are frozen using independent
 development data, $n\geq4$, and all fitted decoders satisfy their stated
@@ -233,9 +233,25 @@ Known population masses instead give $L_{\rm str}=\sum_a\pi_a\ell_a$
 with no mass-estimation allocation. For several frozen partitions or
 candidate--horizon combinations, allocate failure probability over their
 score events and mass events before taking the largest lower endpoint.
-A shared partition needs only one mass event. Sparse strata contribute no
-positive evidence; stratification does not increase the number of independent
-observations.
+A shared partition needs only one mass event. Under the empirical Bernstein
+convention above, strata with fewer than two pairs contribute no positive
+evidence; stratification does not increase the number of independent observations.
+
+\paragraph{KL calibration within strata.}
+For $B>0$ and $K_a\geq1$, the same theorem holds with
+\begin{equation}
+ \ell_a^{\rm KL}=\frac B2\operatorname{kl}_-\!\left(
+       \frac{2\bar Q_a}{B},\frac{\log(1/\beta_a)}{K_a}\right)
+ \label{eq:stratified-kl}
+\end{equation}
+in place of $\ell_a$, and with zero when $K_a=0$ or $B=0$.
+Conditional on the labels, \eqref{eq:kl-bounded-mean} gives each score
+event with failure probability at most $\beta_a$; the same mass event
+and union bound therefore apply. Returning zero also when $K_a=1$ is
+a valid conservative convention. The learned-hierarchy experiment uses
+that convention and the allocation stated in
+Section~\ref{sec:learned-kahm-hierarchy}. Selecting between KL and empirical
+Bernstein endpoints after calibration requires allocation to both families.
 
 \begin{proposition}[Exactness on compatible strata]
 \label{prop:stratified-exactness}

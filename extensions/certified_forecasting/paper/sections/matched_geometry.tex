@@ -11,13 +11,16 @@ for these decoder choices.
 Every geometry--head pair receives the same prefix dimensions $2,6,14,30$,
 two history lengths, and four preprocessing options. Training, horizons,
 origins, regularization, and geometry subsampling follow the original study.
+KAHM has the fixed local cap $r_{\max}=2$ in every arm; the prefix dimensions
+count retained association coordinates. The affine-hull comparator retains
+its separate rank-two SVD construction.
 Equal numerical budgets and feature counts do not imply equal statistical
 capacity or computational cost.
 
 Five seeds, $5701$--$5705$, generate fresh episodes for all six synthetic
 tasks. PenDigits uses new fitting randomness within the same development and
 held-out writer cohorts. Before calibration, each geometry--head pair selects
-preprocessing, history, and dimension by validation MSE across horizons, with
+preprocessing, history, and retained prefix by validation MSE across horizons, with
 ties resolved by feature count, history, preprocessing order, and name.
 PenDigits selects coordinates separately, then averages their losses and
 horizons within each writer, giving the 13 writers equal weight. Its seed
@@ -65,7 +68,7 @@ every seed on both oscillators.
 Mean effects can also oppose most paired signs: favorable quasiperiodic
 block-direct means occur with lower KAHM loss in only two of five seeds.
 
-The complete fixed-dimension curves are released as
+The complete curves at fixed retained-coordinate counts are released as
 \path{paper/figures/matched_geometry_dimensions.pdf}, generated from all
 fixed-dimension records. On PenDigits, KAHM has lower mean MSE than RBF at
 every dimension and head;

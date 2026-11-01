@@ -1,7 +1,7 @@
 \documentclass[twoside,11pt]{article}
 \usepackage[preprint]{jmlr2e}
 \usepackage{times}
-\usepackage{amsmath,mathtools,booktabs,microtype,enumitem}
+\usepackage{amsmath,mathtools,booktabs,microtype,enumitem,needspace}
 \usepackage{lastpage}
 \hypersetup{hidelinks,
 pdftitle={A Hierarchy of Risk Certificates for Forecasting Representations},
@@ -14,6 +14,7 @@ pdfsubject={KAHM forecasting, representation refinement, and finite-sample risk 
 \setlength{\emergencystretch}{1.5em}
 
 \begin{document}
+\input{tables/dimension_policy_numbers}
 \title{A Hierarchy of Risk Certificates\\for Forecasting Representations}
 \author{\name Mohit Kumar \email mohit.kumar@uni-rostock.de\\
 \addr University of Rostock, Rostock, Germany\\
@@ -24,31 +25,29 @@ Software Competence Center Hagenberg, Hagenberg, Austria
 \maketitle
 
 \begin{abstract}
-We study when a forecasting representation can meet an accuracy requirement
-under a prescribed decoder sensitivity. Kernel Affine Hull Machine (KAHM)
-dictionaries provide a learned, expandable setting for this general question.
-For bounded scalar targets, we construct normalized minimum-risk problems on
-blocks of observations. Their size-two member is a pairwise obstruction;
-their expectations increase to the optimal Lipschitz risk under compactness
-and unconditional iid sampling. Exact rare-conflict and noisy-support laws
-show why no fixed block size is universally sufficient. Independent-block
-calibration and estimated-mass stratification give lower risk certificates.
-Combined with fitted-risk upper bounds and retained representation classes,
-these can certify minimum feasible cost among declared alternatives.
-Experiments distinguish population slack from finite-sample uncertainty.
-Fresh calibration on forty frozen learned KAHM banks demonstrates class
-exclusion with larger blocks where pairs are inconclusive, while retaining
-cases favoring stratification and full-sample empirical minimization.
-Broader synthetic, pen-trajectory, and speech studies show task-dependent
-accuracy and preprocessing effects. The guarantees concern expected squared
-error for a fixed target and evaluation law; they distinguish class-level
-limitations from fitted accuracy without identifying all limitations as
-removable representation loss. Informative natural-data class exclusion
-remains limited.
+We study whether a fixed forecasting representation can meet an expected
+squared-error tolerance under a decoder sensitivity budget. For bounded scalar
+targets, we construct normalized minimum-risk scores on blocks of observations.
+The size-two score is a pairwise obstruction; expected scores increase with
+block size and converge to optimal Lipschitz risk under unconditional iid
+sampling and compact metric representation support. Exact rare-conflict and
+noisy-support laws show that no fixed block size is uniformly sufficient.
+Independent-block calibration and estimated-mass stratification turn these
+population bounds into finite-sample lower certificates. Combined with upper
+bounds for fitted forecasts, they can certify minimum feasible cost among
+declared representation classes. Learned Kernel Affine Hull Machine (KAHM)
+dictionaries provide an expandable implementation. Fresh calibration of forty
+frozen banks shows larger blocks excluding classes when pairs are inconclusive,
+while stratification and full-sample empirical minimization can give stronger
+decisions. Broader forecasting studies retain task-dependent accuracy and
+unresolved cases. The certificates assess a representation, metric, sensitivity
+budget, target, and evaluation law jointly; they do not identify every positive
+lower bound as removable information loss. Informative natural-data class
+exclusion remains unestablished.
 \end{abstract}
 \begin{keywords}
-Kernel Affine Hull Machines, time-series forecasting, soft state abstraction,
-representation refinement, prediction risk certification
+Kernel Affine Hull Machines, time-series forecasting, Lipschitz regression,
+risk certification, representation selection
 \end{keywords}
 
 \input{sections/introduction}
@@ -65,20 +64,27 @@ representation refinement, prediction risk certification
 \input{sections/discussion}
 
 \section*{Code, data, and research transparency}
-The \href{https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/certified-soft-state-forecasting/extensions/certified_forecasting}{accompanying repository} provides the implementation, frozen configurations,
-result summaries, and figure generators in
-\path{extensions/certified_forecasting}; editable manuscript files are in its
-\path{paper} directory. The forecasting, input-scaling, matched-geometry,
-lower-bound comparison, block-hierarchy, learned-KAHM decision, learned-geometry hierarchy, controlled
-decision, speech, and speech-scaling studies
-have separate
-protocols and result directories. These provide configurations, source hashes,
-per-episode scores, and outcomes for every prescribed configuration.
+The \href{https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/d6d74d1953a4310b73065a556df816e5ab5e3ebc/extensions/certified_forecasting}{archived research repository}
+at revision \texttt{d6d74d1} contains the reference forecasting,
+input-scaling, matched-geometry, lower-bound comparison, block-hierarchy,
+learned-KAHM decision, learned-geometry hierarchy, controlled-decision,
+speech, and speech-scaling studies in
+\path{extensions/certified_forecasting}. Each study has its own protocol,
+source hashes, result records, and reproduction commands.
+The separate dimension-policy study of Section~\ref{sec:dimension-policy}
+is supplied in the accompanying research extension
+\path{extensions/dimension_certificates}; it is not part of that historical
+revision. Its frozen schedule, source hashes, development/calibration/test
+seals, complete analysis tables, and independent audit identify the evaluated
+family and the order of data access. The accompanying numerical-records
+archive provides the production records and checksums. The manuscript source
+package includes the verified small analysis inputs and a generator for all
+dimension-study tables, so compilation does not require that numerical archive.
 Appendix~\ref{app:protocols} specifies the forecasting configurations and
 independent sampling units. The separately compiled supplement retains
-complete secondary experimental tables and the inherited local KAHM
-implementation details; every proof of the main results remains in this
-manuscript. The reproduction guide is
+complete secondary experimental tables and the local KAHM implementation
+details; every proof of the main results remains in this manuscript.
+The reference studies' reproduction guide is
 \path{extensions/certified_forecasting/docs/REPRODUCIBILITY.md}.
 Public data are identified by source and checksum; download scripts preserve
 attribution and license information. Appendix~\ref{app:speech-protocol} describes the speech study's evaluation

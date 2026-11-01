@@ -14,10 +14,38 @@ of retained dictionary block $b$.
 For one such local model, suppress the indices $(b,c,j)$ and write its
 $N_{\rm loc}\geq2$ reference histories as
 $z_1,\ldots,z_{N_{\rm loc}}\in\mathbb R^{d_x}$, with at least one direction of
-nonzero empirical variance. The fitted linear encoding
-$P\in\mathbb R^{r\times d_x}$ maps histories to
-$r\geq1$ principal-component coordinates. The encoding retains only principal-component directions with positive empirical
-variance. Let $\Sigma\in\mathbb R^{r\times r}$ be the resulting nonsingular
+nonzero empirical variance under the numerical rank test below. The fitted
+linear encoding $P\in\mathbb R^{r\times d_x}$ maps histories to
+$r\geq1$ principal-component coordinates.
+
+\paragraph{Requested and realized local dimension.}
+For requested cap $r_{\max}$, the initial admissible request is
+$r_0=\min\{r_{\max},d_x,N_{\rm loc}-1\}$, using the actual local references
+after subsampling or native component construction. The native default is
+$r_{\max}=20$ \citep[Appendix~B]{kumar2025collaborative}. Reference storage is rounded to
+float32 and PCA arithmetic uses
+float64. Principal directions whose empirical covariance eigenvalues do not
+exceed float64 machine epsilon are discarded. Starting from the admissible
+request, the native routine reduces the requested rank when any retained
+projected coordinate has reference range below $10^{-3}$, stopping at requested
+rank one. The returned rank-one fit need not satisfy that range threshold.
+The stored basis dimension $r$ can therefore be smaller than $r_0$.
+No ambient normal direction is reserved by this KAHM rule, and this
+implementation does not introduce a rank-zero encoder for degenerate local
+references. The dimension-policy study records the cap, actual reference
+count, initial request, stored rank, and reduction reasons for each successful
+local encoder.
+
+The fixed-cap forecasting, coefficient-budget, preprocessing,
+matched-geometry, PenDigits, and speech comparisons use $r_{\max}=2$.
+The two-lag learned-geometry mechanism also uses cap two, which permits its
+full ambient dimension $d_x=2$. Section~\ref{supp:dimension-policy} compares explicit
+cap-two, native-cap, and validation-selected policies on fresh synthetic
+episodes. These specifications distinguish local PCA rank from the number
+of retained association coordinates and from the affine comparator's separate
+SVD rule.
+
+Let $\Sigma\in\mathbb R^{r\times r}$ be the resulting nonsingular
 sample covariance of the encoded references. The Gaussian
 kernel, its reference Gram matrix, and its query vector are
 \begin{align*}

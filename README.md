@@ -53,6 +53,18 @@ all 1,760 endpoints, optimization gaps, and unresolved cases under one 0.05
 failure allocation. Its conclusions are conditional on fixed fitted banks;
 they do not establish that noise can be repaired by changing representations.
 
+The [local-dimension study](extensions/dimension_certificates/README.md)
+compares cap two, native cap twenty and validation-selected caps while fixing
+one history/cap bank and all of its retained prefixes before calibration.
+Across 26 synthetic repetitions, dimension selection improves test MSE in 18
+and ties in eight. Mean error decreases on five of six laws, but the selected
+forecasts receive identical tolerance decisions under all three policies.
+None of the 234 dimension-policy improvement endpoints is positive under the
+campaign-wide 4,680-tail allocation. These findings distinguish observed
+accuracy gains from improved certificate resolution. The
+[complete results](extensions/dimension_certificates/FINDINGS.md) retain all
+policies, competing procedures and unresolved outcomes.
+
 The main paper keeps all theorem proofs. A separately compiled
 [experimental supplement](extensions/certified_forecasting/paper/supplement.pdf)
 retains complete secondary tables and implementation details. The

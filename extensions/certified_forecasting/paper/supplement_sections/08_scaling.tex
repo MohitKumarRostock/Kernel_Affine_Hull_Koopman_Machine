@@ -48,6 +48,7 @@ calibration, or test trajectories. Unseen values may lie outside $[-1,1]$;
 the diagnostic clipped version uses $\max\{-1,\min\{1,z_j(x)\}\}$.
 Clipping can map distinct out-of-range histories to the same input and is
 therefore a different representation, not merely a numerical safeguard.
+The local KAHM cap is fixed at $r_{\max}=2$ in every scaling arm.
 Only KAHM input geometry and models using it change in this comparison.
 Targets, budgets, data streams, and non-KAHM controls remain fixed. History
 and prefix selection use validation MSE within each preprocessing arm;
@@ -122,7 +123,7 @@ leaves the all-horizon upper-certification counts unchanged in every reported
 synthetic condition. The allocations cover statements within each arm, not
 selection across arms. Fresh synthetic calibration supports those within-arm
 claims. Reusing the
-main-study streams or changing fitting seeds on the same PenDigits cohort
+reference-study streams or changing fitting seeds on the same PenDigits cohort
 does not supply an independent calibration sample for the additional
 preprocessing choices. The results indicate that the effect of preprocessing
 depends on both the task and the forecasting architecture. Preprocessing can

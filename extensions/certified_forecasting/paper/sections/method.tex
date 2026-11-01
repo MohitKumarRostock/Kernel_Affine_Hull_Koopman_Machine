@@ -52,7 +52,7 @@ confidence bounds and may select among candidates frozen before calibration.
 A separate test set describes forecasting performance after these decisions.
 Its empirical error estimates population risk; it is not an exact risk value.
 
-\subsection{KAHM dictionaries and stable soft associations}
+\subsection{KAHM dictionaries and bounded soft associations}
 
 A dictionary block describes a history through its associations with a set of
 reference groups. KAHM associations depend on local reconstruction models.
@@ -79,6 +79,22 @@ nonzero; the implementation has an explicit convention at a zero normalizer.
 Supplement Section~S1 gives the complete inherited reconstruction equations and
 numerical rules. The risk results below apply to the fixed map produced by
 these rules and do not require its coefficients to be nonnegative.
+
+The local subspace cap is part of the representation specification. For an
+encoder with $N_{\rm loc}\geq2$ stored reference histories, let
+$r_{\max}\geq1$ be the requested cap. The native construction starts from
+\begin{equation}
+ r_0=\min\{r_{\max},d_x,N_{\rm loc}-1\},
+ \qquad r_{\max}=20\ \text{by default},
+ \label{eq:kahm-rank-request}
+\end{equation}
+and applies the numerical variance and projected-range rules in Supplement
+Section~S1. The stored rank $r\leq r_0$ is reported separately from the cap.
+The KAHM rule permits full ambient rank; the affine-hull comparator has its
+own normal-direction convention. A tuned cap must be fixed before independent
+calibration or included in a declared simultaneously calibrated family.
+Section~\ref{sec:dimension-policy} selects one complete bank on validation
+and retains its prefixes before calibration.
 
 The folding score combines reconstruction error and angular discrepancy
 \citep[Section~3.3]{kumar2026limits}. Define
@@ -244,9 +260,11 @@ for their retained prefixes. Fit comparison models on the same observed targets.
 history-based strata, costs, concentration bounds, and proposed comparisons.
 Allocate $\delta$ across the risk bounds, stratum-mass intervals, alternative
 partitions, and improvement comparisons.
-\item On $n\geq4$ independent calibration episodes, compute one mean squared loss per
+\item On independent calibration episodes, compute one mean squared loss per
 episode and horizon. Compute obstruction scores using disjoint episode pairs or frozen-size
-blocks, using the declared origin sampling rule. For stratified calibration,
+blocks, using the declared origin sampling rule and the chosen bound's
+sample-size requirements ($n\geq4$ for empirical Bernstein pair calibration).
+For stratified calibration,
 use one prespecified origin
 per independent episode (or a justified episode-level stratum), pair within
 strata, and estimate their masses and confidence intervals.

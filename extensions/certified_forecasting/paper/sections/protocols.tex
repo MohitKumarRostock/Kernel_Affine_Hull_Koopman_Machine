@@ -107,19 +107,25 @@ $4\sqrt{\log(720/0.05)/(2\cdot13)}=2.42741$.
 
 \subsection{Random streams and configuration}
 
-Main fitting seeds are $1701,\ldots,1705$. For seed $s$, separate NumPy
+The four-law fixed-cap reference seeds are $1701,\ldots,1705$.
+For seed $s$, separate NumPy
 streams use $100s+11$, $100s+23$, $100s+47$, and $100s+89$ for training,
 validation, calibration, and testing. Clustering and retained blocks receive
 deterministic offsets from the training seed and history length. Archived
 configurations specify these offsets and random-generator versions.
 Geometry uses at most 1600 training rows; decoders use all 1664 rows
 (128 episodes, 13 common origins). Overlapping training rows are permitted.
+Local KAHM reconstruction uses explicit cap $r_{\max}=2$ in the reference,
+oscillator, budget, preprocessing, matched-geometry, and natural-data studies.
+The native cap and numerical rank reductions are specified in
+Section~\ref{supp:kahm-implementation}. Section~\ref{supp:dimension-policy} gives the separate
+dimension-policy grid and fresh random streams.
 Validation and test losses weight episodes equally and origins equally
 within episodes; selection averages MSE over the three horizons.
 
 \subsection{Comparison definitions}
 
-In the main synthetic campaigns, RBF and affine-hull comparators use
+In the fixed-cap reference campaigns, RBF and affine-hull comparators use
 the same type of $k$-means partition, with five initializations and at most 150 iterations. Here $k$ is
 the number of coordinates in the block. To define their scores, suppress the
 block index. Let $\xi\in\mathbb R^{d_x}$ be a preprocessed history, where
@@ -212,7 +218,8 @@ $\lambda\in\{10^{-4},10^{-2}\}$. For RBF and affine-hull features, an
 additional multiplier $\rho\in\{0.25,1,4\}$ changes the association weights
 to values proportional to $\exp(-\rho a_c(\xi))$, with $a_c$ defined above.
 KAHM retains affinity exponent $16$, at most 1600 geometry-training histories,
-and at most 24 reference points per local model. The resulting candidate
+at most 24 reference points per local model, and fixed local cap
+$r_{\max}=2$. The resulting candidate
 counts are 64 for KAHM and 192 for each geometric comparator.
 
 Linear and quadratic regression use training-standardized histories, with

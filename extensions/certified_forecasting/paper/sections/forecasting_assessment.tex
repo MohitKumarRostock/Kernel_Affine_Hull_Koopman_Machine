@@ -7,14 +7,19 @@ whether the implemented representations also give useful forecasts on broader
 tasks. They do not establish universal KAHM superiority or the prevalence of
 informative natural-data class exclusion. All prescribed configurations and
 adverse outcomes are retained. The accompanying supplement gives the complete
-forecasting, preprocessing, matched-geometry, and speech tables and protocols;
+forecasting, local-dimension, preprocessing, matched-geometry, and speech tables and protocols;
 Appendix~\ref{app:protocols} defines the generators and comparison models.
+The fixed-configuration forecasting, preprocessing, matched-geometry, and
+natural-data comparisons use local KAHM cap $r_{\max}=2$.
+Section~\ref{sec:dimension-policy} evaluates dimension selection separately.
+These caps constrain each local reconstruction model; they are distinct from
+the retained feature counts $2,6,14,30$.
 
-\subsection{Synthetic forecasting and retained-block refinement}
+\subsection{Fixed-cap forecasting and retained-block refinement}
 \label{sec:oscillators}
 \label{sec:budget-sensitivity}
 
-The main study uses four bounded length-72 episode laws: harmonic,
+The fixed-cap reference study uses four bounded length-72 episode laws: harmonic,
 quasiperiodic, nonlinear autoregressive, and logistic. Five fits per law use
 128 training, 512 validation, 4096 calibration, and 2048 test episodes;
 histories have lengths 4 or 12 and horizons are 1, 4, and 12. Forty candidates
@@ -27,7 +32,7 @@ KAHM improves on long-horizon persistence for periodic signals, but quadratic
 and autoregressive regressors are stronger. For nonlinear AR at horizon 12,
 KAHM RMSE is $0.0743$, versus $0.0802$ for ridge AR and $0.0813$ for
 quadratic regression; those alternatives are better at one step. At all-horizon
-RMSE tolerance $0.35$, the main study's 800 candidates give 301 acceptances,
+RMSE tolerance $0.35$, its 800 candidates give 301 acceptances,
 24 exclusions, and 475 unresolved decisions. For the 240 oscillator candidates,
 the corresponding counts are 55, 30, and 155. Van der Pol horizon-12 KAHM
 RMSE is $0.3814$, versus $0.2990$ for affine-hull blocks; on Duffing, KAHM
@@ -35,17 +40,19 @@ has $0.2499$, versus $0.1369$ for quadratic regression. Direct fitting also
 does not uniformly improve on rollout: iterated KAHM gives $0.3408$ on
 Van der Pol.
 
-Among 480 main retained-KAHM candidate--horizon statements, 119 lower
+Among 480 four-law retained-KAHM candidate--horizon statements, 119 lower
 endpoints are positive, but only two exclude tolerance $0.35$ and none
 excludes $0.50$. Paired fitted-loss comparisons certify 72 of 360 main,
 43 of 54 Van der Pol, and 10 of 54 Duffing adjacent-prefix improvements.
-These fitted improvements differ from class exclusion. Across all 62 main,
+These fitted improvements differ from class exclusion. Across all 62 four-law,
 oscillator, and budget-sensitivity fits, all 186 lower endpoints of the
 complete-family validation winners are zero; 184 of 186 are zero when
 selection is restricted to KAHM. Fresh budget comparisons at
 $\kappa\in\{1,4,16\}$ show benefits from increasing one to four on several
 tasks and little further gain at sixteen. Zero-ridge duplicate-block checks
 agree within solver gaps; ridge-regularized fits need not be invariant.
+
+\input{sections/dimension_policy_summary}
 
 \subsection{Matched representation and decoder comparisons}
 \label{sec:matched-geometry}

@@ -25,7 +25,10 @@ upper bounds, and independent evaluation. It also gives an exact four-state
 example and independent dynamical confirmation. We reuse its KAHM
 construction and sampling principle; neither certificates for KAHM nor
 independent confirmation is new here. Table~\ref{tab:prior-comparison}
-states the substantive differences. Their reconstruction-score margin bounds
+states the substantive differences in the certificates. That work also
+includes common-target forecasting comparisons; the present extension
+concerns observed-output certificates and decisions over a retained family.
+Their reconstruction-score margin bounds
 concern agreement with reference labels, which does not imply predictive
 sufficiency.
 
@@ -35,7 +38,7 @@ sufficiency.
 \toprule
 Question & \citet{kumar2026limits} & Present work \\
 \midrule
-Prediction target & Successor soft coordinates & Fixed observed future outputs \\
+Certificate target & Successor soft coordinates & Fixed observed future outputs \\
 Decoder class & Spectral-norm-bounded linear coordinate predictors & General Lipschitz oracle; retained-block affine fits \\
 Lower information & Class-centered variation; empirical-minimum comparator & Positive-part pair slack; normalized monotone block hierarchy \\
 Representation decisions & Accuracy exclusion for a fixed coordinate map and norm limit & Simultaneous class exclusion and fitted-model acceptance; minimum feasible cost among declared alternatives \\
@@ -49,11 +52,11 @@ Theorem~\ref{thm:block-hierarchy}.}
 \end{table}
 
 \paragraph{Pairwise bounds and Lipschitz regression.}
-\citet{akash2021inverse} derive a Lipschitz-constrained mean squared error (MSE) bound
-using paired residuals and target separation. Their argument is a close
-antecedent to the geometric step in our witness; our contribution concerns
-its conditional positive-part form, sharpness and slack, and statistically
-valid stratification under the unchanged marginal risk. Finite-support
+The paired-residual argument underlying \citet[Lemma~2]{akash2021inverse}
+uses target separation and Lipschitz control to lower-bound an adversary's
+mean squared error (MSE). We use a conditional squared-positive-part score
+and examine its exactness, population slack, and calibration for class-level
+forecasting decisions under an unchanged marginal risk. Finite-support
 Lipschitz regression can be posed as a constrained optimization problem
 \citep{gottlieb2017regression}; we use this class directly for an empirical-minimum
 comparator. Model-class falsification \citep{muller2025falsification} and
@@ -66,19 +69,20 @@ The Gamma test uses local pair differences to estimate regression noise
 sampling and error criteria.
 
 \paragraph{Empirical minima and optimization over blocks.}
-Expected sample-average optimization values and repeated-batch lower bounds
-are established in stochastic programming
-\citep{linderoth2006empirical,guigues2017confidence}. Optimization of empirical
-$U$-statistics and the tradeoff between computation and statistical precision
-are also established \citep{clemencon2016scaling}. Our block objective can be
-written as the minimum of a residual-difference $U$-statistic. We do not claim
-that empirical-minimum lower bounds or block averaging are new. The specific
-connection is a centered hierarchy for scalar Lipschitz regression: its
-size-two member is the pair witness, its expectations increase to the class
-optimum under compactness, and exact examples quantify why a fixed block size
-can remain inadequate. The recentering argument uses closure under adding
-constants; the pair formula and scalar extension connect it to the Lipschitz
-prediction problem. Calibration uses standard bounded-mean inequalities.
+Monotonic lower expectations of sample-average optimal values are established
+in stochastic programming \citep{mak1999montecarlo}. Repeated-batch estimation
+\citep{linderoth2006empirical} and non-asymptotic optimal-value confidence
+bounds \citep{guigues2017confidence} provide further precedents. Optimization
+of empirical $U$-statistics and its computational--statistical tradeoffs are
+also established \citep{clemencon2016scaling}. Our construction applies these
+principles to scalar Lipschitz prediction. Translation of the fitted values
+justifies a residual-variance normalization, rather than a generic correction
+of empirical risk. It produces the exact positive-part pair score at size two,
+a monotone hierarchy converging under compactness, and exact rare-conflict and
+occupancy laws describing finite-block slack. For each fixed decoder the
+residual-difference objective is a $U$-statistic; its optimized value is not
+generally a $U$-statistic with a fixed kernel. Calibration instead uses standard
+bounded-mean inequalities on independent blocks.
 
 \paragraph{Calibration, refinement, and dependence.}
 We use classical bounded-mean inequalities \citep{hoeffding1963} and empirical

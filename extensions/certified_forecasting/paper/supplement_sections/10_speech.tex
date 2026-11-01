@@ -52,7 +52,8 @@ fit across eight
 families (Table~\ref{tab:speech}). The geometric families share prefix sizes
 $2,6,14,30$, standardization or raw inputs, budgets $1,4$, and ridge parameters
 $10^{-4},10^{-2}$. RBF and affine affinity multipliers are $0.25,1,4$;
-KAHM uses its inherited reconstruction. Conventional regression heads use
+KAHM uses its local reconstruction with explicit cap $r_{\max}=2$.
+Conventional regression heads use
 ridge regularization without a coefficient-norm constraint; thus their
 comparison with the geometric heads does not control statistical capacity.
 Appendix~\ref{app:speech-protocol} specifies their complete grids. Every family

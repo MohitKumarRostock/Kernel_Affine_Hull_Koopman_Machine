@@ -1,0 +1,176 @@
+\section{Local dimension policies for retained KAHM representations}
+\label{supp:dimension-policy}
+
+This study separates the local PCA cap from the number of retained association
+coordinates and examines their consequences for forecasting and risk decisions.
+The construction in Section~\ref{supp:kahm-implementation} requests
+$\min\{r_{\max},d_x,N_{\rm loc}-1\}$ at each actual local encoder, with native
+default $r_{\max}=20$. Stored ranks can be smaller after the numerical
+variance and projected-range rules. The dimension study uses the block-direct
+decoder and training-standardized inputs. The rollout, preprocessing,
+matched-geometry, and natural-data comparisons elsewhere in the supplement
+retain their explicit cap-two configurations and their separate scopes.
+
+\subsection{Development choices and frozen evaluation}
+
+The six laws are the four reference episode generators and the Van der Pol
+and Duffing numerical sensor laws in Section~\ref{app:protocols}. There are
+five fitting repetitions per reference law and three per oscillator. Each
+repetition has 128 training, 512 validation, 4096 calibration, and 2048 test
+episodes of length 72. Histories $m\in\{4,12\}$ share origins
+$11,15,\ldots,59$ and horizons $\{1,4,12\}$. The master seed is
+2026110104. NumPy \texttt{SeedSequence} derives separate streams for every law,
+repetition, and split; the frozen schedule stores their integer seeds.
+Geometry uses at most 1600 training histories, at most 24 references per
+local fit, and affinity exponent 16. The decoder has ridge $10^{-4}$ and
+sum-of-block Frobenius norm budget $\kappa=4$.
+
+The policies are fixed cap two, native cap twenty, and validation selection
+over $\{1,2,4,8,12,20\}$. For each policy, the selection criterion is the best
+prefix's mean validation MSE over the three horizons. It selects one complete
+history--cap bank, with ties resolved by retained coordinate count, history
+length, cap, and candidate name. All four prefixes of that bank are retained
+for certification, and its validation-selected prefix is identified as the
+forecasting model. A bank therefore retains the same earlier coordinate
+functions when a later block is appended. Separate cap choices at each prefix
+would not establish this nested-class relation.
+
+Within a history length, caps share the geometry seed and training-reference
+sampling. Caps at least as large as the ambient history dimension give the
+same native request for fixed references; the tie rule favors the smaller
+equivalent cap. Consequently, selecting cap four at history four can reproduce
+the full ambient native representation. Frequencies of requested caps should
+not be interpreted as comparisons among distinct realized ranks in every case.
+
+RBF and affine-hull banks use their original definitions, including the
+affine comparator's rank-two SVD normal-direction rule. Each chooses a
+history by its best validation prefix and retains all four prefixes.
+Ridge autoregression and quadratic regression each choose a history;
+persistence and the training-mean model complete the comparison. The resulting
+70 development candidates per repetition yield 24 evaluated model instances:
+12 KAHM prefixes, eight geometric-comparator prefixes, and four other models.
+Identical fitted models can share stored arrays but retain their declared
+statements in the confidence allocation.
+
+All \DimDevelopmentFits{} development fits finish before calibration, and
+every retained model and validation choice is sealed. Calibration then
+evaluates all 26 repetitions, and its complete results are sealed before test
+episodes are generated. No calibration or test outcome selects a cap,
+history, or prefix in this study. This design leaves the general
+simultaneous-family selection rule of Section~\ref{sec:calibration}
+available for other declared procedures.
+
+\subsection{Sampling units and simultaneous confidence}
+
+Losses average the thirteen origins within each independent episode.
+Clipped forecasts and observed targets lie in $[-1,1]$, so these scores are
+bounded by four. Upper calibration uses 4096 independent episode losses.
+The lower witness averages matched origins within each disjoint episode pair,
+uses the maximum Euclidean distance over retained blocks, and has bound two.
+Its independent sample size is 2048. The within-episode origins do not multiply
+either sample size. The other fixed feature maps use their declared
+Euclidean metrics and budgets. These choices define the classes being
+certified.
+
+For each repetition, 24 models and three horizons give 144 designated
+one-sided risk statements: a fitted-loss upper endpoint and a class-witness
+lower endpoint for each model and horizon. The nine adjacent-prefix comparisons
+of the three KAHM banks and three comparisons between their validation-selected
+forecasts give a further 36 horizon-specific improvement lower endpoints.
+The latter use a shifted loss difference bounded by eight. Empirical Bernstein
+calibration applies to the independent episode or episode-pair scores.
+One failure probability $0.05$ covers the entire dimension study:
+\[
+ \delta_{\rm tail}
+ =\frac{0.04}{26\cdot144}
+ =\frac{0.01}{26\cdot36}
+ =\frac{0.05}{4680}.
+\]
+Only these designated tails belong to the event. It does not cover the other
+studies in the paper. In particular, cross-study differences in interval
+width cannot isolate dimension when the reference studies use a different
+failure allocation.
+
+At RMSE tolerance $\varepsilon$, all-horizon acceptance requires every
+upper-MSE endpoint to be at most $\varepsilon^2$; exclusion requires at least
+one lower endpoint above $\varepsilon^2$. Other cases remain unresolved.
+A simultaneous upper/lower contradiction is retained with a conflict
+diagnostic, since a finite-sample confidence event can fail. No such
+contradiction occurred. Positive fitted-improvement endpoints concern the
+two fitted forecasts, rather than differences between unknown class optima.
+
+\subsection{Forecasting outcomes and local ranks}
+
+Table~\ref{tab:dimension-full-results} retains all nine families and every
+horizon. Selected cap improves the mean over horizons in \DimBetterRuns{}
+repetitions and ties cap two in \DimEqualRuns{}, with no adverse repetition
+in this sample. Its mean is lower on five laws and equal on quasiperiodic.
+Selected cap and cap two choose the same history and prefix in all 26
+repetitions. The selected policy uses caps one, two, and four in
+\DimCapOneCount{}, \DimCapTwoCount{}, and \DimCapFourCount{} repetitions
+(Table~\ref{tab:dimension-policy-choices}). Every selected KAHM forecast
+uses the 30-coordinate prefix.
+
+Native cap twenty has mixed effects, including
+\DimNativeDuffingIncrease\% higher mean MSE than cap two on Duffing, with
+higher error in every Duffing repetition. Its selected banks have 674
+rank-four, 90 rank-twelve, and 16 rank-three local encoders
+(Table~\ref{tab:dimension-policy-ranks}); the rank-three cases arise from
+the native projected-range reduction. These ranks explain why a requested
+cap of twenty is not a realized dimension of twenty on these histories.
+Selected KAHM has lower mean error than the non-KAHM comparators on nonlinear
+AR and logistic, while quadratic regression remains stronger on the other
+four laws. These cross-family test-error comparisons are descriptive and
+do not assume equal capacity from equal numerical coefficient budgets.
+
+\input{tables/dimension_policy_full_results}
+\input{tables/dimension_policy_choices}
+\input{tables/dimension_policy_ranks}
+
+\subsection{Certificate resolution and verification}
+
+\input{tables/dimension_policy_resolution}
+\input{tables/dimension_policy_improvements}
+
+The selected-forecast decisions are identical across policies for every
+repetition and tolerance. Each policy accepts \DimAcceptLow{}, \DimAcceptMedium{},
+and \DimAcceptHigh{} of its 26 selected forecasts at tolerances
+$0.2$, $0.35$, and $0.5$; the remaining decisions are unresolved.
+All \DimSelectedLowerZero{} selected-KAHM horizon lower endpoints are zero.
+Across all retained KAHM prefixes, cap two, native twenty, and selected cap
+have 91, 81, and 88 positive lower endpoints. Their accepted/excluded/unresolved
+counts at tolerance $0.35$ are $30/3/71$, $29/3/72$, and $30/3/71$,
+respectively, among 104 prefix models per policy.
+Table~\ref{tab:dimension-policy-resolution} gives the complete law-specific
+counts at all declared tolerances.
+
+Of \DimPrefixTails{} adjacent-prefix fitted-loss comparisons,
+\DimPositivePrefix{} have positive simultaneous lower endpoints: 47, 40,
+and 45 for cap two, native twenty, and selected cap
+(Table~\ref{tab:dimension-policy-improvements}). None of the
+\DimPolicyTails{} selected-policy comparisons has a positive lower endpoint.
+Across the full family, \DimAllLowerZero{} of \DimAllLowerCount{} lower
+endpoints are zero and no upper endpoint reaches the loss bound of four.
+Dimension selection therefore improves descriptive forecasting accuracy
+without improving the selected-forecast tolerance decisions in this study.
+
+All candidate fits complete without numerical failure, and every iterative
+fit meets its prescribed objective-gap criterion. The risk guarantees require
+feasible fixed forecasts rather than exact optimization. Independent analysis
+reconstructs all \DimTotalTails{} designated endpoints, the selection rules,
+and all nine exported tables (\DimAuditTableRows{} rows) from archived
+scores and metadata, without unpickling models. For the prespecified
+repetition numbered zero of each law, complete calibration and test arrays
+also verify \DimAuditPredictionJoins{} prediction-to-loss joins. The full
+campaign has a score-level audit; full prediction arrays cover those six jobs.
+The source package contains the small verified analysis inputs used to
+generate the manuscript tables. The numerical-records archive contains
+complete production records and their checksums.
+
+The unknown class-optimal risks are not population ground truth supplied by
+the test set. Test-error containment is therefore a consistency diagnostic,
+not an estimate of true certificate coverage. The evidence is limited to the
+six declared synthetic laws, three or five fitting repetitions per law, and
+the standard-input block-direct procedure. The controlled two-dimensional
+learned-geometry mechanism and larger-observation-block hierarchy retain
+their distinct experimental roles.

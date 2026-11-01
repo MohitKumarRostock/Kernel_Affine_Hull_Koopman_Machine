@@ -25,8 +25,11 @@ at $n=256$; it is not computed at the two larger sizes. Every lower method
 uses the same scalar Lipschitz class. The block and stratified mean bounds use
 KL calibration; the upper endpoints use empirical Bernstein. The 1760
 endpoints share one failure probability $0.05$, with equal allocation
-$0.05/1760$ per endpoint and the stated subdivision for each stratified
-bound's mass and conditional-mean intervals. Taking maxima over the frozen
+$\eta=0.05/1760$ per endpoint. For a partition with $M$ strata, its
+stratified endpoint allocates $\eta/2$ to the joint mass event and
+$\eta/(2M)$ to each conditional KL mean in \eqref{eq:stratified-kl}.
+Strata with fewer than two pairs receive lower endpoint zero, a conservative
+convention also used by the recorded implementation. Taking maxima over the frozen
 methods is covered by this event. The earlier learned-pair study used
 empirical Bernstein lower means, so cross-study changes cannot be attributed
 to block size alone.

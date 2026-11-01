@@ -16,6 +16,7 @@ Study & Independent unit and target & Interpretation \\
 Finite-support hierarchy & One iid scalar observation, $Y\in[-1,1]$ & Known population optima; the confidence event is per law/repetition. \\
 Learned KAHM controls & One independent two-lag history/future episode, $Y\in[-0.85,0.85]$ & Constructed repairable and independent-future laws; all selected banks and heads are frozen. \\
 Synthetic forecasting & One independently initialized length-72 trajectory, $Y\in[-1,1]$ & Origins may overlap; complete-episode losses are independent across trajectories. \\
+Dimension-policy comparison & One length-72 trajectory for fitted loss; one disjoint episode pair for a lower witness & All 26 development repetitions and selected banks precede calibration; one event covers the study's 4,680 designated endpoints. \\
 PenDigits & One eligible writer record; acquisition coordinates in $[0,500]$ have a fixed transformation & Thirteen held-out writers; source identifiers do not establish iid population sampling. \\
 Speech energy & One recording-group bundle; fixed floored energy in $[0,1]$ & 978 calibration groups under the stated iid group-record assumption; repeated fitting seeds reuse groups. \\
 \bottomrule
@@ -26,7 +27,7 @@ conditional on its declared fixed development choices and sampling law.}
 \label{tab:sampling-summary}
 \end{table}
 
-The four main synthetic generators use independent initialization and noise:
+The four reference synthetic generators use independent initialization and noise:
 harmonic and quasiperiodic observations are bounded trigonometric sums,
 nonlinear AR uses a hyperbolic-tangent recurrence, and logistic observations
 are $2u-1$ for $u\in[0,1]$. The oscillator observable is
@@ -38,10 +39,18 @@ proving a continuous-time error bound.
 
 For every comparison, available histories and targets share the same declared
 origin law. Training-fitted transformations and geometry are frozen before
-calibration. The main-study reference seeds use separate streams for training,
+calibration. The fixed-cap reference seeds use separate streams for training,
 validation, calibration, and testing. Later confirmation studies have their
 own numeric seed rules and source freezes. Per-study confidence allocations
 do not automatically yield one confidence event for the full campaign.
+The fixed-cap reference comparisons use local KAHM cap $r_{\max}=2$.
+The dimension-policy comparison uses native construction
+\eqref{eq:kahm-rank-request}, 4096 independent calibration episodes and
+2048 disjoint episode-pair scores per repetition. The thirteen within-episode
+origins are averaged and do not increase these sample sizes.
+Supplement Section~S9 specifies its model grid, whole-bank validation
+selection, and campaign-wide allocation; that allocation does not include
+the other studies in the paper.
 
 \subsection{Speech evaluation order and reused cohorts}
 \label{app:speech-protocol}

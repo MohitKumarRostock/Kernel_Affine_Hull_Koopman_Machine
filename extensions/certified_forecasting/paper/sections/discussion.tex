@@ -28,8 +28,8 @@ independent-future control, $b=8,16$ exclude both classes at $n=1024$ for every
 control bank while pairs do not. All lower methods assess the same scalar Lipschitz
 class. At that size stratification gives larger mean endpoints; full-sample empirical
 minimization resolves every control at $n=256$, its only tested sample size.
-Larger blocks add no cost decision in the repairable regime. The new study
-uses KL lower means, whereas the earlier pair study uses empirical Bernstein;
+Larger blocks add no cost decision in the repairable regime. The learned-hierarchy
+study uses KL lower means, whereas the learned-pair study uses empirical Bernstein;
 cross-study differences do not isolate block size. These are conditional
 evaluations of fixed banks, not new training repetitions or natural-data
 evidence. Stratification can also remove useful contrasts, and a sharp
@@ -67,12 +67,21 @@ PenDigits and speech scaling follow-ups on examined cohorts remain
 descriptive. Confidence allocations cover each declared study, not the
 entire research campaign.
 
-\paragraph{Accuracy and preprocessing.}
+\paragraph{Accuracy and representation parameters.}
 The matched comparisons support KAHM gains on nonlinear autoregression and
 against RBF geometry on the fixed PenDigits cohort. Affine-hull alternatives
 are stronger on the oscillators, while autoregressive, quadratic, and kernel
 regressors outperform KAHM on speech. Scaling to $[-1,1]$ improves some tasks
-and worsens others. It must be treated as a development-selected model choice,
+and worsens others under the fixed local cap of two.
+The dimension-policy study (Section~\ref{sec:dimension-policy}) improves
+descriptive test error through validation selection of the cap, while native
+cap twenty has mixed effects. All selected KAHM lower endpoints remain zero
+and the declared tolerance decisions are unchanged. Increasing local rank is
+therefore neither a universal accuracy prescription nor evidence of improved
+class exclusion. Local dimension and preprocessing both belong to the
+representation specification; their joint interaction is not established by
+these separately defined studies.
+Preprocessing must be treated as a development-selected model choice,
 with training extrema frozen before calibration; clipping future inputs is
 a distinct representation. These experiments assess the stated certificate
 framework and forecasting implementations. They establish neither universal

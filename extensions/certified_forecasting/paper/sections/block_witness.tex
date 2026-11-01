@@ -31,6 +31,7 @@ $T_b=b a_b/(b-1)$. This correction is justified by the freedom to translate
 every fitted value by the same constant; it is not a generic correction
 for arbitrary empirical-risk minima.
 
+\Needspace{8\baselineskip}
 \begin{theorem}[Monotone block hierarchy]
 \label{thm:block-hierarchy}
 Under these assumptions, the following statements hold.
@@ -114,11 +115,12 @@ Clipping it to $[y_-,y_+]$ preserves those properties. Thus $a_b$
 is the empirical minimum over the same bounded Lipschitz class as
 the population problem. On a compact metric space this class is
 compact in the uniform norm: it is uniformly bounded and
-equicontinuous. For each fixed $\epsilon>0$, a finite uniform
-$\epsilon$-net and the ordinary strong law give uniform convergence
-of empirical risks over that net. Since
+equicontinuous. For every integer $m\geq1$, choose a finite uniform
+$1/m$-net. The ordinary strong law holds simultaneously on the countable
+union of these nets, on an event of probability one. Since
 $|(y-f(u))^2-(y-g(u))^2|\leq2D\|f-g\|_\infty$ for interval-valued
-$f,g$, the convergence extends to the entire class. Therefore
+$f,g$, approximation by these nets gives uniform convergence over the entire
+class. Therefore
 $a_b\to R^*_\kappa$ almost surely. Multiplication by $b/(b-1)$
 and the bound $T_b\leq D^2/2$ give $\mathcal{W}_b\to R^*_\kappa$ by
 dominated convergence.
@@ -129,13 +131,14 @@ class. In particular, every block score dominates the average of its
 pair scores. The additional information is joint consistency of the fitted
 values across pairs, rather than a new concentration inequality.
 Optimization of empirical $U$-statistics is established
-\citep{clemencon2016scaling}: equation~\eqref{eq:block-residual-identity}
-places this construction in that framework. Lower bounds obtained by
-averaging empirical optimization values over independent batches are also
-established in stochastic programming
-\citep{linderoth2006empirical,guigues2017confidence}. The specific
-connection here is the centered normalization, its exact pair-obstruction
-member, and the monotone hierarchy for the Lipschitz prediction problem.
+\citep{clemencon2016scaling}; equation~\eqref{eq:block-residual-identity}
+gives the residual-difference form of this construction. Monotonic expected
+sample-average minima \citep{mak1999montecarlo} and independent-batch
+lower estimation \citep{linderoth2006empirical} are established precedents.
+The specific connection here is the centered normalization, its exact
+pair-obstruction member, and its finite-block limitations for Lipschitz
+prediction. The optimized score is calibrated as a bounded block statistic,
+without treating its data-dependent minimizer as a fixed $U$-statistic kernel.
 
 \subsection{Exact gaps and the limits of fixed block sizes}
 
@@ -199,7 +202,7 @@ population optimum $D^2/4$, attained by the constant $D/2$.
 \end{proof}
 
 The second example consists entirely of finite, hence compact, metric
-spaces. It rules out a distribution-free additive approximation rate
+spaces. It rules out a vanishing distribution-free additive approximation bound
 depending only on $b$ and the target range over all such spaces. The
 support points can be $u_j=D e_j/(\kappa\sqrt2)$ in $\mathbb R^M$,
 where $e_j$ are the coordinate unit vectors. Their diameter is
@@ -242,9 +245,12 @@ verified arithmetic.
 
 \begin{corollary}[Independent-block lower calibration]
 \label{cor:block-calibration}
-Suppose the same fixed measurable procedure computes each score
-$\underline T_{b,k}\in[0,B_b^{\rm blk}]$ from block $k$, with
-$\underline T_{b,k}\leq T_{b,k}$, and $K_b\geq1$.
+Suppose measurable numerical scores
+$\underline T_{b,k}\in[0,B_b^{\rm blk}]$ satisfy
+$\underline T_{b,k}\leq T_{b,k}$ pointwise, and $K_b\geq1$.
+The exact scores $T_{b,k}$ are independent and identically distributed,
+computed from disjoint iid blocks; their numerical lower approximations
+may share computation across blocks.
 For an allocated failure probability $\alpha\in(0,1)$ and $B_b^{\rm blk}>0$,
 let
 \begin{equation}
@@ -263,16 +269,21 @@ probabilities is at most the declared total.
 \end{corollary}
 
 \begin{proof}
-The bounded-mean inequality \eqref{eq:kl-bounded-mean} gives
-$L_b\leq\mathbb E\underline T_{b,1}$ with failure probability
-at most $\alpha$. The pointwise score inequality and
-Theorem~\ref{thm:block-hierarchy} give
-$\mathbb E\underline T_{b,1}\leq \mathcal{W}_b\leq R^*_\kappa$.
-A union bound proves the finite-family assertion; different methods
-may reuse the same calibration observations.
+Apply \eqref{eq:kl-bounded-mean} to the iid exact scores
+$T_{b,k}\in[0,B_b^{\rm blk}]$. Their KL lower endpoint is at most
+$\mathcal W_b$ with failure probability at most $\alpha$. The map
+$q\mapsto\operatorname{kl}_-(q,c)$ is nondecreasing for fixed $c$.
+Since the numerical sample mean is no larger than the exact sample mean,
+$L_b$ is no larger than that exact-score endpoint. Theorem~\ref{thm:block-hierarchy}
+then gives $L_b\leq\mathcal W_b\leq R^*_\kappa$. A union bound proves
+the finite-family assertion; different methods may reuse calibration data.
 \end{proof}
 
-The empirical Bernstein radius can be substituted when $K_b\geq2$.
+An empirical Bernstein lower bound can instead be applied to the computed
+scores when $K_b\geq2$ and each is a common fixed measurable function of its
+own block, so those scores are iid. The empirical Bernstein endpoint need
+not be coordinatewise monotone; the preceding KL argument alone does not
+justify that substitution for coupled numerical outputs.
 Block sizes and optimization rules are fixed before calibration; taking
 the largest endpoint across a frozen family requires the stated joint
 allocation. This is distinct from multiplying the full-sample

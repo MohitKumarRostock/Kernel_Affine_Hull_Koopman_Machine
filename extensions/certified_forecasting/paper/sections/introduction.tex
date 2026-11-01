@@ -9,6 +9,10 @@ fitted forecast; a lower risk bound can exclude every decoder in a declared
 representation class. Together they can establish when a more costly
 representation is necessary. All comparisons use the same observed target
 and evaluation law, with decoder sensitivity budgets declared explicitly.
+The added conclusion is necessity within a declared family: the least costly
+accepted fit is certified to have minimum feasible cost when every cheaper
+class is excluded. This conclusion can hold even when upper-only selection returns
+the same fitted forecast.
 
 Kernel Affine Hull Machines (KAHMs) provide our main worked example.
 Their established local reconstruction models map histories to soft
@@ -41,6 +45,10 @@ representation support, they converge to the optimal Lipschitz risk. Larger bloc
 individual pairs cannot express. They also require more optimization and
 leave fewer independent block scores for calibration. Population improvement
 therefore does not imply a uniformly stronger finite-sample certificate.
+Monotonic lower expectations of ordinary sample-average minima are established
+\citep{mak1999montecarlo}. Here the centered normalization connects the
+Lipschitz problem exactly to the pair score, and the rare-conflict and
+noisy-support laws quantify the information missed by finite blocks.
 
 Conditional pairing offers a complementary approach. Comparisons within a
 predefined history stratum can expose conflicts that global pairing rarely
@@ -52,7 +60,7 @@ constraint. We do not identify these causes from a lower endpoint alone.
 
 The paper makes three contributions.
 \begin{enumerate}[leftmargin=*,itemsep=2pt]
-\item \textbf{A hierarchy and its population limits.} We connect the pair
+\item \textbf{A centered hierarchy and its population limits.} We connect the pair
 witness to normalized minimum-risk problems on larger blocks, establish
 monotonicity and consistency under the stated conditions, and identify exact
 and arbitrarily loose pairwise cases.
@@ -71,9 +79,10 @@ speech studies assess accuracy, scaling, and calibration limits.
 \end{enumerate}
 
 The evidence separates informative decisions from unresolved ones.
-Empirical-minimum calibration is often tighter than pairwise calibration;
-KAHM forecasting accuracy and the effect of input scaling depend on the task
-and decoder. Useful class exclusion on a constructed mechanism does not
-establish its prevalence on natural data. All confidence statements concern
-expected squared error with independent calibration units and bounded losses.
-Preprocessing is part of each representation and is frozen before calibration.
+Empirical-minimum calibration is often tighter than pairwise calibration,
+and KAHM accuracy depends on the task and decoder. Useful class exclusion
+on a constructed mechanism does not establish its prevalence on natural data.
+All confidence statements concern expected squared error under the declared
+sampling law. Sections~\ref{sec:theory}--\ref{sec:block-witness} develop the
+population bounds; Sections~\ref{sec:method}--\ref{sec:calibration} connect them
+to fixed forecasting procedures and calibrated decisions.

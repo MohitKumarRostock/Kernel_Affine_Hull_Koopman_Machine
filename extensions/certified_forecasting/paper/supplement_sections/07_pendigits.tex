@@ -21,7 +21,8 @@ it does not cover every newly started stroke.
 
 Each scalar forecast uses its own coordinate history at horizons $1,2,4$.
 For each of the two coordinates and three fitting seeds, the procedure fits
-40 candidates and selects one per family by validation. All candidates and
+40 candidates and selects one per family by validation. KAHM uses the
+explicit local cap $r_{\max}=2$. All candidates and
 selection rules are frozen before testing. Losses average over origins and
 digits within writers, then equally over writers and coordinates before
 taking the square root. Table~\ref{tab:pendigits} reports the mean and sample

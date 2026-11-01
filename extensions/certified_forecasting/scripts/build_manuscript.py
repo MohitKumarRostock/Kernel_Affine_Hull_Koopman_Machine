@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Build the complete main paper and its reproducible experimental supplement.
 
-The detailed study sources are retained unchanged. Supplement-only copies
-expand their table inputs and qualify references to the main paper. Every
-proof of a main-paper result stays in main.pdf.
+Dimension-study assets are generated from verified analysis inputs.
+Supplement-only copies expand table inputs and qualify references to the main
+paper. Every proof of a main-paper result stays in main.pdf.
 """
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ import argparse
 from pathlib import Path
 import re
 import subprocess
+import sys
 
 
 SUPPLEMENT_SOURCES = (
@@ -25,6 +26,7 @@ SUPPLEMENT_SOURCES = (
     ("09_matched", "sections/matched_geometry.tex"),
     ("10_speech", "sections/speech_forecasting.tex"),
     ("11_protocols", "sections/protocols.tex"),
+    ("12_dimension_policy", "sections/dimension_policy.tex"),
 )
 
 
@@ -88,9 +90,13 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--paper", type=Path, default=default)
     parser.add_argument("--prepare-only", action="store_true",
-                        help="Regenerate supplement sources without invoking LaTeX")
+                        help="Regenerate tables and supplement sources without invoking LaTeX")
     args = parser.parse_args()
     paper = args.paper.resolve()
+    subprocess.run(
+        [sys.executable, str(paper / "build_dimension_assets.py"), "--paper", str(paper)],
+        check=True,
+    )
     prepare_supplement(paper)
     if not args.prepare_only:
         compile_tex(paper, "main")

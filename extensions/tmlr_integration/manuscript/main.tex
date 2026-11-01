@@ -25,6 +25,8 @@
 \input{generated/target_geometry/numbers}
 \input{generated/direct_reconstruction/result_macros}
 \input{generated/dimension_forecasting/numbers}
+\input{generated/preprocessing_dimension/numbers}
+\input{generated/crossfit_residual/numbers}
 
 \title{Kernel Affine Hull Features\\
 for Time-Series Forecasting:\\
@@ -35,35 +37,33 @@ and Matched Evaluation\thanks{AI tools assisted with protocol development, imple
 \maketitle
 \begin{abstract}
 Kernel Affine Hull Machines (KAHMs) reconstruct observations from local
-reference sets. We study whether these reconstructions provide useful
-features for a finite-dimensional forecasting decoder. We interpret
-normalized target transfer as a ratio of kernel-ridge predictions,
-connecting the established KAHM construction to rescaled kernel
-interpolation. We give sufficient conditions under which KAHM and matched
-radial-basis-function (RBF) reconstructions generate the same augmented
-feature span, and construct an irregular reference set for which the spans
-differ. Separately, bounded features and a ridge residual decoder yield a
-uniform bound on the forecast correction, including its free intercept.
-A prospectively specified experiment compares ten procedures on 192 task
-suites: three nonlinear simulation laws and a linear control, two
-observation-noise levels, and 24 independent repetitions. Local dimension
-is selected before correction calibration, independently for each geometric
-procedure. Bounded KAHM departure reduces aggregate nonlinear normalized
-mean squared error by \DFGainCommon\% relative to common local-coordinate
-features and \DFGainRawRBF\% relative to raw-input RBF forecasting;
-both establish a prespecified 3\% margin under simultaneous inference.
-Its gains over independently selected RBF departures and boosted trees
-are \DFGainRBF\% and \DFGainHGB\%, below that margin. A selected non-KAHM
-procedure attains lower error. Dimension selection improves KAHM by
-\DFDimensionGain\% relative to a fixed cap of two, while a default cap
-of twenty increases error in these twelve-dimensional histories.
-Matched-bank controls attribute the dimension improvement to stronger
-common features despite a smaller incremental departure benefit.
-Correction bounds and linear-control noninferiority hold, but the joint
-performance criterion is not established. Supporting studies delimit
-transfer to natural series and adaptive procedures. The evidence supports
-conditional forecasting value without establishing a general advantage
-specific to KAHM.
+reference sets. We study the conditional value of these reconstructions
+as nonlinear features for finite, regularized forecasting decoders.
+Normalized target transfer is a ratio of kernel-ridge predictions.
+We give sufficient conditions for equality of KAHM and matched
+radial-basis-function (RBF) augmented feature spans, and an irregular
+reference construction for which the spans differ. Bounded features
+yield uniform magnitude bounds for both a free-intercept residual head
+and a centered correction around a fixed common forecast. These bounds
+are generic ridge results and do not guarantee accuracy.
+The principal experiment compares ten procedures on 192 simulated task
+suites with 24 independent repetition aggregates. With separately
+selected local dimensions, KAHM reduces nonlinear standardized mean
+squared error by \DFGainCommon\% against common features and
+\DFGainRawRBF\% against raw-input RBF, establishing the declared 3\%
+margins. The margins against independently tuned RBF departures and
+boosted trees are not established, and a non-KAHM policy has lower error.
+A preprocessing follow-up does not confirm a general tanh benefit.
+A computational reproduction of a separately specified residual study
+holds a full-training common forecast and shared bias fixed.
+Cross-fitted KAHM reduces baseline nonlinear loss by \CFRGainBias\%, but does not
+establish the prescribed advantage over independent RBF or the expanded
+policy. In secondary comparisons, in-sample KAHM improves its baseline
+by \CFRISGainBias\% and independent in-sample RBF by \CFRISGainRBF\%,
+while remaining above the policy's mean loss. The reproduction adds no
+independent repetitions. The studies support geometry-dependent residual
+features with conditional forecasting value; a general KAHM-specific
+advantage and natural-series adoption remain unestablished.
 \end{abstract}
 
 \input{core_introduction}
@@ -72,6 +72,7 @@ specific to KAHM.
 \input{core_theory}
 \input{core_decoder}
 \input{core_experiment}
+\input{core_followup_experiments}
 \input{supporting_summary}
 \input{core_discussion}
 

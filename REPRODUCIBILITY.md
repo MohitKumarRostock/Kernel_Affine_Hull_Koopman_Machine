@@ -1,10 +1,76 @@
 # Reproducing the KAHM forecasting studies
 
-This repository contains several experiments with distinct source checkpoints and computational environments. The current manuscript draws on the forecasting extensions under `extensions/`; the original Kernel Affine Hull Koopman Machine (KAHKM) experiments have a separate result map under `reproduction/`. Use the environment and entry point for the study being reproduced.
+This repository contains several experiments with distinct source checkpoints and computational environments. The principal experiment in the coordinated manuscript is the validation-selected local-dimension study under `extensions/dimension_forecasting/`. Preprocessing and residual-target follow-ups retain separate protocols, analysis families and evidence. The original Kernel Affine Hull Koopman Machine (KAHKM) experiments have a separate result map under `reproduction/`. Use the environment and entry point for the study being reproduced.
 
-## Principal reconstruction-departure experiment
+## Principal dimension-selected forecasting experiment
 
-The [study README](extensions/reconstruction_mechanism/README.md) is the entry point for the ten-procedure, 192-task-suite experiment. Its evidence consists of exact prepared inputs, fitted model states, selected predictions, selection records, statistical summaries, and timing measurements.
+The [dimension-study README](extensions/dimension_forecasting/README.md) is the entry point for the principal ten-procedure, 192-task-suite experiment. It preserves the six-comparison primary family, of which three criteria were established. Its evidence includes prepared inputs, fitted and candidate states, validation/calibration decisions, terminal forecasts, analysis tables and execution records.
+
+Use the pinned Python 3.12 environment described in that guide. From the repository root:
+
+```bash
+python -m pip install -r extensions/dimension_forecasting/requirements.txt
+```
+
+Restore all six `KAHM_Forecasting_Dimension_Records_01.zip` through `_06.zip`
+archives at the repository root. Their checkout-relative paths restore under
+`extensions/dimension_forecasting/`; the [archive manifest](extensions/dimension_forecasting/documentation/KAHM_Forecasting_Dimension_Records_manifest.json)
+records membership and checksums. Then verify the seals and reconstruct the
+analysis using a new output directory:
+
+```bash
+cd extensions/dimension_forecasting
+python code/study_seals.py verify --root .
+python analysis_code/analyze_forecasting.py --root . --output verification/reanalysis
+```
+
+The [independent final audit](extensions/dimension_forecasting/audit/post_release/final_results_audit.json)
+covers all 192 tasks, 31,104 retained forecast arrays, 18,816 local PCA bases
+and 27 analysis tables. Full staged regeneration and fitting commands are in
+the study README. Run a new numerical execution in a clean copy of the frozen
+source, preserving the reported evidence. Reusing the declared seeds reproduces
+that sample; it does not create new independent repetitions.
+
+## Preprocessing and residual-target follow-ups
+
+| Study | Reproduction entry point | Preserved inference and evidence |
+| --- | --- | --- |
+| Preprocessing and local dimension | [Completed package and restoration guide](extensions/preprocessing_dimension/RESULTS_PACKAGE.md), [frozen execution guide](extensions/preprocessing_dimension/README.md) | Four primary comparisons, one established; a separate secondary disjoint-episode fixed-common mechanism study |
+| Cross-fitted and in-sample residual corrections | [Execution and provenance guide](extensions/crossfit_residual_reproduction_20261101/README.md), [completed results](extensions/crossfit_residual_reproduction_20261101/reporting/RESULTS.md) | Original four primary comparisons, two established; same 24 original cross-fit units and zero additional independent repetitions |
+
+The preprocessing package contains one analysis ZIP and twelve disjoint records
+ZIPs. Its [archive index](extensions/preprocessing_dimension/reporting/archive_index.json)
+and restoration guide specify their layout. The extension depends on the
+unchanged `dimension_forecasting` runtime. Its [audit](extensions/preprocessing_dimension/audit/final_results_audit.json)
+checks all aggregate arithmetic and the primary comparisons; raw
+forecast-to-loss reconstruction covers the prespecified eight repetition-zero
+tasks, not every task. Retain that distinction when describing verification.
+
+The cross-fit reproduction package contains one analysis ZIP and sixteen
+standalone records ZIPs. Its [exact manifest](extensions/crossfit_residual_reproduction_20261101/reporting/ARCHIVE_MANIFEST.json)
+and [delivery verification](extensions/crossfit_residual_reproduction_20261101/reporting/archive_delivery_verification.json)
+identify the retained numerical bytes. The [independent reproduction audit](extensions/crossfit_residual_reproduction_20261101/verification/reproduction_audit.json)
+covers all 192 tasks, 8,064 forecast arrays and 24,192 horizon losses. Restore
+the checkout-relative members over the pinned source. Preserve the sibling
+`dimension_forecasting`, `preprocessing_dimension` and `crossfit_residual_v2`
+directories required by its runtime and provenance audit.
+
+The cross-fit model, pipeline, solver and scientific analyzer were recovered
+from published source and retained without scientific changes. The original
+completed numerical records were unavailable, and prior reported outcomes
+were known. Regenerating the same streams under newly recorded gates verifies
+the new execution; it cannot authenticate the missing original run's bytes,
+audit or chronology. The new freeze is not a new prospective preregistration.
+In-sample residual comparisons remain secondary, and their post hoc mean
+comparison with the expanded policy does not add a primary claim.
+
+## Historical fixed-cap reconstruction-departure experiment
+
+The [reconstruction-mechanism guide](extensions/reconstruction_mechanism/README.md)
+retains the earlier fixed-cap ten-procedure, 192-task experiment. Its original
+numeric supplement, verification programs and eight-table analysis have that
+historical scope. They are not substitutes for the dimension-selected
+principal study or either follow-up.
 
 Use Python 3.12 and install:
 
@@ -12,14 +78,16 @@ Use Python 3.12 and install:
 python -m pip install -r extensions/reconstruction_mechanism/requirements.txt
 ```
 
-From the repository root, restore the lossless evidence and verify the scientific checkpoint:
+From the repository root, restore the lossless historical evidence and verify
+its scientific checkpoint:
 
 ```bash
 python -m extensions.reconstruction_mechanism.evidence unpack
 python -m extensions.reconstruction_mechanism.run verify
 ```
 
-Recompute the analysis in a separate output directory and check it with the independent evaluation implementation:
+Recompute its analysis in a separate output directory and check it with the
+independent evaluation implementation:
 
 ```bash
 python -m extensions.reconstruction_mechanism.analyze --output /tmp/kahm-analysis
@@ -28,11 +96,14 @@ python -m extensions.reconstruction_mechanism.audit \
   --output /tmp/kahm-audit.json
 ```
 
-The study guide also describes selected-state replay and refitting. A new execution must use a separate results directory or disposable checkout. The original evidence is retained so that repeated computation can be distinguished from the reported experiment.
+The historical study guide also describes selected-state replay and refitting.
+A new execution must use a separate results directory or disposable checkout.
+The original evidence is retained so that repeated computation can be
+distinguished from the reported experiment.
 
-### Statistical reproduction and numerical inference portability
+### Historical saved-forecast analysis and numerical replay portability
 
-The anonymous saved-forecast supplement reconstructs all 192 task suites and the complete primary statistical analysis directly from numeric forecast arrays and A-target variance scales. This operation is separate from evaluating serialized fitted states. Its successful verification does not establish that every processor reproduces each selected-state prediction within the declared pointwise tolerance.
+The anonymous fixed-cap saved-forecast supplement reconstructs all 192 task suites and its complete primary statistical analysis directly from numeric forecast arrays and A-target variance scales. This operation is separate from evaluating serialized fitted states. Its successful verification does not establish that every processor reproduces each selected-state prediction within the declared pointwise tolerance.
 
 Selected-state replay compares predictions using relative tolerance `1e-10` and absolute tolerance `1e-12`. The reference Linux environment uses Python 3.12.14 and glibc 2.39, with the pinned numerical packages. Processor-dependent vectorized kernels can still affect the comparison. In a targeted test, disabling NumPy AVX512 dispatch changes 49 of 4,992 raw-RBF predictions on `vanderpol__noise0__seed946100` beyond the original tolerance, with maximum absolute difference `1.0663936400590046e-10`; default dispatch reproduces those raw-RBF predictions exactly. The [diagnostic record](extensions/reconstruction_mechanism/publication_validation/NUMERICAL_REPLAY_PORTABILITY.json) specifies the reproducible invocation and identifies the original source arrays and fitted state. The strict replay criterion concerns numerical agreement between model evaluations and archived predictions. The reported statistical analysis uses the archived predictions directly.
 
@@ -43,11 +114,12 @@ Selected-state replay compares predictions using relative tolerance `1e-10` and 
 | Hash verification | The source, inputs, and stored outputs have the recorded bytes. |
 | Analysis reconstruction | The reported losses, aggregates, and statistical contrasts follow from the saved forecasts. |
 | Selected-model replay | The saved fitted state reproduces its recorded forecasts in a specified numerical environment. |
-| Independent-code evaluation | A separate implementation evaluates saved states or statistics consistently with the original implementation. |
+| Independent-code evaluation | A separate implementation evaluates saved states or statistics consistently with the original implementation, within its stated coverage. |
 | Refitting | Re-execution of the specified fitting and selection procedure yields reproducible results, subject to numerical and timing variation. |
+| Same-seed computational reproduction | A newly retained execution follows the same source, design and simulation streams; it adds no independent sampling evidence and does not authenticate unavailable earlier outputs. |
 | External replication | A separate research team reproduces or independently tests the scientific findings. This is not claimed by the repository's internal checks. |
 
-A successful checksum or replay does not, by itself, validate a scientific interpretation. The manuscript supplies the assumptions, comparison design, and inferential scope needed to interpret the verified outputs.
+A successful checksum or replay does not, by itself, validate a scientific interpretation. The manuscript supplies the assumptions, comparison design and inferential scope needed to interpret the verified outputs. The six principal comparisons and each follow-up's four comparisons remain separate families. A favorable secondary result does not replace an unmet primary criterion.
 
 ## Other forecasting studies
 
@@ -61,13 +133,13 @@ A successful checksum or replay does not, by itself, validate a scientific inter
 | Direct forecast training | [Study README](extensions/direct_reconstruction/README.md) |
 | Online adaptation | [Study README](extensions/adaptive_development/REPRODUCING.md) |
 
-The corresponding protocols specify random seeds, chronology, selection rules, and failure handling. Raw forecasts and fitted states are retained where described. Some older audits verify a complete historical repository checkpoint, including its documentation. Those audits require that historical checkout or its corresponding archive; they should not be interpreted as checks of the present manuscript edition. Current scientific-source verification uses the study-specific frozen dependencies.
+The corresponding protocols specify random seeds, chronology, selection rules and failure handling. Raw forecasts and fitted states are retained where described. Some older audits verify a complete historical repository checkpoint, including its documentation. Those audits require that historical checkout or its corresponding archive; they should not be interpreted as checks of the present manuscript edition. Current scientific-source verification uses the study-specific frozen dependencies.
 
-Numerical package versions alone need not guarantee bitwise agreement. The direct reconstruction study documents CPU-dispatch sensitivity in Duffing generation and one raw-RBF selected-state replay. Such differences are reported against the original tolerances rather than treated as successful exact reproduction. Timing measurements depend on hardware, numerical libraries, and scheduling.
+Numerical package versions alone need not guarantee bitwise agreement. The direct reconstruction study documents CPU-dispatch sensitivity in Duffing generation and one raw-RBF selected-state replay. Such differences are reported against the original tolerances rather than treated as successful exact reproduction. Timing measurements depend on hardware, numerical libraries and scheduling.
 
 ## Original KAHKM experiments
 
-The original architecture's result-to-code mapping is [reproduction/reported_results.tsv](reproduction/reported_results.tsv). The map identifies generators, runners, settings, seeds, retained per-run outputs, and derived artifacts. Entries marked `PASS` identify retained reported results with a reproducibility chain; entries marked `REMOVE` identify legacy outputs excluded from that reported set.
+The original architecture's result-to-code mapping is [reproduction/reported_results.tsv](reproduction/reported_results.tsv). The map identifies generators, runners, settings, seeds, retained per-run outputs and derived artifacts. Entries marked `PASS` identify retained reported results with a reproducibility chain; entries marked `REMOVE` identify legacy outputs excluded from that reported set.
 
 Its reference platform is native Apple Silicon macOS on an Apple M1, using Python 3.14. The direct dependencies are in `requirements.txt`; the resolved environment is in `requirements-lock-arm64.txt`. Platform metadata are recorded under `provenance/reference_arm64_environment/`.
 
@@ -78,15 +150,30 @@ bash scripts/bootstrap_arm64.sh
 .venv-arm64/bin/python scripts/verify_environment.py
 ```
 
-The full evidence summary is [reproduction/REPRODUCIBILITY_EVIDENCE.md](reproduction/REPRODUCIBILITY_EVIDENCE.md), with a machine-readable counterpart in `reproduction/reproducibility_evidence.json`. The historical Duffing reference search has a documented gap in run accounting. A separate prospective 27-job campaign records all scheduled attempts, exit statuses, logs, and output checksums. These records support complete attempt accounting for that campaign, not for every historical execution in the repository.
+The full evidence summary is [reproduction/REPRODUCIBILITY_EVIDENCE.md](reproduction/REPRODUCIBILITY_EVIDENCE.md), with a machine-readable counterpart in `reproduction/reproducibility_evidence.json`. The historical Duffing reference search has a documented gap in run accounting. A separate prospective 27-job campaign records all scheduled attempts, exit statuses, logs and output checksums. These records support complete attempt accounting for that campaign, not for every historical execution in the repository.
 
-## Manuscript reproduction
+## Manuscript reproduction and reporting provenance
 
-The manuscript source includes all generated displays. Compilation requires no model fitting:
+The coordinated manuscript source includes all generated displays. Compilation requires no model fitting or numerical-record archives:
 
 ```bash
 cd extensions/tmlr_integration/manuscript
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
 ```
 
-The [manuscript guide](extensions/tmlr_integration/README.md) identifies the source, display-generation scripts, and archived evidence associated with the paper.
+The [manuscript guide](extensions/tmlr_integration/README.md) and
+[build guide](extensions/tmlr_integration/manuscript/README_BUILD.md) identify
+`core_followup_experiments.tex`, the supporting sections, and the display
+builders. `build_followup_assets.py` reads the completed preprocessing and
+cross-fit evidence into separate `generated/preprocessing_dimension/` and
+`generated/crossfit_residual/` namespaces. Regenerating those displays requires
+the study evidence; compiling the supplied source ZIP does not.
+
+The [coordinated release record](extensions/tmlr_integration/review/COORDINATED_MANUSCRIPT_RELEASE.json)
+identifies this document edition. Manuscript source and reporting changes do
+not alter frozen study code, configurations, protocols, analyzers, numerical
+records or phase seals. Historical packaging utilities and saved-forecast
+verifiers retain their original schemas. This revision adds neither new
+scientific runs nor new natural-data validation, and TMLR review formatting
+makes no claim of submission or acceptance.

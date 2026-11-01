@@ -33,7 +33,8 @@ during selection and evaluation. All bounds use its actual dimensions.
 
 \subsection{Fitting and calibrating the correction}
 
-For horizon $h$, let $f_{0,h}$ be the raw-history ridge baseline. Given
+In the dimension study, let $f_{0,h}$ be the raw-history ridge baseline
+for horizon $h$. Given
 an unstandardized history $x$, let $\psi(x)$ denote the chosen bounded
 feature vector after applying its A-fitted input scaler. The forecast is
 \begin{equation}
@@ -51,6 +52,10 @@ at horizon $h$ for fitting history $i$. The correction minimizes
        \{e_{ih}-b_h-\psi(x_i)^\top w_h\}^2
        +\alpha_h\|w_h\|_2^2.
 \]
+When $\psi$ contains both common and departure blocks, their coefficients
+are fitted jointly. Sharing the raw-history baseline and the common
+feature construction therefore does not fix the fitted common
+contribution across departure methods.
 Set B selects $\alpha_h\in\{10^{-4},10^{-3},10^{-2},10^{-1},1\}$
 by forecast error separately for each horizon and candidate cap.
 For each geometric procedure $m$, let $\widehat y^{(c)}_{m,h}$ be its
@@ -98,8 +103,8 @@ For any scalar $\gamma_h$, the fitted coefficients and correction satisfy
 \end{proposition}
 For a concatenated bounded common and departure vector,
 $R=\sqrt{R_0^2+R_d^2}$; for the common-only vector, $R=R_0$.
-The free intercept contributes the residual-mean term and cannot be
-omitted. This bound controls the correction, not the baseline, total
+For this decoder, the free intercept contributes the residual-mean term
+and cannot be omitted. This bound controls the correction, not the baseline, total
 forecast error, or sensitivity of the preceding reconstruction to changes
 in the history.
 
@@ -131,3 +136,84 @@ guarantee that a finite calibration set selects the best future forecast.
 The coefficient and correction bounds likewise make no claim about
 prediction accuracy. The experiment therefore evaluates error, numerical
 coverage, and the correction inequalities as separate outcomes.
+
+\subsection{Centered corrections to a frozen common predictor}
+\label{sec:fixed-common-decoder}
+
+The residual-target study fixes a separately fitted common forecast
+$f_{\mathrm{com},h}$ and a shared bias before comparing departures:
+\begin{equation}
+ f_{\mathrm{base},h}(x)=f_{\mathrm{com},h}(x)+\beta_h,\qquad
+ \beta_h=\frac1{n_B}\sum_{i\in B}
+       \{y_{i,h}-f_{\mathrm{com},h}(x_i)\}.
+ \label{eq:mechanism-fixed-common-baseline}
+\end{equation}
+The common forecast is fitted on all of A and selected on B. Its
+coefficients and the B-fitted bias are then shared across the departure
+comparisons and frozen before C. Thus the common component cannot
+compensate for a change of departure coordinates during residual fitting.
+
+Let $\varphi_m(x)$ be the separately standardized and radially bounded
+departure block for method $m$, with $\|\varphi_m(x)\|_2\leq R_{d,m}$,
+and let $\bar\varphi_m$ be its A mean. For either in-sample or
+out-of-fold residual targets $r_{ih}$, write
+$\bar r_h=n_A^{-1}\sum_i r_{ih}$ and fit
+\begin{equation}
+ v_{m,h}=\mathop{\arg\min}_{v}\left[
+ \frac1{n_A}\sum_i
+ \{r_{ih}-\bar r_h-(\varphi_m(x_i)-\bar\varphi_m)^\top v\}^2
+ +\alpha_{m,h}\|v\|_2^2\right],\qquad \alpha_{m,h}>0.
+ \label{eq:mechanism-centered-slope-fit}
+\end{equation}
+In-sample targets use $r_{ih}=y_{i,h}-f_{\mathrm{com},h}(x_i)$;
+out-of-fold targets use the common forecast fitted without the fold
+containing the episode of $x_i$. The deployed forecast is
+\begin{equation}
+ \widehat f_{m,h}(x)=f_{\mathrm{base},h}(x)+\eta_{m,h}\delta_{m,h}(x),
+ \qquad
+ \delta_{m,h}(x)=(\varphi_m(x)-\bar\varphi_m)^\top v_{m,h}.
+ \label{eq:mechanism-centered-slope-forecast}
+\end{equation}
+It contains no additional residual-mean intercept. Subtracting the
+constant shared bias before centering the fitting targets would leave
+the slope unchanged. The correction has zero empirical mean on A;
+its mean on another distribution need not vanish. Setting $\eta_{m,h}=0$
+recovers the same shared baseline for every departure method.
+
+\paragraph{Bound for the deployed slope.}
+Define $\sigma_{r,h}^2=n_A^{-1}\sum_i(r_{ih}-\bar r_h)^2$.
+The spectral argument of
+Proposition~\ref{prop:mechanism-correction-bound} immediately gives
+\begin{equation}
+ \|v_{m,h}\|_2\leq\frac{\sigma_{r,h}}{2\sqrt{\alpha_{m,h}}},\qquad
+ |\eta_{m,h}\delta_{m,h}(x)|\leq
+ |\eta_{m,h}|(R_{d,m}+\|\bar\varphi_m\|_2)
+ \frac{\sigma_{r,h}}{2\sqrt{\alpha_{m,h}}}.
+ \label{eq:mechanism-centered-slope-bound}
+\end{equation}
+The residual-mean term is absent because it is absent from the deployed
+correction. The fixed common forecast and shared bias remain outside
+this bound. This specialization is generic bounded-feature ridge
+algebra and applies equally to the matched RBF departure.
+
+\paragraph{Residual alignment and predictive gain.}
+Condition on all fitted and selected quantities, and take expectations
+under a specified evaluation distribution for $(X,Y)$. Suppress the
+horizon and method indices, and suppose $Y$, $f_{\mathrm{base}}(X)$,
+and $\delta(X)$ have finite second moments. For fixed $\eta$, define
+$\mathcal R(f)=\mathbb E[(Y-f(X))^2]$. Expansion of the square gives
+the elementary identity
+\begin{equation}
+ \mathcal R(f_{\mathrm{base}}+\eta\delta)
+ -\mathcal R(f_{\mathrm{base}})
+ =\eta^2\mathbb E[\delta(X)^2]
+ -2\eta\mathbb E[(Y-f_{\mathrm{base}}(X))\delta(X)].
+ \label{eq:mechanism-residual-risk}
+\end{equation}
+For $\eta>0$, improvement holds exactly when
+$\mathbb E[(Y-f_{\mathrm{base}}(X))\delta(X)]>
+\eta\mathbb E[\delta(X)^2]/2$. A bound on correction
+magnitude does not establish that alignment. The identity concerns
+errors of the deployed full-A baseline even when fitting uses fold-model
+residuals; it does not equate those two residual distributions or
+identify the cause of an observed performance difference.

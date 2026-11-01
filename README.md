@@ -8,8 +8,10 @@ This repository contains the manuscript, implementation, and experimental eviden
 - [Supplementary studies](extensions/tmlr_integration/review/KAHM_Supplementary_Studies.pdf)
 - [Editable LaTeX source](extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
 - [Mathematical background](extensions/reconstruction_mechanism/MATHEMATICAL_BACKGROUND.md)
-- [Experimental findings](extensions/dimension_forecasting/FINDINGS.md)
-- [Reproduction instructions](extensions/dimension_forecasting/README.md)
+- [Principal experimental findings](extensions/dimension_forecasting/FINDINGS.md)
+- [Preprocessing findings](extensions/preprocessing_dimension/FINDINGS.md)
+- [Cross-fit reproduction findings](extensions/crossfit_residual_reproduction_20261101/reporting/RESULTS.md)
+- [Principal reproduction instructions](extensions/dimension_forecasting/README.md)
 - [Guide to the studies](TIME_SERIES_RESEARCH.md)
 
 The theoretical analysis distinguishes three properties. A deterministic reconstruction cannot add information to an observed history, but it can change the functions available to a restricted decoder. The KAHM reconstruction sometimes gives the same augmented feature span as a matched radial-basis-function (RBF) reconstruction; an explicit irregular reference set also shows that the spans can differ. Separately, radial feature normalization and a ridge residual predictor provide a uniform bound on the magnitude of the forecast correction. This bound does not guarantee accuracy.
@@ -18,7 +20,17 @@ The principal experiment compares ten procedures in 192 task suites: four simula
 
 These results support a conditional contribution of reconstruction features to a finite decoder. They do not establish a distinctive practical forecasting advantage for KAHM over the complete set of evaluated alternatives. The inferential units are the 24 repetition aggregates. The 9,584,640 individual forecast values are dependent measurements within those repetitions.
 
-The main paper contains the central definitions and theoretical statements, complete proofs, the matched forecasting experiment, and its full protocol. A concise synthesis keeps the material supporting findings and limitations visible. The companion supplementary studies provide the complete controlled, natural-data, scaling, additive, learned-geometry, direct-training, and adaptive investigations with their own notation and comparison families.
+The coordinated manuscript presents the principal study and two follow-ups as separate experiments:
+
+| Study | Primary comparison family | Established criteria | Evidence scope |
+| --- | --- | --- | --- |
+| Validation-selected local dimension | Six comparisons | Three: nonlinear gains over common features and raw-input RBF, and linear noninferiority | Principal controlled simulation experiment, 24 repetition units |
+| Preprocessing and local dimension | Four comparisons | One: linear noninferiority | Separate controlled experiment; fixed-common residual corrections are secondary |
+| Cross-fitted residual correction | Four comparisons | Two: nonlinear gain over the shared baseline, and linear noninferiority | Same-seed computational reproduction of 24 original cross-fit units; zero additional independent repetitions |
+
+The strongest demonstrated role is a bounded feature family that can improve residual correction around a specified forecast. An advantage over independently tuned alternatives and the complete non-KAHM selection policy must be assessed separately. KAHM's proposed role as a complementary specialist in a portfolio remains untested: the evaluated non-KAHM policies exclude it, and no otherwise identical policy with KAHM added has yet been evaluated on fresh data.
+
+The main paper contains the central definitions and theoretical statements, complete proofs, the principal forecasting experiment and its protocol, and the preprocessing and residual-target follow-ups. The companion supplementary studies retain the complete controlled, natural-data, scaling, additive, learned-geometry, direct-training, adaptive, and follow-up investigations with their own notation and comparison families. The coordinated edition reports completed evidence; it adds no natural-data validation.
 
 ## Reproduce the principal experiment
 
@@ -42,6 +54,28 @@ Protocols were frozen locally before production, without public preregistration.
 The historical [fixed-cap experiment](extensions/reconstruction_mechanism/README.md)
 retains its original evidence and saved-forecast schema.
 
+## Preprocessing and corrections around a fixed common forecast
+
+The preprocessing study preserves a separate four-comparison primary family.
+Tanh/tanh preprocessing has **6.486% higher nonlinear error** than the
+standard/standard procedure. Jointly selected KAHM has **4.022% higher error**
+than the selected non-KAHM policy and **0.281% higher error** than independently
+selected bounded RBF. Only linear-control noninferiority is established.
+
+A secondary experiment fits each common predictor on 32 episodes and fits
+centered corrections on 32 disjoint episodes. Within each of its five settings,
+KAHM and RBF share the same common forecast and bias. KAHM reduces nonlinear
+error by **10.780–14.934% relative to that shared baseline** and by
+**2.372–4.140% relative to independently selected RBF**. These secondary
+comparisons support a conditional residual-correction mechanism; they do not
+replace the primary complete-procedure results.
+
+[Findings](extensions/preprocessing_dimension/FINDINGS.md)
+· [Frozen protocol](extensions/preprocessing_dimension/PROTOCOL.md)
+· [Results and restoration guide](extensions/preprocessing_dimension/RESULTS_PACKAGE.md)
+· [Independent audit](extensions/preprocessing_dimension/audit/final_results_audit.json)
+· [Numerical archive index](extensions/preprocessing_dimension/reporting/archive_index.json)
+
 ## Cross-fitted residual correction with a full-training common predictor
 
 An additional synthetic study evaluates episode-wise out-of-fold residuals
@@ -52,15 +86,24 @@ relative to the identical common-plus-bias baseline. Its **2.8662%** reduction
 against independently selected cross-fitted RBF does not establish the
 prescribed 3% margin, and its error is **5.1246% higher** than the expanded
 non-KAHM policy. Linear performance satisfies the prescribed 5% noninferiority
-criterion. In the secondary residual-target comparison, cross-fitted KAHM has
-3.6873% higher error than the in-sample correction.
+criterion.
+
+In the secondary residual-target comparison, cross-fitted KAHM has **3.6873%
+higher error** than in-sample KAHM. The in-sample correction reduces error by
+**12.4259% relative to the shared baseline** and **3.9643% relative to
+independently selected in-sample RBF**. Its mean error remains **1.3862% higher
+than the expanded non-KAHM policy**, a post hoc descriptive comparison rather
+than an additional primary test. The difference between 48-episode fold
+predictors and the 64-episode deployed common predictor is a possible
+residual-alignment explanation; this experiment does not isolate that cause.
 
 The independent audit covers all 192 task suites and 8,064 retained forecast
 arrays. The reproduction reuses the original 24 simulation repetition units
-and adds no independent repetitions. It verifies its newly retained execution
-without authenticating the unavailable original completed-run records. The
-numerical package contains one analysis ZIP and sixteen standalone records
-ZIPs, with 3,311 retained files and an exact size/SHA-256 index.
+and adds no independent repetitions. Earlier reported outcomes were known
+before regeneration. It verifies its newly retained execution without
+authenticating the unavailable original completed-run records. The numerical
+package contains one analysis ZIP and sixteen standalone records ZIPs, with
+3,311 retained files and an exact size/SHA-256 index.
 
 [Results](extensions/crossfit_residual_reproduction_20261101/reporting/RESULTS.md)
 · [Protocol](extensions/crossfit_residual_reproduction_20261101/PROTOCOL.md)
@@ -73,8 +116,9 @@ ZIPs, with 3,311 retained files and an exact size/SHA-256 index.
 
 | Location | Contents |
 | --- | --- |
-| `extensions/tmlr_integration/` | Main paper and supporting-study source, generated displays, compiled PDFs, and submission-package instructions |
+| `extensions/tmlr_integration/` | Coordinated main paper and supporting-study source, generated displays, compiled PDFs, and document release records |
 | `extensions/dimension_forecasting/` | Principal dimension-selected comparison, source and phase records, complete analysis, and independent audit |
+| `extensions/preprocessing_dimension/` | Four-comparison preprocessing study, secondary disjoint-episode residual corrections, audited results, and numerical archive index |
 | `extensions/crossfit_residual_reproduction_20261101/` | Cross-fitted and in-sample residual correction study, same-cohort computational reproduction, audited results, and complete numerical archive index |
 | `extensions/reconstruction_mechanism/` | Historical fixed-cap comparison, algebraic examples, saved evidence, and verification tools |
 | `extensions/predictive_geometry/` | Controlled representation and decoder experiments |
@@ -98,7 +142,21 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
 ```
 
-Compilation does not fit forecasting models. Both PDFs use anonymous TMLR review formatting. The [document guide](extensions/tmlr_integration/README.md) distinguishes the current manuscript and dimension-study evidence from historical saved-forecast packages. The editable source retains required author-identifying license attribution and is not an anonymous review upload. The public repository does not imply that the manuscript has been submitted or accepted.
+Compilation uses the supplied generated displays and does not fit forecasting
+models or require the numerical archives. The [document guide](extensions/tmlr_integration/README.md)
+and [build guide](extensions/tmlr_integration/manuscript/README_BUILD.md)
+describe the coordinated source, including `core_followup_experiments.tex`
+and the separate preprocessing and cross-fit display namespaces. The
+[coordinated release record](extensions/tmlr_integration/review/COORDINATED_MANUSCRIPT_RELEASE.json)
+identifies the delivered document edition. Reporting and manuscript-source
+changes leave the frozen scientific protocols, fitting code, analysis
+definitions, numerical evidence and stage seals unchanged.
+
+Both PDFs use anonymous TMLR review formatting. The editable source retains
+required author-identifying license attribution and is not an anonymous review
+upload. Historical saved-forecast packaging scripts retain their original
+fixed-cap scope. The public repository does not imply that the manuscript has
+been submitted or accepted.
 
 ## Licensing and citation
 

@@ -29,6 +29,8 @@
 \input{generated/utility/numbers}
 \input{generated/target_geometry/numbers}
 \input{generated/direct_reconstruction/result_macros}
+\input{generated/preprocessing_dimension/numbers}
+\input{generated/crossfit_residual/numbers}
 \title{Kernel Affine Hull Features\\
 for Time-Series Forecasting:\\Supplementary Studies}
 \author{Anonymous authors}
@@ -40,11 +42,15 @@ representations for forecasting. It defines the evaluated encodings and
 decoders, establishes the supporting information and residual-risk
 identities, and specifies the controlled, natural-data, scaling, additive,
 metric-learning, reconstruction-training, and online-adaptation experiments.
+Two later studies evaluate preprocessing with native dimension selection
+and centered departure corrections around fixed common forecasts. The
+residual-target study is reported through a computational reproduction
+of its prescribed cohort, with no added independent repetitions.
 Complete comparison families, source-level results, resource measurements,
 and unsuccessful or unavailable configurations accompany their protocols.
 The studies use different procedures and evaluation populations. Their
-results are interpreted separately from the bounded reconstruction-departure
-experiment in the accompanying main paper.
+results are interpreted separately from one another and from the
+principal dimension-selected experiment in the accompanying main paper.
 \end{abstract}
 
 \section{Scope, evidence, and notation}\label{supp:scope}
@@ -54,25 +60,32 @@ protocol development, implementation, numerical and statistical
 verification, analysis, and manuscript preparation. The authors are
 responsible for the scientific claims, evidence, and final text.}
 They test information retention, finite-decoder access, source transfer,
-residual correction, supervised geometry, and online adaptation. None is
-a replication of the main paper's bounded reconstruction-departure
-procedure. Their candidate sets, tuning rules, data populations, cost
-scopes, and loss normalizations remain specific to each study.
+residual correction, supervised geometry, and online adaptation, followed
+by native dimension-selected preprocessing and residual-target studies.
+Their candidate sets, tuning rules, data populations, cost scopes, and
+loss normalizations remain specific to each study. The residual-study
+computational reproduction repeats that study's declared cohort; it is
+neither a new independent sample nor a replication of the principal
+dimension-selected procedure.
 
 \paragraph{Construction policy and scope.}
 Local dimension is a property of the specified procedure. The native
 KAHM initialization is $\min\{20,d,n_c-1\}$ for ambient dimension $d$
 and $n_c$ local references, followed by the native positive-eigenvalue
 and projected-range rules \citep[Appendix B]{Kumar2025Collaborative}.
-The supporting procedures below instead use their explicitly stated
-small-rank caps, usually two, with any additional ambient-dimension
-restriction shown in the corresponding methods. Those caps define the
-reported experiments; they are not the native default. In particular,
+The older supporting procedures use their explicitly stated small-rank
+caps, usually two, with any additional ambient-dimension restriction
+shown in the corresponding methods. Those caps define the reported
+experiments; they are not the native default. In particular,
 the shared reference construction in Section~\ref{sec:nf-reference-geometry}
 uses $\min\{2,d-1,n_c-1\}$. Its natural-data results therefore concern
 that constrained representation. They do not evaluate the main paper's
-native-cap-twenty or B-selected dimension procedures. The main paper's
-fresh simulated dimension comparison and the studies here have separate
+native-cap-twenty or B-selected dimension procedures. In contrast,
+Sections~\ref{sec:preprocessing-dimension-followup}
+and~\ref{sec:crossfit-residual-followup} use validation-selected native
+caps with initialization $\min\{c,d,n_c-1\}$ and the native reductions,
+without an additional ambient normal-direction reservation. The
+principal dimension experiment and the studies here have separate
 sampling units and confidence families; their losses are not pooled.
 
 Sections~\ref{sec:utility-question} and~\ref{c:sec:method} define the common
@@ -81,7 +94,10 @@ Sections~\ref{c:sec:capacity}--\ref{sec:scaling} describe the controlled,
 natural-data, and scaling comparisons.
 Sections~\ref{sec:utility-extension}--\ref{sec:adaptive-development}
 examine residual correction, learned metrics, direct reconstruction
-training, and online updates. The appendices give complete proofs,
+training, and online updates.
+Sections~\ref{sec:preprocessing-dimension-followup}
+and~\ref{sec:crossfit-residual-followup} then specify the preprocessing
+and residual-target follow-ups. The appendices give complete proofs,
 source rosters, numerical specifications, comparison tables, and
 reproducibility details. All crossreferences in this document are local;
 the prefix S distinguishes its sections, equations, propositions, tables,
@@ -107,6 +123,10 @@ Fitted transformations use only the data permitted by each protocol.
 \input{supporting/section_direct_reconstruction}
 \input{supporting/section_adaptive_development}
 \FloatBarrier
+\input{supporting/section_preprocessing_dimension}
+\FloatBarrier
+\input{supporting/section_crossfit_residual}
+\FloatBarrier
 \bibliography{references}
 \bibliographystyle{tmlr}
 \clearpage
@@ -125,5 +145,7 @@ Fitted transformations use only the data permitted by each protocol.
 \input{supporting/appendix_direct_reconstruction}
 \FloatBarrier
 \input{supporting/appendix_adaptive_development}
+\FloatBarrier
+\input{supporting/appendix_followup_protocols}
 \FloatBarrier
 \end{document}

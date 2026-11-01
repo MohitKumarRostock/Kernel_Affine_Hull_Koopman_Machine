@@ -1,0 +1,386 @@
+{
+  "builder_sha256": "c64bd486c7142f07edc64b03acbee9499dd857429d6af511e235c23b5b8d0915",
+  "inputs": {
+    "FIT_LOCK.json": "6707ac5bba5ab1db473bee2ba78a9114f4be3d29f3b23db700a4a6e90576d211",
+    "ORIGINAL_SOURCE.json": "e933e45585f84c226f3a324afc2a1a9c538d60466cf6c31fe71552f9168d41e0",
+    "PREDICTION_LOCK.json": "3e5571de30075b07a723672686ce855069b74a40fb00a44ac8a1dc526885ba93",
+    "PROTOCOL.md": "c9e18d696d52d63dcc03e1246e550cb5c75fa165ba1cf5342d6794cbeeafa508",
+    "PUBLISHED_SOURCE.json": "ff588ef6bc4455b79503d93ed03c63e3d07d465e04e4bf842aa8cf89ba7ddf07",
+    "README.md": "9cd49fc24ef500838b9667bc94541ef900f74f172648f41d86e873a747b22ec4",
+    "TARGET_RELEASE.json": "7d897eab8f59850a16bcf21634f15dda69ba85156232b4a36cc1af554577a2fb",
+    "analysis/B_selections.csv": "f9dd00db222061563bc16151584cdbf5a016e026e3a1cf2ea9242cf2ab2a8c66",
+    "analysis/C_scores_choices.csv": "5a4226bd643ac9b04aa2464c5ff03b32010048bc98b0027d39737865d0c12e7d",
+    "analysis/analysis_summary.json": "340fbc0d8636a4763e86a3b47b53d696cb797dd0d1b6b0f732d44d9bf1897155",
+    "analysis/descriptive_contrasts.csv": "0d490ceb041aaa3f6c250047b3a14605c85d2e7c3a3e7e4b5efe4dd617cd4d9d",
+    "analysis/panel_summary.csv": "9476fd46af83a3752ed48cbb82fd3423236fe07341706f896470974fb6cded3d",
+    "analysis/primary_contrasts.csv": "d49098b5ccc92972b572cd775049c07a77dfc69818d6945b9d4eb15147588da8",
+    "analysis_code/ANALYSIS_PROTOCOL.md": "00dec9075021845e8fe4fa870c826664dee1b1ea78ba5164a8e74b84943687ca",
+    "analysis_code/analyze.py": "b2240062f68679ca9bc25643eb863704020daaddc69a5bd131f6ec83da44689b",
+    "audit/original_numerical_amendment.md": "f6072d380d1c39cb32733d61cbab88f780c46e6bf3f086e3a9bebf729b9acc3c",
+    "audit/original_protocol.md": "85e48a74b18b30d396262adfeb7f3989ecf9386b97085878e2b9d8d7ad125859",
+    "audit/verify_crossfit.py": "7cccc40387ec11d5c8421fbc109e8a28209f458cc3531f6b8796c26443765d9b",
+    "audit/verify_pipeline.py": "c4d192547bcebb4f5cc465f77b0158e3d0cbaedd25fef23ee19e7a9ce4869872",
+    "audit/verify_reproduction.py": "15234640235fbaa972bb0cfa27e80f63264d787e7313b86b684b9973439b96c2",
+    "code/crossfit_model.py": "1da60753e968af9b88f9c4fc1d65956a173df1c90f7600b74295df5cb4e8dbe4",
+    "code/numerical_solver.py": "b0132ad71822ac525883318ec9539df6ae676de13362ef0b146048021913801a",
+    "code/pipeline.py": "8d0b16aa1468c48714fb0f1cd0468aaef482127eaf6d916ff2dd59c2c8b3cea6",
+    "config.json": "81c6c2892d3f0e15dfcb2f1187f4c04248c9da3394a214cb9da541c8d8eff7f6",
+    "freeze.json": "fad1172d60165631afe79be2c8e57faabbe10324d18bd661ebeb9fe68687e5bb",
+    "readiness/prior_seed_exclusions.json": "f2d5f1d57af1e21256360e67e6905e284caea99f6cf3d310d0492eebd20af56c",
+    "reporting/review_results.py": "1045b861bbdcd82179dc87729814c9c32ea1c61bc420ef00ab6c01a030263bc4",
+    "requirements.txt": "e13a1a2d9853e792fc1b6579f8ecd529c19afefaa9c10626488e0399cbdea020",
+    "verification/reproduction_audit.json": "a51a287d293975a1a0a98f13d28051d4166afaab6a670d72cf9aa700137d9a6c",
+    "verification/results_review.json": "90ae95438a8dc1a1ebaf81a64d3f651758a33e9f6a0443055de359af496d5282"
+  },
+  "numeric_cells": [
+    {
+      "decimal_places": 4,
+      "display": "1.8873",
+      "key": "CFRMaxErrorRatio",
+      "value": 1.887278279125112
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.028575",
+      "key": "crossfit_KAHM_vs_shared_bias candidate",
+      "value": 0.028574961514064745
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.031469",
+      "key": "crossfit_KAHM_vs_shared_bias comparator",
+      "value": 0.03146912266424993
+    },
+    {
+      "decimal_places": 2,
+      "display": "9.20",
+      "key": "crossfit_KAHM_vs_shared_bias gain",
+      "value": 9.196828208601616
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.001778",
+      "key": "crossfit_KAHM_vs_shared_bias lower",
+      "value": 0.0017782799626380136
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.028575",
+      "key": "crossfit_KAHM_vs_independent_RBF candidate",
+      "value": 0.028574961514064745
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.029418",
+      "key": "crossfit_KAHM_vs_independent_RBF comparator",
+      "value": 0.02941815288217443
+    },
+    {
+      "decimal_places": 2,
+      "display": "2.87",
+      "key": "crossfit_KAHM_vs_independent_RBF gain",
+      "value": 2.8662281125767297
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000172",
+      "key": "crossfit_KAHM_vs_independent_RBF lower",
+      "value": -0.00017208629920995462
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.028575",
+      "key": "crossfit_KAHM_vs_expanded_nonKAHM candidate",
+      "value": 0.028574961514064745
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.027182",
+      "key": "crossfit_KAHM_vs_expanded_nonKAHM comparator",
+      "value": 0.027181989653277117
+    },
+    {
+      "decimal_places": 2,
+      "display": "-5.12",
+      "key": "crossfit_KAHM_vs_expanded_nonKAHM gain",
+      "value": -5.1246133140209205
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.002463",
+      "key": "crossfit_KAHM_vs_expanded_nonKAHM lower",
+      "value": -0.0024626747158418578
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.918803",
+      "key": "linear_crossfit_KAHM_vs_ridge candidate",
+      "value": 0.9188026781289813
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.908524",
+      "key": "linear_crossfit_KAHM_vs_ridge comparator",
+      "value": 0.9085240411677948
+    },
+    {
+      "decimal_places": 2,
+      "display": "-1.13",
+      "key": "linear_crossfit_KAHM_vs_ridge gain",
+      "value": -1.1313555278047005
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.031950",
+      "key": "linear_crossfit_KAHM_vs_ridge lower",
+      "value": 0.03194972237360911
+    },
+    {
+      "decimal_places": 2,
+      "display": "9.20",
+      "key": "CFRGainBias",
+      "value": 9.196828208601616
+    },
+    {
+      "decimal_places": 2,
+      "display": "2.87",
+      "key": "CFRGainRBF",
+      "value": 2.8662281125767297
+    },
+    {
+      "decimal_places": 2,
+      "display": "5.12",
+      "key": "CFRPolicyPenalty",
+      "value": 5.1246133140209205
+    },
+    {
+      "decimal_places": 2,
+      "display": "1.13",
+      "key": "CFRLinearPenalty",
+      "value": 1.1313555278047005
+    },
+    {
+      "decimal_places": 2,
+      "display": "-3.69",
+      "key": "",
+      "value": -3.6872899637608425
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.001016",
+      "key": "",
+      "value": 0.0010161724628205491
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.000878",
+      "key": "",
+      "value": 0.0008783150735630443
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.001154",
+      "key": "",
+      "value": 0.001154029852078054
+    },
+    {
+      "decimal_places": 2,
+      "display": "12.43",
+      "key": "",
+      "value": 12.425937814427911
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.003910",
+      "key": "",
+      "value": -0.003910333613005727
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.004041",
+      "key": "",
+      "value": -0.004041086804778616
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.003780",
+      "key": "",
+      "value": -0.0037795804212328384
+    },
+    {
+      "decimal_places": 2,
+      "display": "3.96",
+      "key": "",
+      "value": 3.964339493112823
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001138",
+      "key": "",
+      "value": -0.001137623204146937
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001298",
+      "key": "",
+      "value": -0.0012975410578734059
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000978",
+      "key": "",
+      "value": -0.000977705350420468
+    },
+    {
+      "decimal_places": 2,
+      "display": "4.17",
+      "key": "",
+      "value": 4.173094236222696
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001244",
+      "key": "",
+      "value": -0.0012443896236051034
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001350",
+      "key": "",
+      "value": -0.0013500783959335756
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001139",
+      "key": "",
+      "value": -0.001138700851276631
+    },
+    {
+      "decimal_places": 2,
+      "display": "7.72",
+      "key": "",
+      "value": 7.715689284920502
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.002627",
+      "key": "",
+      "value": -0.0026271359085694493
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.003065",
+      "key": "",
+      "value": -0.003065069792699791
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.002189",
+      "key": "",
+      "value": -0.0021892020244391078
+    },
+    {
+      "decimal_places": 2,
+      "display": "0.69",
+      "key": "",
+      "value": 0.6880645685114262
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000198",
+      "key": "",
+      "value": -0.00019797639104484786
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000251",
+      "key": "",
+      "value": -0.0002508787138205108
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000145",
+      "key": "",
+      "value": -0.00014507406826918493
+    },
+    {
+      "decimal_places": 2,
+      "display": "12.43",
+      "key": "CFRISGainBias",
+      "value": 12.425937814427911
+    },
+    {
+      "decimal_places": 2,
+      "display": "3.96",
+      "key": "CFRISGainRBF",
+      "value": 3.964339493112823
+    },
+    {
+      "decimal_places": 2,
+      "display": "3.69",
+      "key": "CFROOFvsISPenalty",
+      "value": 3.6872899637608425
+    },
+    {
+      "decimal_places": 2,
+      "display": "4.17",
+      "key": "CFRMatchedRBFGain",
+      "value": 4.173094236222696
+    },
+    {
+      "decimal_places": 2,
+      "display": "7.72",
+      "key": "CFRFullCommonGain",
+      "value": 7.715689284920502
+    },
+    {
+      "decimal_places": 2,
+      "display": "0.69",
+      "key": "CFRCalibrationGain",
+      "value": 0.6880645685114262
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.001016",
+      "key": "CFROOFvsISDifference",
+      "value": 0.0010161724628205491
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.000878",
+      "key": "CFROOFvsISLower",
+      "value": 0.0008783150735630443
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.001154",
+      "key": "CFROOFvsISUpper",
+      "value": 0.001154029852078054
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.027559",
+      "key": "CFRISLoss",
+      "value": 0.027558789051244193
+    },
+    {
+      "decimal_places": 2,
+      "display": "1.39",
+      "key": "CFRISPolicyPenalty",
+      "value": 1.3862097763018166
+    }
+  ],
+  "outputs": {
+    "calibration_table.tex": "eedaff54b99072b6492e68804837ed985e19f018c02027ce34efc566516f8eb8",
+    "metrics.json": "8ed094a9c355be27264696bd3c4e7b4292645332574063f6ddbaa8ad1c992454",
+    "numbers.tex": "71d699f02b860c5edd6d533986dee0a023e008be0d5c0bda31bdee38db8e8019",
+    "primary_table.tex": "a65f785e3e0cc7d5a03d5c427a8b49c29ed39d4e1043af5ce601aad585ff54b4",
+    "secondary_detail_table.tex": "b82b9ce50ad5d924fd524155675acaebce59009ddc5d65e5e96c834e57960be4",
+    "secondary_table.tex": "7cf84362d5c20911989a33dc046655e9f0307d3391fa65503c14611c5aa57d74",
+    "selection_table.tex": "7aae99f7f9e970fbe0fb384b264da62d64cea0004746e74268527d1cc003e2b4"
+  },
+  "schema": "followup_manuscript_assets_v1",
+  "source_freeze_sha256": "fad1172d60165631afe79be2c8e57faabbe10324d18bd661ebeb9fe68687e5bb",
+  "study_directory": "crossfit_residual_reproduction_20261101",
+  "verification_scope": "Checks existing source/phase/table/audit hash consistency and displayed arithmetic. Does not rerun production audit or authenticate unavailable original records."
+}

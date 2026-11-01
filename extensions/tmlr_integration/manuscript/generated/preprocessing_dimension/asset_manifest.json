@@ -1,0 +1,436 @@
+{
+  "builder_sha256": "c64bd486c7142f07edc64b03acbee9499dd857429d6af511e235c23b5b8d0915",
+  "inputs": {
+    "FIT_LOCK.json": "2ed33b633ea52754db1110ea06d33916ac185f3bcb52cebe374cbc11204e594c",
+    "PREDICTION_LOCK.json": "637c52b870d75a7c011ba2aa3ae387f93ee5879bd9d8020799241bab0aa6fc50",
+    "PROTOCOL.md": "a06cc387a50838d8746cc45a6951b81bd223d151409d355827c5404f193e94d9",
+    "README.md": "41602ccb16f8c18b8cdee40f13675f96cd56c5bbbce5bb554edfd23fe7e0829a",
+    "TARGET_RELEASE.json": "32b987fcf882bfd63323500f9b4afd414dd65402886d3f4d45f91acbd46e01d5",
+    "analysis/analysis_summary.json": "b58944bd887fcd9ca96f56e8927378321ebfa0d1437c401ab5ee6c0b8678a735",
+    "analysis/fixed_common_contrasts.csv": "95dea61d8192eec2d45276e17e86eef1062d23c67307449f38e01a658b91df73",
+    "analysis/fixed_common_panel_summary.csv": "2610218b28147f2119c890ad8dffdaf2a569ae64349e0a1293634f9b6b578b55",
+    "analysis/primary_contrasts.csv": "ee63050bcae53c3c8cd52266e53065cad565f4570dd31442f6d2f1ea914ca5b4",
+    "analysis_code/ANALYSIS_PROTOCOL.md": "18b4a19e309f827229fc6c11ace543ce91e2ddaa792fc3fe7563da0ced328e55",
+    "analysis_code/analyze.py": "6f6e016821013abcdd9b0c2f1aa6e241c33ec815b743006f84dd45c25a910c36",
+    "audit/final_results_audit.json": "61c7a49a2d1ca4a06a363ffdaac942ffe680fe0bbef032d72b473f164ec89953",
+    "audit/verify_primary.py": "c7005c396003f110538aa01946ca45a39db2ecb5f1c511c8a35ce8f9db52f359",
+    "audit/verify_results.py": "0bc16977be6039797485f7cbb46cc467d6908ce4085906b6fbfab3b7fad7aeee",
+    "code/fixed_common_secondary.py": "6c634046a2b5009db0964aea4f2addf6e3d426ad4f735e4ee081521671a30e1d",
+    "code/pipeline.py": "6f5dec41792c5fd202f6288ca9a2c235377c67478dfeed30ec1ddab304cf86f0",
+    "code/preprocessing_model.py": "fe02add34f2c06352695ab82ca9b10f216775c7aabf2793a51539f5e7b0f3336",
+    "config.json": "6ab825d68992df359f25605cb416e87a3e0c3deffadc7aabf607a823c9334cea",
+    "freeze.json": "6102fb7b5bb4726be149287c1645b7085feaec29a635483483d2e8a9f888c172",
+    "readiness/prior_seed_exclusions.json": "4d5b60e901b84b7b61401754555068e159f4a67b6040b64f81dec836a389d0b0",
+    "requirements.txt": "e13a1a2d9853e792fc1b6579f8ecd529c19afefaa9c10626488e0399cbdea020"
+  },
+  "numeric_cells": [
+    {
+      "decimal_places": 4,
+      "display": "1.3762",
+      "key": "PPMaxErrorRatio",
+      "value": 1.3761966718315435
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.028372",
+      "key": "selected_KAHM_vs_nonKAHM_policy candidate",
+      "value": 0.028371728565975852
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.027275",
+      "key": "selected_KAHM_vs_nonKAHM_policy comparator",
+      "value": 0.027274720611215303
+    },
+    {
+      "decimal_places": 2,
+      "display": "-4.02",
+      "key": "selected_KAHM_vs_nonKAHM_policy gain",
+      "value": -4.0220685315084825
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.002217",
+      "key": "selected_KAHM_vs_nonKAHM_policy lower",
+      "value": -0.0022169947050127755
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.028372",
+      "key": "selected_KAHM_vs_selected_RBF candidate",
+      "value": 0.028371728565975852
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.028292",
+      "key": "selected_KAHM_vs_selected_RBF comparator",
+      "value": 0.028292129119783228
+    },
+    {
+      "decimal_places": 2,
+      "display": "-0.28",
+      "key": "selected_KAHM_vs_selected_RBF gain",
+      "value": -0.2813483773370873
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001142",
+      "key": "selected_KAHM_vs_selected_RBF lower",
+      "value": -0.0011416783125393327
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.030051",
+      "key": "tanh_KAHM_vs_standard_KAHM candidate",
+      "value": 0.030051188342365077
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.028221",
+      "key": "tanh_KAHM_vs_standard_KAHM comparator",
+      "value": 0.0282207796045169
+    },
+    {
+      "decimal_places": 2,
+      "display": "-6.49",
+      "key": "tanh_KAHM_vs_standard_KAHM gain",
+      "value": -6.486031794653924
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.002991",
+      "key": "tanh_KAHM_vs_standard_KAHM lower",
+      "value": -0.002990795591288429
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.913255",
+      "key": "linear_selected_KAHM_vs_ridge candidate",
+      "value": 0.9132551275569144
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.911654",
+      "key": "linear_selected_KAHM_vs_ridge comparator",
+      "value": 0.9116543463381683
+    },
+    {
+      "decimal_places": 2,
+      "display": "-0.18",
+      "key": "linear_selected_KAHM_vs_ridge gain",
+      "value": -0.17559080644720115
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.042510",
+      "key": "linear_selected_KAHM_vs_ridge lower",
+      "value": 0.04251048978603877
+    },
+    {
+      "decimal_places": 2,
+      "display": "4.02",
+      "key": "PPPolicyPenalty",
+      "value": 4.0220685315084825
+    },
+    {
+      "decimal_places": 2,
+      "display": "0.28",
+      "key": "PPRBFPenalty",
+      "value": 0.2813483773370873
+    },
+    {
+      "decimal_places": 2,
+      "display": "6.49",
+      "key": "PPTanhPenalty",
+      "value": 6.486031794653924
+    },
+    {
+      "decimal_places": 2,
+      "display": "0.18",
+      "key": "PPLinearPenalty",
+      "value": 0.17559080644720115
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.028372",
+      "key": "PPNonlinearLoss",
+      "value": 0.028371728565975852
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.034008",
+      "key": "",
+      "value": 0.03400759132148564
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.029732",
+      "key": "",
+      "value": 0.029732144667008773
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.030454",
+      "key": "",
+      "value": 0.030454395350725947
+    },
+    {
+      "decimal_places": 2,
+      "display": "12.57",
+      "key": "",
+      "value": 12.572036090588057
+    },
+    {
+      "decimal_places": 2,
+      "display": "2.37",
+      "key": "",
+      "value": 2.3715810982271157
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000722",
+      "key": "",
+      "value": -0.0007222506837171778
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000906",
+      "key": "",
+      "value": -0.0009060501791110804
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000538",
+      "key": "",
+      "value": -0.0005384511883232753
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.033924",
+      "key": "",
+      "value": 0.03392353248451621
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.029497",
+      "key": "",
+      "value": 0.0294973287775544
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.030449",
+      "key": "",
+      "value": 0.030449370048768788
+    },
+    {
+      "decimal_places": 2,
+      "display": "13.05",
+      "key": "",
+      "value": 13.047590810249709
+    },
+    {
+      "decimal_places": 2,
+      "display": "3.13",
+      "key": "",
+      "value": 3.126637003292898
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000952",
+      "key": "",
+      "value": -0.0009520412712143897
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001121",
+      "key": "",
+      "value": -0.0011214141477051773
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000783",
+      "key": "",
+      "value": -0.0007826683947236021
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.035919",
+      "key": "",
+      "value": 0.03591901765020487
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.031441",
+      "key": "",
+      "value": 0.03144124183561892
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.032755",
+      "key": "",
+      "value": 0.03275450374250087
+    },
+    {
+      "decimal_places": 2,
+      "display": "12.47",
+      "key": "",
+      "value": 12.4663092353819
+    },
+    {
+      "decimal_places": 2,
+      "display": "4.01",
+      "key": "",
+      "value": 4.009408651726609
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001313",
+      "key": "",
+      "value": -0.001313261906881947
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001576",
+      "key": "",
+      "value": -0.0015758411390494557
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001051",
+      "key": "",
+      "value": -0.0010506826747144382
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.035919",
+      "key": "",
+      "value": 0.03591901765020487
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.030555",
+      "key": "",
+      "value": 0.03055494033485552
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.031418",
+      "key": "",
+      "value": 0.031418373556869834
+    },
+    {
+      "decimal_places": 2,
+      "display": "14.93",
+      "key": "",
+      "value": 14.933808512212332
+    },
+    {
+      "decimal_places": 2,
+      "display": "2.75",
+      "key": "",
+      "value": 2.7481792475712585
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000863",
+      "key": "",
+      "value": -0.0008634332220143168
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001070",
+      "key": "",
+      "value": -0.0010699108250991245
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.000657",
+      "key": "",
+      "value": -0.0006569556189295091
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.033924",
+      "key": "",
+      "value": 0.03392353248451621
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.030267",
+      "key": "",
+      "value": 0.030266573269567942
+    },
+    {
+      "decimal_places": 6,
+      "display": "0.031574",
+      "key": "",
+      "value": 0.03157360722752327
+    },
+    {
+      "decimal_places": 2,
+      "display": "10.78",
+      "key": "",
+      "value": 10.780007113402535
+    },
+    {
+      "decimal_places": 2,
+      "display": "4.14",
+      "key": "",
+      "value": 4.139640898604579
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001307",
+      "key": "",
+      "value": -0.001307033957955322
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001504",
+      "key": "",
+      "value": -0.0015035714338255055
+    },
+    {
+      "decimal_places": 6,
+      "display": "-0.001110",
+      "key": "",
+      "value": -0.0011104964820851386
+    },
+    {
+      "decimal_places": 2,
+      "display": "10.78",
+      "key": "PPFixedBiasGainMin",
+      "value": 10.780007113402535
+    },
+    {
+      "decimal_places": 2,
+      "display": "14.93",
+      "key": "PPFixedBiasGainMax",
+      "value": 14.933808512212332
+    },
+    {
+      "decimal_places": 2,
+      "display": "2.37",
+      "key": "PPFixedRBFGainMin",
+      "value": 2.3715810982271157
+    },
+    {
+      "decimal_places": 2,
+      "display": "4.14",
+      "key": "PPFixedRBFGainMax",
+      "value": 4.139640898604579
+    }
+  ],
+  "outputs": {
+    "fixed_common_intervals.tex": "6683c93890179be74793242f5556c3bd00051cc7673fbe68db3502142a166732",
+    "fixed_common_table.tex": "e8ec1219c267209afac942b51028573eb59cb32bb65a7ab88940c81a17e58740",
+    "metrics.json": "e5cb62a7f59582b4587e64a2b28f4b0527a856e9ebae0f1a882f290655b4d443",
+    "model_grid_table.tex": "c9f485a84cb5d288146608dccfb74b0fbfc926d0812e096f3cb57ddb0d342d85",
+    "numbers.tex": "7af5a02c33fa252434cf5bdbce4916dc5630d59ce40da12651b4f1ca41f5b51b",
+    "primary_table.tex": "efbe82b222312bc3efacfc886f7b7cb305999e59be0faf44562ff0c1b3e8e0ca"
+  },
+  "schema": "followup_manuscript_assets_v1",
+  "source_freeze_sha256": "6102fb7b5bb4726be149287c1645b7085feaec29a635483483d2e8a9f888c172",
+  "study_directory": "preprocessing_dimension",
+  "verification_scope": "Checks existing source/phase/table/audit hash consistency and displayed arithmetic. Does not rerun production audit or authenticate unavailable original records."
+}

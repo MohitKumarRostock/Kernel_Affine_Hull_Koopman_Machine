@@ -174,6 +174,40 @@ remove the displayed linear relation. A forecasting comparison therefore
 evaluates the complete reconstruction, feature transformation, and fitting
 procedure, even when two untransformed feature sets have the same span.
 
+\subsection{Freezing the common predictor}
+\label{app:mechanism-fixed-common}
+
+Consider the two-reference example in
+Equation~\eqref{eq:mechanism-two-reference} on $\R$. For a Gaussian
+kernel of positive precision, $0<\rho<1$, so $c_\rho>1$.
+Writing $t>0$ for the scalar precision gives $A_R(z)=\tanh(tz)$,
+which is bounded and nonconstant.
+If $az+bd_R(z)=0$, then $(a-b)z+bA_R(z)=0$. Boundedness first gives
+$a=b$, and nonconstancy then gives $b=0$. Thus $z$ and $d_R$ are
+linearly independent. Were $d_K=u d_R$ for a scalar $u$,
+Equation~\eqref{eq:mechanism-two-reference} would give
+$(c_\rho-1)z+(c_\rho-u)d_R=0$, contradicting that independence.
+The nonzero one-dimensional spans of $d_K$ and $d_R$ are therefore
+distinct and neither contains the other. Translating both by any fixed
+$f_{\mathrm{base}}$ proves the claims about
+Equation~\eqref{eq:mechanism-fixed-common-classes}. Permitting the
+coefficient of $z$ to vary restores the equal augmented spans already
+proved above.
+
+For a fixed fitting sample, define $H_Av(z)=v(z)-\bar v_A$. Linearity
+gives
+\[
+ H_A d_K=c_\rho H_A d_R+(c_\rho-1)H_A z.
+\]
+The same non-equality argument applies whenever $H_Az$ and $H_Ad_R$
+are linearly independent on the query domain under consideration.
+On the whole real line this follows from independence of $1,z,d_R$:
+boundedness and nonconstancy of $A_R$ prove it by the preceding argument
+with an added constant. Independence need not hold on an arbitrary
+finite query set. Separate nonlinear radial maps need not preserve
+the displayed identity. These are function-class statements; they
+give no risk ordering for fitted or calibrated forecasts.
+
 \subsection{An explicit distinct reconstruction basis}
 
 \paragraph{Irregular scalar references.}
@@ -354,3 +388,23 @@ bounds the additive correction but does not bound the retained raw
 baseline or total forecast error. The experiment checks the feature,
 coefficient, and correction inequalities on every saved task and reports
 forecast errors separately.
+
+\paragraph{Centered slope-only specialization.}
+For Equation~\eqref{eq:mechanism-centered-slope-fit}, let $\Phi_c$
+have rows $(\varphi_m(x_i)-\bar\varphi_m)^\top$ and let
+$r_c=(r_{ih}-\bar r_h)_{i=1}^{n_A}$. Then
+\[
+ v_{m,h}=(\Phi_c^\top\Phi_c+n_A\alpha_{m,h}I)^{-1}\Phi_c^\top r_c.
+\]
+The same singular-value inequality gives the coefficient bound in
+Equation~\eqref{eq:mechanism-centered-slope-bound}.
+Cauchy--Schwarz applied directly to
+$(\varphi_m(x)-\bar\varphi_m)^\top v_{m,h}$ gives its correction
+bound, without a response-mean term. No intercept is reintroduced in
+this deployed slope. Finally, writing
+$e=Y-f_{\mathrm{base}}(X)$ gives
+$(e-\eta\delta(X))^2-e^2=\eta^2\delta(X)^2-2\eta e\delta(X)$.
+Finite second moments make all terms integrable and justify taking the
+conditional expectation stated in
+Equation~\eqref{eq:mechanism-residual-risk}. This identity uses no
+independence assumption between the residual and the correction.

@@ -1,0 +1,259 @@
+{
+  "all_code_outside_selected_native_bank_AST_identical": true,
+  "all_existing_selected_native_bank_assertions_AST_identical": true,
+  "case_count": 27,
+  "case_status_counts": {
+    "expected_rejection": 9,
+    "passed": 18
+  },
+  "cases": [
+    {
+      "case": "standard/original_single_reference_failure",
+      "exception": "ZeroDivisionError",
+      "message": "float division by zero",
+      "status": "expected_rejection"
+    },
+    {
+      "case": "standard/corrected_single_reference",
+      "counts": {
+        "assertions": 5,
+        "exact_array_comparisons": 1,
+        "numerical_values_compared": 16,
+        "selected_geometry_bank_occurrences_checked": 1,
+        "selected_local_bases_checked": 1,
+        "selected_zero_admissible_rank_bases": 1
+      },
+      "ranks": {
+        "standard/cap4/rank0": 1
+      },
+      "status": "passed"
+    },
+    {
+      "case": "standard/reject_nonzero_single_reference_basis",
+      "exception": "AssertionError",
+      "message": "Selected actual native rank",
+      "status": "expected_rejection"
+    },
+    {
+      "case": "standard/reject_wrong_single_reference_dimension_metadata",
+      "exception": "AssertionError",
+      "message": "Selected native dimension audit",
+      "status": "expected_rejection"
+    },
+    {
+      "case": "standard/constant_multiple_references",
+      "counts": {
+        "assertions": 5,
+        "exact_array_comparisons": 1,
+        "numerical_values_compared": 16,
+        "selected_geometry_bank_occurrences_checked": 1,
+        "selected_local_bases_checked": 1,
+        "selected_reference_eigendecompositions": 1,
+        "selected_zero_variance_rank_bases": 1
+      },
+      "original_behavior_preserved": true,
+      "status": "passed"
+    },
+    {
+      "case": "standard/ordinary_rank_cap1",
+      "effective_rank": 1,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "standard/ordinary_rank_cap2",
+      "effective_rank": 2,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "standard/ordinary_rank_cap4",
+      "effective_rank": 4,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "standard/ordinary_rank_cap12",
+      "effective_rank": 4,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "minmax/original_single_reference_failure",
+      "exception": "ZeroDivisionError",
+      "message": "float division by zero",
+      "status": "expected_rejection"
+    },
+    {
+      "case": "minmax/corrected_single_reference",
+      "counts": {
+        "assertions": 5,
+        "exact_array_comparisons": 1,
+        "numerical_values_compared": 16,
+        "selected_geometry_bank_occurrences_checked": 1,
+        "selected_local_bases_checked": 1,
+        "selected_zero_admissible_rank_bases": 1
+      },
+      "ranks": {
+        "minmax/cap4/rank0": 1
+      },
+      "status": "passed"
+    },
+    {
+      "case": "minmax/reject_nonzero_single_reference_basis",
+      "exception": "AssertionError",
+      "message": "Selected actual native rank",
+      "status": "expected_rejection"
+    },
+    {
+      "case": "minmax/reject_wrong_single_reference_dimension_metadata",
+      "exception": "AssertionError",
+      "message": "Selected native dimension audit",
+      "status": "expected_rejection"
+    },
+    {
+      "case": "minmax/constant_multiple_references",
+      "counts": {
+        "assertions": 5,
+        "exact_array_comparisons": 1,
+        "numerical_values_compared": 16,
+        "selected_geometry_bank_occurrences_checked": 1,
+        "selected_local_bases_checked": 1,
+        "selected_reference_eigendecompositions": 1,
+        "selected_zero_variance_rank_bases": 1
+      },
+      "original_behavior_preserved": true,
+      "status": "passed"
+    },
+    {
+      "case": "minmax/ordinary_rank_cap1",
+      "effective_rank": 1,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "minmax/ordinary_rank_cap2",
+      "effective_rank": 2,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "minmax/ordinary_rank_cap4",
+      "effective_rank": 4,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "minmax/ordinary_rank_cap12",
+      "effective_rank": 4,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "tanh_z_1/original_single_reference_failure",
+      "exception": "ZeroDivisionError",
+      "message": "float division by zero",
+      "status": "expected_rejection"
+    },
+    {
+      "case": "tanh_z_1/corrected_single_reference",
+      "counts": {
+        "assertions": 5,
+        "exact_array_comparisons": 1,
+        "numerical_values_compared": 16,
+        "selected_geometry_bank_occurrences_checked": 1,
+        "selected_local_bases_checked": 1,
+        "selected_zero_admissible_rank_bases": 1
+      },
+      "ranks": {
+        "tanh_z_1/cap4/rank0": 1
+      },
+      "status": "passed"
+    },
+    {
+      "case": "tanh_z_1/reject_nonzero_single_reference_basis",
+      "exception": "AssertionError",
+      "message": "Selected actual native rank",
+      "status": "expected_rejection"
+    },
+    {
+      "case": "tanh_z_1/reject_wrong_single_reference_dimension_metadata",
+      "exception": "AssertionError",
+      "message": "Selected native dimension audit",
+      "status": "expected_rejection"
+    },
+    {
+      "case": "tanh_z_1/constant_multiple_references",
+      "counts": {
+        "assertions": 5,
+        "exact_array_comparisons": 1,
+        "numerical_values_compared": 16,
+        "selected_geometry_bank_occurrences_checked": 1,
+        "selected_local_bases_checked": 1,
+        "selected_reference_eigendecompositions": 1,
+        "selected_zero_variance_rank_bases": 1
+      },
+      "original_behavior_preserved": true,
+      "status": "passed"
+    },
+    {
+      "case": "tanh_z_1/ordinary_rank_cap1",
+      "effective_rank": 1,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "tanh_z_1/ordinary_rank_cap2",
+      "effective_rank": 2,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "tanh_z_1/ordinary_rank_cap4",
+      "effective_rank": 4,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    },
+    {
+      "case": "tanh_z_1/ordinary_rank_cap12",
+      "effective_rank": 4,
+      "original_behavior_preserved": true,
+      "repeat_uses_cached_eigendecomposition": true,
+      "status": "passed"
+    }
+  ],
+  "completed_utc": "2026-11-01T16:58:18.665913+00:00",
+  "environment": {
+    "numpy": "2.3.5",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]"
+  },
+  "frozen_files_hashes_verified": 17,
+  "not_claimed": [
+    "Completed production audit",
+    "Verified experimental performance",
+    "Recovery of missing study arrays or states",
+    "Correction of the frozen manufactured-data oracle"
+  ],
+  "production_arrays_read": false,
+  "scientific_results_audited": false,
+  "scope": "Manufactured selected-native-bank regression only",
+  "source_sha256": {
+    "corrected_verifier": "37088a016475f83c4cc01604ae9ff79c560b1c6d87b6fa1554b055c198044009",
+    "freeze": "b118e88a1c788fac3a268682736d01c5a9219146f0db7bda1929159c059d3210",
+    "frozen_oracle": "7cccc40387ec11d5c8421fbc109e8a28209f458cc3531f6b8796c26443765d9b",
+    "original_verifier": "7f6cc7a32e1945f124d947c0f9876df43f3710097f17e4fcac0323c2e2e8ffc8",
+    "regression_program": "f851beed66c02434e3482dd98f30ab809d478f42f843e588eeef022dd6358777"
+  },
+  "status": "passed"
+}

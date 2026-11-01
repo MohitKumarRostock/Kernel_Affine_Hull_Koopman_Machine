@@ -1,0 +1,91 @@
+{
+  "audit_sha256": "c7005c396003f110538aa01946ca45a39db2ecb5f1c511c8a35ce8f9db52f359",
+  "checks": {
+    "bank_training_input_checks": 18,
+    "cap12_cap20_query_identities": 25,
+    "complete_candidates": 30,
+    "full_ambient_rank_models": 12,
+    "gamma_zero_identities": 230,
+    "hybrid_prediction_oracles": 60,
+    "independent_B_selection_checks": 40,
+    "native_basis_checks": 36,
+    "published_standard_parity_arrays": 20,
+    "scaler_checks": 20
+  },
+  "completed_utc": "2026-11-01T13:17:23.161253+00:00",
+  "fixture_dimensions": {
+    "A": [
+      64,
+      12
+    ],
+    "B": [
+      24,
+      12
+    ],
+    "C": [
+      20,
+      12
+    ],
+    "query": [
+      17,
+      12
+    ]
+  },
+  "fixture_model_overrides": {
+    "alpha_grid": [
+      0.0001,
+      0.01,
+      1.0
+    ],
+    "bank_row_cap": 64,
+    "blocks": [
+      2
+    ],
+    "feature_scale_floor": 1e-06,
+    "gamma_grid": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "max_references": 24,
+    "raw_hgb_l2_regularization": 1.0,
+    "raw_hgb_learning_rates": [
+      0.1
+    ],
+    "raw_hgb_max_iter": 8,
+    "raw_hgb_max_leaf_nodes": [
+      7
+    ],
+    "raw_rbf_bandwidth_factors": [
+      0.5,
+      1.0
+    ],
+    "raw_rbf_landmarks": 16,
+    "relative_denominator_tolerance": 1e-10,
+    "target_variance_floor": 1e-12
+  },
+  "implementation_sha256": {
+    "primary": "fe02add34f2c06352695ab82ca9b10f216775c7aabf2793a51539f5e7b0f3336",
+    "secondary": "6c634046a2b5009db0964aea4f2addf6e3d426ad4f735e4ee081521671a30e1d"
+  },
+  "notes": {
+    "C_isolation": "Different C targets leave all A/B states and choices byte-identical",
+    "exact_tie_order": "Cap ascending, then declared pair order; ridge first in policy ties",
+    "query_isolation": "Prediction fits neither banks nor heads and preserves serialized state",
+    "unexpected_guard": "Injected finite coordinate fallback stops the adapter"
+  },
+  "runtime_provenance": {
+    "commit": "7dda356138675934aab5e327ec667bde0a5eda79",
+    "corrected_runtime_files_verified": 33,
+    "corrected_runtime_manifest_sha256": "48376645f55dc0cf9f6700f942f5974136f55484326865262e61077c99b874d0",
+    "default_dimension_policy": "native",
+    "default_rank_cap": 20,
+    "files_verified": 17,
+    "manifest_sha256": "9628392a77dfc8e947a1b308aa105da970f096e5b9fed3dffeb156b9cef56ba2",
+    "scope": "Construction correction only; no rescoring of archived studies.",
+    "shared_dimension_policy_sha256": "c03d9a1923b5d9c8ade8a4198fd06e2b24c6add9bf0e0992c469f90d7621efa2"
+  },
+  "scope": "Manufactured inputs only; no scientific production data or outcomes",
+  "status": "passed"
+}

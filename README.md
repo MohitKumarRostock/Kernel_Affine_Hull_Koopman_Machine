@@ -2,45 +2,71 @@
 
 ## KAHM representations for time-series forecasting
 
-**Kernel Affine Hull Representations for Time-Series Forecasting: Distinctness,
-Stability, and Predictive Limits** studies reconstruction-derived feature spaces,
-bounded residual corrections, and their empirical forecasting value. The
-manuscript uses anonymous TMLR review formatting.
+**Kernel Affine Hull Features for Time-Series Forecasting: Feature Spans,
+Bounded Corrections, and Matched Evaluation** studies reconstruction-derived
+feature spaces, bounded residual corrections, and their forecasting value.
+The manuscript specifies the native local-dimension policy and evaluates
+procedure-specific validation selection before calibration and test.
+It uses anonymous TMLR review formatting.
 
-- [Manuscript PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript.pdf)
-- [Editable LaTeX source](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
-- [Scientific findings and the six primary comparisons](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/reconstruction_mechanism/FINDINGS.md)
-- [Mathematical definitions and derivations](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/reconstruction_mechanism/MATHEMATICAL_BACKGROUND.md)
-- [Implementation, evidence, and reproduction commands](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/REPRODUCIBILITY.md)
-- [Manuscript build and anonymous numerical supplement](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/tmlr_integration/README.md)
-- [Compilation and evidence-verification results](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-reconstruction-mechanism/extensions/tmlr_integration/TMLR_SUBMISSION_VALIDATION.json)
+- [Main manuscript PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript.pdf)
+- [Supporting studies PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/tmlr_integration/review/KAHM_Supplementary_Studies.pdf)
+- [Complete editable LaTeX source archive](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
+- [Scientific findings and all six primary comparisons](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/dimension_forecasting/FINDINGS.md)
+- [Study code, protocol, and reproduction commands](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/dimension_forecasting/README.md)
+- [Manuscript build instructions and verification records](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/tmlr_integration/manuscript/README_BUILD.md)
 
-The principal experiment compares ten procedures on **192 task suites**, using
-**24 independent repetition aggregates** for inference. Bounded KAHM reconstruction
-departures reduce nonlinear aggregate normalized mean squared error by **12.58%**
-relative to the shared local-coordinate basis. The **1.17%** gain over matched
-bounded RBF reconstruction does not establish the prespecified 3% improvement
-margin. The **3.92%** point gain over raw-input RBF forecasting has an unresolved
-simultaneous margin bound. Boosted trees and the validation-selected non-KAHM
-procedure have lower aggregate error.
+The principal experiment compares ten complete procedures on **192 task
+suites**, with **24 independent repetition aggregates** as the inferential
+units. The dimension-selected bounded KAHM procedure reduces nonlinear
+aggregate normalized MSE by **9.01%** relative to independently selected common
+features and by **8.01%** relative to raw-input RBF; the prespecified margins
+are established for these comparisons. Together with linear-control
+noninferiority, **three of six primary criteria** are established. The complete
+joint criterion remains unmet, and KAHM has **4.08% higher** aggregate error
+than the selected non-KAHM policy.
 
-The correction bounds, numerical stability checks, and linear-control
-noninferiority criterion are satisfied. Two of the six required comparisons
-are established, so the overall improvement criterion is not satisfied.
-The results distinguish useful reconstruction features from a practical
-forecasting advantage specific to KAHM.
+Selecting the cap improves nonlinear aggregate error by **3.26%** relative to
+the historical cap-two procedure, while native cap twenty increases it by
+**8.39%**. Dimension selection is therefore part of the forecasting procedure;
+these results do not establish a universal advantage for larger subspaces or
+for KAHM. Earlier supporting studies retain their original configurations and
+evidential scope.
 
-The evidence contains **1,920 prediction arrays and 9,584,640 forecast values**.
-The source and input record was specified locally before evaluation and was
-not a public preregistration. The anonymous saved-forecast supplement independently
-reconstructs all eight numerical analysis tables and the six primary confidence
-bounds without fitting models or loading serialized model objects. Full fitting,
-selected-state replay, numerical diagnostics, and the earlier studies have
-separate reproduction instructions.
+## Risk certificates for forecasting representations
 
-Use the [research branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-reconstruction-mechanism)
-for the manuscript and its computational evidence. The original Koopman-machine
-implementation and its documentation follow below.
+**A Hierarchy of Risk Certificates for Forecasting Representations** develops
+normalized block-risk lower bounds and calibrated decisions for declared
+representation-decoder classes. Learned KAHM dictionaries provide a concrete
+implementation. The complete main paper contains the proofs; the experimental
+supplement contains the detailed protocols and secondary results.
+
+- [Main manuscript PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/certified_forecasting/paper/main.pdf)
+- [Experimental supplement PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/certified_forecasting/paper/supplement.pdf)
+- [Complete editable LaTeX source archive](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/certified_forecasting/review/Risk_Certificates_Manuscript_Source.zip)
+- [Manuscript source and build instructions](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/certified_forecasting/paper/README_BUILD.txt)
+- [Dimension-policy findings](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/dimension_certificates/FINDINGS.md)
+- [Study code, protocol, and reproduction commands](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/dimension_certificates/README.md)
+
+The targeted dimension-policy study uses **26 fitting repetitions** and a
+study-wide allocation over **4,680 designated one-sided statements**.
+Validation-selected caps improve descriptive test error in **18 repetitions**
+and tie in eight relative to cap two. The selected-forecast certificate
+decisions remain unchanged. Improved fitted accuracy is distinct from improved
+class-exclusion resolution; the manuscript retains that distinction and the
+separate scope of the historical studies.
+
+## Research materials and availability
+
+The [forecasting branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-manuscript-dimension-revision-2026-11-01) and
+[certificate branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-manuscript-dimension-revision-2026-11-01) contain the reviewed manuscripts,
+editable sources, computational code, protocols, analysis tables, and audit
+receipts. The large numerical-records archives are separately supplied and
+are not included in these Git branches. Replaying saved numerical records
+requires those archives; the study guides identify their checksums and the
+commands for fresh computation.
+
+The original Koopman-machine implementation and its documentation follow below.
 
 ## Original Koopman-machine software
 

@@ -1,0 +1,115 @@
+{
+  "c_contiguous": true,
+  "dtype": "float64",
+  "f_contiguous": false,
+  "finite": true,
+  "fit_seed": 2073710093,
+  "frobenius_norm": 182.35022211535187,
+  "kwargs": {
+    "full_matrices": false
+  },
+  "matrix_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+  "max": 7.355786516792574,
+  "max_abs": 7.355786516792574,
+  "min": -7.2499856396014355,
+  "positional_args": [],
+  "saved_files": {
+    "centered.npy": "4e3be7ddc506712d44f5e0337d3c5b9769514e051e03e01b2476d89d6ab74314",
+    "mean.npy": "474e4284d34a3f22dbd95213bfedbd3fe4e6c5b34192659724136efe9dc5652b",
+    "response.npy": "89204b2527b42f613f2a8f0e41c7bc459c51336e8a73843251392531f968fee5",
+    "x.npy": "3aa5f1fdc7ba6d3558cf680efe06810d273e4ffa3e4d05f5c3f42460310be9c4",
+    "y.npy": "6421598e1f82529ff6f36096a4dbed9615df5d3f44b1a00bef821671f8c2d1fe",
+    "ymean.npy": "be71cf47ed0001c7ba7ecb19ce267df30fd517a0b168127e29957348a8eeb3ea"
+  },
+  "shape": [
+    383,
+    182
+  ],
+  "stack": [
+    {
+      "alphas": [
+        0.0001,
+        0.001,
+        0.01,
+        0.1,
+        1.0
+      ],
+      "file": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/dimension_forecasting/runtime/step1/forecasting_corrected/code/vendor_geometry/kahm_geometry/extensions/reconstruction_mechanism/models.py",
+      "function": "_ridge_path",
+      "line": 135
+    },
+    {
+      "file": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/dimension_forecasting/runtime/step1/forecasting_corrected/code/vendor_geometry/kahm_geometry/extensions/reconstruction_mechanism/models.py",
+      "function": "_select_ridge",
+      "line": 180,
+      "prefix": "fold0/standard__cap12"
+    },
+    {
+      "cap": 12,
+      "file": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/code/crossfit_model.py",
+      "function": "fit_common_only",
+      "key": "standard__cap12",
+      "line": 122,
+      "prefix": "fold0__tanh_z_1__cap8__local13",
+      "scaler": "standard",
+      "seed": 2073710093,
+      "tag": "fold0",
+      "tx_sha256": "e2b96f49e72094b3f1fd29130955d37d5a0dd1b0bbfd89b80a68571df4bd5703",
+      "tx_shape": [
+        383,
+        12
+      ],
+      "ty_sha256": "0006e2ad7c66fdbf4b6a1822e56f5eb0638987cf0533ad51ffd96426d40ce87e",
+      "ty_shape": [
+        383,
+        3
+      ]
+    },
+    {
+      "ax_sha256": "b4e7930dee8b3d5a3af0a705d6f0c13ee81e9f462fc2b5c6dcef8f08f09db6d4",
+      "ax_shape": [
+        512,
+        12
+      ],
+      "ay_sha256": "ac3b24ed8d84e461cfc7e27964bf5fdc8fe87f09bb012460827e8f4aea40515c",
+      "ay_shape": [
+        512,
+        3
+      ],
+      "file": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/code/crossfit_model.py",
+      "fold": 0,
+      "function": "fit_crossfit",
+      "line": 368,
+      "seed": 2073710093,
+      "tag": "fold0",
+      "train_mask_sha256": "74c8f2ddcb9a1224e8b0f4ff0ffee8d7f8f8210fd465a17a03543edbd2e54d37",
+      "train_mask_shape": [
+        512
+      ]
+    },
+    {
+      "ax_sha256": "b4e7930dee8b3d5a3af0a705d6f0c13ee81e9f462fc2b5c6dcef8f08f09db6d4",
+      "ax_shape": [
+        512,
+        12
+      ],
+      "ay_sha256": "ac3b24ed8d84e461cfc7e27964bf5fdc8fe87f09bb012460827e8f4aea40515c",
+      "ay_shape": [
+        512,
+        3
+      ],
+      "file": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/readiness/diagnostic.py",
+      "function": "capture",
+      "line": 154
+    },
+    {
+      "file": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/readiness/diagnostic.py",
+      "function": "<module>",
+      "line": 249
+    }
+  ],
+  "svd_call_index": 205,
+  "task_id": "duffing__h12__noise0__rep01",
+  "traceback": "Traceback (most recent call last):\n  File \"/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/readiness/diagnostic.py\", line 95, in traced_svd\n    return original_svd(a, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/linalg/_linalg.py\", line 1862, in svd\n    u, s, vh = gufunc(a, signature=signature)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/linalg/_linalg.py\", line 172, in _raise_linalgerror_svd_nonconvergence\n    raise LinAlgError(\"SVD did not converge\")\nnumpy.linalg.LinAlgError: SVD did not converge\n",
+  "utc": "2026-11-01T14:39:16.499150+00:00"
+}

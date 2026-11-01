@@ -1,0 +1,39 @@
+{
+  "criterion": "Only direct LAPACK status; no outcome losses used",
+  "matrix_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+  "low_level_status": [
+    {
+      "driver": "gesdd",
+      "wrapper": "<fortran function dgesdd>",
+      "compute_uv": 1,
+      "info": 1,
+      "finite_singular_values": false,
+      "largest_returned_singular_value": null,
+      "returned_singular_value_status": "nonfinite after failed driver; not a valid decomposition"
+    },
+    {
+      "driver": "gesdd",
+      "wrapper": "<fortran function dgesdd>",
+      "compute_uv": 0,
+      "info": 0,
+      "finite_singular_values": true,
+      "largest_returned_singular_value": 39.87355038909376
+    },
+    {
+      "driver": "gesvd",
+      "wrapper": "<fortran function dgesvd>",
+      "compute_uv": 1,
+      "info": 0,
+      "finite_singular_values": true,
+      "largest_returned_singular_value": 39.87355038909375
+    },
+    {
+      "driver": "gesvd",
+      "wrapper": "<fortran function dgesvd>",
+      "compute_uv": 0,
+      "info": 0,
+      "finite_singular_values": true,
+      "largest_returned_singular_value": 39.87355038909374
+    }
+  ]
+}

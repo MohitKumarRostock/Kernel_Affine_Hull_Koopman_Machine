@@ -1,0 +1,192 @@
+{
+  "alphas": [
+    0.0001,
+    0.001,
+    0.01,
+    0.1,
+    1.0
+  ],
+  "criterion": "Factorization and ridge normal equations only; no B/C/D forecast loss computed",
+  "finite_matrix": true,
+  "finite_response": true,
+  "matrix_column_mean_max_abs": 9.562266847212102e-17,
+  "matrix_exact_zero_columns": 0,
+  "matrix_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+  "matrix_shape": [
+    383,
+    182
+  ],
+  "numpy": "2.3.5",
+  "response_column_mean_max_abs": 1.2183828068871046e-18,
+  "response_shape": [
+    383,
+    3
+  ],
+  "ridge_checks": [
+    {
+      "alpha": 0.0001,
+      "driver": "scipy_gesvd",
+      "finite_coefficient": true,
+      "maximum_absolute_coefficient_difference": 1.2986833830552769e-12,
+      "relative_coefficient_difference_from_spd_solve": 3.0999892326925284e-12,
+      "relative_fitted_training_correction_difference": 1.1429798133713167e-13,
+      "relative_normal_equation_residual": 2.1111358792028017e-14
+    },
+    {
+      "alpha": 0.001,
+      "driver": "scipy_gesvd",
+      "finite_coefficient": true,
+      "maximum_absolute_coefficient_difference": 1.1746159600534156e-13,
+      "relative_coefficient_difference_from_spd_solve": 4.224001912373333e-13,
+      "relative_fitted_training_correction_difference": 3.4893408126842474e-14,
+      "relative_normal_equation_residual": 1.0415513880834102e-14
+    },
+    {
+      "alpha": 0.01,
+      "driver": "scipy_gesvd",
+      "finite_coefficient": true,
+      "maximum_absolute_coefficient_difference": 6.689093723366568e-15,
+      "relative_coefficient_difference_from_spd_solve": 4.7707497595263706e-14,
+      "relative_fitted_training_correction_difference": 6.595473783717755e-15,
+      "relative_normal_equation_residual": 7.090434849939259e-15
+    },
+    {
+      "alpha": 0.1,
+      "driver": "scipy_gesvd",
+      "finite_coefficient": true,
+      "maximum_absolute_coefficient_difference": 2.636779683484747e-16,
+      "relative_coefficient_difference_from_spd_solve": 6.054485876517167e-15,
+      "relative_fitted_training_correction_difference": 4.359389251140418e-15,
+      "relative_normal_equation_residual": 5.7478045178014e-15
+    },
+    {
+      "alpha": 1.0,
+      "driver": "scipy_gesvd",
+      "finite_coefficient": true,
+      "maximum_absolute_coefficient_difference": 4.336808689942018e-17,
+      "relative_coefficient_difference_from_spd_solve": 4.066208430109863e-15,
+      "relative_fitted_training_correction_difference": 4.82118310701945e-15,
+      "relative_normal_equation_residual": 5.105459738844904e-15
+    }
+  ],
+  "schema": "crossfit-svd-driver-replay-v1",
+  "scipy": "1.17.0",
+  "threadpools": [
+    {
+      "architecture": "SkylakeX",
+      "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-fdde5778.so",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "threading_layer": "pthreads",
+      "user_api": "blas",
+      "version": "0.3.30"
+    },
+    {
+      "architecture": "SkylakeX",
+      "filepath": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/scipy.libs/libscipy_openblas-6cdc3b4a.so",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "threading_layer": "pthreads",
+      "user_api": "blas",
+      "version": "0.3.30"
+    }
+  ],
+  "trials": [
+    {
+      "driver": "numpy_gesdd",
+      "exception": "SVD did not converge",
+      "input_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+      "input_unchanged": true,
+      "repeat": 0,
+      "status": "failure"
+    },
+    {
+      "driver": "numpy_gesdd",
+      "exception": "SVD did not converge",
+      "input_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+      "input_unchanged": true,
+      "repeat": 1,
+      "status": "failure"
+    },
+    {
+      "driver": "numpy_gesdd",
+      "exception": "SVD did not converge",
+      "input_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+      "input_unchanged": true,
+      "repeat": 2,
+      "status": "failure"
+    },
+    {
+      "driver": "scipy_gesdd",
+      "exception": "SVD did not converge",
+      "input_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+      "input_unchanged": true,
+      "repeat": 0,
+      "status": "failure"
+    },
+    {
+      "driver": "scipy_gesdd",
+      "exception": "SVD did not converge",
+      "input_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+      "input_unchanged": true,
+      "repeat": 1,
+      "status": "failure"
+    },
+    {
+      "driver": "scipy_gesdd",
+      "exception": "SVD did not converge",
+      "input_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+      "input_unchanged": true,
+      "repeat": 2,
+      "status": "failure"
+    },
+    {
+      "driver": "scipy_gesvd",
+      "finite_factors": true,
+      "input_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+      "input_unchanged": true,
+      "left_orthogonality_frobenius": 3.592349878439816e-14,
+      "numerical_rank": 155,
+      "relative_reconstruction_error": 5.2471265851823384e-15,
+      "repeat": 0,
+      "right_orthogonality_frobenius": 3.460862287926678e-14,
+      "singular_values_sha256": "38d8704ff4e8ceb68ce2987b44a81119448d8771f6147e871950d64f6ad71f59",
+      "smax": 39.873550389093744,
+      "smin": 3.3737011152559355e-17,
+      "status": "success"
+    },
+    {
+      "driver": "scipy_gesvd",
+      "finite_factors": true,
+      "input_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+      "input_unchanged": true,
+      "left_orthogonality_frobenius": 3.592349878439816e-14,
+      "numerical_rank": 155,
+      "relative_reconstruction_error": 5.2471265851823384e-15,
+      "repeat": 1,
+      "right_orthogonality_frobenius": 3.460862287926678e-14,
+      "singular_values_sha256": "38d8704ff4e8ceb68ce2987b44a81119448d8771f6147e871950d64f6ad71f59",
+      "smax": 39.873550389093744,
+      "smin": 3.3737011152559355e-17,
+      "status": "success"
+    },
+    {
+      "driver": "scipy_gesvd",
+      "finite_factors": true,
+      "input_sha256": "dff2558eab1b0c2369f9554c47e086f7189d3973b8d2b53ee236396acbd739da",
+      "input_unchanged": true,
+      "left_orthogonality_frobenius": 3.592349878439816e-14,
+      "numerical_rank": 155,
+      "relative_reconstruction_error": 5.2471265851823384e-15,
+      "repeat": 2,
+      "right_orthogonality_frobenius": 3.460862287926678e-14,
+      "singular_values_sha256": "38d8704ff4e8ceb68ce2987b44a81119448d8771f6147e871950d64f6ad71f59",
+      "smax": 39.873550389093744,
+      "smin": 3.3737011152559355e-17,
+      "status": "success"
+    }
+  ],
+  "utc": "2026-11-01T14:39:25.715108+00:00"
+}

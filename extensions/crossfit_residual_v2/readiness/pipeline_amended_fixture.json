@@ -1,0 +1,238 @@
+{
+  "A_episode_count": 64,
+  "checks": {
+    "C_policy_minimum_and_fixed_D_recovery": true,
+    "C_preserves_development_state": true,
+    "D_generation_without_fit_seal_rejected": true,
+    "changed_frozen_source_rejected": true,
+    "changed_sealed_state_rejected": true,
+    "freeze_precedes_all_manufactured_arrays": true,
+    "full_fit_seal_before_D": true,
+    "pre_C_saved_before_C_loading": true,
+    "shared_full_common_bias_identity": true,
+    "target_free_prediction_preserves_state": true,
+    "target_release_without_prediction_seal_rejected": true
+  },
+  "completed_utc": "2026-11-01T14:48:24.259583+00:00",
+  "failed_gate_attempts_preserved": 4,
+  "fixture_config_sha256": "9974936757798deed7cc1289916faba67674bdf28eb73ec624aff7e9b2d034d5",
+  "fixture_fit_seal_sha256": "8e972131675d2ae84b0e444306053d880634a454bcf6a3ca61a5f9e699f061af",
+  "fixture_freeze_sha256": "d7f9cf22add38b525acb0acaf5035de4a42ac537209fb9f2af1ab84005ee936a",
+  "fixture_prediction_seal_sha256": "de2c5d63267e7012c34bb631a5939d7729f8a2f95a53e1231e0468acfa0085bf",
+  "fixture_root": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+  "fixture_target_release_sha256": "f46df4d6e749d052ea3bcad516ff59b2f626aaad7de8098cf44f09e0445a5d57",
+  "history": 12,
+  "methods_arrays_per_task": 42,
+  "release": {
+    "created_utc": "2026-11-01T14:48:23.872164+00:00",
+    "d_manifest_sha256": "97aee09feb30dbde6c76ab1a0be5588570a61ea8c66028fbc78dec9f56b90a16",
+    "fit_lock_sha256": "8e972131675d2ae84b0e444306053d880634a454bcf6a3ca61a5f9e699f061af",
+    "prediction_lock_sha256": "de2c5d63267e7012c34bb631a5939d7729f8a2f95a53e1231e0468acfa0085bf",
+    "status": "released",
+    "task_count": 1
+  },
+  "rows": {
+    "A": 512,
+    "B": 256,
+    "C": 256,
+    "D": 1664
+  },
+  "scientific_generator_invocations": 0,
+  "scope": "One manufactured integration task only; no scientific generator or production outcomes",
+  "source_and_copied_executables_identical_at_start_and_end": true,
+  "source_hashes": {
+    "PROTOCOL.md": "85e48a74b18b30d396262adfeb7f3989ecf9386b97085878e2b9d8d7ad125859",
+    "README.md": "b9bcca8f015d75f40c00aa93aab234362dc35b85cfae936ee77581f30c4335ab",
+    "analysis_code/ANALYSIS_PROTOCOL.md": "00dec9075021845e8fe4fa870c826664dee1b1ea78ba5164a8e74b84943687ca",
+    "analysis_code/analyze.py": "b2240062f68679ca9bc25643eb863704020daaddc69a5bd131f6ec83da44689b",
+    "audit/verify_crossfit.py": "7cccc40387ec11d5c8421fbc109e8a28209f458cc3531f6b8796c26443765d9b",
+    "audit/verify_numerical_amendment.py": "7cc1b18df5e8b121b7e0d5a10f8f72a0d7d076a0555fa7fad177994d2db24f2f",
+    "audit/verify_pipeline.py": "c4d192547bcebb4f5cc465f77b0158e3d0cbaedd25fef23ee19e7a9ce4869872",
+    "audit/verify_results.py": "57047c88f4c8c18831ef60d22e3bbcbfb300a6ba03e48629c8368ece5c5ce55b",
+    "code/crossfit_model.py": "1da60753e968af9b88f9c4fc1d65956a173df1c90f7600b74295df5cb4e8dbe4",
+    "code/numerical_solver.py": "b0132ad71822ac525883318ec9539df6ae676de13362ef0b146048021913801a",
+    "code/pipeline.py": "8d0b16aa1468c48714fb0f1cd0468aaef482127eaf6d916ff2dd59c2c8b3cea6",
+    "config.json": "ecdf1dfa5a8b557967f0b0a1a1cb7b77bbd4aed67336ba6aae1f439c7685dc5e",
+    "requirements.txt": "e13a1a2d9853e792fc1b6579f8ecd529c19afefaa9c10626488e0399cbdea020"
+  },
+  "stage_commands": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "freeze",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "freeze",
+      "elapsed_seconds": 0.17108702400219045,
+      "expected_error": null,
+      "returncode": 0,
+      "started_utc": "2026-11-01T14:48:14.422620+00:00"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "fit",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "fit",
+      "elapsed_seconds": 0.12092372799816076,
+      "expected_error": "Frozen file missing or changed",
+      "returncode": 1,
+      "started_utc": "2026-11-01T14:48:14.545120+00:00"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "d",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "d",
+      "elapsed_seconds": 0.13688106699919445,
+      "expected_error": "FIT_LOCK.json",
+      "returncode": 1,
+      "started_utc": "2026-11-01T14:48:14.714843+00:00"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "fit",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "fit",
+      "elapsed_seconds": 4.769981943998573,
+      "expected_error": null,
+      "returncode": 0,
+      "started_utc": "2026-11-01T14:48:19.486288+00:00"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "seal-fits",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "seal-fits",
+      "elapsed_seconds": 0.21319751799819642,
+      "expected_error": null,
+      "returncode": 0,
+      "started_utc": "2026-11-01T14:48:19.701304+00:00"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "d",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "d",
+      "elapsed_seconds": 0.17460382700301125,
+      "expected_error": "Frozen file missing or changed",
+      "returncode": 1,
+      "started_utc": "2026-11-01T14:48:19.939254+00:00"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "predict",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "predict",
+      "elapsed_seconds": 3.270351451999886,
+      "expected_error": null,
+      "returncode": 0,
+      "started_utc": "2026-11-01T14:48:23.268797+00:00"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "release",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "release",
+      "elapsed_seconds": 0.18594283000129508,
+      "expected_error": "PREDICTION_LOCK.json",
+      "returncode": 1,
+      "started_utc": "2026-11-01T14:48:23.456214+00:00"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "seal-predictions",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "seal-predictions",
+      "elapsed_seconds": 0.2109010339991073,
+      "expected_error": null,
+      "returncode": 0,
+      "started_utc": "2026-11-01T14:48:23.674067+00:00"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "release",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "release",
+      "elapsed_seconds": 0.21766270599982818,
+      "expected_error": null,
+      "returncode": 0,
+      "started_utc": "2026-11-01T14:48:23.893110+00:00"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/code/pipeline.py",
+        "verify",
+        "--root",
+        "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual_v2/readiness/fixtures/pipeline_amended_01",
+        "--workers",
+        "1"
+      ],
+      "command": "verify",
+      "elapsed_seconds": 0.1950345120021666,
+      "expected_error": null,
+      "returncode": 0,
+      "started_utc": "2026-11-01T14:48:24.089476+00:00"
+    }
+  ],
+  "status": "passed",
+  "task_id": "manufactured_fixture__h12__noise0__rep00"
+}

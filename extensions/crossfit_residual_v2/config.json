@@ -1,0 +1,290 @@
+{
+  "analysis": {
+    "family_alpha": 0.05,
+    "independent_unit": "repetition",
+    "linear_noninferiority_margin": 0.05,
+    "max_error_ratio": 5.0,
+    "primary_claims": [
+      "crossfit KAHM vs full-A common plus shared bias, nonlinear,3%",
+      "crossfit KAHM vs independently selected crossfit RBF, nonlinear,3%",
+      "crossfit KAHM vs expanded non-KAHM policy, nonlinear,3%",
+      "crossfit KAHM vs ridge,linear,5% noninferiority"
+    ],
+    "primary_family_size": 4,
+    "primary_mode": "calibrated",
+    "public_preregistration": false,
+    "secondary_intervals": "Descriptive unadjusted95% paired t, not simultaneous",
+    "superiority_margin": 0.03
+  },
+  "crossfit": {
+    "common_selection": "Each complement fit independently selects scaler, native cap and penalties on B; complement-only target-variance normalizer",
+    "departure_feature_statistics": "All retained A rows",
+    "departure_history_geometry": "All retained A inputs, reused identically across target modes",
+    "fold_assignment": "original A episode ID modulo 4",
+    "fold_fit_seed": "Same task fit seed across full, fold and half fits; no new random seed needed",
+    "folds": 4,
+    "full_common": "Separate full-A gamma-one B-selected common from verified PrimarySuite",
+    "half_common": "First32 original A episodes, independently B selected common only; no half-split correction claim",
+    "residual_modes": [
+      "crossfit",
+      "insample"
+    ],
+    "response_intercept": "Omitted; predict only centered feature slopes",
+    "shared_bias": "mean_B(Y_B - full_A_common_B), fixed across all correction methods"
+  },
+  "crossfit_methods": [
+    "common",
+    "shared_bias",
+    "half_common",
+    "half_shared_bias",
+    "crossfit_kahm",
+    "crossfit_rbf",
+    "crossfit_matched_rbf",
+    "insample_kahm",
+    "insample_rbf",
+    "insample_matched_rbf"
+  ],
+  "execution": {
+    "fit_seal_before_D_generation": true,
+    "fresh_process_per_task": true,
+    "numerical_threads": 1,
+    "output_array_count_per_task": 42,
+    "prediction_seal_before_scoring": true,
+    "stop_on_unexpected_failure": true,
+    "workers": 3
+  },
+  "geometry_methods": [
+    "common",
+    "kahm_departure",
+    "rbf_departure",
+    "kahm_unbounded",
+    "rbf_unbounded"
+  ],
+  "histories": [
+    12
+  ],
+  "history_tail_length": 60,
+  "horizons": [
+    1,
+    4,
+    12
+  ],
+  "laws": [
+    "linear_ar",
+    "nonlinear_ar",
+    "vanderpol",
+    "duffing"
+  ],
+  "linear_ar": {
+    "burn_in_stored_values": 256,
+    "coefficients": [
+      0.65,
+      -0.15
+    ],
+    "initial_values": [
+      0.0,
+      0.0
+    ],
+    "innovation_std": 0.1
+  },
+  "master_seed": 2026110173,
+  "max_episode_length": 72,
+  "methods": [
+    "ridge",
+    "raw_rbf",
+    "raw_hgb",
+    "persistence",
+    "common",
+    "kahm_departure",
+    "rbf_departure",
+    "kahm_unbounded",
+    "rbf_unbounded",
+    "nonkahm_policy"
+  ],
+  "model": {
+    "alpha_grid": [
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0
+    ],
+    "bank_row_cap": 512,
+    "blocks": [
+      2,
+      4,
+      8
+    ],
+    "feature_scale_floor": 1e-06,
+    "gamma_grid": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "max_references": 24,
+    "raw_hgb_l2_regularization": 1.0,
+    "raw_hgb_learning_rates": [
+      0.05,
+      0.1
+    ],
+    "raw_hgb_max_iter": 100,
+    "raw_hgb_max_leaf_nodes": [
+      7,
+      15
+    ],
+    "raw_rbf_bandwidth_factors": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "raw_rbf_landmarks": 64,
+    "relative_denominator_tolerance": 1e-10,
+    "target_variance_floor": 1e-12
+  },
+  "native_cap_order": [
+    1,
+    2,
+    4,
+    8,
+    12
+  ],
+  "noise_levels": [
+    0.0,
+    0.1
+  ],
+  "nonkahm_methods": [
+    "ridge",
+    "raw_rbf",
+    "raw_hgb",
+    "persistence",
+    "common",
+    "rbf_departure",
+    "rbf_unbounded"
+  ],
+  "nonlinear_laws": [
+    "nonlinear_ar",
+    "vanderpol",
+    "duffing"
+  ],
+  "numerical_amendment": {
+    "cohort": "Same 192 tasks, exact original ABC bytes, same reserved D streams; all fits restarted",
+    "identifier": "ridge-svd-fallback-2026-11-01",
+    "original_abc_manifest_sha256": "9eeca65f9b2749f111ef809044d20fbc8fb6316b8c429b4ec86559e0c0e2cba8",
+    "original_extension": "crossfit_residual",
+    "original_freeze_sha256": "eaa4a1e326f6bcc5204d0971fbd4ec821fda8cab04b708199ebbe70babead7a7",
+    "original_seed_manifest_sha256": "559692d8f27f7ce0bfcaf9d82534716d555278be73b9340808674a86b620e626",
+    "original_source_commit": "3b9db85c1aa8ba890dbb74cc913a9337d7360d9d",
+    "provenance_file": "readiness/amendment_provenance.json",
+    "solver_rule": "Original centered ridge path first; only LinAlgError triggers finite-matrix SciPy gesvd fallback",
+    "timing": "After original ABC preparation and aborted fitting, before any D generation",
+    "unchanged": "Objective, alpha grid, candidate grids, all selection rules, inferential claims, margins, and D seeds"
+  },
+  "origins_per_episode": 13,
+  "policy_order": [
+    "legacy__ridge",
+    "legacy__raw_rbf",
+    "legacy__raw_hgb",
+    "legacy__persistence",
+    "legacy__common",
+    "legacy__rbf_departure",
+    "legacy__rbf_unbounded",
+    "crossfit__shared_bias",
+    "crossfit__crossfit_rbf",
+    "crossfit__insample_rbf"
+  ],
+  "primary_history": 12,
+  "repetitions": 24,
+  "scaler_order": [
+    "standard",
+    "minmax",
+    "tanh_z_1"
+  ],
+  "schema_version": "kahm-crossfit-residual-v1",
+  "seed_derivation": {
+    "additional_exclusion_check": "All inherited prior exclusions plus complete preprocessing-study stream roster",
+    "collision_policy": "Stop before generation if any intended-distinct derived seed collides",
+    "distinct_seed_count": 1272,
+    "excluded_seed_manifest": null,
+    "fit_stream": [
+      "master_seed",
+      "repetition",
+      "law_index",
+      1004
+    ],
+    "function": "int(numpy.random.SeedSequence(integer_components).generate_state(1)[0])",
+    "law_index_order": [
+      "linear_ar",
+      "nonlinear_ar",
+      "vanderpol",
+      "duffing"
+    ],
+    "pairing": "No history, noise level or candidate cap in generation, unit-noise, retained-row or fit streams",
+    "repetition_identifier": [
+      "master_seed",
+      "repetition",
+      1000
+    ],
+    "repetition_index_base": 0,
+    "split_streams": [
+      "master_seed",
+      "repetition",
+      "law_index",
+      "split_index",
+      "purpose"
+    ]
+  },
+  "seed_purposes": {
+    "fit": 1004,
+    "generation": 1001,
+    "identifier": 1000,
+    "rows": 1003,
+    "unit_noise": 1002
+  },
+  "selection": {
+    "C": "Correction eta per horizon and one expanded policy family across horizons; no common/cap/scaler/alpha refit",
+    "D": "Prediction only after full fit seal, scoring only after full prediction seal",
+    "common": "B, per-horizon ridge penalties then one cap/scaler across horizons; cap-first then scaler order",
+    "common_bias": "B residual mean only; no C bias selection",
+    "departure": "B, independently per target mode and kind, per-horizon alpha then one cap/scaler across horizons",
+    "matched_RBF": "RBF at same target-mode KAHM selected scaler and cap, own B alpha and C eta",
+    "policy_tie": "First minimum in policy_order"
+  },
+  "shared_methods": [
+    "ridge",
+    "raw_rbf",
+    "raw_hgb",
+    "persistence"
+  ],
+  "source": {
+    "corrected_construction_commit": "3cd8e56d95ec1187deed6070541f26742ce4f1cc",
+    "corrected_policy_sha256": "c03d9a1923b5d9c8ade8a4198fd06e2b24c6add9bf0e0992c469f90d7621efa2",
+    "forecasting_commit": "7dda356138675934aab5e327ec667bde0a5eda79",
+    "native_lineage_commit": "d6d74d1953a4310b73065a556df816e5ab5e3ebc",
+    "preprocessing_source_commit": "5cfd7a1745a52459b7b5045fe84803b9bbb2b56a",
+    "principal_workflow": "extensions/reconstruction_mechanism",
+    "publication_commit": "3b9db85c1aa8ba890dbb74cc913a9337d7360d9d",
+    "repository": "https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine"
+  },
+  "split_caps": {
+    "A": 512,
+    "B": 256,
+    "C": 256,
+    "D": null
+  },
+  "split_episodes": {
+    "A": 64,
+    "B": 32,
+    "C": 32,
+    "D": 128
+  },
+  "split_indices": {
+    "A": 0,
+    "B": 1,
+    "C": 2,
+    "D": 3
+  },
+  "stride": 4,
+  "study_id": "Honest cross-fitted residual corrections with a full-training common predictor",
+  "task_count": 192
+}

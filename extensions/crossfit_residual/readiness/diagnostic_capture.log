@@ -1,0 +1,30 @@
+Replaying legacy fit from unchanged A/B inputs
+Replaying crossfit fit with NumPy SVD capture and no numerical fallback
+{"capture": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/readiness/svd_failure_duffing_rep01/failure_00", "shape": [383, 182], "finite": true, "context": [{"function": "_ridge_path", "file": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/dimension_forecasting/runtime/step1/forecasting_corrected/code/vendor_geometry/kahm_geometry/extensions/reconstruction_mechanism/models.py", "line": 135, "alphas": [0.0001, 0.001, 0.01, 0.1, 1.0]}, {"function": "_select_ridge", "file": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/dimension_forecasting/runtime/step1/forecasting_corrected/code/vendor_geometry/kahm_geometry/extensions/reconstruction_mechanism/models.py", "line": 180, "prefix": "fold0/standard__cap12"}, {"function": "fit_common_only", "file": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/code/crossfit_model.py", "line": 122, "tag": "fold0", "prefix": "fold0__tanh_z_1__cap8__local13", "cap": 12, "scaler": "standard", "key": "standard__cap12", "seed": 2073710093, "tx_shape": [383, 12], "tx_sha256": "e2b96f49e72094b3f1fd29130955d37d5a0dd1b0bbfd89b80a68571df4bd5703", "ty_shape": [383, 3], "ty_sha256": "0006e2ad7c66fdbf4b6a1822e56f5eb0638987cf0533ad51ffd96426d40ce87e"}, {"function": "fit_crossfit", "file": "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/code/crossfit_model.py", "line": 368, "tag": "fold0", "fold": 0, "seed": 2073710093, "ax_shape": [512, 12], "ax_sha256": "b4e7930dee8b3d5a3af0a705d6f0c13ee81e9f462fc2b5c6dcef8f08f09db6d4", "ay_shape": [512, 3], "ay_sha256": "ac3b24ed8d84e461cfc7e27964bf5fdc8fe87f09bb012460827e8f4aea40515c", "train_mask_shape": [512], "train_mask_sha256": "74c8f2ddcb9a1224e8b0f4ff0ffee8d7f8f8210fd465a17a03543edbd2e54d37"}]}
+Traceback (most recent call last):
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/readiness/diagnostic.py", line 249, in <module>
+    capture() if arguments.mode == "capture" else replay()
+    ^^^^^^^^^
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/readiness/diagnostic.py", line 154, in capture
+    model.fit_crossfit(ax, ay, groups, bx, by, seed=task["fit_seed"], config=config["model"],
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/code/crossfit_model.py", line 368, in fit_crossfit
+    model, selection, vp, ba, diagnostic = fit_common_only(ax[train_mask], ay[train_mask], bx, by,
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/code/crossfit_model.py", line 122, in fit_common_only
+    head, head_record = m._select_ridge(ft, base.residual_a, fb, by, base.predictions_b,
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/dimension_forecasting/runtime/step1/forecasting_corrected/code/vendor_geometry/kahm_geometry/extensions/reconstruction_mechanism/models.py", line 180, in _select_ridge
+    heads = _ridge_path(xa, ya, alphas)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/dimension_forecasting/runtime/step1/forecasting_corrected/code/vendor_geometry/kahm_geometry/extensions/reconstruction_mechanism/models.py", line 135, in _ridge_path
+    u, singular, vt = np.linalg.svd(centered, full_matrices=False)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/readiness/diagnostic.py", line 95, in traced_svd
+    return original_svd(a, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/linalg/_linalg.py", line 1862, in svd
+    u, s, vh = gufunc(a, signature=signature)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/linalg/_linalg.py", line 172, in _raise_linalgerror_svd_nonconvergence
+    raise LinAlgError("SVD did not converge")
+numpy.linalg.LinAlgError: SVD did not converge

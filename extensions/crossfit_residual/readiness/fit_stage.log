@@ -1,0 +1,22 @@
+{"phase": "fit", "completed": 8, "total": 192, "elapsed_seconds": 46.72304525399886}
+Traceback (most recent call last):
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/code/pipeline.py", line 561, in <module>
+    main()
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/code/pipeline.py", line 551, in main
+    elif a.command in ('fit', 'predict'): out = run_stage(root, a.command, a.workers)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/code/pipeline.py", line 432, in run_stage
+    try: completed.append(future.result())
+                          ^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/7682e7b6bcd0/kahm_preprocessing_study/extensions/crossfit_residual/code/pipeline.py", line 425, in run
+    if proc.returncode: raise RuntimeError(f'{task["task_id"]}: worker exited {proc.returncode}')
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: duffing__h12__noise0__rep01: worker exited 1

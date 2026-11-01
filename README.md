@@ -11,6 +11,9 @@ This repository contains the manuscript, implementation, and experimental eviden
 - [Principal experimental findings](extensions/dimension_forecasting/FINDINGS.md)
 - [Preprocessing findings](extensions/preprocessing_dimension/FINDINGS.md)
 - [Cross-fit reproduction findings](extensions/crossfit_residual_reproduction_20261101/reporting/RESULTS.md)
+- [Fresh policy-augmentation findings](extensions/policy_augmentation_20261101/RESULTS.md)
+- [Policy-augmentation research report](extensions/policy_augmentation_20261101/reporting/KAHM_Policy_Augmentation_Research_Report.pdf)
+- [Separate 48-series natural policy evaluation](extensions/policy_augmentation_natural_20261101/FINDINGS.md)
 - [Principal reproduction instructions](extensions/dimension_forecasting/README.md)
 - [Guide to the studies](TIME_SERIES_RESEARCH.md)
 
@@ -28,9 +31,9 @@ The coordinated manuscript presents the principal study and two follow-ups as se
 | Preprocessing and local dimension | Four comparisons | One: linear noninferiority | Separate controlled experiment; fixed-common residual corrections are secondary |
 | Cross-fitted residual correction | Four comparisons | Two: nonlinear gain over the shared baseline, and linear noninferiority | Same-seed computational reproduction of 24 original cross-fit units; zero additional independent repetitions |
 
-The strongest demonstrated role is a bounded feature family that can improve residual correction around a specified forecast. An advantage over independently tuned alternatives and the complete non-KAHM selection policy must be assessed separately. KAHM's proposed role as a complementary specialist in a portfolio remains untested: the evaluated non-KAHM policies exclude it, and no otherwise identical policy with KAHM added has yet been evaluated on fresh data.
+The strongest demonstrated role is a bounded feature family that can improve residual correction around a specified forecast. An advantage over independently tuned alternatives and the complete non-KAHM selection policy must be assessed separately. A subsequent [fresh policy-augmentation study](extensions/policy_augmentation_20261101/RESULTS.md) now evaluates this distinction directly: adding KAHM reduces nonlinear policy loss by 0.816%, while neither prespecified 3% superiority criterion is established. Its separate natural-series policy evaluation has 2.273% higher mean error than the base policy.
 
-The main paper contains the central definitions and theoretical statements, complete proofs, the principal forecasting experiment and its protocol, and the preprocessing and residual-target follow-ups. The companion supplementary studies retain the complete controlled, natural-data, scaling, additive, learned-geometry, direct-training, adaptive, and follow-up investigations with their own notation and comparison families. The coordinated edition reports completed evidence; it adds no natural-data validation.
+The main paper contains the central definitions and theoretical statements, complete proofs, the principal forecasting experiment and its protocol, and the preprocessing and residual-target follow-ups. The companion supplementary studies retain the complete controlled, natural-data, scaling, additive, learned-geometry, direct-training, adaptive, and follow-up investigations with their own notation and comparison families. That coordinated document edition predates the fresh policy-augmentation study; the subsequent synthetic and natural findings are reported in the separate study records linked below.
 
 ## Reproduce the principal experiment
 
@@ -112,6 +115,38 @@ package contains one analysis ZIP and sixteen standalone records ZIPs, with
 · [Archive manifest](extensions/crossfit_residual_reproduction_20261101/reporting/ARCHIVE_MANIFEST.json)
 · [Archive delivery verification](extensions/crossfit_residual_reproduction_20261101/reporting/archive_delivery_verification.json)
 
+## Fresh policy augmentation and separate natural evaluation
+
+The new synthetic experiment uses **24 fresh repetitions and 192 task suites**.
+P0 is the established ten-family menu, P1 adds the existing in-sample KAHM
+residual correction, and P0plus adds a new raw-history Nyström RBF correction.
+The two additions receive the same 75 B-validation scores per horizon and
+one additional C-selection slot. Native local dimension and preprocessing
+remain validation-selected; equal search counts do not imply equal capacity
+or runtime.
+
+P1 has **0.816% lower nonlinear SMSE than P0** and **0.658% lower than
+P0plus**. Neither declared 3% superiority criterion is established; both
+linear 5% noninferiority criteria are established. The standalone KAHM
+correction improves the shared baseline by 12.497%, a separate descriptive
+comparison that does not establish complete-policy superiority.
+
+The chronological natural evaluation uses **24 Weekly and 24 Hourly M4
+training-series histories**, excluding the previously evaluated pilot IDs.
+It reserves terminal training segments, uses no official M4 Test data, and
+does not claim an official M4 ranking or independent-source inference.
+P1 has **2.273% higher overall SMSE than P0** and **2.718% lower than P0plus**.
+KAHM is selected on 3 of 48 series, with one win and two losses versus P0;
+the other 45 P1 forecasts are identical to P0.
+
+[Synthetic results](extensions/policy_augmentation_20261101/RESULTS.md)
+· [Frozen synthetic protocol](extensions/policy_augmentation_20261101/PROTOCOL.md)
+· [Synthetic independent audit](extensions/policy_augmentation_20261101/verification/policy_audit.json)
+· [Natural findings](extensions/policy_augmentation_natural_20261101/FINDINGS.md)
+· [Natural reproduction](extensions/policy_augmentation_natural_20261101/REPRODUCTION.md)
+· [Natural independent audit](extensions/policy_augmentation_natural_20261101/audit/verification.json)
+· [Numerical archive index](extensions/policy_augmentation_20261101/reporting/ARCHIVE_INDEX.json)
+
 ## Repository organization
 
 | Location | Contents |
@@ -120,6 +155,8 @@ package contains one analysis ZIP and sixteen standalone records ZIPs, with
 | `extensions/dimension_forecasting/` | Principal dimension-selected comparison, source and phase records, complete analysis, and independent audit |
 | `extensions/preprocessing_dimension/` | Four-comparison preprocessing study, secondary disjoint-episode residual corrections, audited results, and numerical archive index |
 | `extensions/crossfit_residual_reproduction_20261101/` | Cross-fitted and in-sample residual correction study, same-cohort computational reproduction, audited results, and complete numerical archive index |
+| `extensions/policy_augmentation_20261101/` | Fresh 24-repetition policy augmentation, matched added-search control, complete analysis, audits, report builder and numerical archive index |
+| `extensions/policy_augmentation_natural_20261101/` | Separate chronological 48-series M4 training-history evaluation, deterministic roster, audited descriptive results and reproduction guide |
 | `extensions/reconstruction_mechanism/` | Historical fixed-cap comparison, algebraic examples, saved evidence, and verification tools |
 | `extensions/predictive_geometry/` | Controlled representation and decoder experiments |
 | `extensions/natural_forecasting/` | Natural-data evaluation and dataset provenance |

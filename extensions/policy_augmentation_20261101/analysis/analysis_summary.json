@@ -1,0 +1,237 @@
+{
+  "analyzer_sha256": "378d5137467bd9aff92e4d38c6c7c72046d6e689b14de3bac5fab161269f2d65",
+  "arrays_per_task": 50,
+  "config_sha256": "12085442ef23f2cca1d7fb20c76e1fb16b433bf89125e1b32888e1fc4fd905e3",
+  "created_utc": "2026-11-01T20:02:33.770042+00:00",
+  "criteria_established": 2,
+  "forecast_arrays": 9600,
+  "freeze_sha256": "8883a946000c6ffce1869436882366fe1465816b16ddb247919742017d132751",
+  "independent_repetitions": 24,
+  "limitations": [
+    "Synthetic laws and fixed finite tuning menus; no natural-data claim.",
+    "Student-t bounds use 24 independent simulation repetition aggregates and their approximation assumptions.",
+    "Equal marginal B score count does not establish equal wall time or equal model complexity.",
+    "Nested candidate menus guarantee nonincrease on C only; they do not guarantee D improvement.",
+    "Selection-conditioned results are descriptive and cannot replace failed primary criteria.",
+    "Resource tables retain full measured experiment costs; reuse does not identify every isolated policy cost."
+  ],
+  "panel_summary": [
+    {
+      "forecast_key": "policy__calibrated__P0",
+      "mean_smse": 0.02726838512983061,
+      "n_repetitions": 24,
+      "panel": "nonlinear",
+      "repetition_sd": 0.0009932970126619047
+    },
+    {
+      "forecast_key": "policy__calibrated__P0plus",
+      "mean_smse": 0.027225020380295603,
+      "n_repetitions": 24,
+      "panel": "nonlinear",
+      "repetition_sd": 0.0009796315684671558
+    },
+    {
+      "forecast_key": "policy__calibrated__P1",
+      "mean_smse": 0.02704582691299484,
+      "n_repetitions": 24,
+      "panel": "nonlinear",
+      "repetition_sd": 0.000995207794320231
+    },
+    {
+      "forecast_key": "policy__calibrated__P0",
+      "mean_smse": 0.9139071372975609,
+      "n_repetitions": 24,
+      "panel": "linear",
+      "repetition_sd": 0.04226163796408792
+    },
+    {
+      "forecast_key": "policy__calibrated__P0plus",
+      "mean_smse": 0.9139365474760259,
+      "n_repetitions": 24,
+      "panel": "linear",
+      "repetition_sd": 0.04219057440724704
+    },
+    {
+      "forecast_key": "policy__calibrated__P1",
+      "mean_smse": 0.9139216740018812,
+      "n_repetitions": 24,
+      "panel": "linear",
+      "repetition_sd": 0.042266163670879896
+    },
+    {
+      "forecast_key": "policy__calibrated__P0",
+      "mean_smse": 0.24892807317176321,
+      "n_repetitions": 24,
+      "panel": "all_descriptive",
+      "repetition_sd": 0.010559059805351781
+    },
+    {
+      "forecast_key": "policy__calibrated__P0plus",
+      "mean_smse": 0.2489029021542282,
+      "n_repetitions": 24,
+      "panel": "all_descriptive",
+      "repetition_sd": 0.010555271361052972
+    },
+    {
+      "forecast_key": "policy__calibrated__P1",
+      "mean_smse": 0.24876478868521637,
+      "n_repetitions": 24,
+      "panel": "all_descriptive",
+      "repetition_sd": 0.010613948444634726
+    }
+  ],
+  "prediction_lock_sha256": "fda3e5a10e8b4c823883c3b0606867138ddf7b811906e81f191acad8109b06a5",
+  "primary_family_size": 4,
+  "primary_results": [
+    {
+      "candidate": "P1",
+      "candidate_mean_smse": 0.02704582691299484,
+      "comparator": "P0",
+      "comparator_factor": 0.97,
+      "comparator_mean_smse": 0.02726838512983061,
+      "contrast_id": "P1_vs_P0_nonlinear",
+      "criterion_established": false,
+      "critical_t": 2.3978750646571103,
+      "df": 23,
+      "family_alpha": 0.05,
+      "family_size": 4,
+      "margin": "3% superiority",
+      "margin_difference_mean": 0.0005954933370591497,
+      "margin_difference_sd": 0.0002368278068629452,
+      "margin_difference_se": 4.834227364305165e-05,
+      "n_repetitions": 24,
+      "p_bonferroni": 1.0,
+      "p_one_sided": 0.9999999999934576,
+      "panel": "nonlinear",
+      "point_relative_gain_percent": 0.81617674011909,
+      "simultaneous_one_sided_upper": 0.0007114120695966539,
+      "strict_D_win_repetitions": 16
+    },
+    {
+      "candidate": "P1",
+      "candidate_mean_smse": 0.02704582691299484,
+      "comparator": "P0plus",
+      "comparator_factor": 0.97,
+      "comparator_mean_smse": 0.027225020380295603,
+      "contrast_id": "P1_vs_P0plus_nonlinear",
+      "criterion_established": false,
+      "critical_t": 2.3978750646571103,
+      "df": 23,
+      "family_alpha": 0.05,
+      "family_size": 4,
+      "margin": "3% superiority",
+      "margin_difference_mean": 0.0006375571441081053,
+      "margin_difference_sd": 0.00032742162347994844,
+      "margin_difference_se": 6.683465902329579e-05,
+      "n_repetitions": 24,
+      "p_bonferroni": 1.0,
+      "p_one_sided": 0.999999999076385,
+      "panel": "nonlinear",
+      "point_relative_gain_percent": 0.6581940611895876,
+      "simultaneous_one_sided_upper": 0.0007978183064349266,
+      "strict_D_win_repetitions": 16
+    },
+    {
+      "candidate": "P1",
+      "candidate_mean_smse": 0.9139216740018812,
+      "comparator": "P0",
+      "comparator_factor": 1.05,
+      "comparator_mean_smse": 0.9139071372975609,
+      "contrast_id": "P1_vs_P0_linear",
+      "criterion_established": true,
+      "critical_t": 2.3978750646571103,
+      "df": 23,
+      "family_alpha": 0.05,
+      "family_size": 4,
+      "margin": "5% noninferiority",
+      "margin_difference_mean": -0.04568082016055792,
+      "margin_difference_sd": 0.002109813466562243,
+      "margin_difference_se": 0.00043066387046083624,
+      "n_repetitions": 24,
+      "p_bonferroni": 3.7911436394087424e-32,
+      "p_one_sided": 9.477859098521856e-33,
+      "panel": "linear",
+      "point_relative_gain_percent": -0.0015906106569207878,
+      "simultaneous_one_sided_upper": -0.04464814200433116,
+      "strict_D_win_repetitions": 0
+    },
+    {
+      "candidate": "P1",
+      "candidate_mean_smse": 0.9139216740018812,
+      "comparator": "P0plus",
+      "comparator_factor": 1.05,
+      "comparator_mean_smse": 0.9139365474760259,
+      "contrast_id": "P1_vs_P0plus_linear",
+      "criterion_established": true,
+      "critical_t": 2.3978750646571103,
+      "df": 23,
+      "family_alpha": 0.05,
+      "family_size": 4,
+      "margin": "5% noninferiority",
+      "margin_difference_mean": -0.045711700847946256,
+      "margin_difference_sd": 0.002113034336379548,
+      "margin_difference_se": 0.0004313213277591969,
+      "n_repetitions": 24,
+      "p_bonferroni": 3.865812120187609e-32,
+      "p_one_sided": 9.664530300469023e-33,
+      "panel": "linear",
+      "point_relative_gain_percent": 0.0016274077435540768,
+      "simultaneous_one_sided_upper": -0.04467744619125768,
+      "strict_D_win_repetitions": 1
+    }
+  ],
+  "status": "complete",
+  "study_root": "/workspace/scratch/3435edb2ec4d/kahm_repo/extensions/policy_augmentation_20261101",
+  "tables": {
+    "conditional_descriptive.csv": {
+      "rows": 75,
+      "sha256": "6d7320cfa3cccbc0e305c0d04a6629c20689006870e0ab1b20359a6b8695630f"
+    },
+    "extra_widths_by_task.csv": {
+      "rows": 1344,
+      "sha256": "8418c24b0f2cc974a5048f22d5bbe114d2708f220b3b200c0ae9518e49c161b0"
+    },
+    "horizon_losses.csv": {
+      "rows": 28800,
+      "sha256": "261c3adccad61a7261adee0de3510a467c2d3a9593edb9ce774cdff249c547c8"
+    },
+    "panel_summary.csv": {
+      "rows": 150,
+      "sha256": "5fd4eeac256d84db4a8a4eb7527e0f10bd02ebe15caec0f4726096cbf157ef45"
+    },
+    "primary_paired_repetitions.csv": {
+      "rows": 96,
+      "sha256": "8bf2a8c334735555d5be8441053fa54e090d0b11b3631e6b2b96604a11910d90"
+    },
+    "primary_results.csv": {
+      "rows": 4,
+      "sha256": "c0990c6402dd64d8de0f74388849545d23948810af80e632d4d3c0e6d6e6dd2f"
+    },
+    "repetition_losses.csv": {
+      "rows": 3600,
+      "sha256": "509e3a9989c527fec8d7c47d26c7d45c48f0d6dc9eb7b582114d996423ca7bdb"
+    },
+    "resource_by_task.csv": {
+      "rows": 2880,
+      "sha256": "e621cfe7ed33e09b10deb697e010b12bab5eaabfc9b4556e56c91ecd01556dc6"
+    },
+    "resource_summary.csv": {
+      "rows": 15,
+      "sha256": "b3f735727bf2e7313dc5bca268d0d657203b3ef23e9086390c073a8fde274356"
+    },
+    "selection_by_task.csv": {
+      "rows": 576,
+      "sha256": "d473182fa1a7c7fe2b35b1644146c39cda2d9aaa02bde47c8ac89ab6a6255e3d"
+    },
+    "selection_frequencies.csv": {
+      "rows": 96,
+      "sha256": "7eb00f1bc839e629350018eceadf89d1e81eb45973568c2905d57c33ec543cb8"
+    },
+    "task_losses.csv": {
+      "rows": 9600,
+      "sha256": "ede057b3313c42faeba9f7c6db418ed950f33a9d72aa6cd60167230c68542e4f"
+    }
+  },
+  "target_release_sha256": "0ae04dc2ff695f3529f49d0594b1ec167c94c68b42f115553ff95f43bd5964cc",
+  "tasks": 192
+}

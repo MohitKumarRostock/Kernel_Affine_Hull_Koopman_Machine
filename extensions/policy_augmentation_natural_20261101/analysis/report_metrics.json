@@ -1,0 +1,457 @@
+{
+  "KAHM_policy_selected_series": [
+    "weekly__W160",
+    "weekly__W196",
+    "hourly__H368"
+  ],
+  "common_selections": {
+    "requested_cap": {
+      "1": 12,
+      "12": 18,
+      "2": 7,
+      "4": 4,
+      "8": 7
+    },
+    "scaler": {
+      "minmax": 16,
+      "standard": 13,
+      "tanh_z_1": 19
+    }
+  },
+  "correction_selections": {
+    "kahm": {
+      "eta": {
+        "0.0": 47,
+        "0.25": 13,
+        "0.5": 18,
+        "1.0": 66
+      },
+      "realized_rank_occurrences": {
+        "1": 168,
+        "12": 84,
+        "2": 140,
+        "4": 210,
+        "8": 70
+      },
+      "requested_cap": {
+        "1": 12,
+        "12": 6,
+        "2": 10,
+        "4": 15,
+        "8": 5
+      },
+      "scaler": {
+        "minmax": 16,
+        "standard": 12,
+        "tanh_z_1": 20
+      }
+    },
+    "rbf": {
+      "eta": {
+        "0.0": 68,
+        "0.25": 8,
+        "0.5": 10,
+        "1.0": 58
+      },
+      "realized_rank_occurrences": {
+        "1": 308,
+        "12": 98,
+        "2": 98,
+        "4": 126,
+        "7": 1,
+        "8": 41
+      },
+      "requested_cap": {
+        "1": 22,
+        "12": 7,
+        "2": 7,
+        "4": 9,
+        "8": 3
+      },
+      "scaler": {
+        "minmax": 14,
+        "standard": 10,
+        "tanh_z_1": 24
+      }
+    }
+  },
+  "evidence_status": "48 new exact M4 series identities; anonymous source dependence; descriptive external benchmark development",
+  "numerical_solver_fallback_events": 0,
+  "numerical_solver_fallback_statuses": {},
+  "overall_method_means": {
+    "direct__calibrated__drift": {
+      "SMSE": 0.9436672335409483,
+      "frequency_MASE": 6.461658339602867,
+      "seasonal_MASE": 5.643459073010619
+    },
+    "direct__calibrated__seasonal_naive": {
+      "SMSE": 0.5021523002845513,
+      "frequency_MASE": 4.040902821333476,
+      "seasonal_MASE": 1.0792439213976528
+    },
+    "direct__eta1__drift": {
+      "SMSE": 0.9436672335409483,
+      "frequency_MASE": 6.461658339602867,
+      "seasonal_MASE": 5.643459073010619
+    },
+    "direct__eta1__seasonal_naive": {
+      "SMSE": 0.5021523002845513,
+      "frequency_MASE": 4.040902821333476,
+      "seasonal_MASE": 1.0792439213976528
+    },
+    "extra__calibrated__extra_rbf": {
+      "SMSE": 0.15620205451477723,
+      "frequency_MASE": 2.0828619329505624,
+      "seasonal_MASE": 0.9187896715686511
+    },
+    "extra__eta1__extra_rbf": {
+      "SMSE": 0.18066152737192306,
+      "frequency_MASE": 2.2322250916389303,
+      "seasonal_MASE": 0.943456131699393
+    },
+    "legacy__calibrated__common": {
+      "SMSE": 0.14930617651865816,
+      "frequency_MASE": 1.9202010565922685,
+      "seasonal_MASE": 1.0039169121258071
+    },
+    "legacy__calibrated__kahm_departure": {
+      "SMSE": 0.15081045376452165,
+      "frequency_MASE": 1.8476466926269668,
+      "seasonal_MASE": 0.933031404300992
+    },
+    "legacy__calibrated__kahm_unbounded": {
+      "SMSE": 0.15320212188213422,
+      "frequency_MASE": 1.8059287130972743,
+      "seasonal_MASE": 0.884284404896361
+    },
+    "legacy__calibrated__nonkahm_policy": {
+      "SMSE": 0.12928458537753165,
+      "frequency_MASE": 1.5169157477044781,
+      "seasonal_MASE": 0.770443131856406
+    },
+    "legacy__calibrated__persistence": {
+      "SMSE": 0.18017842360485026,
+      "frequency_MASE": 2.239498918782403,
+      "seasonal_MASE": 1.4595459717263992
+    },
+    "legacy__calibrated__raw_hgb": {
+      "SMSE": 0.16340892369567186,
+      "frequency_MASE": 2.3790982153237668,
+      "seasonal_MASE": 1.4461869196599793
+    },
+    "legacy__calibrated__raw_rbf": {
+      "SMSE": 0.15868344131611598,
+      "frequency_MASE": 1.7503293932396946,
+      "seasonal_MASE": 0.8410482680064377
+    },
+    "legacy__calibrated__rbf_departure": {
+      "SMSE": 0.15224579999034563,
+      "frequency_MASE": 1.8129340967666663,
+      "seasonal_MASE": 0.8998597175116011
+    },
+    "legacy__calibrated__rbf_unbounded": {
+      "SMSE": 0.16051627194857185,
+      "frequency_MASE": 1.760247785145954,
+      "seasonal_MASE": 0.8426142079132406
+    },
+    "legacy__calibrated__ridge": {
+      "SMSE": 0.18914328893242024,
+      "frequency_MASE": 2.4962706274622097,
+      "seasonal_MASE": 1.5519847249010599
+    },
+    "legacy__gamma1__common": {
+      "SMSE": 0.16640305317703516,
+      "frequency_MASE": 2.2820167402015232,
+      "seasonal_MASE": 1.0353124543317813
+    },
+    "legacy__gamma1__kahm_departure": {
+      "SMSE": 0.18622201325102875,
+      "frequency_MASE": 2.2534968208843917,
+      "seasonal_MASE": 0.9912533896022255
+    },
+    "legacy__gamma1__kahm_unbounded": {
+      "SMSE": 0.3153082029284903,
+      "frequency_MASE": 2.671349330993998,
+      "seasonal_MASE": 1.0134990391816505
+    },
+    "legacy__gamma1__nonkahm_policy": {
+      "SMSE": 0.16527924806045394,
+      "frequency_MASE": 2.174010208132325,
+      "seasonal_MASE": 0.847107010988446
+    },
+    "legacy__gamma1__persistence": {
+      "SMSE": 0.9302387235091775,
+      "frequency_MASE": 6.448114524678732,
+      "seasonal_MASE": 5.6158157784295035
+    },
+    "legacy__gamma1__raw_hgb": {
+      "SMSE": 2.0023974050653597,
+      "frequency_MASE": 13.33539930173164,
+      "seasonal_MASE": 3.5409865785187447
+    },
+    "legacy__gamma1__raw_rbf": {
+      "SMSE": 0.8533857237929364,
+      "frequency_MASE": 6.290033036225612,
+      "seasonal_MASE": 1.3895927544770563
+    },
+    "legacy__gamma1__rbf_departure": {
+      "SMSE": 0.18333924293191572,
+      "frequency_MASE": 2.281274531914994,
+      "seasonal_MASE": 0.9443267829247753
+    },
+    "legacy__gamma1__rbf_unbounded": {
+      "SMSE": 0.3313777675839262,
+      "frequency_MASE": 2.990628128839907,
+      "seasonal_MASE": 1.0062035379904384
+    },
+    "legacy__gamma1__ridge": {
+      "SMSE": 0.18914328893242024,
+      "frequency_MASE": 2.4962706274622097,
+      "seasonal_MASE": 1.5519847249010599
+    },
+    "policy__calibrated__P0": {
+      "SMSE": 0.12761223314433595,
+      "frequency_MASE": 1.3809301905140536,
+      "seasonal_MASE": 0.6260662464078396
+    },
+    "policy__calibrated__P0plus": {
+      "SMSE": 0.13415923375551606,
+      "frequency_MASE": 1.4049320902870275,
+      "seasonal_MASE": 0.6295275368343379
+    },
+    "policy__calibrated__P1": {
+      "SMSE": 0.13051223223418373,
+      "frequency_MASE": 1.39021467220348,
+      "seasonal_MASE": 0.630945938990474
+    },
+    "policy__eta1__P0": {
+      "SMSE": 0.13182724431018508,
+      "frequency_MASE": 1.496016582076119,
+      "seasonal_MASE": 0.6513953824454265
+    },
+    "policy__eta1__P0plus": {
+      "SMSE": 0.15735146793251248,
+      "frequency_MASE": 1.570488571137347,
+      "seasonal_MASE": 0.6632273813322368
+    },
+    "policy__eta1__P1": {
+      "SMSE": 0.13332597489779618,
+      "frequency_MASE": 1.5035402878216821,
+      "seasonal_MASE": 0.656058364503517
+    },
+    "residual__calibrated__common": {
+      "SMSE": 0.16640305317703516,
+      "frequency_MASE": 2.2820167402015232,
+      "seasonal_MASE": 1.0353124543317813
+    },
+    "residual__calibrated__insample_kahm": {
+      "SMSE": 0.15195625354893003,
+      "frequency_MASE": 2.044670647376316,
+      "seasonal_MASE": 0.8936664405550089
+    },
+    "residual__calibrated__insample_matched_rbf": {
+      "SMSE": 0.1558256380987658,
+      "frequency_MASE": 2.0838964395521624,
+      "seasonal_MASE": 0.9173833549099117
+    },
+    "residual__calibrated__insample_rbf": {
+      "SMSE": 0.15529621529683504,
+      "frequency_MASE": 2.0871338108678947,
+      "seasonal_MASE": 0.9179220674527956
+    },
+    "residual__calibrated__shared_bias": {
+      "SMSE": 0.157182580836565,
+      "frequency_MASE": 2.1168088916763206,
+      "seasonal_MASE": 0.9373956897873374
+    },
+    "residual__eta1__common": {
+      "SMSE": 0.16640305317703516,
+      "frequency_MASE": 2.2820167402015232,
+      "seasonal_MASE": 1.0353124543317813
+    },
+    "residual__eta1__insample_kahm": {
+      "SMSE": 0.1644154065805409,
+      "frequency_MASE": 2.1609919517497125,
+      "seasonal_MASE": 0.920872007857927
+    },
+    "residual__eta1__insample_matched_rbf": {
+      "SMSE": 0.1646817994563295,
+      "frequency_MASE": 2.2018231873183103,
+      "seasonal_MASE": 0.9372804671169406
+    },
+    "residual__eta1__insample_rbf": {
+      "SMSE": 0.15803635679783926,
+      "frequency_MASE": 2.154417391126454,
+      "seasonal_MASE": 0.9293729595400192
+    },
+    "residual__eta1__shared_bias": {
+      "SMSE": 0.157182580836565,
+      "frequency_MASE": 2.1168088916763206,
+      "seasonal_MASE": 0.9373956897873374
+    }
+  },
+  "policy_aggregates": [
+    {
+      "SMSE": "0.07939197699798133",
+      "frequency_MASE": "1.7619209262605653",
+      "method_key": "policy__calibrated__P0",
+      "panel": "Weekly",
+      "seasonal_MASE": "0.252193038048137",
+      "series_count": "24"
+    },
+    {
+      "SMSE": "0.09146226499271466",
+      "frequency_MASE": "1.8117754879207826",
+      "method_key": "policy__calibrated__P0plus",
+      "panel": "Weekly",
+      "seasonal_MASE": "0.26096638101540287",
+      "series_count": "24"
+    },
+    {
+      "SMSE": "0.08392463500032525",
+      "frequency_MASE": "1.7729758104831361",
+      "method_key": "policy__calibrated__P1",
+      "panel": "Weekly",
+      "seasonal_MASE": "0.2544383440571236",
+      "series_count": "24"
+    },
+    {
+      "SMSE": "0.17583248929069054",
+      "frequency_MASE": "0.9999394547675422",
+      "method_key": "policy__calibrated__P0",
+      "panel": "Hourly",
+      "seasonal_MASE": "0.9999394547675422",
+      "series_count": "24"
+    },
+    {
+      "SMSE": "0.17685620251831743",
+      "frequency_MASE": "0.9980886926532732",
+      "method_key": "policy__calibrated__P0plus",
+      "panel": "Hourly",
+      "seasonal_MASE": "0.9980886926532732",
+      "series_count": "24"
+    },
+    {
+      "SMSE": "0.17709982946804217",
+      "frequency_MASE": "1.0074535339238244",
+      "method_key": "policy__calibrated__P1",
+      "panel": "Hourly",
+      "seasonal_MASE": "1.0074535339238244",
+      "series_count": "24"
+    },
+    {
+      "SMSE": "0.12761223314433595",
+      "frequency_MASE": "1.3809301905140536",
+      "method_key": "policy__calibrated__P0",
+      "panel": "Overall",
+      "seasonal_MASE": "0.6260662464078396",
+      "series_count": "48"
+    },
+    {
+      "SMSE": "0.13415923375551606",
+      "frequency_MASE": "1.4049320902870275",
+      "method_key": "policy__calibrated__P0plus",
+      "panel": "Overall",
+      "seasonal_MASE": "0.6295275368343379",
+      "series_count": "48"
+    },
+    {
+      "SMSE": "0.13051223223418373",
+      "frequency_MASE": "1.39021467220348",
+      "method_key": "policy__calibrated__P1",
+      "panel": "Overall",
+      "seasonal_MASE": "0.630945938990474",
+      "series_count": "48"
+    }
+  ],
+  "provenance": {
+    "FIT_LOCK.json": "1dc68fb1e1e341cb7ec1aab161c915ca905b36b2d5fd15828422b3118cbe1c0b",
+    "PREDICTION_LOCK.json": "65f0535f8789f8239d37028a3b0fbdbc210b620c30847588e75cb95d784e9a71",
+    "analysis/analysis_summary.json": "8d3f56d6d2d5344bc7dc02318673225f82363e48a7b7bd4013028d28cca1c5d9",
+    "audit/verification.json": "cc83f9242352219db2058e8901cb76bfebbc4f336acc0ca429e98976dd94729a",
+    "freeze.json": "d9a2386a2a8869463f87839be3f945c078b7c3826de091773b546f1c933c702e"
+  },
+  "schema": "kahm-natural-policy-report-metrics-v1",
+  "selected_KAHM_series_details": [
+    {
+      "KAHM_gain_vs_P0_percent": 13.674312154913759,
+      "P0_SMSE": 0.0030622646952506785,
+      "P0_choice": "direct__drift",
+      "P0_max_abs_error": 166.37536145251397,
+      "P0plus_SMSE": 0.0030622646952506785,
+      "P0plus_choice": "direct__drift",
+      "P1_SMSE": 0.0026435210618123823,
+      "P1_max_abs_error": 129.77818731159186,
+      "P1_to_P0_max_abs_error_ratio": 0.7800324890571764,
+      "alpha": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "eta": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "requested_cap": 1,
+      "scaler": "tanh_z_1",
+      "task_id": "weekly__W160"
+    },
+    {
+      "KAHM_gain_vs_P0_percent": -20.063138545935,
+      "P0_SMSE": 0.5442943806606887,
+      "P0_choice": "direct__drift",
+      "P0_max_abs_error": 4262.646559331477,
+      "P0plus_SMSE": 0.8356140240827111,
+      "P0plus_choice": "extra__extra_rbf",
+      "P1_SMSE": 0.6534969163503815,
+      "P1_max_abs_error": 4607.318198444302,
+      "P1_to_P0_max_abs_error_ratio": 1.080858601414723,
+      "alpha": [
+        1.0,
+        0.1,
+        0.01
+      ],
+      "eta": [
+        0.5,
+        1.0,
+        0.5
+      ],
+      "requested_cap": 4,
+      "scaler": "standard",
+      "task_id": "weekly__W196"
+    },
+    {
+      "KAHM_gain_vs_P0_percent": -54.774862389838596,
+      "P0_SMSE": 0.05552942158021979,
+      "P0_choice": "legacy__rbf_departure",
+      "P0_max_abs_error": 43.11136767163893,
+      "P0plus_SMSE": 0.05552942158021979,
+      "P0plus_choice": "legacy__rbf_departure",
+      "P1_SMSE": 0.08594558583665853,
+      "P1_max_abs_error": 41.05201787463963,
+      "P1_to_P0_max_abs_error_ratio": 0.9522318611489087,
+      "alpha": [
+        0.0001,
+        0.0001,
+        0.01
+      ],
+      "eta": [
+        0.5,
+        0.25,
+        1.0
+      ],
+      "requested_cap": 2,
+      "scaler": "tanh_z_1",
+      "task_id": "hourly__H368"
+    }
+  ],
+  "selected_rank_count_scope": "Counts local bases in each independently selected correction bank; same bank may be counted for both kinds; not independent observations",
+  "standalone_KAHM_shared_baseline_descriptive": {
+    "ISRBF_SMSE": 0.15529621529683504,
+    "KAHM_SMSE": 0.15195625354893003,
+    "KAHM_gain_vs_ISRBF_percent": 2.150703892893313,
+    "KAHM_gain_vs_bias_percent": 3.3250041192981805,
+    "bias_SMSE": 0.157182580836565
+  }
+}

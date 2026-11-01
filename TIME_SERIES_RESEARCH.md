@@ -19,6 +19,8 @@ The research examines whether local reconstruction gives a finite forecasting de
 | Principal dimension-selected study | Six comparisons; three established | Useful gains over common features and raw-input RBF; the complete comparison criterion is not established. |
 | Preprocessing follow-up | Four comparisons; one established | Tanh and joint preprocessing selection do not establish a practical complete-procedure advantage; disjoint-episode fixed-common corrections are positive secondary evidence. |
 | Cross-fit computational reproduction | Original four comparisons; two established | A shared-baseline gain survives with a full-training common predictor; the independent-RBF margin and policy superiority are not established. |
+| Fresh policy augmentation | Four comparisons; two linear safeguards established | Adding KAHM gives a 0.816% nonlinear mean gain over P0, while neither 3% superiority criterion is established; 24 genuinely new repetitions. |
+| Separate natural policy evaluation | Descriptive external benchmark-development evidence | On 48 reserved M4 training-series histories, adding KAHM increases overall policy SMSE by 2.273%; no independent-source inference. |
 
 These are separate comparison families, not a pooled success count or a replacement of earlier failed claims. The cross-fit reproduction uses the original 24 simulation repetition units and contributes zero additional independent repetitions.
 
@@ -35,7 +37,9 @@ A nonzero correction helps when its alignment with the predictable baseline resi
 
 The secondary cross-fit comparison is particularly informative. Cross-fitted KAHM has 3.6873% higher error than in-sample KAHM. The in-sample procedure improves over the shared baseline by 12.4259% and independently selected in-sample RBF by 3.9643%. Its mean error nevertheless remains 1.3862% above the expanded non-KAHM policy, a post hoc descriptive comparison without a new primary test. Fold predictors use 48 episodes, whereas the deployed common predictor uses 64. Residual-target alignment is a plausible explanation for the ordering, but the experiment does not isolate training size or establish that cross-fitting is generally inferior.
 
-The strongest future hypothesis is that a KAHM correction supplies complementary forecasts that an honest selector can exploit. That portfolio role is currently untested. The reported non-KAHM policy excludes KAHM; favorable condition means do not establish that validation can identify those conditions reliably. A decisive new study would compare the frozen non-KAHM policy with the identical policy including one prespecified KAHM procedure on fresh data, accompanied by a control giving non-KAHM methods the same additional search opportunities. This is a proposed experiment, not a result of the completed studies.
+The subsequent [policy-augmentation study](extensions/policy_augmentation_20261101/RESULTS.md) tests whether a selector can exploit a KAHM correction's complementary forecasts. It compares the unchanged P0 menu with P1, which adds the existing in-sample KAHM correction, and P0plus, which adds a new raw-history RBF correction with the same number of additional validation opportunities. On 24 fresh repetitions, P1 reduces nonlinear mean SMSE by 0.816% versus P0 and 0.658% versus P0plus. Neither prespecified 3% superiority criterion is established; both linear noninferiority criteria are established. Equal search counts do not match feature width or runtime. These results show a small observed incremental benefit under the studied laws, without establishing the declared practical margin.
+
+The [separate natural evaluation](extensions/policy_augmentation_natural_20261101/FINDINGS.md) uses 24 Weekly and 24 Hourly M4 training histories outside the recorded prior pilot. P1 has 2.273% higher overall SMSE than P0 and 2.718% lower than P0plus. C selects KAHM on three series, producing one win and two losses versus P0; on the remaining 45, P1 equals P0. Both enlarged menus have higher overall error than P0. This chronological evaluation uses reserved training-file segments and no official Test data. The natural menu adds causal seasonal-naive and drift controls and omits the episode cross-fit family. Its scores remain descriptive and are not pooled with the synthetic inference.
 
 ## Supporting studies and interpretation
 
@@ -50,7 +54,7 @@ The strongest future hypothesis is that a KAHM correction supplies complementary
 | [Online adaptation](extensions/adaptive_development/REPRODUCING.md) | Do maintained geometry and residual predictors justify their cost? | Both capacity tiers fail the prescribed accuracy criteria; severe extrapolation remains after a numerical solver repair. |
 | [Historical fixed-cap reconstruction departures](extensions/reconstruction_mechanism/README.md) | Do distinct, bounded reconstruction features improve a matched forecasting procedure? | The common-feature comparison and linear-control noninferiority criterion are satisfied; the four other useful-improvement criteria are not established. |
 
-The studies use different procedures, populations, normalization conventions, and selection budgets. Their numerical scores should be interpreted within the corresponding protocol, and their observations are not pooled as independent evidence for a single test. The coordinated manuscript adds no new natural-series validation or application cohort.
+The studies use different procedures, populations, normalization conventions, and selection budgets. Their numerical scores should be interpreted within the corresponding protocol, and their observations are not pooled as independent evidence for a single test. The coordinated manuscript edition predates the fresh policy-augmentation and natural-series evaluations, whose separate records report the subsequent evidence.
 
 ## Statistical and computational scope
 
@@ -70,6 +74,9 @@ Each study retains its original decision rule. Passing a baseline comparison, no
 - [Principal evidence restoration, analysis, and replay](extensions/dimension_forecasting/README.md)
 - [Preprocessing results and numerical package](extensions/preprocessing_dimension/RESULTS_PACKAGE.md)
 - [Cross-fit results and exact evidence links](extensions/crossfit_residual_reproduction_20261101/reporting/RESULTS.md)
+- [Fresh policy-augmentation results and primary criteria](extensions/policy_augmentation_20261101/RESULTS.md)
+- [Separate natural policy findings and selected cases](extensions/policy_augmentation_natural_20261101/FINDINGS.md)
+- [Complete policy-augmentation numerical archive index](extensions/policy_augmentation_20261101/reporting/ARCHIVE_INDEX.json)
 - [Coordinated document release](extensions/tmlr_integration/review/COORDINATED_MANUSCRIPT_RELEASE.json)
 - [Earlier Koopman result provenance](reproduction/reported_results.tsv)
 

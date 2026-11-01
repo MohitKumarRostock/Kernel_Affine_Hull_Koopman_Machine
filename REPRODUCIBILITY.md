@@ -64,6 +64,40 @@ audit or chronology. The new freeze is not a new prospective preregistration.
 In-sample residual comparisons remain secondary, and their post hoc mean
 comparison with the expanded policy does not add a primary claim.
 
+## Fresh policy augmentation and natural-series evaluation
+
+The [policy-augmentation execution guide](extensions/policy_augmentation_20261101/README.md)
+specifies the new 24-repetition, 192-task simulation experiment. Its
+[completed results](extensions/policy_augmentation_20261101/RESULTS.md) retain
+four prespecified criteria: neither nonlinear 3% superiority criterion is
+established, and both linear 5% noninferiority criteria are established.
+These new repetitions are not pooled with the previous studies.
+
+The [natural reproduction guide](extensions/policy_augmentation_natural_20261101/REPRODUCTION.md)
+specifies a separate 48-series chronological evaluation using pinned M4
+training files, with no official Test-file evaluation. It preserves a
+deterministic roster, local source freeze, stage seals and independent
+numerical verification. Natural contrasts remain descriptive.
+
+Restore the analysis ZIP and every records ZIP listed in the
+[archive index](extensions/policy_augmentation_20261101/reporting/ARCHIVE_INDEX.json)
+at the repository root. The full archive manifest records every member's
+size and SHA-256, and the archive README specifies verification and replay.
+The immutable combined scientific-source reference is commit
+`b1915813e98a59572a4bbb800adc2bd1f3fccc1b`. The synthetic source was published
+before D generation; natural source was locally frozen before parsing new
+values and published after evaluation. Neither chronology is a public
+preregistration.
+
+The [synthetic audit](extensions/policy_augmentation_20261101/verification/policy_audit.json)
+checks all 192 tasks, 9,600 saved forecast arrays and four primary bounds.
+The [natural audit](extensions/policy_augmentation_natural_20261101/audit/verification.json)
+checks 48 series, 2,016 terminal arrays, B/C choices, policy forwarding and
+selected ridge normal equations. Each audit states which inherited feature
+maps and numerical components it reuses. Preserve all sealed records,
+including the explicitly sealed noncanonical filenames identified in the
+archive manifest. Reporting scripts are subsequent to the scientific freeze.
+
 ## Historical fixed-cap reconstruction-departure experiment
 
 The [reconstruction-mechanism guide](extensions/reconstruction_mechanism/README.md)

@@ -1,9 +1,0 @@
-# Relationship between the gate-temperature pilot and later studies
-
-The nine-task gate-temperature pilot is an exploratory experiment with three independent realizations per simulation law. It uses independently implemented generators, a limit of 160 objective evaluations per horizon and penalty, and trainable gate temperatures with a fixed reconstruction bank. Its design, source snapshot, predictions, and numerical checks are retained in this directory.
-
-The subsequent [direct reconstruction study](../direct_reconstruction/README.md) uses the original study generators, 12 fresh repetitions per law, a public checkpoint before execution, and a 256-evaluation ceiling for its trainable local procedures. Its reconstruction intervention modifies local bandwidths as well as gate temperatures. The two studies therefore have different procedures, search budgets, and experimental units. Their errors and costs are not pooled, and the pilot is not part of the later simultaneous-comparison family.
-
-The original pilot README records the source-code availability at the time of its execution and is included in the immutable pilot checkpoint. The [scientific guide](SCIENTIFIC_GUIDE.md) provides the current methods and reproduction entry point. The historical file identities distinguish the pilot implementation from the original code subsequently used in the direct reconstruction experiment.
-
-The pilot's sliding-window ridge and cached-reconstruction components are numerical building blocks for fixed or explicitly versioned feature maps. Their algebraic checks do not constitute an online forecasting experiment or establish streaming accuracy, latency, or memory bounds. The later [adaptive study](../adaptive_development/REPRODUCING.md) evaluates a separate complete chronological forecasting procedure and reports its outcomes independently.

@@ -1,0 +1,67 @@
+name: Publication-tree integrity
+on:
+  push:
+    branches:
+      - paper/geometry-induced-soft-state-clean-2026-11-02
+  pull_request:
+    branches:
+      - paper/geometry-induced-soft-state-enrichment-2026-11-02
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out publication and archive metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine'
+          git init .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git -c protocol.version=2 fetch --filter=blob:none --depth=2 origin "$GITHUB_SHA" 5123365917ae630b684f8a3bebb0294ee695ce7a
+          git checkout --detach "$GITHUB_SHA"
+      - name: Check preserved files, links and document dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/verify_publication_tree.py --output-dir "$RUNNER_TEMP/publication-check"
+          python3 papers/score_enrichment/scripts/publish_documents.py --verify-inputs
+          echo '## Publication-tree preservation' >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/publication-check/cleanup_audit.json" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Install verification and document dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-publishers lmodern poppler-utils python3-venv
+          python3 -m venv "$RUNNER_TEMP/summary-env"
+          "$RUNNER_TEMP/summary-env/bin/python" -m pip install --quiet scipy==1.17.0
+      - name: Recompute all forty primary-summary decisions
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/summary-env/bin/python" extensions/score_enrichment_20261102/verify_primary_summary.py | tee "$RUNNER_TEMP/primary-summary-check.json"
+          echo '## Primary-summary arithmetic' >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/primary-summary-check.json" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Compile documents without modifying published PDFs
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp -a papers/score_enrichment "$RUNNER_TEMP/paper-rebuild"
+          python3 "$RUNNER_TEMP/paper-rebuild/scripts/build.py" > "$RUNNER_TEMP/document-build.log" 2>&1 || { tail -n 100 "$RUNNER_TEMP/document-build.log"; exit 1; }
+          test "$(pdfinfo "$RUNNER_TEMP/paper-rebuild/main.pdf" | awk '/^Pages:/ {print $2}')" = 12
+          test "$(pdfinfo "$RUNNER_TEMP/paper-rebuild/supplement.pdf" | awk '/^Pages:/ {print $2}')" = 14
+          if grep -E 'undefined references|undefined citations|Citation .* undefined|Reference .* undefined|Missing character:|Overfull' "$RUNNER_TEMP/paper-rebuild/main.log" "$RUNNER_TEMP/paper-rebuild/supplement.log"; then
+            exit 1
+          fi
+          git diff --exit-code
+          echo '## Document build' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Passed: 12-page article and 14-page supplement rebuilt from retained sources. Tracked PDF bytes are unchanged. No experiment, model fitting, full audit, or history rewrite was performed.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Document build passed: article=12 pages; supplement=14 pages; tracked files unchanged.'

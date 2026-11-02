@@ -1,15 +1,18 @@
-.DS_Store
+# Local environments and caches
+.venv/
 __pycache__/
 *.py[cod]
-.venv/
-.venv-arm64/
 .pytest_cache/
-.mypy_cache/
-.ruff_cache/
-
-# Standalone manuscript download bundle; editable sources are tracked individually.
-/papers/soft_state_forecasting_source.zip
-# Uncompressed large records are restored from checksummed public gzip files.
-/extensions/soft_state_ablation_20261102/analysis/B_candidate_scores.csv
-/extensions/soft_state_ablation_20261102/analysis/basis_dimensions.csv
-/extensions/soft_state_ablation_20261102/verification/independent_audit.json
+.DS_Store
+__MACOSX/
+.vscode/
+# Derived TeX files; supplied PDFs and bibliography outputs remain tracked
+*.aux
+*.blg
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+# Locally generated verification outputs
+cleanup_check/

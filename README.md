@@ -4,11 +4,22 @@
 
 Geometric affinities describe relationships to reference regions, but their interpretation does not establish predictive usefulness. Reconstruction-score normalization can discard absolute affinity information, while local position may be absent from the scores themselves. Even an information-preserving enrichment can be difficult for a finite decoder to use. This research separates those questions using Kernel Affine Hull Machines (KAHMs), matched affine and positive-kernel reconstructions, and common observed-response targets.
 
-The [manuscript directory](papers/score_enrichment/) contains the approved article, supplementary sources, complete static tables, bibliography, and build instructions. The [study guide](extensions/score_enrichment_20261102/README.md) identifies the numerical evidence and its distribution scope. The [research index](docs/RESEARCH_INDEX.md) preserves earlier studies without pooling their sampling units or comparison families.
+## Current paper and evidence
+
+| Resource | Location |
+| --- | --- |
+| Article | [Main PDF](papers/score_enrichment/main.pdf) |
+| Supplementary material | [Supplement PDF](papers/score_enrichment/supplement.pdf) |
+| Editable sources and static tables | [Paper directory](papers/score_enrichment/) |
+| Primary results and protocol identities | [Study directory](extensions/score_enrichment_20261102/) |
+| Build and verification commands | [Reproducibility guide](REPRODUCIBILITY.md) |
+| Related studies and previous editions | [Historical evidence index](docs/RESEARCH_INDEX.md) |
+
+This checkout contains the current publication materials. Previous paper editions, unrelated experiment outputs, exploratory code, and historical environments are available at the immutable archive identified in the research index rather than alongside the current article. Their removal from this checkout does not remove them from Git history.
 
 ## Complete primary findings
 
-Protocol `KAHM-SCORE-20261102-v1` has 64 repetitions under each of four laws, 256 task suites, and 40 two-sided paired comparisons in one Bonferroni family. Primary procedures independently select their native dimension and decoder settings on validation data.
+Protocol `KAHM-SCORE-20261102-v1` has 64 repetitions under each of four laws, 256 task suites, and 40 two-sided paired comparisons in one Bonferroni family. Primary procedures independently select native dimension and decoder settings on validation data.
 
 | Candidate / reference | Lower candidate mean loss | Higher candidate mean loss | Unresolved |
 | --- | ---: | ---: | ---: |
@@ -18,18 +29,14 @@ Protocol `KAHM-SCORE-20261102-v1` has 64 repetitions under each of four laws, 25
 | KAHM-local / positive-kernel-local | 3 | 0 | 5 |
 | KAHM-local / raw history | 3 | 3 | 2 |
 
-Each row covers four laws and two decoders. Directions follow adjusted intervals, not point ordering alone. The counts are not an omnibus success criterion. Coverage relies on a paired-Student approximation; no practical or equivalence margin is assigned. All four nonlinear-decoder KAHM/positive-kernel comparisons are unresolved. The [complete primary summary](extensions/score_enrichment_20261102/primary_contrasts.csv) retains favorable, unfavorable, and unresolved comparisons.
+Each row covers four laws and two decoders. Directions follow adjusted intervals, not point ordering alone. These counts are not an omnibus success criterion. Coverage relies on a paired-Student approximation; no practical or equivalence margin is assigned. All four nonlinear-decoder KAHM/positive-kernel comparisons are unresolved. The [complete primary table](extensions/score_enrichment_20261102/primary_contrasts.csv) retains all favorable, unfavorable, and unresolved comparisons. [Interpretation](TIME_SERIES_RESEARCH.md) explains the scientific scope.
 
-On Van der Pol with the nonlinear decoder, KAHM-local has 62.09% lower mean loss than raw input and 2.51% lower loss than affine-local, with resolved adjusted comparisons. Its approximately 0.038% difference from positive-kernel-local is unresolved. On Duffing, the same KAHM procedure has higher loss than raw and affine-local. These are conditional results for the specified procedures, not general KAHM superiority.
+Partition normalizers recover score information in exact arithmetic. Gated local coordinates preserve the input under positivity and a full-rank basis-stack condition, although recovery can be ill-conditioned. These properties neither order fitted risks nor establish autonomous Koopman closure. No autonomous transition matrix is fitted in this study.
 
-## Mathematical scope
+## Reproducibility scope
 
-Partition normalizers recover the full score vector from memberships in exact arithmetic. Gated local coordinates preserve the input under positivity and a full-rank basis-stack condition, although the inverse may be ill-conditioned. Matched raw reconstruction spaces can coincide or differ. These statements neither order fitted risks nor establish Koopman closure of nonlinear score coordinates. No autonomous transition matrix is fitted in this study.
+The checkout supports document compilation and checking arithmetic from the published primary-summary statistics. It is not the complete experimental execution package. Frozen numerical source, repetition-level losses, and full audit records remain in the separately delivered author package; complete model/episode archives have no established public download location. The cleanup does not change that pre-existing distribution limit. See the [availability statement](extensions/score_enrichment_20261102/AVAILABILITY.md).
 
-## Publication and reproduction scope
+The article, supplement, all tables, and the published study directory are unchanged from the pre-cleanup snapshot. A read-only integrity workflow checks their file identities, document dependencies, local links, and summary arithmetic. Historical unfavorable results remain described in the supplement and linked through the archive index.
 
-This branch publishes the document sources and static tables, the exact 40-row primary summary, and the original protocol and source/release identities. It is not a complete mirror of the separately delivered scientific execution package. That package contains the frozen implementation, repetition-level loss tables, audit receipts, and stage records. The supplied large numerical-archive inventory does not establish a public download service.
-
-[REPRODUCIBILITY.md](REPRODUCIBILITY.md) distinguishes document builds, summary-arithmetic checks, saved-loss analysis, and full model replay. The publication manifest identifies the document inputs checked against the approved author package. Earlier frozen experiments and manuscript editions remain unchanged. The public repository is attributed research material, not an anonymous review-code archive.
-
-Original software retains the [MIT License](LICENSE); research outputs retain the terms in [DATA_LICENSE](DATA_LICENSE). Third-party licenses and attribution are preserved. Cite the manuscript version, study protocol, and immutable repository commit used.
+Original software retains the [MIT License](LICENSE); research outputs retain the terms in [DATA_LICENSE](DATA_LICENSE). Third-party attribution and licenses are preserved. This public repository is attributed research material, not an anonymity-certified review-code archive.

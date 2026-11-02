@@ -1,41 +1,55 @@
 # Reproduction scope
 
-## Documents
+## Build the current documents
 
-The approved manuscript is **Predictive Enrichment of Geometry-Induced Soft-State Abstractions: Information Retention and Decoder Access**. From the repository root, run:
+From the repository root:
 
 ```bash
 python papers/score_enrichment/scripts/build.py
 ```
 
-This builds `main.pdf` and `supplement.pdf` in the paper directory using the supplied static tables. It requires Python and a TeX installation with pdfLaTeX, BibTeX, and the imported packages. Supplied `.bbl` files permit a build without BibTeX. No simulation or numerical archive is needed. A branch-restricted GitHub workflow performs the same document build and publishes only the two PDFs and a document-build receipt. Its output is a document build, not a forecasting audit.
+The command builds the article and supplement from the supplied tables. It requires Python and a TeX installation with pdfLaTeX and the imported packages. BibTeX is used when available; supplied `.bbl` files also support compilation. On Ubuntu, the document environment includes `texlive-latex-extra`, `texlive-fonts-recommended`, `texlive-publishers`, and `lmodern`. No historical experiment directory or numerical archive is required.
 
-The publication manifest records the 41 approved document-build inputs. Their Git subtree before publication documentation is `2906ac70db2806f480fc4e3de1683c1859b848b1`. Matching these inputs establishes source identity, not scientific correctness. Recompiled PDF bytes may differ with TeX versions, fonts, timestamps, or document identifiers.
+The [publication manifest](papers/score_enrichment/PUBLICATION_MANIFEST.json) identifies 41 approved document-build inputs. The [original build receipt](papers/score_enrichment/DOCUMENT_BUILD.json) identifies the committed PDFs. A fresh build may differ in binary bytes across TeX environments. Document compilation is not a model audit.
 
-## Primary-summary arithmetic
+## Check the published summary arithmetic
 
-The exact released `primary_contrasts.csv` is included under `extensions/score_enrichment_20261102/`. With SciPy installed:
+With SciPy installed:
 
 ```bash
 python extensions/score_enrichment_20261102/verify_primary_summary.py
 ```
 
-The checker verifies the original CSV hash, all 40 comparison identities, sample sizes, Student critical value, standard errors, confidence endpoints, effect ratios, and decision counts. It operates on reported means and standard deviations. It does not reconstruct the 2,560 paired repetition differences, authenticate predictions, or rerun a model. The distinction from a repetition-level saved-loss check is deliberate.
+The checker verifies the exact primary CSV identity, all 40 comparison identities, sample sizes, critical value, standard errors, confidence endpoints, effect ratios, and decisions. It uses reported means and standard deviations. It does not reconstruct repetition-level losses or refit any model.
 
-## Complete scientific execution package
+## Verify publication preservation
 
-The separately delivered author package contains the unchanged compact source/results release under `extensions/score_enrichment_20261102/release/`. That full release is not mirrored in this publication branch. It contains the frozen numerical implementation, cohort roster, selected losses, paired repetitions, analysis scripts, computational audit, and stage records. The recorded protocol is `KAHM-SCORE-20261102-v1`; its source-manifest SHA256 is `af4357d382f23a58797cc111f73eca9cb6e8b283415ed31f3cd586af2fe4ba28`.
+In a Git checkout containing the archived predecessor commit:
 
-The historical freeze retains its original title and local-publication status. Publishing these identifiers after the experiment does not turn the local prospective freeze into public preregistration. The results receipt has a separate identity and cites files in the complete release; its references are not a claim that every file is included here.
+```bash
+git fetch origin archive/pre-manuscript-cleanup-2026-11-02
+python scripts/verify_publication_tree.py --output-dir /tmp/kahm-publication-check
+```
 
-The exact repository-overlay package is `KAHM_Step8_Repository_Update.zip`, 6,348,062 bytes, SHA256 `8ef7bca05707c86f87922de1698719e971d0ce2b182c2ce264cd6a3c6c414637`. It contains the complete author-delivered compact release and its file manifests. Its guarded application utility is intended for the original base checkout; it must not be forced over this publication edition or conflicting local changes. The complete author ZIP is separately identified in the study availability statement. Neither package name is a public download URL.
+Choose an output directory that does not already exist. The verifier checks the unchanged paper and study subtrees, all committed working files, local Markdown links, pinned historical paths, and TeX input dependencies. It writes a JSON receipt and a path/object inventory for files absent from the current checkout. The corresponding GitHub workflow builds the documents in a temporary directory and checks summary arithmetic without running experiments or modifying tracked PDFs.
 
-Full regeneration uses the complete source package in a new output tree, not a preserved completed-results tree. Its recorded environment uses Python 3.13.5, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, threadpoolctl 3.6.0, and pytest 9.0.2, with three workers and one numerical thread each. The environment preflight checks the recorded platform and library signature. The root requirements belong to older research and are not a replacement environment. No full regeneration was performed as part of repository publication.
+## Complete experimental execution
 
-## Model replay and availability
+The numerical implementation and complete compact results release are supplied separately in `KAHM_Step8_Repository_Update.zip`, inside `extensions/score_enrichment_20261102/release/`. They were not mirrored in the publication branch before cleanup and are not mirrored by this cleanup. The scientific-source manifest is `af4357d382f23a58797cc111f73eca9cb6e8b283415ed31f3cd586af2fe4ba28`; the study identifier is `KAHM-SCORE-20261102-v1`.
 
-The original inventory describes sixteen large numerical archives totaling 9.024 GiB. The complete archives are not distributed here and have no established public endpoint. The only supplied copy available during editorial checking was incomplete and unreadable; it is not included in this branch. These delivery limitations do not by themselves establish an error in the original computation, but they prevent full replay from the supplied copies.
+That package supplies the frozen implementation, cohort roster, repetition-level loss tables, analysis and audit scripts, and stage records. Its names and hashes are provenance identifiers, not public download URLs. The original guarded overlay utility must not be forced over this paper-focused checkout or conflicting changes; use a separate compatible working tree and follow the package instructions.
 
-The retained computational audit reports distinct ridge calculations and forecast replay, while sharing the feature encoder and native primitives. It does not independently reimplement clustering or physical-law integration and is not external scientific replication. Archive hashes, saved-loss checks, model replay, refitting, and external replication have different scopes.
+The recorded experimental environment uses Python 3.13.5, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, threadpoolctl 3.6.0, and pytest 9.0.2. The platform signature is checked by the experimental preflight. These requirements belong to the complete scientific package, not the older root requirements retained in the historical archive. No simulation regeneration is performed by the cleanup or its workflow.
 
-Related studies retain their own environments, source identities, and sampling units. Their reproduction instructions are linked from [the research index](docs/RESEARCH_INDEX.md).
+## Numerical archives and historical studies
+
+The release inventory describes sixteen numerical archives totaling 9.024 GiB. The complete set has no established public endpoint. The only supplied copy inspected during editorial checking was incomplete and unreadable; it is not included here. This delivery limitation does not establish an error in the original calculation, but it prevents replay from those supplied copies. See [AVAILABILITY.md](extensions/score_enrichment_20261102/AVAILABILITY.md).
+
+The [historical index](docs/RESEARCH_INDEX.md) links earlier studies at immutable commit `5123365917ae630b684f8a3bebb0294ee695ce7a`. To inspect or reproduce an earlier study, use a separate worktree at that commit, keeping its original paths, manifests, and environment:
+
+```bash
+git fetch origin archive/pre-manuscript-cleanup-2026-11-02
+git worktree add --detach ../kahm-research-archive 5123365917ae630b684f8a3bebb0294ee695ce7a
+```
+
+Git history has not been rewritten. A paper-only checkout is smaller and easier to navigate, but a full-history clone still contains historical objects. Source identity, saved-summary checks, model replay, refitting, and external scientific replication remain different verification tasks.

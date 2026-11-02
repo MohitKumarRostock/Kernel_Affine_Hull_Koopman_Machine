@@ -1,0 +1,41 @@
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrrr}
+\toprule
+& & \multicolumn{3}{c}{MSE $\times 10^3$: mean (SD)} & \multicolumn{2}{c}{KAHM change (wins)}\\
+Task & Head & KAHM & RBF & Affine & vs. RBF & vs. Affine\\
+\midrule
+Harmonic & Block & 49.77 (1.33) & 50.97 (0.98) & 52.45 (0.78) & -2.4\% (5) & -5.1\% (5)\\
+ & Frobenius & 47.67 (1.31) & 48.41 (1.13) & 44.94 (1.13) & -1.5\% (5) & +6.1\% (0)\\
+ & Rollout & 52.26 (1.04) & 52.38 (0.98) & 51.66 (1.42) & -0.2\% (3) & +1.2\% (1)\\
+\addlinespace[3pt]
+Quasiperiodic & Block & 34.26 (1.32) & 34.95 (0.70) & 34.74 (2.82) & -2.0\% (2) & -1.4\% (2)\\
+ & Frobenius & 33.72 (1.30) & 34.30 (0.61) & 25.92 (2.72) & -1.7\% (3) & +30.1\% (0)\\
+ & Rollout & 39.22 (3.18) & 41.75 (3.83) & 37.95 (4.58) & -6.1\% (2) & +3.3\% (1)\\
+\addlinespace[3pt]
+Nonlinear AR & Block & 4.56 (0.05) & 4.69 (0.04) & 4.77 (0.04) & -2.7\% (5) & -4.4\% (5)\\
+ & Frobenius & 4.56 (0.05) & 4.69 (0.04) & 4.77 (0.04) & -2.7\% (5) & -4.4\% (5)\\
+ & Rollout & 4.57 (0.08) & 4.81 (0.07) & 4.81 (0.05) & -5.0\% (5) & -4.9\% (5)\\
+\addlinespace[3pt]
+Logistic & Block & 165.48 (4.28) & 167.18 (2.74) & 173.27 (2.22) & -1.0\% (3) & -4.5\% (5)\\
+ & Frobenius & 160.66 (5.06) & 161.29 (3.38) & 170.63 (2.33) & -0.4\% (2) & -5.8\% (5)\\
+ & Rollout & 167.63 (5.93) & 164.90 (5.64) & 177.74 (2.40) & +1.7\% (1) & -5.7\% (5)\\
+\addlinespace[3pt]
+Van der Pol & Block & 52.92 (5.56) & 61.82 (3.52) & 48.35 (3.07) & -14.4\% (5) & +9.5\% (2)\\
+ & Frobenius & 26.42 (4.55) & 30.92 (7.17) & 13.03 (2.92) & -14.5\% (3) & +102.7\% (0)\\
+ & Rollout & 33.36 (4.97) & 40.23 (16.47) & 17.30 (3.63) & -17.1\% (4) & +92.8\% (0)\\
+\addlinespace[3pt]
+Duffing & Block & 24.82 (1.60) & 23.91 (2.21) & 21.95 (2.32) & +3.8\% (3) & +13.1\% (1)\\
+ & Frobenius & 23.41 (1.76) & 21.21 (2.77) & 13.72 (1.51) & +10.4\% (0) & +70.6\% (0)\\
+ & Rollout & 27.41 (3.03) & 27.02 (4.58) & 15.23 (1.41) & +1.4\% (3) & +79.9\% (0)\\
+\addlinespace[3pt]
+PenDigits & Block & 5.14 (0.32) & 6.09 (0.22) & 5.89 (1.15) & -15.6\% (5) & -12.7\% (4)\\
+ & Frobenius & 5.04 (0.32) & 6.09 (0.22) & 5.14 (0.70) & -17.2\% (5) & -1.9\% (4)\\
+ & Rollout & 5.46 (0.40) & 6.65 (0.34) & 5.54 (0.97) & -17.9\% (5) & -1.4\% (3)\\
+\bottomrule
+\end{tabular}
+\caption{Matched geometry comparison after validation-only selection from identical preprocessing, history, and dimension options. Absolute all-horizon test MSE and its sample standard deviation across five fitting repetitions are scaled by $10^3$. Relative changes use ratios of mean MSEs; negative values favor KAHM. Wins count repetitions with lower KAHM MSE out of five. PenDigits averages both coordinates and weights the same 13 writers equally. Every effect is descriptive; calibrated comparisons are reported separately.}
+\label{tab:matched-geometry-primary}
+\label{tab:matched-geometry-mse}
+\end{table}

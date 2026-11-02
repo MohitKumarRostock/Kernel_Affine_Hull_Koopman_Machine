@@ -1,0 +1,24 @@
+{
+  "recorded_at_utc": "2026-10-29T19:40:41.602758+00:00",
+  "calibration_generated": false,
+  "failure": "Calibration preflight found a zero-byte source_snapshot.tar.gz, before creating calibration_started.json or drawing calibration data. Initial manifests had recorded a nonempty archive; the cause of the local truncation was not identified.",
+  "initial_expected_archive_sha256": "752d595674eb17b641d4aab6ab8a45e4d66234a0646a40192560be84851e5c69",
+  "observed_zero_byte_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "rebuilt_archive_sha256": "d33cf1e90d373a5e2904134ac8f60dec048a4dec8287d9aa99136439350ca327",
+  "source_reconstruction": "Every retained execution-source file matched its original frozen SHA-256. Excluded one unrelated, unused source module edited in parallel; it was not imported by the study. The runner itself is unchanged.",
+  "excluded_unused_source": [
+    {
+      "path": "extensions/certified_forecasting/src/certified_forecasting/block_witness.py",
+      "frozen_sha256": "68cef47a1e404595da777e31758f65ca07c64b25ce9d74fcf21253a15a560e42",
+      "current_sha256": "650cc0f2d2fb9ec18aa252f8812c1dfbfae03b7ca4c38363dbbd1d33fcb00f14"
+    }
+  ],
+  "unchanged_frozen_models_sha256": "cc77a4f6a744bb7d6277aa275972c3f9e9e7b9a5aa4de995f7e467788ef47d0f",
+  "unchanged_protocol_sha256": "58595dc96e9e431395d218a7ebb5ead0b34dab2c9f64858c465b5926a7953044",
+  "design_models_seeds_calibration_sizes_and_tolerance_changed": false,
+  "initial_records_retained": [
+    "source_snapshot.json",
+    "protocol_freeze.json",
+    "development_freeze.json"
+  ]
+}

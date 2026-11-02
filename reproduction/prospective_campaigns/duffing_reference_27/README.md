@@ -3,10 +3,9 @@
 This directory preserves a prospective reproducibility rerun of the complete
 documented Duffing reference sensitivity grid.
 
-The campaign is **not** represented as an original historical experiment
-archive. The historical run-accounting audit remains preserved separately under
-`reproduction/run_accounting/` and records that the tracked historical outputs
-did not contain the nine `C=35` jobs from the documented reference grid.
+This campaign was executed after the original experiments. The historical
+run-accounting audit in `reproduction/run_accounting/` records that the tracked
+historical outputs lacked the nine `C=35` jobs in the reference grid.
 
 ## Frozen campaign
 
@@ -54,9 +53,8 @@ These outputs provide prospective evidence that the complete documented
 27-combination Duffing reference campaign is executable under the frozen
 reference environment and code revision.
 
-They close the reproducibility evidence gap identified by the historical audit,
-but they do not retroactively convert the previously missing `C=35` historical
-artifacts into original historical outputs.
+They establish reproducibility of all scheduled configurations. The nine
+missing `C=35` results remain absent from the original historical archive.
 
 ## Verification
 

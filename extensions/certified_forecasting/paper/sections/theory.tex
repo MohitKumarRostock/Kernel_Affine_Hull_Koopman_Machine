@@ -1,0 +1,294 @@
+\section{Pairwise obstructions and their limitations}
+\label{sec:theory}
+
+This section defines the representation risk and derives its pairwise
+obstruction. All comparisons use the same distribution of histories and
+observed forecasting targets. The histories need not form a Markov state,
+and neither stationarity nor exact linear feature evolution is assumed.
+
+\subsection{A directly estimable pairwise obstruction}
+
+Let $X\in\mathcal X$ be a random available history, let
+$Y\in\mathbb R^q$ be its future target, and let
+$U=\Gamma(X)\in\mathcal U$ be a fixed, measurable representation. Here
+$\mathcal X$ and $\mathcal U$ denote the history and representation spaces.
+A measurable pseudometric $d:\mathcal U\times\mathcal U\to[0,\infty)$ is symmetric,
+vanishes on the diagonal, and satisfies the triangle inequality; unlike a
+metric, it may assign zero distance to distinct points. For a sensitivity
+budget $\kappa\geq0$, define
+\begin{align*}
+ \mathcal G_\kappa(d)
+ &=\left\{g:\mathcal U\to\mathbb R^q\text{ measurable}:
+       \|g(u)-g(v)\|_2\leq\kappa d(u,v)
+       \text{ for all }u,v\in\mathcal U\right\},\\
+ R^*_\kappa(\Gamma,d)
+ &=\inf_{g\in\mathcal G_\kappa(d)}
+             \mathbb E\|Y-g(\Gamma(X))\|_2^2.
+\end{align*}
+Thus $\kappa$ limits how much a forecast can change when its representation
+changes, and $R^*_\kappa$ is the best population squared-error risk permitted
+by that limit. For any predictor $f:\mathcal X\to\mathbb R^q$, write
+$R(f)=\mathbb E\|Y-f(X)\|_2^2$. The representation, pseudometric, and
+budget are fixed before the calibration data are observed. The class
+$\mathcal G_\kappa(d)$ may contain more decoders than the fitted family;
+a lower bound on its optimal risk therefore also applies to that family.
+When the representation and pseudometric are clear, we abbreviate
+$R^*_\kappa(\Gamma,d)$ to $R^*_\kappa$ and similarly suppress the
+arguments of the witness defined below.
+
+\paragraph{What the oracle risk measures.}
+For $\mathbb E\|Y\|_2^2<\infty$, write
+$M_X=\mathbb E[Y\mid X]$ and $M_U=\mathbb E[Y\mid U]$.
+The standard orthogonality of conditional expectation gives
+\begin{equation}
+\begin{split}
+ R^*_\kappa(\Gamma,d)
+ ={}&\underbrace{\mathbb E\|Y-M_X\|_2^2}_{\text{irreducible history risk}}
+   +\underbrace{\mathbb E\|M_X-M_U\|_2^2}_{\text{representation information loss}}\\
+ &+\underbrace{\inf_{g\in\mathcal G_\kappa(d)}
+       \mathbb E\|M_U-g(U)\|_2^2}_{\text{sensitivity approximation}}.
+\end{split}
+\label{eq:risk-decomposition}
+\end{equation}
+Indeed, $U$ is measurable with respect to $X$, so
+$\mathbb E[M_X\mid U]=M_U$. For every finite-risk $g$, the three
+terms in $Y-g(U)=(Y-M_X)+(M_X-M_U)+(M_U-g(U))$ are pairwise
+orthogonal in $L^2$. Expanding and taking the infimum proves the identity;
+constant decoders ensure that this infimum is finite. This standard
+decomposition is not a new result. It shows why a positive risk lower bound
+alone cannot distinguish information loss from future noise or a restrictive
+budget. Its information-loss term concerns the conditional mean under squared
+error, not full conditional-distribution or Markov sufficiency. Restricting
+the decoder further to a restricted affine family can add another approximation
+gap, as the example at the end of this section demonstrates.
+
+Any training-fitted preprocessing is part of $\Gamma$. The population
+results below do not require the input coordinates to lie in $[-1,1]$.
+For the finite-sample certificates, the deterministic range assumption
+concerns the target and prediction loss. A common value of $\kappa$ across
+preprocessing choices limits sensitivity in each resulting feature metric;
+it does not impose a common Lipschitz constant in the original input units.
+Each choice therefore specifies its own representation class and must be
+frozen before calibration.
+
+To define the pairwise statistic, first draw a conditioning variable $A$.
+Then draw $(X,Y)$ and $(X',Y')$ independently from the same conditional law
+given $A$, and set $U=\Gamma(X)$ and $U'=\Gamma(X')$. Each copy must have
+the original marginal law of $(X,Y)$. Taking $A$ to be constant gives an
+ordinary independent pair. With $z_+=\max\{z,0\}$, define
+\begin{equation}
+ W_{\kappa,A}(\Gamma,d)
+ =\frac12\mathbb E\left[
+       \bigl(\|Y-Y'\|_2-\kappa d(U,U')\bigr)_+^2\right].
+ \label{eq:pair-witness}
+\end{equation}
+The expectation includes both the draw of $A$ and the two conditional draws.
+We call $W_{\kappa,A}$ a \emph{pair witness}, or \emph{obstruction}: it
+measures target separation that a decoder with budget $\kappa$ cannot
+reproduce from the representation separation. The variable $A$ specifies
+a sampling construction. Arbitrary nearest-neighbor matching need not have
+this conditional independence property.
+
+\begin{theorem}[Pairwise prediction obstruction]
+\label{thm:pair-obstruction}
+Assume $\mathbb E\|Y\|_2^2<\infty$. Then
+\begin{equation}
+ R^*_\kappa(\Gamma,d)\geq W_{\kappa,A}(\Gamma,d).
+ \label{eq:pair-population}
+\end{equation}
+For a representation space $\mathcal U\subseteq\mathbb R^p$ with
+$d(u,v)=\|u-v\|_2$, where $p$ is its ambient dimension, assume also
+$\mathbb E\|U\|_2^2<\infty$. Define
+\[
+ \sigma_{Y\mid A}^2=\mathbb E\|Y-\mathbb E[Y\mid A]\|_2^2,
+ \qquad
+ \tau_{U\mid A}^2=\mathbb E\|U-\mathbb E[U\mid A]\|_2^2,
+\]
+where $\sigma_{Y\mid A}$ and $\tau_{U\mid A}$ are the nonnegative square
+roots. These are scalar, averaged conditional variances, rather than
+functions of a particular value of $A$. Then
+\begin{equation}
+ W_{\kappa,A}(\Gamma,\|\cdot\|_2)
+ \geq (\sigma_{Y\mid A}-\kappa\tau_{U\mid A})_+^2.
+ \label{eq:pair-dominance}
+\end{equation}
+Both inequalities use the same conditioning variable and evaluation law.
+\end{theorem}
+
+\begin{proof}
+Fix $g\in\mathcal G_\kappa(d)$ with finite risk and define the two residuals
+$r=Y-g(U)$ and $r'=Y'-g(U')$. Since
+$Y-Y'=r-r'+g(U)-g(U')$, the triangle inequality gives
+\[
+ \|Y-Y'\|_2\leq\|r-r'\|_2+\kappa d(U,U'),
+ \qquad
+ (\|Y-Y'\|_2-\kappa d(U,U'))_+\leq\|r-r'\|_2.
+\]
+Conditional on $A$, the residuals are independent and identically
+distributed. Expanding the squared norm therefore yields
+\begin{align*}
+ \mathbb E[\|r-r'\|_2^2\mid A]
+ &=2\mathbb E[\|r\|_2^2\mid A]
+           -2\mathbb E[r\mid A]^\top\mathbb E[r'\mid A]\\
+ &=2\left\{\mathbb E[\|r\|_2^2\mid A]
+                    -\|\mathbb E[r\mid A]\|_2^2\right\}.
+\end{align*}
+Square the preceding pointwise bound, take expectations, and divide by two.
+This gives $W_{\kappa,A}\leq\mathbb E\|r\|_2^2=R(g\circ\Gamma)$.
+Taking the infimum over $g$ proves \eqref{eq:pair-population}; predictors
+with infinite risk satisfy the bound trivially.
+
+For \eqref{eq:pair-dominance}, set
+$a=\|Y-Y'\|_2$ and $b=\|U-U'\|_2$. Pointwise,
+$a\leq(a-\kappa b)_++\kappa b$. For a scalar random variable $V$, the
+notation $\|V\|_{L^2}=(\mathbb E V^2)^{1/2}$ denotes its root second
+moment under the pairing law. The triangle inequality in $L^2$ gives
+\[
+ \|(a-\kappa b)_+\|_{L^2}
+ \geq(\|a\|_{L^2}-\kappa\|b\|_{L^2})_+.
+\]
+The same conditional-independence calculation gives
+$\mathbb E a^2=2\sigma_{Y\mid A}^2$ and
+$\mathbb E b^2=2\tau_{U\mid A}^2$. Substitute these identities, square,
+and divide by two to obtain \eqref{eq:pair-dominance}.
+\end{proof}
+
+\begin{proposition}[An exact decomposition of witness slack]
+\label{prop:witness-slack}
+For any admissible decoder $g$ with finite risk, put
+$r=Y-g(U)$, $r'=Y'-g(U')$, and
+$v=(\|Y-Y'\|_2-\kappa d(U,U'))_+$. Then
+\begin{equation}
+ R(g\circ\Gamma)-W_{\kappa,A}
+ =\mathbb E\|\mathbb E[r\mid A]\|_2^2
+   +\frac12\mathbb E\bigl[\|r-r'\|_2^2-v^2\bigr].
+ \label{eq:witness-slack}
+\end{equation}
+Both terms are nonnegative. Consequently, $g$ attains the witness, meaning
+$R(g\circ\Gamma)=W_{\kappa,A}$, if and only if
+$\mathbb E[r\mid A]=0$ almost surely and
+$\|r-r'\|_2=v$ almost surely. Whenever $r\ne r'$, the latter condition requires
+$\|g(U)-g(U')\|_2=\kappa d(U,U')$. It also requires the decoder
+difference to be a nonnegative scalar multiple of the residual difference;
+the scalar may be zero.
+\end{proposition}
+
+\begin{proof}
+Conditional independence gives
+$\frac12\mathbb E\|r-r'\|_2^2
+=R(g\circ\Gamma)-\mathbb E\|\mathbb E[r\mid A]\|_2^2$.
+Subtract the witness and use $v\leq\|r-r'\|_2$ from the preceding proof.
+Equality requires both nonnegative terms to vanish. If $r\ne r'$, it
+also requires equality in
+$\|Y-Y'\|_2\leq\|r-r'\|_2+\|g(U)-g(U')\|_2
+\leq\|r-r'\|_2+\kappa d(U,U')$, giving the stated conditions.
+\end{proof}
+
+The witness directly estimates a squared distance discrepancy. It does not
+estimate two variances separately and then subtract their square roots.
+This distinction can matter when little input variation remains in the
+representation. The certificates below use concentration for bounded means;
+they establish no new minimax estimation rate. Taking a square root of a risk
+bound can still produce slow convergence near zero. Moreover,
+\eqref{eq:pair-dominance} compares certificates under a common pairing law.
+It does not compare pairing at a common time origin with conditioning on a
+different grouping, such as a reference-class label $c(X)$, where $c$
+assigns a history to a group.
+
+\begin{proposition}[Exactness on a two-atom law]
+\label{prop:two-atom}
+Suppose $(U,Y)$ takes only two values: $(u_0,y_0)$ with probability
+$p\in(0,1)$ and $(u_1,y_1)$ with probability $1-p$. Use Euclidean
+representation distance and an unconditioned independent pair, and omit the
+constant conditioning variable from the notation. Then
+\begin{equation}
+ R^*_\kappa
+ =W_\kappa
+ =p(1-p)\bigl(\|y_1-y_0\|_2
+                 -\kappa\|u_1-u_0\|_2\bigr)_+^2.
+ \label{eq:two-atom-optimum}
+\end{equation}
+An affine map attains this optimum. If forecasts must lie in a nonempty
+closed convex set containing $y_0,y_1$, projecting that map onto the set
+preserves both the optimum and the Lipschitz budget.
+\end{proposition}
+
+\begin{proof}
+Write $a=\|y_1-y_0\|_2$, $b=\|u_1-u_0\|_2$, and
+$\mu=py_0+(1-p)y_1$. The unequal ordered pairs have total probability
+$2p(1-p)$, whereas equal pairs contribute zero. Thus
+\eqref{eq:pair-witness} gives the right side of
+\eqref{eq:two-atom-optimum} as a lower bound.
+
+To attain the bound, first consider $a=0$: the constant forecast $y_0$
+has zero risk. If $a>0$, let $v=(y_1-y_0)/a$ be the unit target direction
+and let $s=\min\{a,\kappa b\}$ be the allowed fitted separation. Choose
+\[
+ f_0=\mu-(1-p)sv,\qquad f_1=\mu+psv.
+\]
+Then $y_0-f_0=-(1-p)(a-s)v$ and
+$y_1-f_1=p(a-s)v$, so their weighted squared error is
+$p(1-p)(a-s)^2$, exactly the proposed bound. If $b=0$, then $s=0$
+and the constant map $\mu$ realizes both fitted values. If $b>0$, use
+\[
+ g(u)=f_0+
+ \frac{\langle u-u_0,u_1-u_0\rangle}{b^2}(f_1-f_0).
+\]
+Its linear part has operator norm $\|f_1-f_0\|_2/b=s/b\leq\kappa$,
+so it is an admissible affine decoder. Both fitted values lie on the
+segment joining $y_0$ and $y_1$. Projection onto the stated convex set
+fixes them and is nonexpansive, meaning that it cannot increase distances.
+\end{proof}
+
+Exactness also holds on continuous supports. Let $T$ be a square-integrable
+real random variable, set $U=T$ and $Y=b+\beta Tv$, and assume
+$b,v\in\mathbb R^q$, $\|v\|_2=1$, and $\beta\geq0$.
+Here $\beta$ is the target's slope, and
+$\operatorname{Var}(T)=\mathbb E(T-\mathbb ET)^2$.
+For independent $T,T'$ and $d(t,t')=|t-t'|$, the pair discrepancy is
+$(\beta-\kappa)_+|T-T'|$. Since
+$\mathbb E(T-T')^2=2\operatorname{Var}(T)$, its witness is
+$(\beta-\kappa)_+^2\operatorname{Var}(T)$. The affine decoder
+\[
+ g(t)=b+\beta\mathbb E[T]v+
+       \min\{\beta,\kappa\}(t-\mathbb E[T])v
+\]
+has Lipschitz constant at most $\kappa$ and residual
+$(\beta-\kappa)_+(T-\mathbb ET)v$. Its risk equals the witness, so
+$W_\kappa=R^*_\kappa$ also in this continuous-support example.
+
+\paragraph{Two sources of population looseness.}
+Even with independent unconditioned pairs, the witness need not approximate
+the optimum by a fixed relative factor. Let $\kappa=1$ and let $(U,Y)$
+take values $(3,0),(0,-1),(1,1)$ with probabilities
+$1-2\varepsilon,\varepsilon,\varepsilon$, where
+$0<\varepsilon<1/2$. Only the two rare atoms have a positive discrepancy,
+so $W_\kappa=\varepsilon^2$. The fitted values
+$g(0)=-1/2$, $g(1)=1/2$, and $g(3)=0$ attain risk $\varepsilon/2$.
+Linear interpolation between these points, with constant values outside
+$[0,3]$, defines a $1$-Lipschitz decoder. Conversely, any admissible fitted
+values $v_0=g(0)$ and $v_1=g(1)$ satisfy $|v_1-v_0|\leq1$.
+The minimum of $(-1-v_0)^2+(1-v_1)^2$ under this constraint is $1/2$,
+attained at $v_0=-1/2$ and $v_1=1/2$. The two rare atoms alone therefore
+contribute at least $\varepsilon/2$ to every decoder's risk. Thus
+$R^*_\kappa=\varepsilon/2$ and
+$W_\kappa/R^*_\kappa=2\varepsilon$ can approach zero. The same example
+lies in $\Delta_2$ after mapping $u$ to $(u/3,1-u/3)$ and setting
+$\kappa=3/\sqrt2$. Stratification below replaces the quadratic probability
+of encountering this rare pair by the probability of its stratum.
+
+A separate gap comes from comparing the fitted affine family with all
+Lipschitz decoders. For equally likely $X\in\{-1,0,1\}$, take
+$\Phi(x)=((x+1)/2,(1-x)/2)^\top$, $Y=X^2$, and $\kappa=\sqrt2$,
+with Euclidean distance between feature vectors.
+The target satisfies the Lipschitz inequalities on this support and has a
+scalar Lipschitz extension, so $W_\kappa=R^*_\kappa=0$.
+An affine function of $\Phi(x)$ is affine in $x$; clipping it to $[0,1]$
+preserves monotonicity. A nondecreasing forecast cannot fit the target pair
+$(1,0)$ at $x=-1,0$: its minimum sum of squared errors on that pair is
+$1/2$, attained when both fitted values are $1/2$. A nonincreasing forecast
+has the same obstruction on the target pair $(0,1)$ at $x=0,1$.
+Averaging over the three atoms gives MSE at least $1/6$ for every clipped
+affine forecast. The unprojected affine optimum is the constant $2/3$,
+with MSE $2/9$. Thus a sharp lower bound for all Lipschitz decoders need
+not describe the optimum of a restricted affine family.

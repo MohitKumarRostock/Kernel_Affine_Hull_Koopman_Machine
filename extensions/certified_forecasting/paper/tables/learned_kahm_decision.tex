@@ -1,0 +1,21 @@
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Regime & Episodes & Upper accepts & Unconditional & Stratified \\
+\midrule
+Repairable & 256 & 0/20 & 0/20 & 0/20 \\
+Repairable & 1,024 & 20/20 & 0/20 & 17/20 \\
+Repairable & 4,096 & 20/20 & 20/20 & 20/20 \\
+Repairable & 16,384 & 20/20 & 20/20 & 20/20 \\
+\midrule
+Irreducible & 256 & 0/20 & 0/20 & 0/20 \\
+Irreducible & 1,024 & 0/20 & 0/20 & 0/20 \\
+Irreducible & 4,096 & 0/20 & 0/20 & 20/20 \\
+Irreducible & 16,384 & 0/20 & 0/20 & 20/20 \\
+\bottomrule
+\end{tabular}
+\caption{Decisions for fitted KAHM representations over 20 fresh trials per regime. The two retained classes have costs 2 and 6, common budget $\kappa=2$, and fixed MSE tolerance $0.10$. Upper accepts counts trials in which a fitted model passes. The last two columns count certification of minimum cost 6 in the repairable regime, or exclusion of both classes in the irreducible regime. Stratification takes the maximum of separately budgeted lower bounds from two frozen learned partitions. All bounds, trials, regimes, and sample-size prefixes share a total failure allocation of $0.05$.}
+\label{tab:learned-kahm-decision}
+\end{table}

@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrrrrr}
+\toprule
+Regime & Episodes & Upper & $b=2$ & $b=4$ & $b=8$ & $b=16$ & Strat. & ERM \\
+\midrule
+Repairable & 256 & 0/20 & 0/20 & 0/20 & 0/20 & 0/20 & 0/20 & 0/20 \\
+Repairable & 1,024 & 20/20 & 20/20 & 20/20 & 20/20 & 20/20 & 20/20 & -- \\
+Repairable & 4,096 & 20/20 & 20/20 & 20/20 & 20/20 & 20/20 & 20/20 & -- \\
+\midrule
+Irreducible & 256 & 0/20 & 0/20 & 0/20 & 0/20 & 0/20 & 0/20 & 20/20 \\
+Irreducible & 1,024 & 0/20 & 0/20 & 0/20 & 20/20 & 20/20 & 20/20 & -- \\
+Irreducible & 4,096 & 0/20 & 0/20 & 20/20 & 20/20 & 20/20 & 20/20 & -- \\
+\bottomrule
+\end{tabular}
+\caption{Fresh calibration conditional on all 40 archived learned KAHM banks. Upper counts accepted fitted forecasts; lower-method columns count minimum cost six in the repairable regime and exclusion of both classes in the irreducible regime. All 1,760 endpoints share total failure probability $0.05$. Strat. takes the maximum of the two separately allocated learned-partition bounds. Full-sample ERM is evaluated only at $n=256$, on the same observations as the blocks; dashes mean uncomputed. Counts describe the fixed bank collection, not independent new training repetitions.}
+\label{tab:learned-kahm-hierarchy}
+\end{table}

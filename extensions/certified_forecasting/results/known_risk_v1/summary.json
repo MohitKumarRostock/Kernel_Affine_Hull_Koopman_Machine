@@ -1,0 +1,42 @@
+{
+  "config": {
+    "campaign": "known_risk_v1",
+    "probabilities": [
+      0.2,
+      0.5
+    ],
+    "softness": [
+      0.0,
+      0.2,
+      0.6,
+      1.0
+    ],
+    "kappa": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "calibration_sizes": [
+      64,
+      256,
+      1024,
+      4096
+    ],
+    "n_training": 256,
+    "replicates": 300,
+    "seed": 314159,
+    "delta": 0.05
+  },
+  "configuration_sha256": "551b4f2f86be946b800d4d27269f8b6def847366e72312ee3393d6ded41ee787",
+  "runner_sha256": "0e7976a59593ef9676f62bf83d93289bf370e71a29177647765f67ff3a484405",
+  "n_trials": 28800,
+  "elapsed_seconds": 4.15102482400016,
+  "failure_counts": {
+    "pair_valid": 1,
+    "centered_valid": 0,
+    "upper_valid": 0,
+    "joint_valid": 1
+  },
+  "confidence_scope": "Within each trial, three directions have jointly at least95% confidence. No global confidence across trials is asserted.",
+  "monte_carlo_scope": "Only these finite two-atom configurations; empirical coverage is not a proof of the theorem."
+}

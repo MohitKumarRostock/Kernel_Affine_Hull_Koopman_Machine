@@ -1,0 +1,64 @@
+\section{Sampling laws and reproducibility}
+\label{app:protocols}
+
+The complete episode equations, numerical integration scheme, comparison-model
+definitions, candidate grids, and data eligibility rules are retained in the
+supplement's experimental-protocol section. The repository provides the exact
+configuration and source snapshot for each study. Table~\ref{tab:sampling-summary}
+summarizes the units on which the main confidence statements depend.
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{@{}p{0.20\linewidth}p{0.36\linewidth}p{0.38\linewidth}@{}}
+\toprule
+Study & Independent unit and target & Interpretation \\
+\midrule
+Finite-support hierarchy & One iid scalar observation, $Y\in[-1,1]$ & Known population optima; the confidence event is per law/repetition. \\
+Learned KAHM controls & One independent two-lag history/future episode, $Y\in[-0.85,0.85]$ & Constructed repairable and independent-future laws; all selected banks and heads are frozen. \\
+Synthetic forecasting & One independently initialized length-72 trajectory, $Y\in[-1,1]$ & Origins may overlap; complete-episode losses are independent across trajectories. \\
+PenDigits & One eligible writer record; acquisition coordinates in $[0,500]$ have a fixed transformation & Thirteen held-out writers; source identifiers do not establish iid population sampling. \\
+Speech energy & One recording-group bundle; fixed floored energy in $[0,1]$ & 978 calibration groups under the stated iid group-record assumption; repeated fitting seeds reuse groups. \\
+\bottomrule
+\end{tabular}
+\caption{Sampling units and deterministic target ranges. Clipping a predictor
+alone does not bound an unbounded target. Every confidence statement is
+conditional on its declared fixed development choices and sampling law.}
+\label{tab:sampling-summary}
+\end{table}
+
+The four main synthetic generators use independent initialization and noise:
+harmonic and quasiperiodic observations are bounded trigonometric sums,
+nonlinear AR uses a hyperbolic-tangent recurrence, and logistic observations
+are $2u-1$ for $u\in[0,1]$. The oscillator observable is
+$0.95\tanh(x)+\eta$, $|\eta|\leq0.02$, under the specified Runge--Kutta
+episode law. These finite sampling procedures define the target risks; no
+stationarity or invariant-distribution claim is required. The archived
+half-step numerical check assesses integration consistency rather than
+proving a continuous-time error bound.
+
+For every comparison, available histories and targets share the same declared
+origin law. Training-fitted transformations and geometry are frozen before
+calibration. The main-study reference seeds use separate streams for training,
+validation, calibration, and testing. Later confirmation studies have their
+own numeric seed rules and source freezes. Per-study confidence allocations
+do not automatically yield one confidence event for the full campaign.
+
+\subsection{Speech evaluation order and reused cohorts}
+\label{app:speech-protocol}
+
+The speech protocol freezes all 24 selected models before held-out scoring.
+The first execution scored calibration then test for each model, instead of
+completing calibration for every model first. A strict-order replay retained
+identical selected models and numerical outcomes; both execution records and
+their scope remain in the supplement and repository. The later speech-scaling
+comparison is descriptive on the same cohort and does not score calibration
+groups or assert a new risk certificate. PenDigits fitting-seed follow-ups
+likewise reuse the same held-out writers.
+
+Exact commands, dependencies, immutable result locations, and audit scope are
+listed in \path{docs/REPRODUCIBILITY.md} within the extension. Reproduction
+runners write new directories rather than overwrite retained outcomes. The
+main and supplementary PDFs are built together by
+\path{scripts/build_manuscript.py}; it resolves cross-document references
+without changing the retained experimental sources. All theorem and proposition
+proofs remain in the main manuscript.

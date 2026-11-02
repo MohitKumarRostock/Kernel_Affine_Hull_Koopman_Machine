@@ -1,0 +1,20 @@
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{rccccc}
+\toprule
+ & \multicolumn{3}{c}{Repairable regime} & \multicolumn{2}{c}{Irreducible regime} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-6}
+$n$ & Upper & \multicolumn{2}{c}{Minimum cost $5$} & \multicolumn{2}{c}{All classes excluded} \\
+ & acceptance & Unconditional & Stratified & Unconditional & Stratified \\
+\midrule
+256 & 0 & 0 & 0 & 0 & 0 \\
+1,024 & 100 & 0 & 0 & 0 & 0 \\
+4,096 & 100 & 0 & 0 & 0 & 0 \\
+16,384 & 100 & 0 & 100 & 0 & 1 \\
+65,536 & 100 & 0 & 100 & 0 & 100 \\
+\bottomrule
+\end{tabular}
+\caption{Decision counts out of 100 independent repetitions in each constructed regime, at the prespecified RMSE tolerance $0.30$. Upper acceptance certifies a fitted predictor; equality of the cost endpoints certifies the least feasible cost among the three predefined classes. The unconditional and stratified methods share the same upper endpoint and fitted model. Every irreducible-regime upper decision is unresolved. One failure budget $0.05$ covers all five calibration sizes and all reported endpoints within each regime and repetition.}
+\label{tab:decision-outcomes}
+\end{table}

@@ -1,0 +1,91 @@
+\section{Certified decisions for learned KAHM representations}
+\label{sec:learned-kahm-decision}
+
+We ask whether class-level decisions can arise when the representation and
+the pairing partitions are learned by the actual KAHM implementation.
+Section~\ref{sec:decision-value} separately examines explicit feature maps.
+This is a constructed mechanism experiment with continuous histories and fresh
+independent episodes. It tests the connection between the theory and learned
+geometry; it does not estimate how often the method succeeds on natural
+forecasting tasks.
+
+\paragraph{A smooth two-lag product and an irreducible control.}
+Each history is $X=(X_1,X_2)$, where independently
+$X_j=S_j(0.9+V_j)$, $S_j$ is uniform on $\{-1,1\}$, and
+$V_j\sim\operatorname{Unif}[-0.1,0.1]$. The repairable one-step target is
+\[
+ Y=0.8X_1X_2+E,\qquad E\sim\operatorname{Unif}[-0.05,0.05],
+\]
+with independent noise. This is a smooth nonlinear second-order recurrence
+at the declared forecast origin, with four modes in the initial-history law.
+In the irreducible control, an independent history $\widetilde X$, unavailable
+to the predictor, replaces $X$ in the target formula. In both regimes
+$Y\in[-0.85,0.85]$. We fix the MSE tolerance at $0.10$ in these target units,
+after five development-only pilot seeds and before any confirmatory
+calibration data. It is a study-design tolerance, not an external application
+requirement. The noise variance is $0.05^2/3$; the irreducible control has
+Bayes risk $0.8^2(0.9^2+0.1^2/3)^2+0.05^2/3$. Neither reference value enters
+model selection or a reported confidence endpoint.
+
+\paragraph{Learned classes and frozen calibration.}
+Each of 20 independently generated trials per regime uses 2,048 training,
+1,024 validation, and 16,384 calibration episodes, with one origin and one
+future observation per episode. Training-only coordinate min--max scaling,
+as defined in Section~\ref{sec:input-scaling}, precedes geometry fitting;
+frozen extrema transform later histories without clipping. KAHM blocks have
+two and four clusters, association exponent $16$, retained subspace dimension
+$2$, and at most 48 local references per cluster. The first class uses the
+two-coordinate block; the second retains it and appends the four-coordinate
+block. Thus their declared costs are $2$ and $6$. Both use the common
+sum-of-block-norms budget $\kappa=2$ and the corresponding maximum-block
+distance. The cost comparison concerns these two classes and counts retained
+coordinates, not runtime or all possible forecasting methods.
+
+For each class, validation selects among ridge penalties
+$0$, $10^{-5}$, and $10^{-3}$. All 40 feature banks, 240 candidate fits, and
+80 selected heads are recorded, and every selection is frozen before any
+calibration episode is generated. Twenty-two candidate fits, including nine
+selected fits, reach the 20,000-iteration limit before the strict $10^{-9}$
+objective-gap criterion; their largest gaps are $5.35\times10^{-9}$ and
+$2.21\times10^{-9}$, respectively. All coefficient budgets remain feasible.
+The risk guarantees require fixed feasible forecasts, not exact optimization.
+
+Two history-only partitions take the argmax of the frozen two-cluster or
+four-cluster association block. No generated quadrant labels or future targets
+define these partitions. We compute unconditional and both stratified lower
+certificates, accounting for estimated stratum masses, at calibration sizes
+256, 1,024, 4,096, and 16,384. A total failure allocation of $0.05$ covers
+\emph{both regimes, all trials, all sample-size prefixes, both classes, and all
+reported bounds jointly}: $0.01$ for upper endpoints, $0.01$ for unconditional
+lower endpoints, and $0.03$ for the two stratified families. The latter split
+each partition's allocation equally between mass estimation and conditional
+mean bounds. All designs, sample sizes, tolerances, and partitions remain fixed
+after calibration starts.
+
+\input{tables/learned_kahm_decision}
+
+\paragraph{What the lower information changes.}
+At 1,024 episodes, upper calibration accepts the six-coordinate forecast in
+all 20 repairable trials. Stratified lower calibration additionally excludes
+the cheaper class in 17 trials, certifying minimum feasible cost six; the
+unconditional lower certificate does so in none. At 4,096 episodes both lower
+constructions establish this conclusion in all 20 trials. In the irreducible
+control, stratification excludes both classes in all 20 trials at 4,096 and
+16,384 episodes, whereas unconditional lower calibration never establishes
+joint infeasibility at the prescribed sample sizes. Every trial at 256
+episodes remains unresolved. Table~\ref{tab:learned-kahm-decision} retains
+these small-sample failures.
+
+At 16,384 episodes, the repairable six-coordinate forecast has mean empirical
+MSE $0.00431$ and mean upper endpoint $0.00906$ across trials. Its cheaper
+class has stratified lower endpoints between $0.2513$ and $0.3905$. In the
+irreducible control, the six-coordinate class has stratified lower endpoints
+between $0.3441$ and $0.3657$, while its unconditional lower endpoints remain
+between $0.0808$ and $0.0929$, below the tolerance. The choice of conditioning
+still matters: the four-cluster partition yields zero lower endpoints for
+the cheaper class in the repairable regime because it removes the relevant
+target contrast. The prespecified two-cluster partition retains that contrast.
+Thus stratification has decision value here, but finer conditioning is not
+uniformly preferable. These outcomes supply a learned-KAHM example of the
+class-exclusion mechanism; the natural-data results and their unresolved
+lower certificates retain their separate scope.

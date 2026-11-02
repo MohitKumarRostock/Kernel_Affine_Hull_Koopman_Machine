@@ -1,0 +1,479 @@
+{
+  "status": "passed",
+  "baseline_commit": "5300c4833ed849e712f30609eb257e570d064d3b",
+  "method": "Executed baseline and current script snapshots against identical retained inputs; intercepted Figure.savefig before rendering; compared every Line2D x/y array exactly, axis scales/limits, absence of additional plotted artist types, and all nonfigure outputs byte-for-byte. The only permitted text-output exception is the exact LaTeX change from scriptsize to footnotesize. All outputs were redirected to this audit directory.",
+  "source_sha256": {
+    "make_paper_assets.py": {
+      "baseline": "4dc2626c7d6caaed69a9f8bd510a05862a982c64b549bb0fb4000bdbe62cd7ea",
+      "current": "b8a150196427bfa89dd22af4cf246d48053cb612be175899a75ebfb8539ea76e"
+    },
+    "make_matched_assets.py": {
+      "baseline": "ecde87500606abf0daef2df9cafa9a964ba1b44916f3f79fe309fc945de060d3",
+      "current": "c5dab07cc858e408033abe40b0aa6a327a116ec379e57347c922c2eaa84f9d30"
+    }
+  },
+  "sources_unchanged_during_audit": {
+    "make_paper_assets.py": true,
+    "make_matched_assets.py": true
+  },
+  "figure_count": 4,
+  "axis_count": 28,
+  "line_count": 85,
+  "coordinate_pairs": 302,
+  "nonfigure_output_count_including_stdout": 14,
+  "inputs_unchanged": true,
+  "input_sha256": {
+    "results/main_v1/harmonic_1701/results.json": "39f8e6414a8489367a26ddb10da64c997cc470ae5fc617485b27457d6ad49ddd",
+    "results/main_v1/harmonic_1702/results.json": "c61fd07d6f71ef969674bc2846ba900113fd3a237a4ebe8967658a906260d16b",
+    "results/main_v1/harmonic_1703/results.json": "a9c7ba6ce5dd0c5c54bde8b264ea675f55a0379edacea7b70e7b4fd693b72f2a",
+    "results/main_v1/harmonic_1704/results.json": "1fb807b059c9fe46b328dc7e81c1c41a5206bfe90e81ff2aafd62c5a10f114be",
+    "results/main_v1/harmonic_1705/results.json": "e7f0f25c4da0b5d261bbf52f6371a4ae0f1ca6283f7c47f430879b9a755cffdf",
+    "results/main_v1/logistic_1701/results.json": "c2ca30b9a6e19b20ce397ad60d364fdb00031767b7eef8cb6b9da3f58e687513",
+    "results/main_v1/logistic_1702/results.json": "d77cabfdafc24e4ebfbc941455363f4f3000666f076ddcf6a9dc3f986dc53997",
+    "results/main_v1/logistic_1703/results.json": "b5298424e614e2c3f13c47d0817281e13e2df125438ec1792012ec858fa75aec",
+    "results/main_v1/logistic_1704/results.json": "cc1a2f8e8f4e9eb8e4b0f8d354de76d412f89d944fb6b009d6ddbd9362f46152",
+    "results/main_v1/logistic_1705/results.json": "841ad7bcc47197f5a911e16a8acd6254eb5eda9a5c288520e60b2fbf5165050f",
+    "results/main_v1/nonlinear_ar_1701/results.json": "b03505eb2a7d7f944df17228cd24e14b1c8861b5cf3780fa666c0d026dccc58f",
+    "results/main_v1/nonlinear_ar_1702/results.json": "e5775ad0b4584ee0f5f3d46fbd5b37ccdae1e49d81a18fe06440247424dc65c4",
+    "results/main_v1/nonlinear_ar_1703/results.json": "d25c3282b972b768a7262041fc31dc466265b961a51fc64aae7cfee424c5d6c7",
+    "results/main_v1/nonlinear_ar_1704/results.json": "1052aa3398018117e95edffc94b69fea38b325bfdaaa8d0f5ee65d2609fcee34",
+    "results/main_v1/nonlinear_ar_1705/results.json": "1afe551a9e4328d8cce407ca2f3f68c4c225170756dd342173b6f382a6e9e877",
+    "results/main_v1/quasiperiodic_1701/results.json": "d58b68b1b6b3b81adac682810f4694498f85b58867d80a848f70ac2b3f2f339b",
+    "results/main_v1/quasiperiodic_1702/results.json": "490b9f7909674fa992e8c01ea780ee2f162faffa74e3bc46f623eea37eb3be53",
+    "results/main_v1/quasiperiodic_1703/results.json": "3ff702ffbf2b64af233578917083fd4047450b7bc9d93d9634f783ba3bdb539a",
+    "results/main_v1/quasiperiodic_1704/results.json": "77ad3b8b7facbaca8c9cd2059aa2a7305ddca34181012926b5817c622e380c35",
+    "results/main_v1/quasiperiodic_1705/results.json": "96ba5882da2767a5c60f77906e33ffaf338750715a251bc2363047720b33ef8e",
+    "results/known_risk_v1/trials.csv.gz": "bfe012e96a36bed2a490f88306960e3dba8cf8e057d430fb22702255cbe12af1",
+    "results/matched_geometry_study/analysis/summary.json": "cca3cfed01dc64d267b38a28263a83151d5f021c95c462df09508f239de22452",
+    "results/matched_geometry_study/analysis/audit.json": "700cc678366bf12ba1dac6469a663fe422f5ae799bbe94814e51eeb29ecfe659",
+    "results/matched_geometry_study/analysis/taskwise_comparisons.csv": "f95d48e1eef95e42705c42c1fbc228730ea610c1153ce28150ca15370b0c3de1",
+    "results/matched_geometry_study/analysis/taskwise_models.csv": "1c33e2ae225a002a05b4c9d1a442a30d96e4426d70c389563f15f54f81c6f67d"
+  },
+  "figures": [
+    {
+      "script": "make_paper_assets.py",
+      "figure": "known_risk",
+      "passed": true,
+      "axis_count": 2,
+      "line_count": 8,
+      "coordinate_pairs": 28,
+      "axes": [
+        {
+          "axis": 0,
+          "line_count": 4,
+          "coordinate_pairs": 14,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 1,
+          "line_count": 4,
+          "coordinate_pairs": 14,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        }
+      ]
+    },
+    {
+      "script": "make_paper_assets.py",
+      "figure": "refinement",
+      "passed": true,
+      "axis_count": 4,
+      "line_count": 12,
+      "coordinate_pairs": 48,
+      "axes": [
+        {
+          "axis": 0,
+          "line_count": 3,
+          "coordinate_pairs": 12,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 1,
+          "line_count": 3,
+          "coordinate_pairs": 12,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 2,
+          "line_count": 3,
+          "coordinate_pairs": 12,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 3,
+          "line_count": 3,
+          "coordinate_pairs": 12,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        }
+      ]
+    },
+    {
+      "script": "make_paper_assets.py",
+      "figure": "duplicate_invariance",
+      "passed": true,
+      "axis_count": 1,
+      "line_count": 2,
+      "coordinate_pairs": 16,
+      "axes": [
+        {
+          "axis": 0,
+          "line_count": 2,
+          "coordinate_pairs": 16,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        }
+      ]
+    },
+    {
+      "script": "make_matched_assets.py",
+      "figure": "matched_geometry_dimensions",
+      "passed": true,
+      "axis_count": 21,
+      "line_count": 63,
+      "coordinate_pairs": 210,
+      "axes": [
+        {
+          "axis": 0,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 1,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 2,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 3,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 4,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 5,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 6,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 7,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 8,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 9,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 10,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 11,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 12,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 13,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 14,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 15,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 16,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 17,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 18,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 19,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        },
+        {
+          "axis": 20,
+          "line_count": 3,
+          "coordinate_pairs": 10,
+          "x_y_exact_equal": true,
+          "scales_equal": true,
+          "limits_equal": true,
+          "no_unchecked_collection_patch_or_image": true
+        }
+      ]
+    }
+  ],
+  "nonfigure_outputs": [
+    {
+      "script": "make_paper_assets.py",
+      "asset": "analysis/all_candidates.csv",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "a02e7fd99de433c1717ffc5ee3ef8650476d5b381a66f590a3d09185f4d40bbd",
+      "current_sha256": "a02e7fd99de433c1717ffc5ee3ef8650476d5b381a66f590a3d09185f4d40bbd",
+      "diff": ""
+    },
+    {
+      "script": "make_paper_assets.py",
+      "asset": "analysis/forecast_summary.csv",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "0fdd56ab199689e3b14bd2e50d28ccf1908b62a167066921178048ccb813cee1",
+      "current_sha256": "0fdd56ab199689e3b14bd2e50d28ccf1908b62a167066921178048ccb813cee1",
+      "diff": ""
+    },
+    {
+      "script": "make_paper_assets.py",
+      "asset": "analysis/paired_improvements.csv",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "89f9897e1b8fcc306f1399baf1d7976d5f8f1211f4d557de7a6ae04440bff196",
+      "current_sha256": "89f9897e1b8fcc306f1399baf1d7976d5f8f1211f4d557de7a6ae04440bff196",
+      "diff": ""
+    },
+    {
+      "script": "make_paper_assets.py",
+      "asset": "analysis/selections.csv",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "fbb8031fd7c8725d55362f6547ab2ad31122a3f947d45ada9516ed136dae5226",
+      "current_sha256": "fbb8031fd7c8725d55362f6547ab2ad31122a3f947d45ada9516ed136dae5226",
+      "diff": ""
+    },
+    {
+      "script": "make_paper_assets.py",
+      "asset": "analysis/summary.json",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "ef1ca75194cb46268a2f393400515eeeda977a37a0fc2d4ece51c31948c676e2",
+      "current_sha256": "ef1ca75194cb46268a2f393400515eeeda977a37a0fc2d4ece51c31948c676e2",
+      "diff": ""
+    },
+    {
+      "script": "make_paper_assets.py",
+      "asset": "analysis/validation_selected.csv",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "3c78372312bf199468d517c9dbc2a69be39d688aa01e0fcf07ca7a33fc22d563",
+      "current_sha256": "3c78372312bf199468d517c9dbc2a69be39d688aa01e0fcf07ca7a33fc22d563",
+      "diff": ""
+    },
+    {
+      "script": "make_paper_assets.py",
+      "asset": "stdout.json",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "ef1ca75194cb46268a2f393400515eeeda977a37a0fc2d4ece51c31948c676e2",
+      "current_sha256": "ef1ca75194cb46268a2f393400515eeeda977a37a0fc2d4ece51c31948c676e2",
+      "diff": ""
+    },
+    {
+      "script": "make_paper_assets.py",
+      "asset": "tables/certified_selection.tex",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "edf31ad57c8258654334c07e1a9ed4ad6271989763195994c04a0dd7a02c5713",
+      "current_sha256": "edf31ad57c8258654334c07e1a9ed4ad6271989763195994c04a0dd7a02c5713",
+      "diff": ""
+    },
+    {
+      "script": "make_paper_assets.py",
+      "asset": "tables/forecast_results.tex",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "b0eca8d753f058d2a3875b44d4a52e97d6b55bac8163371b7838f829b29dff89",
+      "current_sha256": "b0eca8d753f058d2a3875b44d4a52e97d6b55bac8163371b7838f829b29dff89",
+      "diff": ""
+    },
+    {
+      "script": "make_paper_assets.py",
+      "asset": "tables/improvements.tex",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "4770e3f42e16bd19c0ee342fecdc3ce406f22134a41d69342d5488676ba7e2bc",
+      "current_sha256": "4770e3f42e16bd19c0ee342fecdc3ce406f22134a41d69342d5488676ba7e2bc",
+      "diff": ""
+    },
+    {
+      "script": "make_matched_assets.py",
+      "asset": "stdout.json",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "0af66a45fc9fb7d5e3f47e4ce8402063758e8b589ee1528cce8a7e43fce31c00",
+      "current_sha256": "0af66a45fc9fb7d5e3f47e4ce8402063758e8b589ee1528cce8a7e43fce31c00",
+      "diff": ""
+    },
+    {
+      "script": "make_matched_assets.py",
+      "asset": "tables/matched_geometry_mse.tex",
+      "bytes_identical": false,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "514171c2f98ad3f7fa4696080f53f6cfb88d370b0dc7e86f983c4044aa90faaa",
+      "current_sha256": "fbc416f90f6aa60d1db32c2f444571a41201610421d9adc2b0512b9e90997900",
+      "diff": "--- baseline\n+++ current\n@@ -1,6 +1,6 @@\n \\begin{table}[t]\n \\centering\n-\\scriptsize\n+\\footnotesize\n \\setlength{\\tabcolsep}{3pt}\n \\begin{tabular}{lrrrrrrrrr}\n \\toprule\n"
+    },
+    {
+      "script": "make_matched_assets.py",
+      "asset": "tables/matched_geometry_numbers.tex",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "5af1c06093cbfea2ce3b27f5d1ad0824ff95b522fe19c2c9d229b5449a3e9852",
+      "current_sha256": "5af1c06093cbfea2ce3b27f5d1ad0824ff95b522fe19c2c9d229b5449a3e9852",
+      "diff": ""
+    },
+    {
+      "script": "make_matched_assets.py",
+      "asset": "tables/matched_geometry_primary.tex",
+      "bytes_identical": true,
+      "content_equal_except_fontsize": true,
+      "baseline_sha256": "426700a1bb997cb8c42ec8a432a6988675dcc23afa6d2efe7501247155e02e67",
+      "current_sha256": "426700a1bb997cb8c42ec8a432a6988675dcc23afa6d2efe7501247155e02e67",
+      "diff": ""
+    }
+  ],
+  "failures": [],
+  "limitations": [
+    "This verifies plotted numerical data, not final PDF rasterization, label size or layout.",
+    "No experiment fitting, calibration rerun or modification of retained results/manuscript figures occurred."
+  ]
+}

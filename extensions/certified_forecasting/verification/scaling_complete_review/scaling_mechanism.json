@@ -1,0 +1,56 @@
+{
+  "seed": 2810,
+  "n_training_points": 24,
+  "n_queries": 20,
+  "dimension": 3,
+  "subspace_dimension": 2,
+  "rows": [
+    {
+      "input_scale": 0.5,
+      "inferred_retained_regularization": 0.18694921872225714,
+      "mean_folding_score": 0.254275964246025,
+      "mean_original_units_reconstruction_norm": 0.5939684267855222,
+      "max_gram_difference_vs_scale_one": 0.0,
+      "max_folding_difference_vs_scale_one": 0.17180498059174742,
+      "max_original_units_reconstruction_difference_vs_scale_one": 0.09592325851314021
+    },
+    {
+      "input_scale": 1.0,
+      "inferred_retained_regularization": 0.7592763672642616,
+      "mean_folding_score": 0.3515902608382345,
+      "mean_original_units_reconstruction_norm": 0.5895970935294567,
+      "max_gram_difference_vs_scale_one": 0.0,
+      "max_folding_difference_vs_scale_one": 0.0,
+      "max_original_units_reconstruction_difference_vs_scale_one": 0.0
+    },
+    {
+      "input_scale": 2.0,
+      "inferred_retained_regularization": 3.236816489974531,
+      "mean_folding_score": 0.5017039294076487,
+      "mean_original_units_reconstruction_norm": 0.6109551795546432,
+      "max_gram_difference_vs_scale_one": 0.0,
+      "max_folding_difference_vs_scale_one": 0.2212014994552767,
+      "max_original_units_reconstruction_difference_vs_scale_one": 0.1508990428689826
+    }
+  ],
+  "checks": {
+    "gram_agreement_at_1e_minus_10": true,
+    "nontrivial_folding_change": true,
+    "nontrivial_reconstruction_change": true
+  },
+  "interpretation": "For this fixed cloud, uniform rescaling preserves the Gaussian Gram matrix to the stated tolerance while changing local regularization, reconstructions, and folding scores. This demonstrates a mechanism of scale sensitivity, not a general affine-invariance theorem or a forecasting accuracy benefit.",
+  "source_sha256": {
+    "autoencoder.py": "a6463135338252db8881518fbf027aa901212a1321ad3c250bca5cc58b5b1228",
+    "autoencoder_filtering_extended.py": "7961d065022ac27e75bcdf3d4b85ca900da85e7953cea994da2948f59372dd21",
+    "kernel_regularized_least_squares.py": "566433afa74cf8e8c4798e3c5cec23ea0d1f2acee4b77546317aa5cbd2df59bf",
+    "dim_reduce.py": "b6fb4ab1d77a48d5e4fee55aefcbe18adb7f6ee17e93180fbd5451feeb96f036",
+    "kxx_matrix.py": "6a11db30dee4c630930303361c94138ca7e58fc2818d22df31f72631c4a553d3",
+    "kxa_matrix.py": "00a614f6c39922adbba0ab988e9465684ea96e566e7f1a9fa897c1676adaff82",
+    "distance_matrix.py": "d241f1b323cdffbdec65ffc193fc6bf368d98b29a5f7d58e55300c721d1de50a"
+  },
+  "runner_sha256": "8780fb1af51b60a747ed4e5551a1e3c742b7367ed40e2e2ae1ce9590a3fc3a27",
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5"
+  }
+}

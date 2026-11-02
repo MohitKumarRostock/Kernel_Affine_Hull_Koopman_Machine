@@ -1,0 +1,155 @@
+\section{Representation behavior on broader forecasting tasks}
+\label{sec:experiments}
+
+The controlled studies separate population obstruction, calibration uncertainty,
+and decisions between declared classes. The following experiments examine
+whether the implemented representations also give useful forecasts on broader
+tasks. They do not establish universal KAHM superiority or the prevalence of
+informative natural-data class exclusion. All prescribed configurations and
+adverse outcomes are retained. The accompanying supplement gives the complete
+forecasting, preprocessing, matched-geometry, and speech tables and protocols;
+Appendix~\ref{app:protocols} defines the generators and comparison models.
+
+\subsection{Synthetic forecasting and retained-block refinement}
+\label{sec:oscillators}
+\label{sec:budget-sensitivity}
+
+The main study uses four bounded length-72 episode laws: harmonic,
+quasiperiodic, nonlinear autoregressive, and logistic. Five fits per law use
+128 training, 512 validation, 4096 calibration, and 2048 test episodes;
+histories have lengths 4 or 12 and horizons are 1, 4, and 12. Forty candidates
+per fit are frozen before calibration. Van der Pol and Duffing supply three
+additional fits each. Calibration averages over origins within independent
+episodes. Its failure allocation is per declared repetition, rather than
+joint over the whole research campaign.
+
+KAHM improves on long-horizon persistence for periodic signals, but quadratic
+and autoregressive regressors are stronger. For nonlinear AR at horizon 12,
+KAHM RMSE is $0.0743$, versus $0.0802$ for ridge AR and $0.0813$ for
+quadratic regression; those alternatives are better at one step. At all-horizon
+RMSE tolerance $0.35$, the main study's 800 candidates give 301 acceptances,
+24 exclusions, and 475 unresolved decisions. For the 240 oscillator candidates,
+the corresponding counts are 55, 30, and 155. Van der Pol horizon-12 KAHM
+RMSE is $0.3814$, versus $0.2990$ for affine-hull blocks; on Duffing, KAHM
+has $0.2499$, versus $0.1369$ for quadratic regression. Direct fitting also
+does not uniformly improve on rollout: iterated KAHM gives $0.3408$ on
+Van der Pol.
+
+Among 480 main retained-KAHM candidate--horizon statements, 119 lower
+endpoints are positive, but only two exclude tolerance $0.35$ and none
+excludes $0.50$. Paired fitted-loss comparisons certify 72 of 360 main,
+43 of 54 Van der Pol, and 10 of 54 Duffing adjacent-prefix improvements.
+These fitted improvements differ from class exclusion. Across all 62 main,
+oscillator, and budget-sensitivity fits, all 186 lower endpoints of the
+complete-family validation winners are zero; 184 of 186 are zero when
+selection is restricted to KAHM. Fresh budget comparisons at
+$\kappa\in\{1,4,16\}$ show benefits from increasing one to four on several
+tasks and little further gain at sixteen. Zero-ridge duplicate-block checks
+agree within solver gaps; ridge-regularized fits need not be invariant.
+
+\subsection{Matched representation and decoder comparisons}
+\label{sec:matched-geometry}
+\input{tables/matched_geometry_numbers}
+
+KAHM, RBF, and affine-hull geometries each receive three decoders: direct
+block-norm fitting, direct Frobenius-norm fitting, and feature rollout. Each
+geometry--decoder pair has the same prefix dimensions $2,6,14,30$, two
+history lengths, and four preprocessing choices. Validation alone selects
+among these options. Five new seeds generate fresh synthetic episodes;
+PenDigits uses new fitting randomness on its existing writer cohort.
+Equal numerical budgets and feature counts do not imply equal statistical
+capacity or computation cost.
+
+\input{tables/matched_geometry_combined}
+
+All \MatchedCandidates\ fits completed. KAHM has lower mean MSE in
+\MatchedImproved\ of \MatchedComparisons\ contrasts and higher MSE in
+\MatchedDegraded. These are descriptive, dependent contrasts. Nonlinear AR
+favors KAHM over both geometric alternatives under every head and seed;
+its block-direct MSE $0.00456$ also improves on ridge AR $0.00511$ and
+quadratic regression $0.00523$. On PenDigits, the reductions relative to RBF
+are $15.6\%$, $17.2\%$, and $17.9\%$ across heads, with all five seeds
+favorable. However, Frobenius-direct KAHM MSE $0.00504$ exceeds ridge AR
+$0.00184$ and quadratic regression $0.00102$. Affine geometry is stronger
+under Frobenius and rollout heads in every seed on both oscillators.
+Favorable mean contrasts can also oppose most seed-specific signs.
+
+For each synthetic task and seed, a joint $0.05$ allocation covers all
+preprocessing arms and six planned paired geometry comparisons. Only one
+of the 180 comparisons certifies positive improvement: Van der Pol seed
+5703, KAHM rollout versus RBF rollout, with lower MSE-improvement endpoint
+$0.00107$. The remaining comparisons are inconclusive. PenDigits comparative
+effects remain descriptive because the same held-out cohort was examined
+earlier. The supplement retains the complete fixed-dimension interpretation
+and confidence accounting.
+
+\subsection{Preprocessing is part of the representation}
+\label{sec:input-scaling}
+
+Training-standardized histories are the original default. The primary
+alternative fits coordinate minima $a_j$ and maxima $b_j$ on training data
+and freezes the map
+\begin{equation}
+ z_j(x)=
+ \begin{cases}2(x_j-a_j)/(b_j-a_j)-1,&b_j>a_j,\\
+ 0,&b_j=a_j.\end{cases}
+ \label{eq:input-minmax}
+\end{equation}
+Future extrema may fall outside $[-1,1]$; clipping is a distinct representation.
+Targets and their units are unchanged. Section~\ref{sec:method} explains why
+the full reconstruction-and-affinity map is not invariant to this scaling.
+
+The original-seed follow-up is descriptive; a frozen confirmation protocol
+uses three new streams on each of six synthetic tasks. Duffing MSE decreases
+by $7.07\%$ and $7.29\%$ in the original and confirmation stages, whereas
+logistic MSE increases by $2.65\%$ and $6.97\%$ and Van der Pol MSE increases
+by $3.82\%$ and $2.26\%$. The nonlinear-AR effect changes sign. On the fixed
+PenDigits cohort, soft-KAHM MSE decreases by $19.79\%$ and $19.65\%$, but
+hard assignments worsen by $3.96\%$ and $4.14\%$. Conventional regressors
+remain stronger. These outcomes support selecting preprocessing on development
+data, rather than prescribing one transformation for every task. The matched
+study above makes that selection before fresh calibration.
+
+\subsection{Natural-data calibration and its limits}
+\label{sec:pendigits}
+\label{sec:speech}
+
+PenDigits uses original unnormalized trajectories with a fixed acquisition-box
+transformation. Its 1751 eligible held-out digits belong to 13 inferred writer
+identifiers. Losses are averaged within writers. Even under an iid eligible-writer
+assumption, generic upper-RMSE endpoints near $1.56$ certify none of the
+declared tolerances $0.2,0.35,0.5$. Completed-stroke eligibility defines a
+retrospective population, and repeated fitting seeds do not supply additional
+independent writers. The accuracy comparisons therefore remain descriptive.
+
+The official Mini Speech Commands subset supplies 7178 eligible one-second
+clips in 1630 documented recording identifiers
+\citep{warden2018speech,tensorflow2026mini}. A fixed split assigns
+244/163/978/245 groups to training/validation/calibration/test. The causal
+observable is frame energy in decibels relative to full scale, floored at
+$-60$ dB and mapped to $[0,1]$; multiplying normalized RMSE by 60 returns
+dB error for that floored observable. Histories contain 4 or 12 frames and
+horizons are 10, 40, and 120 ms. Losses weight identifiers equally after
+averaging their origins and clips. The confidence statement assumes iid
+group-record bundles; identifiers and disjoint splits do not establish that
+population assumption.
+
+Three fitting seeds compare 486 candidates per fit across eight families;
+all 24 validation-selected models are frozen before held-out evaluation.
+A joint $0.05$ allocation covers the 72 selected-model/horizon upper bounds.
+All six learned families pass the all-horizon 18 dB criterion in every fit;
+persistence and the constant model do not. No family passes the 6 or 12 dB
+criterion. At 120 ms, mean test RMSE is 12.73 dB for KAHM, 12.51 for ridge
+AR, 12.47 for quadratic regression, and 12.39 for Gaussian-kernel regression,
+versus 14.70 for persistence. The conventional regressors also outperform
+KAHM at shorter horizons. The tolerances are declared resolution levels,
+not established audio-application requirements.
+
+A later scaling analysis reuses this cohort and makes no new confidence
+claim. Min--max scaling lowers KAHM all-horizon MSE by $1.41\%$, but raw
+energy histories perform better still; the conventional regressors remain
+stronger than every KAHM scaling arm. Thus speech demonstrates informative
+upper calibration under its sampling model, while natural-data class exclusion
+and a general KAHM forecasting advantage remain unestablished. The complete
+observable, model grid, scoring-order record, and scaling results accompany
+the supplement and Appendix~\ref{app:speech-protocol}.

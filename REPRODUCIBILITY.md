@@ -2,7 +2,9 @@
 
 This repository provides a reproducible reference environment and experiment workflow for the Kernel Affine Hull Koopman Machine (KAHKM).
 
-The repository is intentionally independent of any particular journal, conference, or publication venue.
+This guide describes the parent KAHKM study. The forecasting extension has a
+separate [reproduction guide](extensions/certified_forecasting/docs/REPRODUCIBILITY.md)
+for its Linux environment, episode-based experiments, and manuscript.
 
 ## Reference platform
 
@@ -93,7 +95,8 @@ The repository follows these principles for reproducible experimental results:
 7. Tables and figures are generated programmatically.
 8. Every reported result is traceable to the runs that produced it.
 9. The exact source commit and execution environment are recorded.
-10. Release artifacts are protected by cryptographic checksums; the final immutable archival release is created only at the release stage.
+10. Distributed evidence packages include cryptographic checksums. An immutable
+    archival release and its DOI are not recorded in the current citation metadata.
 
 ## Experimental reproduction
 
@@ -103,7 +106,7 @@ The environment bootstrap establishes a validated computational environment. Exp
 
 ## Evidence map
 
-The current reviewer-facing evidence summary is:
+The consolidated reproducibility evidence is in:
 
 `reproduction/REPRODUCIBILITY_EVIDENCE.md`
 
@@ -118,15 +121,11 @@ The principal evidence layers are:
 - `reproduction/prospective_campaigns/duffing_reference_27/README.md` for the prospective Duffing reference campaign;
 - `reproduction/reported_results.tsv` for result-level provenance and retention status.
 
-The historical and prospective evidence are deliberately distinguished. The
-historical run-accounting audit preserves a documented gap in the original
-Duffing reference-search archive. A separately labeled prospective campaign
-then reruns the complete 27-job grid from a frozen clean commit and records every
-attempt, exit status, log, and output checksum.
-
-This supports a strong failure-preserving claim for that prospective campaign.
-It does not establish that every failed execution attempt from every historical
-campaign was preserved.
+The historical Duffing reference-search archive contains 18 of 27 scheduled
+jobs. The prospective campaign reruns the complete grid from a fixed source
+commit and records every attempt, exit status, log, and output checksum.
+Complete execution accounting therefore applies to that prospective campaign.
+Equivalent ledgers are unavailable for all historical campaigns.
 
 ## Historical environments
 

@@ -1,0 +1,99 @@
+\section{Related work}
+\label{sec:related}
+
+\paragraph{Geometric representations and Koopman prediction.}
+KAHMs learn reconstruction models in reproducing kernel Hilbert spaces
+(RKHSs) \citep{kumar2024kahm,kumar2025collaborative}. We use these established
+reconstruction models to construct forecasting features.
+Soft state aggregation \citep{singh1994soft}, approximate state abstraction
+\citep{abel2016abstraction}, and task-oriented latent transition models
+\citep{gelada2019deepmdp} likewise distinguish a representation from its
+predictive use. Extended dynamic mode decomposition approximates Koopman
+operators on finite dictionaries \citep{williams2015edmd}; learned dictionaries
+\citep{li2017dictionary} and RKHS regression bounds \citep{kostic2022regression}
+provide related forecasting frameworks. Basis-invariant consistency diagnostics
+\citep{haseli2023consistency}, multistep projection-error guarantees and
+refinement \citep{conradie2026trustworthy}, and residual-based dictionary
+learning \citep{coote2026residual} address dictionary quality. Our decisions
+instead compare expected observed-output error with a declared tolerance
+while preserving a common target and sampling law.
+
+\paragraph{Closest KAHM prediction-limit analysis.}
+The earlier analysis of \citet{kumar2026limits}, in its cited third version, provides
+class-centered lower certificates, empirical-minimum comparisons, fitted-risk
+upper bounds, and independent evaluation. It also gives an exact four-state
+example and independent dynamical confirmation. We reuse its KAHM
+construction and sampling principle; neither certificates for KAHM nor
+independent confirmation is new here. Table~\ref{tab:prior-comparison}
+states the substantive differences. Their reconstruction-score margin bounds
+concern agreement with reference labels, which does not imply predictive
+sufficiency.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{@{}p{0.19\linewidth}p{0.35\linewidth}p{0.40\linewidth}@{}}
+\toprule
+Question & \citet{kumar2026limits} & Present work \\
+\midrule
+Prediction target & Successor soft coordinates & Fixed observed future outputs \\
+Decoder class & Spectral-norm-bounded linear coordinate predictors & General Lipschitz oracle; retained-block affine fits \\
+Lower information & Class-centered variation; empirical-minimum comparator & Positive-part pair slack; normalized monotone block hierarchy \\
+Representation decisions & Accuracy exclusion for a fixed coordinate map and norm limit & Simultaneous class exclusion and fitted-model acceptance; minimum feasible cost among declared alternatives \\
+\bottomrule
+\end{tabular}
+\caption{Scope relative to arXiv:2609.32652v3. KAHM reconstruction,
+independent evaluation, and standard concentration are shared foundations.
+The scalar block consistency result requires the conditions in
+Theorem~\ref{thm:block-hierarchy}.}
+\label{tab:prior-comparison}
+\end{table}
+
+\paragraph{Pairwise bounds and Lipschitz regression.}
+\citet{akash2021inverse} derive a Lipschitz-constrained mean squared error (MSE) bound
+using paired residuals and target separation. Their argument is a close
+antecedent to the geometric step in our witness; our contribution concerns
+its conditional positive-part form, sharpness and slack, and statistically
+valid stratification under the unchanged marginal risk. Finite-support
+Lipschitz regression can be posed as a constrained optimization problem
+\citep{gottlieb2017regression}; we use this class directly for an empirical-minimum
+comparator. Model-class falsification \citep{muller2025falsification} and
+minimal-empirical-risk bounds \citep{wu2026minimal} provide broader context.
+The Gamma test uses local pair differences to estimate regression noise
+\citep{evans2002gamma}. Lipschitz set-membership identification
+\citep{milanese2004setmembership}, trajectory invalidation
+\citep{jin2020invalidation}, and corruption-robust prediction ranges
+\citep{blum2026reliable} concern related feasibility questions with different
+sampling and error criteria.
+
+\paragraph{Empirical minima and optimization over blocks.}
+Expected sample-average optimization values and repeated-batch lower bounds
+are established in stochastic programming
+\citep{linderoth2006empirical,guigues2017confidence}. Optimization of empirical
+$U$-statistics and the tradeoff between computation and statistical precision
+are also established \citep{clemencon2016scaling}. Our block objective can be
+written as the minimum of a residual-difference $U$-statistic. We do not claim
+that empirical-minimum lower bounds or block averaging are new. The specific
+connection is a centered hierarchy for scalar Lipschitz regression: its
+size-two member is the pair witness, its expectations increase to the class
+optimum under compactness, and exact examples quantify why a fixed block size
+can remain inadequate. The recentering argument uses closure under adding
+constants; the pair formula and scalar extension connect it to the Lipschitz
+prediction problem. Calibration uses standard bounded-mean inequalities.
+
+\paragraph{Calibration, refinement, and dependence.}
+We use classical bounded-mean inequalities \citep{hoeffding1963} and empirical
+Bernstein and standard-deviation bounds \citep{maurer2009empirical}. The
+simultaneous testing principle follows Learn then Test
+\citep{angelopoulos2025ltt}. Our group norm is established in group selection
+and multiple-kernel learning \citep{bach2008group}; here its max-block dual
+metric gives a comparable sensitivity budget as dictionaries grow. Soft gating
+and residual fitting also have established precedents
+\citep{jordan1994experts,buhlmann2003boosting}. The additional cost conclusion
+comes from jointly excluding cheaper classes and accepting a fitted model.
+
+Within-episode dependence is allowed because concentration is applied to
+independent episode summaries. A chronological split of one dependent record
+does not provide that independence. Forecasting bounds under other sampling
+assumptions \citep{mcdonald2017forecasting} and dependence-aware conformal
+analysis \citep{oliveira2024conformal} illustrate the additional conditions
+needed; their guarantees are not consequences of the present theorem.

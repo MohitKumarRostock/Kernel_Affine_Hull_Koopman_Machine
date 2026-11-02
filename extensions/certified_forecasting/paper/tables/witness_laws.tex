@@ -1,0 +1,20 @@
+\begin{table}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llll}
+\toprule
+Law & Representation values $u_i$ & Targets $y_i$ & Stratum labels $c(u_i)$ \\
+\midrule
+Collapsed binary & $(0,0)$ & $(-1,1)$ & $(0,0)$ \\
+Two atoms & $(-.6/\sqrt2,.6/\sqrt2)$ & $(-1,1)$ & $(0,0)$ \\
+Three-point V & $(-1,0,1)$ & $(1,-1,1)$ & $(0,0,1)$ \\
+Five-point zigzag & $(-1,-.5,0,.5,1)$ & $(-1,1,-1,1,-1)$ & $(0,0,1,1,1)$ \\
+Partial collapse & $(-1,-1,0,0,1,1)$ & $(-1,.2,-.2,.2,-.2,1)$ & $(0,0,1,1,2,2)$ \\
+Noisy affine & $(-1,-1,0,0,1,1)$ & $(-1,0,-.5,.5,0,1)$ & $(0,0,1,1,2,2)$ \\
+Rare conflict & $(3,0,1)$ & $(0,-1,1)$ & $(0,1,1)$ \\
+Affine mismatch & $(-1,0,1)$ & $(-.5,.5,-.5)$ & $(0,0,0)$ \\
+\bottomrule
+\end{tabular}
+\caption{Prespecified joint supports for the lower-bound comparison. Entry $i$ gives one possible pair $(U,Y)=(u_i,y_i)$. Each row assigns equal probabilities to its entries, except rare conflict, whose probabilities are $(.9,.05,.05)$. Repeated representation values retain different possible targets. Stratum labels depend only on $U$ and are fixed before calibration. Every law uses $|u-u'|$, $\kappa=1$, and predictions in $[-1,1]$.}
+\label{tab:witness-laws}
+\end{table}

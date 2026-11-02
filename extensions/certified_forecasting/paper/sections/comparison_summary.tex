@@ -1,0 +1,52 @@
+\section{Complementary lower-bound and decision checks}
+\label{sec:witness-comparison}
+
+The block study extends an earlier comparison of unconditional pairs,
+range-aware centered bounds, certified empirical minima, and estimated-mass
+stratified pairs. That comparison uses the same eight scalar finite-support
+laws, 300 repetitions at each $n\in\{64,256,1024,4096\}$, and separate
+$0.05$ one-sided allocations per method; it does not assert one joint event
+across methods. The supplement retains every population optimum, endpoint,
+tolerance decision, and timing result.
+
+On partial collapse at $n=4096$, stratification raises the population witness
+from $0.0867$ to the exact risk $0.2533$. Mean calibrated endpoints are
+$0.0646$ for unconditional pairs, $0.1772$ for estimated-mass stratification,
+and $0.2178$ for empirical minimization. Finer conditioning is not uniformly
+better: the chosen partition lowers the three-point population witness from
+$0.2222$ to $0.1667$. Rare conflicts remain difficult. At $n=4096$, the
+exact MSE is $0.025$, yet neither primary pair method excludes RMSE $0.10$
+in any of 300 trials, whereas empirical minimization does so in every trial.
+Supplying a tighter known score range raises stratified exclusions to 284;
+also supplying known masses raises them to 300. The result depends on both
+the pairing construction and the structural information provided.
+
+All four methods have zero observed coverage violations in this prescribed
+grid, which is a numerical check rather than a proof. Finite-support lookup
+and repeated-count optimization make its computation times unsuitable as
+continuous-representation scalability evidence. A separate two-atom
+calibration check has one pair-lower violation in 28,800 trials and none for
+the centered lower or fitted upper bound. Accounting for known zero
+representation variance substantially strengthens centered calibration in
+the collapsed case. Thus these experiments do not establish uniform
+superiority of pairwise certificates over centered or empirical-minimum
+alternatives.
+
+\subsection{An analytic check of the cost decision}
+\label{sec:decision-value}
+
+An explicit-feature control uses independent histories $X=(Z,S)$ and targets
+$Y=0.8SZ+0.1N$ (repairable) or $Y=0.8SR+0.1N$ (irreducible), with
+$S\sim\operatorname{Bernoulli}(0.2)$ and independent random signs $Z,R,N$.
+Its three retained classes have costs $1,3,5$ and exact minimum MSEs
+$0.138,0.138,0.01$ in the repairable regime, and $0.138$ for all three
+in the control. These are explicit maps, not learned KAHMs.
+At RMSE tolerance $0.30$, upper calibration accepts the cost-5 fit in every
+one of 100 repairable repetitions from $n=1024$. Stratified lower calibration
+certifies its minimum feasible cost in every repetition from $n=16384$;
+unconditional calibration never closes the cost interval through $n=65536$.
+Both selection rules return the same fitted model: the additional conclusion
+is necessity of its declared cost. The irreducible control is jointly excluded
+in every repetition only at $n=65536$ under stratification, with smaller
+samples and unconditional bounds retained as failures. The supplement gives
+the complete design, all intermediate outcomes, and simultaneous allocation.

@@ -1,7 +1,7 @@
 # Archived run-accounting audit
 
 This directory records an audit of the experiment outputs that existed in the
-repository before any prospective gap-closing reruns were added.
+repository before the subsequent prospective reproducibility campaign.
 
 ## Declared-source coverage
 
@@ -50,14 +50,13 @@ historical Duffing reference search has complete run-level evidence.
 
 ## Interpretation
 
-This audit is intentionally failure-preserving: a missing historical artifact is
-reported as a gap rather than inferred, reconstructed, or silently filled from
-another campaign.
+The audit reports missing historical artifacts as gaps in the original record.
+The [subsequent Duffing campaign](../prospective_campaigns/duffing_reference_27/)
+executes the complete 27-job grid from a fixed source commit and records every
+attempt, command, exit status, and output checksum. Those results establish
+reproducibility of the grid without changing the historical archive.
 
-A prospective gap-closing rerun, if added later, must be clearly labeled as a
-new reproducibility run from a frozen Git commit. It must not be represented as
-an original historical output.
-
-Archived grid completeness also does not by itself prove that failed execution
-attempts were preserved. A prospective execution ledger should record every
-attempt, command, start/end state, exit status, and output checksum.
+Archived grid coverage identifies represented configurations. It does not, by
+itself, establish that every failed execution attempt was preserved; that
+stronger conclusion requires the execution ledger supplied by the prospective
+campaign.

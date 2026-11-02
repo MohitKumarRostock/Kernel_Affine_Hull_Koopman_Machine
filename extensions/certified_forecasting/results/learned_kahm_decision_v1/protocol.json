@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "title": "Certified decisions for learned KAHM representations of a smooth two-lag product",
+  "scope": "Constructed independent-episode mechanism study; not a naturally acquired cohort or general KAHM accuracy benchmark",
+  "regimes": [
+    "repairable",
+    "irreducible"
+  ],
+  "history_dimension": 2,
+  "history_formula": "X_j = S_j * (0.9 + U_j), independent S_j uniform on {-1,+1}, U_j uniform on [-0.1,+0.1]",
+  "target_formula": {
+    "repairable": "Y=0.8*X_1*X_2+E",
+    "irreducible": "Y=0.8*V_1*V_2+E, where V is an independent history-law draw hidden from the predictor"
+  },
+  "noise": "E uniform on [-0.05,0.05], independent of every history coordinate",
+  "forecast_horizon": 1,
+  "origins_per_episode": 1,
+  "target_bounds": [
+    -0.85,
+    0.85
+  ],
+  "mse_tolerance": 0.1,
+  "tolerance_rationale": "A fixed absolute MSE tolerance in the declared bounded signal units, comfortably above noise variance 0.05^2/3 and below the unconditional target variance; chosen after development-only pilots and before every confirmatory calibration stream",
+  "n_repetitions_per_regime": 20,
+  "n_train": 2048,
+  "n_validation": 1024,
+  "calibration_sizes": [
+    256,
+    1024,
+    4096,
+    16384
+  ],
+  "calibration_prefixes": true,
+  "data_seed_rule": "base=98100000+1000*regime_index+10*repetition_index, zero-based indices; training=base+1, validation=base+2, calibration=base+3",
+  "bank_seed_rule": "99100000+1000*regime_index+repetition_index",
+  "feature_kind": "kahm",
+  "cluster_counts": [
+    2,
+    4
+  ],
+  "retained_feature_costs": [
+    2,
+    6
+  ],
+  "cost_definition": "Retained scalar soft-association coordinates; declared KAHM classes only, not runtime or a minimum over all predictors",
+  "input_scaling": "minmax",
+  "scaling_fit": "All 2048 training histories before geometry fitting; transform later data with frozen extrema; do not clip; constant coordinates map to zero",
+  "max_fit": 2048,
+  "max_train_per_cluster": 48,
+  "subspace_dim": 2,
+  "omega": 16.0,
+  "tau": 1e-06,
+  "kappa": 2.0,
+  "decoder": "BlockBoundedRidge with unpenalized intercept, prediction clipping to target bounds and common sum-of-block-Frobenius-norms budget",
+  "ridge_grid": [
+    0.0,
+    1e-05,
+    0.001
+  ],
+  "selection": "Minimum validation MSE within each regime/repetition/retained-prefix; ties broken by first ridge-grid entry; all selections frozen before any calibration generation",
+  "decoder_tolerance": 1e-09,
+  "decoder_max_iter": 20000,
+  "partition_names": [
+    "learned_coarse",
+    "learned_fine"
+  ],
+  "partitions": "Argmax of each frozen learned KAHM soft-association block, ties by lowest index; history-only, no generated sign labels or future responses",
+  "stratum_pairing": "Consecutive observations in original episode order within each learned stratum, disjoint pairs; discard one final odd observation per stratum",
+  "stratum_mass": "Calibration frequency with simultaneous Hoeffding intervals, intersected with the probability simplex; minimize the weighted conditional lower endpoints over that simplex",
+  "rare_strata_policy": "Zero conditional lower endpoint when fewer than two disjoint pairs",
+  "confidence_delta": 0.05,
+  "confidence_scope": "Joint across BOTH regimes, ALL 20 repetitions, ALL four sample-size prefixes, BOTH retained classes, and ALL upper/unconditional/stratified endpoints",
+  "upper_budget": 0.01,
+  "unconditional_lower_budget": 0.01,
+  "stratified_lower_budget": 0.03,
+  "n_class_size_records": 320,
+  "upper_tail": "0.01/320",
+  "unconditional_tail": "0.01/320",
+  "stratified_eta": "0.03/(320*2) per learned partition, class, sample size, regime and repetition; eta/2 for masses and eta/(2*M) for each of M conditional means",
+  "primary_lower": "Maximum of unconditional and both learned-partition lower endpoints; all three are simultaneously budgeted",
+  "upper_only": "Cheapest fitted class whose upper endpoint is at most 0.1; failure of an upper endpoint to pass does not exclude its class",
+  "minimum_cost": "c_low=min cost among classes whose lower endpoint is at most 0.1, c_up=min cost among classes whose upper endpoint is at most 0.1; equal finite endpoints certify minimum feasible cost among the two declared classes; no remaining lower-compatible class certifies joint infeasibility",
+  "oracle_use": "Known Bayes risk 0.05^2/3 (repairable) and 0.8^2*(0.9^2+0.1^2/3)^2+0.05^2/3 (irreducible) are descriptive reference values only; not used in any endpoint or model selection",
+  "reporting": "Retain every seed, candidate validation loss, selected model, certificate at every prefix, failure and unresolved decision; no calibration-driven protocol, sample-size, tolerance, partition or model changes",
+  "development_disclosure": "Five pilot seeds 97001--97005 tested a sign-product target and a smooth product target on separate development-only train/validation samples. They informed this protocol. No pilot calibration sample was generated. Both pilot scripts and outcomes are retained. The confirmatory stream seeds are disjoint."
+}

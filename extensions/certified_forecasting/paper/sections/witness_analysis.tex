@@ -1,0 +1,265 @@
+\section{Comparison certificates and bounded-loss calibration}
+\label{app:witness-analysis}
+
+This appendix derives the comparison bounds used in the lower-certificate
+experiments. Each formula applies to independent, identically distributed
+calibration units and a model class fixed before calibration. The comparison
+examines the statistical information and computational cost of these
+established concentration methods relative to the pair witness.
+
+\subsection{Relation to an inverse-contrastive population bound}
+\label{app:inverse-contrastive}
+
+Let $(U,Y)$ and $(U',Y')$ be independent copies of a representation and
+its scalar target, with $\mathbb E Y^2<\infty$. Use the same representation
+pseudometric $d$ and sensitivity budget $\kappa>0$ in both bounds below.
+Write $W_\kappa$ for \eqref{eq:pair-witness} with constant conditioning
+variable $A$. For a threshold $a>0$, define
+$F=\{|Y-Y'|>a\}$, $\rho=\Pr(F)$, and
+$M=\mathbb E[\mathbf1_F d(U,U')^2]\leq\varepsilon<\infty$.
+Put $v=(|Y-Y'|-\kappa d(U,U'))_+$.
+Since $\mathbf1_F|Y-Y'|\leq\mathbf1_Fv+
+\kappa\mathbf1_Fd(U,U')$, the $L^2$ triangle inequality gives
+$\|\mathbf1_Fv\|_{L^2}\geq
+(\|\mathbf1_F|Y-Y'|\|_{L^2}-\kappa\sqrt M)_+$.
+On $F$, the target difference exceeds $a$, so the first norm is at least
+$a\sqrt\rho$. Therefore
+\begin{equation}
+ \begin{split}
+ W_\kappa&\geq\tfrac12\|\mathbf1_Fv\|_{L^2}^2
+ \geq\tfrac12(a\sqrt\rho-\kappa\sqrt M)_+^2\\
+ &\geq\tfrac12(a\sqrt\rho-\kappa\sqrt\varepsilon)_+^2.
+ \end{split}
+ \label{eq:inverse-contrastive-comparison}
+\end{equation}
+The inverse-contrastive-loss hypothesis of
+\citet[Lemma~2 and its appendix proof]{akash2021inverse} bounds $M$ by
+$\varepsilon$. In their continuous-target setting and positive regime
+$\varepsilon<a^2\rho^2/\kappa^2$, their displayed population lower bound
+is $(a\rho-\kappa\sqrt\varepsilon)^2/4$; it is no larger than
+\eqref{eq:inverse-contrastive-comparison} because $\sqrt\rho\geq\rho$.
+Thus the earlier paired-residual argument already implies a prediction-risk
+obstruction. The positive-part discrepancy gives the stronger population
+bound above for the same law. A comparison of finite-sample confidence
+bounds additionally requires the same sampling assumptions and error
+probability allocations.
+
+\subsection{A range-aware centered lower bound}
+\label{app:centered-range-aware}
+
+For this scalar comparator, let $U,Y\in\mathbb R$ have known interval
+ranges of lengths $D_U,D_Y$, and use $d(u,u')=|u-u'|$.
+From $n\geq2$ independent, identically distributed observations
+$(U_i,Y_i)$, define sample means $\bar U=n^{-1}\sum_iU_i$ and
+$\bar Y=n^{-1}\sum_iY_i$, and sample standard deviations
+\[
+ s_U=\left(\frac{1}{n-1}\sum_{i=1}^n(U_i-\bar U)^2\right)^{1/2},
+ \qquad
+ s_Y=\left(\frac{1}{n-1}\sum_{i=1}^n(Y_i-\bar Y)^2\right)^{1/2}.
+\]
+Also let $\widehat v_Y=n^{-1}\sum_i(Y_i-\bar Y)^2$, which uses denominator
+$n$ rather than $n-1$. Define
+$c_\alpha=\sqrt{2\log(1/\alpha)/(n-1)}$.
+For a total failure probability $\eta\in(0,1)$, use
+$\alpha=\eta/3$ if $D_U>0$ and $\alpha=\eta/2$ if $D_U=0$, and set
+\begin{align}
+ \sigma_Y^-&=\max\left\{(s_Y-D_Yc_\alpha)_+,\,
+ \sqrt{\left(\widehat v_Y-D_Y^2
+                    \sqrt{\frac{\log(1/\alpha)}{2n}}\right)_+}\right\},
+ \nonumber\\
+ \sigma_U^+&=
+ \begin{cases}
+   \min\{s_U+D_Uc_\alpha,D_U/2\},&D_U>0,\\
+   0,&D_U=0,
+ \end{cases}
+ \qquad
+ L_{\rm ctr}=(\sigma_Y^--\kappa\sigma_U^+)_+^2.
+ \label{eq:range-aware-centered}
+\end{align}
+Then $L_{\rm ctr}\leq R^*_\kappa$ with probability at least $1-\eta$,
+where $R^*_\kappa$ is the infimum risk over scalar $\kappa$-Lipschitz
+functions of $U$. Both target lower bounds hold on the same confidence
+event, which permits taking their maximum.
+
+To verify this, rescale \citet[Theorem~10]{maurer2009empirical} to obtain
+the one-sided events
+$\sqrt{\operatorname{Var}(Y)}\geq s_Y-D_Yc_\alpha$ and
+$\sqrt{\operatorname{Var}(U)}\leq s_U+D_Uc_\alpha$, each with probability
+at least $1-\alpha$. Also, $\widehat v_Y=\inf_a n^{-1}\sum_i(Y_i-a)^2$, where $a$ may be
+restricted to the known target interval. Replacing one observation changes
+this infimum by at most $D_Y^2/n$, and
+$\mathbb E\widehat v_Y=(1-1/n)\operatorname{Var}(Y)
+\leq\operatorname{Var}(Y)$.
+For $D_Y>0$, the bounded-differences inequality consequently gives
+\[
+ \Pr\!\left\{\widehat v_Y-\mathbb E\widehat v_Y>
+          D_Y^2\sqrt{\frac{\log(1/\alpha)}{2n}}\right\}\leq\alpha.
+\]
+This proves the second target lower bound; for $D_Y=0$ it is identically
+zero. The deterministic interval bound
+$\operatorname{Var}(U)\leq D_U^2/4$ follows by bounding the mean squared
+distance to the interval midpoint, and justifies the cap. A union bound
+combines the two target statements and, when $D_U>0$, the representation
+statement. On their common event, \eqref{eq:pair-dominance} with constant
+$A$ gives
+$R^*_\kappa\geq
+(\sqrt{\operatorname{Var}(Y)}-\kappa\sqrt{\operatorname{Var}(U)})_+^2
+\geq L_{\rm ctr}$. When the representation is structurally constant, its
+variance
+is exactly zero and requires no confidence correction. A zero sample variance
+alone does not justify that substitution.
+
+\subsection{One-sided relative-entropy bounds}
+\label{app:kl-calibration}
+
+For probabilities $r,p\in[0,1]$, define binary relative entropy
+\[
+ \operatorname{kl}(r\Vert p)
+ =r\log(r/p)+(1-r)\log\{(1-r)/(1-p)\}.
+\]
+Terms with zero numerator are zero. At $p=0$ or $p=1$, the value is
+infinite unless $r=p$, in which case it is zero. For $c>0$, let
+$\operatorname{kl}_-(r,c)$ and $\operatorname{kl}_+(r,c)$ be the smallest
+and largest $p\in[0,1]$ satisfying $\operatorname{kl}(r\Vert p)\leq c$.
+These endpoints lie respectively below and above $r$. They are
+nondecreasing functions of $r$ and can be found by scalar bisection.
+In particular,
+$\operatorname{kl}_-(0,c)=0$ and
+$\operatorname{kl}_+(1,c)=1$.
+
+Let $V_1,\ldots,V_n$ be independent and identically distributed in
+$[0,B]$, with $B>0$, mean $\mu$, and sample mean $\bar V$.
+For $\eta\in(0,1)$ and $c=\log(1/\eta)/n$, each of
+\begin{equation}
+ B\operatorname{kl}_-(\bar V/B,c)\leq\mu,
+ \qquad
+ \mu\leq B\operatorname{kl}_+(\bar V/B,c)
+ \label{eq:kl-bounded-mean}
+\end{equation}
+has failure probability at most $\eta$. A joint two-sided claim allocates
+failure probability to both directions. If $B=0$, both endpoints are zero.
+The scores need not be Bernoulli observations.
+
+For completeness, convexity of the exponential gives, for every real $t$,
+\[
+ \mathbb E e^{tV_1/B}
+ \leq 1-\mu/B+(\mu/B)e^t.
+\]
+Write $p=\mu/B$. Independence and the exponential Markov inequality give,
+for $z\in(p,1]$,
+\[
+ \Pr\{\bar V/B\geq z\}
+ \leq\inf_{t\geq0}e^{-tnz}(1-p+pe^t)^n
+ =e^{-n\operatorname{kl}(z\Vert p)}.
+\]
+For $z\in[0,p)$, the same calculation with $t\leq0$ bounds
+$\Pr\{\bar V/B\leq z\}$ by the same expression
+\citep{hoeffding1963}. If $p\in\{0,1\}$, boundedness makes every score
+constant and the assertions hold directly. For $0<p<1$, the divergence
+increases as $z$ moves away from $p$ on either side. Inverting these
+two one-sided bounds at probability $\eta$ proves
+\eqref{eq:kl-bounded-mean}.
+Applying the upper endpoint to losses of a frozen forecaster gives an
+alternative to \eqref{eq:risk-ucb}, under the same sampling and range
+assumptions. An episode average is one bounded score. Choosing between
+different concentration methods after seeing calibration requires a joint
+allocation, just as in Section~\ref{sec:theory}.
+
+\subsection{A certified empirical-minimum comparator}
+\label{app:erm-comparator}
+
+An empirical-minimum lower bound provides a comparison with structural
+certificates that avoid optimization on calibration observations
+\citep[Section~2.5]{kumar2026limits}. Let $\mathcal G$ be a fixed nonempty
+class with losses $\ell_g(X,Y)\in[0,B]$, $B>0$, and define
+the following quantities from independent, identically distributed
+observations $(X_i,Y_i)$ of the target law:
+\[
+ R^*=\inf_{g\in\mathcal G}\mathbb E\ell_g(X,Y),\qquad
+ a_n=\inf_{g\in\mathcal G}\frac1n\sum_i\ell_g(X_i,Y_i).
+\]
+Assume $a_n$ is measurable. Let $\eta\in(0,1)$ be the allocated failure
+probability. If a computed measurable value $d_n$ satisfies $d_n\leq a_n$
+for every calibration sample, put $q_n=\max\{0,d_n/B\}$.
+Since $0\leq a_n\leq B$, one has $0\leq q_n\leq a_n/B\leq1$. Then
+\begin{equation}
+ L_{\rm ERM}
+ =B\operatorname{kl}_-\!\left(q_n,\frac{\log(1/\eta)}{n}\right)
+ \leq R^*
+ \label{eq:erm-kl-lower}
+\end{equation}
+with probability at least $1-\eta$.
+
+Indeed, $a_n\leq n^{-1}\sum_i\ell_g(X_i,Y_i)$ for every fixed $g$.
+For $t\geq0$, the preceding moment-generating-function bound therefore gives
+\[
+ \mathbb E e^{tn a_n/B}
+ \leq\inf_{g\in\mathcal G}
+       \{1-R(g)/B+(R(g)/B)e^t\}^{n}
+ =\{1-R^*/B+(R^*/B)e^t\}^{n},
+\]
+where $R(g)=\mathbb E\ell_g(X,Y)$.
+The equality follows because $1-r+re^t$ is nondecreasing in $r$ for
+$t\geq0$ and the class has predictors with risks arbitrarily close to $R^*$.
+If $R^*=0$, this moment-generating-function bound and $a_n\geq0$ imply
+$a_n=0$ almost surely. If $R^*=B$, the conclusion follows from
+$L_{\rm ERM}\leq B$. For $0<R^*<B$, the exponential Markov argument yields
+$\Pr\{a_n/B\geq z\}\leq
+\exp\{-n\operatorname{kl}(z\Vert R^*/B)\}$ for $z\in(R^*/B,1]$.
+Its inversion bounds $B\operatorname{kl}_-(a_n/B,\log(1/\eta)/n)$
+from above by $R^*$ with probability at least $1-\eta$.
+Monotonicity in the first argument and $q_n\leq a_n/B$ prove
+\eqref{eq:erm-kl-lower}. Neither attainment of the population infimum nor
+a uniform complexity penalty is needed: the empirical infimum lies below
+the empirical risk of each fixed population competitor. The result
+lower-bounds the risk of
+every class member; it supplies neither an upper risk guarantee nor an
+excess-risk bound for a predictor fitted to these calibration observations.
+
+For scalar Lipschitz regression on a finite calibration sample, the empirical
+infimum is a convex quadratic program
+\citep[Section~III-A]{gottlieb2017regression}. Restricting predictions to the known
+target interval $[y_-,y_+]$ preserves the optimum, because clipping
+reduces loss and preserves the Lipschitz budget. Here $y_-\leq y_+$ are
+known bounds with $Y\in[y_-,y_+]$ almost surely. Let
+$u_1,\ldots,u_{m_U}$ be the $m_U\geq1$ distinct observed representation
+values and let $v_j\in[y_-,y_+]$ be the fitted value at $u_j$. Set
+\[
+ w_j=\frac{\#\{i:U_i=u_j\}}n,\qquad
+ t_j=\frac1n\sum_{i:U_i=u_j}Y_i,\qquad
+ \nu=\frac1n\sum_iY_i^2.
+\]
+Here $\#$ counts sample indices, $j=1,\ldots,m_U$, and $U_i=\Gamma(X_i)$.
+Expanding the squared losses shows that the empirical risk is
+$\nu+\sum_j(w_jv_j^2-2t_jv_j)$. Minimize this expression subject to
+$v_j-v_k\leq\kappa d(u_j,u_k)$ for every ordered pair $(j,k)$ and
+$y_-\leq v_j\leq y_+$. These constraints are necessary for a global
+Lipschitz decoder. They are also sufficient: the function
+$g(u)=\min_j\{v_j+\kappa d(u,u_j)\}$ is measurable,
+$\kappa$-Lipschitz, and equals $v_j$ at every observed node.
+Projecting $g$ onto $[y_-,y_+]$ preserves those values and its Lipschitz
+constant. For ordered scalar inputs with absolute distance, constraints
+in both directions between adjacent nodes imply every pair constraint by
+summation.
+
+Let $v=(v_1,\ldots,v_{m_U})^\top$ and write the $L_{\rm con}$ pairwise
+and interval constraints as $Av\leq b$, with
+$A\in\mathbb R^{L_{\rm con}\times m_U}$ and $b\in\mathbb R^{L_{\rm con}}$.
+For any nonnegative multiplier vector
+$\zeta\in[0,\infty)^{L_{\rm con}}$, a dual lower value is
+\begin{equation}
+ d_{\rm dual}(\zeta)=\nu-\zeta^\top b-
+ \sum_{j=1}^{m_U}\frac{((A^\top\zeta)_j-2t_j)^2}{4w_j}.
+ \label{eq:empirical-risk-dual}
+\end{equation}
+Indeed, adding $\zeta^\top(Av-b)$ to the quadratic objective gives its
+Lagrangian. Completing the square in each $v_j$ shows that the
+unconstrained minimum occurs at
+$v_j=(2t_j-(A^\top\zeta)_j)/(2w_j)$ and equals
+\eqref{eq:empirical-risk-dual}. Every observed node has positive frequency,
+so $w_j>0$ and these divisions are defined. For feasible $v$, the added
+term is nonpositive. Hence weak duality gives
+$d_{\rm dual}(\zeta)\leq a_n$, supplying the required $d_n$.
+A primal objective alone is an upper bound on $a_n$ and cannot replace this
+dual value. The implementation records primal feasibility and the primal--dual
+gap; its floating-point checks do not constitute interval-arithmetic proofs.

@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering\small
+\caption{Mean lower endpoints at $n=4096$ over all 100 repetitions of each law. $R^*$ is the minimum risk in the same scalar Lipschitz class. Columns $L_b$ use disjoint blocks of size $b$; ERM uses the full sample. A single failure budget $0.05$ per law and repetition covers all six methods and all three sample sizes. The hierarchy orders population witnesses, not these finite-sample endpoints.}
+\label{tab:block-hierarchy}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Law & $R^*$ & $L_2$ & $L_4$ & $L_8$ & $L_{16}$ & $L_{32}$ & ERM \\
+\midrule
+Collapsed binary & 1.0000 & 0.9229 & 0.9355 & 0.9375 & 0.9311 & 0.9159 & 0.9089 \\
+Two-atom partial & 0.3315 & 0.2776 & 0.2726 & 0.2573 & 0.2330 & 0.1995 & 0.2755 \\
+Three-point V & 0.2222 & 0.1769 & 0.1719 & 0.1589 & 0.1393 & 0.1131 & 0.1763 \\
+Five-point zigzag & 0.5400 & 0.3247 & 0.3870 & 0.4203 & 0.4158 & 0.3831 & 0.4697 \\
+Partial collapse & 0.2533 & 0.0590 & 0.0964 & 0.1276 & 0.1373 & 0.1244 & 0.2044 \\
+Noisy affine & 0.2500 & 0.0678 & 0.1017 & 0.1280 & 0.1352 & 0.1219 & 0.2012 \\
+Rare conflict & 0.0250 & 0.0001 & 0.0004 & 0.0007 & 0.0008 & 0.0005 & 0.0116 \\
+Affine mismatch & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "title": "Block hierarchy on frozen learned KAHM representations",
+  "scope": "Fresh independent calibration conditional on all 40 previously frozen KAHM feature banks; constructed mechanism, not new training repetitions or a natural-data benchmark",
+  "frozen_models": "results/learned_kahm_decision_v1/frozen_models.json.gz",
+  "regimes": [
+    "repairable",
+    "irreducible"
+  ],
+  "repetitions_per_regime": 20,
+  "prefixes": [
+    1,
+    2
+  ],
+  "retained_costs": [
+    2,
+    6
+  ],
+  "kappa": 2.0,
+  "target_bounds": [
+    -0.85,
+    0.85
+  ],
+  "mse_tolerance": 0.1,
+  "sampling_law": "Same smooth two-lag product laws as the archived learned-KAHM decision experiment, with new independent draws. X_j=S_j(0.9+V_j), signs equiprobable, V_j uniform[-0.1,0.1]. Y=0.8 product(X)+E in repairable; Y=0.8 product(V)+E for an independent hidden history V in irreducible; E uniform[-0.05,0.05]. One origin and target per episode.",
+  "calibration_sizes": [
+    256,
+    1024,
+    4096
+  ],
+  "block_sizes": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "full_erm_sizes": [
+    256
+  ],
+  "data_seed_base": 202610293000,
+  "data_seed_rule": "base+100*regime_index+repetition_index, zero-based; draw 4096 episodes once, use nested prefixes",
+  "input_scaling": "Replay frozen training min-max extrema and archived KAHM reconstruction state; no refitting, no held-out clipping or scale updates",
+  "partitions": [
+    "learned_coarse",
+    "learned_fine"
+  ],
+  "partition_rule": "Argmax of frozen two-coordinate or four-coordinate block; first index breaks ties",
+  "block_rule": "Consecutive disjoint blocks in original episode order; reuse scores for nested sample sizes, with no block selection",
+  "pair_rule": "Exact positive-part pair formula under the same max-block metric and kappa",
+  "stratification": "Consecutive disjoint pairs within each history-only partition; estimated stratum masses with simultaneous Hoeffding intervals intersected with the simplex; zero conditional lower endpoint for fewer than two pairs",
+  "block_calibration": "KL lower endpoint for bounded block-score means using sharp scalar target-diameter bound; all scores are feasible-dual lower values",
+  "stratified_calibration": "Each partition receives one endpoint allocation eta, split eta/2 for mass intervals and eta/(2*M) for M conditional KL means",
+  "upper_calibration": "Empirical Bernstein upper endpoint on fixed fitted squared losses bounded by target diameter squared",
+  "full_erm_calibration": "For all 256 observations, min SSE/256 feasible-dual value, KL empirical-minimum lower bound with loss bound target diameter squared; not the block normalization",
+  "confidence_delta": 0.05,
+  "confidence_scope": "Joint over both regimes, all 40 fixed banks, both classes, all sizes, upper endpoints, four block sizes, both partitions, and full-ERM endpoints",
+  "endpoint_counts": {
+    "upper": 240,
+    "block": 960,
+    "stratified": 480,
+    "full_erm": 80,
+    "total": 1760
+  },
+  "allocation": "Every listed endpoint gets eta=0.05/1760; taking maxima across frozen alternatives uses this same simultaneous event",
+  "solver": {
+    "algorithm": "signed-edge proximal FISTA, step 2/b, McShane-envelope primal repair",
+    "max_iter": 4000,
+    "tolerance": 1e-07,
+    "check_every": 20,
+    "dual_guard": "1e-11*(1+abs(linear)+abs(penalty)+abs(quadratic))",
+    "primal_guard": "1e-11*(1+abs(SSE))"
+  },
+  "solver_policy": "Keep every feasible-dual result, including stopping-limit cases and wide gaps; record gaps and feasibility. Arithmetic exceptions use zero dual and constant feasible primal and retain the error. No solver-driven row exclusion.",
+  "computation": "One numerical thread; block timings cover batch optimization on n=4096, full-ERM timing covers n=256. They are not matched-n runtime comparisons.",
+  "primary_reporting": "All endpoints, every bank and sample size, uncalibrated score means, optimization gaps, decisions, unresolved outcomes, and method differences. Decision counts do not estimate frequency over newly fitted banks. Full ERM is uncomputed above n256, never substituted by a smaller-sample score.",
+  "development_disclosure": "Dense benchmark on seeds 202610291701 and 202610291702 (second not reached) stopped at costly n256; it revealed wide primal-dual brackets for nearly coincident KAHM coordinates. Sparse benchmark on 202610291801 and 202610291802 evaluated only archived bank 0 in each regime, informing the solver and n256 full-ERM limit. No confirmatory streams were generated before freeze. All development results are retained."
+}

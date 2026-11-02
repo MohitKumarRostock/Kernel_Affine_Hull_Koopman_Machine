@@ -1,0 +1,282 @@
+\section{Learning and certifying KAHM forecasts}
+\label{sec:method}
+
+The procedure has three stages. KAHM reconstruction models map each history
+to geometric features; a constrained decoder maps those features to future
+observations; and independent calibration assesses the resulting forecasts.
+Keeping these stages separate also allows alternative representations to use
+the same decoder and evaluation procedure.
+
+\input{sections/notation}
+
+\subsection{A fixed raw-output forecasting task}
+
+Let $y_t\in\mathbb R^{d_y}$ be the observation at integer time $t$, where
+$d_y\geq1$ is the number of observed coordinates. For a history length
+$m\geq1$, define the column vector
+\[
+ x_t=(y_{t-m+1}^\top,\ldots,y_t^\top)^\top\in\mathbb R^{md_y}.
+\]
+Covariates available at time $t$ may be appended to this vector. A forecast
+origin is a time $t$ at which a prediction is made using only this available
+information. Let $\mathcal H$ be a finite, nonempty set of positive integer
+horizons, ordered increasingly, and let $H=|\mathcal H|$ be its size. The joint
+target is
+\[
+ Y_t=(y_{t+h}^\top:h\in\mathcal H)^\top\in\mathbb R^q,
+ \qquad q=d_yH.
+\]
+Thus each training row contains all requested future observations in the same
+order. The theory also considers one horizon at a time, in which case its
+target dimension is $d_y$ (or one for a separately scored coordinate).
+
+The history length, any fixed target transformation, horizons, and origin
+sampling rule define the prediction task. Here ``raw output'' means the
+observed signal under that fixed transformation, rather than learned feature
+coordinates. When comparing history lengths, we use the same origins, starting
+after the longest history is available. Every candidate is therefore evaluated
+under the same target and origin law.
+
+The main learner directly predicts each requested horizon, sharing a geometric
+representation and a joint coefficient budget. It does not generate an entire
+trajectory by iterating one-step forecasts. The rollout baselines instead
+iterate a fitted feature-transition model and decode the resulting features.
+Both approaches are evaluated on the same observed targets; a small one-step
+feature error alone is not assumed to guarantee an accurate long rollout.
+
+An \emph{episode} is one complete trajectory or other prespecified independent
+sampling unit. Development data comprise training data, used to fit features
+and coefficients, and validation data, used to choose hyperparameters or a
+representative within each model family. Calibration data provide the
+confidence bounds and may select among candidates frozen before calibration.
+A separate test set describes forecasting performance after these decisions.
+Its empirical error estimates population risk; it is not an exact risk value.
+
+\subsection{KAHM dictionaries and stable soft associations}
+
+A dictionary block describes a history through its associations with a set of
+reference groups. KAHM associations depend on local reconstruction models.
+Radial basis function (RBF) associations instead depend on distances to group
+centers; affine-hull associations use residuals from fitted local affine
+subspaces together with a locality term. Each construction specifies which
+histories receive similar coordinates. A soft association retains a weight for
+every group, while a hard assignment retains only the selected group. These
+geometric choices need not preserve all information relevant to forecasting.
+
+For block $b$, partition the training histories into $C_b\geq1$ reference
+groups, indexed by $c=1,\ldots,C_b$. Let $\mathcal X$ be the history domain
+and let $z(x)\in\mathbb R^{d_x}$ be the preprocessed history, with dimension
+$d_x$. Each group has $J_{bc}\geq1$ local KAHM reconstruction models, fitted
+using its training histories
+\citep{kumar2024kahm,kumar2025collaborative,kumar2026limits}.
+
+Each local model maps a preprocessed query to a reconstruction
+$\widehat z_{bcj}(x)$ using regularized kernel regression on its reference
+histories. The encoding, covariance-normalized Gaussian kernel, regularizer,
+and reference histories are all fitted on training data. The reconstruction is
+an affine combination of local references when its coefficient normalizer is
+nonzero; the implementation has an explicit convention at a zero normalizer.
+Supplement Section~S1 gives the complete inherited reconstruction equations and
+numerical rules. The risk results below apply to the fixed map produced by
+these rules and do not require its coefficients to be nonnegative.
+
+The folding score combines reconstruction error and angular discrepancy
+\citep[Section~3.3]{kumar2026limits}. Define
+\[
+ e_{bcj}(x)=1-\exp\{-\|z(x)-\widehat z_{bcj}(x)\|_2\},
+ \qquad
+ \theta_{bcj}(x)=\frac{\arccos\gamma_{bcj}(x)}{\pi},
+\]
+where $\gamma_{bcj}(x)$ is the cosine similarity
+$\langle z(x),\widehat z_{bcj}(x)\rangle/
+ (\|z(x)\|_2\|\widehat z_{bcj}(x)\|_2)$, clipped to $[-1,1]$;
+when either vector has zero norm, the implementation sets this similarity
+to zero. The inverse cosine $\arccos$ takes values in $[0,\pi]$. The group
+score is
+\[
+ T_{bc}(x)=\min_{1\leq j\leq J_{bc}}
+            \left\{\frac{e_{bcj}(x)^2+\theta_{bcj}(x)^2}{2}\right\}^{1/2}.
+\]
+Thus $T_{bc}:\mathcal X\to[0,1]$ is a geometric discrepancy score: smaller
+values indicate a closer reconstruction match. It is not a class probability.
+Taking the minimum allows any local model within the group to provide the
+match.
+
+Fix an exponent $\omega>0$ and offset $\tau>0$. The exponent controls the
+contrast between affinities, and the offset keeps them positive. The reported
+runs use $\tau=10^{-6}$. Define
+\begin{equation}
+ \Phi_{bc}(x)=
+ \frac{(1-T_{bc}(x)+\tau)^\omega}
+ {\sum_{r=1}^{C_b}(1-T_{br}(x)+\tau)^\omega},
+ \qquad
+ \Phi_b(x)=(\Phi_{b1}(x),\ldots,\Phi_{bC_b}(x))^\top.
+ \label{eq:soft-features}
+\end{equation}
+Then $\Phi_b(x)$ lies in the probability simplex
+\[
+ \Delta_{C_b}=\{v\in\mathbb R^{C_b}:v_c\geq0\ \text{for all }c,
+                                    \ \mathbf1_{C_b}^\top v=1\}.
+\]
+The coordinates express relative reconstruction affinity and need not be
+calibrated probabilities. We evaluate these weights in log space: with
+$\ell_{bc}=\omega\log(1-T_{bc}+\tau)$, subtract
+$\max_c\ell_{bc}$ before exponentiation and normalization. This leaves the
+relative affinities unchanged and avoids replacing small summed affinities
+by uniform weights.
+
+The forecasting method combines these reconstruction features with retained
+blocks, a constrained output decoder, and independent calibration. In the
+main experiments, histories are standardized using training means and
+standard deviations.
+Section~\ref{sec:input-scaling} separately compares training-based range
+scaling and bounded raw histories. The input subsample and the maximum number
+of local training points are fixed by each configuration. Once fitted, the
+feature maps remain fixed during decoder fitting and calibration.
+
+\paragraph{Why input scaling can change the predictor.}
+Even for a fixed query and reconstruction, multiplying both vectors by a
+positive scalar $a$ changes the radial term to
+$1-\exp\{-a\|z-\widehat z\|_2\}$, while leaving their angle unchanged.
+Translating both vectors leaves their difference unchanged but generally
+changes their angle; unequal coordinate scales can change both terms.
+Refitting after preprocessing can additionally change the reference groups,
+retained principal components, and local regularization parameters. Thus a
+covariance-normalized kernel does not make the complete KAHM representation
+invariant to input scaling. Training-based scaling to $[-1,1]$ is a
+model choice whose effect must be evaluated on the forecasting task.
+
+At stage $s$, retain the first $s$ blocks:
+\[
+ \Gamma_s(x)=(\Phi_1(x)^\top,\ldots,\Phi_s(x)^\top)^\top
+ \in\prod_{b=1}^s\Delta_{C_b}\subset\mathbb R^{p_s},
+ \qquad p_s=\sum_{b=1}^s C_b.
+\]
+A \emph{prefix} means these first $s$ blocks. Their cluster partitions need
+not be nested: preserving earlier forecasts requires retaining the earlier
+coordinate functions, not their partitions. The experiments append blocks of
+sizes $2,4,8,16$, giving prefix dimensions $2,6,14,30$.
+
+
+\paragraph{Connection to the general hierarchy.}
+For fixed learned blocks, the ambient product of simplices is compact under
+$\rho_s(u,v)=\max_{b\leq s}\|u_b-v_b\|_2$, with diameter at most
+$\sqrt2$ independently of $s$. Thus Theorem~\ref{thm:block-hierarchy}
+applies directly to any bounded scalar observed target and unconditional iid
+calibration observations from this representation. No continuity of the map
+from histories to affinities is required. This is an instantiation of the
+general result; the same conclusion holds for other fixed simplex-valued
+feature blocks. Increasing the number $s$ of dictionary blocks changes the
+representation class, whereas increasing the observation-block size in
+Section~\ref{sec:block-witness} strengthens its population lower information
+while holding that representation fixed.
+
+\subsection{A constrained multihorizon decoder}
+
+Let $(x_i,Y_i)$, $i=1,\ldots,N$, be the training histories and their joint
+targets. Form the response matrix $\mathsf Y\in\mathbb R^{N\times q}$
+with row $i$ equal to $Y_i^\top$, and the feature matrix
+$F=[F_1,\ldots,F_s]\in\mathbb R^{N\times p_s}$, where
+row $i$ of $F_b\in\mathbb R^{N\times C_b}$ is
+$\Phi_b(x_i)^\top$. Fit an intercept $a\in\mathbb R^q$ and coefficient
+matrix $W\in\mathbb R^{p_s\times q}$ by solving
+\begin{equation}
+ \min_{a,W}\ \frac1N\|\mathsf Y-\mathbf1_Na^\top-FW\|_{\rm F}^2
+                   +\lambda\|W\|_{\rm F}^2
+ \quad\text{subject to}\quad
+                \sum_{b=1}^s\|W_b\|_{\rm F}\leq\kappa.
+ \label{eq:training-objective}
+\end{equation}
+Here $W_b\in\mathbb R^{C_b\times q}$ contains the coefficient rows for
+block $b$, $\lambda\geq0$ is the ridge parameter, and $\kappa\geq0$ is
+the coefficient budget. The intercept is unpenalized. The loss sums squared
+errors over all target coordinates and horizons, then divides by $N$; it is
+not additionally divided by $q$ or $H$.
+
+For a known output box $\mathcal Y\subset\mathbb R^q$ containing the
+target, the reported prediction is
+\[
+ f_s(x)=\Pi_{\mathcal Y}\bigl(a+W^\top\Gamma_s(x)\bigr).
+\]
+The objective in \eqref{eq:training-objective} fits the unprojected affine
+predictor; clipping is applied at prediction time and included in every
+reported loss. Throughout the paper, the same affine map is written as
+$a+\sum_b W_b^\top\Phi_b(x)$, with $W_b\in\mathbb R^{C_b\times q}$.
+
+Centering the training matrices eliminates the intercept. Projected accelerated
+gradient then solves the constrained quadratic. Each projection computes the
+block Frobenius norms, projects that nonnegative vector onto an $\ell_1$ ball
+of radius $\kappa$, and rescales the blocks. The recorded first-order
+optimality gap bounds the remaining training-objective error; a small change
+between iterates alone would not give that bound. Appendix~\ref{app:optimization}
+derives both the projection and the gap. The fitted-risk certificate remains
+valid after early stopping, provided the returned model satisfies the budget
+used for certification.
+
+The ridge term regularizes fitting, whereas the block constraint defines the
+feasible sensitivity class. Exact block duplication leaves that class unchanged,
+but distributing coefficients across duplicates can reduce the squared
+Frobenius ridge penalty. The replication results therefore concern feasible
+prediction classes and their population obstruction. The duplicate-block
+experiment uses $\lambda=0$ to compare these feasible classes without changing
+the fitting penalty.
+
+\subsection{Calibration and model selection}
+
+The candidate family includes history lengths, dictionary prefixes, geometric
+feature types, and baseline models. Each certificate compares a representation
+lower bound with a fitted-model upper bound for the same observed target,
+origin law, and decoder sensitivity budget. Algorithm~\ref{alg:procedure}
+summarizes the procedure; Sections~\ref{sec:block-witness} and~\ref{sec:calibration} give the score
+formulas and their guarantees.
+
+\begin{figure}[t]
+\centering
+\fbox{\begin{minipage}{0.94\linewidth}
+\textbf{Algorithm 1: Learning and certifying KAHM forecasts}
+\begin{enumerate}[leftmargin=*,itemsep=3pt]
+\item Specify horizons, causal origins, known target bounds, RMSE tolerances
+$\epsilon_h\geq0$, total failure probability $\delta\in(0,1)$, and a
+candidate-cost rule.
+\item Use development data to fit geometric blocks and constrained decoders
+for their retained prefixes. Fit comparison models on the same observed targets.
+\item Freeze all candidates, preprocessing choices, sensitivity budgets,
+history-based strata, costs, concentration bounds, and proposed comparisons.
+Allocate $\delta$ across the risk bounds, stratum-mass intervals, alternative
+partitions, and improvement comparisons.
+\item On $n\geq4$ independent calibration episodes, compute one mean squared loss per
+episode and horizon. Compute obstruction scores using disjoint episode pairs or frozen-size
+blocks, using the declared origin sampling rule. For stratified calibration,
+use one prespecified origin
+per independent episode (or a justified episode-level stratum), pair within
+strata, and estimate their masses and confidence intervals.
+\item Compute simultaneous lower endpoints $L_{jh}$ and upper endpoints $U_{jh}$
+for candidate $j$ at horizon $h$.
+\item Accept a fitted candidate when $U_{jh}\leq\epsilon_h^2$ for every
+required horizon; exclude its representation class when
+$L_{jh}>\epsilon_h^2$ for any horizon. Return the least costly accepted
+candidate, if one exists, and the cost interval between the cheapest
+nonexcluded class and the cheapest accepted fit.
+\item Equal finite cost endpoints certify minimum feasible cost among the
+declared classes. Exclusion of every class certifies infeasibility within that
+family. Otherwise report the unresolved accuracy or cost decision explicitly.
+\end{enumerate}
+\end{minipage}}
+\caption{Forecasting and certification for a finite family fixed before calibration.
+The same procedure applies to alternative feature constructions. A candidate
+fitted after inspecting calibration needs fresh evaluation data or a separately
+justified adaptive guarantee.}
+\label{alg:procedure}
+\end{figure}
+
+A lower endpoint above tolerance can motivate changing the representation or
+budget, but does not establish that a particular change will help. Paired
+episode losses therefore compare old and new fitted forecasts directly. They
+can certify an improvement even when the representation obstruction is zero.
+Conversely, the lower bound can exclude a restricted class even if no tested
+refinement attains the desired accuracy.
+
+In the experiments, cost is the number of retained feature coordinates, with
+ties resolved by history length and then validation error. This measures
+representation size. A deployment with unequal feature-evaluation costs can
+use a different cost function, provided it is fixed before calibration.

@@ -1,0 +1,154 @@
+{
+  "status": "passed",
+  "comparison": "Training minmax minus training standardization; retained KAHM family only",
+  "writer_score_definition": "For each selected coordinate-specific forecast, average squared errors over origins and eligible digits within a writer, then average the two coordinate losses. The all-horizon writer score averages horizons 1,2,4.",
+  "scope": "Descriptive comparisons on the same thirteen writers; counting fit-writer-horizon cells does not create independent observations.",
+  "stages": {
+    "original": {
+      "sources": [
+        {
+          "path": "results/input_scaling_study/analysis_original/pendigits_writer_differences.csv",
+          "sha256": "825822b0a303dfd38a34fe5a1b5e46e7ac2423e0d9031e2ee98118ef9d765066"
+        },
+        {
+          "path": "results/input_scaling_study/analysis_original/selected_candidates.csv",
+          "sha256": "24455224f71f89186a3e34cb594da1be9390fa54f850a461f28b3cf2fa6345ff"
+        }
+      ],
+      "fitting_seeds": [
+        1701,
+        1702,
+        1703
+      ],
+      "per_horizon_writer_comparisons": {
+        "1": {
+          "fit_writer_cells": 39,
+          "improved": 39,
+          "worsened": 0,
+          "tied": 0
+        },
+        "2": {
+          "fit_writer_cells": 39,
+          "improved": 39,
+          "worsened": 0,
+          "tied": 0
+        },
+        "4": {
+          "fit_writer_cells": 39,
+          "improved": 36,
+          "worsened": 3,
+          "tied": 0
+        }
+      },
+      "all_horizon_writer_comparisons": {
+        "fit_writer_cells": 39,
+        "improved": 39,
+        "worsened": 0,
+        "tied": 0
+      },
+      "coordinate_seed_horizon_comparisons_after_writer_averaging": {
+        "cells": 18,
+        "improved": 18,
+        "worsened": 0,
+        "tied": 0
+      },
+      "adverse_writer_horizon_comparisons": [
+        {
+          "seed": 1701,
+          "writer": 9,
+          "horizon": 4,
+          "standard_mse": 0.0276237333398034,
+          "alternative_mse": 0.0290689690804096,
+          "mse_difference_alternative_minus_standard": 0.0014452357406061
+        },
+        {
+          "seed": 1701,
+          "writer": 11,
+          "horizon": 4,
+          "standard_mse": 0.0183209427684724,
+          "alternative_mse": 0.0183664688494576,
+          "mse_difference_alternative_minus_standard": 4.552608098526076e-05
+        },
+        {
+          "seed": 1702,
+          "writer": 9,
+          "horizon": 4,
+          "standard_mse": 0.0273532706211647,
+          "alternative_mse": 0.0276299359431193,
+          "mse_difference_alternative_minus_standard": 0.0002766653219546
+        }
+      ],
+      "maximum_difference_arithmetic_discrepancy": 1.0191500421363742e-16,
+      "maximum_all_horizon_reaggregation_discrepancy": 7.979727989493313e-17
+    },
+    "confirmation": {
+      "sources": [
+        {
+          "path": "results/input_scaling_study/analysis_confirmation/pendigits_writer_differences.csv",
+          "sha256": "8abd9d916aa7a4932389f49da96bd1e511cf47a4f91c0f89bc8764d27d90173b"
+        },
+        {
+          "path": "results/input_scaling_study/analysis_confirmation/selected_candidates.csv",
+          "sha256": "5001ea6a77b52c50c91d7c874d61dcba9c4c155a4afc01b2ff948aa3891e34ab"
+        }
+      ],
+      "fitting_seeds": [
+        4701,
+        4702,
+        4703
+      ],
+      "per_horizon_writer_comparisons": {
+        "1": {
+          "fit_writer_cells": 39,
+          "improved": 39,
+          "worsened": 0,
+          "tied": 0
+        },
+        "2": {
+          "fit_writer_cells": 39,
+          "improved": 39,
+          "worsened": 0,
+          "tied": 0
+        },
+        "4": {
+          "fit_writer_cells": 39,
+          "improved": 37,
+          "worsened": 2,
+          "tied": 0
+        }
+      },
+      "all_horizon_writer_comparisons": {
+        "fit_writer_cells": 39,
+        "improved": 39,
+        "worsened": 0,
+        "tied": 0
+      },
+      "coordinate_seed_horizon_comparisons_after_writer_averaging": {
+        "cells": 18,
+        "improved": 18,
+        "worsened": 0,
+        "tied": 0
+      },
+      "adverse_writer_horizon_comparisons": [
+        {
+          "seed": 4702,
+          "writer": 9,
+          "horizon": 4,
+          "standard_mse": 0.0261715601826391,
+          "alternative_mse": 0.0274934608569116,
+          "mse_difference_alternative_minus_standard": 0.0013219006742724
+        },
+        {
+          "seed": 4703,
+          "writer": 9,
+          "horizon": 4,
+          "standard_mse": 0.0273254692586725,
+          "alternative_mse": 0.0277376072864395,
+          "mse_difference_alternative_minus_standard": 0.000412138027767
+        }
+      ],
+      "maximum_difference_arithmetic_discrepancy": 1.0234868508263162e-16,
+      "maximum_all_horizon_reaggregation_discrepancy": 6.667843360785852e-17
+    }
+  }
+}

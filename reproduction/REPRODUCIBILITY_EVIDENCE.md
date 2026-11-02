@@ -1,8 +1,8 @@
 # Reproducibility evidence summary
 
-This file consolidates the repository's current reproducibility evidence in one
-reviewer-facing location. Historical evidence and prospective gap-closing runs
-are deliberately kept separate.
+This account summarizes the retained reproducibility evidence for the parent
+KAHKM experiments. Historical archives and subsequent reproducibility runs
+are identified by their source commits and execution records.
 
 ## Current evidence state
 
@@ -15,7 +15,7 @@ are deliberately kept separate.
 | Prospective Duffing reference closure | PASS | 27/27 attempted; 27 passed; 0 failed; 81 output files verified |
 | Environment capture | PASS | Apple Silicon arm64; Python 3.14.7; frozen lockfile and bootstrap/verifier scripts |
 | Licensing and citation metadata | PASS | `LICENSE`, `DATA_LICENSE`, and `CITATION.cff` present |
-| Final immutable archival release | PENDING | DOI/version metadata should be added only at final immutable release |
+| Immutable archival release | Not recorded | The current citation metadata contain no archival DOI |
 
 ## Reported-result provenance
 
@@ -68,8 +68,6 @@ This historical gap remains visible in:
 - `reproduction/run_accounting/expected_run_completeness.json`
 - `reproduction/run_accounting/README.md`
 
-It is not rewritten or relabeled as historically complete.
-
 ## Prospective Duffing reference closure
 
 A separately labeled prospective reproducibility campaign was executed from
@@ -97,19 +95,19 @@ Primary evidence:
 - `reproduction/prospective_campaigns/duffing_reference_27/run_eab0ad4/verification_report.json`
 - `reproduction/prospective_campaigns/duffing_reference_27/run_eab0ad4/SHA256SUMS`
 
-These outputs close the reproducibility evidence gap but are explicitly not
-represented as original historical outputs.
+These outputs establish that the complete grid can be reproduced from the
+recorded source and environment. They are subsequent runs; the original
+historical archive remains incomplete.
 
-## No-cherry-picking claim boundary
+## Scope of execution accounting
 
-The prospective Duffing campaign has strong failure-preserving accounting:
-every scheduled attempt has a ledger row, exit code, logs, and output hashes.
+Every scheduled attempt in the prospective Duffing campaign has a ledger row,
+exit code, logs, and output hashes.
 
-For the older historical campaigns, the repository now provides archived
-schedule-completeness evidence, but it does not have equivalent execution ledgers
-for every historical attempt. Therefore the repository should not claim that
-every failed historical execution was preserved unless additional evidence is
-added.
+The older campaigns have archived evidence of scheduled configurations, but
+equivalent execution ledgers are unavailable for every attempt. Coverage of a
+parameter grid therefore does not establish complete retention of failed
+historical executions.
 
 ## Environment, licensing, and citation
 
@@ -123,15 +121,11 @@ Reference environment and controls:
 - `DATA_LICENSE`
 - `CITATION.cff`
 
-## Remaining release work
+## Archival and publication scope
 
-Before the final immutable release:
-
-1. remove the two `REMOVE` manuscript items and apply the already identified
-   caption/protocol clarifications;
-2. run final end-to-end repository verification after manuscript cleanup;
-3. create the immutable archival release and then add final DOI/version metadata
-   to citation/release files.
-
-The evidence summary intentionally does not mark those remaining steps complete
-before they have been performed.
+The result matrix excludes the two legacy event-label items marked `REMOVE`.
+The retained evidence does not document a completed final release review or
+an immutable archival DOI. The source commits and checksums identify the
+versions assessed here. The forecasting extension provides its own manuscript,
+experimental records, and scientific verification report in
+`extensions/certified_forecasting/`.

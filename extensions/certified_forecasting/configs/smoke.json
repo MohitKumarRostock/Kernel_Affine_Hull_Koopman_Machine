@@ -1,0 +1,49 @@
+{
+  "campaign": "development_smoke",
+  "systems": [
+    "harmonic"
+  ],
+  "seeds": [
+    29
+  ],
+  "n_train": 24,
+  "n_validation": 24,
+  "n_calibration": 64,
+  "n_test": 32,
+  "episode_length": 72,
+  "histories": [
+    4,
+    12
+  ],
+  "horizons": [
+    1,
+    4,
+    12
+  ],
+  "origin_stride": 4,
+  "cluster_counts": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "feature_kinds": [
+    "kahm",
+    "rbf",
+    "affine"
+  ],
+  "kappa": 4.0,
+  "alpha": 0.0001,
+  "omega": 16.0,
+  "max_geometry_inputs": 1600,
+  "max_train_per_cluster": 24,
+  "delta": 0.05,
+  "risk_delta_fraction": 0.8,
+  "rmse_tolerances": [
+    0.2,
+    0.35,
+    0.5
+  ],
+  "certificate_method": "bernstein",
+  "save_episode_scores": false
+}

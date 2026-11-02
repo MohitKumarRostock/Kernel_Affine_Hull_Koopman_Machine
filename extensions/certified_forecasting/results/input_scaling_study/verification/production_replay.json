@@ -1,0 +1,67 @@
+{
+  "scope": "Full harmonic_1701 production replays in legacy and explicit min-max modes",
+  "comparisons": [
+    {
+      "mode": "standard",
+      "reference": "/workspace/scratch/3369de70587c/scaling-investigation/results/standard/main_v1/harmonic_1701",
+      "replay": "/workspace/scratch/3369de70587c/scaling-investigation/production_validation/legacy_full/harmonic_1701",
+      "excluded_fields": [
+        "train_seconds",
+        "elapsed_seconds"
+      ],
+      "files": {
+        "results.json": {
+          "scientific_values_exact": true,
+          "reference_sha256": "0ffe6427ff7d43ea3c56bedcf59b7e05467878bbac3e711874cb929c185a144b",
+          "replay_sha256": "0b9e973be99a605400181f49002045839a0ecfea9ffa3e4e99a2f4ed2e42ec25"
+        },
+        "frozen_candidates.json": {
+          "scientific_values_exact": true,
+          "reference_sha256": "e56ffcb299d6320cfba569158831e64b76c417510f22407f4c879bf704359f2b",
+          "replay_sha256": "f40fc59bfd725246811810a21dc693539c31590f9382bfe996a501a325d58d1a"
+        },
+        "episode_scores.npz": {
+          "arrays": 120,
+          "values": 983040,
+          "all_values_exact": true,
+          "reference_sha256": "3e1a567f998921b10d11c799e2d107e650a73ecefe17121bb7d2324558f65e0d",
+          "replay_sha256": "3e1a567f998921b10d11c799e2d107e650a73ecefe17121bb7d2324558f65e0d"
+        }
+      },
+      "legacy_output_schema_preserved": true,
+      "status": "pass"
+    },
+    {
+      "mode": "minmax",
+      "reference": "/workspace/scratch/3369de70587c/scaling-investigation/results/minmax/main_v1/harmonic_1701",
+      "replay": "/workspace/scratch/3369de70587c/scaling-investigation/production_validation/minmax_full/harmonic_1701",
+      "excluded_fields": [
+        "train_seconds",
+        "elapsed_seconds",
+        "input_scaling"
+      ],
+      "files": {
+        "results.json": {
+          "scientific_values_exact": true,
+          "reference_sha256": "0aee394228c068872314ef90143654db3b4dbf5f47c6795929e43430b5c4239d",
+          "replay_sha256": "e1e856b0d4bc01127e9178d6af9e6fff2e72668567bb76994e4572627bf15b11"
+        },
+        "frozen_candidates.json": {
+          "scientific_values_exact": true,
+          "reference_sha256": "039b3042d3923ff4dfdf775a6cf7d4ac1574b3efd1d4e03b42dbbe5a6d2ec450",
+          "replay_sha256": "7ffaaeb7ad10fd50e99bbb7bbadfde469e5d16c9b35f5e79bc206d506579e049"
+        },
+        "episode_scores.npz": {
+          "arrays": 120,
+          "values": 983040,
+          "all_values_exact": true,
+          "reference_sha256": "65334e10b7ac04ef17d6510b9a1c38a1c037c348d70feb483e2933392f594745",
+          "replay_sha256": "65334e10b7ac04ef17d6510b9a1c38a1c037c348d70feb483e2933392f594745"
+        }
+      },
+      "explicit_scaler_metadata_candidates": 16,
+      "status": "pass"
+    }
+  ],
+  "status": "pass"
+}

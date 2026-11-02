@@ -256,8 +256,8 @@ def prospective_duffing_summary() -> dict[str, Any]:
         "git_tree_clean_before_campaign": True,
         "git_tree_clean_after_campaign": True,
         "provenance_interpretation": (
-            "Prospective reproducibility rerun; closes the evidence gap without "
-            "being represented as historical original output."
+            "Subsequent reproducibility run of the complete grid; the historical "
+            "archive remains incomplete."
         ),
         "summary_path": str((base / "campaign_summary.json").relative_to(ROOT)),
         "verification_path": str(
@@ -299,9 +299,9 @@ def build_evidence() -> dict[str, Any]:
     evidence = {
         "schema_version": 1,
         "purpose": (
-            "Reviewer-facing consolidation of repository reproducibility evidence. "
-            "Historical audit findings and prospective gap-closing evidence are "
-            "kept explicitly distinct."
+            "Summary of retained repository reproducibility evidence. Historical "
+            "archives and subsequent reproducibility runs are identified by "
+            "their source commits and execution records."
         ),
         "source_checkpoints": CHECKPOINTS,
         "reported_results": result_matrix_summary(),
@@ -322,14 +322,13 @@ def build_evidence() -> dict[str, Any]:
             "no_cherry_picking": (
                 "The prospective Duffing campaign preserves every scheduled attempt "
                 "and exit status. Historical campaigns have archived schedule "
-                "coverage evidence, but a blanket claim that every failed historical "
-                "execution attempt was preserved would be stronger than the current "
-                "evidence supports."
+                "coverage evidence, but equivalent execution ledgers are unavailable "
+                "for every historical attempt."
             ),
             "remaining_release_work": [
-                "manuscript cleanup for the two REMOVE items and clarified captions",
-                "final immutable archival release and DOI/version metadata",
-                "final end-to-end release verification after manuscript/repository cleanup",
+                "two legacy event-label items excluded from the retained result set",
+                "no immutable archival release or DOI recorded",
+                "completed final release review not documented",
             ],
         },
     }
@@ -346,9 +345,9 @@ def write_markdown(evidence: dict[str, Any]) -> None:
 
     text = f"""# Reproducibility evidence summary
 
-This file consolidates the repository's current reproducibility evidence in one
-reviewer-facing location. Historical evidence and prospective gap-closing runs
-are deliberately kept separate.
+This account summarizes the retained reproducibility evidence for the parent
+KAHKM experiments. Historical archives and subsequent reproducibility runs
+are identified by their source commits and execution records.
 
 ## Current evidence state
 
@@ -361,7 +360,7 @@ are deliberately kept separate.
 | Prospective Duffing reference closure | PASS | {prospective['attempted_jobs']}/{prospective['scheduled_jobs']} attempted; {prospective['passed_jobs']} passed; {prospective['failed_jobs']} failed; {prospective['verified_output_files']} output files verified |
 | Environment capture | PASS | {controls['reference_platform']}; Python {controls['reference_python']}; frozen lockfile and bootstrap/verifier scripts |
 | Licensing and citation metadata | PASS | `LICENSE`, `DATA_LICENSE`, and `CITATION.cff` present |
-| Final immutable archival release | PENDING | DOI/version metadata should be added only at final immutable release |
+| Immutable archival release | Not recorded | The current citation metadata contain no archival DOI |
 
 ## Reported-result provenance
 
@@ -414,8 +413,6 @@ This historical gap remains visible in:
 - `{historical['completeness_path']}`
 - `{historical['audit_note_path']}`
 
-It is not rewritten or relabeled as historically complete.
-
 ## Prospective Duffing reference closure
 
 A separately labeled prospective reproducibility campaign was executed from
@@ -443,19 +440,19 @@ Primary evidence:
 - `{prospective['verification_path']}`
 - `reproduction/prospective_campaigns/duffing_reference_27/run_eab0ad4/SHA256SUMS`
 
-These outputs close the reproducibility evidence gap but are explicitly not
-represented as original historical outputs.
+These outputs establish that the complete grid can be reproduced from the
+recorded source and environment. They are subsequent runs; the original
+historical archive remains incomplete.
 
-## No-cherry-picking claim boundary
+## Scope of execution accounting
 
-The prospective Duffing campaign has strong failure-preserving accounting:
-every scheduled attempt has a ledger row, exit code, logs, and output hashes.
+Every scheduled attempt in the prospective Duffing campaign has a ledger row,
+exit code, logs, and output hashes.
 
-For the older historical campaigns, the repository now provides archived
-schedule-completeness evidence, but it does not have equivalent execution ledgers
-for every historical attempt. Therefore the repository should not claim that
-every failed historical execution was preserved unless additional evidence is
-added.
+The older campaigns have archived evidence of scheduled configurations, but
+equivalent execution ledgers are unavailable for every attempt. Coverage of a
+parameter grid therefore does not establish complete retention of failed
+historical executions.
 
 ## Environment, licensing, and citation
 
@@ -469,18 +466,14 @@ Reference environment and controls:
 - `{controls['data_license']}`
 - `{controls['citation_metadata']}`
 
-## Remaining release work
+## Archival and publication scope
 
-Before the final immutable release:
-
-1. remove the two `REMOVE` manuscript items and apply the already identified
-   caption/protocol clarifications;
-2. run final end-to-end repository verification after manuscript cleanup;
-3. create the immutable archival release and then add final DOI/version metadata
-   to citation/release files.
-
-The evidence summary intentionally does not mark those remaining steps complete
-before they have been performed.
+The result matrix excludes the two legacy event-label items marked `REMOVE`.
+The retained evidence does not document a completed final release review or
+an immutable archival DOI. The source commits and checksums identify the
+versions assessed here. The forecasting extension provides its own manuscript,
+experimental records, and scientific verification report in
+`extensions/certified_forecasting/`.
 """
 
     OUTPUT_MD.write_text(text, encoding="utf-8")

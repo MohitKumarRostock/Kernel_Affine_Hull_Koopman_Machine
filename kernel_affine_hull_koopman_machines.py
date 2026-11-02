@@ -1,12 +1,10 @@
 """
 Kernel Affine Hull Koopman Machines using the original KAHM/OTFL folding pipeline.
 
-This standalone version keeps the KAHKM state-regime abstraction code local.
-It keeps the KAHKM-specific state-regime abstraction, association normalization,
-folding-distance evaluation, and NLMS Koopman closure in this file.
-
-It still depends on the original local KAHM/OTFL helper modules that perform the
-autoencoder training and folding-score evaluation:
+This module implements state-regime abstraction, association normalization,
+folding-distance evaluation, and normalized least-mean-squares (NLMS) fitting
+of a Koopman closure. Autoencoder training and folding-score evaluation use
+the following local KAHM/OTFL helper modules:
 
 - ``parallel_autoencoders.py``
 - ``combine_multiple_autoencoders_extended.py``
@@ -21,9 +19,9 @@ Important design choices
        psi_c(x) = (1 - T_c(x) + tau)^omega
                   / sum_l (1 - T_l(x) + tau)^omega.
 
-4. Hierarchical ``y_then_x`` clustering and the regression script's alternative
-   soft mapper are intentionally not used, because this file implements KAHKM
-   regime abstraction rather than the earlier output-regression workflow.
+4. Regime abstraction uses current-state clustering and the normalized folding
+   associations above. Hierarchical ``y_then_x`` clustering is not part of this
+   construction.
 5. Omega is treated as an abstraction sharpness parameter and should be selected
    by external validation/sensitivity analysis.
 
@@ -1170,7 +1168,7 @@ def fit_kahkm(
 
     The KAHM/OTFL abstraction model is trained locally by clustering current
     states and training one original KAHM/OTFL autoencoder set per state-regime
-    cluster. This file does not import the earlier regression helper.
+    cluster.
 
     After the abstraction is fixed, the Koopman closure is learned from
     Phi = Psi(X0), Chi = Psi(X1).

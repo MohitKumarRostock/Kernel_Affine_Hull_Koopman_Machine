@@ -1,0 +1,162 @@
+{
+  "status": "passed",
+  "scope": "Descriptive matched-cohort comparisons; no confidence or certification claim.",
+  "aggregation": "Each selected model weights the three horizon MSEs equally; each horizon MSE weights the 245 test recording groups equally. Mean and sample SD then use the three fits.",
+  "sources": [
+    {
+      "path": "results/speech_forecasting_v1_replay/analysis/selected_results.csv",
+      "sha256": "54ba753cae8b51e0e0f4e51a3479248b60af8f88609c99733fc5014698c96243"
+    },
+    {
+      "path": "results/speech_scaling_v1/selected_results.csv",
+      "sha256": "f942feb2401d06063a2608f3f0c3a26f18bf674645e59767a5e1c7ae4ee160d5"
+    },
+    {
+      "path": "results/speech_scaling_v1/group_losses.csv.gz",
+      "sha256": "733a016bc65099ed7c369d9f1daa4d863b8ec325f8ca06f61930564a68866194"
+    },
+    {
+      "path": "results/speech_scaling_v1/speech_scaling.tex",
+      "sha256": "6df6394b93c7ac6c29a19f64da9126bcacd56aeafd0a2119ced4a24e5e2405a3"
+    }
+  ],
+  "family_summaries": {
+    "kahm": {
+      "mean_all_horizon_mse": {
+        "minmax": 0.02225119513528148,
+        "minmax_clip": 0.022251170487929642,
+        "raw": 0.02180020742962423,
+        "standard": 0.022569923804939215
+      },
+      "sd_over_three_fits": {
+        "minmax": 9.151457158688964e-05,
+        "minmax_clip": 9.15432804720243e-05,
+        "raw": 0.0004411631273940839,
+        "standard": 0.0001969385944379948
+      },
+      "minmax_vs_standard_percent": -1.4121831886201863,
+      "minmax_improving_fits": 3,
+      "raw_beats_minmax_fits": 3
+    },
+    "rbf": {
+      "mean_all_horizon_mse": {
+        "minmax": 0.021303573465869,
+        "minmax_clip": 0.02130350382363599,
+        "raw": 0.02145005180863785,
+        "standard": 0.021465731228053047
+      },
+      "sd_over_three_fits": {
+        "minmax": 0.00013160112026071603,
+        "minmax_clip": 0.0001316548043251976,
+        "raw": 2.2888363354435578e-05,
+        "standard": 3.389256010202291e-05
+      },
+      "minmax_vs_standard_percent": -0.7554262208041118,
+      "minmax_improving_fits": 3,
+      "raw_beats_minmax_fits": 0
+    },
+    "affine": {
+      "mean_all_horizon_mse": {
+        "minmax": 0.022546648326381886,
+        "minmax_clip": 0.022546524960109404,
+        "raw": 0.022995367810097266,
+        "standard": 0.022492998297317237
+      },
+      "sd_over_three_fits": {
+        "minmax": 0.0001035260379323704,
+        "minmax_clip": 0.00010358449690314607,
+        "raw": 0.0006611233922198075,
+        "standard": 0.000664509847361013
+      },
+      "minmax_vs_standard_percent": 0.2385187975186387,
+      "minmax_improving_fits": 1,
+      "raw_beats_minmax_fits": 1
+    }
+  },
+  "conventional_baseline_comparisons": [
+    {
+      "baseline": "ar",
+      "kahm_scaling": "standard",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0012635874609565998
+    },
+    {
+      "baseline": "ar",
+      "kahm_scaling": "raw",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0007130868050744003
+    },
+    {
+      "baseline": "ar",
+      "kahm_scaling": "minmax",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0011475890820003003
+    },
+    {
+      "baseline": "ar",
+      "kahm_scaling": "minmax_clip",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0011476034123187
+    },
+    {
+      "baseline": "quadratic",
+      "kahm_scaling": "standard",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0012090665700499998
+    },
+    {
+      "baseline": "quadratic",
+      "kahm_scaling": "raw",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0006538325288137003
+    },
+    {
+      "baseline": "quadratic",
+      "kahm_scaling": "minmax",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0010930681910937003
+    },
+    {
+      "baseline": "quadratic",
+      "kahm_scaling": "minmax_clip",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0010930825214121001
+    },
+    {
+      "baseline": "kernel",
+      "kahm_scaling": "standard",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0012248410306178
+    },
+    {
+      "baseline": "kernel",
+      "kahm_scaling": "raw",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0006782803732683002
+    },
+    {
+      "baseline": "kernel",
+      "kahm_scaling": "minmax",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0011088426516615004
+    },
+    {
+      "baseline": "kernel",
+      "kahm_scaling": "minmax_clip",
+      "seed_horizon_cells": 9,
+      "baseline_lower_mse_cells": 9,
+      "maximum_baseline_minus_kahm_mse": -0.0011088569819799002
+    }
+  ]
+}

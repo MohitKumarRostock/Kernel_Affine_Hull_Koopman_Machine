@@ -1,0 +1,84 @@
+\section{Input scaling as a model choice}
+\label{sec:input-scaling}
+\input{tables/input_scaling_numbers}
+
+\paragraph{Training-based transformations.}
+Section~\ref{sec:method} explains why the complete KAHM representation is
+sensitive to input scaling. The forecasting experiments in
+Section~\ref{sec:experiments} standardize each history coordinate using its
+training mean and standard deviation. We compare this with training
+min--max scaling, its clipped version, and raw histories.
+Here ``raw'' means no additional history transformation after the fixed
+observation transformation defining the forecasting task. For a history vector
+$x$ and coordinate index $j$, let $a_j$ and $b_j$ be that coordinate's minimum
+and maximum over all training histories. The primary alternative is
+\begin{equation}
+ z_j(x)=\begin{cases}2(x_j-a_j)/(b_j-a_j)-1,&b_j>a_j,\\0,&b_j=a_j.\end{cases}
+ \label{eq:input-minmax}
+\end{equation}
+Each nonconstant training coordinate therefore spans $[-1,1]$. A coordinate
+that is constant in training is mapped to zero for every query. Extrema are
+fixed before geometry subsampling and never recomputed on validation,
+calibration, or test trajectories. Unseen values may lie outside $[-1,1]$;
+the diagnostic clipped version uses $\max\{-1,\min\{1,z_j(x)\}\}$.
+Clipping can map distinct out-of-range histories to the same input and is
+therefore a different representation, not merely a numerical safeguard.
+Only KAHM input geometry and models using it change in this comparison.
+Targets, budgets, data streams, and non-KAHM controls remain fixed. History
+and prefix selection use validation MSE within each preprocessing arm;
+test errors do not select an arm.
+
+The first comparison reuses every original fitting seed and budget condition.
+Because this comparison was designed after inspecting the corresponding
+results, its calibration endpoints do not carry a confirmatory confidence
+guarantee for the subsequent choice of preprocessing. A fixed confirmation
+protocol uses new seeds
+$4701$--$4703$ on all six synthetic systems, with fresh development,
+calibration, and test episodes. PenDigits instead uses new training subsamples
+on the same writer cohort; those comparisons remain descriptive.
+
+\input{tables/input_scaling_primary}
+
+\paragraph{Results.}
+Table~\ref{tab:input-scaling-primary} reports all tasks. Mean MSE decreases on
+harmonic, quasiperiodic, and Duffing data in both stages; Duffing reductions
+are \ScalingDuffingOriginalMagnitude\% and
+\ScalingDuffingConfirmationMagnitude\%. Logistic MSE increases by
+\ScalingLogisticOriginalMagnitude\% and
+\ScalingLogisticConfirmationMagnitude\%, and Van der Pol MSE increases by
+\ScalingVDPOriginalMagnitude\% and \ScalingVDPConfirmationMagnitude\%.
+The nonlinear-AR effect changes sign. Mean changes can disagree with a majority
+of seed-specific changes, so every paired effect and the sample standard
+deviation across fits are archived alongside conditional episode standard
+errors. Large numbers of test episodes do not replace independent fitting
+repetitions.
+
+PenDigits soft-KAHM MSE decreases by \ScalingPenOriginalMagnitude\% and
+\ScalingPenConfirmationMagnitude\%. Each coordinate improves at every horizon
+in each fit after averaging over writers. All 13 writer means improve after
+averaging coordinates and horizons, although horizon-four losses worsen in
+three original and two new-seed writer--fit comparisons. Ridge AR and
+quadratic regression remain more accurate. Hard KAHM assignments instead worsen by
+\ScalingHardPenOriginalIncrease\% and
+\ScalingHardPenConfirmationIncrease\% in every fit. Rollout improves on
+\ScalingRolloutOriginalImprovingTasks\ of seven original tasks and
+\ScalingRolloutConfirmationImprovingTasks\ of seven new-seed tasks, but the
+new-seed logistic rollout worsens by
+\ScalingRolloutLogisticConfirmationMagnitude\%.
+
+Clipped and unclipped min--max results are similar; raw inputs retain the
+logistic and Van der Pol limitations. Budget-specific effects also vary.
+Neither preprocessing nor budget is selected by test performance. All
+horizon-specific, uncertainty, diagnostic-arm, and budget tables remain in the
+reproducible result archive. At tolerances $0.20,0.35,0.50$, primary scaling
+leaves the all-horizon upper-certification counts unchanged in every reported
+synthetic condition. The allocations cover statements within each arm, not
+selection across arms. Fresh synthetic calibration supports those within-arm
+claims. Reusing the
+main-study streams or changing fitting seeds on the same PenDigits cohort
+does not supply an independent calibration sample for the additional
+preprocessing choices. The results indicate that the effect of preprocessing
+depends on both the task and the forecasting architecture. Preprocessing can
+be selected using validation data before calibration, as in the matched
+comparison below; alternatively, selecting among calibrated arms requires a
+failure-probability allocation that covers all such arms.

@@ -1,0 +1,40 @@
+\subsection{Matrix-free optimization of scalar block scores}
+\label{app:block-solver}
+
+For a block of $b$ observations, orient each edge $e=(i,j)$ of the complete
+graph with $i<j$. Let $\mathsf B$ have columns $e_i-e_j$, where $e_i$ is
+coordinate vector $i$, and set $c_e=\kappa d(U_i,U_j)$. The constraints are
+$|\mathsf B^\top v|\leq c$. Positive and negative parts of any signed edge
+vector $\alpha$ give nonnegative multipliers for the two constraint directions.
+Minimizing the resulting Lagrangian over $v$ yields the feasible dual value
+\[
+ D(\alpha)=\alpha^\top\mathsf B^\top Y
+       -\sum_e c_e|\alpha_e|-\tfrac14\|\mathsf B\alpha\|_2^2
+       \leq \min_{|\mathsf B^\top v|\leq c}\|Y-v\|_2^2.
+\]
+Thus no convergence assumption is required for a finite signed dual to supply
+a lower value. The implementation minimizes $-D$ by accelerated proximal
+gradient with componentwise soft thresholding \citep{beck2009fista}. Since
+$\mathsf B\mathsf B^\top=bI-\mathbf1\mathbf1^\top$, the smooth negative-dual
+term has gradient Lipschitz constant $b/2$, giving step size $2/b$. Incidence
+products use indexed sums, avoiding a dense constraint matrix.
+
+To obtain a primal upper value from an approximate vector $z$, evaluate
+\[
+ v_i^- =\min_j\{z_j+\kappa d(U_i,U_j)\},\qquad
+ v_i^+ =\max_j\{z_j-\kappa d(U_i,U_j)\}.
+\]
+The triangle inequality makes both envelopes $\kappa$-Lipschitz on the sampled
+support. Their average is feasible, as is a common translation by its mean
+residual. Clipping to the observed target interval preserves feasibility and
+cannot increase squared error. This construction remains valid for duplicate
+or nearly coincident feature rows. Primal values quantify the numerical gap;
+only guarded dual values enter lower calibration.
+
+Each batched program follows its own stopping criterion with a fixed iteration
+limit; another block's convergence does not alter its iterates. The recorded
+dual and primal guards address floating-point roundoff numerically and are
+not interval-arithmetic verification. Early-stopped programs and their gaps
+are retained. The block score divides the lower squared-error sum by $b-1$;
+the full-sample empirical-minimum comparator instead divides by its sample
+size, as required by Appendix~\ref{app:erm-comparator}.

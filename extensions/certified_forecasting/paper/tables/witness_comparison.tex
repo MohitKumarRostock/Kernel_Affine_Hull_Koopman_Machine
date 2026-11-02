@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+& \multicolumn{4}{c}{Population quantities} & \multicolumn{4}{c}{Mean lower endpoint, $n=4096$} \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-9}
+Law & $R^*$ & $W$ & $W_{\rm str}$ & $C$ & Pair & Centered & ERM & Strat. \\
+\midrule
+Collapsed binary & 1.0000 & 1.0000 & 1.0000 & 1.0000 & 0.9306 & 0.9149 & 0.9345 & 0.9237 \\
+Two atoms & 0.3315 & 0.3315 & 0.3315 & 0.3315 & 0.3034 & 0.2807 & 0.2908 & 0.3001 \\
+Three-point V & 0.2222 & 0.2222 & 0.1667 & 0.0160 & 0.1996 & 0.0000 & 0.1890 & 0.1355 \\
+Five-point zigzag & 0.5400 & 0.3800 & 0.5250 & 0.0744 & 0.3408 & 0.0186 & 0.4891 & 0.4442 \\
+Partial collapse & 0.2533 & 0.0867 & 0.2533 & 0.0000 & 0.0646 & 0.0000 & 0.2178 & 0.1772 \\
+Noisy affine & 0.2500 & 0.0972 & 0.2500 & 0.0000 & 0.0777 & 0.0000 & 0.2145 & 0.1801 \\
+Rare conflict & 0.0250 & 0.0025 & 0.0250 & 0.0000 & 0.0000 & 0.0000 & 0.0148 & 0.0059 \\
+Affine mismatch & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\caption{Finite-support comparison on the same full scalar Lipschitz class. $R^*$ is the minimum MSE, $W$ the unconditional pair witness, $W_{\rm str}$ the prespecified stratified witness, and $C$ the centered population bound. The last four columns average 300 independent calibration samples. Each method separately has nominal one-sided confidence $95\%$; no joint confidence across columns is asserted. Empirical risk minimization (ERM) uses a dual-certified empirical minimum and bounded-loss Kullback--Leibler (KL) inversion. Primary stratification estimates the stratum masses. All quantities are in MSE units.}
+\label{tab:witness-comparison}
+\end{table}

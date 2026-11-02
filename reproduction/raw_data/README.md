@@ -1,14 +1,17 @@
 # Raw scientific inputs
 
-This directory is reserved for raw scientific input datasets captured by the
-final frozen reproduction campaign.
+This directory contains the raw scientific inputs captured from source commit
+`ac531aefc66066c3fc320d94c0b362fb88f94967`. The
+[dataset card](DATASET_CARD.md) describes seven compressed family archives and
+553 logical subdatasets in `canonical/`.
 
-The repository already contains extensive unaggregated run-level result files,
-but the pre-campaign inventory shows that underlying state-transition or
-trajectory arrays were not systematically persisted for every retained result.
-Those metric-level files are therefore not relabeled as raw scientific data.
+Run-level metric files and underlying scientific inputs serve different
+purposes. The pre-campaign inventory found that state-transition and trajectory
+arrays were not systematically persisted for every retained result. The
+canonical capture supplies these inputs with explicit provenance; the earlier
+metric files remain separately identifiable.
 
-Final-campaign raw datasets are written with `scripts/raw_data_capture.py`.
+The capture uses `scripts/raw_data_capture.py`.
 Each dataset consists of:
 
 - a compressed `.npz` archive containing the actual numerical input arrays;
@@ -19,7 +22,8 @@ Each dataset consists of:
 - a canonical array-content SHA-256 checksum independent of ZIP-container
   metadata.
 
-A later campaign manifest will enumerate every captured dataset used by the
-retained reported results and will verify all sidecars and checksums.
+`canonical/manifest.json` enumerates the captured families and records their
+verification. `canonical/dataset_index.tsv` identifies the logical subdatasets,
+and `canonical/SHA256SUMS` supplies distributed-file checksums.
 
 The pre-campaign evidence audit is stored under `reproduction/data_inventory/`.

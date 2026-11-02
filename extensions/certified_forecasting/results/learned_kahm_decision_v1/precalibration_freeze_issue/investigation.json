@@ -1,0 +1,11 @@
+{
+  "purpose": "Investigation of pre-calibration zero-byte source archive",
+  "code_inspection": "Runner has one write site for source_snapshot.tar.gz, used by develop; calibration only hashes/reads it. Verifier opens archive with r:gz and has no archive write. No overwrite path was identified.",
+  "isolated_probe": {
+    "routine": "run_study.snapshot",
+    "archive_bytes": 224021,
+    "sha256": "5e7a3309f46d1618cf03551b9d9cf1b10554aade94217728534b9d742e4e7662",
+    "same_size_and_hash_on_subsequent_process": true
+  },
+  "conclusion": "Original truncation cause not identified; preflight guard prevented calibration and repair preserved initial records and unchanged experimental choices."
+}

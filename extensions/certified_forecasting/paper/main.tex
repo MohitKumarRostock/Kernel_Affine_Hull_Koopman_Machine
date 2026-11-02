@@ -1,0 +1,98 @@
+\documentclass[twoside,11pt]{article}
+\usepackage[preprint]{jmlr2e}
+\usepackage{times}
+\usepackage{amsmath,mathtools,booktabs,microtype,enumitem}
+\usepackage{lastpage}
+\hypersetup{hidelinks,
+pdftitle={A Hierarchy of Risk Certificates for Forecasting Representations},
+pdfauthor={Mohit Kumar and Somayeh Kargaran},
+pdfsubject={KAHM forecasting, representation refinement, and finite-sample risk certification}}
+\jmlrheading{}{2026}{1--\pageref{LastPage}}{}{}{}{Mohit Kumar and Somayeh Kargaran}
+\ShortHeadings{A Hierarchy of Risk Certificates}{Kumar and Kargaran}
+\firstpageno{1}
+\allowdisplaybreaks
+\setlength{\emergencystretch}{1.5em}
+
+\begin{document}
+\title{A Hierarchy of Risk Certificates\\for Forecasting Representations}
+\author{\name Mohit Kumar \email mohit.kumar@uni-rostock.de\\
+\addr University of Rostock, Rostock, Germany\\
+Software Competence Center Hagenberg, Hagenberg, Austria
+\AND
+\name Somayeh Kargaran \email somayeh.kargaran@scch.at\\
+\addr Software Competence Center Hagenberg, Hagenberg, Austria}
+\maketitle
+
+\begin{abstract}
+We study when a forecasting representation can meet an accuracy requirement
+under a prescribed decoder sensitivity. Kernel Affine Hull Machine (KAHM)
+dictionaries provide a learned, expandable setting for this general question.
+For bounded scalar targets, we construct normalized minimum-risk problems on
+blocks of observations. Their size-two member is a pairwise obstruction;
+their expectations increase to the optimal Lipschitz risk under compactness
+and unconditional iid sampling. Exact rare-conflict and noisy-support laws
+show why no fixed block size is universally sufficient. Independent-block
+calibration and estimated-mass stratification give lower risk certificates.
+Combined with fitted-risk upper bounds and retained representation classes,
+these can certify minimum feasible cost among declared alternatives.
+Experiments distinguish population slack from finite-sample uncertainty.
+Fresh calibration on forty frozen learned KAHM banks demonstrates class
+exclusion with larger blocks where pairs are inconclusive, while retaining
+cases favoring stratification and full-sample empirical minimization.
+Broader synthetic, pen-trajectory, and speech studies show task-dependent
+accuracy and preprocessing effects. The guarantees concern expected squared
+error for a fixed target and evaluation law; they distinguish class-level
+limitations from fitted accuracy without identifying all limitations as
+removable representation loss. Informative natural-data class exclusion
+remains limited.
+\end{abstract}
+\begin{keywords}
+Kernel Affine Hull Machines, time-series forecasting, soft state abstraction,
+representation refinement, prediction risk certification
+\end{keywords}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/theory}
+\input{sections/block_witness}
+\input{sections/method}
+\input{sections/theory_calibration}
+\input{sections/block_experiments}
+\input{sections/comparison_summary}
+\input{sections/learned_kahm_decision}
+\input{sections/learned_kahm_hierarchy}
+\input{sections/forecasting_assessment}
+\input{sections/discussion}
+
+\section*{Code, data, and research transparency}
+The \href{https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/certified-soft-state-forecasting/extensions/certified_forecasting}{accompanying repository} provides the implementation, frozen configurations,
+result summaries, and figure generators in
+\path{extensions/certified_forecasting}; editable manuscript files are in its
+\path{paper} directory. The forecasting, input-scaling, matched-geometry,
+lower-bound comparison, block-hierarchy, learned-KAHM decision, learned-geometry hierarchy, controlled
+decision, speech, and speech-scaling studies
+have separate
+protocols and result directories. These provide configurations, source hashes,
+per-episode scores, and outcomes for every prescribed configuration.
+Appendix~\ref{app:protocols} specifies the forecasting configurations and
+independent sampling units. The separately compiled supplement retains
+complete secondary experimental tables and the inherited local KAHM
+implementation details; every proof of the main results remains in this
+manuscript. The reproduction guide is
+\path{extensions/certified_forecasting/docs/REPRODUCIBILITY.md}.
+Public data are identified by source and checksum; download scripts preserve
+attribution and license information. Appendix~\ref{app:speech-protocol} describes the speech study's evaluation
+order and its implications for interpretation.
+
+\paragraph{Use of AI tools.}
+AI tools assisted with derivation exploration, implementation, literature
+retrieval, and manuscript preparation.
+
+\appendix
+\input{sections/optimization}
+\input{sections/block_optimization}
+\input{sections/witness_analysis}
+\input{sections/protocol_summary}
+\input{sections/known_risk_details}
+\bibliography{references}
+\end{document}

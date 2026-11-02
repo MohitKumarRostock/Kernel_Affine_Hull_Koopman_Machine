@@ -1,0 +1,33 @@
+{
+  "schema": "kahm-matched-geometry-protocol-v1",
+  "protocol_sha256": "4a16cd2fd55df1ef85fa2b6ad91066fcd6187426ede293e32447b1851e34fe8f",
+  "modes": [
+    "standard",
+    "minmax",
+    "minmax_clip",
+    "raw"
+  ],
+  "campaigns": [
+    "main_v1",
+    "oscillators_v1",
+    "pendigits_v1"
+  ],
+  "selection_order": [
+    "mean validation MSE",
+    "n_features",
+    "history",
+    "mode order: standard, minmax, minmax_clip, raw",
+    "candidate name"
+  ],
+  "synthetic_joint_delta_per_system_seed": 0.05,
+  "synthetic_complete_family_delta_per_arm": 0.01,
+  "synthetic_cross_geometry_delta": 0.01,
+  "n_primary_cross_geometry_comparisons": 6,
+  "pendigits_joint_delta_conditional_on_iid_writers": 0.05,
+  "pendigits_delta_per_arm_across_all_seeds_coordinates": 0.0125,
+  "pendigits_scope": "Same held-out writers; fitting-seed variation, not a new cohort",
+  "scheduled_jobs": 124,
+  "scheduled_candidate_fits": 13440,
+  "timing_scope": "Head fitting excludes validation/scoring; shared geometry is charged once per bank; no deployment-runtime claim",
+  "reference_design": true
+}

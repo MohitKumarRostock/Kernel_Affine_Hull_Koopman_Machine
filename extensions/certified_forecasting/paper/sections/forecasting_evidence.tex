@@ -1,0 +1,86 @@
+\section{Additional forecasting evidence}
+\label{sec:experiments}
+
+These studies test predictive accuracy and the limits of calibration beyond
+the controlled decision mechanisms. All prescribed configurations are retained
+in the result archive. Reported test RMSEs average over complete fits.
+Detailed study sections, tables, and fitting variability accompany the source
+supplement; Appendix~\ref{app:protocols} specifies the generators, comparisons,
+and independent sampling units. The matched comparison in
+Section~\ref{sec:matched-geometry} subsequently allows validation to select
+preprocessing.
+
+\subsection{Bounded synthetic episodes}
+
+Four length-72 generators cover harmonic, quasiperiodic, nonlinear-AR, and
+logistic observations in $[-1,1]$. Each of five fits uses 128 training,
+512 validation, 4096 calibration, and 2048 test episodes. Histories have
+lengths 4 or 12; horizons are 1, 4, and 12. Training-standardized geometric
+features and comparison models form 40 frozen candidates per fit. The
+$0.05$ failure budget covers candidate risk and adjacent-prefix improvement
+bounds within each repetition; overlapping origins do not increase the
+independent sample size.
+
+KAHM improves on long-horizon persistence for periodic signals, while
+quadratic and autoregressive regressors are stronger. On nonlinear AR,
+horizon-12 KAHM RMSE is $0.0743$, compared with $0.0802$ for ridge AR and
+$0.0813$ for quadratic regression; these alternatives are better at one step.
+At all-horizon RMSE tolerance $0.35$, the 800 candidates yield 301 acceptances,
+24 class exclusions, and 475 unresolved decisions. No candidate certifies
+$0.50$ on logistic data; this is not a proof of infeasibility.
+
+Among 480 retained-KAHM candidate--horizon statements, 119 lower endpoints
+are positive, but only two exclude $0.35$ and none excludes $0.50$.
+Paired losses certify 72 of 360 adjacent-prefix improvements. Across all
+62 main, oscillator, and budget-sensitivity fits, all 186 horizon-specific
+lower endpoints of the complete-family validation winners are zero; 184 of
+186 are zero when selection is restricted to KAHM. Candidate exclusion and
+validation-winner behavior are therefore distinct findings.
+
+\subsection{Oscillators}
+\label{sec:oscillators}
+
+Three new fits per system use independently initialized Van der Pol and
+Duffing episodes with the same sample sizes and confidence allocation.
+Horizon-12 KAHM sensor RMSEs are $0.3814$ and $0.2499$, compared with
+$0.2990$ for Van der Pol affine-hull blocks and $0.1369$ for Duffing quadratic
+regression. Iterated KAHM reaches $0.3408$ on Van der Pol, so direct fitting
+also need not outperform rollout. At tolerance $0.35$, the 240 candidates
+produce 55 acceptances, 30 exclusions, and 155 unresolved decisions. Paired
+KAHM refinement gains are certified in 43 of 54 Van der Pol and 10 of 54
+Duffing comparisons. The risk concerns the bounded sensor under the numerical
+episode law, not physical-state error.
+
+\subsection{Coefficient budgets and numerical checks}
+\label{sec:budget-sensitivity}
+
+Fresh streams compare $\kappa\in\{1,4,16\}$ on the four main systems, with
+three fits each and joint confidence allocation across budgets. Increasing
+$\kappa$ from 1 to 4 helps several tasks; increasing it to 16 gives little
+further improvement, and conventional regressors retain advantages. Equal
+numerical budgets do not imply equal capacity across representations.
+Zero-ridge duplicate-block checks agree within solver gaps; they do not
+establish invariance of ridge-regularized fits.
+
+A separate 28,800-trial two-atom check has one pair-lower violation and no
+centered-lower or fitted-upper violations. At complete collapse and $n=4096$,
+the centered method's mean endpoint is $0.5327$; using known zero representation
+variance gives an expected-endpoint lower bound about $0.9031$, compared with
+mean pair endpoint $0.9177$. The original comparison therefore partly reflects
+unused structural information, not a universal advantage over centered methods.
+
+\subsection{Original pen trajectories}
+\label{sec:pendigits}
+
+PenDigits forecasting uses original, unnormalized trajectories and a fixed
+acquisition-box transformation. There are 1751 eligible held-out digits from
+13 inferred writer identifiers. The completed-stroke eligibility rule defines
+a retrospective population. At horizons 1, 2, and 4, KAHM RMSEs are
+$0.04661,0.06686,0.11269$, whereas quadratic regression achieves
+$0.00768,0.01777,0.05184$; ridge AR also outperforms KAHM. Three fitting seeds
+reuse this writer cohort.
+
+Even assuming iid eligible writer records, generic upper-RMSE endpoints near
+$1.56$ certify none of $0.2,0.35,0.5$. Neither digits nor overlapping windows
+replace independent writers, and source identifiers do not establish the iid
+assumption. These comparisons remain descriptive.

@@ -1,0 +1,299 @@
+\section{A hierarchy of consistent block witnesses}
+\label{sec:block-witness}
+
+The pair witness can lose information because its optimal fitted values are
+chosen separately for each pair. Requiring one set of fitted values to
+respect every distance in a larger block removes some of this freedom. We
+now make this observation precise for a \emph{scalar} target. The result
+connects the pair obstruction to the optimal Lipschitz risk, while exposing
+the statistical cost of using larger blocks.
+
+Fix the representation, pseudometric, and sensitivity budget from
+Section~\ref{sec:theory}. Let $(U_i,Y_i)_{i=1}^b$ be independent copies
+from the full evaluation law, where $b\geq2$, and assume
+$Y\in[y_-,y_+]$ almost surely. Write $D=y_+-y_-$. Define
+\begin{equation}
+ \begin{aligned}
+ T_b&=\frac{1}{b-1}\min_{v\in\mathbb R^b}
+       \sum_{i=1}^b(Y_i-v_i)^2,
+ &\mathcal{W}_b&=\mathbb E T_b,\\
+ &\text{subject to }|v_i-v_j|\leq\kappa d(U_i,U_j)
+       \quad(i,j\leq b).
+ \end{aligned}
+ \label{eq:block-witness}
+\end{equation}
+The feasible set contains every constant vector. The minimum therefore
+exists and is unique. Its value is unchanged if the fitted values are
+restricted to $[y_-,y_+]$, because clipping preserves feasibility and
+cannot increase squared error. The factor $1/(b-1)$ is essential: if
+$a_b$ denotes the usual minimum empirical MSE, then
+$T_b=b a_b/(b-1)$. This correction is justified by the freedom to translate
+every fitted value by the same constant; it is not a generic correction
+for arbitrary empirical-risk minima.
+
+\begin{theorem}[Monotone block hierarchy]
+\label{thm:block-hierarchy}
+Under these assumptions, the following statements hold.
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+\item The first member is exactly the pair score:
+\[
+ T_2=\tfrac12\bigl(|Y_1-Y_2|-\kappa d(U_1,U_2)\bigr)_+^2.
+\]
+Consequently $\mathcal{W}_2=W_{\kappa,A}$ when $A$ is constant.
+\item For every $b\geq2$,
+\begin{equation}
+ 0\leq T_b\leq B_b^{\rm blk},
+ \qquad B_b^{\rm blk}=\frac{D^2\lfloor b^2/4\rfloor}{b(b-1)},
+ \qquad \mathcal{W}_b\leq R^*_\kappa.
+ \label{eq:block-range}
+\end{equation}
+\item If $2\leq m\leq b$ and $T_m(S)$ is the score computed from a
+subset $S\subseteq\{1,\ldots,b\}$ of size $m$, then
+\begin{equation}
+ \binom bm^{-1}\sum_{|S|=m}T_m(S)\leq T_b.
+ \label{eq:block-subset}
+\end{equation}
+In particular,
+$\mathcal{W}_2\leq \mathcal{W}_3\leq\cdots\leq R^*_\kappa$.
+\item If the representation takes values in a compact metric space
+and $d$ is that metric, then $\mathcal{W}_b\uparrow R^*_\kappa$ as
+$b\to\infty$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+For two observations, let
+$\Delta=|Y_1-Y_2|$ and $c=\kappa d(U_1,U_2)$. If $\Delta\leq c$,
+both targets can be fitted exactly. Otherwise the optimal fitted
+separation is $c$, with the two residuals having magnitude
+$(\Delta-c)/2$ and opposite signs. Their squared sum is
+$(\Delta-c)^2/2$, proving (i).
+
+For any fixed admissible decoder $g$ of finite risk, put
+$r_i=Y_i-g(U_i)$ and $\bar r=b^{-1}\sum_i r_i$.
+The translated values $v_i=g(U_i)+\bar r$ are feasible. Thus
+\[
+ T_b\leq\frac1{b-1}\sum_i(r_i-\bar r)^2,
+ \qquad
+ \mathcal{W}_b\leq\operatorname{Var}(Y-g(U))\leq R(g\circ\Gamma).
+\]
+Taking the infimum over $g$ proves the population bound. Using the
+constant fitted value $\bar Y$ instead bounds $T_b$ by the unbiased
+sample variance of the targets. This variance is a convex function
+of each target coordinate, so its maximum over $[y_-,y_+]^b$ occurs
+at interval endpoints. If $k$ coordinates equal $y_+$ and $b-k$
+equal $y_-$, its value is $D^2 k(b-k)/\{b(b-1)\}$. Maximizing over
+integer $k$ proves the range bound.
+
+For (iii), let $v$ minimize the full-block objective and set
+$r_i=Y_i-v_i$. Translation invariance implies $\sum_i r_i=0$:
+otherwise translating $v$ by the residual mean would strictly lower
+the objective. Hence
+\begin{equation}
+ T_b=\frac1{b(b-1)}\sum_{i<j}(r_i-r_j)^2.
+ \label{eq:block-residual-identity}
+\end{equation}
+On a subset $S$, restricting $v$ and translating by that subset's
+residual mean gives feasible fitted values. Therefore
+\[
+ T_m(S)\leq\frac1{m(m-1)}
+                  \sum_{i<j,\ i,j\in S}(r_i-r_j)^2.
+\]
+A uniformly chosen $m$-subset contains a given pair with probability
+$m(m-1)/\{b(b-1)\}$. Averaging proves
+\eqref{eq:block-subset}; taking expectations proves monotonicity.
+This is an average-over-subsets statement, not an ordering between
+arbitrary realized blocks of different sizes.
+
+To prove (iv), any feasible vector extends to a scalar Lipschitz
+function by
+$g_v(u)=\min_i\{v_i+\kappa d(u,U_i)\}$.
+The triangle inequality and the finite constraints show that this
+function is $\kappa$-Lipschitz and equals $v_i$ at $U_i$.
+Clipping it to $[y_-,y_+]$ preserves those properties. Thus $a_b$
+is the empirical minimum over the same bounded Lipschitz class as
+the population problem. On a compact metric space this class is
+compact in the uniform norm: it is uniformly bounded and
+equicontinuous. For each fixed $\epsilon>0$, a finite uniform
+$\epsilon$-net and the ordinary strong law give uniform convergence
+of empirical risks over that net. Since
+$|(y-f(u))^2-(y-g(u))^2|\leq2D\|f-g\|_\infty$ for interval-valued
+$f,g$, the convergence extends to the entire class. Therefore
+$a_b\to R^*_\kappa$ almost surely. Multiplication by $b/(b-1)$
+and the bound $T_b\leq D^2/2$ give $\mathcal{W}_b\to R^*_\kappa$ by
+dominated convergence.
+\end{proof}
+
+The result strengthens the population witness without changing the decoder
+class. In particular, every block score dominates the average of its
+pair scores. The additional information is joint consistency of the fitted
+values across pairs, rather than a new concentration inequality.
+Optimization of empirical $U$-statistics is established
+\citep{clemencon2016scaling}: equation~\eqref{eq:block-residual-identity}
+places this construction in that framework. Lower bounds obtained by
+averaging empirical optimization values over independent batches are also
+established in stochastic programming
+\citep{linderoth2006empirical,guigues2017confidence}. The specific
+connection here is the centered normalization, its exact pair-obstruction
+member, and the monotone hierarchy for the Lipschitz prediction problem.
+
+\subsection{Exact gaps and the limits of fixed block sizes}
+
+Consistency for a fixed distribution does not provide a universal choice
+of $b$. Two exact calculations distinguish rare predictive conflicts from
+the capacity to interpolate many distinct inputs.
+
+\begin{proposition}[Two exact block-size laws]
+\label{prop:block-rare}
+For the three-atom distribution from Section~\ref{sec:theory}, with
+$(U,Y)=(3,0),(0,-1),(1,1)$ of probabilities
+$1-2\varepsilon,\varepsilon,\varepsilon$ and $\kappa=1$,
+\begin{equation}
+ R^*_\kappa=\frac\varepsilon2,
+ \qquad
+ \mathcal{W}_b=\frac{2b\varepsilon-1+(1-2\varepsilon)^b}{4(b-1)}.
+ \label{eq:block-rare-exact}
+\end{equation}
+For every fixed $b$, $\mathcal{W}_b/R^*_\kappa\to0$ as
+$\varepsilon\downarrow0$.
+
+Separately, let $U$ be uniform on $M\geq1$ points whose pairwise
+distances are at least $D/\kappa$, where $D,\kappa>0$, and let
+$Y\in\{0,D\}$ be independent of $U$ and equiprobable. Then
+\begin{equation}
+ R^*_\kappa=\frac{D^2}{4},
+ \qquad
+ \mathcal{W}_b=\frac{D^2}{4(b-1)}
+       \left[b-M\{1-(1-1/M)^b\}\right].
+ \label{eq:block-occupancy}
+\end{equation}
+For fixed $b$, $\mathcal{W}_b\to0$ as $M\to\infty$, while the optimal risk
+stays $D^2/4$.
+\end{proposition}
+
+\begin{proof}
+In the first law, let $N_-$ and $N_+$ count the two rare atoms in
+a block, and put $N=N_-+N_+$. The common atom can be fitted at zero
+without restricting the optimum at the rare atoms. Their constrained
+weighted least-squares error is $N_-N_+/N$ when $N>0$, and zero
+otherwise. Conditional on $N$, $N_-$ is binomial with parameters
+$N$ and $1/2$, so the conditional mean of this error is
+$(N-1)/4$ for $N\geq1$. Since
+$N\sim\operatorname{Binomial}(b,2\varepsilon)$,
+\[
+ (b-1)\mathcal{W}_b=\tfrac14\{\mathbb EN-\Pr(N\geq1)\}
+ =\tfrac14\{2b\varepsilon-1+(1-2\varepsilon)^b\}.
+\]
+Its expansion at zero gives
+$\mathcal{W}_b/R^*_\kappa=b\varepsilon+O(\varepsilon^2)$.
+
+In the second law, any fitted values in $[0,D]$ at distinct support
+points satisfy the Lipschitz constraints. At a support point observed
+$n>0$ times, the empirical optimum is its target mean, with expected
+squared residual sum $(n-1)D^2/4$. If $O_b$ is the number of occupied
+support points, the conditional expected total is
+$(b-O_b)D^2/4$. Each of the $M$ points is occupied with probability
+$1-(1-1/M)^b$. Taking expectations gives
+\eqref{eq:block-occupancy}. Independence of $Y$ and $U$ gives the
+population optimum $D^2/4$, attained by the constant $D/2$.
+\end{proof}
+
+The second example consists entirely of finite, hence compact, metric
+spaces. It rules out a distribution-free additive approximation rate
+depending only on $b$ and the target range over all such spaces. The
+support points can be $u_j=D e_j/(\kappa\sqrt2)$ in $\mathbb R^M$,
+where $e_j$ are the coordinate unit vectors. Their diameter is
+$D/\kappa$ for every $M\geq2$, so a bound on representation diameter
+alone does not remove this limitation. For fixed $b$,
+$\mathcal{W}_b/R^*_\kappa=b/(2M)+O(M^{-2})$ as $M\to\infty$.
+The
+first example shows why increasing block size can be necessary even on
+three fixed support points. Larger blocks address these losses, but do
+not make an uninformative certificate evidence of adequate representation.
+
+\subsection{Calibration and certified optimization values}
+
+Use disjoint blocks of $b$ independent calibration units, giving
+$K_b=\lfloor n/b\rfloor$ independent scores. This makes the effect of
+block size explicit: increasing $b$ tightens $\mathcal{W}_b$ but decreases the
+number of independently calibrated scores. The hierarchy therefore
+does not order finite-sample confidence endpoints.
+
+The quadratic program in \eqref{eq:block-witness} must be solved from
+below for a lower certificate. Write its inequalities as $Av\leq c$,
+where rows of $A$ are coordinate differences and
+$c_{ij}=\kappa d(U_i,U_j)$. For every nonnegative multiplier vector
+$\lambda$, weak duality gives the lower value
+\begin{equation}
+ d_b(\lambda)=\lambda^\top(AY-c)
+                       -\tfrac14\|A^\top\lambda\|_2^2
+ \ \leq\ \min_{Av\leq c}\|Y-v\|_2^2.
+ \label{eq:block-dual}
+\end{equation}
+This follows by minimizing
+$\|Y-v\|_2^2+\lambda^\top(Av-c)$ over $v$; its minimizer is
+$Y-A^\top\lambda/2$.
+Thus
+$\underline T_b=\max\{0,d_b(\lambda)/(b-1)\}\leq T_b$.
+A primal value alone has the wrong inequality direction. The
+implementation reports primal feasibility and the primal--dual gap;
+floating-point tolerances are numerical checks rather than proofs by
+verified arithmetic.
+
+\begin{corollary}[Independent-block lower calibration]
+\label{cor:block-calibration}
+Suppose the same fixed measurable procedure computes each score
+$\underline T_{b,k}\in[0,B_b^{\rm blk}]$ from block $k$, with
+$\underline T_{b,k}\leq T_{b,k}$, and $K_b\geq1$.
+For an allocated failure probability $\alpha\in(0,1)$ and $B_b^{\rm blk}>0$,
+let
+\begin{equation}
+ L_b=B_b^{\rm blk}\operatorname{kl}_-\!\left(
+       \frac{K_b^{-1}\sum_{k=1}^{K_b}\underline T_{b,k}}{B_b^{\rm blk}},
+       \frac{\log(1/\alpha)}{K_b}\right),
+ \label{eq:block-lower}
+\end{equation}
+where $\operatorname{kl}_-$ is defined in
+Appendix~\ref{app:kl-calibration}. Then
+$L_b\leq \mathcal{W}_b\leq R^*_\kappa$ with probability at least
+$1-\alpha$. If $B_b^{\rm blk}=0$, take $L_b=0$. A finite family of block
+sizes, representations, horizons, and comparison methods can be
+selected after calibration when the sum of their allocated failure
+probabilities is at most the declared total.
+\end{corollary}
+
+\begin{proof}
+The bounded-mean inequality \eqref{eq:kl-bounded-mean} gives
+$L_b\leq\mathbb E\underline T_{b,1}$ with failure probability
+at most $\alpha$. The pointwise score inequality and
+Theorem~\ref{thm:block-hierarchy} give
+$\mathbb E\underline T_{b,1}\leq \mathcal{W}_b\leq R^*_\kappa$.
+A union bound proves the finite-family assertion; different methods
+may reuse the same calibration observations.
+\end{proof}
+
+The empirical Bernstein radius can be substituted when $K_b\geq2$.
+Block sizes and optimization rules are fixed before calibration; taking
+the largest endpoint across a frozen family requires the stated joint
+allocation. This is distinct from multiplying the full-sample
+empirical-minimum endpoint in Appendix~\ref{app:erm-comparator} by
+$n/(n-1)$, which that endpoint's proof does not justify.
+
+\paragraph{Conditioning and forecasting origins.}
+For a common origin or stratum $A$, draw the $b$ observations independently
+conditional on $A$. The same proof gives a monotone hierarchy
+$\mathcal{W}_{b,A}\leq R^*_\kappa$. For finitely many values of $A$ and the
+compact-support conditions above, its limit is
+\[
+ \sum_a\Pr(A=a)\inf_{g\in\mathcal G_\kappa(d)}
+                 \mathbb E[(Y-g(U))^2\mid A=a],
+\]
+which can be strictly below the optimum of one shared decoder. The
+decoder attaining each conditional infimum may differ with $a$.
+Consequently, averaging a block score over common forecast origins
+preserves validity and monotonicity but does not generally establish
+convergence to the shared-decoder risk. For that consistency claim,
+one may instead draw an independent uniform origin in each independent
+episode; the resulting observations are independent draws from the full
+evaluation law. Neither construction treats overlapping windows as
+independent calibration units.

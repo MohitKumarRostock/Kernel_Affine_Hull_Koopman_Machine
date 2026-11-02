@@ -1,0 +1,172 @@
+\section{Convex fitting and a numerical optimality certificate}
+\label{app:optimization}
+
+This appendix derives the projection used to fit the decoder and a computable
+upper bound on its training-objective suboptimality. That optimization bound
+is distinct from the population prediction-risk certificate: one measures
+how accurately a finite training problem was solved, and the other evaluates
+forecasting error on new episodes.
+
+Let $N$ be the number of training windows and
+$p_s=\sum_{b=1}^sC_b$ the total number of retained feature coordinates. Write
+$F=[F_1,\ldots,F_s]\in\mathbb R^{N\times p_s}$ for the fixed feature
+matrix, where $F_b\in\mathbb R^{N\times C_b}$ contains block $b$.
+Let $\mathsf Y\in\mathbb R^{N\times q}$ contain the corresponding
+stacked targets, with $q=d_yH$ for $d_y$ output coordinates at each of
+$H$ horizons. Training windows may be dependent; optimization of this
+finite objective requires no independence assumption on its rows.
+
+With intercept $a\in\mathbb R^q$ and coefficient matrix
+$W\in\mathbb R^{p_s\times q}$, solve
+\begin{equation}
+ \min_{W,a}\frac1N\|\mathsf Y-\mathbf1_Na^\top-FW\|_{\rm F}^2
+                       +\lambda\|W\|_{\rm F}^2
+ \quad\text{subject to}\quad
+       \sum_{b=1}^s\|W_b\|_{\rm F}\leq\kappa.
+ \label{eq:training-program}
+\end{equation}
+Here $\mathbf1_N\in\mathbb R^N$ is the all-ones column vector,
+$W_b\in\mathbb R^{C_b\times q}$ contains the rows associated with
+$F_b$, $\lambda\geq0$ is the ridge coefficient, and $\kappa\geq0$ is
+the block-norm budget. The intercept is neither penalized nor constrained.
+The loss sums over output coordinates and horizons, then averages over
+training windows; there is no additional division by $H$ or $q$.
+Clipping is applied after fitting. Thus \eqref{eq:training-program}
+minimizes a convex objective before clipping, not the evaluated clipped
+empirical loss.
+
+Define the row means
+$\bar F=N^{-1}\mathbf1_N^\top F$ and
+$\bar{\mathsf Y}=N^{-1}\mathbf1_N^\top\mathsf Y$, and the centered
+matrices
+\[
+ F_c=F-\mathbf1_N\bar F,\qquad
+ \mathsf Y_c=\mathsf Y-\mathbf1_N\bar{\mathsf Y}.
+\]
+For fixed $W$, minimizing over the intercept gives
+$a^\top=\bar{\mathsf Y}-\bar F W$. Substituting this expression
+eliminates the intercept. With $I_{p_s}$ the $p_s\times p_s$ identity matrix,
+put
+\[
+ M=F_c^\top F_c/N+\lambda I_{p_s}\in\mathbb R^{p_s\times p_s},
+ \qquad C=F_c^\top\mathsf Y_c/N\in\mathbb R^{p_s\times q},
+ \qquad c=\|\mathsf Y_c\|_{\rm F}^2/N.
+\]
+The reduced objective and its gradient are
+\[
+ J(W)=\operatorname{tr}(W^\top M W)
+             -2\langle W,C\rangle_{\rm F}+c,
+ \qquad G(W)=\nabla J(W)=2(MW-C).
+\]
+The Frobenius inner product is
+$\langle A,B\rangle_{\rm F}=\operatorname{tr}(A^\top B)$.
+Since $M$ is positive semidefinite, $J$ is convex. Moreover,
+\[
+ \|G(W)-G(V)\|_{\rm F}
+ \leq2\|M\|_{\rm op}\|W-V\|_{\rm F},
+\]
+where $\|M\|_{\rm op}=\sup_{\|v\|_2=1}\|Mv\|_2$ is the operator
+norm. The implementation uses projected gradient steps with acceleration
+and monotone restarts. The following formulas assess feasibility and
+optimization accuracy without requiring a convergence-rate claim for
+that implementation.
+
+\begin{proposition}[Projection onto the block norm ball]
+\label{prop:block-projection}
+Let
+$\mathcal C_\kappa=\{W:\sum_b\|W_b\|_{\rm F}\leq\kappa\}$
+be the feasible coefficient set, and let $A\in\mathbb R^{p_s\times q}$
+have the same row-block partition as $W$. Define $a_b=\|A_b\|_{\rm F}$
+and let $\mathcal P_\kappa(A)$ denote the nearest matrix in
+$\mathcal C_\kappa$ in Frobenius norm. If
+$\sum_ba_b\leq\kappa$, then $\mathcal P_\kappa(A)=A$.
+Otherwise, for $\kappa>0$, choose the unique threshold
+$\theta\in(0,\max_b a_b)$ satisfying
+$\sum_b(a_b-\theta)_+=\kappa$. For $\kappa=0$, take
+$\theta=\max_b a_b$. The projection is
+\begin{equation}
+ \bigl[\mathcal P_\kappa(A)\bigr]_b
+ =\begin{cases}
+       (1-\theta/a_b)_+ A_b,& a_b>0,\\
+       0,& a_b=0.
+   \end{cases}
+ \label{eq:block-projection}
+\end{equation}
+In particular, $\mathcal P_0(A)=0$.
+For every feasible $W$, the objective gap satisfies
+\begin{equation}
+ 0\leq J(W)-J^*
+ \leq\mathcal D(W)
+ :=\langle G(W),W\rangle_{\rm F}
+                    +\kappa\max_b\|G_b(W)\|_{\rm F},
+ \label{eq:optimization-gap}
+\end{equation}
+where $J^*=\min_{V\in\mathcal C_\kappa}J(V)$ is also the optimum
+value of \eqref{eq:training-program}, and $G_b(W)$ is the row block of
+the gradient corresponding to $W_b$.
+\end{proposition}
+
+\begin{proof}
+For a block $B_b$ constrained to have Frobenius norm $v_b\geq0$,
+Cauchy--Schwarz gives
+\[
+ \|B_b-A_b\|_{\rm F}^2
+ =v_b^2+a_b^2-2\langle B_b,A_b\rangle_{\rm F}
+ \geq(v_b-a_b)^2.
+\]
+When $a_b>0$, equality is attained by taking
+$B_b=(v_b/a_b)A_b$. When $a_b=0$, the squared distance is $v_b^2$
+and its optimum has $v_b=0$. Thus matrix projection reduces to the scalar problem
+\[
+ \min_{v_1,\ldots,v_s\geq0}
+       \sum_{b=1}^s(v_b-a_b)^2
+       \quad\text{subject to}\quad\sum_{b=1}^s v_b\leq\kappa.
+\]
+If the original norms are feasible, the solution is $v_b=a_b$. If
+$\kappa=0$, the only feasible vector is zero. In the remaining case the
+budget constraint is active. A multiplier $2\theta$ for that constraint
+reduces each coordinate minimization to
+$\min_{v_b\geq0}(v_b-a_b)^2+2\theta v_b$, whose solution is
+$v_b=(a_b-\theta)_+$. The sum of these coordinates is continuous and
+strictly decreasing from $\sum_b a_b$ to zero as $\theta$ increases from
+zero to $\max_b a_b$, so the required threshold exists and is unique.
+Rescaling each nonzero block gives \eqref{eq:block-projection}.
+
+The feasible set is nonempty and compact, so continuity of $J$ ensures
+that $J^*$ is attained. For the objective gap, convexity gives, for every
+feasible $V$,
+\[
+ J(W)-J(V)\leq\langle G(W),W-V\rangle_{\rm F}.
+\]
+Also,
+\[
+ \langle G(W),V\rangle_{\rm F}
+ \geq-\sum_b\|G_b(W)\|_{\rm F}\|V_b\|_{\rm F}
+ \geq-\kappa\max_b\|G_b(W)\|_{\rm F}.
+\]
+The last value is attainable by assigning the entire budget to a block
+with largest gradient norm, in the direction opposite to that gradient
+(or by $V=0$ if the gradient is zero). Substitute an optimal $V$ in the
+convexity inequality to obtain \eqref{eq:optimization-gap}.
+\end{proof}
+
+The implementation records coefficient norms, the gap $\mathcal D(W)$,
+iteration count, and whether the requested gap tolerance was reached.
+These are floating-point diagnostics, not interval-arithmetic guarantees.
+The held-out risk certificate requires the returned model to satisfy the
+Lipschitz budget used in calibration; it does not require an optimal
+training solution.
+
+For a joint multihorizon fit, let $W_{b,h}$ be the columns of block $W_b$
+associated with the output at horizon $h$. Then
+\[
+ \sum_b\|W_{b,h}\|_{\rm F}
+ \leq\sum_b\|W_b\|_{\rm F}\leq\kappa,
+\]
+so the joint budget also bounds each horizon decoder's sensitivity.
+For scalar outputs, $W_{b,h}$ is the column corresponding to $h$ in the
+increasingly ordered horizon list, and its Frobenius norm is its Euclidean
+norm. Although the block constraint is invariant to exact
+feature duplication, the ridge term $\lambda\|W\|_{\rm F}^2$ is not:
+splitting coefficients among duplicate blocks changes that penalty.
+The duplicate-block optimization test therefore uses $\lambda=0$.

@@ -1,0 +1,122 @@
+\section{Exact-risk benchmark and centered comparator}
+\label{app:known-risk}
+
+This benchmark has an analytically known optimal risk and fitted-model risk,
+so certificate coverage can be checked without using a test estimate as
+population truth. Let $Z\in\{0,1\}$ be a Bernoulli state with
+$\Pr(Z=1)=p\in(0,1)$, and let the scalar target be $Y=2Z-1$.
+For a representation-separation parameter $a\in[0,1]$, use
+\[
+ \Phi_a(0)=\left((1+a)/2,(1-a)/2\right)^\top,\qquad
+ \Phi_a(1)=\left((1-a)/2,(1+a)/2\right)^\top.
+\]
+Both vectors lie in the two-coordinate probability simplex. Their Euclidean
+distance is $\sqrt2a$, whereas the target separation is $2$. For sensitivity
+budget $\kappa\geq0$, define the unexplained separation
+$c=(2-\kappa\sqrt2a)_+$. Proposition~\ref{prop:two-atom} then gives
+\[
+ R^*=p(1-p)c^2.
+\]
+Here $R^*$ denotes the minimum MSE over the benchmark's constrained
+predictors. The two target values, representation family, and support are
+specified in advance by the benchmark design.
+
+An independent training sample gives the empirical frequency
+$\widehat p$ of state $1$. We choose the constrained empirical-risk
+minimizer whose predictions at the two states are
+\begin{equation}
+ \widehat f(0)=-1+\widehat p c,
+ \qquad
+ \widehat f(1)=1-(1-\widehat p)c.
+ \label{eq:two-atom-fit}
+\end{equation}
+These values lie in $[-1,1]$ and have separation
+$2-c=\min\{2,\kappa\sqrt2a\}$. The affine construction in
+Proposition~\ref{prop:two-atom} therefore realizes them within the budget;
+when $a=0$, the two values coincide. If one state is absent from training,
+\eqref{eq:two-atom-fit} selects one feasible empirical minimizer using the
+predeclared support. This convention specifies the prediction even at an
+unobserved state.
+
+Conditional on the training sample, state $0$ has prediction error
+$-\widehat p c$, and state $1$ has error $(1-\widehat p)c$.
+Consequently the exact fitted population risk is
+\begin{equation}
+ R(\widehat f)
+ =c^2\{(1-p)\widehat p^2+p(1-\widehat p)^2\}
+ =R^*+c^2(\widehat p-p)^2.
+ \label{eq:two-atom-fitted-risk}
+\end{equation}
+For an independent pair of calibration states, the witness score equals
+$c^2/2$ when the states differ and zero otherwise. The mismatch probability
+is $2p(1-p)$, so the expected score is exactly $R^*$. With $n$ calibration
+observations, the pair lower bound uses $\lfloor n/2\rfloor$ disjoint
+pairs. An odd final observation is excluded from pairing but remains in the
+fitted-risk and centered statistics. The reported calibration sizes are all
+even.
+
+\paragraph{The centered comparator.}
+For comparison, apply a centered certificate based on the target and
+representation variances, with Euclidean distance and a single reference
+class. Let $Z_1,\ldots,Z_n$
+be independent calibration states, with $n\geq4$, and
+$\bar z=n^{-1}\sum_{i=1}^nZ_i$ their empirical frequency. The output and
+representation variances, computed with denominator $n$, are
+\[
+ \widehat s=4\bar z(1-\bar z),\qquad
+ \widehat t=2a^2\bar z(1-\bar z).
+\]
+Their population counterparts are
+$\sigma^2=4p(1-p)$ and $\tau^2=2a^2p(1-p)$.
+The population centered bound is
+$(\sigma-\kappa\tau)_+^2\leq R^*$, using nonnegative square roots.
+In this two-state benchmark the inequality is an equality.
+
+For a failure probability $\eta\in(0,1)$, define
+\begin{align}
+ r&=\log(2/\eta)/n,\nonumber\\
+ V_\eta&=(\widehat s-4\sqrt{r/2})_+,\nonumber\\
+ T_\eta&=\min\{1,\widehat t+\sqrt{2r}+1/n\},\nonumber\\
+ L^{\rm ctr}_\eta&=(\sqrt{V_\eta}-\kappa\sqrt{T_\eta})_+^2.
+ \label{eq:centered-comparator}
+\end{align}
+Here $V_\eta$ is a lower bound on $\sigma^2$, $T_\eta$ is an upper
+bound on $\tau^2$, and the superscript ``ctr'' identifies the centered
+risk bound. We show that $L^{\rm ctr}_\eta\leq R^*$ with probability
+at least $1-\eta$.
+
+First, $\mathbb E\widehat s=(1-1/n)\sigma^2\leq\sigma^2$, and
+changing one calibration observation changes $\widehat s$ by at most
+$4/n$. The bounded-differences inequality therefore gives
+\[
+ \widehat s-\mathbb E\widehat s\leq4\sqrt{r/2}
+\]
+with probability at least $1-\eta/2$. On this confidence event,
+$V_\eta\leq\sigma^2$.
+Second, changing one observation changes $\widehat t$ by at most $2/n$,
+so the same inequality gives
+\[
+ \mathbb E\widehat t-\widehat t\leq\sqrt{2r}
+\]
+with failure probability at most $\eta/2$. Since
+$\mathbb E\widehat t=(1-1/n)\tau^2$ and $\tau^2\leq1$,
+\[
+ \tau^2\leq\widehat t+\sqrt{2r}+\tau^2/n
+          \leq\widehat t+\sqrt{2r}+1/n.
+\]
+Capping the right side at one remains valid because $\tau^2\leq1$.
+A union bound gives $V_\eta\leq\sigma^2$ and
+$T_\eta\geq\tau^2$ jointly with probability at least $1-\eta$.
+The expression in \eqref{eq:centered-comparator} increases with its first
+variance argument and decreases with its second. Hence it is no larger
+than $(\sigma-\kappa\tau)_+^2\leq R^*$ on that event. The constant
+one is the general simplex-variance bound; it is conservative for this
+two-coordinate example.
+
+In each Monte Carlo trial, the fitted-risk upper bound, pair-witness lower
+bound, and centered lower bound each receive failure probability $\delta/3$.
+For the centered bound, setting $\eta=\delta/3$ splits that allocation
+between its two internal variance bounds. The three reported directions
+therefore hold jointly with probability at least $1-\delta$ within a
+trial. No joint $1-\delta$ event is asserted across all trials, grid
+conditions, or separately reported experiments.

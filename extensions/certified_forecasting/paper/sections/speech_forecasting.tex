@@ -1,0 +1,113 @@
+\section{Speech-energy forecasting with group-level calibration}
+\label{sec:speech}
+
+This second real-data domain tests whether a larger number of documented
+recording groups permits useful calibration. We use the official Mini Speech
+Commands subset \citep{warden2018speech,tensorflow2026mini}, with an eligibility
+rule, group split, observable, and model grid specified
+before downloading or inspecting the audio.
+
+\paragraph{Observable and sampling units.}
+Of 8000 source clips, 7178 have the prescribed mono, 16 kHz, signed 16-bit,
+exactly one-second format. They belong to 1630 filename identifiers, using the
+source convention before \texttt{\_nohash\_}. All clips from an identifier
+remain together. A fixed random permutation assigns 244 identifiers to
+training, 163 to validation, 978 to calibration, and 245 to testing. These
+contain 1159, 677, 4256, and 1086 clips, respectively. Identifiers denote
+recording sessions for web volunteers; they are not biometric confirmation
+of distinct people. Confidence statements assume iid group-record bundles
+and independence from development data. Identifier separation supports the
+evaluation design but does not establish that population sampling assumption.
+
+Each clip is divided into 100 nonoverlapping frames of 160 samples. For frame
+$t\in\{0,\ldots,99\}$ and sample index $j\in\{1,\ldots,160\}$,
+let $x_{tj}$ be the signed pulse-code modulation (PCM) amplitude divided by
+32768. The observed energy is
+\[
+ e_t=\frac{10\log_{10}\!\left(\max\left\{160^{-1}\sum_{j=1}^{160}
+ x_{tj}^2,10^{-6}\right\}\right)+60}{60}\in[0,1].
+\]
+The implementation clips numerical output to $[0,1]$. A frame is observed at
+its end, so this transformation uses no future samples. It represents power
+in decibels relative to full scale, floored at $-60$ dB. Multiplying normalized
+RMSE by 60 gives RMSE in dB for this floored observable, not waveform error
+or error in unfloored acoustic power. The source selects and quality-screens
+one-second recordings; our complete-clip eligibility further restricts the
+population. This is retrospective forecasting within released clips, without
+per-utterance normalization by future means, peaks, or extrema.
+
+Histories contain 4 or 12 frames, horizons are 1, 4, or 12 frames
+(10, 40, or 120 ms), and all candidates share origins $11,15,\ldots,87$.
+Losses average over origins and clips within each identifier, then weight
+identifiers equally. Thousands of clips and windows do not replace the
+978 independent calibration units assumed by the theorem.
+
+\paragraph{Development and calibration.}
+Three fitting seeds use the same group split. Each samples 4096 training
+histories with equal identifier probability and evaluates all validation
+groups with equal weights. The prespecified study compares 486 candidates per
+fit across eight
+families (Table~\ref{tab:speech}). The geometric families share prefix sizes
+$2,6,14,30$, standardization or raw inputs, budgets $1,4$, and ridge parameters
+$10^{-4},10^{-2}$. RBF and affine affinity multipliers are $0.25,1,4$;
+KAHM uses its inherited reconstruction. Conventional regression heads use
+ridge regularization without a coefficient-norm constraint; thus their
+comparison with the geometric heads does not control statistical capacity.
+Appendix~\ref{app:speech-protocol} specifies their complete grids. Every family
+has both histories. Selection
+minimizes validation MSE across horizons; all 24 selected models are frozen
+before held-out losses are evaluated.
+
+For each selected model and horizon, calibration gives one bounded loss in
+$[0,1]$ per identifier. The bounded-mean relative-entropy upper bound in
+Appendix~\ref{app:kl-calibration} uses tail probability $0.05/72$, covering
+all $3\times8\times3$ statements jointly. Prespecified tolerances of
+6, 12, and 18 dB are explicit resolution levels, not claimed application
+requirements. Model choices and calibration formulas remain fixed during
+held-out evaluation. Appendix~\ref{app:speech-protocol} describes the scoring
+order and its verification.
+
+\input{tables/speech_forecasting}
+
+\paragraph{Findings.}
+At 120 ms, mean test RMSE is 12.73 dB for KAHM, 12.51 for ridge AR,
+12.47 for quadratic regression, and 12.39 for Gaussian-kernel regression.
+The latter three also outperform KAHM at shorter horizons. KAHM improves
+on long-horizon persistence, whose mean is 14.70 dB. These are descriptive
+accuracy comparisons; no separately calibrated superiority claim is made.
+The displayed standard deviations describe fitting variation on the same
+245 test groups.
+
+All six learned families satisfy the all-horizon 18 dB upper criterion in
+all three fits. Persistence and the constant model do not; no family passes
+the all-horizon 6 or 12 dB criterion. Thus the larger calibration cohort can
+resolve a declared tolerance under the stated sampling model, while leaving
+tighter requirements unresolved. The experiment supports the certification
+procedure without establishing that its tolerance is sufficient for an audio
+application or that KAHM is the best forecaster. Shared geometry costs and inference times
+are archived separately and imply no general computational advantage.
+
+\paragraph{Input scaling on the same recording cohort.}
+A descriptive comparison evaluates standardization, raw energy histories,
+training min--max scaling to $[-1,1]$, and its clipped variant for all three
+geometric families. It retains the same observations, 4096 sampled training
+histories per seed, and decoder grids. Each transformation is fitted before
+the 1600-history geometry subsample. There are 2688 candidate fits in total;
+validation selects one model within each family, seed, and preprocessing arm.
+All 36 selections are frozen before test scoring. Because this analysis
+reuses the previously examined recording cohort, its results provide no
+independent confirmation or new risk certificate. Calibration groups are
+not scored in this comparison.
+
+\input{tables/speech_scaling}
+
+Table~\ref{tab:speech-scaling} shows that min--max scaling lowers KAHM's mean
+all-horizon MSE by $1.41\%$ relative to standardization, with lower MSE in
+each of the three fits. Raw energy histories nevertheless give lower KAHM
+MSE than either min--max variant in every fit. RBF min--max MSE decreases by
+$0.76\%$ with improvement in all three fits; affine-hull mean MSE increases
+by $0.24\%$, with improvement in only one fit. Clipped and unclipped results
+agree at the displayed precision. The ridge AR, quadratic, and
+Gaussian-kernel regressors from Table~\ref{tab:speech} retain lower test MSE
+than every KAHM scaling arm at every horizon and seed. These comparisons
+describe the specified implementations and the same 245 test groups.

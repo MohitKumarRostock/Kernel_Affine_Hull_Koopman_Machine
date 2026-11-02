@@ -1,0 +1,203 @@
+\section{Joint input-scaling and dimension-selection study}
+\label{supp:joint-selection}
+
+\paragraph{Completed evidence.}
+The source was published before production preparation. All 256 tasks
+and the independent computational audit have completed, and four
+of the six primary criteria are established. The full primary
+results appear in Table~\ref{supp:joint-primary}; this section retains
+the exact design, additional descriptive results, and verification
+scope.
+
+This separate follow-up preserves the G/P/K/R direct-readout
+architecture and the completed fixed-standardization experiment.
+Its protocol, configuration, and analysis are maintained under
+\path{extensions/soft_state_joint_selection_20261102}.
+The input transformations, local dimensions, and penalties are
+selected jointly using B, while all transformations and model
+coefficients are fitted on A. C is diagnostic only. No baseline,
+residual correction, calibration, or coordinate-propagation model
+is introduced.
+
+\paragraph{Exact scaling rules and candidate order.}
+The fifteen candidates iterate through standardization, min--max,
+and $\tanh$ of standardized histories, in that order, and then caps
+$1,2,4,8,12$ within each scaler. All input-transform statistics are
+fitted on the designated A matrix before bank subsampling.
+Min--max is $2(x_k-a_k)/(b_k-a_k)-1$ with A extrema $a_k,b_k$;
+constant A coordinates map to zero for every query. Subsequent
+queries are not clipped. Tanh uses A population mean and scale with
+the inherited small-scale rule, and there is no immediate
+restandardization of its output. Derived feature blocks are then
+standardized and bounded exactly as in the current architecture.
+This latter operation is distinct from restandardizing the input.
+
+For every candidate and horizon, each arm selects its own affine
+ridge penalty from $10^{-4},10^{-3},10^{-2},10^{-1},1$ on B.
+Candidate selection averages the resulting B losses equally over
+horizons after division by A-target population variances, floored
+at $10^{-12}$. First minima resolve ties at both stages. The selected
+states are kept without refitting on B. All controls share a bank
+within a candidate, but different scalers can change the partition
+and reference allocation.
+
+\paragraph{Four retained views.}
+Joint shared selection lets P choose one scaler/cap pair for all
+arms. Joint independent selection lets every arm choose its own
+pair. Standard-only shared and independent selection restrict the
+same fitted grid to its five standardization candidates. Each
+task therefore supplies sixteen logical forecast arrays from
+fifteen candidate banks. Exact prefix identities hold within a
+candidate, not between independently selected geometries.
+The paired standard-only comparison separates the effects of
+expanding the candidate menu from changes in the simulation cohort.
+
+\begin{table}[tbp]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\input{generated/joint_selection/aggregate_table}
+\caption{Mean SMSE in all four retained views of the joint-selection
+study. The nonlinear population equally weights its three laws and
+two noise conditions within each repetition; the linear population
+equally weights its two noise conditions. The displayed means
+average the 32 independent repetition aggregates. Each view uses
+the same fresh data and the same cached candidate fits.}
+\label{tab:joint-aggregate}
+\end{table}
+
+\paragraph{Data and inference.}
+The fixed design contains 32 new repetitions, four inherited laws,
+and two noise levels: 256 tasks. History width is 12, horizons are
+1, 4, and 12, origin stride is 4, and A/B/C/D contain
+64/32/32/128 independent episodes. A/B/C row caps are 512/256/256;
+all 1,664 D origins per task are scored. The new master seed is
+2026110204. Its 1,696 declared stream identities are checked
+against 8,957 predecessor records, including the completed
+soft-state experiment, before production generation. Pairing
+across scalers, caps, arms, views, and noise levels follows the
+same episode and fitting-stream definitions.
+
+The primary family has six contrasts: joint shared P/G, K/P,
+and K/R on the nonlinear population, joint shared K/P on the
+linear population, and independently joint-selected K versus
+standard-only independently selected K on each population.
+The nonlinear margins are 3\% superiority and the linear
+margins 5\% noninferiority. One-sided paired Student upper bounds
+use $t_{1-0.05/6,31}$ for all six tests. The 32 repetition aggregates,
+not individual origins or tasks, are the units of inference.
+All other comparisons are descriptive. Gains are ratios of
+population mean losses, not means of per-repetition ratios.
+
+\begin{table}[tbp]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\input{generated/joint_selection/primary_table}
+\caption{Complete six-comparison primary family. The first four
+comparisons use P's selected common bank. The last two compare
+independently selected K procedures on the identical cohort.
+Gain is positive when candidate mean loss is lower; $U$ is the
+simultaneous upper bound for the margin-adjusted paired difference.
+The criterion is established only when $U<0$.}
+\label{supp:joint-primary}
+\end{table}
+
+\paragraph{Primary interpretation and descriptive variation.}
+The shared-bank P/G and K/P nonlinear comparisons establish their
+3\% margins, whereas K/R does not. Both linear noninferiority
+criteria are established. The independently selected K comparison
+has a nonlinear point gain of \JSGainJointKNonlinear\% against
+standard-only K and does not establish its 3\% margin. In particular,
+the results do not establish the conjunction of the two direct
+tuning criteria. The larger menu weakly improves each arm's selected
+B score in the independent view and P's score in the shared view
+by construction. That inclusion argument supplies no corresponding
+ordering for G, K, or R on P's bank, or for any terminal loss.
+
+Table~\ref{tab:joint-law} reports the law-level point differences
+without simultaneous inference. Joint K improves its standard-only
+reference on the oscillators and worsens it on both autoregressive
+laws. On nonlinear repetition aggregates it wins 15 pairs and loses
+17; on the linear aggregates it wins none, ties 18, and loses 14.
+These counts describe paired outcomes and are not additional
+primary hypothesis tests. Likewise, the independently selected
+K/R comparisons describe complete procedures and cannot replace
+the failed shared-bank K/R criterion.
+
+\begin{table}[tbp]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\input{generated/joint_selection/descriptive_table}
+\caption{Descriptive law-level comparisons of independently selected
+procedures. Standard K selects its cap among the five standardized
+candidates; joint K and joint R select among all fifteen candidates.
+Gains use ratios of mean losses, with positive values favoring K
+in the indicated comparison. No law-level margin is established
+by this table.}
+\label{tab:joint-law}
+\end{table}
+
+\paragraph{Selected scalers and native caps.}
+Table~\ref{tab:joint-selection-frequency} summarizes the independent
+P, K, and R choices. For nonlinear K, standardization is selected
+in 91 of 192 tasks, min--max in 64, and tanh in 37. The corresponding
+linear counts are 48, 9, and 7 of 64. Selection of a nonstandard
+transform records a B preference, not proof of a terminal advantage
+for that transform. A cap limits native local dimensions; it is
+not the actual rank of every local model. Medians across tasks
+can also fall between grid entries: standard-only K's Duffing
+median cap is 3 because the middle observations are 2 and 4.
+No cap of 3 was fitted.
+
+\begin{table}[tbp]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\input{generated/joint_selection/selection_table}
+\caption{Independent joint selections by population and arm. Scaler
+counts sum to 192 nonlinear or 64 linear tasks per arm. Reported
+cap summaries concern selected upper bounds, not a common realized
+local rank. Frequencies are descriptive and use B alone.}
+\label{tab:joint-selection-frequency}
+\end{table}
+
+\paragraph{Verification scope.}
+Manufactured-only preflight checks compare standard-only behavior
+with the published model, independently reconstruct every scaler's
+A statistics and query transforms, verify shared block prefixes,
+native cap aliases, ridge and geometry selection, and portable-state
+roundtrips. A miniature staged fixture exercises the source freeze,
+publication requirement, global fitted-state and prediction seals,
+target release, and independent audit. These fixtures supply no
+scientific outcome evidence.
+
+The completed production audit passed \JSAuditChecks\ checks on
+all \JSTasks\ tasks. It independently reconstructed all
+76,800 B penalty-path forecast arrays, 4,096 selected C arrays,
+and 4,096 selected D arrays. Maximum absolute differences were
+$1.13\times10^{-10}$, $2.42\times10^{-12}$, and
+$6.28\times10^{-12}$ respectively. It verified the A-fitted
+input statistics, all fifteen candidates, native dimensions,
+shared-prefix identities, selections, standard-only references,
+stage and data rosters, and independently recomputed all six
+primary and 64 descriptive paired comparisons. There were
+\JSSolverRecoveries\ numerical solver recoveries.
+The declared general replay tolerances remained
+\texttt{rtol=2e-7}, \texttt{atol=2e-9}, with tighter checks where
+specified. The audit uses the saved fitted geometry and physical
+episodes; it does not independently refit partition k-means or
+reintegrate the physical laws. Computational replay is not
+independent scientific replication.
+
+\paragraph{Measured resource scope.}
+The core candidate-fitting records sum to \JSFitCpuMinutes\ CPU minutes and
+\JSFitWallSumMinutes\ worker wall minutes, with a median of
+\JSFitMedianSeconds\ wall seconds per task. The prediction-task
+records sum to \JSQueryWallSumMinutes\ worker wall minutes.
+These are sums over tasks, not elapsed end-to-end runtime.
+They cover the declared candidate search and shared computations;
+they do not isolate the cost of K or establish computational parity
+with R. Portable fitted states, all candidate B paths, selected C
+and D forecasts, raw episodes, and released targets are retained
+in the indexed numerical records. The main paper and this
+supplement compile from the included display assets without model
+fitting or these large archives.
+\FloatBarrier

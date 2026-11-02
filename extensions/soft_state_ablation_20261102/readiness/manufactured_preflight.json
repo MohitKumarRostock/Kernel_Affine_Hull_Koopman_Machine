@@ -1,0 +1,137 @@
+{
+  "created_utc": "2026-11-02T08:15:04.326549+00:00",
+  "fixture_root": "/tmp/kahm-softstate-preflight-20261102d/staged_fixture",
+  "independent_audit_in_this_receipt": false,
+  "production_data_used": false,
+  "production_generators_executed": false,
+  "schema": "kahm-soft-state-manufactured-preflight-v1",
+  "source_code_sha256": {
+    "artifacts.py": "8bacf1c61689fc4d402b46f043d47fc484bee71c7157f1f37ffb156f23711e6e",
+    "model.py": "4b4b220784957c0534553f580d83f39bc66d3f6fd9a5ff06dac83a3fa75f53fa",
+    "pipeline.py": "e7facecc5bc2afb106958250c6cd1b092f1639afdadad50cc955ef959a149b77",
+    "preflight.py": "51fbd5078cf842e36fbcce99e74bf788d4848c0f1d8afb423aa7f39ab1524a53"
+  },
+  "staged_checks": [
+    {
+      "exit_code": 0,
+      "log_sha256": "db040a76bb4e9ca1b45ae210d2b3c3cabc2ef937fca09fae05d9e8f42efce8a9",
+      "name": "freeze",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "47a19a65c01f25e04ebc81dea96decd9f0017064f3cdeae6109fe7b6b00226a3",
+      "name": "abc",
+      "status": "passed"
+    },
+    {
+      "exit_code": 1,
+      "log_sha256": "c1973f564f214e4d09ebf6c213de32563ff63addb20360985f507c621bd12690",
+      "name": "reject_D_before_fit_seal",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "6f3b85e5101df9830a813aee48917f12bcac7c9439f40ccf12078831ca88844a",
+      "name": "fit",
+      "status": "passed"
+    },
+    {
+      "exit_code": 1,
+      "log_sha256": "c1973f564f214e4d09ebf6c213de32563ff63addb20360985f507c621bd12690",
+      "name": "reject_D_after_fits_without_global_seal",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "0d001d6c0990011d309f81d471ad91f28f61748f992c9db794e7a56247a57121",
+      "name": "seal-fits",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "9f7b31b699340292e624d4d13653c71d467e6fce51def6ff6b7d34b91dd298b7",
+      "name": "d",
+      "status": "passed"
+    },
+    {
+      "exit_code": 1,
+      "log_sha256": "a34f4e5522e6c2171e097dbaa2bc5dd36730be561c337836d607f02bfd520ffa",
+      "name": "reject_scoring_before_prediction_seal",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "46a84fa01cae669e35eee9eba6939edceb249f93812172b2048ed9a2d9599672",
+      "name": "predict",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "4c52b811a1fafdbc94b3d3c7558da740b6f2cdfeba303c22fb82397016b05df9",
+      "name": "seal-predictions",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "2521ad70e56f793f84d6c457c3d863930a47afb144861f96489051151073f4b8",
+      "name": "release",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "8f571008a8d11874b092fa9721bc54f945394054267eb40888b296240f556791",
+      "name": "verify",
+      "status": "passed"
+    }
+  ],
+  "status": "passed",
+  "unit_checks": [
+    {
+      "all_B_alpha_predictions_bitwise_equal": true,
+      "name": "native_cap12_cap20_alias_at_history12",
+      "status": "passed",
+      "stored_ranks": [
+        12,
+        12
+      ]
+    },
+    {
+      "name": "actual_block_prefix_identity_and_partition_sums",
+      "status": "passed"
+    },
+    {
+      "maximum_absolute_prediction_difference": 3.503863865716994e-13,
+      "name": "independent_affine_ridge_normal_equation_and_B_paths",
+      "status": "passed"
+    },
+    {
+      "name": "shared_P_objective_and_independent_cap_choices",
+      "status": "passed"
+    },
+    {
+      "forecast_atol": 2e-12,
+      "forecast_rtol": 2e-12,
+      "maximum_absolute_forecast_difference": 1.0658141036401503e-14,
+      "name": "portable_state_exact_arrays_numerical_forecast_roundtrip_and_query_immutability",
+      "portable_array_count": 173,
+      "status": "passed"
+    },
+    {
+      "name": "native_zero_rank_empty_position_block_and_affine_intercept",
+      "status": "passed"
+    },
+    {
+      "name": "documented_svd_recovery_on_manufactured_exception",
+      "policy_id": "numpy-first-gesvd-on-linalgerror-v1",
+      "status": "passed"
+    },
+    {
+      "name": "publication_receipt_gate_artificial_metadata_only",
+      "production_preparation_called": false,
+      "remote_publication_claimed": false,
+      "status": "passed"
+    }
+  ],
+  "work_directory": "/tmp/kahm-softstate-preflight-20261102d"
+}

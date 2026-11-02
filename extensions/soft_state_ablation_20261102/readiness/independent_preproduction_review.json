@@ -1,0 +1,110 @@
+{
+  "checks_reviewed": {
+    "analysis_integrity": "Executing analyzer and frozen study files are hashed; fit and prediction seals bind ABC/D manifests; D binds complete fits/ABC; release binds fit/prediction/D identities before terminal scoring.",
+    "data_separation": "Geometry, input scaling, block scaling and coefficients use A; B selects penalties/caps; C is diagnostic-only after stored state; D generation follows complete fit seal and forecasts accept queries only.",
+    "dimension_policy": "Native min(cap,d,n_reference-1), with inherited reductions; cap20 duplicates12 at history12; no d-1 constraint introduced.",
+    "frozen_family": "P/G nonlinear, K/P nonlinear, K/R nonlinear at 3% superiority, K/P linear at 5% noninferiority; explicit analyzer/config agreement checks.",
+    "generator_and_source": "Inherited observation-law module validates its pinned generator manifest; local freeze records new and inherited source files; seed derivation checks intended-distinct identities and predecessor exclusions.",
+    "primary_estimand": "Shared cap selected by P on B; arm-specific B penalties; independent-cap view remains secondary. The primary comparison is conditional on this declared P-selected geometry.",
+    "primary_statistics": "32 independent repetition aggregates; equal horizons and law/noise cells; separate nonlinear and linear panels; four one-sided Bonferroni paired-t upper bounds with df 31; candidate minus factor times comparator; strict upper<0 decision.",
+    "publication_gate": "Production ABC/D preparation requires a receipt bound to exact freeze SHA, verified source flag, repository, branch, commit/tree identities and publication chronology; prepared manifests bind receipt SHA. Offline analyzer/audit also check publication bindings.",
+    "readout_target": "Direct horizon-specific affine ridge predicts the same observed future target; no raw-history baseline, residual target or calibration.",
+    "scope": "Underlying gates are product-simplex coordinates; standardized/radially transformed and enriched readout vectors need not be simplex-valued. No sufficiency, exact closure, rollout utility or general forecasting superiority is established before observing the new results.",
+    "shared_blocks": "At each cap one bank supplies all arms; transformed G is an exact prefix of P, and transformed P an exact prefix of K/R; separate fixed-block radial transforms preserve these identities."
+  },
+  "created_utc": "2026-11-02T08:21:19.882481+00:00",
+  "findings_resolved_before_review_completion": [
+    {
+      "finding": "Analyzer lacked executing-source and ABC-manifest-to-fit-seal validation.",
+      "id": "R1",
+      "resolution": "Added self/frozen-file validation, explicit manifest-to-seal hashes, prepared source links and D-to-fit/ABC links before target access.",
+      "verification": "Source inspection of the revised implementation."
+    },
+    {
+      "finding": "Local freeze alone did not enforce source publication before production generation.",
+      "id": "R2",
+      "resolution": "Added PUBLICATION.json gate and receipt-hash/chronology bindings in preparation, later manifest verification, analyzer and independent auditor. Protocol execution order updated.",
+      "verification": "Source inspection plus inspection of the passed artificial publication-gate test; actual remote publication remains the next operational step."
+    }
+  ],
+  "implementation_preflight": {
+    "production_data_used": false,
+    "reported_status": "passed",
+    "source_hash_matches": {
+      "artifacts.py": true,
+      "model.py": true,
+      "pipeline.py": true,
+      "preflight.py": true
+    },
+    "staged_checks": 12,
+    "unit_checks": 8
+  },
+  "independent_artificial_audit": {
+    "checks": 14130,
+    "executed_by_this_reviewer": false,
+    "maximum_absolute_D_replay_difference": 9.894307595459395e-13,
+    "reported_status": "passed",
+    "source_hash_matches": {
+      "analyze_soft_state.py": true,
+      "independent_oracle.py": true,
+      "preflight_statistics.py": true,
+      "verify_soft_state.py": true
+    },
+    "statistics_checks": 17,
+    "tasks": 8
+  },
+  "inspected_receipts_sha256": {
+    "audit/historical_precision.json": "389d9ef0268a7f0933daebacf7f959dafd15183acceb53ac6d2178ebf9b08a0c",
+    "audit/manufactured_audit_preflight_final.json": "70237d608600f68949fd88883d86b0aa6e673eba395f3f69968a523ee402f0c0",
+    "audit/preflight_statistics.json": "0a8644a4871026bac01b9e8b4077ee704b02204bdfb0d0a7f939b66adb78abfb",
+    "readiness/manufactured_preflight.json": "42a90629843717eec7a3f200f7f16f290a5e3bb600ca1591d470c2097c93fe5c"
+  },
+  "limitations": [
+    "Read-only source review and inspected artificial receipts cannot guarantee absence of runtime defects or validate unseen production results.",
+    "The full production publication/manifest chain is not executed on the two-repetition artificial fixture.",
+    "The paired-t analysis is an approximation for independent repetition means; historical precision illustrations do not establish power for the new gate-only comparison.",
+    "Fresh repetitions under known laws are new sampling units, not new application domains or an external replication."
+  ],
+  "production_data_accessed": false,
+  "production_generation_or_fitting_executed_by_reviewer": false,
+  "production_paths_at_review": {
+    "PUBLICATION.json": false,
+    "freeze.json": false,
+    "prepared": false,
+    "results": false
+  },
+  "remaining_operational_requirements": [
+    "Freeze the reviewed source, configuration and analysis before any production generation.",
+    "Publish and externally verify the frozen commit/tree and record the exact freeze-bound PUBLICATION receipt before ABC preparation.",
+    "Complete the fixed 256-task execution, staged seals, terminal analysis and independent production audit regardless of primary outcomes."
+  ],
+  "review_actions": [
+    "Read protocol, configuration, model and pipeline source",
+    "Inspect analyzer primary statistics and source/publication/manifest checks",
+    "Inspect selected inherited generator, seed, dimension-adapter and ridge-solver functions",
+    "Inspect final artificial implementation, statistics and independent replay receipts",
+    "Match receipt source hashes against current files",
+    "Parse reviewed Python sources without executing them"
+  ],
+  "reviewed_source_sha256": {
+    "PROTOCOL.md": "3aa6e345da1d44b0f60aa049e0234341d012539ddcc6109944faccf1fbb0c4be",
+    "analysis_code/ANALYSIS_CONTRACT.md": "1e9c21d753a7f863fc95e1e0a354fcbc00a7ab211100d5fa7de0560cf1558a0b",
+    "analysis_code/HISTORICAL_PRECISION.md": "975c7d556d61cc762418bba8219fdbea9f7bcf759c298885c11aeceea8c8386a",
+    "analysis_code/analyze_soft_state.py": "d34150b463e8ec7ee73413b47b55f63cf15ede3c507a865a318d9fc0939916b4",
+    "audit/verify_soft_state.py": "2cdf6f1b61fcd115a72c6f81987c3b7d63bb242226720798485b56aa3e2fc5aa",
+    "code/artifacts.py": "8bacf1c61689fc4d402b46f043d47fc484bee71c7157f1f37ffb156f23711e6e",
+    "code/model.py": "4b4b220784957c0534553f580d83f39bc66d3f6fd9a5ff06dac83a3fa75f53fa",
+    "code/pipeline.py": "e7facecc5bc2afb106958250c6cd1b092f1639afdadad50cc955ef959a149b77",
+    "config.json": "00529be5605f59d3d35ccc39fb823d791158b5e6fd0dbcafcfcfe9b78d617a76",
+    "readiness/prior_seed_exclusions.json": "a0fd5a2bcc704f8561e702b04158d81fb5cac2e7c2852d8bc4c70019bcc64c97"
+  },
+  "reviewer_role": "Separate assistant reviewer from implementation and analysis authors; internal review, not external scientific replication",
+  "schema": "kahm-soft-state-independent-preproduction-review-v1",
+  "scope_qualification": {
+    "analysis_code/analyze_soft_state.py": "Primary config, weighting, four contrasts, repetition units, source/manifest/publication gate, terminal normalization and reporting inspected; no production analyzer execution performed.",
+    "audit/verify_soft_state.py": "Selected source, publication, chronology and configuration bindings were inspected; the full independent numerical oracle was not line-reviewed in this review. Its execution evidence is reported only through the inspected receipt.",
+    "code/artifacts.py": "Append-only serialization and array hashing helpers inspected."
+  },
+  "status": "passed_within_stated_source_review_scope",
+  "unresolved_code_or_design_blockers_identified": []
+}

@@ -1,0 +1,96 @@
+{
+  "allowance_fraction_of_n24": 0.8507457301538216,
+  "allowance_per_paired_sd": 0.4164095764658054,
+  "critical_t": 2.3555682821599135,
+  "family_alpha": 0.05,
+  "family_size": 4,
+  "historical_illustrations": [
+    {
+      "historical_contrast": "selected_KAHM_vs_nonKAHM_policy",
+      "historical_margin_sd": 0.0006164804968002807,
+      "historical_reference_mean_smse": 0.027274720611215303,
+      "illustrative_80pct_margin_excess_percent_reference": 1.284462817244466,
+      "illustrative_n32_allowance_percent_reference": 0.9411952783357798,
+      "illustrative_n32_allowance_smse": 0.0002567083825720342,
+      "study": "preprocessing_dimension"
+    },
+    {
+      "historical_contrast": "selected_KAHM_vs_selected_RBF",
+      "historical_margin_sd": 0.0004358132702010258,
+      "historical_reference_mean_smse": 0.028292129119783228,
+      "illustrative_80pct_margin_excess_percent_reference": 0.8753814197457385,
+      "illustrative_n32_allowance_percent_reference": 0.6414392444423328,
+      "illustrative_n32_allowance_smse": 0.00018147681926258675,
+      "study": "preprocessing_dimension"
+    },
+    {
+      "historical_contrast": "tanh_KAHM_vs_standard_KAHM",
+      "historical_margin_sd": 0.0006410345570143302,
+      "historical_reference_mean_smse": 0.0282207796045169,
+      "illustrative_80pct_margin_excess_percent_reference": 1.290847508484657,
+      "illustrative_n32_allowance_percent_reference": 0.9458736864362113,
+      "illustrative_n32_allowance_smse": 0.00026693292838628245,
+      "study": "preprocessing_dimension"
+    },
+    {
+      "historical_contrast": "linear_selected_KAHM_vs_ridge",
+      "historical_margin_sd": 0.003006238900205723,
+      "historical_reference_mean_smse": 0.9116543463381683,
+      "illustrative_80pct_margin_excess_percent_reference": 0.18739404642856447,
+      "illustrative_n32_allowance_percent_reference": 0.13731373872322242,
+      "illustrative_n32_allowance_smse": 0.0012518266671896936,
+      "study": "preprocessing_dimension"
+    },
+    {
+      "historical_contrast": "P1_vs_P0_nonlinear",
+      "historical_margin_sd": 0.0002368278068629452,
+      "historical_reference_mean_smse": 0.02726838512983061,
+      "illustrative_80pct_margin_excess_percent_reference": 0.4935552543606326,
+      "illustrative_n32_allowance_percent_reference": 0.36165459113763504,
+      "illustrative_n32_allowance_smse": 9.861736675112457e-05,
+      "study": "policy_augmentation_20261101"
+    },
+    {
+      "historical_contrast": "P1_vs_P0plus_nonlinear",
+      "historical_margin_sd": 0.00032742162347994844,
+      "historical_reference_mean_smse": 0.027225020380295603,
+      "illustrative_80pct_margin_excess_percent_reference": 0.6834419771663327,
+      "illustrative_n32_allowance_percent_reference": 0.5007948484685445,
+      "illustrative_n32_allowance_smse": 0.00013634149955903173,
+      "study": "policy_augmentation_20261101"
+    },
+    {
+      "historical_contrast": "P1_vs_P0_linear",
+      "historical_margin_sd": 0.002109813466562243,
+      "historical_reference_mean_smse": 0.9139071372975609,
+      "illustrative_80pct_margin_excess_percent_reference": 0.13119113721587045,
+      "illustrative_n32_allowance_percent_reference": 0.09613083169816503,
+      "illustrative_n32_allowance_smse": 0.0008785465320330363,
+      "study": "policy_augmentation_20261101"
+    },
+    {
+      "historical_contrast": "P1_vs_P0plus_linear",
+      "historical_margin_sd": 0.002113034336379548,
+      "historical_reference_mean_smse": 0.9139365474760259,
+      "illustrative_80pct_margin_excess_percent_reference": 0.13138718725037127,
+      "illustrative_n32_allowance_percent_reference": 0.09627448814684728,
+      "illustrative_n32_allowance_smse": 0.0008798877330695118,
+      "study": "policy_augmentation_20261101"
+    }
+  ],
+  "limitations": [
+    "No historical gate-only variance estimate.",
+    "Historical procedures have raw-baseline and selection differences.",
+    "These illustrations do not validate power for the new representation-only estimands.",
+    "Fixed budget: no production-dependent extension or optional stopping."
+  ],
+  "n": 32,
+  "new_production_data_used": false,
+  "normal_model_individual_power_standardized_margin_excess_80": 0.5682801752475709,
+  "normal_model_individual_power_standardized_margin_excess_90": 0.6495143565640934,
+  "sources": {
+    "extensions/policy_augmentation_20261101/analysis/analysis_summary.json": "a0bf3226273454339247a2078166d8114be04efd7cc9e19d90e0dbed7cf7c473",
+    "extensions/preprocessing_dimension/analysis/analysis_summary.json": "b58944bd887fcd9ca96f56e8927378321ebfa0d1437c401ab5ee6c0b8678a735"
+  },
+  "status": "historical_only_fixed_budget"
+}

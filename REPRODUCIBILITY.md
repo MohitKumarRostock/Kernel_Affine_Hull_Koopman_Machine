@@ -1,10 +1,33 @@
 # Reproducing the KAHM forecasting studies
 
-This repository contains experiments with distinct source checkpoints, targets, comparison families, and computational environments. The current paper is under [papers/soft_state_forecasting/](papers/soft_state_forecasting/); the new representation study is under [extensions/soft_state_ablation_20261102/](extensions/soft_state_ablation_20261102/). The [research index](docs/RESEARCH_INDEX.md) separates current entry points from preserved earlier studies. Use the environment and execution guide for the study being reproduced; the root Python requirements belong to the original KAHKM architecture.
+This repository contains experiments with distinct source checkpoints, targets, comparison families, and computational environments. The current paper is under [papers/soft_state_forecasting/](papers/soft_state_forecasting/); the new joint-selection study is under [extensions/soft_state_joint_selection_20261102/](extensions/soft_state_joint_selection_20261102/). The [research index](docs/RESEARCH_INDEX.md) separates current entry points from preserved earlier studies. Use the environment and execution guide for the study being reproduced; the root Python requirements belong to the original KAHKM architecture.
 
-**Status: all 256 tasks, the frozen analysis, and the independent production audit are complete.** The scientific source is [commit `2b7d19b5`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/2b7d19b5b47f46b5b21b28d24960688f7969d96f). The [audit receipt](extensions/soft_state_ablation_20261102/verification/independent_audit_summary.json) records verification coverage and limits. Three of four primary criteria are established; the KAHM-versus-RBF superiority margin is not.
+**Joint-selection status: all 256 production tasks, the frozen analysis, and the independent production audit are complete.** The scientific source is [commit `8e025027`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/8e0250279074aefa39079fa33205d3c74f835848). The analysis and audit establish four of six criteria. The [complete results](extensions/soft_state_joint_selection_20261102/RESULTS.md) identify the completed evidence and the passed independent verification.
 
-## Current G/P/K/R representation ablation
+## Current joint scaling and native-dimension selection
+
+The [publication receipt](extensions/soft_state_joint_selection_20261102/PUBLICATION.json) records actual source commit `8e0250279074aefa39079fa33205d3c74f835848`, tree `1946da072f230244ad92795f9517ef89d1f06487`, and branch `research/kahm-soft-state-joint-selection-2026-11-02`. All 19 extension file identities matched the approved source, and the public commit tree matched the reviewed tree. Publication was verified before production preparation. The separate local reviewed commit is retained as provenance and is not substituted for the actual publication.
+
+The fixed experiment contains 32 new independent repetitions, 256 tasks, 15 scaler/cap candidates, and 16 forecast views/arms per task. Standard-only views reuse the same standard candidate fits on this cohort. All fitted states were sealed before D generation, and all predictions were sealed before target release and scoring. The [complete analysis](extensions/soft_state_joint_selection_20261102/analysis/analysis_summary.json) contains 4,096 terminal forecast arrays and 23 CSV tables, with source and phase digests. Its SHA-256 is `1345429169d0bd263d17a54fb469718a768a0be218db18059b0084176d2421e9`.
+
+Four shared-bank structural comparisons and the two independent joint-versus-standard K comparisons comprise one six-criterion family. The frozen analysis establishes shared nonlinear P/G and K/P superiority and both linear noninferiority criteria. Neither shared K/R superiority nor independent K joint-tuning superiority is established. Independent K/R, per-law comparisons, and selection-frequency summaries remain descriptive. This family is separate from every predecessor study.
+
+Use the [study README](extensions/soft_state_joint_selection_20261102/README.md), its pinned requirements, and the [reporting/restoration guide](extensions/soft_state_joint_selection_20261102/reporting/README.md). Preserve the original numerical records. After restoring complete records, reanalysis and independent replay use new output paths:
+
+```bash
+python extensions/soft_state_joint_selection_20261102/code/pipeline.py verify
+python extensions/soft_state_joint_selection_20261102/analysis_code/analyze_soft_state.py \
+  --output /tmp/KAHM_Joint_Selection_Reanalysis
+python extensions/soft_state_joint_selection_20261102/audit/verify_soft_state.py \
+  --analysis /tmp/KAHM_Joint_Selection_Reanalysis \
+  --output /tmp/KAHM_Joint_Selection_Replayed_Audit.json
+```
+
+The [independent production audit summary](extensions/soft_state_joint_selection_20261102/verification/independent_audit_summary.json) records 7,422,883 passed checks across all 256 tasks. It independently refits and replays all 76,800 B penalty-path arrays and replays every selected C and D forecast, 4,096 arrays on each split. It verifies all six primary bounds, A-fitted scaler statistics, retained histories and targets, local references, native dimensions, and kernel identities. No numerical solver recoveries occurred. Maximum absolute forecast differences are 1.127675730572264e-10 on B paths, 2.4236168627567167e-12 on C, and 6.276451580689013e-12 on D, within frozen tolerances of relative 2e-7 and absolute 2e-9. The [full compressed receipt](extensions/soft_state_joint_selection_20261102/verification/independent_audit.json.gz) restores exact JSON with SHA-256 `8ba3931c3e705838d9f3ec924f374b8cb9e492aa6f90803684412d8151a9c89c` and binds the exact analysis digest above.
+
+Physical-law integration and partition k-means fitting are not independently reimplemented. Manufactured-data checks are separate implementation evidence. This internal numerical audit is not external scientific replication. Stage seals and publication record procedural order; they are not public preregistration or cryptographic target isolation. Reusing the declared seeds reproduces this sample, without adding independent repetitions. Fresh realizations of the inherited laws do not create new application domains.
+
+## Predecessor standard-only G/P/K/R representation ablation
 
 The published source is identified by [PUBLICATION.json](extensions/soft_state_ablation_20261102/PUBLICATION.json): commit `2b7d19b5b47f46b5b21b28d24960688f7969d96f`, published on 2 November 2026 at 09:20:24 UTC. All 25 published study-file identities were checked against the exact local source. The receipt binds source publication to the local freeze before production preparation. All 256 A/B-fitted task states were sealed before D generation; terminal forecasts were sealed before scoring. The complete analysis contains 2,048 task/view/arm forecast arrays, 32 independent repetition aggregates and 17 CSV tables. The independent production audit has passed all 256 tasks. Primary comparisons share a P-selected bank; independently selected caps are secondary. The four-criterion family does not pool earlier repetitions or natural-series observations.
 
@@ -163,7 +186,7 @@ Selected-state replay compares predictions using relative tolerance `1e-10` and 
 | Same-seed computational reproduction | A newly retained execution follows the same source, design and simulation streams; it adds no independent sampling evidence and does not authenticate unavailable earlier outputs. |
 | External replication | A separate research team reproduces or independently tests the scientific findings. This is not claimed by the repository's internal checks. |
 
-A successful checksum or replay does not, by itself, validate a scientific interpretation. The manuscript supplies the assumptions, comparison design and inferential scope needed to interpret the verified outputs. The earlier six-comparison dimension family, each follow-up family, and the new ablation family remain separate. A favorable secondary result does not replace an unmet primary criterion.
+A successful checksum or replay does not, by itself, validate a scientific interpretation. The manuscript supplies the assumptions, comparison design and inferential scope needed to interpret the verified outputs. The earlier six-comparison dimension family, each follow-up family, the four-comparison standard-only ablation, and the new six-comparison joint-selection family remain separate. A favorable secondary result does not replace an unmet primary criterion.
 
 ## Other forecasting studies
 
@@ -210,6 +233,6 @@ The outputs are `main.pdf` and `supplement.pdf` in that directory. GitHub retain
 
 The preserved [earlier manuscript guide](extensions/tmlr_integration/README.md), [historical build guide](extensions/tmlr_integration/manuscript/README_BUILD.md), and [coordinated release record](extensions/tmlr_integration/review/COORDINATED_MANUSCRIPT_RELEASE.json) describe the earlier edition. Its source remains at `extensions/tmlr_integration/manuscript/`; it is not the current build entry point.
 
-Manuscript reporting changes do not alter frozen study code, configurations, protocols, analyzers, numerical records, or phase seals. The G/P/K/R ablation is a separate completed execution and analysis under published frozen source; its independent production audit has passed. Historical packaging utilities and saved-forecast verifiers retain their original schemas. Document builds and numerical audits are distinct evidence, and TMLR review formatting makes no claim of submission or acceptance.
+Manuscript reporting changes do not alter frozen study code, configurations, protocols, analyzers, numerical records, or phase seals. The standard-only G/P/K/R ablation retains its completed execution and passed independent audit. The new joint-selection follow-up has completed its frozen analysis and passed its independent production audit. Historical packaging utilities and saved-forecast verifiers retain their original schemas. Document builds and numerical audits are distinct evidence, and TMLR review formatting makes no claim of submission or acceptance.
 
-The completed four-arm results and computational audit were published and hash-verified in [commit `65ecf679`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/65ecf679796cc38b2342e2a4c12fa0226dc9ac78), separately from the frozen scientific source and manuscript edition.
+The predecessor four-arm results and computational audit were published and hash-verified in [commit `65ecf679`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/65ecf679796cc38b2342e2a4c12fa0226dc9ac78), separately from that study's frozen scientific source and manuscript edition.

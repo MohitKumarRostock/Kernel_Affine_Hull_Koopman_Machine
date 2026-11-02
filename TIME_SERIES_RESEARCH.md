@@ -1,20 +1,47 @@
 # Evidence on geometry-induced forecasting representations
 
-The [current manuscript](papers/soft_state_forecasting/) studies geometry-induced soft-state abstractions and their predictive enrichment. This guide separates the new representation ablation from the previously completed forecasting studies. The [research index](docs/RESEARCH_INDEX.md) maps their files; the [reproducibility guide](REPRODUCIBILITY.md) explains their computational evidence.
+The [current manuscript](papers/soft_state_forecasting/) studies geometry-induced soft-state abstractions and their predictive enrichment. This guide separates the new joint scaling/dimension study, its predecessor representation ablation, and the earlier forecasting studies. The [research index](docs/RESEARCH_INDEX.md) maps their files; the [reproducibility guide](REPRODUCIBILITY.md) explains their computational evidence.
 
-**Status: all 256 tasks, the frozen analysis, and the independent production audit are complete.** The scientific source is [commit `2b7d19b5`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/2b7d19b5b47f46b5b21b28d24960688f7969d96f). The [audit receipt](extensions/soft_state_ablation_20261102/verification/independent_audit_summary.json) records verification coverage and limits. Three of four primary criteria are established; the KAHM-versus-RBF superiority margin is not.
+**Joint-selection status: all 256 production tasks, the frozen analysis, and the independent production audit are complete.** The published scientific source is [commit `8e025027`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/8e0250279074aefa39079fa33205d3c74f835848). The analysis and audit establish four of six primary criteria. The KAHM-versus-RBF and joint-versus-standard 3% margins remain unestablished. The [complete report](extensions/soft_state_joint_selection_20261102/RESULTS.md) retains all comparisons and current verification status.
 
 A deterministic transformation cannot add information to its input, although it can make a predictive relationship easier for a restricted decoder to express. The completed studies support conditional feature and residual-correction value on the studied synthetic laws. A general KAHM-specific advantage over independently tuned alternatives or a complete forecasting selection policy has not been established.
 
-## Current question: memberships, position, and reconstruction enrichment
+## Current joint selection and same-cohort comparison
+
+The [joint-selection study](extensions/soft_state_joint_selection_20261102/) evaluates 32 fresh repetitions under four inherited laws and two paired noise levels, for 256 tasks. It selects among A-fitted standardization, min-max, and tanh input transforms crossed with native caps 1, 2, 4, 8, and 12. B chooses penalties and scaler/cap pairs. C remains diagnostic and D remains the final evaluation. Standard-only views restrict selection to exactly the same cached standard candidates on the same cohort, so the tuning question does not depend on a comparison with an earlier study's sample mean.
+
+The six primary comparisons form one Bonferroni-adjusted, one-sided paired-t family across 32 repetition aggregates, with 31 degrees of freedom. Four contrasts share a P-selected joint bank; two compare independently selected joint K with standard-only K. Other independently selected comparisons, including K/R, remain descriptive.
+
+| Primary comparison | Panel | Relative gain | Prescribed criterion | Established by analysis |
+| --- | --- | ---: | --- | --- |
+| Shared P versus G | Nonlinear | 68.69% | 3% superiority | Yes |
+| Shared K versus P | Nonlinear | 8.86% | 3% superiority | Yes |
+| Shared K versus R | Nonlinear | -0.9186% | 3% superiority | No |
+| Shared K versus P | Linear | -1.26% | 5% noninferiority | Yes |
+| Independent joint K versus standard-only K | Nonlinear | 0.0727% | 3% superiority | No |
+| Independent joint K versus standard-only K | Linear | -0.2491% | 5% noninferiority | Yes |
+
+Sources: [primary contrasts](extensions/soft_state_joint_selection_20261102/analysis/primary_contrasts.csv) and [analysis summary](extensions/soft_state_joint_selection_20261102/analysis/analysis_summary.json). The passed independent audit confirms the complete numerical analysis. Negative gain denotes higher loss. The two passing noninferiority criteria do not assert improved mean accuracy.
+
+The shared-bank nonlinear means are G 0.09377669, P 0.02935955, K 0.02675882, and R 0.02651524. Local position and KAHM enrichment improve their prescribed controls, but the matched RBF arm has lower mean loss than K. With independent joint selection, K has mean loss 0.02621031 versus R's 0.02599175, or 0.8409% higher loss; this comparison is descriptive. Same-cohort standard-only independent K has mean loss 0.02622938. The 0.0727% joint-tuning gain does not establish the prespecified 3% improvement. See [panel losses](extensions/soft_state_joint_selection_20261102/analysis/panel_summary.csv).
+
+### Descriptive tuning effects and choices
+
+Independent K's per-law joint-versus-standard gain is -0.4884% on nonlinear AR, 0.2269% on Van der Pol, 0.5176% on Duffing, and -0.2491% on linear AR. On the nonlinear aggregate it wins 15 repetition pairs and loses 17. On the linear aggregate it wins none, ties 18, and loses 14. No per-law primary claim was declared, and these counts do not replace the simultaneous bounds. Sources are the [condition means](extensions/soft_state_joint_selection_20261102/analysis/condition_summary.csv) and [optimization summary](extensions/soft_state_joint_selection_20261102/analysis/optimization_summary.csv).
+
+Independent K chooses standard/min-max/tanh on 91/64/37 of the 192 nonlinear task cells and on 48/9/7 of the 64 linear task cells. Its median selected native caps are 4 for nonlinear AR, 1 for Van der Pol, 2 for Duffing, and 8 for linear AR. These are task-cell frequencies and cap summaries, not independent replications or realized ranks of all local models. The [selection records](extensions/soft_state_joint_selection_20261102/analysis/selection_by_task.csv) retain every choice. Joint selection contains the standard-only menu and therefore cannot worsen its selector's B objective. Lower validation loss does not guarantee lower D loss, and the finite menu is not global optimization.
+
+The [independent production audit](extensions/soft_state_joint_selection_20261102/verification/independent_audit_summary.json) passed 7,422,883 checks over every task, with all 76,800 B penalty-path arrays independently refitted/replayed and all 4,096 C and 4,096 D arrays replayed. It independently confirms the six primary bounds and recorded no numerical solver recoveries. Physical-law integration and partition k-means fitting are outside its independent reimplementation scope. This verification establishes computational agreement within the declared tolerances, not external scientific replication.
+
+## Predecessor standard-only ablation: memberships, position, and enrichment
 
 The evaluated locality gates are nonnegative and sum to one within each reference partition. Their collection lies in a product of simplices. Gate-weighted principal coordinates retain within-region position; KAHM or matched RBF departures add signed observables. The enriched descriptor is not simplex-valued. Shared memberships do not make the two reconstruction maps identical, and distinct raw feature spans do not establish forecasting superiority.
 
-The new [soft-state ablation](extensions/soft_state_ablation_20261102/) has completed its fixed budget of 32 fresh repetition units and 256 tasks under the same four simulation laws, with horizons 1, 4, and 12. Four arms compare memberships (G), memberships plus local position (P), P plus KAHM departures (K), and P plus matched RBF departures (R), predicting the same external observations. The frozen analysis is complete, and the independent production audit has passed. Primary P-selected shared-bank comparisons have their own four-criterion family; independently selected banks are secondary.
+The predecessor [soft-state ablation](extensions/soft_state_ablation_20261102/) completed its separate budget of 32 fresh repetition units and 256 tasks under the same four simulation laws, with horizons 1, 4, and 12. Four arms compare memberships (G), memberships plus local position (P), P plus KAHM departures (K), and P plus matched RBF departures (R), predicting the same external observations. Its frozen analysis and independent production audit are complete. Its primary P-selected shared-bank comparisons retain their four-criterion family; independently selected banks in that study are secondary.
 
-This design addresses a gap in the earlier studies: their common feature block already included local position, so it was not a membership-only control. The new study can distinguish the contribution of position from the incremental contribution of reconstruction. A successful readout would still not establish a sufficient Markov state or an autonomous soft-coordinate evolution model. The companion score-normalized KAHM abstraction uses a different membership map.
+That design addressed a gap in the earlier studies: their common feature block already included local position, so it was not a membership-only control. The ablation distinguishes the contribution of position from the incremental contribution of reconstruction. A successful readout would still not establish a sufficient Markov state or an autonomous soft-coordinate evolution model. The companion score-normalized KAHM abstraction uses a different membership map.
 
-### Four-arm primary results
+### Preserved four-arm primary results
 
 The shared-bank nonlinear mean SMSEs are G **0.09887034**, P **0.03045071**, K **0.02726601**, and R **0.02727398**. Relative gains use the ratio of the corresponding mean losses.
 
@@ -100,7 +127,8 @@ Each study retains its original decision rule. Passing a baseline comparison, no
 ## Access and manuscript provenance
 
 - [Current paper and editable source](papers/soft_state_forecasting/)
-- [New G/P/K/R study and execution status](extensions/soft_state_ablation_20261102/)
+- [Joint-selection results and execution status](extensions/soft_state_joint_selection_20261102/)
+- [Preserved standard-only G/P/K/R results](extensions/soft_state_ablation_20261102/RESULTS.md)
 - [Historical coordinated manuscript edition](extensions/tmlr_integration/README.md)
 - [Mathematical definitions and derivations](extensions/reconstruction_mechanism/MATHEMATICAL_BACKGROUND.md)
 - [Complete principal results](extensions/dimension_forecasting/FINDINGS.md)
@@ -113,10 +141,10 @@ Each study retains its original decision rule. Passing a baseline comparison, no
 - [Historical coordinated document release](extensions/tmlr_integration/review/COORDINATED_MANUSCRIPT_RELEASE.json)
 - [Earlier Koopman result provenance](reproduction/reported_results.tsv)
 
-The canonical paper directory holds the current main manuscript, supplementary studies, individual editable files and build instructions. The revision places the completed four-arm analysis alongside retained earlier findings, whose full protocols and comparison families remain in their study records and supplementary material. Generated displays have separate study namespaces and retain their evidence identities. The new ablation has its own complete cohort and analysis; its independent production audit has passed. Reorganizing the paper does not modify the frozen procedures or outcomes of previous experiments.
+The canonical paper directory holds the current main manuscript, supplementary studies, individual editable files and build instructions. The joint-selection analysis and its independent audit are complete; the build guide records manuscript verification. The completed predecessor ablation and earlier findings retain their full protocols, comparison families, and evidence. Generated displays use separate study namespaces. Reorganizing the paper does not modify the frozen procedures or outcomes of previous experiments.
 
 The dimension-study records and historical fixed-cap saved-forecast archive have distinct scopes, as specified in their study guides. The editable source preserves required author-identifying license attribution and is distributed separately from the anonymous review files. The documents' TMLR formatting does not claim submission or acceptance.
 
 KAHM is the local reconstruction used in the forecasting representations. KAHKM is the earlier Koopman architecture. The distinction is maintained throughout the result documentation.
 
-The completed four-arm results and computational audit were published and hash-verified in [commit `65ecf679`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/65ecf679796cc38b2342e2a4c12fa0226dc9ac78), separately from the frozen scientific source and manuscript edition.
+The predecessor four-arm results and computational audit were published and hash-verified in [commit `65ecf679`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/65ecf679796cc38b2342e2a4c12fa0226dc9ac78), separately from that study's frozen scientific source and manuscript edition.

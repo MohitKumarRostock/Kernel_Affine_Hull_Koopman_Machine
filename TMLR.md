@@ -1,15 +1,9 @@
 # Manuscript and review materials
 
-The article is **Local Position and Reconstruction Features for Forecasting: A Matched Study of Kernel Affine Hull Machines**. Its source is in [papers/local_position_forecasting/](papers/local_position_forecasting/). It presents a matched representation comparison, two raw-span propositions with proofs, and explicit limits on KAHM-specific forecasting claims.
+The current article is **Predictive Enrichment of Geometry-Induced Soft-State Abstractions: Information Retention and Decoder Access**. Its [source directory](papers/score_enrichment/) contains the article, focused supplement, complete primary tables, and build inputs.
 
-The main article includes the complete four-comparison primary family. The supplementary material contains the simulation laws, numerical construction, all descriptive comparisons, a bounded-feature ridge calculation, related studies, and a reproducibility specification. Earlier comprehensive editions remain available through the [research index](docs/RESEARCH_INDEX.md).
+The title describes the scientific question. KAHM is identified in the abstract and method as the principal reconstruction construction, with affine and positive-kernel controls. The paper distinguishes information retention, fitted prediction, and exact dynamical closure. It makes no universal forecasting or autonomous-closure claim.
 
-## Scientific interpretation
+Review formatting does not assert submission or acceptance. The public source preserves identifying license and provenance information and is not an anonymous supporting-code archive. Authors remain responsible for comparing the exact other-venue manuscript and supplement, preparing permitted anonymous review materials, checking authorship and disclosures, and confirming the stated evidence availability.
 
-The principal result is the value of local position and conditional reconstruction enrichment for a specified affine readout. The experiment does not establish KAHM superiority over matched RBF. Its failed comparison, nonlinear-autoregression deterioration, linear point-loss increase, and unfavorable related policy results remain visible. The paper does not claim state-of-the-art forecasting, a sufficient Markov state, autonomous Koopman propagation, or dimensionality reduction.
-
-## Format and attribution
-
-The manuscript uses the unmodified TMLR style and anonymous author fields. The default review header is a formatting convention, not evidence of submission or acceptance. The public repository is attributed and contains identifying licenses and source metadata. A review code archive must be prepared separately rather than assuming this public repository or author package is anonymous.
-
-Authors remain responsible for checking current TMLR policies, overlap with prior or concurrent manuscripts, funding and conflict disclosures, author agreement, and the suitability of the anonymous supporting materials. Editorial fit and a complete evidence trail do not guarantee acceptance.
+The original numerical source and results have separate identities from this publication. [REPRODUCIBILITY.md](REPRODUCIBILITY.md) documents the difference between the published subset, the author-delivered compact scientific package, and the unavailable complete numerical-archive set. A successful document build is not a model replay or an external scientific replication.

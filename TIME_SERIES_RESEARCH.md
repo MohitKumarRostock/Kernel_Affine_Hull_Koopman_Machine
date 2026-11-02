@@ -1,27 +1,13 @@
-# Forecasting evidence and scientific scope
+# Interpretation of the forecasting evidence
 
-The central study asks whether an affine ridge decoder benefits from local position and reconstruction departures when all representations predict the same observed future response. It evaluates G (memberships), P (memberships plus local principal coordinates), K (P plus KAHM departures), and R (P plus matched positive-kernel RBF departures).
+The central result concerns predictive enrichment, not a universal ranking of reconstructions. With independently validation-selected procedures, KAHM-local improves KAHM-memberships in six of eight law–decoder cells. Normalizer enrichment improves three. Against affine-local, KAHM-local has one resolved advantage and four resolved disadvantages. Against positive-kernel-local it has three resolved linear-decoder advantages, but every nonlinear-decoder comparison is unresolved.
 
-## Supported conclusion
+On Van der Pol with the nonlinear decoder, KAHM-local has mean SMSE 0.002145667, compared with 0.005660276 for raw input, 0.002200870 for affine-local, and 0.002146480 for positive-kernel-local. The raw and affine comparisons resolve; the positive-kernel comparison does not. On Duffing, the same nonlinear procedure is worse than raw and affine-local. Linear autoregression favors affine-local and raw input under both decoders. All ten nonlinear-autoregression primary comparisons are unresolved under the prescribed mean-difference intervals.
 
-At a common bank selected by P on validation data, P reduces nonlinear mean loss by 69.201% relative to G, and K reduces it by 10.459% relative to P. Both prescribed 3% margins are established in the four-comparison family. K's 0.029% point improvement over R does not establish the KAHM-specific superiority margin. Its linear loss is 1.111% higher than P while satisfying the 5% noninferiority criterion.
+The family consists of 40 two-sided Bonferroni paired-Student intervals, with 64 repetition units per law. No practical or equivalence margin is specified. Skewed paired differences, including the normalizer comparison on nonlinear autoregression, limit the reliability of a Gaussian/Student approximation. The complete differences, sign counts, extrema, and deletion diagnostics are retained rather than used to select a different inferential method.
 
-These are conditional results for the complete fitted procedure. Separate block transformations preserve common coordinates, but feature nesting does not ensure that finite-sample test loss decreases. The common-bank choice is asymmetric: P selects the bank. Independently selected banks describe a different procedure, with slightly lower nonlinear mean loss for R than for K. Neither the small point difference nor an unsuccessful superiority test establishes equivalence.
+Information retention and finite-decoder access are distinct. Memberships plus partition log normalizers recover full scores in exact arithmetic; local coordinates recover the input under positivity and a full-rank stack condition. Neither identity guarantees good numerical conditioning or a useful fitted forecast. Matched raw reconstruction spans can coincide even when reconstruction formulas differ. Those raw-span statements do not transfer automatically through nonlinear scoring and distinct memberships.
 
-The reconstruction benefit also varies across laws and horizons. K worsens P on nonlinear autoregression at both noise levels; the aggregate nonlinear gain is concentrated at horizon 12. The simulation laws were used in earlier research, so fresh repetitions are not new application domains. The natural-data policy study does not supply a direct real-data validation of this four-arm procedure.
+The secondary common-cap view is selected by affine-local linear ridge. Five point orderings reverse relative to independent selection. Its favorable results cannot substitute for unfavorable or unresolved primary results. Same-bank score/normalizer comparisons are descriptive tests of decoder parameterization, not claims that one member has more information.
 
-## What the theory establishes
-
-KAHM and positive-kernel RBF can have equal augmented raw spans under reference invariance. A specified irregular reference geometry separates those spans. The proof concerns exact reconstruction maps, not query fallback or nonlinear block transformations. An invertible coordinate change can change an isotropic ridge penalty, so equal spans do not force equal fitted predictors. Distinct spans do not establish lower risk.
-
-The generic bounded-feature ridge result controls coefficient and correction magnitudes. It is not a forecast-accuracy theorem, and it does not establish stable recursive rollout. The experiments use direct observed-output readouts rather than autonomous coordinate propagation. No Markov sufficiency, Koopman invariance, or compression claim is made.
-
-## Related findings
-
-The [research index](docs/RESEARCH_INDEX.md) and focused supplement retain the dimension, preprocessing, residual-target, policy-augmentation, and natural-data results. In particular, the selected non-KAHM policy is stronger than KAHM in the dimension study; the fresh policy study fails both nonlinear superiority margins; and KAHM augmentation worsens aggregate loss by 2.273% in the descriptive natural-data panel. Those results constrain broader utility claims even though the matched representation comparison is positive.
-
-Computational regeneration of the original residual-study units adds no independent observations. Primary and secondary comparison families remain separate within each study. No pooled significance statement is constructed from the collection of experiments.
-
-## Verification and availability
-
-The retained computational audit provides independent calculations for selected numerical steps, not external scientific replication. Saved-loss arithmetic can be checked from the compact manuscript evidence. Full model replay requires the separately indexed arrays; full simulation regeneration requires the complete frozen source and its dependencies. [REPRODUCIBILITY.md](REPRODUCIBILITY.md) specifies these routes and their limits.
+The [research index](docs/RESEARCH_INDEX.md) preserves the separate controlled, residual, and policy evidence, including the unfavorable natural-series result. The current evaluation has no new real-data domain, autonomous transition fit, or empirical Koopman-closure verification. Claims about Markov sufficiency, recursive stability, universal superiority, and efficient deployment remain unsupported by this study.

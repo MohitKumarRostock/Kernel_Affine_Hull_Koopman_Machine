@@ -1,0 +1,38 @@
+\section{Results}\label{sec:results}
+\subsection{Enrichment and matched controls answer different questions}
+Table~\ref{tab:decisions} displays every primary decision, and Table~\ref{tab:means} gives the local-feature and raw-input losses. The supplement reports all 40 adjusted intervals and all representation means, including memberships, normalizers, and full scores. The counts of resolved comparisons are a description of this family, not a prespecified omnibus success statistic.
+
+Local-position enrichment reduces KAHM membership-only mean loss in six of eight law--decoder cells. The two nonlinear-autoregression comparisons remain unresolved. Normalizer enrichment reduces mean loss in three cells: both Van der Pol decoders and Duffing with linear ridge. Its other comparisons remain unresolved. These results concern independently selected complete procedures, so their gains include changes in selected caps and decoder settings.
+
+The reconstruction controls substantially narrow the interpretation. KAHM-local has lower loss than affine-local in one cell, higher loss in four, and unresolved ordering in three. Against positive-kernel-local, it has lower loss in three linear-decoder cells and unresolved ordering in the other five. In particular, none of the four nonlinear-decoder KAHM/positive-kernel comparisons resolves the ordering. Against raw inputs, three comparisons favor KAHM, three favor raw inputs, and two remain unresolved.
+
+\begin{table}[t]
+\centering\small\setlength{\tabcolsep}{3.6pt}
+\caption{Complete primary decision family. ``Lower'' and ``Higher'' indicate that the adjusted interval for candidate minus reference mean SMSE is wholly negative or positive. ``Unresolved'' is not equivalence. The candidate is KAHM-local except in Norm/Mem, where it is KAHM-normalizer. Mem, Aff, Pos, and Raw denote KAHM-memberships, affine-local, positive-kernel-local, and raw input. All entries use independent validation selection and 64 repetitions within the named law.}\label{tab:decisions}
+\input{tables/decisions}
+\end{table}
+\begin{table}[t]
+\centering\small\setlength{\tabcolsep}{4.4pt}
+\caption{Terminal mean SMSE for local encodings and raw inputs under independent selection. Lower is better. The nonlinear decoder has 64 Gaussian Nystr\"om landmarks and retains its linear input. Mean ordering alone does not give the adjusted decisions in Table~\ref{tab:decisions}.}\label{tab:means}
+\input{tables/local_means}
+\end{table}
+
+\subsection{A favorable setting and its limits}
+On Van der Pol with the nonlinear decoder, KAHM-local has mean SMSE 0.002145667, compared with 0.005660276 for raw histories and 0.002200870 for affine-local features. The gains of 62.09\% and 2.51\% have adjusted intervals below zero in absolute-loss units. Positive-kernel-local has mean SMSE 0.002146480. Its approximately 0.038\% difference from KAHM is unresolved. The large raw-input improvement is therefore not evidence of a similarly large KAHM-specific benefit.
+
+The linear-decoder comparison illustrates why no single reconstruction ranking follows. On Van der Pol, KAHM-local has 12.79\% lower mean loss than positive-kernel-local, but 22.95\% higher loss than affine-local. Both adjusted comparisons resolve their respective directions. Beating one reconstruction control does not establish that KAHM is the best construction. Neither this contrast nor the nonlinear result is a separately tested representation-by-capacity interaction.
+
+\subsection{Adverse outcomes and uncertainty}
+On Duffing with the nonlinear decoder, KAHM-local has 22.96\% higher mean loss than raw input and 20.17\% higher loss than affine-local; both comparisons resolve in the unfavorable direction. On linear autoregression, affine-local and raw input outperform KAHM-local with both decoders. All ten primary nonlinear-autoregression comparisons remain unresolved.
+
+The latter result is not a statement that the procedures behave identically. For nonlinear autoregression with the nonlinear decoder, normalizer enrichment is worse than memberships in 63 of 64 repetitions, yet the adjusted interval for the mean difference contains zero. The difference sequence has a large adverse observation and substantial dispersion. Conversely, local enrichment improves on memberships in 61 repetitions but its adjusted mean-loss interval is also unresolved. Sign counts concern frequency of improvement; the primary intervals concern the mean difference. No observation was trimmed, and no sign test or alternative interval replaced the specified analysis. The skewed differences make its approximation-based coverage a substantive limitation. The complete differences and sensitivity summaries are supplied.
+
+\subsection{Selection and information-equivalent encodings}
+Five of the 40 point orderings reverse between independent selection and the secondary common-cap view. The latter is conditional on a bank chosen for affine-local linear ridge and carries no additional inferential family. A favorable secondary ordering cannot rescue an unsuccessful primary comparison. For example, the nonlinear Duffing KAHM/positive-kernel point ordering changes sign, while its independently selected comparison remains unresolved.
+
+At the same reconstruction and cap, the full-score and normalizer-enriched encodings determine one another by Proposition~\ref{prop:normalizer}. Their fitted predictions nevertheless differ. The supplement reports all 24 same-bank mean differences across the three reconstructions, four laws, and two decoders. This comparison illustrates decoder access under different parameterizations; it does not establish that one member of an information-equivalent pair contains more information. Independently selected caps can change the score map itself and do not support the same interpretation.
+
+\subsection{Numerical behavior and computational scope}
+The observed stacked local bases have full numerical column rank in 254 of 256 cap-two banks and all cap-four, cap-eight, and cap-twelve banks. No cap-one stack has full column rank. These checks concern the specified numerical tolerance and sampled banks, not uniform inverse conditioning. Across all evaluated queries, the smallest recorded memberships are of order $10^{-44}$ for KAHM and $10^{-46}$ for positive-kernel reconstruction. Thus exact positivity should not be confused with a useful numerical lower bound.
+
+The retained computational audit checks all 256 tasks, independently refits 843,264 candidate ridge heads, replays 62,464 C/D forecast arrays, and recomputes all primary statistics. The maximum absolute discrepancy in its independent B forecasts is $3.84\times10^{-8}$ under componentwise tolerances $2\times10^{-7}$ relative and $2\times10^{-9}$ absolute. The audit shares the feature encoder and native routines and does not independently reimplement the generators or clustering. It is computational verification, not external replication. Supplement Sections~S2 and S4 specify its scope, numerical recoveries, underflow diagnostics, and complete-search resource measurements.

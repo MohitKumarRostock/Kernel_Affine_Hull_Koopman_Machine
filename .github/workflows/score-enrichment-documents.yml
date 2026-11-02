@@ -1,0 +1,47 @@
+name: Score-enrichment document build
+on:
+  push:
+    branches:
+      - paper/geometry-induced-soft-state-enrichment-2026-11-02
+    paths:
+      - 'papers/score_enrichment/**/*.tex'
+      - 'papers/score_enrichment/*.tex'
+      - 'papers/score_enrichment/*.bib'
+      - 'papers/score_enrichment/*.bbl'
+      - 'papers/score_enrichment/*.sty'
+      - 'papers/score_enrichment/*.bst'
+      - 'papers/score_enrichment/scripts/*.py'
+      - 'papers/score_enrichment/PUBLICATION_MANIFEST.json'
+      - '.github/workflows/score-enrichment-documents.yml'
+permissions:
+  contents: write
+concurrency:
+  group: score-enrichment-document-build
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out the exact public manuscript commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = 'MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine'
+          git init .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git -c protocol.version=2 fetch --filter=blob:none --depth=1 origin "$GITHUB_SHA"
+          git sparse-checkout init --cone
+          git sparse-checkout set papers/score_enrichment
+          git checkout --detach FETCH_HEAD
+          python3 papers/score_enrichment/scripts/publish_documents.py --verify-inputs
+      - name: Install document-build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-publishers lmodern poppler-utils
+      - name: Compile both documents without running experiments
+        run: python3 papers/score_enrichment/scripts/build.py
+      - name: Publish only the two PDFs and document-build receipt
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 papers/score_enrichment/scripts/publish_documents.py --publish

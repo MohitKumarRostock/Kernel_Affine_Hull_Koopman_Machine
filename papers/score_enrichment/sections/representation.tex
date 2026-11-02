@@ -1,0 +1,55 @@
+\section{Reconstruction-score representations}\label{sec:representation}
+\subsection{Inputs, notation, and reference geometry}
+Let $(y_t)$ be a scalar observed series and let $x_t=(y_{t-d+1},\ldots,y_t)^\top\in\R^d$ be the available history. The target is $y_{t+h}$ for a positive horizon $h$ in a finite set $\mathcal H$. A single representation supplies separately fitted coefficients for these direct forecasts. A, B, C, and D denote disjoint episode sets used for training, validation, diagnostic evaluation, and terminal evaluation, respectively. No claim that a finite observed history is a Markov state is assumed.
+
+Vectors are columns; $\top$ denotes transpose. The symbols $\|\cdot\|_1$ and $\|\cdot\|_2$ denote the sum of absolute coordinates and the Euclidean norm; $\|\cdot\|_F$ is the Frobenius matrix norm. Logarithms are natural. Also, $I_n$ is the $n$-dimensional identity matrix, and $\mathbf1_n$ is the all-ones vector. The operator $\col$ stacks its arguments. Let $z\in\R^d$ be an A-standardized history, using population-divisor standard deviations and replacing a scale at most $10^{-12}$ by one.
+
+There are $B_0$ reference partitions. Partition $b$ contains local model indices $\mathcal J_b$, with disjoint index sets across partitions, and the total number of local models is $J=\sum_b|\mathcal J_b|$. Model $j$ contains $n_j$ reference histories $q_{ji}\in\R^d$ as the rows of $Q_j\in\R^{n_j\times d}$. Its mean is $\mu_j$, and $P_j\in\R^{d\times r_j}$ contains orthonormal principal directions. References and partitions use A only and are fixed before changing the dimension cap. For cap $c$, the requested rank starts at $\min\{c,d,n_j-1\}$. Native positive-variance and projected-range rules can reduce this request; $r_j$ always denotes the actual stored rank. There is no extra $d-1$ restriction. The supplement specifies the numerical rank policy and its rank-zero case.
+
+\subsection{Three matched reconstructions}
+For positive rank, let $S_j$ be the sample covariance of $P_j^\top q_{ji}$, with divisor $n_j-1$. The retained positive-variance directions make $S_j$ positive definite. Define
+\begin{equation}
+\kappa_j(z,z')=\exp\left(-\frac{[P_j^\top(z-z')]^\top S_j^{-1}[P_j^\top(z-z')]}{2r_j}\right).
+\label{eq:kernel}
+\end{equation}
+Let $k_j(z)\in\R^{n_j}$ contain the similarities to the references and let $G_j$ be their Gram matrix. A positive regularizer $\lambda_j$ is fitted to reference reconstruction on A, without response targets. Write $C_j=(G_j+\lambda_j I_{n_j})^{-1}$. The reconstruction rules are
+\begin{align}
+\mathcal A^K_j(z)&=\frac{Q_j^\top C_jk_j(z)}{\mathbf1_{n_j}^\top C_jk_j(z)},&
+\mathcal A^R_j(z)&=\frac{Q_j^\top k_j(z)}{\mathbf1_{n_j}^\top k_j(z)},\label{eq:reconstructions}\\
+\mathcal A^A_j(z)&=\mu_j+P_jP_j^\top(z-\mu_j).\nonumber
+\end{align}
+Here K denotes KAHM, R denotes positive-kernel reconstruction, and A denotes affine projection. Their reference histories and bases are matched at a fixed cap; K and R also share the projected Gaussian metric. KAHM weights sum to one when their denominator is nonzero, but can be negative. They are not the soft memberships defined below.
+
+The implementation subtracts the maximum log-kernel entry before exponentiation. This common rescaling leaves the exact normalized quotient unchanged and prevents complete row underflow. A signed-denominator guard requires $|\mathbf1^\top C_jk_j|/\|C_jk_j\|_1\geq10^{-10}$ when the latter norm is nonzero. A declared invalid query uses the affine reconstruction and recomputes its score; it does not set the score to zero. Rank-zero models use $\mu_j$ for all rules. These safeguards define the evaluated numerical map. The exact raw-span analysis concerns the quotient where it is defined, without fallback.
+
+\subsection{Scores and soft memberships}
+For reconstruction rule $m\in\{K,R,A\}$, let $a=\mathcal A^m_j(z)$. Define the radial discrepancy $e_j^m(z)=1-\exp(-\|z-a\|_2)$ and angular discrepancy $\theta_j^m(z)=\pi^{-1}\arccos(\clip(c(z,a),-1,1))$, where
+\[
+ c(z,a)=\begin{cases}z^\top a/(\|z\|_2\|a\|_2),&\|z\|_2\|a\|_2>0,\\0,&\text{otherwise},\end{cases}
+ \qquad \clip(u,l,v)=\min\{v,\max\{l,u\}\}.
+\]
+The reconstruction score is
+\begin{equation}
+ T_j^m(z)=\sqrt{\bigl(e_j^m(z)^2+\theta_j^m(z)^2\bigr)/2}\in[0,1].
+\label{eq:score}
+\end{equation}
+This radial-and-angular score follows the KAHM soft-coordinate construction \citep{KumarKargaran2026Limits}. It is not a forecast error. In particular, its angle is defined relative to the standardized origin. Exact nonzero reconstruction has score zero, while exact reconstruction at $z=0$ has score $1/(2\sqrt2)$ under the stated zero-norm convention.
+
+For fixed $\tau>0$ and $\omega>0$, normalize separately in each partition:
+\begin{equation}
+ Z_b^m(z)=\sum_{j\in\mathcal J_b}(1-T_j^m(z)+\tau)^\omega,\qquad
+ \phi_j^m(z)=\frac{(1-T_j^m(z)+\tau)^\omega}{Z_b^m(z)},\qquad
+ \zeta_b^m(z)=\log Z_b^m(z).
+\label{eq:memberships}
+\end{equation}
+The concatenation $\phi^m$ lies in $\prod_b\Delta_{|\mathcal J_b|}$, where $\Delta_q=\{v\in\R^q:v_i\geq0,\ \mathbf1_q^\top v=1\}$. These memberships describe relative reconstruction affinities, not posterior regime probabilities. Each rule supplies its own scores and memberships. Forcing the three rules to share memberships would remove part of the effect under investigation.
+
+\subsection{Four encodings and a raw-input control}
+Let $T^m=\col_j T_j^m$ and $\zeta^m=\col_b\zeta_b^m$. At a fixed reconstruction and bank, define
+\begin{align}
+ \Gamma^m_{\Mem}(z)&=\phi^m(z),&
+ \Gamma^m_{\Norm}(z)&=\col(\phi^m(z),\zeta^m(z)),\nonumber\\
+ \Gamma^m_{\Loc}(z)&=\col\!\left(\phi^m(z),\{\phi_j^m(z)P_j^\top(z-\mu_j)\}_{j=1}^J\right),&
+ \Gamma^m_{\Score}(z)&=T^m(z).\label{eq:encodings}
+\end{align}
+Their widths are $J$, $J+B_0$, $J+\sum_jr_j$, and $J$, respectively. The standardized history $\Gamma_{\mathrm{raw}}(z)=z$ is a separate control. Enrichment does not retain a hidden raw-history forecast, fit residual targets, or apply a calibrated correction. Only $\Gamma_{\Mem}$ has the product-of-simplices interpretation. The normalizer and local encodings need not be nonnegative or normalized.

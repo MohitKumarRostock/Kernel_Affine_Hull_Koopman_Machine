@@ -1,0 +1,44 @@
+\section{Related controlled and forecasting evaluations}\label{sup:related}
+The following studies address related questions with different populations, rank policies, encodings, or readouts. They informed the central design but contribute no observations to its 64-repetition confidence family. Complete records remain in study-specific research archives. A favorable result in one procedure does not repair an unfavorable result in another.
+
+\subsection{A target intervention with fixed inputs and geometry}
+Let $S$ take $-1$ and $1$ with equal probability, let $T\sim U[-1,1]$, and let $\epsilon\sim U[-0.1,0.1]$, independently. For curvature $c\in\{0,1\}$ and mixture weight $\gamma\in\{0,1/2,1\}$, set
+\[
+ X=(T,\ c\cos(\pi T)+0.5S)^\top,\qquad
+ Y_\gamma=\sqrt{1-\gamma}\,S+\sqrt{3\gamma}\,T+\epsilon.
+\]
+Within a repetition and curvature, changing $\gamma$ leaves the inputs, noise values, and fitted geometry unchanged. The predictable signal has variance one and the observation-noise variance is $1/300$. The target changes from branch identity to signed position without changing those variances.
+
+For straight branches ($c=0$), the recorded affine reconstruction is almost exact, but its score memberships nearly preserve the reflection $(x_1,x_2)\mapsto(-x_1,x_2)$. A representation exactly invariant to this reflection cannot encode the sign of $T$. Symmetry gives $\E[T\mid\Gamma(X)]=0$; hence a position component with variance $\gamma$ is lost in squared-error prediction even when branch identity is retained. The fitted numerical representation is only approximately invariant, so its measured reflection discrepancy is a diagnostic rather than a population certificate.
+
+The complete six branch contrasts in that study compare affine and KAHM memberships. With $c=0$ and $\gamma=0$, their reported MSEs are 0.003334 and 0.003347; at $\gamma=1/2$ they are 0.503448 and 0.013995; at $\gamma=1$ they are 1.002694 and 0.024668. With $c=1$, the corresponding pairs are 0.282887/0.281126, 0.160813/0.165207, and 0.062366/0.051042. A separate locality-aware affine score gives 0.004641 in the straight-branch position case, showing that useful position information is not exclusive to KAHM. Local-coordinate controls also restore predictive access. The complete original 29-comparison family, including forecasting and static-regression controls, is preserved in the predictive-geometry archive; its intervals are not reinterpreted as members of the central family.
+
+\subsection{Finite decoder capacity with constrained local ranks}
+A separate follow-up uses 24 fresh repetitions for each of three nonlinear laws, 64- and 256-landmark nonlinear decoders, and score-based local features. Its local rank is constrained by $\min(2,d-1,n_j-1)$, unlike the validation-selected native dimensions of the central study. The reference partitions request 2, 4, and 8 groups. Its normalization, query-underflow handling, and fitted-head conventions also differ; a same-sample stabilization analysis is descriptive rather than a new independent cohort.
+
+Table~\ref{sup:capacity} retains all twelve primary capacity comparisons. The difference is control MSE minus KAHM MSE, so positive values favor KAHM, the opposite sign from the central candidate-minus-reference convention. Each interval is $\bar D\pm t_{23,1-0.05/(2\cdot12)}s_D/\sqrt{24}$, with critical value 3.18066309590. A practical benefit requires its lower endpoint to exceed the study's fixed positive margin. An unfavorable interval lies below zero. The family has four practical-benefit results, six unfavorable comparisons, and two unresolved signs. The margins and population are specific to that study; they are not used in the central experiment.
+
+At 256 landmarks on Van der Pol, raw, affine-local, and KAHM-local mean MSEs are 0.001654150, 0.001078003, and 0.000871969. KAHM's point gains are 47.3\% and 19.1\%. Both raw-input comparisons on nonlinear autoregression favor raw inputs, and all four Duffing control comparisons favor the controls. Thus the favorable Van der Pol results coexist with adverse outcomes in the same complete family. Their different capacities do not by themselves constitute a primary statistical interaction test.
+
+\begin{table}[htbp]\centering\small\setlength{\tabcolsep}{3pt}
+\caption{Complete 24-repetition capacity family. Improvement, interval endpoints, and margins are multiplied by $10^3$. Positive improvement favors KAHM-local. These are MSEs from a different procedure, not the central SMSE estimand.}\label{sup:capacity}
+\input{tables/related_capacity}
+\end{table}
+\FloatBarrier
+
+\subsection{A different gate-and-departure experiment}
+A four-arm representation study uses center-distance gates G, adds gate-weighted local coordinates to form P, and appends KAHM or matched positive-kernel reconstruction departures to form K or R. It does not use the score memberships studied here. Its 32 independent repetitions yield 256 law/noise tasks. The primary bank is selected by P, and all four arms use direct affine ridge heads. Its one-sided four-comparison family asks for 3\% nonlinear superiority or 5\% linear noninferiority.
+
+The nonlinear P/G gain is 69.201\%, the nonlinear K/P gain 10.459\%, and the nonlinear K/R gain 0.029\%. The first two specified margins are established; the third is not. Linear K loss is 1.111\% higher than P while satisfying the 5\% tolerance. The failed K/R margin is not equivalence. These results isolate local position and departure enrichment under their chosen gate map. They are not a direct confirmation of the reconstruction-score hierarchy or an autonomous propagation test.
+
+\subsection{Residual, policy, and natural-series evaluations}
+A validation-selected dimension study uses 24 repetition units and 192 law/noise tasks, retains a raw-history ridge forecast, and fits geometric features to residual targets with C calibration. Its six-criterion family establishes KAHM margins over common features and raw-input RBF and establishes linear noninferiority. It does not establish the margins over selected positive-kernel departures, histogram gradient boosting, or a selected non-KAHM policy. Its KAHM nonlinear mean SMSE is 0.028912; the joint six-criterion requirement is not met.
+
+A separate preprocessing-and-dimension study has 24 fresh repetitions and one established criterion out of four, namely linear noninferiority. Its primary nonlinear comparisons with independently selected positive-kernel reconstruction and a non-KAHM policy are unfavorable in mean loss. A residual-target computational reproduction regenerates the original 24 prescribed units with prior outcome knowledge and no new independent cohort; two of its four criteria are established. It cannot authenticate missing original execution records merely because its own calculations pass verification.
+
+The fresh policy-augmentation study uses 24 repetitions and 192 tasks. Its base policy selects among ten non-KAHM families; one enlarged policy adds a centered KAHM correction and another adds a centered raw-history Nystr\"om correction. Adding KAHM lowers nonlinear mean loss by 0.816\% against the base policy and 0.658\% against the added-RBF policy, but neither specified 3\% margin is established. Both linear noninferiority criteria are met. Equal added search counts do not guarantee equal feature width or computation.
+
+The natural-series policy evaluation uses 24 Weekly and 24 Hourly M4 training series, excludes pilot identifiers, and does not use official M4 Test data \citep{M4DataSnapshot2026}. A/B/C/D are chronological blocks with separated targets. Its aggregate SMSE is 0.127612 for the base policy and 0.130512 after KAHM augmentation, an increase of 2.273\%. Only three decisions change: one improves terminal loss and two worsen it. Shared unknown series sources preclude treating all series as independent source replications, and no independence-based confidence interval is assigned. This descriptive result is not a test of the central 26-procedure design.
+
+\subsection{Scope of the research archive}
+Supervised input-metric geometry, directly trained reconstruction parameters, scaling changes, and online adaptation remain separate development investigations. Their targets, reference updates, and numerical conventions differ from the score-based direct-readout experiment. They are not treated as evidence that learned KAHM soft coordinates have Markov sufficiency or exact Koopman closure. The research index preserves their source locations, limitations, unsuccessful configurations, and study-specific records without pooling their observations. The separation between fixed-abstraction certification \citep{KumarKargaran2026Limits} and external-target representation evaluation is maintained throughout.

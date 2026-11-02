@@ -1,0 +1,42 @@
+\section{Observation laws, data allocation, and random streams}\label{sup:generators}
+The central study contains 64 independent repetitions of four numerical observation laws. A task is one law and repetition. Each task supplies independently generated training (A), validation (B), diagnostic (C), and terminal (D) episode sets. All compared procedures receive the same observations and retained windows in that task. There is no added measurement-noise sweep beyond the innovations and sensor noise specified below.
+
+\subsection{Autoregression}
+Let $u_t$ be the scalar observation at integer time $t$. In the linear law, $u_0=u_1=0$ and
+\[
+ u_t=0.65u_{t-1}-0.15u_{t-2}+\epsilon_t,\qquad
+ \epsilon_t\stackrel{\mathrm{iid}}\sim N(0,0.1^2),\quad t\geq2.
+\]
+Discard the first 256 stored values and retain the next 72. In the nonlinear law, $u_0,u_1$ are independent $U[-0.8,0.8]$ draws, and
+\[
+ u_t=\tanh\{1.25u_{t-1}-0.65u_{t-2}+0.25\sin(3u_{t-1})+\epsilon_t\},\qquad
+ \epsilon_t\stackrel{\mathrm{iid}}\sim U[-0.1,0.1].
+\]
+Discard the first 80 stored values and retain the next 72. Here $N(\mu,\sigma^2)$ denotes a normal law with mean $\mu$ and variance $\sigma^2$, and $U[a,b]$ a uniform law on $[a,b]$. Innovations are independent of initial values. Independent episodes use independent draws under the prescribed stream.
+
+\subsection{Noisy oscillator observations}
+At continuous time $s$, position $q(s)$ and velocity $v(s)$ obey
+\begin{align*}
+\dot q&=v,&\dot v&=(1-q^2)v-q&&\text{(Van der Pol)},\\
+\dot q&=v,&\dot v&=-0.2v+q-q^3+0.3\cos(1.2s+\theta)&&\text{(Duffing)}.
+\end{align*}
+Dots denote time derivatives. Initial position and velocity are independent $U[-2,2]$ draws. An independent phase $\theta\sim U[0,2\pi]$ is drawn for both laws but used only by Duffing. For each episode, the random-number order is initial position, initial velocity, phase, and then 72 sensor-noise values $\xi_j\stackrel{\mathrm{iid}}\sim U[-0.02,0.02]$.
+
+Classical fourth-order Runge--Kutta integration uses float64 arithmetic, step 0.025, and a burn-in interval of length 10. Observations are spaced by 0.1, with the first retained observation at time 10.1. If $q_j$ is the retained numerical position, the observed value is $u_j=0.95\tanh(q_j)+\xi_j$. The laws are noisy numerical observation processes, not exact continuous-time trajectories or exactly stationary samples after a finite burn-in. The implementation fixes the integration and random-draw order.
+
+\subsection{Episodes, windows, and the unit of inference}
+A/B/C/D contain 64/32/32/128 episodes, each of length 72. For origins $t=11,15,\ldots,59$, define
+\[
+ x_t=(u_{t-11},\ldots,u_t)^\top\in\R^{12},\qquad
+ Y_t=(u_{t+1},u_{t+4},u_{t+12})^\top\in\R^3.
+\]
+Each episode yields thirteen windows. A/B/C uniformly sample 512/256/256 rows without replacement and sort the selected rows into episode/origin order. D retains all 1,664 rows. A later origin may use a value previously treated as an earlier target because that value is then observed; no model is refitted between origins. The evaluation is a set of rolling direct forecasts, not one autonomous trajectory forecast.
+
+Overlapping windows, horizons, representations, and caps are not independent inferential observations. The independent unit for a law-specific comparison is a complete repetition, including its A/B-selected predictors and D aggregate loss. The four laws have separate primary results; their 256 tasks are not pooled as 256 observations for one contrast.
+
+\subsection{Random streams and execution order}
+The namespace is \texttt{kahm-score-enrichment-final|2026-11-02|v1}. A seed is derived by SHA256 from the namespace, law identifier, repetition, split, and purpose. Data and row-sampling seeds use the first 16 digest bytes as a big-endian integer; the fit seed uses the first four. NumPy's \texttt{default\_rng} uses these seeds. The exact 256-task roster and all streams are provided in \texttt{cohort.json}; repetitions are indexed 0 through 63. Fit randomness is derived from task identity, not worker order. Numerical library and seed specifications together define the reproducible computation.
+
+The 2,304 top-level identifiers are distinct and differ from the 84 recorded development identifiers. This is a check of seed equality, not a proof that every realized pseudorandom sequence is disjoint; exclusions against all other historical streams were not exhaustively reconstructed. No earlier observation enters the current confidence intervals.
+
+A fits all candidate states; B selects them. Complete fitted states and choices were sealed before C/D generation, and every C/D forecast was sealed before either set was scored. C makes no tuning or calibration decision. Target arrays are present after C/D preparation, so the seals demonstrate ordering and byte identity rather than cryptographic isolation. The protocol was fixed locally before production generation, with prior development knowledge, and is not a public preregistration.

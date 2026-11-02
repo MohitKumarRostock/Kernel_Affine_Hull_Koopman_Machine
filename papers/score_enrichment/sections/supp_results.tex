@@ -1,0 +1,82 @@
+\section{Complete statistical results}\label{sup:results}
+\subsection{Loss, comparison family, and precision}
+For one law $\ell$, repetition $r$, and procedure $m$, define
+\[
+ L_{\ell rm}=\frac13\sum_{h\in\{1,4,12\}}\frac{1}{1664}
+ \sum_{i\in D}\frac{(y_{ih}-\widehat y_{mih})^2}{v_{\ell rh}},
+\]
+where $v_{\ell rh}$ is the retained-A horizon-target population variance floored at $10^{-12}$. Each horizon and each D origin receives equal weight. The random A normalization is part of the procedure's estimand. No terminal scale fitting, trimming, winsorization, or retrospective horizon reweighting is used.
+
+For candidate $a$ and reference $b$, define $d_r=L_{\ell ra}-L_{\ell rb}$, its mean $\bar d$, and sample standard deviation $s_d$ over 64 repetitions. All 40 comparisons use
+\[
+ [\bar d-t_{63,1-0.05/80}s_d/8,\ \bar d+t_{63,1-0.05/80}s_d/8],
+ \qquad t_{63,0.999375}=3.37962646388.
+\]
+The marginal confidence coefficient is 99.875\%; Bonferroni targets 95\% simultaneous coverage when the paired-Student marginal approximation is valid. Dependence among comparisons does not invalidate the Bonferroni inequality, but nonnormal repetition differences can affect the marginal approximation. A zero sample variance would be flagged as no Student inference while retaining its family slot. None of the 40 released differences has that exception.
+
+The fixed precision rule selected the first repetition count in $32,48,64,96$ giving $t_{n-1,1-0.05/80}/\sqrt n\leq0.45$. The resulting multipliers are 0.627711, 0.495723, 0.422453, and 0.339547. This is a criterion relative to a future paired standard deviation, not an absolute-error tolerance or a power guarantee. No optional stopping or sample-size extension followed terminal scoring.
+
+There are no practical superiority, noninferiority, or equivalence margins in this family. A negative interval supports lower candidate mean loss; a positive interval supports higher mean loss; an interval containing zero is unresolved. Relative gain is $100(1-\overline L_a/\overline L_b)$, not an average of per-repetition percentages. Confidence endpoints are absolute SMSE differences, not percentage bounds.
+
+\subsection{All primary intervals}
+Tables~\ref{sup:ar}--\ref{sup:duf} contain the full primary family. Each local comparison uses KAHM-local as candidate; the normalizer comparison uses KAHM-normalizer. Membership references are KAHM-memberships. Positive-kernel references use matched positive-kernel-local features, not a different decoder. Every row uses independent B selection.
+
+\begin{table}[htbp]\centering\small\setlength{\tabcolsep}{3pt}
+\caption{Linear autoregression: all ten primary comparisons. Gain is positive when the candidate mean is lower. The adjusted interval and $\bar d$ use absolute SMSE units.}\label{sup:ar}
+\input{tables/primary_linear_ar}
+\end{table}
+\begin{table}[htbp]\centering\small\setlength{\tabcolsep}{3pt}
+\caption{Nonlinear autoregression: all ten primary comparisons. All directions remain unresolved under the specified interval calculation.}\label{sup:nar}
+\input{tables/primary_nonlinear_ar}
+\end{table}
+\FloatBarrier
+\begin{table}[htbp]\centering\small\setlength{\tabcolsep}{3pt}
+\caption{Van der Pol: all ten primary comparisons. Favorable raw-input results do not imply superiority over every reconstruction control.}\label{sup:vdp}
+\input{tables/primary_van_der_pol}
+\end{table}
+\begin{table}[htbp]\centering\small\setlength{\tabcolsep}{3pt}
+\caption{Duffing: all ten primary comparisons, including the adverse nonlinear-decoder outcomes.}\label{sup:duf}
+\input{tables/primary_duffing}
+\end{table}
+\FloatBarrier
+
+\subsection{Every procedure under both selection rules}
+Tables~\ref{sup:indlin}--\ref{sup:shnon} report terminal mean SMSE with the sample standard deviation across 64 repetitions in parentheses. Standard deviations describe variation; they are not confidence intervals. Each table includes all three reconstructions and four encodings, together with raw input. The shared-cap tables describe a different procedure and carry no additional inferential family.
+
+\begin{table}[htbp]\centering\small\setlength{\tabcolsep}{3.3pt}
+\caption{Independent selection, linear decoder: mean SMSE (repetition standard deviation).}\label{sup:indlin}
+\input{tables/all_independent_linear}
+\end{table}
+\begin{table}[htbp]\centering\small\setlength{\tabcolsep}{3.3pt}
+\caption{Independent selection, nonlinear decoder: mean SMSE (repetition standard deviation).}\label{sup:indnon}
+\input{tables/all_independent_nonlinear}
+\end{table}
+\FloatBarrier
+\begin{table}[htbp]\centering\small\setlength{\tabcolsep}{3.3pt}
+\caption{Shared cap, linear decoder: mean SMSE (repetition standard deviation). The bank is selected by affine-local linear ridge on B.}\label{sup:shlin}
+\input{tables/all_shared_linear}
+\end{table}
+\begin{table}[htbp]\centering\small\setlength{\tabcolsep}{3.3pt}
+\caption{Shared cap, nonlinear decoder: mean SMSE (repetition standard deviation). Each procedure selects its own within-cap decoder settings.}\label{sup:shnon}
+\input{tables/all_shared_nonlinear}
+\end{table}
+\FloatBarrier
+
+\subsection{Descriptive comparisons and sensitivity}
+Five of the 40 point orderings change sign between the independent and shared-cap views. Table~\ref{sup:selection} shows the KAHM/positive-kernel comparisons in both views. The common cap is chosen for affine-local linear ridge, not independently for either of these nonlinear reconstructions. Its results cannot replace primary decisions.
+
+For a fixed reconstruction and common cap, memberships plus normalizers and full scores contain the same information in exact arithmetic. Table~\ref{sup:normscore} reports the difference between their fitted mean losses for every law, decoder, and reconstruction. The conditioning, scaling, kernel, and penalty are parts of the finite procedure. Thus these differences do not measure information gained or lost. Independently selected caps can change the underlying score maps and do not instantiate the same information-equivalent pair.
+
+\begin{table}[htbp]\centering\small
+\caption{KAHM-local versus positive-kernel-local: point relative gains under both cap rules. Shared-cap values are descriptive. Only the last column reports a primary interval decision.}\label{sup:selection}
+\input{tables/selection_KR}
+\end{table}
+\begin{table}[htbp]\centering\small
+\caption{Same-bank normalizer-encoding loss minus full-score loss, in mean SMSE. Negative values favor normalizers. All 24 values are descriptive, without new significance labels.}\label{sup:normscore}
+\input{tables/normalizer_score}
+\end{table}
+\FloatBarrier
+
+The primary numerical record includes all 2,560 paired differences, as well as each sequence's median, extrema, favorable count, and leave-one-out mean range. For nonlinear autoregression with the nonlinear decoder, normalizer enrichment is worse in 63 repetitions but its mean-difference interval is unresolved; local enrichment is better in 61 but its interval is also unresolved. Extreme observations remain included. The primary mean estimand is not replaced by the fraction of favorable repetitions, and no post hoc normality pretest selects an alternative inferential method.
+
+The machine-readable release also contains every C diagnostic mean, D horizon decomposition, within-cap score, and cap/penalty/bandwidth frequency. These are descriptive analyses using the same cohort, not additional independent tests. Final-grid boundary selections remain limitations of the prescribed procedure rather than permission to retune after observing D. In particular, the single 64-landmark design cannot support a claim about a landmark-capacity interaction.

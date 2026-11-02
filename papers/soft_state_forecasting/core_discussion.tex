@@ -10,7 +10,8 @@ for position does not establish a KAHM-specific advantage, and an
 advantage over memberships alone does not establish sufficient state
 representation.
 
-The complete primary family establishes three of four criteria.
+The first experiment's complete primary family establishes three of
+four criteria.
 Position reduces nonlinear loss by \SAGainPG\% relative to
 memberships, and KAHM departures reduce P's loss by \SAGainKP\%;
 both exceed their $3\%$ margins under the simultaneous bounds.
@@ -24,7 +25,7 @@ positive-kernel construction. Nor does a large P/G gain show that
 memberships have no predictive content: it shows their limitations
 for this affine readout and allocation.
 
-The primary bank is selected for P, so the comparison concerns
+In that experiment, the primary bank is selected for P, so the comparison concerns
 enrichment of a validation-selected common representation. It does
 not optimize the bank independently for G, K, or R. The secondary
 independent-cap analysis asks a different question about complete
@@ -36,7 +37,7 @@ access still depends on radial scaling, regularization, sample size,
 and the affine readout. The comparison does not estimate all
 information retained by an abstraction.
 
-The secondary results reinforce that distinction. Independently
+The first experiment's secondary results reinforce that distinction. Independently
 selected K and R attain nonlinear mean losses
 \SALossIndependentNonlinearK\ and \SALossIndependentNonlinearR\;
 the K/R point difference changes sign without establishing either
@@ -63,6 +64,29 @@ capacity, conditioning, or computational cost.
 
 Local dimension acts on several parts of this construction at once:
 position coordinates, projected kernels and reconstruction departures.
+Input scaling also changes those quantities. The second experiment in
+Section~\ref{sec:joint-selection} addresses their joint selection
+using a common-bank structural view and an independently selected
+complete-procedure view, each with a same-cohort standard-only
+reference. Four of its six primary criteria are established.
+The shared-bank P/G and K/P nonlinear gains remain substantial,
+but K's nonlinear loss is \JSRelativeLossChangeKR\% higher than
+R's. Independently expanding K's scaling menu improves its
+nonlinear mean loss by only \JSGainJointKNonlinear\%, leaving
+the prescribed 3\% gain unestablished. Its linear loss is
+\JSRelativeLossChangeJointKLinear\% higher, within the established
+5\% noninferiority criterion. These direct tuning comparisons use
+the identical fresh cohort and dimension-selected standard-only
+controls; they do not attribute between-experiment differences to
+scaling. Neither the shared-bank nor independent-procedure view
+supports a general KAHM-over-RBF claim. A failed superiority margin
+also does not establish equivalence or prove that every scaling
+choice is irrelevant.
+
+The finite grid deliberately leaves other geometry parameters fixed.
+Its result concerns three input transforms, five native caps, and
+the declared ridge grid under this data allocation, rather than a
+global optimum over all models or preprocessing choices.
 The historical dimension decomposition finds stronger common prediction
 and a smaller incremental departure benefit after selection.
 Native full ambient rank is admissible, with caps twelve and twenty
@@ -134,10 +158,13 @@ external scope of either conclusion.
 
 Geometry-induced soft-state abstractions are therefore a useful
 organizing framework when membership, position and reconstruction
-are evaluated as distinct observables. The present experiment
-supports the predictive value of position and a conditional KAHM
+are evaluated as distinct observables. The two experiments
+support the predictive value of position and a conditional KAHM
 departure increment, while leaving a general KAHM-specific advantage
-over matched RBF unestablished. The raw-span theory explains possible
+over matched RBF unestablished. The joint-selection experiment
+also finds very little aggregate nonlinear benefit from expanding
+K's input-scaling menu beyond dimension-selected standardization.
+The raw-span theory explains possible
 functional distinctions without turning them into a guarantee of
 utility. Useful autonomous dynamics and practical policy gains remain
 separate empirical questions. The evidence supports a representation
@@ -145,6 +172,53 @@ research program with explicit external targets and matched controls,
 rather than a general forecasting-superiority claim.
 
 \section*{Reproducibility and research transparency}
+
+\paragraph{Completed joint-selection study.}
+The separate experiment under
+\path{extensions/soft_state_joint_selection_20261102} has a frozen
+protocol, source, analysis, and audit. Its standard-only mode
+reproduces the published model bitwise on manufactured inputs.
+The miniature staged audit passes 39,324 checks on eight artificial
+tasks; the statistical preflight passes 42 checks on fabricated
+losses. These readiness checks are distinct from the completed
+scientific production results.
+
+Scientific source commit \texttt{8e025027} was published before
+production preparation. Its nineteen extension files and repository
+root tree were verified at
+12:50:03 UTC on 2 November 2026; the source-freeze SHA256 begins
+\texttt{0c3737ae8d407198}. The actual public commit and its exact
+file roster are recorded separately from the reviewed local
+checkpoint in \path{PUBLICATION.json}. Global fitted-state and
+forecast seals precede D generation and target release, respectively.
+Target release completed at 13:08:30 UTC, analysis at 13:08:50,
+and the independent audit at 13:14:09.
+
+The audit passed \JSAuditChecks\ checks on all \JSTasks\ tasks
+and independently confirmed all six primary decisions. It refitted
+all 76,800 B penalty-path forecast arrays and replayed 4,096
+selected C and 4,096 selected D arrays. Maximum absolute forecast
+discrepancies were $1.13\times10^{-10}$, $2.42\times10^{-12}$,
+and $6.28\times10^{-12}$, respectively. It verified the source
+and stage chain, seed exclusions, complete task and data rosters,
+A-fitted scaling, native dimensions, common-coordinate identities,
+B selections, standard-only comparators, and exported statistics.
+There were zero numerical solver recoveries. The audit retains
+its declared tolerances and uses saved fitted geometry and physical
+episodes; it does not independently refit partition k-means or
+reintegrate the physical laws. These procedural controls are not
+independent preregistration, oversight, cryptographic target
+isolation, or external scientific replication.
+
+Compact results and losslessly compressed large tables and audit
+records are published separately from the frozen source. An indexed
+numerical archive preserves all portable fitted states, candidate
+paths, forecasts, and underlying data, with member and archive
+checksums. Restoration verifies exact original bytes. Completed
+result publication \texttt{06df3ed4} and the subsequent
+manuscript edition have separate identities.
+
+\paragraph{Preceding fixed-standardization representation study.}
 
 The four-arm implementation and analysis specification are maintained
 under \path{extensions/soft_state_ablation_20261102}.

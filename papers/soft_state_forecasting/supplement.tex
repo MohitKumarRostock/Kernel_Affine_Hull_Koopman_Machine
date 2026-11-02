@@ -33,6 +33,7 @@
 \input{generated/crossfit_residual/numbers}
 \input{generated/policy_augmentation/numbers}
 \input{generated/soft_state_ablation/numbers}
+\input{generated/joint_selection/numbers}
 \title{Geometry-Induced Soft-State Abstractions\\
 for Forecasting:\\Supplementary Studies}
 \author{Anonymous authors}
@@ -66,13 +67,22 @@ and unsuccessful or unavailable configurations accompany their protocols.
 The studies use different procedures and evaluation populations. Their
 results are interpreted separately from one another and from the
 earlier dimension-selected experiment in the accompanying main paper.
-The new \SARepetitions-repetition representation-only study compares
+The preceding \SARepetitions-repetition representation-only study compares
 memberships, local position, KAHM enrichment and matched RBF enrichment
 on \SATasks\ task suites. Its single four-contrast primary family
 establishes the nonlinear position and KAHM-enrichment margins and
 linear noninferiority, but not the prescribed KAHM-over-RBF superiority
 margin. Complete primary results, descriptive decompositions and
 independent computational audit coverage accompany the frozen protocol.
+A separately frozen joint scaling--dimension study adds \JSRepetitions\
+fresh repetitions and \JSTasks\ tasks. Its six-contrast family establishes
+the nonlinear position and KAHM-enrichment margins and both linear
+noninferiority criteria. Neither KAHM-over-RBF superiority nor a 3\%
+benefit from expanding KAHM's scaling menu is established. The latter
+comparison uses dimension-selected standard-only candidates from the
+same cohort; its nonlinear point gain is \JSGainJointKNonlinear\%.
+Complete forecast means, scaler and cap choices, law-level results,
+and numerical verification records accompany the joint-selection design.
 \end{abstract}
 
 \section{Scope, evidence, and notation}\label{supp:scope}
@@ -163,6 +173,8 @@ its forecast origin; a horizon-$h$ target occurs $h$ steps later.
 Fitted transformations use only the data permitted by each protocol.
 
 \input{supporting/section_soft_state_ablation}
+\FloatBarrier
+\input{supporting/section_joint_selection}
 \FloatBarrier
 \input{supporting/utility_question}
 \input{supporting/mechanisms}

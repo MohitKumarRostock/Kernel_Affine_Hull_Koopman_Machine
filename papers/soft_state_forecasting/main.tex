@@ -29,6 +29,7 @@
 \input{generated/crossfit_residual/numbers}
 \input{generated/policy_augmentation/numbers}
 \input{generated/soft_state_ablation/numbers}
+\input{generated/joint_selection/numbers}
 
 \title{Geometry-Induced Soft-State Abstractions\\
 for Forecasting: Predictive Enrichment\\
@@ -41,18 +42,23 @@ Geometry-induced soft-state abstractions describe an observed history
 through graded membership in local reference regions. We distinguish
 these memberships from within-region position and signed reconstruction
 departures supplied by Kernel Affine Hull Machines (KAHMs). Only the
-membership block is simplex-valued within each partition. A fixed
-\SARepetitions-repetition study of \SATasks\ simulated task suites compares
-four representation-only affine ridge readouts of the same future
-observations: memberships (G), added local position (P), and KAHM (K)
-or matched positive-kernel RBF (R) enrichment. In the primary comparison,
-P selects a common reference bank. P reduces nonlinear loss relative to
-G by \SAGainPG\%, and K reduces P's loss by \SAGainKP\%; both establish
-the prescribed 3\% margins within one four-contrast confidence family.
-K improves R by only \SAGainKR\%, leaving its 3\% superiority criterion
-unestablished, while meeting the 5\% linear noninferiority criterion
-against P. Thus \SACriteriaEstablished\ of \SAFamilySize\ criteria are
-established. Benefits vary across laws and horizons.
+membership block is simplex-valued within each partition. Two separately
+frozen studies, each with \SARepetitions\ independent repetitions and
+\SATasks\ simulated task suites, compare four representation-only affine
+ridge readouts: memberships (G), added local position (P), and KAHM (K)
+or matched positive-kernel RBF (R) enrichment. The first selects local
+dimension under standardization and establishes \SACriteriaEstablished\
+of \SAFamilySize\ primary criteria. The second jointly selects among
+three input scalers and five native dimension caps. On its P-selected
+common geometry, P reduces nonlinear loss relative to G by
+\JSGainPG\%, and K reduces P's loss by \JSGainKP\%; both establish
+their 3\% margins. K has \JSRelativeLossChangeKR\% higher loss than R,
+leaving KAHM-specific superiority unestablished. Against the same-cohort
+standard-only procedure, independently joint-selected K improves nonlinear
+loss by only \JSGainJointKNonlinear\%, failing its 3\% margin.
+Both linear 5\% noninferiority criteria hold, so
+\JSCriteriaEstablished\ of \JSFamilySize\ criteria are established
+in this separate comparison family.
 We characterize equality and separation of matched KAHM and RBF raw
 observable spans. Equal spans share exact Koopman-invariance status
 under a specified deterministic evolution; distinct spans alone imply
@@ -62,8 +68,9 @@ or rollout stability. Earlier residual and policy studies retain their
 separate scope, including unsuccessful policy-superiority criteria and
 an unfavorable descriptive natural-data comparison. The evidence
 supports local position and conditional reconstruction enrichment as
-useful predictive observables. It does not establish a general
-KAHM-specific advantage, membership-only sufficiency, or useful
+useful predictive observables, while showing little aggregate benefit
+from the expanded scaling menu in the tested grid. It does not establish
+a general KAHM-specific advantage, membership-only sufficiency, or useful
 autonomous soft-state dynamics.
 \end{abstract}
 
@@ -73,6 +80,7 @@ autonomous soft-state dynamics.
 \input{core_theory}
 \input{core_decoder}
 \input{core_soft_state_study}
+\input{core_joint_selection_study}
 \input{core_experiment}
 \input{core_followup_experiments}
 \FloatBarrier

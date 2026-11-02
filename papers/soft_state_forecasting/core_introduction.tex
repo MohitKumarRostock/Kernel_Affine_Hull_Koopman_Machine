@@ -21,8 +21,9 @@ $\psi_K$ contains signed coordinates and is not simplex-valued.
 Neither the membership map nor its enrichment is assumed to be a
 sufficient or Markov state.
 
-Our central comparison separates these layers
-(Section~\ref{sec:softstate-study}). G contains memberships alone;
+Our two experiments separate these layers
+(Sections~\ref{sec:softstate-study} and~\ref{sec:joint-selection}).
+G contains memberships alone;
 P adds local principal coordinates; K adds KAHM departures to P;
 and R instead adds matched radial-basis-function (RBF) departures.
 Every affine ridge head uses only its declared representation to
@@ -35,7 +36,7 @@ a deterministic representation cannot add information to its input
 but can expose functions that a restricted predictor can use
 \citep{Fukumizu2004SDR,Xu2020Usable}.
 
-The fixed study evaluates \SARepetitions\ independent repetitions of
+The first fixed study evaluates \SARepetitions\ independent repetitions of
 four inherited laws and two noise levels, giving \SATasks\ task suites
 at horizons $1,4,12$. Geometry and heads use fitting episodes; separate
 validation episodes select penalties and, through P, the shared
@@ -47,7 +48,7 @@ against P. Independently selected banks address a secondary procedure
 comparison. They do not replace the primary shared-bank question or
 its confidence family.
 
-The primary shared-bank results establish three of four criteria.
+That study's primary shared-bank results establish three of four criteria.
 Local position reduces nonlinear loss by \SAGainPG\% relative to
 memberships alone, and KAHM departures reduce the resulting loss by
 \SAGainKP\%; both establish the prescribed $3\%$ margins. KAHM's
@@ -106,3 +107,19 @@ to new domains, and the residual-study reproduction adds no independent
 cohort. The resulting framework separates available observables,
 their accessibility to a specified decoder, closed coordinate dynamics,
 and the value of adding a candidate to a forecasting policy.
+
+A second frozen study jointly selects input scaling and native dimension
+within the same direct-readout architecture
+(Section~\ref{sec:joint-selection}). Its \JSRepetitions\ fresh repetitions
+retain both P-selected common geometry and individually selected
+procedures, together with paired standard-only controls. Thus the effect
+of enlarging the tuning menu is measured on the same cohort. The shared
+comparison again establishes the position and KAHM-enrichment margins,
+but K has \JSRelativeLossChangeKR\% higher nonlinear loss than matched R.
+Independently joint-selected K improves on standard-only K by only
+\JSGainJointKNonlinear\%, leaving the prespecified 3\% tuning benefit
+unestablished. Both linear noninferiority criteria hold. These
+\JSCriteriaEstablished\ of \JSFamilySize\ outcomes distinguish useful
+reconstruction features from a reliable gain due to a larger search menu.
+They concern the declared finite scaler/cap/penalty grid, rather than
+global optimization of all geometric parameters.

@@ -1,0 +1,275 @@
+{
+  "analysis": {
+    "contrast": "candidate loss minus reference_factor times reference loss; pass iff one-sided Bonferroni paired-t upper bound is strictly negative",
+    "family_alpha": 0.05,
+    "independent_unit": "repetition",
+    "linear_noninferiority_margin": 0.05,
+    "practical_margin_scope": "inherited research convention, not deployment-derived",
+    "primary_claims": [
+      {
+        "candidate": "P",
+        "candidate_context": "shared",
+        "population": "nonlinear",
+        "reference": "G",
+        "reference_context": "shared",
+        "reference_factor": 0.97
+      },
+      {
+        "candidate": "K",
+        "candidate_context": "shared",
+        "population": "nonlinear",
+        "reference": "P",
+        "reference_context": "shared",
+        "reference_factor": 0.97
+      },
+      {
+        "candidate": "K",
+        "candidate_context": "shared",
+        "population": "nonlinear",
+        "reference": "R",
+        "reference_context": "shared",
+        "reference_factor": 0.97
+      },
+      {
+        "candidate": "K",
+        "candidate_context": "shared",
+        "population": "linear",
+        "reference": "P",
+        "reference_context": "shared",
+        "reference_factor": 1.05
+      },
+      {
+        "candidate": "K",
+        "candidate_context": "independent",
+        "population": "nonlinear",
+        "reference": "K",
+        "reference_context": "standard_independent",
+        "reference_factor": 0.97
+      },
+      {
+        "candidate": "K",
+        "candidate_context": "independent",
+        "population": "linear",
+        "reference": "K",
+        "reference_context": "standard_independent",
+        "reference_factor": 1.05
+      }
+    ],
+    "primary_context": "mixed_prespecified",
+    "primary_family_size": 6,
+    "public_preregistration": false,
+    "secondary": "Independent joint-selected K/R and other arm contrasts, standard-only structural contrasts, per-law/noise/horizon comparisons, and all other paired intervals are descriptive; no promotion after terminal evaluation.",
+    "superiority_margin": 0.03,
+    "weighting": "mean horizons within task; equal law/noise cells within repetition; mean independent repetitions"
+  },
+  "arms": [
+    "G",
+    "P",
+    "K",
+    "R"
+  ],
+  "block_transforms": {
+    "blocks": [
+      "gate",
+      "position",
+      "kahm",
+      "rbf"
+    ],
+    "coordinatewise_standardize": true,
+    "fit_split": "A",
+    "no_second_standardization": true,
+    "radial_bound": "T(v)=v/sqrt(1+||v||^2/p) separately per block; empty block remains empty",
+    "scale_floor": 1e-06,
+    "shared_blocks_identical": true
+  },
+  "contexts": [
+    "shared",
+    "independent",
+    "standard_shared",
+    "standard_independent"
+  ],
+  "decoder": {
+    "calibration": false,
+    "intercept": "unpenalized",
+    "penalty_selection": "B independently by scaler/cap/arm/horizon; first alpha wins exact tie",
+    "raw_history_baseline": false,
+    "residual_target": false,
+    "ridge_solver": "inherited policy_augmentation_20261101/code/numerical_solver.py checked NumPy-SVD with SciPy gesvd recovery, unchanged",
+    "target": "observed y_(t+h)",
+    "type": "horizon-specific affine ridge"
+  },
+  "execution": {
+    "fit_seal_before_D_generation": true,
+    "fresh_process_per_task": true,
+    "no_optional_stopping": true,
+    "no_production_cap_or_scaler_additions": true,
+    "numerical_threads": 1,
+    "output_array_count_per_task": 16,
+    "prediction_seal_before_scoring": true,
+    "stop_on_unexpected_failure": true,
+    "workers": 3
+  },
+  "fresh_evidence": {
+    "hypothesis_informed_by_prior_studies": true,
+    "new_application_domains": false,
+    "new_independent_repetitions": 32,
+    "no_pooling_with_prior_cohorts": true,
+    "prior_outcomes_known": true,
+    "source_freeze_precedes_production_generation": true
+  },
+  "histories": [
+    12
+  ],
+  "history_tail_length": 60,
+  "horizons": [
+    1,
+    4,
+    12
+  ],
+  "input_scaling_order": [
+    "standard",
+    "minmax",
+    "tanh_z_1"
+  ],
+  "laws": [
+    "linear_ar",
+    "nonlinear_ar",
+    "vanderpol",
+    "duffing"
+  ],
+  "linear_ar": {
+    "burn_in_stored_values": 256,
+    "coefficients": [
+      0.65,
+      -0.15
+    ],
+    "initial_values": [
+      0.0,
+      0.0
+    ],
+    "innovation_std": 0.1
+  },
+  "master_seed": 2026110204,
+  "max_episode_length": 72,
+  "model": {
+    "alpha_grid": [
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0
+    ],
+    "bank_row_cap": 512,
+    "blocks": [
+      2,
+      4,
+      8
+    ],
+    "feature_scale_floor": 1e-06,
+    "max_references": 24,
+    "relative_denominator_tolerance": 1e-10,
+    "target_variance_floor": 1e-12
+  },
+  "native_cap_order": [
+    1,
+    2,
+    4,
+    8,
+    12
+  ],
+  "noise_levels": [
+    0.0,
+    0.1
+  ],
+  "nonlinear_laws": [
+    "nonlinear_ar",
+    "vanderpol",
+    "duffing"
+  ],
+  "origins_per_episode": 13,
+  "primary_history": 12,
+  "repetitions": 32,
+  "schema_version": "kahm-soft-state-joint-selection-v1",
+  "seed_derivation": {
+    "additional_exclusion_check": "Full predecessor exclusions and every soft_state_ablation_20261102 declared stream",
+    "collision_policy": "Stop before generation if any intended-distinct derived seed collides",
+    "distinct_seed_count": 1696,
+    "excluded_seed_manifest": null,
+    "fit_stream": [
+      "master_seed",
+      "repetition",
+      "law_index",
+      1004
+    ],
+    "function": "int(numpy.random.SeedSequence(integer_components).generate_state(1)[0])",
+    "law_index_order": [
+      "linear_ar",
+      "nonlinear_ar",
+      "vanderpol",
+      "duffing"
+    ],
+    "pairing": "No history, noise level, candidate cap, scaler, arm or comparator view in generation, unit-noise, retained-row or fit streams",
+    "repetition_identifier": [
+      "master_seed",
+      "repetition",
+      1000
+    ],
+    "repetition_index_base": 0,
+    "split_streams": [
+      "master_seed",
+      "repetition",
+      "law_index",
+      "split_index",
+      "purpose"
+    ]
+  },
+  "seed_purposes": {
+    "fit": 1004,
+    "generation": 1001,
+    "identifier": 1000,
+    "rows": 1003,
+    "unit_noise": 1002
+  },
+  "selection": {
+    "C": "diagnostics only; never fit, choose, or calibrate",
+    "D": "evaluation only after global fit and prediction seals",
+    "cap20": "alias of12 at history12; preflight checks, not an additional search choice",
+    "joint_independent": "Each arm selects its own scaler/cap pair by the identical B objective",
+    "joint_shared": "P selects one input-scaler/native-cap pair using equal-horizon B SMSE after independent per-horizon penalties; all four arms use that bank",
+    "no_refit": "Keep A-fitted states after B selection; no B or C refit",
+    "standard_independent": "Each arm selects a cap from its cached standard-only candidates",
+    "standard_shared": "P selects a cap from the cached standard-only candidates; all arms use that bank",
+    "tie_rule": "First minimum in input_scaling_order outer loop, ascending native_cap_order inner loop; first alpha per horizon"
+  },
+  "source": {
+    "branch": "research/kahm-soft-state-joint-selection-2026-11-02",
+    "generator_source": "extensions/dimension_forecasting/vendor_original",
+    "geometry_runtime": "extensions/dimension_forecasting/runtime/step1/forecasting_corrected/code",
+    "input_manuscript_archive_sha256": "2ebd576b6109ee591bc7099035ae16671af05ee5ffae2757e85d213971d0cdd6",
+    "parent_commit": "6c39a003e61ace058851ec6badca3e8dd13ef183",
+    "predecessor_study": "extensions/soft_state_ablation_20261102",
+    "repository": "https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine",
+    "study_contract": "extensions/dimension_forecasting/code/study_contract.py"
+  },
+  "split_caps": {
+    "A": 512,
+    "B": 256,
+    "C": 256,
+    "D": null
+  },
+  "split_episodes": {
+    "A": 64,
+    "B": 32,
+    "C": 32,
+    "D": 128
+  },
+  "split_indices": {
+    "A": 0,
+    "B": 1,
+    "C": 2,
+    "D": 3
+  },
+  "stride": 4,
+  "study_id": "Joint input scaling and native dimension selection for geometry-induced soft-state forecasts",
+  "task_count": 256
+}

@@ -1,0 +1,241 @@
+{
+  "created_utc": "2026-11-02T11:14:19.293120+00:00",
+  "fixture_root": "/tmp/kahm-joint-preflight-a/staged_fixture",
+  "independent_audit_in_this_receipt": true,
+  "independent_audit_source_sha256": {
+    "independent_oracle.py": "26622c69212d78758f615a295ce7eaec2fcb443dfc02d522cae250a70cf3fa76",
+    "verify_soft_state.py": "c841a897304936fb9e1f162ceeae6a79d93b5198774bbc95fe86e9d9cd16b1b7"
+  },
+  "production_data_used": false,
+  "production_generators_executed": false,
+  "schema": "kahm-soft-state-joint-manufactured-preflight-v1",
+  "source_code_sha256": {
+    "artifacts.py": "8bacf1c61689fc4d402b46f043d47fc484bee71c7157f1f37ffb156f23711e6e",
+    "model.py": "4cd667242b1ebfbc7e659c0f0ba804495003dbe68f720b63f90df6b6abfebf09",
+    "pipeline.py": "3a870c56f0ba2b83cd473b85666a7c03ac11d8def1bd992196defe39e607a45f",
+    "preflight.py": "d9fb0f2e25ef6bc59274b5dfb2d6fcca529a3ebca3260af65b33da27eaf1a997",
+    "preflight_model.py": "45d307e6034a4fbf9775da7e6ba87e813e63c09082ad7de53efb24872666f01c"
+  },
+  "staged_checks": [
+    {
+      "exit_code": 0,
+      "log_sha256": "8f5342084b2fd811af57030007c5c8ce7a15b823a801e4e8a75ee4e927a47506",
+      "name": "freeze",
+      "status": "passed"
+    },
+    {
+      "name": "reject_changed_frozen_source",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "47a19a65c01f25e04ebc81dea96decd9f0017064f3cdeae6109fe7b6b00226a3",
+      "name": "abc",
+      "status": "passed"
+    },
+    {
+      "exit_code": 1,
+      "log_sha256": "b6644d5eecd83efa5c4b819e7e64b6b456f508e078dde900bc98222a02b102c5",
+      "name": "reject_D_before_fit_seal",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "8d36d6896292afd7ddf93ef90e8a9af18ea57f64a43a960fc728d6cfb3a4a676",
+      "name": "fit",
+      "status": "passed"
+    },
+    {
+      "exit_code": 1,
+      "log_sha256": "b6644d5eecd83efa5c4b819e7e64b6b456f508e078dde900bc98222a02b102c5",
+      "name": "reject_D_after_fits_without_global_seal",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "0d001d6c0990011d309f81d471ad91f28f61748f992c9db794e7a56247a57121",
+      "name": "seal-fits",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "9f7b31b699340292e624d4d13653c71d467e6fce51def6ff6b7d34b91dd298b7",
+      "name": "d",
+      "status": "passed"
+    },
+    {
+      "exit_code": 1,
+      "log_sha256": "d83e3a32d83800bc7be4e7aec917ecae927a575c79ec45f7764e61624b0022d7",
+      "name": "reject_scoring_before_prediction_seal",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "38e062761b3da024e6725e38c6ba5a56a6b0b6280ae2b0531c4144f54f6f9119",
+      "name": "predict",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "4c52b811a1fafdbc94b3d3c7558da740b6f2cdfeba303c22fb82397016b05df9",
+      "name": "seal-predictions",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "2521ad70e56f793f84d6c457c3d863930a47afb144861f96489051151073f4b8",
+      "name": "release",
+      "status": "passed"
+    },
+    {
+      "exit_code": 0,
+      "log_sha256": "2772eb43d9045760ee62ab334324e5c7d5a08a9d28031d392f1a736aefa23646",
+      "name": "verify",
+      "status": "passed"
+    },
+    {
+      "checks": 39324,
+      "maximum_absolute_numerical_differences": {
+        "A geometry mean": 0.0,
+        "A geometry scale": 0.0,
+        "A source references": 0.0,
+        "A-only block means": 1.1102230246251565e-16,
+        "A-only block scales": 2.220446049250313e-16,
+        "A-only loss normalization": 0.0,
+        "A-only minmax constant": 0.0,
+        "A-only minmax maximum": 0.0,
+        "A-only minmax minimum": 0.0,
+        "A-only minmax range": 0.0,
+        "A-only observation noise amplitude": 0.0,
+        "A-only tanh mean": 0.0,
+        "A-only tanh raw_standard_deviation": 0.0,
+        "A-only tanh scale": 0.0,
+        "B-selected penalties": 0.0,
+        "Basis orthogonality": 1.7763568394002505e-15,
+        "C diagnostic losses": 0.0,
+        "C diagnostic standardized losses": 0.0,
+        "Candidate cap score": 0.0,
+        "D reuses A noise amplitude": 0.0,
+        "Exact common input scaling across caps": 0.0,
+        "Exact raw memberships across caps": 0.0,
+        "Exact references/centers/radii across caps": 0.0,
+        "Exact selected B view": 0.0,
+        "Final native projected range": 0.0,
+        "First B penalty minimum": 0.0,
+        "Independent A histories": 0.0,
+        "Independent A targets": 0.0,
+        "Independent B histories": 0.0,
+        "Independent B targets": 0.0,
+        "Independent C histories": 0.0,
+        "Independent C targets": 0.0,
+        "Independent D histories": 0.0,
+        "Independent D targets": 0.0,
+        "Independent all-alpha B forecasts": 3.0340174816956278e-12,
+        "Independent episode identities": 0.0,
+        "Independent origin identities": 0.0,
+        "Independent retained row identities": 0.0,
+        "Independent selected C forecasts": 4.249933738265099e-13,
+        "Independent selected D forecasts": 5.504485756091526e-13,
+        "Independent selected ridge coefficients": 2.049826974825919e-11,
+        "KAHM inverse identity": 7.771561172376096e-16,
+        "Leading PCA spectrum": 4.884981308350689e-15,
+        "P view identity C": 0.0,
+        "P view identity D": 0.0,
+        "Partition gate sums": 1.1102230246251565e-16,
+        "Projected whitening identity": 4.440892098500626e-16,
+        "Recomputed B penalty losses": 0.0,
+        "Recomputed B standardized losses": 0.0,
+        "Reference center": 0.0,
+        "Reference radius": 0.0,
+        "Selected B penalty forwarding": 0.0,
+        "Selected head feature centering": 2.508410146262463e-15,
+        "Stored selected penalties": 0.0,
+        "Unit-noise reserved stream": 0.0,
+        "Unpenalized response intercept": 0.0,
+        "Whitened reference coordinates": 0.0
+      },
+      "name": "independent_all_artificial_tasks_replay",
+      "scope": "All candidate B paths, joint and standard-only selections, all selected C/D arrays; artificial data only",
+      "status": "passed",
+      "task_count": 8
+    }
+  ],
+  "status": "passed",
+  "unit_checks": [
+    {
+      "all_candidate_alpha_paths_bitwise_equal": true,
+      "all_selected_forecasts_bitwise_equal": true,
+      "candidate_count": 5,
+      "name": "standard_only_exact_predecessor_predictions_and_selections",
+      "status": "passed",
+      "views": 2
+    },
+    {
+      "A_rows": 96,
+      "bank_row_cap": 64,
+      "candidate_count": 15,
+      "name": "A_only_full_row_input_scalers_and_exact_shared_blocks_all_candidates",
+      "status": "passed"
+    },
+    {
+      "name": "changing_B_histories_and_targets_does_not_change_A_geometry_or_block_scalers",
+      "status": "passed",
+      "transformations_checked": [
+        "standard",
+        "minmax",
+        "tanh_z_1"
+      ]
+    },
+    {
+      "candidate_count": 15,
+      "name": "independent_recomputation_of_every_B_alpha_pair_and_standard_subset_choice",
+      "status": "passed",
+      "superset_property_applies_to_B_only": true,
+      "view_count": 4
+    },
+    {
+      "maximum_absolute_prediction_difference": 1.5170087408478139e-12,
+      "name": "independent_affine_ridge_normal_equations_for_all_input_transformations",
+      "status": "passed",
+      "unpenalized_intercept": true
+    },
+    {
+      "full_ambient_rank_exercised": true,
+      "name": "cap12_cap20_exact_alias_all_transformations_at_history12",
+      "status": "passed"
+    },
+    {
+      "forecast_array_count": 16,
+      "maximum_absolute_forecast_difference": 1.4210854715202004e-14,
+      "name": "portable_state_order_roundtrip_query_immutability_and_AB_only_fitting_API",
+      "portable_array_count": 681,
+      "status": "passed"
+    },
+    {
+      "name": "exact_ties_follow_scaler_outer_cap_inner_then_first_alpha",
+      "status": "passed"
+    },
+    {
+      "minmax_constant_A_coordinates_map_to_zero_for_all_queries": true,
+      "minmax_out_of_range_transformed_value": 5.0,
+      "name": "constant_coordinates_native_zero_rank_unclipped_minmax_and_tanh_saturation",
+      "status": "passed"
+    },
+    {
+      "name": "changed_serialized_candidate_order_and_selection_identity_rejected",
+      "status": "passed"
+    },
+    {
+      "name": "publication_receipt_gate_artificial_metadata_only",
+      "production_preparation_called": false,
+      "remote_publication_claimed": false,
+      "status": "passed"
+    },
+    {
+      "log_sha256": "cd1e1ecece6a8e2b6ac1ffa755d3c232bf0a8dd6a6fdace4308c41e8d3d02b96",
+      "name": "independent_manufactured_six_contrast_statistics",
+      "status": "passed"
+    }
+  ],
+  "work_directory": "/tmp/kahm-joint-preflight-a"
+}

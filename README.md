@@ -1,6 +1,21 @@
 # Kernel Affine Hull Koopman Machine
 
-## KAHM representations for time-series forecasting
+## Current forecasting manuscript and four-arm study
+
+**Geometry-Induced Soft-State Abstractions for Forecasting: Predictive Enrichment with Kernel Affine Hull Machines** is the current forecasting manuscript.
+
+The new G/P/K/R study has completed **32 independent repetitions and 256 tasks**, with independent numerical audit passed. On the primary P-selected shared bank, local position improves memberships-only nonlinear loss by **69.201%**, and KAHM enrichment improves the common coordinates by **10.459%**. Both establish their 3% margins. KAHM improves matched RBF by only **0.0292%**, leaving its 3% superiority margin unestablished. Linear KAHM loss is **1.111% higher** than P but satisfies the 5% noninferiority criterion: **three of four primary criteria** are established.
+
+These findings support useful geometric enrichment under the specified direct readouts; they do not establish KAHM-specific superiority or autonomous soft-state dynamics. Secondary independently selected banks and earlier policy studies retain separate evidential scopes.
+
+- [Main manuscript PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/papers/soft_state_forecasting/main.pdf) and [supplement](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/papers/soft_state_forecasting/supplement.pdf)
+- [Individual editable source files](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-soft-state-ablation-2026-11-02/papers/soft_state_forecasting/) and [build guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/papers/soft_state_forecasting/README_BUILD.md)
+- [Primary comparison table](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/extensions/soft_state_ablation_20261102/analysis/primary_contrasts.csv), [study protocol](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/extensions/soft_state_ablation_20261102/PROTOCOL.md), and [audit receipt](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/extensions/soft_state_ablation_20261102/verification/independent_audit_summary.json)
+- [Research and evidence index](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/docs/RESEARCH_INDEX.md)
+
+Scientific source was published before production as [commit `2b7d19b5`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/2b7d19b5b47f46b5b21b28d24960688f7969d96f). The branch links above identify the current document and result edition. Earlier manuscripts and frozen studies remain available below.
+
+## Earlier dimension-selected forecasting manuscript
 
 **Kernel Affine Hull Features for Time-Series Forecasting: Feature Spans,
 Bounded Corrections, and Matched Evaluation** studies reconstruction-derived
@@ -58,7 +73,7 @@ separate scope of the historical studies.
 
 ## Research materials and availability
 
-The [forecasting branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-manuscript-dimension-revision-2026-11-01) and
+The [earlier forecasting branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-manuscript-dimension-revision-2026-11-01) and
 [certificate branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-manuscript-dimension-revision-2026-11-01) contain the reviewed manuscripts,
 editable sources, computational code, protocols, analysis tables, and audit
 receipts. The large numerical-records archives are separately supplied and
@@ -166,3 +181,7 @@ A persistent archival identifier such as a DOI should be cited once an immutable
 ## Repository
 
 https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine
+
+The completed four-arm results and computational audit were published and hash-verified in [commit `65ecf679`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/65ecf679796cc38b2342e2a4c12fa0226dc9ac78), separately from the frozen scientific source and manuscript edition.
+
+The completed manuscript edition, editable source and document verification are published at [commit `6c39a003`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/6c39a003e61ace058851ec6badca3e8dd13ef183).

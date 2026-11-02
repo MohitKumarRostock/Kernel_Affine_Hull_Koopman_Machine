@@ -1,10 +1,10 @@
 # Research and evidence index
 
-The current forecasting revision is **Geometry-Induced Soft-State Abstractions for Forecasting: Predictive Enrichment with Kernel Affine Hull Machines**. Its canonical home is [papers/soft_state_forecasting/](../papers/soft_state_forecasting/). This index maps the current manuscript and new representation study to the preserved evidence on which the research developed.
+The current forecasting revision is **Geometry-Induced Soft-State Abstractions for Forecasting: Predictive Enrichment with Kernel Affine Hull Machines**. Its canonical home is [papers/soft_state_forecasting/](../papers/soft_state_forecasting/). This index maps the current manuscript and joint-selection follow-up to the preserved evidence on which the research developed.
 
-**Status: all 256 tasks, the frozen analysis, and the independent production audit are complete.** The scientific source is [commit `2b7d19b5`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/2b7d19b5b47f46b5b21b28d24960688f7969d96f). The [audit receipt](../extensions/soft_state_ablation_20261102/verification/independent_audit_summary.json) records verification coverage and limits. Three of four primary criteria are established; the KAHM-versus-RBF superiority margin is not.
+**Joint-selection status: all 256 tasks, the frozen analysis, and the independent production audit are complete.** Published scientific source is [commit `8e025027`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/8e0250279074aefa39079fa33205d3c74f835848). The analysis and audit establish four of six criteria, with the KAHM-over-RBF and joint-tuning 3% margins unestablished. See the [results report](../extensions/soft_state_joint_selection_20261102/RESULTS.md) for the full outcomes and current audit status.
 
-The [research branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-soft-state-ablation-2026-11-02) is `research/kahm-soft-state-ablation-2026-11-02`. This revision maintains the manuscript and outcome documentation alongside its published frozen scientific source. Relative links below resolve within this revision.
+The [research branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-soft-state-joint-selection-2026-11-02) is `research/kahm-soft-state-joint-selection-2026-11-02`. This revision maintains the manuscript and outcome documentation alongside its published frozen scientific source. Relative links below resolve within this revision.
 
 ## Current entry points
 
@@ -13,12 +13,14 @@ The [research branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Ko
 | Main paper | [main.pdf](../papers/soft_state_forecasting/main.pdf), [main.tex](../papers/soft_state_forecasting/main.tex) |
 | Supplementary studies | [supplement.pdf](../papers/soft_state_forecasting/supplement.pdf), [supplement.tex](../papers/soft_state_forecasting/supplement.tex) |
 | Editable files and build guide | [Source directory](../papers/soft_state_forecasting/), [README_BUILD.md](../papers/soft_state_forecasting/README_BUILD.md) |
-| G/P/K/R representation ablation | [Study directory](../extensions/soft_state_ablation_20261102/), [primary contrasts](../extensions/soft_state_ablation_20261102/analysis/primary_contrasts.csv), [analysis summary](../extensions/soft_state_ablation_20261102/analysis/analysis_summary.json) |
+| Joint scaling and dimension selection | [Study directory](../extensions/soft_state_joint_selection_20261102/), [six primary contrasts](../extensions/soft_state_joint_selection_20261102/analysis/primary_contrasts.csv), [complete results](../extensions/soft_state_joint_selection_20261102/RESULTS.md) |
+| Joint-selection independent verification | [Passed audit summary](../extensions/soft_state_joint_selection_20261102/verification/independent_audit_summary.json), [full compressed audit](../extensions/soft_state_joint_selection_20261102/verification/independent_audit.json.gz): all 256 tasks, 7,422,883 checks |
+| Preserved standard-only G/P/K/R ablation | [Study directory](../extensions/soft_state_ablation_20261102/), [results](../extensions/soft_state_ablation_20261102/RESULTS.md), [passed audit](../extensions/soft_state_ablation_20261102/verification/independent_audit_summary.json) |
 | Interpretation of completed studies | [TIME_SERIES_RESEARCH.md](../TIME_SERIES_RESEARCH.md) |
 | Scientific reproduction and audit scope | [REPRODUCIBILITY.md](../REPRODUCIBILITY.md) |
 | Paper scope and review materials | [TMLR.md](../TMLR.md) |
 
-The new ablation has completed 32 fresh repetition units and 256 tasks, with frozen analysis complete and independent production audit passed. Its primary P-selected shared-bank family establishes nonlinear P/G and K/P superiority and linear K/P noninferiority; K/R superiority is unestablished, giving three of four criteria. The nonlinear gains are 69.201%, 10.459% and 0.0292%, respectively. Linear K loss is 1.111% higher than P while meeting the 5% tolerance. Independent-cap comparisons are secondary. These results are separate from the completed earlier policy and representation experiments.
+The joint-selection study has 32 fresh repetition units, 256 tasks, and 4,096 terminal forecast arrays. Its six-comparison primary family contains four P-selected shared-bank contrasts and independent joint-versus-standard K contrasts on both panels. The analysis establishes shared nonlinear P/G and K/P superiority, with gains of 68.69% and 8.86%, and both linear noninferiority criteria. Shared nonlinear K has 0.9186% higher loss than R, and independent joint K has only a 0.0727% gain over standard-only K, so both prescribed 3% superiority margins remain unestablished. The independent audit confirms these findings across all 256 tasks. Independent K/R, per-law tuning effects, and selection frequencies are descriptive. The standard-only controls are from this same cohort, and earlier experiments remain separate.
 
 ## Forecasting evidence retained in the current research
 
@@ -26,6 +28,7 @@ These locations are stable study identifiers. Moving or renaming them would obsc
 
 | Study directory | Evidence and interpretation entry point |
 | --- | --- |
+| `extensions/soft_state_ablation_20261102/` | [Results](../extensions/soft_state_ablation_20261102/RESULTS.md), [reproduction](../extensions/soft_state_ablation_20261102/README.md): completed standard-only representation ablation, 32 repetitions, passed audit, three of four primary criteria established |
 | `extensions/dimension_forecasting/` | [Findings](../extensions/dimension_forecasting/FINDINGS.md), [reproduction](../extensions/dimension_forecasting/README.md): earlier principal validation-selected dimension comparison, 24 repetition units and its own six-criterion family |
 | `extensions/preprocessing_dimension/` | [Findings](../extensions/preprocessing_dimension/FINDINGS.md), [records](../extensions/preprocessing_dimension/RESULTS_PACKAGE.md): a separate four-criterion study and secondary fixed-common corrections |
 | `extensions/crossfit_residual_reproduction_20261101/` | [Results](../extensions/crossfit_residual_reproduction_20261101/reporting/RESULTS.md), [execution guide](../extensions/crossfit_residual_reproduction_20261101/README.md): same-cohort reproduction with prior outcome knowledge, not fresh independent repetitions |
@@ -64,4 +67,4 @@ Use the current paper directory for manuscript builds, the particular study dire
 
 The manuscript and documentation may be updated without changing earlier frozen experiments. Source freezes, target-release records, and numerical archives retain their separate identities. Cite the paper version, specific study, and immutable repository commit used rather than treating a moving branch name as a scientific checkpoint.
 
-The completed four-arm results and computational audit were published and hash-verified in [commit `65ecf679`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/65ecf679796cc38b2342e2a4c12fa0226dc9ac78), separately from the frozen scientific source and manuscript edition.
+The predecessor four-arm results and computational audit were published and hash-verified in [commit `65ecf679`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/65ecf679796cc38b2342e2a4c12fa0226dc9ac78), separately from that study's frozen scientific source and manuscript edition.

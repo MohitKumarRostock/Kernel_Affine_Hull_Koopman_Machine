@@ -1,44 +1,35 @@
-# Local Position and Reconstruction Features for Forecasting
+# Predictive Enrichment of Geometry-Induced Soft-State Abstractions
 
-## A matched study of Kernel Affine Hull Machines
+## Information retention and decoder access
 
-This repository contains the implementation and evidence for a matched study of geometric forecasting features. The paper asks whether local position and reconstruction departures improve a direct affine ridge forecast of the same future observations. It distinguishes predictive usefulness from raw feature-span expressivity and from autonomous state dynamics.
+Geometric affinities describe relationships to reference regions, but their interpretation does not establish predictive usefulness. Reconstruction-score normalization can discard absolute affinity information, while local position may be absent from the scores themselves. Even an information-preserving enrichment can be difficult for a finite decoder to use. This research separates those questions using Kernel Affine Hull Machines (KAHMs), matched affine and positive-kernel reconstructions, and common observed-response targets.
 
-The manuscript source and build instructions are in [papers/local_position_forecasting/](papers/local_position_forecasting/). The [supplementary source](papers/local_position_forecasting/supplement.tex) specifies the complete protocol, all primary and descriptive comparisons, and the computational audit. The [reproducibility guide](REPRODUCIBILITY.md) gives the exact source identity and regeneration commands. The [research index](docs/RESEARCH_INDEX.md) locates related and earlier studies without mixing their inference populations.
+The [manuscript directory](papers/score_enrichment/) contains the approved article, supplementary sources, complete static tables, bibliography, and build instructions. The [study guide](extensions/score_enrichment_20261102/README.md) identifies the numerical evidence and its distribution scope. The [research index](docs/RESEARCH_INDEX.md) preserves earlier studies without pooling their sampling units or comparison families.
 
-## Main result
+## Complete primary findings
 
-Four inputs share a local reference construction: G contains membership gates; P adds local principal coordinates; K adds Kernel Affine Hull Machine (KAHM) reconstruction departures; and R adds matched positive-kernel radial-basis-function (RBF) departures. Each input predicts the same observed response with direct affine ridge heads. The primary comparison uses the bank selected by P on validation data. It therefore evaluates enrichment conditional on that selection procedure, not a symmetric comparison of independently optimized forecasting systems.
+Protocol `KAHM-SCORE-20261102-v1` has 64 repetitions under each of four laws, 256 task suites, and 40 two-sided paired comparisons in one Bonferroni family. Primary procedures independently select their native dimension and decoder settings on validation data.
 
-| Primary comparison | Population | Reduction in mean loss | Prescribed criterion | Established |
-| --- | --- | ---: | --- | --- |
-| P versus G | Nonlinear | 69.201% | 3% superiority | Yes |
-| K versus P | Nonlinear | 10.459% | 3% superiority | Yes |
-| K versus R | Nonlinear | 0.029% | 3% superiority | No |
-| K versus P | Linear | -1.111% | 5% noninferiority | Yes |
+| Candidate / reference | Lower candidate mean loss | Higher candidate mean loss | Unresolved |
+| --- | ---: | ---: | ---: |
+| KAHM-local / KAHM-memberships | 6 | 0 | 2 |
+| KAHM-normalizer / KAHM-memberships | 3 | 0 | 5 |
+| KAHM-local / affine-local | 1 | 4 | 3 |
+| KAHM-local / positive-kernel-local | 3 | 0 | 5 |
+| KAHM-local / raw history | 3 | 3 | 2 |
 
-The analysis uses 32 independent repetition aggregates and one four-comparison Bonferroni family. All 256 tasks contribute according to the declared aggregation. Local position substantially improves the membership-only readout, and KAHM departures improve P on average in the nonlinear panel. The results do not establish a KAHM-specific advantage over matched RBF. Failure of the K/R margin is not an equivalence finding. Linear noninferiority permits the observed 1.111% loss increase; it is not superiority.
+Each row covers four laws and two decoders. Directions follow adjusted intervals, not point ordering alone. The counts are not an omnibus success criterion. Coverage relies on a paired-Student approximation; no practical or equivalence margin is assigned. All four nonlinear-decoder KAHM/positive-kernel comparisons are unresolved. The [complete primary summary](extensions/score_enrichment_20261102/primary_contrasts.csv) retains favorable, unfavorable, and unresolved comparisons.
 
-The reconstruction benefit is heterogeneous: K worsens P in nonlinear autoregression at both noise levels, and its aggregate improvement is concentrated at horizon 12. Independently selected caps slightly favor R over K in mean nonlinear loss. These findings are retained in the [complete study results](extensions/soft_state_ablation_20261102/RESULTS.md) and [compact analysis records](extensions/soft_state_ablation_20261102/analysis/).
+On Van der Pol with the nonlinear decoder, KAHM-local has 62.09% lower mean loss than raw input and 2.51% lower loss than affine-local, with resolved adjusted comparisons. Its approximately 0.038% difference from positive-kernel-local is unresolved. On Duffing, the same KAHM procedure has higher loss than raw and affine-local. These are conditional results for the specified procedures, not general KAHM superiority.
 
-## Scope of the mathematical results
+## Mathematical scope
 
-The paper gives sufficient conditions for equality of KAHM and RBF augmented raw feature spans and an irregular scalar geometry in which the spans differ. These statements concern exact maps before block transformations and ridge fitting. They do not determine forecasting risk, establish Koopman closure, or prove Markov sufficiency. The evaluated features can be wider than the input history, so the experiment is not evidence of compression.
+Partition normalizers recover the full score vector from memberships in exact arithmetic. Gated local coordinates preserve the input under positivity and a full-rank basis-stack condition, although the inverse may be ill-conditioned. Matched raw reconstruction spaces can coincide or differ. These statements neither order fitted risks nor establish Koopman closure of nonlinear score coordinates. No autonomous transition matrix is fitted in this study.
 
-## Evidence and repository organization
+## Publication and reproduction scope
 
-| Location | Purpose |
-| --- | --- |
-| `papers/local_position_forecasting/` | Main article, focused supplement, editable source, compact evidence, and build/check scripts |
-| `extensions/soft_state_ablation_20261102/` | Matched representation experiment: fixed protocol, implementation, analysis, and audit records |
-| `docs/RESEARCH_INDEX.md` | Related studies, earlier methods, and retained archival material |
-| `REPRODUCIBILITY.md` | Document builds, saved-loss checks, archive restoration, audit replay, and full simulation regeneration |
-| `TIME_SERIES_RESEARCH.md` | Interpretation of the central and related evidence |
+This branch publishes the document sources and static tables, the exact 40-row primary summary, and the original protocol and source/release identities. It is not a complete mirror of the separately delivered scientific execution package. That package contains the frozen implementation, repetition-level loss tables, audit receipts, and stage records. The supplied large numerical-archive inventory does not establish a public download service.
 
-The central experiment depends on earlier runtime modules. Their original paths and frozen source records are preserved. Earlier paper editions and exploratory studies remain available as archival material; they are not additional independent evidence for the matched experiment. In particular, unfavorable policy and natural-data results are not removed or pooled with the central result.
+[REPRODUCIBILITY.md](REPRODUCIBILITY.md) distinguishes document builds, summary-arithmetic checks, saved-loss analysis, and full model replay. The publication manifest identifies the document inputs checked against the approved author package. Earlier frozen experiments and manuscript editions remain unchanged. The public repository is attributed research material, not an anonymous review-code archive.
 
-Large fitted-state and episode archives are separately indexed. An archive index does not establish a public download location. Full source regeneration and replay from author-supplied arrays are different reproducibility routes, as documented in the guide.
-
-## Licensing and citation
-
-Original software is distributed under the [MIT License](LICENSE). Original research outputs are distributed under [CC BY 4.0](DATA_LICENSE), unless another license is stated. Third-party datasets, dependencies, and template files retain their own licenses. Cite the manuscript and the exact study source or evidence commit used. The public repository is an attributed research resource, not an anonymous review archive.
+Original software retains the [MIT License](LICENSE); research outputs retain the terms in [DATA_LICENSE](DATA_LICENSE). Third-party licenses and attribution are preserved. Cite the manuscript version, study protocol, and immutable repository commit used.

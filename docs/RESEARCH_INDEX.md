@@ -1,27 +1,27 @@
-# Research index
+# Research and evidence index
 
-## Central forecasting study
+## Current manuscript
 
-The focused article is [Local Position and Reconstruction Features for Forecasting](../papers/local_position_forecasting/). Its matched experiment is [soft_state_ablation_20261102](../extensions/soft_state_ablation_20261102/). The main article reports all four primary comparisons; the supplement contains the full protocol, descriptive decompositions, related studies, and computational audit scope.
+[Predictive Enrichment of Geometry-Induced Soft-State Abstractions](../papers/score_enrichment/) studies information retention and finite-decoder access in reconstruction-score representations. The [study directory](../extensions/score_enrichment_20261102/) contains its exact primary-summary evidence and source identities. Its 64-repetition-per-law cohort and 40-comparison family are separate from all earlier studies. The [reproducibility guide](../REPRODUCIBILITY.md) states which materials are published in this branch and which remain in the author-delivered package.
 
-The 32-repetition central experiment tests a hierarchy of direct forecasting features. It does not combine observations or comparison families from the studies below.
+## Related studies
 
-## Related evidence
+| Scientific question | Study and evidence |
+| --- | --- |
+| Score-based local coordinates and decoder capacity | [Predictive geometry](../extensions/predictive_geometry/README.md): complete controlled and capacity studies, including unfavorable laws |
+| Center-distance gates, position, and departures | [Four-arm ablation](../extensions/soft_state_ablation_20261102/README.md): different gate map and a separate 32-repetition cohort |
+| Validation-selected native dimension in residual forecasting | [Dimension study](../extensions/dimension_forecasting/README.md): separate retained-baseline architecture and six-criterion family |
+| Input preprocessing and dimension | [Preprocessing study](../extensions/preprocessing_dimension/FINDINGS.md): complete-procedure and secondary comparisons remain distinct |
+| Residual target construction | [Computational reproduction](../extensions/crossfit_residual_reproduction_20261101/README.md): original simulation units with prior outcome knowledge, not fresh independent repetitions |
+| Enlarging a forecasting policy | [Policy augmentation](../extensions/policy_augmentation_20261101/RESULTS.md): neither nonlinear practical-superiority criterion established |
+| Natural-series policy use | [M4 training-series evaluation](../extensions/policy_augmentation_natural_20261101/FINDINGS.md): descriptive 2.273% loss increase after KAHM augmentation; no official M4 Test data |
 
-| Study | Evidence and scope | Record |
-| --- | --- | --- |
-| Validation-selected local dimension | 24 repetitions and 192 tasks; three of six criteria established. KAHM improves common features and raw-input RBF, but the selected non-KAHM policy has lower mean loss. | [Dimension findings](../extensions/dimension_forecasting/FINDINGS.md) |
-| Preprocessing and dimension | 24 fresh repetitions; one of four criteria established. Primary KAHM and preprocessing superiority margins are not established. | [Preprocessing findings](../extensions/preprocessing_dimension/FINDINGS.md) |
-| Residual-target computational reproduction | Regenerates 24 original simulation units with prior outcome knowledge; two of four criteria established. It contributes no additional independent repetitions. | [Residual-target results](../extensions/crossfit_residual_reproduction_20261101/reporting/RESULTS.md) |
-| Policy augmentation | 24 fresh repetitions and 192 tasks. Nonlinear improvements of 0.816% over the base policy and 0.658% over the added-RBF control do not establish their 3% margins. Both linear noninferiority criteria pass. | [Policy results](../extensions/policy_augmentation_20261101/RESULTS.md) |
-| Natural-data policy evaluation | Descriptive panel of 48 M4 training series. KAHM augmentation has 2.273% higher aggregate loss than the base policy. Official M4 Test data are not used. | [Natural-data findings](../extensions/policy_augmentation_natural_20261101/FINDINGS.md) |
+Supervised geometry, directly trained reconstructions, scaling, and online adaptation remain separate development investigations under `extensions/`. Their representations and update rules do not establish closure of the present score map.
 
-These studies address different procedures. A representation-level gain does not establish a benefit from enlarging an already selected forecasting policy. Equal search counts do not guarantee equal feature capacity or computation.
+## Preserved documents and earlier architecture
 
-## Archival methods and manuscripts
+Earlier article editions remain in [local_position_forecasting](../papers/local_position_forecasting/), [soft_state_forecasting](../papers/soft_state_forecasting/), and [tmlr_integration](../extensions/tmlr_integration/). These are not the current manuscript entry point. Their original records and paths are retained.
 
-Earlier manuscript editions are preserved under [papers/soft_state_forecasting/](../papers/soft_state_forecasting/) and [extensions/tmlr_integration/](../extensions/tmlr_integration/). Their source manifests and reporting records identify those editions; they are not the entry point for the focused article.
+Root `experiment_*.py`, `step_*.py`, `kahkm_*` outputs, [reproduction](../reproduction/), and [provenance](../provenance/) concern earlier Kernel Affine Hull Koopman Machine (KAHKM) work. KAHKM, a KAHM reconstruction map, center-distance gates, and reconstruction-score memberships are different objects. Their targets, decoders, and statistical units must not be interchanged.
 
-Other controlled, natural-data, training, adaptation, and exploratory experiments remain under [extensions/](../extensions/). Root `experiment_*.py`, `step_*.py`, `kahkm_*`, `reproduction/`, and `provenance/` belong to earlier Kernel Affine Hull Koopman Machine (KAHKM) work. KAHKM denotes a different architecture from the KAHM local reconstruction used in the central feature study. Targets, coordinate maps, and readouts differ, so results do not transfer automatically between them.
-
-Frozen experiment files and original paths remain part of the provenance and dependency structure. The index separates reading routes without deleting unfavorable evidence or altering the studies' statistical contracts.
+No observations or comparison families are pooled merely because their studies share this repository. Historical snapshots remain at their original paths, and no unfavorable evidence is removed.

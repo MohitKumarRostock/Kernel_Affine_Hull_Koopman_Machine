@@ -38,7 +38,7 @@ jobs:
       - name: Install document-build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-publishers poppler-utils
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-publishers lmodern poppler-utils
       - name: Compile both documents without running experiments
         run: python3 papers/score_enrichment/scripts/build.py
       - name: Publish only the two PDFs and document-build receipt

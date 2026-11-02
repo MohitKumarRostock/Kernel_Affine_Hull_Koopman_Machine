@@ -1,0 +1,54 @@
+
+\section{What distinguishes the raw reconstruction features?}\label{sec:theory}
+This section compares exact scalar function spans before column standardization, the radial map, or ridge fitting. For a vector-valued function, adjoining it to a span means adjoining each coordinate function. Fix one positive-rank local model and suppress its index. Write $n$ for its reference count, $Q\in\R^{n\times d}$ for its references, $K$ for its Gram matrix, $\lambda>0$ for its regularizer, and $C=(K+\lambda I_n)^{-1}$. The Gaussian Gram matrix is symmetric positive semidefinite, so $C$ is symmetric positive definite. All reconstructions in this section use Equation~\eqref{eq:reconstructions} without fallback.
+
+\subsection{Normalized target transfer}
+For $s(z)=\mathbf1_n^\top Ck(z)\ne0$, the normalized vector $\omega(z)=Ck(z)/s(z)$ satisfies $\mathbf1_n^\top\omega(z)=1$. Symmetry of $C$ gives, for any reference target vector $v\in\R^n$,
+\begin{equation}
+ \omega(z)^\top v=\frac{k(z)^\top Cv}{k(z)^\top C\mathbf1_n}.
+ \label{eq:quotient}
+\end{equation}
+This is a ratio of two kernel-ridge predictions with regularization matrix $K+\lambda I_n$ and no extra intercept: the numerator fits $v$, and the denominator fits the constant target. In particular, if $f(q)=q^\top\beta+\beta_0$ for $\beta\in\R^d$ and $\beta_0\in\R$, then $f(Q)=Q\beta+\beta_0\mathbf1_n$ and
+\[
+ \omega(z)^\top f(Q)-f(z)=[A_K(z)-z]^\top\beta.
+\]
+The equality follows by substituting $f(Q)$ and using the unit sum of the weights. At zero regularization, when $K$ is invertible and the denominator is nonzero, Equation~\eqref{eq:quotient} is the rescaled interpolation construction studied by \citet{DeMarchi2017Rescaled}. The quotient identity is an interpretation of the existing reconstruction, not a new normalization principle.
+
+\subsection{A sufficient condition for equal augmented spans}
+Fix a common gate $g$, mean $\mu$, and principal basis $P$. Let $\mathcal S_0$ be the span of $g$ and the coordinates of $g(z)P^\top(z-\mu)$. Define $d_m(z)=g(z)[A_m(z)-A_A(z)]$ for $m=K,R$. Since
+\[
+ g(z)A_A(z)=g(z)\mu+P\{g(z)P^\top(z-\mu)\},
+\]
+its coordinates already belong to $\mathcal S_0$. Thus adjoining departures or gated reconstructions yields the same augmented span.
+
+\begin{proposition}[Equal spans under reference invariance]\label{prop:equal}
+Suppose $K\mathbf1_n=\kappa\mathbf1_n$ for a scalar $\kappa$ and $C\mathcal V\subseteq\mathcal V$, where
+$\mathcal V=\operatorname{span}\{\mathbf1_n,Q_{:1},\ldots,Q_{:d}\}\subseteq\R^n$ and $Q_{:i}$ is column $i$ of $Q$. Then
+\[
+ \operatorname{span}(\mathcal S_0,d_K)=\operatorname{span}(\mathcal S_0,d_R).
+\]
+The same equality holds after adjoining a common constant function.
+\end{proposition}
+
+The assumptions imply $C\mathbf1_n=a\mathbf1_n$, with $a=(\kappa+\lambda)^{-1}>0$, and $CQ=QB+\mathbf1_n c^\top$ for some matrix $B\in\R^{d\times d}$ and vector $c\in\R^d$. Hence $A_K=(B^\top A_R+c)/a$. Invertibility of $C$ on the finite-dimensional invariant space $\mathcal V$ supplies the reverse relation; $B$ itself need not be invertible. Appendix~\ref{app:proofs} gives the full proof, including redundant reference-coordinate columns.
+
+For a simple example, take scalar references $(-1,1)$, $g=1$, and $A_A(z)=z$. If $\rho\in(0,1)$ is the off-diagonal Gram entry, direct inversion gives
+\[
+ A_K=c_\rho A_R,\qquad
+ d_K=c_\rho d_R+(c_\rho-1)z,\qquad
+ c_\rho=\frac{1+\rho+\lambda}{1-\rho+\lambda}.
+\]
+The reconstructions and departures differ, but the augmented spans containing the common coordinate $z$ agree. A different reconstruction formula is therefore not sufficient evidence for an additional raw predictive basis.
+
+\subsection{Irregular references can give different spans}
+\begin{proposition}[Separation for three scalar references]\label{prop:distinct}
+Let $q_1<q_2<q_3$ satisfy $q_1+q_3\ne2q_2$, and let $\tau>0$. Define $k_i(z)=\exp\{-\tau(z-q_i)^2/2\}$, $K_{ij}=\exp\{-\tau(q_i-q_j)^2/2\}$, $C=(K+\lambda I_3)^{-1}$ for $\lambda>0$, and $q=(q_1,q_2,q_3)^\top$. Suppose every entry of $C\mathbf1_3$ is positive. For $g=1$ and $A_A(z)=z$, the scalar functions on $\R$ satisfy
+\[
+ A_K\notin\operatorname{span}(1,z,A_R),\qquad
+ d_K\notin\operatorname{span}(1,z,d_R).
+\]
+\end{proposition}
+
+The irregular spacing makes the six Gaussian products $k_i k_j$, $i\leq j$, linearly independent. An affine relation between the reconstructions would then force $K$ to have constant row sums, contradicting the strict ordering of its inter-reference distances. Positivity of $C\mathbf1_3$ makes both reconstructions bounded and excludes a nonzero additional linear term in $z$. Appendix~\ref{app:proofs} proves each step and gives a concrete example with $q=(-1,0,2)^\top$, $\tau=3/7$, and $\lambda=4$.
+
+These propositions establish equality in some geometries and possible separation in another; they do not classify every fitted bank. Nor do they order forecasting risks. An invertible linear change of coordinates generally changes an isotropic ridge penalty, and the separate nonlinear radial maps can alter a raw span relation. Conversely, a distinct raw function may be irrelevant to the target or difficult to estimate. The experiment therefore assesses the full transformed-and-fitted procedure rather than inferring performance from algebraic expressivity.

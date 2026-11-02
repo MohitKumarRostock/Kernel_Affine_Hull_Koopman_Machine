@@ -1,0 +1,115 @@
+
+\section{Scope and notation}
+The central experiment predicts observed future values using four geometric representations. G contains locality memberships; P appends local principal coordinates; K appends KAHM reconstruction departures to P; R instead appends matched positive-kernel RBF departures. Every readout is affine ridge regression on its declared representation. There is no separate retained baseline, residual target, or calibration multiplier in this experiment.
+
+Vectors are columns. A superscript $\top$ denotes transpose, $\|\cdot\|_2$ is the Euclidean norm, $\|\cdot\|_1$ is the sum of absolute coordinates, and $\|\cdot\|_F$ is the square root of the sum of squared matrix entries. The symbols $I_n$ and $\mathbf1_n$ denote the identity matrix and all-ones vector of dimension $n$. The operator $\concat$ stacks its arguments as a column. Population moments such as $\E$ and $\Var$ refer to the stated probability law; empirical variances below specify their divisors. All fitted transformations remain fixed when validation or evaluation observations are processed.
+
+\section{Observation laws and data allocation}\label{supp:laws}
+\subsection{Base episode generators}
+Four numerical observation laws generate episodes of length 72. Independent episodes use independent initial states and innovation streams. We write $u_t$ for a base discrete-time observation and reserve $y_t$ for the observation after additional noise. The notation $N(\mu,\sigma^2)$ denotes a normal distribution with mean $\mu$ and variance $\sigma^2$, and $U[a,b]$ denotes a uniform distribution on $[a,b]$.
+
+\paragraph{Linear autoregression.}
+The process starts with $u_0=u_1=0$ and follows
+\[
+ u_t=0.65u_{t-1}-0.15u_{t-2}+\epsilon_t,\qquad
+ \epsilon_t\stackrel{\mathrm{iid}}\sim N(0,0.1^2),\quad t\geq2.
+\]
+The first 256 stored values are discarded. An episode consists of 72 values beginning at stored index 256. This law provides the separate linear control.
+
+\paragraph{Nonlinear autoregression.}
+The initial values are independent draws $u_0,u_1\sim U[-0.8,0.8]$, and
+\[
+ u_t=\tanh\{1.25u_{t-1}-0.65u_{t-2}+0.25\sin(3u_{t-1})+\epsilon_t\},
+ \qquad \epsilon_t\stackrel{\mathrm{iid}}\sim U[-0.1,0.1].
+\]
+The innovations are independent of the initial values. The first 80 stored values are discarded, and the next 72 are retained.
+
+\paragraph{Oscillators.}
+Let $q(s)$ be position and $v(s)$ velocity at continuous time $s$; a dot denotes differentiation with respect to $s$. The Van der Pol and Duffing systems are, respectively,
+\begin{align*}
+ \dot q&=v,& \dot v&=(1-q^2)v-q,\\
+ \dot q&=v,& \dot v&=-0.2v+q-q^3+0.3\cos(1.2s+\theta).
+\end{align*}
+Initial position and velocity are independent $U[-2,2]$ draws. The phase $\theta\sim U[0,2\pi]$ is independent of both. The random-number procedure draws this phase for both systems, although only Duffing uses it. Classical fourth-order Runge--Kutta integration uses 64-bit floating-point arithmetic and step 0.025. After a burn-in interval of length 10, observations are recorded at intervals of 0.1. The 72 observed values are
+\[
+ u_j=0.95\tanh(q_j)+\xi_j,\qquad
+ \xi_j\stackrel{\mathrm{iid}}\sim U[-0.02,0.02],
+\]
+where $q_j$ is the numerically integrated position at retained observation $j$. Sensor noise is independent of the initial states and is drawn before integration in the specified random-number sequence. These generators define numerical observation laws; the episodes are not asserted to be exact continuous-time solutions or exactly stationary after burn-in.
+
+\subsection{Additional noise, windows, and split roles}
+There are 32 independent repetition units. For each law and repetition, A/B/C/D contain $64/32/32/128$ independent base episodes. Let $s_A$ be the population standard deviation of all base A episode values, using divisor equal to their number. For $\eta\in\{0,0.1\}$, set $y_t=u_t+\eta s_A e_t$, where the $e_t$ are independent standard normal variables. Base episodes and standard-normal arrays are shared across noise levels and competitors. Split-specific streams separate A, B, C, and D. Both histories and targets contain the added noise. The oscillator sensor noise remains present when $\eta=0$.
+
+An origin $t\in\{11,15,\ldots,59\}$ produces the history $x_t=(y_{t-11},\ldots,y_t)^\top\in\R^{12}$ and the targets $(y_{t+1},y_{t+4},y_{t+12})$. Each episode supplies thirteen origins. A/B/C retain at most $512/256/256$ rows, sampled uniformly without replacement. D retains all $128\times13=1664$ rows. The history at a later origin may contain a response that was a target at an earlier origin in the same episode, as that response is then observed. No model is refitted between origins. Dependence among overlapping windows is handled by aggregating losses within repetition, not by treating windows as independent samples.
+
+A fits geometry, feature transformations, and readout coefficients. B selects penalties and caps. All choices are fixed before C diagnostic predictions are recorded; C does not alter any coefficient or hyperparameter. D supplies final evaluation only. The four laws, two noise levels, and 32 repetitions give 256 task suites; the inferential sample size remains 32.
+
+\subsection{Random streams}
+The master seed is 2026110203. Repetitions are indexed $r=0,\ldots,31$; law indices follow linear autoregression, nonlinear autoregression, Van der Pol, and Duffing. Split indices for A/B/C/D are 0/1/2/3. A stream seed is the first uint32 value returned by NumPy's \texttt{SeedSequence} applied to its integer components. Generation, unit-noise, and row-sampling streams use
+\[
+ (2026110203,r,\mathrm{law},\mathrm{split},\mathrm{purpose}),
+\]
+with purposes 1001, 1002, and 1003. Fitting uses $(2026110203,r,\mathrm{law},1004)$, and the repetition identifier uses $(2026110203,r,1000)$. These rules give 1,696 intended-distinct streams. The retained roster checks collisions internally and against the recorded prior-study exclusions. Omitting noise level and candidate cap from the stream tuples pairs the intended random quantities across those comparisons.
+
+\section{Reference geometry and numerical evaluation}\label{supp:geometry}
+\subsection{Partitions, references, and local dimension}
+Each history coordinate is centered and scaled with its A mean and population standard deviation. A standard deviation at most $10^{-12}$ is replaced by one. At most 512 standardized A histories enter the bank. Separate $k$-means partitions request 2, 4, and 8 groups, with five initializations and at most 150 iterations. Too few distinct rows reduce the requested number of groups. An unresolved empty-group configuration is retried with halved group counts. Each group supplies at most 24 reference rows without replacement.
+
+Local model $j$ stores these references as rows of $Q_j\in\R^{n_j\times d}$, with $d=12$, in float32. Principal-component calculations convert them to float64 and use centered sample covariance. At candidate cap $c\in\{1,2,4,8,12\}$, the requested local rank starts at $\min\{c,d,n_j-1\}$. Eigenvalues must exceed double-precision machine epsilon. If the smallest coordinate range of the projected references is below $10^{-3}$, the requested rank is decremented and PCA recomputed. This continues until the range condition holds or requested rank one is reached. A rank-one model may therefore remain below the range threshold. The stored rank $r_j$ is the actual number of retained principal directions, not the cap.
+
+No additional $d-1$ restriction is used. Cap 20 is an alias of cap 12 at this history width and does not receive another search slot. Singleton or constant reference sets use an explicit rank-zero affine fallback. That wrapper is not treated as successful positive-rank PCA. Requested ranks, retained ranks, reference counts, and fallback reasons are recorded.
+
+\subsection{Kernels, reconstructions, and departures}
+Let $\mu_j=n_j^{-1}\sum_i q_{ji}$, where $q_{ji}\in\R^d$ is reference $i$. The squared-radius scale is
+\[
+ s_j=\max\{n_j^{-1}\sum_i\|q_{ji}-\mu_j\|_2^2,10^{-6}\}.
+\]
+For a standardized query $z$, gates in partition $\mathcal J_b$ are proportional to $\exp\{-\|z-\mu_j\|_2^2/(2s_j)\}$ and normalized over $j\in\mathcal J_b$. They depend on centers and radius scales, not on the reconstruction. Let $P_j\in\R^{d\times r_j}$ contain the retained orthonormal principal directions. At positive rank,
+\[
+ S_j=\frac1{n_j-1}\sum_i P_j^\top(q_{ji}-\mu_j)(q_{ji}-\mu_j)^\top P_j
+\]
+is the projected sample covariance. The Gaussian kernel between queries $z,z'$ is
+\[
+ \kappa_j(z,z')=\exp\left\{-\frac{[P_j^\top(z-z')]^\top S_j^{-1}[P_j^\top(z-z')]}{2r_j}\right\}.
+\]
+The vector $k_j(z)$ contains similarities to the references, and $K_j$ is their Gram matrix. With $C_j=(K_j+\lambda_j I_{n_j})^{-1}$, define
+\[
+ A_{K,j}(z)=\frac{Q_j^\top C_jk_j(z)}{\mathbf1_{n_j}^\top C_jk_j(z)},\quad
+ A_{R,j}(z)=\frac{Q_j^\top k_j(z)}{\mathbf1_{n_j}^\top k_j(z)},\quad
+ A_{A,j}(z)=\mu_j+P_jP_j^\top(z-\mu_j).
+\]
+KAHM and RBF use the same references and projected kernel. Their departures are $d_m(z)=\concat_j g_j(z)[A_{m,j}(z)-A_{A,j}(z)]$ for $m\in\{K,R\}$. Every departure retains all ambient coordinates.
+
+\paragraph{Reference-fitted regularization.}
+For one local model, suppress $j$ and write $Q\in\R^{n\times d}$. Define the reference energy $\nu=\|Q\|_F^2/(nd)$ and initialize $\lambda^{(0)}=2.5\nu$. At iteration $a$, compute
+\[
+ C^{(a)}=(K+\lambda^{(a)}I_n)^{-1},\qquad
+ \lambda^{(a+1)}=2\nu+\frac{\|Q-KC^{(a)}Q\|_F^2}{nd}.
+\]
+Stop when $|\lambda^{(a+1)}-\lambda^{(a)}|\leq10^{-3}$ or after 100 inverse computations. The reconstruction uses the last computed $C^{(a)}$ with its corresponding $\lambda^{(a)}$, not the subsequent proposal. An invalid regularizer or unexpected factorization failure stops the experiment. This is a reference-reconstruction rule, not a forecast-target tuning criterion.
+
+\paragraph{Query evaluation.}
+Before exponentiation, subtract the largest log-kernel entry from the query log-kernel vector. This multiplies every kernel entry by a common positive factor and therefore leaves both normalized reconstructions unchanged in exact arithmetic. It prevents the entire Gaussian vector from underflowing to zero, but does not resolve signed cancellation. For $a_j=C_jk_j(z)$ with $\|a_j\|_1>0$, compute the relative denominator $\rho_j=|\mathbf1_{n_j}^\top a_j|/\|a_j\|_1$. A failed denominator or finite-value check invokes the inherited affine fallback; the KAHM relative-denominator threshold is $10^{-10}$. Fallback makes the corresponding raw departure zero. Feature centering can subsequently map that raw zero to a nonzero transformed vector. Rank-zero models use $A_A=\mu_j$ and no position coordinates. Unexpected nonfinite final features or forecasts stop execution rather than deleting a task.
+
+\section{Feature transformations, fitting, and selection}\label{supp:fitting}
+Let $b_G=\concat_j g_j$ and $b_P=\concat_j g_jP_j^\top(z-\mu_j)$. The four raw blocks are $b_G,b_P,d_K,d_R$. Each receives its own A-fitted column means and population standard deviations, with scale floor $10^{-6}$. For a standardized block vector $v\in\R^p$, $p>0$, apply
+\[
+ T_p(v)=\frac{v}{\sqrt{1+\|v\|_2^2/p}}.
+\]
+An empty block remains empty. A tilde denotes the complete column-standardization and radial transformation. The readout inputs are
+\[
+ \chi_G=\widetilde b_G,\quad
+ \chi_P=\concat(\widetilde b_G,\widetilde b_P),\quad
+ \chi_K=\concat(\widetilde b_G,\widetilde b_P,\widetilde d_K),\quad
+ \chi_R=\concat(\widetilde b_G,\widetilde b_P,\widetilde d_R).
+\]
+There is no additional transformation of the concatenation. The G block is identical in all arms and the P input is an identical prefix in K and R. Exact array hashes check these prefix identities. The raw gates form a product of simplices, but the transformed inputs need not.
+
+For each cap, arm, and horizon, A minimizes
+\[
+ \frac1{n_A}\sum_{i\in A}(y_{ih}-a-\chi_m(x_i)^\top w)^2+\alpha\|w\|_2^2,
+ \qquad \alpha\in\{10^{-4},10^{-3},10^{-2},10^{-1},1\}.
+\]
+The intercept $a$ is unpenalized, $w$ is the coefficient vector, $y_{ih}$ is the observed horizon-$h$ target, and $n_A$ is the retained A row count. A summed-squared-error implementation must use penalty $n_A\alpha$ to give this estimator. B chooses the penalty independently for each cap, arm, and horizon. The first penalty in ascending order wins an exact tie. The centered-SVD solver has a documented SciPy \texttt{gesvd} recovery for its specified linear-algebra exception; the recovery preserves the objective and records the event. Other unhandled failures stop execution.
+
+For each arm and cap, average its selected B horizon MSEs after division by the corresponding retained-A target population variances, each floored at $10^{-12}$. The primary bank is the cap minimizing this quantity for P. All four arms use that bank and their own selected penalties. Independent per-arm cap selection forms a secondary comparison. Exact cap ties choose the first cap in ascending order. The primary rule intentionally favors a bank selected for P's task; it is not an exchangeable selection rule across arms. Equal K/R widths and search counts do not equate function classes, effective rank, or runtime.

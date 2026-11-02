@@ -1,0 +1,32 @@
+
+\section{What bounded features imply for a ridge readout}\label{supp:bound}
+The radial transformation supplies a deterministic feature-norm bound. It does not establish predictive accuracy or stability of a recursively propagated representation. The following calculation makes the distinction explicit and is independent of the particular reconstruction method.
+
+For a block $v\in\R^p$, $p>0$, define $T_p(v)=v/\sqrt{1+\|v\|_2^2/p}$. Its norm is at most $\sqrt p$. Put $a=1+\|v\|_2^2/p$. Its Jacobian is
+\[
+ DT_p(v)=a^{-1/2}I_p-a^{-3/2}vv^\top/p.
+\]
+For $v\ne0$, the eigenvalue parallel to $v$ is $a^{-3/2}$ and the eigenvalues on the orthogonal complement are $a^{-1/2}$. At zero the Jacobian is $I_p$. All singular values are at most one. Integrating the derivative along the line segment between two arguments shows that $\|T_p(v)-T_p(v')\|_2\leq\|v-v'\|_2$. Thus the radial map is nonexpansive with respect to its own input. This does not bound the sensitivity of the preceding signed reconstruction or fallback rule.
+
+If a representation concatenates separately transformed blocks of widths $p_1,\ldots,p_J$, its total width is $p=\sum_jp_j$ and its norm is at most $R=\sqrt{\sum_jp_j}$. Empty blocks contribute zero. Let $\chi_i\in\R^p$ and $y_i\in\R$, $i=1,\ldots,n$, be fixed training features and targets. Write $\bar\chi=n^{-1}\sum_i\chi_i$, $\bar y=n^{-1}\sum_i y_i$, and $\sigma_y^2=n^{-1}\sum_i(y_i-\bar y)^2$.
+
+\begin{proposition}[Centered-ridge magnitude bound]
+Let $(\widehat a,\widehat w)$ minimize
+$n^{-1}\sum_i(y_i-a-\chi_i^\top w)^2+\alpha\|w\|_2^2$ with $\alpha>0$ and unpenalized intercept. If a query feature $\chi$ satisfies $\|\chi\|_2\leq R$, then
+\[
+ \|\widehat w\|_2\leq\frac{\sigma_y}{2\sqrt\alpha},\qquad
+ |\widehat a+\chi^\top\widehat w|
+ \leq|\bar y|+(R+\|\bar\chi\|_2)\frac{\sigma_y}{2\sqrt\alpha}.
+\]
+\end{proposition}
+\begin{proof}
+For fixed $w$, differentiation with respect to the intercept gives $a=\bar y-\bar\chi^\top w$. Let $X_c\in\R^{n\times p}$ have rows $(\chi_i-\bar\chi)^\top$, and let $y_c\in\R^n$ have entries $y_i-\bar y$. The strictly convex coefficient objective has the unique solution
+\[
+ \widehat w=(X_c^\top X_c+n\alpha I_p)^{-1}X_c^\top y_c.
+\]
+For a singular value $s\geq0$ of $X_c$, the coefficient operator has singular value $s/(s^2+n\alpha)$. Since $(s-\sqrt{n\alpha})^2\geq0$, this quantity is at most $1/(2\sqrt{n\alpha})$. Hence $\|\widehat w\|_2\leq\|y_c\|_2/(2\sqrt{n\alpha})=\sigma_y/(2\sqrt\alpha)$. The fitted intercept gives
+$\widehat a+\chi^\top\widehat w=\bar y+(\chi-\bar\chi)^\top\widehat w$.
+Cauchy--Schwarz and the triangle inequality yield the stated magnitude bound.
+\end{proof}
+
+The bound conditions on the training sample and the selected positive penalty. It holds for every candidate and therefore for a validation-selected candidate, using that candidate's own dimensions and sample moments. It does not become an error guarantee after selection. Added Gaussian observation noise is unbounded, and even a uniformly bounded prediction can have large loss. The result also gives no control of a multistep rollout because the experiment fits no recursive transition model.

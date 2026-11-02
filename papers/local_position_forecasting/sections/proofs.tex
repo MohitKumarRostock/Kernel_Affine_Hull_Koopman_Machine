@@ -1,0 +1,60 @@
+
+\section{Proofs of the raw-span statements}\label{app:proofs}
+All spans in this appendix are real linear spans. They consist of scalar functions on the stated query domain, except for $\mathcal V$, which is a subspace of the finite-dimensional reference-coordinate space $\R^n$.
+
+\subsection{Proof of Proposition~\ref{prop:equal}}
+Since $K\mathbf1_n=\kappa\mathbf1_n$ and $K$ is positive semidefinite, $\kappa\geq0$ and
+$C\mathbf1_n=a\mathbf1_n$ with $a=(\kappa+\lambda)^{-1}>0$.
+The KAHM denominator is therefore $a\mathbf1_n^\top k(z)>0$. Invariance of $\mathcal V$ gives a matrix $B\in\R^{d\times d}$ and vector $c\in\R^d$ such that $CQ=QB+\mathbf1_n c^\top$. Symmetry of $C$ then implies
+\[
+ A_K(z)=\frac{(CQ)^\top k(z)}{a\mathbf1_n^\top k(z)}
+ =\frac{B^\top A_R(z)+c}{a}.
+\]
+Multiplying by $g(z)$ shows that each coordinate of $gA_K$ lies in the span of $g$ and the coordinates of $gA_R$. Since $g\in\mathcal S_0$ and $gA_A$ belongs coordinatewise to $\mathcal S_0$, this gives
+$\operatorname{span}(\mathcal S_0,d_K)\subseteq\operatorname{span}(\mathcal S_0,d_R)$.
+
+For the reverse inclusion, $C$ is injective on $\mathcal V$ because it is invertible on $\R^n$. Consequently $\dim(C\mathcal V)=\dim\mathcal V$. Together with $C\mathcal V\subseteq\mathcal V$, finite dimensionality gives $C\mathcal V=\mathcal V$. Hence $C^{-1}\mathcal V\subseteq\mathcal V$, and there exist $D\in\R^{d\times d}$ and $e\in\R^d$ such that $C^{-1}Q=QD+\mathbf1_n e^\top$. Multiplication by $C$ yields
+$Q=CQD+a\mathbf1_n e^\top$. After transposition and multiplication by $k(z)$,
+\[
+ A_R(z)=aD^\top A_K(z)+ae.
+\]
+The same gated-span argument gives the reverse inclusion. This proof does not require the columns of $Q$ to be independent, or either $B$ or $D$ to be invertible. Adjoining the same constant function to both equal spaces preserves equality.\hfill$\square$
+
+\subsection{Proof of Proposition~\ref{prop:distinct}}
+Write $v=C\mathbf1_3$ and $u=Cq$, so
+$A_K(z)=u^\top k(z)/(v^\top k(z))$ and
+$A_R(z)=q^\top k(z)/(\mathbf1_3^\top k(z))$.
+Every $v_i$ is positive by assumption. Thus $A_K$ is a convex combination of the three finite values $u_i/v_i$, with positive weights proportional to $v_i k_i(z)$. The RBF reconstruction is a convex combination of the three references. Both functions are bounded on $\R$.
+
+We first rule out an affine relation $A_K(z)=aA_R(z)+b$ with constants $a,b\in\R$. Put $w=u-bv$. Cross multiplication of this hypothetical relation gives
+\begin{equation}
+ (w^\top k)(\mathbf1_3^\top k)=a(q^\top k)(v^\top k)
+ \quad\hbox{for every }z\in\R.
+ \label{eq:crossmultiply}
+\end{equation}
+For $i\leq j$,
+\[
+ k_i(z)k_j(z)=\exp\{-\tau z^2\}
+ \exp\{\tau(q_i+q_j)z\}
+ \exp\{-\tau(q_i^2+q_j^2)/2\}.
+\]
+The six sums $q_i+q_j$ are distinct: strict reference ordering rules out every coincidence except $q_1+q_3=2q_2$, which is excluded. Exponentials with distinct real rates are linearly independent. Indeed, differentiating a putative zero linear combination at zero to orders zero through five produces a Vandermonde system; its determinant is the product of the nonzero differences between rates. Multiplication by the common positive factor $\exp\{-\tau z^2\}$ and nonzero constants preserves linear independence. Coefficients of all six products in Equation~\eqref{eq:crossmultiply} must therefore agree.
+
+The diagonal coefficients give $w_i=aq_i v_i$. The off-diagonal coefficients give $w_i+w_j=a(q_i v_j+q_j v_i)$ for $i<j$. If $a=0$, then $w=0$, so $Cq=bC\mathbf1_3$. Invertibility of $C$ would imply $q=b\mathbf1_3$, contradicting distinct references. If $a\ne0$, substitution of the diagonal identities gives $(q_i-q_j)(v_i-v_j)=0$. Hence all entries of $v$ equal a positive constant $v_0$. The identity $(K+\lambda I_3)v=\mathbf1_3$ would then make all row sums of $K$ equal.
+
+Those row sums are not equal. The middle-row sum exceeds the first-row sum by $K_{23}-K_{13}>0$, since $q_3-q_2<q_3-q_1$. It exceeds the last-row sum by $K_{12}-K_{13}>0$, since $q_2-q_1<q_3-q_1$. The Gaussian strictly decreases with positive distance. This contradiction rules out every affine relation between $A_K$ and $A_R$.
+
+If $A_K=aA_R+b+cz$ on $\R$, boundedness of both reconstructions forces $c=0$, returning to the impossible affine relation. Therefore $A_K\notin\operatorname{span}(1,z,A_R)$. Finally, $d_K=A_K-z$ and $d_R=A_R-z$, so $\operatorname{span}(1,z,d_R)=\operatorname{span}(1,z,A_R)$. Membership of $d_K$ in this span would imply membership of $A_K$, which proves the second assertion.\hfill$\square$
+
+\paragraph{Existence of a positive-denominator example.}
+Take $q=(-1,0,2)^\top$, $\tau=3/7$, and $\lambda=4$. Write $K=I_3+E$ and $a=1+\lambda=5$. For a matrix, $\|\cdot\|_\infty$ is the maximum absolute row sum; for a vector it is the largest absolute coordinate. In this example,
+\[
+ \|E\|_\infty=e^{-3/14}+e^{-6/7}<2,\qquad a>2\|E\|_\infty.
+\]
+The Neumann series for $aC=(I_3+E/a)^{-1}$ converges and gives
+\[
+ \|aC\mathbf1_3-\mathbf1_3\|_\infty
+ \leq\sum_{k=1}^{\infty}(\|E\|_\infty/a)^k
+ =\frac{\|E\|_\infty/a}{1-\|E\|_\infty/a}<1.
+\]
+Every entry of $C\mathbf1_3$ is therefore positive. This constructed example establishes that the proposition's assumptions are satisfiable. The chosen regularizer is part of the algebraic example and is not a claim about the reference-fitted regularizers in the forecasting experiment.

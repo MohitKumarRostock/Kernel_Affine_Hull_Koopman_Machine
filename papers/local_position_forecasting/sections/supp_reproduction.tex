@@ -1,0 +1,17 @@
+
+\section{Reproducibility specification}\label{supp:reproducibility}
+The central study is stored under \path{extensions/soft_state_ablation_20261102/}. Its frozen configuration and analysis contract define the candidate menu, seed rules, comparison factors, and fixed 32-repetition budget. The study environment records Python 3.12.14, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, and threadpoolctl 3.6.0. Production uses three fresh-process workers with one numerical thread each. These are recorded execution versions, not a claim that other versions cannot reproduce the results.
+
+The scientific dependency chain includes \path{extensions/dimension_forecasting/} for generators, native geometry, and shared runtime components, and the numerical solver under \path{extensions/policy_augmentation_20261101/code/}. The original source manifest identifies the required files and hashes. Running the central study from an isolated directory without these dependencies is not a complete reproduction environment.
+
+\paragraph{Levels of reproduction.}
+Document compilation uses the supplied tables, bibliography, and unmodified TMLR style files. It requires no model fitting. Recomputing the primary statistics uses the repetition-loss CSV files and reconstructs the four paired differences, their standard deviations, and adjusted upper endpoints. This verifies the arithmetic conditional on those losses, not the upstream predictions.
+
+Selected-model replay additionally requires prepared observations, portable JSON/NPZ fitted states, and retained predictions. Full audit replay reconstructs features and refits penalty paths as described in Section~\ref{supp:results}. The large numerical records are indexed in separate archives; a compact manuscript source package is not a substitute for those arrays. Their public availability must be distinguished from the availability of source sufficient to regenerate them.
+
+Full simulation regeneration starts from the recorded preproduction source in a separate clean worktree, with the original source freeze and genuine publication receipt. It runs A/B/C generation, fitting, fit sealing, D generation, prediction, prediction sealing, target release, analysis, and audit in that order. Completed output trees are not reused as clean generation directories. Execution timestamps and archive bytes can change even when numerical results agree, so substantive arrays are compared using the declared tolerances. The repository reproduction guide gives the exact commands and source identifiers.
+
+\paragraph{Evidence retention.}
+The compact record includes all primary and descriptive analysis tables. Three larger records are stored losslessly compressed: B candidate scores, basis dimensions, and the full computational audit. Restoration verifies compressed and uncompressed SHA256 identities before writing files. Hash checks establish byte identity; they do not independently establish scientific validity. The analysis and audit retain the unsuccessful primary comparison rather than replacing it with a favorable secondary subset.
+
+The related dimension, preprocessing, residual-target, and policy studies retain their own protocols and numerical records. Their source freezes, sampling units, and inference families remain separate. Computational reruns of an existing cohort are not counted as additional independent repetitions, and a source freeze is not described as external preregistration.

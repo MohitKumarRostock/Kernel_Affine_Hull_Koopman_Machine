@@ -1,0 +1,601 @@
+{
+  "audit_scope": [
+    "All task histories/targets replayed from retained physical episodes and reserved noise/row streams.",
+    "All B penalty paths independently refitted by affine Cholesky normal equations.",
+    "Every selected C/D forecast independently replayed from portable A-fitted geometry and coefficients.",
+    "All primary aggregate losses and bounds independently recomputed; units are complete repetitions.",
+    "Every input scaler fitted statistic and query transform independently checked against A histories.",
+    "Local reference eligibility, native spectral/range dimensions and kernel identities checked.",
+    "Partition k-means fitting and physical law integration are not independently reimplemented.",
+    "Stage hashes and source inspection establish recorded workflow order, not cryptographic target isolation.",
+    "Replay agreement is numerical within frozen tolerances; sealed byte and prefix hashes are exact."
+  ],
+  "figure": {
+    "aggregation": "Equal noise-level means within each repetition, then equal mean over 32 repetitions",
+    "file": "independent_K_joint_vs_standard.pdf",
+    "separate_y_scales": true,
+    "uncertainty_intervals": "none; descriptive mean comparison",
+    "values": [
+      {
+        "joint_K_smse": 0.9208811917896502,
+        "joint_K_vs_joint_R_gain_percent": -0.047709852414223874,
+        "joint_K_vs_standard_K_gain_percent": -0.24909935814723116,
+        "joint_R_smse": 0.9204420502459194,
+        "law": "linear_ar",
+        "n_repetitions": 32,
+        "scope": "descriptive equal-noise per-law means; no per-law primary inference",
+        "standard_K_smse": 0.9185929825660927
+      },
+      {
+        "joint_K_smse": 0.027860833707132916,
+        "joint_K_vs_joint_R_gain_percent": -4.930360848833848,
+        "joint_K_vs_standard_K_gain_percent": -0.48836518816728347,
+        "joint_R_smse": 0.02655173724911721,
+        "law": "nonlinear_ar",
+        "n_repetitions": 32,
+        "scope": "descriptive equal-noise per-law means; no per-law primary inference",
+        "standard_K_smse": 0.027725432347279932
+      },
+      {
+        "joint_K_smse": 0.024420908302777763,
+        "joint_K_vs_joint_R_gain_percent": 2.1125607450271366,
+        "joint_K_vs_standard_K_gain_percent": 0.22687851746754362,
+        "joint_R_smse": 0.024947948877452258,
+        "law": "vanderpol",
+        "n_repetitions": 32,
+        "scope": "descriptive equal-noise per-law means; no per-law primary inference",
+        "standard_K_smse": 0.02447644008717638
+      },
+      {
+        "joint_K_smse": 0.02634918737132404,
+        "joint_K_vs_joint_R_gain_percent": 0.4773407935506957,
+        "joint_K_vs_standard_K_gain_percent": 0.5175640256115388,
+        "joint_R_smse": 0.026475566048396494,
+        "law": "duffing",
+        "n_repetitions": 32,
+        "scope": "descriptive equal-noise per-law means; no per-law primary inference",
+        "standard_K_smse": 0.02648627078061054
+      }
+    ]
+  },
+  "independent_scaler_selections": [
+    {
+      "arm": "P",
+      "counts": {
+        "minmax": 71,
+        "standard": 78,
+        "tanh_z_1": 43
+      },
+      "median_cap": 2.0,
+      "panel": "nonlinear",
+      "tasks": 192
+    },
+    {
+      "arm": "K",
+      "counts": {
+        "minmax": 64,
+        "standard": 91,
+        "tanh_z_1": 37
+      },
+      "median_cap": 2.0,
+      "panel": "nonlinear",
+      "tasks": 192
+    },
+    {
+      "arm": "R",
+      "counts": {
+        "minmax": 69,
+        "standard": 82,
+        "tanh_z_1": 41
+      },
+      "median_cap": 2.0,
+      "panel": "nonlinear",
+      "tasks": 192
+    },
+    {
+      "arm": "P",
+      "counts": {
+        "minmax": 28,
+        "standard": 31,
+        "tanh_z_1": 5
+      },
+      "median_cap": 8.0,
+      "panel": "linear",
+      "tasks": 64
+    },
+    {
+      "arm": "K",
+      "counts": {
+        "minmax": 9,
+        "standard": 48,
+        "tanh_z_1": 7
+      },
+      "median_cap": 8.0,
+      "panel": "linear",
+      "tasks": 64
+    },
+    {
+      "arm": "R",
+      "counts": {
+        "minmax": 28,
+        "standard": 32,
+        "tanh_z_1": 4
+      },
+      "median_cap": 8.0,
+      "panel": "linear",
+      "tasks": 64
+    }
+  ],
+  "limitations": [
+    "Four inherited simulated laws with fresh independent repetitions, not new application domains.",
+    "The target is an observed future response, not a soft coordinate or a Koopman rollout.",
+    "The 3% threshold is an inherited research convention, not a deployment-derived utility threshold.",
+    "Paired Student bounds assume independent repetition aggregates and are approximate outside normality.",
+    "Shared geometry is selected by P; the independently selected K-versus-standard K pair is a separate primary question.",
+    "Other independent-geometry comparisons, including K versus R, remain descriptive.",
+    "A larger candidate set guarantees no greater selected B loss for its selector, but not lower D loss.",
+    "The finite scaler/cap/penalty grid does not optimize all geometry parameters or establish a global optimum.",
+    "Nested feature blocks do not imply monotone validation or test loss under fitted regularization.",
+    "Failure of a positive margin is not an equivalence finding or proof of zero benefit.",
+    "Secondary intervals are unadjusted descriptive intervals and cannot replace primary claims."
+  ],
+  "macros": {
+    "JSAuditChecks": {
+      "display": "7{,}422{,}883",
+      "value": 7422883
+    },
+    "JSCandidates": {
+      "display": "15",
+      "value": 15
+    },
+    "JSCaps": {
+      "display": "5",
+      "value": 5
+    },
+    "JSCriteriaEstablished": {
+      "display": "4",
+      "value": 4
+    },
+    "JSCriticalT": {
+      "display": "2.530926",
+      "value": 2.530925845218132
+    },
+    "JSEstablishedJointKLinear": {
+      "display": "Yes",
+      "value": "Yes"
+    },
+    "JSEstablishedJointKNonlinear": {
+      "display": "No",
+      "value": "No"
+    },
+    "JSEstablishedKP": {
+      "display": "Yes",
+      "value": "Yes"
+    },
+    "JSEstablishedKR": {
+      "display": "No",
+      "value": "No"
+    },
+    "JSEstablishedLinearKP": {
+      "display": "Yes",
+      "value": "Yes"
+    },
+    "JSEstablishedPG": {
+      "display": "Yes",
+      "value": "Yes"
+    },
+    "JSFamilySize": {
+      "display": "6",
+      "value": 6
+    },
+    "JSFitCpuMinutes": {
+      "display": "19.63",
+      "value": 19.628353522966666
+    },
+    "JSFitMedianSeconds": {
+      "display": "4.56",
+      "value": 4.560982888500803
+    },
+    "JSFitWallSumMinutes": {
+      "display": "19.63",
+      "value": 19.6305526275674
+    },
+    "JSGainJointKLinear": {
+      "display": "-0.2491",
+      "value": -0.24909935814723116
+    },
+    "JSGainJointKNonlinear": {
+      "display": "0.0727",
+      "value": 0.07270959955905099
+    },
+    "JSGainKP": {
+      "display": "8.86",
+      "value": 8.858229161576203
+    },
+    "JSGainKR": {
+      "display": "-0.9186",
+      "value": -0.9186420651470906
+    },
+    "JSGainLinearKP": {
+      "display": "-1.26",
+      "value": -1.2585780708876948
+    },
+    "JSGainPG": {
+      "display": "68.69",
+      "value": 68.69205912846093
+    },
+    "JSGapJointKLinear": {
+      "display": "-0.0436414",
+      "value": -0.04364143990474711
+    },
+    "JSGapJointKNonlinear": {
+      "display": "0.00076781",
+      "value": 0.0007678101542066255
+    },
+    "JSGapKP": {
+      "display": "-0.00171995",
+      "value": -0.0017199498460707557
+    },
+    "JSGapKR": {
+      "display": "0.00103904",
+      "value": 0.0010390371773190779
+    },
+    "JSGapLinearKP": {
+      "display": "-0.0342551",
+      "value": -0.0342551029911211
+    },
+    "JSGapPG": {
+      "display": "-0.0616038",
+      "value": -0.06160384178843572
+    },
+    "JSLossIndependentLinearG": {
+      "display": "0.937323",
+      "value": 0.9373233297986664
+    },
+    "JSLossIndependentLinearK": {
+      "display": "0.920881",
+      "value": 0.9208811917896503
+    },
+    "JSLossIndependentLinearP": {
+      "display": "0.915564",
+      "value": 0.9155637519676488
+    },
+    "JSLossIndependentLinearR": {
+      "display": "0.920442",
+      "value": 0.9204420502459194
+    },
+    "JSLossIndependentNonlinearG": {
+      "display": "0.0921642",
+      "value": 0.09216418613971807
+    },
+    "JSLossIndependentNonlinearK": {
+      "display": "0.0262103",
+      "value": 0.026210309793744908
+    },
+    "JSLossIndependentNonlinearP": {
+      "display": "0.0293596",
+      "value": 0.029359552155313606
+    },
+    "JSLossIndependentNonlinearR": {
+      "display": "0.0259918",
+      "value": 0.025991750724988653
+    },
+    "JSLossSharedLinearG": {
+      "display": "0.940694",
+      "value": 0.9406944951189602
+    },
+    "JSLossSharedLinearK": {
+      "display": "0.927087",
+      "value": 0.9270868365749103
+    },
+    "JSLossSharedLinearP": {
+      "display": "0.915564",
+      "value": 0.9155637519676488
+    },
+    "JSLossSharedLinearR": {
+      "display": "0.919841",
+      "value": 0.9198406107313736
+    },
+    "JSLossSharedNonlinearG": {
+      "display": "0.0937767",
+      "value": 0.09377669478737044
+    },
+    "JSLossSharedNonlinearK": {
+      "display": "0.0267588",
+      "value": 0.02675881574458344
+    },
+    "JSLossSharedNonlinearP": {
+      "display": "0.0293596",
+      "value": 0.029359552155313606
+    },
+    "JSLossSharedNonlinearR": {
+      "display": "0.0265152",
+      "value": 0.026515235636355012
+    },
+    "JSLossStandardIndependentLinearG": {
+      "display": "0.943965",
+      "value": 0.9439654679841134
+    },
+    "JSLossStandardIndependentLinearK": {
+      "display": "0.918593",
+      "value": 0.9185929825660928
+    },
+    "JSLossStandardIndependentLinearP": {
+      "display": "0.914789",
+      "value": 0.9147888468184859
+    },
+    "JSLossStandardIndependentLinearR": {
+      "display": "0.918714",
+      "value": 0.9187137413110529
+    },
+    "JSLossStandardIndependentNonlinearG": {
+      "display": "0.0966196",
+      "value": 0.09661958287474678
+    },
+    "JSLossStandardIndependentNonlinearK": {
+      "display": "0.0262294",
+      "value": 0.02622938107168895
+    },
+    "JSLossStandardIndependentNonlinearP": {
+      "display": "0.029789",
+      "value": 0.02978903053621785
+    },
+    "JSLossStandardIndependentNonlinearR": {
+      "display": "0.0260926",
+      "value": 0.026092601992333514
+    },
+    "JSLossStandardSharedLinearG": {
+      "display": "0.943965",
+      "value": 0.9439654679841134
+    },
+    "JSLossStandardSharedLinearK": {
+      "display": "0.922462",
+      "value": 0.9224621599351954
+    },
+    "JSLossStandardSharedLinearP": {
+      "display": "0.914789",
+      "value": 0.9147888468184859
+    },
+    "JSLossStandardSharedLinearR": {
+      "display": "0.919456",
+      "value": 0.9194560699504687
+    },
+    "JSLossStandardSharedNonlinearG": {
+      "display": "0.0966196",
+      "value": 0.09661958287474678
+    },
+    "JSLossStandardSharedNonlinearK": {
+      "display": "0.0266938",
+      "value": 0.026693828794785216
+    },
+    "JSLossStandardSharedNonlinearP": {
+      "display": "0.029789",
+      "value": 0.02978903053621785
+    },
+    "JSLossStandardSharedNonlinearR": {
+      "display": "0.0266479",
+      "value": 0.026647880925687314
+    },
+    "JSQueryWallSumMinutes": {
+      "display": "12.67",
+      "value": 12.667868537966449
+    },
+    "JSRelativeLossChangeJointKLinear": {
+      "display": "0.2491",
+      "value": 0.24909935814723116
+    },
+    "JSRelativeLossChangeJointKNonlinear": {
+      "display": "-0.0727",
+      "value": -0.07270959955905099
+    },
+    "JSRelativeLossChangeKP": {
+      "display": "-8.86",
+      "value": -8.858229161576203
+    },
+    "JSRelativeLossChangeKR": {
+      "display": "0.9186",
+      "value": 0.9186420651470906
+    },
+    "JSRelativeLossChangeLinearKP": {
+      "display": "1.26",
+      "value": 1.2585780708876948
+    },
+    "JSRelativeLossChangePG": {
+      "display": "-68.69",
+      "value": -68.69205912846093
+    },
+    "JSRepetitions": {
+      "display": "32",
+      "value": 32
+    },
+    "JSScalings": {
+      "display": "3",
+      "value": 3
+    },
+    "JSSolverRecoveries": {
+      "display": "0",
+      "value": 0
+    },
+    "JSTasks": {
+      "display": "256",
+      "value": 256
+    },
+    "JSUpperJointKLinear": {
+      "display": "-0.0417521",
+      "value": -0.04175207406466925
+    },
+    "JSUpperJointKNonlinear": {
+      "display": "0.000901116",
+      "value": 0.0009011161677636612
+    },
+    "JSUpperKP": {
+      "display": "-0.00144862",
+      "value": -0.001448622866809453
+    },
+    "JSUpperKR": {
+      "display": "0.00119423",
+      "value": 0.0011942252672097339
+    },
+    "JSUpperLinearKP": {
+      "display": "-0.0305374",
+      "value": -0.030537381433792775
+    },
+    "JSUpperPG": {
+      "display": "-0.0587852",
+      "value": -0.05878518634208848
+    }
+  },
+  "per_law_descriptive": [
+    {
+      "joint_K_smse": 0.9208811917896502,
+      "joint_K_vs_joint_R_gain_percent": -0.047709852414223874,
+      "joint_K_vs_standard_K_gain_percent": -0.24909935814723116,
+      "joint_R_smse": 0.9204420502459194,
+      "law": "linear_ar",
+      "n_repetitions": 32,
+      "scope": "descriptive equal-noise per-law means; no per-law primary inference",
+      "standard_K_smse": 0.9185929825660927
+    },
+    {
+      "joint_K_smse": 0.027860833707132916,
+      "joint_K_vs_joint_R_gain_percent": -4.930360848833848,
+      "joint_K_vs_standard_K_gain_percent": -0.48836518816728347,
+      "joint_R_smse": 0.02655173724911721,
+      "law": "nonlinear_ar",
+      "n_repetitions": 32,
+      "scope": "descriptive equal-noise per-law means; no per-law primary inference",
+      "standard_K_smse": 0.027725432347279932
+    },
+    {
+      "joint_K_smse": 0.024420908302777763,
+      "joint_K_vs_joint_R_gain_percent": 2.1125607450271366,
+      "joint_K_vs_standard_K_gain_percent": 0.22687851746754362,
+      "joint_R_smse": 0.024947948877452258,
+      "law": "vanderpol",
+      "n_repetitions": 32,
+      "scope": "descriptive equal-noise per-law means; no per-law primary inference",
+      "standard_K_smse": 0.02447644008717638
+    },
+    {
+      "joint_K_smse": 0.02634918737132404,
+      "joint_K_vs_joint_R_gain_percent": 0.4773407935506957,
+      "joint_K_vs_standard_K_gain_percent": 0.5175640256115388,
+      "joint_R_smse": 0.026475566048396494,
+      "law": "duffing",
+      "n_repetitions": 32,
+      "scope": "descriptive equal-noise per-law means; no per-law primary inference",
+      "standard_K_smse": 0.02648627078061054
+    }
+  ],
+  "primary": [
+    {
+      "candidate_key": "shared__P",
+      "candidate_mean_smse": 0.029359552155313603,
+      "comparator_factor": 0.97,
+      "comparator_key": "shared__G",
+      "comparator_mean_smse": 0.09377669478737044,
+      "contrast_id": "P_vs_G_nonlinear",
+      "criterion_established": true,
+      "critical_t": 2.530925845218132,
+      "macro_suffix": "PG",
+      "margin_difference_mean": -0.06160384178843572,
+      "margin_difference_sd": 0.006299956622454897,
+      "margin_difference_se": 0.001113685512229739,
+      "panel": "nonlinear",
+      "point_relative_gain_percent": 68.69205912846093,
+      "simultaneous_one_sided_upper": -0.05878518634208848,
+      "strict_D_win_repetitions": 32
+    },
+    {
+      "candidate_key": "shared__K",
+      "candidate_mean_smse": 0.02675881574458344,
+      "comparator_factor": 0.97,
+      "comparator_key": "shared__P",
+      "comparator_mean_smse": 0.029359552155313603,
+      "contrast_id": "K_vs_P_nonlinear",
+      "criterion_established": true,
+      "critical_t": 2.530925845218132,
+      "macro_suffix": "KP",
+      "margin_difference_mean": -0.0017199498460707557,
+      "margin_difference_sd": 0.0006064409901760464,
+      "margin_difference_se": 0.0001072046341357417,
+      "panel": "nonlinear",
+      "point_relative_gain_percent": 8.858229161576203,
+      "simultaneous_one_sided_upper": -0.001448622866809453,
+      "strict_D_win_repetitions": 32
+    },
+    {
+      "candidate_key": "shared__K",
+      "candidate_mean_smse": 0.02675881574458344,
+      "comparator_factor": 0.97,
+      "comparator_key": "shared__R",
+      "comparator_mean_smse": 0.026515235636355012,
+      "contrast_id": "K_vs_R_nonlinear",
+      "criterion_established": false,
+      "critical_t": 2.530925845218132,
+      "macro_suffix": "KR",
+      "margin_difference_mean": 0.0010390371773190779,
+      "margin_difference_sd": 0.00034685978944314007,
+      "margin_difference_se": 6.13167273090456e-05,
+      "panel": "nonlinear",
+      "point_relative_gain_percent": -0.9186420651470906,
+      "simultaneous_one_sided_upper": 0.0011942252672097339,
+      "strict_D_win_repetitions": 9
+    },
+    {
+      "candidate_key": "shared__K",
+      "candidate_mean_smse": 0.9270868365749103,
+      "comparator_factor": 1.05,
+      "comparator_key": "shared__P",
+      "comparator_mean_smse": 0.9155637519676488,
+      "contrast_id": "K_vs_P_linear",
+      "criterion_established": true,
+      "critical_t": 2.530925845218132,
+      "macro_suffix": "LinearKP",
+      "margin_difference_mean": -0.0342551029911211,
+      "margin_difference_sd": 0.008309452854866084,
+      "margin_difference_se": 0.001468917615406431,
+      "panel": "linear",
+      "point_relative_gain_percent": -1.2585780708876948,
+      "simultaneous_one_sided_upper": -0.030537381433792775,
+      "strict_D_win_repetitions": 1
+    },
+    {
+      "candidate_key": "independent__K",
+      "candidate_mean_smse": 0.026210309793744908,
+      "comparator_factor": 0.97,
+      "comparator_key": "standard_independent__K",
+      "comparator_mean_smse": 0.02622938107168895,
+      "contrast_id": "joint_K_vs_standard_K_nonlinear",
+      "criterion_established": false,
+      "critical_t": 2.530925845218132,
+      "macro_suffix": "JointKNonlinear",
+      "margin_difference_mean": 0.0007678101542066255,
+      "margin_difference_sd": 0.0002979513171821176,
+      "margin_difference_se": 5.267084921073481e-05,
+      "panel": "nonlinear",
+      "point_relative_gain_percent": 0.07270959955905099,
+      "simultaneous_one_sided_upper": 0.0009011161677636612,
+      "strict_D_win_repetitions": 15
+    },
+    {
+      "candidate_key": "independent__K",
+      "candidate_mean_smse": 0.9208811917896502,
+      "comparator_factor": 1.05,
+      "comparator_key": "standard_independent__K",
+      "comparator_mean_smse": 0.9185929825660927,
+      "contrast_id": "joint_K_vs_standard_K_linear",
+      "criterion_established": true,
+      "critical_t": 2.530925845218132,
+      "macro_suffix": "JointKLinear",
+      "margin_difference_mean": -0.04364143990474711,
+      "margin_difference_sd": 0.004222908071954605,
+      "margin_difference_se": 0.0007465117335016274,
+      "panel": "linear",
+      "point_relative_gain_percent": -0.24909935814723116,
+      "simultaneous_one_sided_upper": -0.04175207406466925,
+      "strict_D_win_repetitions": 0
+    }
+  ],
+  "reporting_only": true
+}

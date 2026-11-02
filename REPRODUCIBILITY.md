@@ -1,10 +1,20 @@
 # Reproducing the KAHM forecasting studies
 
-This repository contains several experiments with distinct source checkpoints and computational environments. The principal experiment in the coordinated manuscript is the validation-selected local-dimension study under `extensions/dimension_forecasting/`. Preprocessing and residual-target follow-ups retain separate protocols, analysis families and evidence. The original Kernel Affine Hull Koopman Machine (KAHKM) experiments have a separate result map under `reproduction/`. Use the environment and entry point for the study being reproduced.
+This repository contains experiments with distinct source checkpoints, targets, comparison families, and computational environments. The current paper is under [papers/soft_state_forecasting/](papers/soft_state_forecasting/); the new representation study is under [extensions/soft_state_ablation_20261102/](extensions/soft_state_ablation_20261102/). The [research index](docs/RESEARCH_INDEX.md) separates current entry points from preserved earlier studies. Use the environment and execution guide for the study being reproduced; the root Python requirements belong to the original KAHKM architecture.
 
-## Principal dimension-selected forecasting experiment
+**Status: all 256 tasks, the frozen analysis, and the independent production audit are complete.** The scientific source is [commit `2b7d19b5`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/2b7d19b5b47f46b5b21b28d24960688f7969d96f). The [audit receipt](extensions/soft_state_ablation_20261102/verification/independent_audit_summary.json) records verification coverage and limits. Three of four primary criteria are established; the KAHM-versus-RBF superiority margin is not.
 
-The [dimension-study README](extensions/dimension_forecasting/README.md) is the entry point for the principal ten-procedure, 192-task-suite experiment. It preserves the six-comparison primary family, of which three criteria were established. Its evidence includes prepared inputs, fitted and candidate states, validation/calibration decisions, terminal forecasts, analysis tables and execution records.
+## Current G/P/K/R representation ablation
+
+The published source is identified by [PUBLICATION.json](extensions/soft_state_ablation_20261102/PUBLICATION.json): commit `2b7d19b5b47f46b5b21b28d24960688f7969d96f`, published on 2 November 2026 at 09:20:24 UTC. All 25 published study-file identities were checked against the exact local source. The receipt binds source publication to the local freeze before production preparation. All 256 A/B-fitted task states were sealed before D generation; terminal forecasts were sealed before scoring. The complete analysis contains 2,048 task/view/arm forecast arrays, 32 independent repetition aggregates and 17 CSV tables. The independent production audit has passed all 256 tasks. Primary comparisons share a P-selected bank; independently selected caps are secondary. The four-criterion family does not pool earlier repetitions or natural-series observations.
+
+Use the [study directory](extensions/soft_state_ablation_20261102/) for the protocol, source freeze, publication receipt and execution commands. The [analysis summary](extensions/soft_state_ablation_20261102/analysis/analysis_summary.json) records all four primary contrasts, phase hashes and table identities. The analysis establishes P/G and K/P nonlinear superiority and K/P linear noninferiority, while leaving K/R nonlinear superiority unestablished: three of four criteria. The [independent production audit](extensions/soft_state_ablation_20261102/verification/independent_audit_summary.json) records 2,563,814 checks, independently refits and replays 25,600 B penalty-path arrays, and replays all 2,048 C and 2,048 D forecast arrays. It recomputes the primary losses and bounds and checks local references, native dimensions and kernel identities. No numerical solver recoveries occurred. Maximum absolute forecast differences are 1.20209e-11 on B paths, 2.42889e-12 on C and 5.58575e-12 on D. Physical-law integration and partition k-means fitting are not independently reimplemented; this is an internal numerical audit, not external scientific replication. Earlier artificial receipts concern manufactured data and source review; they do not verify this production cohort. Publication and seals document procedural order, not independent preregistration or cryptographic target isolation. Fresh seeds under known laws extend sampling evidence, not application domains.
+
+Preserve the original input, fit, prediction, target, and analysis records when replaying a completed study. Use separate output directories or a clean checkout for regenerated files. Earlier terminal results informed the new design; the new comparison therefore requires its own reserved evaluation.
+
+## Earlier dimension-selected forecasting experiment
+
+The [dimension-study README](extensions/dimension_forecasting/README.md) is the entry point for the earlier principal ten-procedure, 192-task-suite experiment. It preserves the six-comparison primary family, of which three criteria were established. Its evidence includes prepared inputs, fitted and candidate states, validation/calibration decisions, terminal forecasts, analysis tables and execution records.
 
 Use the pinned Python 3.12 environment described in that guide. From the repository root:
 
@@ -153,7 +163,7 @@ Selected-state replay compares predictions using relative tolerance `1e-10` and 
 | Same-seed computational reproduction | A newly retained execution follows the same source, design and simulation streams; it adds no independent sampling evidence and does not authenticate unavailable earlier outputs. |
 | External replication | A separate research team reproduces or independently tests the scientific findings. This is not claimed by the repository's internal checks. |
 
-A successful checksum or replay does not, by itself, validate a scientific interpretation. The manuscript supplies the assumptions, comparison design and inferential scope needed to interpret the verified outputs. The six principal comparisons and each follow-up's four comparisons remain separate families. A favorable secondary result does not replace an unmet primary criterion.
+A successful checksum or replay does not, by itself, validate a scientific interpretation. The manuscript supplies the assumptions, comparison design and inferential scope needed to interpret the verified outputs. The earlier six-comparison dimension family, each follow-up family, and the new ablation family remain separate. A favorable secondary result does not replace an unmet primary criterion.
 
 ## Other forecasting studies
 
@@ -188,26 +198,18 @@ The full evidence summary is [reproduction/REPRODUCIBILITY_EVIDENCE.md](reproduc
 
 ## Manuscript reproduction and reporting provenance
 
-The coordinated manuscript source includes all generated displays. Compilation requires no model fitting or numerical-record archives:
+The canonical current source is [papers/soft_state_forecasting/](papers/soft_state_forecasting/). Its `main.tex` and `supplement.tex` use supplied generated displays. With the documented TeX environment, compile from the repository root:
 
 ```bash
-cd extensions/tmlr_integration/manuscript
+cd papers/soft_state_forecasting
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
 ```
 
-The [manuscript guide](extensions/tmlr_integration/README.md) and
-[build guide](extensions/tmlr_integration/manuscript/README_BUILD.md) identify
-`core_followup_experiments.tex`, the supporting sections, and the display
-builders. `build_followup_assets.py` reads the completed preprocessing and
-cross-fit evidence into separate `generated/preprocessing_dimension/` and
-`generated/crossfit_residual/` namespaces. Regenerating those displays requires
-the study evidence; compiling the supplied source ZIP does not.
+The outputs are `main.pdf` and `supplement.pdf` in that directory. GitHub retains those PDFs and the individual editable files in the [source directory](papers/soft_state_forecasting/), with the [build guide](papers/soft_state_forecasting/README_BUILD.md). A standalone source ZIP may be delivered separately; it is not an additional repository artifact. Compiling supplied tables and figures does not require scientific refitting or numerical-record archives; regenerating their values requires the corresponding study evidence. Follow the paper's `README_BUILD.md` for its actual dependencies and reporting commands.
 
-The [coordinated release record](extensions/tmlr_integration/review/COORDINATED_MANUSCRIPT_RELEASE.json)
-identifies this document edition. Manuscript source and reporting changes do
-not alter frozen study code, configurations, protocols, analyzers, numerical
-records or phase seals. Historical packaging utilities and saved-forecast
-verifiers retain their original schemas. This revision adds neither new
-scientific runs nor new natural-data validation, and TMLR review formatting
-makes no claim of submission or acceptance.
+The preserved [earlier manuscript guide](extensions/tmlr_integration/README.md), [historical build guide](extensions/tmlr_integration/manuscript/README_BUILD.md), and [coordinated release record](extensions/tmlr_integration/review/COORDINATED_MANUSCRIPT_RELEASE.json) describe the earlier edition. Its source remains at `extensions/tmlr_integration/manuscript/`; it is not the current build entry point.
+
+Manuscript reporting changes do not alter frozen study code, configurations, protocols, analyzers, numerical records, or phase seals. The G/P/K/R ablation is a separate completed execution and analysis under published frozen source; its independent production audit has passed. Historical packaging utilities and saved-forecast verifiers retain their original schemas. Document builds and numerical audits are distinct evidence, and TMLR review formatting makes no claim of submission or acceptance.
+
+The completed four-arm results and computational audit were published and hash-verified in [commit `65ecf679`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/65ecf679796cc38b2342e2a4c12fa0226dc9ac78), separately from the frozen scientific source and manuscript edition.

@@ -1,0 +1,53 @@
+{
+  "schema_version": "reconstruction-mechanism-v1",
+  "laws": ["linear_ar", "nonlinear_ar", "vanderpol", "duffing"],
+  "nonlinear_laws": ["nonlinear_ar", "vanderpol", "duffing"],
+  "seeds": [946100, 946101, 946102, 946103, 946104, 946105, 946106, 946107, 946108, 946109, 946110, 946111, 946112, 946113, 946114, 946115, 946116, 946117, 946118, 946119, 946120, 946121, 946122, 946123],
+  "development_seed": 975001,
+  "noise_levels": [0.0, 0.1],
+  "episode_length": 72,
+  "history": 12,
+  "horizons": [1, 4, 12],
+  "stride": 4,
+  "split_episodes": {"A": 64, "B": 32, "C": 32, "D": 128},
+  "split_caps": {"A": 512, "B": 256, "C": 256, "D": null},
+  "linear_ar": {"coefficients": [0.65, -0.15], "innovation_std": 0.1, "initial_values": [0.0, 0.0], "burn_in_stored_values": 256},
+  "seed_salts": {"generation": 946601, "unit_noise": 946602, "caps": 946603, "fit": 946604},
+  "methods": ["ridge", "raw_rbf", "raw_hgb", "persistence", "common", "kahm_departure", "rbf_departure", "kahm_unbounded", "rbf_unbounded", "nonkahm_policy"],
+  "model": {
+    "alpha_grid": [0.0001, 0.001, 0.01, 0.1, 1.0],
+    "gamma_grid": [0.0, 0.25, 0.5, 1.0],
+    "blocks": [2, 4, 8],
+    "rank": 2,
+    "max_references": 24,
+    "bank_row_cap": 512,
+    "relative_denominator_tolerance": 1e-10,
+    "feature_scale_floor": 1e-6,
+    "target_variance_floor": 1e-12,
+    "raw_rbf_landmarks": 64,
+    "raw_rbf_bandwidth_factors": [0.5, 1.0, 2.0],
+    "raw_hgb_learning_rates": [0.05, 0.1],
+    "raw_hgb_max_leaf_nodes": [7, 15],
+    "raw_hgb_max_iter": 100,
+    "raw_hgb_l2_regularization": 1.0
+  },
+  "analysis": {
+    "primary_candidate": "kahm_departure",
+    "primary_comparators": ["common", "rbf_departure", "raw_rbf", "raw_hgb", "nonkahm_policy"],
+    "family_alpha": 0.05,
+    "superiority_margin": 0.03,
+    "linear_noninferiority_margin": 0.05,
+    "variance_floor": 1e-12,
+    "max_error_ratio": 5.0
+  },
+  "execution": {
+    "numerical_threads": 1,
+    "fresh_process_per_task": true,
+    "serial_task_execution": true,
+    "replay_rtol": 1e-10,
+    "replay_atol": 1e-12,
+    "fit_api_receives": ["A_X", "A_Y", "B_X", "B_Y", "C_X", "C_Y"],
+    "predict_api_receives": ["D_X"],
+    "public_preregistration": false
+  }
+}

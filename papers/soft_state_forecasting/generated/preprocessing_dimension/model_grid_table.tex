@@ -1,0 +1,16 @@
+\begin{tabular}{@{}p{0.43\linewidth}p{0.51\linewidth}@{}}
+\toprule
+Setting & Frozen value \\
+\midrule
+Ridge penalties, each horizon & $\{0.0001,0.001,0.01,0.1,1\}$ \\
+Calibration multipliers, each horizon & $\{0,0.25,0.5,1\}$ \\
+Preprocessing-study native caps & $\{1,2,4,8,12,20\}$ \\
+Requested partition counts & $\{2,4,8\}$ \\
+References per local model / bank rows & At most 24 / 512 \\
+Raw RBF landmark count & At most 64 \\
+Raw RBF bandwidth factors & $\{0.5,1,2\}$ \\
+HGB learning rates / leaf counts & $\{0.05,0.1\}$ / $\{7,15\}$ \\
+HGB iterations / L2 penalty & 100 / 1 \\
+Feature-scale / target-variance floors & $10^{-6}$ / $10^{-12}$ \\
+\bottomrule
+\end{tabular}

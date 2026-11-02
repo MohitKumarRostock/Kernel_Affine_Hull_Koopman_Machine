@@ -1,0 +1,28 @@
+% Generated only from audited target-geometry predictions; no fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Fresh synthetic repetitions: mean test MSE $\times10^3$ over all 12 independent repetitions per law, with equal episode, origin and horizon weights. Every declared procedure is shown. A dash denotes an incomplete full roster; baseline fallbacks retain their actual forecasts. Differences are assessed by the 18 prespecified paired intervals in Table~\ref{tab:target-synthetic-intervals}, not by ranking these means.}
+\label{tab:target-synthetic-main}
+\begin{tabular}{lrrr}
+\toprule
+Procedure & Nonlinear AR & Van der Pol & Duffing \\
+\midrule
+Raw ridge & 5.057 & 44.140 & 6.916 \\
+Raw RBF & 4.442 & 8.316 & 4.172 \\
+Persistence / seasonal naive & 8.549 & 293.407 & 37.977 \\
+Joint raw + KAHM & 4.465 & 17.009 & 5.277 \\
+Fixed, IS KAHM & 4.478 & 21.380 & 5.468 \\
+Fixed, IS Affine & 4.470 & 18.986 & 4.706 \\
+Fixed, IS Locality & 4.503 & 13.699 & 4.508 \\
+Fixed, IS RBF local & 4.427 & 15.987 & 5.318 \\
+Fixed, OOF KAHM & 4.481 & 21.383 & 5.469 \\
+Fixed, OOF Affine & 4.473 & 18.983 & 4.721 \\
+Fixed, OOF Locality & 4.506 & 13.700 & 4.512 \\
+Fixed, OOF RBF local & 4.431 & 15.988 & 5.321 \\
+Learned, OOF KAHM & 4.492 & 20.629 & 5.572 \\
+Learned, OOF Affine & 4.460 & 18.879 & 4.736 \\
+Learned, OOF Locality & 4.530 & 13.968 & 4.536 \\
+Learned, OOF RBF local & 4.408 & 15.460 & 5.328 \\
+\bottomrule
+\end{tabular}
+\end{table}

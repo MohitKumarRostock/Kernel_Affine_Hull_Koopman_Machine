@@ -1,0 +1,24 @@
+% Generated from the audited forecasting-utility extension; no model fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Exact available-window counts for all twelve originally selected series, including Car Parts T1324 whose geometric fits fail, after the fixed caps. Inputs and targets are shared by the two capacities and every procedure. Initial training observations set the scale; refit windows stop before the reserved test boundary. These windows are related observations, not independent source replications.}
+\label{tab:utility-windows}
+\begin{tabular}{llrrrrrl}
+\toprule
+Source & Series & Length & Train & Valid. & Refit & Test & Scale \\
+\midrule
+Weather & T1476 & 14262 & 512 & 64 & 512 & 64 & Seasonal \\
+Weather & T1967 & 6810 & 512 & 64 & 512 & 64 & Seasonal \\
+Weather & T416 & 6811 & 512 & 64 & 512 & 64 & Seasonal \\
+Solar Weekly & T88 & 52 & 24 & 9 & 34 & 10 & First diff. \\
+Solar Weekly & T94 & 52 & 24 & 9 & 34 & 10 & First diff. \\
+Solar Weekly & T8 & 52 & 24 & 9 & 34 & 10 & First diff. \\
+COVID-19 Deaths & T42 & 212 & 93 & 36 & 135 & 37 & Seasonal \\
+COVID-19 Deaths & T146 & 212 & 93 & 36 & 135 & 37 & Seasonal \\
+COVID-19 Deaths & T96 & 212 & 93 & 36 & 135 & 37 & Seasonal \\
+Car Parts & T1324 & 51 & 23 & 9 & 33 & 10 & Seasonal \\
+Car Parts & T2368 & 51 & 23 & 9 & 33 & 10 & Seasonal \\
+Car Parts & T857 & 51 & 23 & 9 & 33 & 10 & Seasonal \\
+\bottomrule
+\end{tabular}
+\end{table}

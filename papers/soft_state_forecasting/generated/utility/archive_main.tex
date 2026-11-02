@@ -1,0 +1,22 @@
+% Generated from the audited forecasting-utility extension; no model fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{New archive-source coverage and losses. Full-roster scaled MSE uses all 24 configurations and is undefined (dash) for procedures with failed fits. Matched loss and wall seconds use only the post-hoc 22-configuration common-support diagnostic (11 series, including two Car Parts series), with equal source weights. Pipeline costs include all required searches, validation, selected refit, prediction, and serialization. Policy costs are unions of measured required components, including rejected corrections; they are not separately timed full policy executions. Conditioning on success does not complete the prespecified full-roster evaluation.}
+\label{tab:utility-archive}
+\begin{tabular}{lrrrr}
+\toprule
+Procedure & Outputs & Full-roster MSE & Matched MSE & Matched seconds \\
+\midrule
+Raw ridge & 24/24 & 1.2848 & 0.8466 & 0.0015 \\
+Raw RBF & 24/24 & 9.6633 & 9.1730 & 0.0037 \\
+Concatenated KAHM & 22/24 & \textemdash & 1.2111 & 0.0691 \\
+Additive KAHM & 22/24 & \textemdash & 9.1443 & 0.0498 \\
+Additive affine & 22/24 & \textemdash & 9.3312 & 0.0369 \\
+Additive locality & 22/24 & \textemdash & 9.5624 & 0.0379 \\
+Persistence / seasonal naive & 24/24 & 1.5720 & 1.2062 & 0.0012 \\
+Histogram gradient boosting & 24/24 & 10.7552 & 10.3174 & 0.6380 \\
+KAHM 5\% rule & 22/24 & \textemdash & 9.2460 & 0.0467 \\
+All-geometry 5\% rule & 22/24 & \textemdash & 9.2624 & 0.0869 \\
+\bottomrule
+\end{tabular}
+\end{table}

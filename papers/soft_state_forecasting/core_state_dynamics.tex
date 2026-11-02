@@ -1,0 +1,125 @@
+\subsection{Soft state coordinates and dynamical observable spaces}
+\label{sec:soft-state-dynamics}
+
+For this discussion, write all features as functions of the history
+$x$, absorbing their fixed preprocessing. The map $\Phi_G$ in
+Equation~\eqref{eq:geometry-soft-state} describes locality to reference
+regions in a product of simplices. The enriched raw descriptors in
+Equation~\eqref{eq:geometry-enriched-observables} supply additional,
+potentially signed observables. Neither construction is assumed to
+be a sufficient Markov state. The following analysis asks when a
+specified observable family can evolve autonomously and how that
+requirement relates to prediction of an external output.
+
+\paragraph{Direct readouts and propagated coordinates.}
+For a fixed soft representation $\Phi$, a dynamical forecasting model
+can combine one propagation matrix with an output decoder:
+\begin{equation}
+ \widehat y_h^{\mathrm{prop}}(x)
+ =d_{\mathrm{out}}\bigl((B^\top)^h\Phi(x)\bigr).
+ \label{eq:soft-state-propagated-readout}
+\end{equation}
+If $d_{\mathrm{out}}(s)=v^\top s$, then
+$\widehat y_h^{\mathrm{prop}}(x)=(B^h v)^\top\Phi(x)$.
+The horizon-specific coefficient vectors therefore share the recursion
+$v_{h+1}=Bv_h$. Independent direct linear readouts
+$v_h^\top\Phi(x)$ do not impose that relation. Propagation can provide
+useful structure, but it also requires an adequate evolution model for
+the coordinates. The central experiment fits representation-only direct
+readouts for a finite horizon set. Earlier studies additionally use
+retained baselines and calibrated corrections. Neither construction's
+accuracy establishes a matrix that propagates the feature vector.
+In the earlier architecture, a history-dependent baseline can retain
+predictive information absent from the departure features themselves.
+
+\paragraph{A function-space criterion for exact evolution.}
+Let $F:\mathcal X\to\mathcal X$ be a fixed deterministic evolution on
+a specified history-state domain. This is an additional assumption for
+the following statement; finite observed histories need not define such
+a deterministic state. For any finite raw feature vector $\psi$, set
+\begin{equation}
+ \eta_\psi(x)=(1,\psi(x)^\top)^\top,\qquad
+ \mathcal V_\psi=\operatorname{span}\{\text{coordinates of }\eta_\psi\},
+ \qquad K_F g=g\circ F.
+ \label{eq:soft-state-observable-space}
+\end{equation}
+These are spaces of functions on $\mathcal X$, without an assumed
+inner product or a choice of matrix-fitting algorithm.
+
+\begin{proposition}[Raw feature spans and exact dynamical closure]
+\label{prop:soft-state-closure}
+The space $\mathcal V_\psi$ is invariant under $K_F$ if and only if
+there exists a real square matrix $T_\psi$ such that
+\[
+ \eta_\psi(F(x))=T_\psi^\top\eta_\psi(x)
+ \quad\text{for every }x\in\mathcal X.
+\]
+Consequently, if the augmented raw KAHM and matched RBF feature spaces
+satisfy $\mathcal V_{\psi_K}=\mathcal V_{\psi_R}$, they have the same
+exact invariance status under this $F$. When invariant, their induced
+operators on that common function space are identical. Matrix
+representations in nonredundant bases are similar; full matrices on
+redundant coefficient vectors need not faithfully represent the
+operator's spectrum.
+\end{proposition}
+
+\begin{proof}
+If the space is invariant, each coordinate of $\eta_\psi\circ F$ is
+a linear combination of the coordinates of $\eta_\psi$; collecting
+these coefficients gives $T_\psi$. Conversely, the displayed identity
+gives
+$K_F(c^\top\eta_\psi)=(T_\psi c)^\top\eta_\psi\in\mathcal V_\psi$
+for every coefficient vector $c$. Equal function spaces have the same
+image under composition with $F$, proving the invariance equivalence
+and equality of the restricted operators. Two bases of that space are
+related by an invertible change of coordinates, so their operator
+matrices are similar. With redundant coordinates, let
+$\mathcal N_\psi=\{c:c^\top\eta_\psi\equiv0\}$.
+The identity implies $T_\psi\mathcal N_\psi\subseteq\mathcal N_\psi$.
+The faithful action is on the quotient by this null space; eigenvectors
+contained in it represent the zero function.
+\end{proof}
+
+Proposition~\ref{prop:soft-state-closure} is the standard observable-space
+implication of exact closure, applied to the raw span comparisons here
+\citep{KumarKargaran2026Limits}. Under the hypotheses of
+Proposition~\ref{prop:mechanism-redundancy}, changing between matched
+KAHM and RBF coordinates cannot change exact invariance of their common
+augmented span. Proposition~\ref{prop:mechanism-distinct} instead permits
+different candidate observable spaces; it does not show that either is
+invariant or more predictive. The assertion concerns jointly variable
+augmented spans, not the restricted correction classes with a frozen
+common forecast in Equation~\eqref{eq:mechanism-fixed-common-classes}.
+
+\paragraph{Prediction targets and the limits of closure claims.}
+An adequate propagated representation must also support the output of
+interest. Comparing abstractions through their respective successor
+coordinates changes the target along with the representation; nearly
+constant coordinates can be easy to forecast while retaining little
+useful state information. The forecasting experiments instead keep the
+future observation $y_{t+h}$ fixed across compared procedures. They
+test access to that target through finite readouts, not internal closure
+of a soft-coordinate map. A proposed propagation model requires its own
+common-target and rollout evaluation.
+
+Exact invariance concerns pointwise functions on the stated domain.
+Zero population squared error implies only almost-sure equality under
+its evaluation law, and a small empirical residual establishes neither
+statement. Under stochastic transitions, an equation
+$\E[\Phi(x_{t+1})\mid x_t=x]=B^\top\Phi(x)$ concerns the conditional
+mean. Iteration additionally requires suitable Markov and
+time-homogeneity assumptions; realized successors can retain random
+variation. Correction-magnitude bounds do not establish these
+properties or control the amplification of errors through matrix powers.
+
+Finally, exact raw-space invariance is unchanged by a change of basis,
+whereas isotropic ridge penalties and matrix-norm limits generally are
+not. Separate nonlinear radial transforms can change the observable
+space itself. The minimum-risk certificates for fixed simplex-valued
+coordinates in \citet{KumarKargaran2026Limits} additionally specify a
+successor-coordinate target, predictor norm and independent evaluation
+units. Applying such certificates to these enriched signed features or
+raw-target residual heads requires a separately justified formulation.
+The present span results therefore characterize available observables;
+the experiments determine their conditional forecasting value under the
+declared transformations, readouts and selection procedures.

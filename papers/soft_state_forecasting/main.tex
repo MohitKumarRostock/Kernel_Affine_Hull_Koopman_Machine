@@ -1,0 +1,92 @@
+\documentclass[10pt]{article}
+\usepackage{tmlr}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,microtype,enumitem,longtable,array}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{hyperref}
+\usepackage{url}
+\hypersetup{hidelinks,
+ pdftitle={Geometry-Induced Soft-State Abstractions for Forecasting: Predictive Enrichment with Kernel Affine Hull Machines},
+ pdfauthor={Anonymous authors},
+ pdfsubject={Geometry-induced soft-state abstractions, predictive observables, Koopman closure, and matched forecasting evaluation}}
+\newtheorem{proposition}{Proposition}
+\allowdisplaybreaks
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\MSE}{\operatorname{MSE}}
+\newcommand{\K}{\mathrm{K}}
+\newcommand{\A}{\mathrm{A}}
+\newcommand{\clip}{\operatorname{clip}}
+\input{generated/controlled/claim_numbers}
+\input{generated/natural_numbers}
+\input{generated/scaling/numbers}
+\input{generated/utility/numbers}
+\input{generated/target_geometry/numbers}
+\input{generated/direct_reconstruction/result_macros}
+\input{generated/dimension_forecasting/numbers}
+\input{generated/preprocessing_dimension/numbers}
+\input{generated/crossfit_residual/numbers}
+\input{generated/policy_augmentation/numbers}
+\input{generated/soft_state_ablation/numbers}
+
+\title{Geometry-Induced Soft-State Abstractions\\
+for Forecasting: Predictive Enrichment\\
+with Kernel Affine Hull Machines\thanks{AI tools assisted with protocol development, implementation, numerical and statistical verification, analysis, and manuscript preparation. The authors are responsible for the scientific claims, the accuracy of the evidence, and the final text.}}
+\author{Anonymous authors}
+\begin{document}
+\maketitle
+\begin{abstract}
+Geometry-induced soft-state abstractions describe an observed history
+through graded membership in local reference regions. We distinguish
+these memberships from within-region position and signed reconstruction
+departures supplied by Kernel Affine Hull Machines (KAHMs). Only the
+membership block is simplex-valued within each partition. A fixed
+\SARepetitions-repetition study of \SATasks\ simulated task suites compares
+four representation-only affine ridge readouts of the same future
+observations: memberships (G), added local position (P), and KAHM (K)
+or matched positive-kernel RBF (R) enrichment. In the primary comparison,
+P selects a common reference bank. P reduces nonlinear loss relative to
+G by \SAGainPG\%, and K reduces P's loss by \SAGainKP\%; both establish
+the prescribed 3\% margins within one four-contrast confidence family.
+K improves R by only \SAGainKR\%, leaving its 3\% superiority criterion
+unestablished, while meeting the 5\% linear noninferiority criterion
+against P. Thus \SACriteriaEstablished\ of \SAFamilySize\ criteria are
+established. Benefits vary across laws and horizons.
+We characterize equality and separation of matched KAHM and RBF raw
+observable spans. Equal spans share exact Koopman-invariance status
+under a specified deterministic evolution; distinct spans alone imply
+neither closure nor predictive superiority. Generic bounded-ridge
+arguments control prediction magnitude without guaranteeing accuracy
+or rollout stability. Earlier residual and policy studies retain their
+separate scope, including unsuccessful policy-superiority criteria and
+an unfavorable descriptive natural-data comparison. The evidence
+supports local position and conditional reconstruction enrichment as
+useful predictive observables. It does not establish a general
+KAHM-specific advantage, membership-only sufficiency, or useful
+autonomous soft-state dynamics.
+\end{abstract}
+
+\input{core_introduction}
+\input{core_related}
+\input{core_method}
+\input{core_theory}
+\input{core_decoder}
+\input{core_soft_state_study}
+\input{core_experiment}
+\input{core_followup_experiments}
+\FloatBarrier
+\input{core_policy_augmentation}
+\input{supporting_summary}
+\input{core_discussion}
+
+\bibliography{references}
+\bibliographystyle{tmlr}
+\appendix
+\FloatBarrier
+\input{focused_appendix_math}
+\FloatBarrier
+\input{focused_appendix_decoder}
+\FloatBarrier
+\input{focused_appendix_experiment}
+\end{document}

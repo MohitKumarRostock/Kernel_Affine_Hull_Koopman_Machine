@@ -1,0 +1,75 @@
+{\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{lrrrr}
+\caption{Development capacity comparison. Each capacity changes specified training-window and model-size caps; it is not an equal-time budget. Values are equal-source weighted and retain all prescribed context--horizon settings and seeds.}\label{tab:capacity-development}\\
+\toprule
+Method or policy & medium MSE & medium wall (s) & small MSE & small wall (s) \\
+\midrule
+\endfirsthead
+\toprule
+Method or policy & medium MSE & medium wall (s) & small MSE & small wall (s) \\
+\midrule
+\endhead
+Raw ridge & 1.177 & 0.28 & 1.177 & 0.1761 \\
+Raw RBF & 4.582 & 0.1846 & 2.984 & 0.1838 \\
+Affine local & 1.989 & 0.3292 & 1.836 & 0.2676 \\
+Locality local & 8.238 & 0.4065 & 6.18 & 0.2817 \\
+KAHM local & 3.855 & 0.3779 & 4.763 & 0.3473 \\
+Raw + affine & 1.394 & 0.3071 & 1.501 & 0.282 \\
+Raw + locality & 3.879 & 0.3038 & 3.327 & 0.2798 \\
+Raw + KAHM & 2.332 & 0.3819 & 2.022 & 0.3359 \\
+Seasonal naive & 1.723 & 0.2078 & 1.723 & 0.1725 \\
+Holt & 2.631 & 0.345 & 2.632 & 0.3683 \\
+Histogram boosting & 9.795 & 3.468 & 10.23 & 2.326 \\
+MLP & 1.253 & 1.108 & 1.302 & 0.7098 \\
+Always raw & 4.582 & 0.1846 & 2.984 & 0.1838 \\
+Always raw + KAHM & 2.332 & 0.3819 & 2.022 & 0.3359 \\
+Validation: matched pair & 2.342 & 0.5295 & 2.493 & 0.4758 \\
+Validation: raw portfolio & 1.128 & 4.223 & 1.127 & 3.142 \\
+Validation: KAHM family & 2.261 & 0.6594 & 2.021 & 0.5963 \\
+Validation: full portfolio & 1.137 & 5.805 & 1.166 & 4.488 \\
+Cheap probe & 2.297 & 0.4321 & 2.463 & 0.4022 \\
+Metadata & 2.332 & 0.3828 & 2.022 & 0.3367 \\
+Metadata + geometry & 2.364 & 0.4492 & 2.072 & 0.404 \\
+Metadata + probe & 2.337 & 0.419 & 2.007 & 0.3846 \\
+Metadata + probe + geometry & 2.348 & 0.4327 & 2.03 & 0.388 \\
+\bottomrule
+\end{longtable}
+}
+
+{\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{lrrrr}
+\caption{Confirmation capacity comparison. Each capacity changes specified training-window and model-size caps; it is not an equal-time budget. Values are equal-source weighted and retain all prescribed context--horizon settings and seeds.}\label{tab:capacity-confirmation}\\
+\toprule
+Method or policy & medium MSE & medium wall (s) & small MSE & small wall (s) \\
+\midrule
+\endfirsthead
+\toprule
+Method or policy & medium MSE & medium wall (s) & small MSE & small wall (s) \\
+\midrule
+\endhead
+Raw ridge & 0.7635 & 0.1561 & 0.7961 & 0.2199 \\
+Raw RBF & 0.7767 & 0.1719 & 0.8383 & 0.1657 \\
+Affine local & 0.916 & 0.3088 & 0.9738 & 0.6917 \\
+Locality local & 0.8908 & 0.3176 & 0.902 & 0.2621 \\
+KAHM local & 0.9243 & 0.334 & 0.9466 & 0.3097 \\
+Raw + affine & 0.8233 & 0.3859 & 0.8684 & 0.2899 \\
+Raw + locality & 0.8363 & 0.2831 & 0.8561 & 0.275 \\
+Raw + KAHM & 0.8288 & 0.3732 & 0.8551 & 0.4016 \\
+Seasonal naive & 1.05 & 0.1621 & 1.05 & 0.1607 \\
+Holt & 2.373 & 0.333 & 2.373 & 0.3569 \\
+Histogram boosting & 0.9215 & 12.73 & 0.9896 & 5.086 \\
+MLP & 0.8712 & 1.956 & 0.8859 & 0.9695 \\
+Always raw & 0.7767 & 0.1719 & 0.8383 & 0.1657 \\
+Always raw + KAHM & 0.8288 & 0.3732 & 0.8551 & 0.4016 \\
+Validation: matched pair & 0.7847 & 0.4538 & 0.8347 & 0.5085 \\
+Validation: raw portfolio & 0.8404 & 11.6 & 0.8874 & 5.074 \\
+Validation: KAHM family & 0.8281 & 0.6116 & 0.8531 & 0.6369 \\
+Validation: full portfolio & 0.8541 & 12.98 & 0.8987 & 6.918 \\
+Cheap probe & 0.7943 & 0.3749 & 0.8343 & 0.3182 \\
+Metadata & 0.8009 & 0.3187 & 0.8311 & 0.2764 \\
+Metadata + geometry & 0.8009 & 0.3779 & 0.8311 & 0.3611 \\
+Metadata + probe & 0.7765 & 0.2805 & 0.8377 & 0.3812 \\
+Metadata + probe + geometry & 0.7765 & 0.2805 & 0.8377 & 0.3812 \\
+\bottomrule
+\end{longtable}
+}

@@ -1,0 +1,21 @@
+\begin{table}[t]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Frozen-policy confirmation outcomes over 4 source families with the same hierarchical weighting. Gain is raw-RBF scaled MSE minus chosen loss. Harm is the weighted fraction with loss more than 5\% above raw RBF. The final column counts selection of the specific raw-plus-KAHM pair member, including in portfolios. Wall cost includes all required probes/searches and decision inference, then the chosen final refit, forecast and model serialization. Offline evidence acquisition and diagnostic fitting are separate.}\label{tab:policy-summary}
+\begin{tabular}{lrrrrr}
+\toprule
+Policy & Scaled MSE & Wall (s) & Gain & Harm (\%) & Raw+K (\%) \\
+\midrule
+Always raw & 0.8075 & 0.1688 & 0 & 0 & 0 \\
+Always raw + KAHM & 0.8419 & 0.3874 & -0.0344 & 25 & 100 \\
+Validation: matched pair & 0.8097 & 0.4812 & -0.002159 & 5.47 & 32 \\
+Validation: raw portfolio & 0.8639 & 8.338 & -0.05638 & 10.9 & 0 \\
+Validation: KAHM family & 0.8406 & 0.6242 & -0.03306 & 26.6 & 73.4 \\
+Validation: full portfolio & 0.8764 & 9.948 & -0.0689 & 14.8 & 14.1 \\
+Cheap probe & 0.8143 & 0.3465 & -0.006771 & 9.38 & 50 \\
+Metadata & 0.816 & 0.2976 & -0.008445 & 15.6 & 50 \\
+Metadata + geometry & 0.816 & 0.3695 & -0.008445 & 15.6 & 50 \\
+Metadata + probe & 0.8071 & 0.3309 & 0.0004363 & 3.12 & 31.2 \\
+Metadata + probe + geometry & 0.8071 & 0.3309 & 0.0004363 & 3.12 & 31.2 \\
+\bottomrule
+\end{tabular}
+\end{table}

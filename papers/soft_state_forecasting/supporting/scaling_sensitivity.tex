@@ -1,0 +1,31 @@
+\section{Post-hoc sensitivity to geometry scaling}\label{sec:scaling}
+A specified sensitivity analysis replaces training z-score geometry
+scaling by training min--max scaling to $[-1,1]$, without clipping
+future values. Raw-history components and comparators remain
+standardized. Targets, splits, seeds, head grids, capacities, and query
+conventions are fixed. The protocol precedes these fits but follows
+inspection of the original outcomes. These paired comparisons reuse
+sources and draws and supply no fresh confirmation.
+
+All 208 natural configurations are rerun for the three raw-augmented
+geometries under both scalers. On the four formerly reserved families,
+KAHM loss changes from \ScalingNaturalKahmStandardLoss{} to
+\ScalingNaturalKahmMinmaxLoss{}, an increase of
+\ScalingNaturalKahmChangePercent\%. Min--max KAHM remains
+\ScalingNaturalKahmVsRawPercent\% above raw RBF and
+\ScalingNaturalKahmVsRidgePercent\% above ridge. Its measured warm
+method time is \ScalingNaturalKahmMinmaxTime{} seconds, compared with
+\ScalingNaturalKahmStandardTime{} for standardized KAHM and
+\ScalingNaturalRawTime{} for the remeasured raw RBF. The timings include
+a retained Saugeen search/cleanup outlier and do not identify an intrinsic
+cost of scaling.
+
+All 24 original controlled draws per law and both landmark counts are
+also reused. The principal ordering persists: raw RBF is better on
+autoregression and Duffing, while KAHM local features are better than
+raw and both local controls on Van der Pol. Individual changes can be
+substantial: 256-landmark Duffing KAHM MSE falls by 7.35\%, yet remains
+above the raw, affine, and locality controls. Appendix~\ref{app:scaling}
+retains the complete paired cells, source heterogeneity, and resource
+accounting. The original benefit diagnostic is not refitted or reevaluated
+under min--max geometry.

@@ -1,0 +1,28 @@
+% Generated from the audited forecasting-utility extension; no model fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Descriptive test residual decomposition on the post-hoc common-support archive subset. For $d=\widehat f_{\rm add}-\widehat f_{\rm raw}$, alignment is $2\,\mathrm{mean}\langle Y-\widehat f_{\rm raw},d\rangle$ and energy is $\mathrm{mean}\|d\|^2$, averaged over target coordinates and divided by the fixed training scale before hierarchical aggregation. Raw-minus-additive MSE equals alignment minus energy before rounding. These are identities of the saved predictions, not fresh inference or a population certificate.}
+\label{tab:utility-residual}
+\begin{tabular}{llrrr}
+\toprule
+Source & Correction & Alignment & Energy & Gain \\
+\midrule
+Weather & Additive KAHM & -0.0024712 & 0.00068791 & -0.0031591 \\
+Weather & Additive affine & 0.00021308 & 0.00097397 & -0.00076088 \\
+Weather & Additive locality & -0.0004239 & 0.00036141 & -0.00078531 \\
+Solar Weekly & Additive KAHM & 0 & 0 & 0 \\
+Solar Weekly & Additive affine & 0 & 0 & 0 \\
+Solar Weekly & Additive locality & 0.10669 & 0.059975 & 0.04671 \\
+COVID-19 Deaths & Additive KAHM & 0.1667 & 0.045967 & 0.12074 \\
+COVID-19 Deaths & Additive affine & -0.59915 & 0.029908 & -0.62906 \\
+COVID-19 Deaths & Additive locality & -1.1003 & 0.15312 & -1.2534 \\
+Car Parts & Additive KAHM & -0.00065859 & 0.0020919 & -0.0027505 \\
+Car Parts & Additive affine & -0.00064528 & 0.0021013 & -0.0027466 \\
+Car Parts & Additive locality & -0.058009 & 0.29197 & -0.34998 \\
+\midrule
+Equal-source mean & Additive KAHM & 0.040893 & 0.012187 & 0.028707 \\
+Equal-source mean & Additive affine & -0.1499 & 0.0082457 & -0.15814 \\
+Equal-source mean & Additive locality & -0.26301 & 0.12636 & -0.38936 \\
+\bottomrule
+\end{tabular}
+\end{table}

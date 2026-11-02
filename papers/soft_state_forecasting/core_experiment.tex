@@ -1,0 +1,83 @@
+\section{Context from preceding forecasting studies}
+\label{sec:experiment}
+
+The preceding studies evaluate complete forecasting procedures and
+residual corrections. They provide context for the representation
+ablation without supplying additional observations to its primary
+analysis. Each retains its original cohort, selection rules, comparison
+family, and numerical outcomes. Appendix~\ref{app:reconstruction-results}
+gives the dimension-study protocol and complete results; the
+\emph{Supplementary Studies} gives the later protocols and detailed tables.
+
+\subsection{Validation-selected local dimension}
+
+The earlier dimension experiment compares ten procedures on four laws
+(nonlinear autoregression, Van der Pol, Duffing, and linear AR(2)), two
+added-noise levels, and 24 independent repetitions: 192 tasks. Histories
+have width twelve and horizons $1,4,12$. Independent episode sets
+A/B/C/D contain 64/32/32/128 episodes: A fits scalers, banks and heads;
+B selects hyperparameters; C calibrates corrections and selects the
+non-KAHM procedure; D evaluates frozen forecasts. A/B/C retain at most
+512/256/256 histories, and D uses all 1,664 origins. Source and analysis
+were frozen locally before generation; predictions were sealed before
+D-target release. This was not public preregistration.
+
+Common, KAHM, and RBF procedures select their native cap independently
+from $1,2,4,8,12,20$. Primary comparisons therefore need not share a bank;
+secondary matched-bank comparisons hold the KAHM-selected bank fixed.
+All non-ridge candidates are calibrated toward the same raw-ridge
+baseline. The non-KAHM policy selects among ridge, raw RBF, boosting,
+persistence, common features, and bounded or unbounded RBF departures.
+Its comparison assesses a complete procedure, not matched feature capacity.
+Native caps twelve and twenty coincide at the tested history width;
+ascending ties select twelve. Native dimension permits full ambient rank.
+The historical fixed-cap-two control retains its specified
+$\min\{2,d-1,n_j-1\}$ restriction.
+
+Task SMSE averages D mean squared errors divided by the corresponding
+A-target variances across horizons. Nonlinear repetition loss averages
+the three nonlinear laws and both noise levels; the linear panel is
+separate. The five nonlinear margin contrasts are
+$d_r=0.97L_{r,m}^{\mathrm{NL}}-L_{r,K}^{\mathrm{NL}}$;
+the linear contrast is
+$d_r=1.05L_{r,\mathrm{ridge}}^{\mathrm{lin}}-L_{r,K}^{\mathrm{lin}}$.
+Each criterion requires
+$\bar d-t_{23,1-0.05/6}s_d/\sqrt{24}>0$.
+This is an approximate one-sided Bonferroni paired-$t$ calculation
+across 24 independent repetition aggregates, not across dependent origins.
+The declared joint criterion requires all six comparisons and the
+separate numerical screens to pass.
+
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{3.5pt}
+\caption{The preceding dimension study's unchanged six-claim family.
+$L_K,L_m$ are mean SMSEs. Gain is $100(1-L_K/L_m)$.
+The first five rows test a 3\% nonlinear improvement and the last a
+5\% linear noninferiority tolerance. The simultaneous lower endpoint
+concerns the absolute margin contrast; a positive endpoint establishes
+the criterion. The complete ten-procedure results remain in the appendix.}
+\label{tab:mechanism-primary}
+\input{generated/dimension_forecasting/primary_table}
+\end{table}
+
+KAHM's nonlinear loss is 0.028912. Its gains over common features and
+raw RBF, \DFGainCommon\% and \DFGainRawRBF\%, establish their
+3\% margins. Gains over independently selected RBF departures
+(\DFGainRBF\%) and boosting (\DFGainHGB\%) do not; loss is
+\DFWorsePolicy\% higher than the selected non-KAHM procedure.
+Linear noninferiority passes: three of six criteria are established,
+so the joint performance criterion fails. An unestablished margin does
+not imply equality.
+
+Dimension selection lowers loss relative to fixed cap two by
+\DFDimensionGain\%, whereas native cap twenty raises it by 8.39\%.
+On the KAHM-selected bank, the total loss change $-0.000973$ comprises
+a common-feature improvement $-0.002150$ and a weakening of the
+incremental departure benefit by $+0.001177$. This descriptive fitted-loss
+decomposition is not a causal or orthogonal variance decomposition.
+Matched-bank KAHM improves over RBF by 0.68\%, without establishing
+the primary 3\% margin. All 192 tasks complete, the feature and
+correction bounds have no violations, and the maximum taskwise
+KAHM-to-ridge maximum-error ratio is \DFMaxErrorRatio{}, below five.
+These checks establish computational coverage, not forecasting superiority.

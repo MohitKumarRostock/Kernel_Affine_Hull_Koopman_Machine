@@ -1,0 +1,202 @@
+\section{Preprocessing and validation-selected local dimensions}
+\label{sec:preprocessing-dimension-followup}
+
+This follow-up tests whether fitting the history transformation and selecting
+the local dimension changes the value of KAHM departures. It has its own
+source/configuration/analysis freeze and \PPRepetitions\ fresh repetitions
+of the previously studied numerical laws. It is separate from the main
+paper's principal dimension experiment. Its primary comparison evaluates
+complete concatenated readouts; a second, explicitly descriptive experiment
+holds the fitted common forecast and bias fixed. Results from these two
+architectures are not pooled into one ranking. Appendix~\ref{app:followup-protocols}
+gives the shared generators, feature construction, grids, loss, and
+simultaneous-inference definitions.
+
+\subsection{History transformations and candidate geometry}
+
+The geometry input transforms are fitted only on the histories assigned to
+the relevant fitting block. Standardization uses coordinatewise population
+means and standard deviations with the inherited constant-coordinate rule.
+Min--max scaling is
+\[
+ T_{\mathrm{mm},k}(x)=2\frac{x_k-a_k}{b_k-a_k}-1,
+ \qquad a_k=\min_{i\in F}x_{ik},\quad b_k=\max_{i\in F}x_{ik},
+\]
+where $F$ is the fitting block. A constant fitting coordinate maps to zero
+for every query; other query values are not clipped to $[-1,1]$.
+The third transform is $T_{\mathrm{tanh},k}(x)=
+\tanh((x_k-\mu_k)/s_k)$ using the fitting standardization parameters.
+It has no selected tanh multiplier and no subsequent restandardization of
+the transformed histories. Targets and the raw-ridge incumbent retain their
+original units. The later column scaling of constructed features is a
+different operation.
+
+The five common/departure scaler pairs are standard/standard,
+min--max/min--max, tanh/tanh, tanh/min--max, and min--max/tanh. A hybrid
+uses two fitted banks with the same requested cap; it does not choose two
+caps independently. The native cap grid is $1,2,4,8,12,20$. Within a scaler,
+reference membership is paired across caps. Different scalers may change
+partitions, references, PCA directions, projected kernels, and gates. Their
+comparison therefore changes the complete geometry, without isolating a
+causal effect of compressing input coordinates. Caps twelve and twenty
+produce the same admissible maps at history width \PPHistory; ascending
+tie resolution favors twelve. No realized rank of twenty is tested.
+
+\subsection{Complete-procedure fitting and selection}
+
+All primary history scalers, local banks, feature scalers, coefficients,
+and raw-model candidates are fitted on A. For each geometric candidate,
+B selects its ridge penalty separately by horizon. Each complete method
+then independently selects one scaler pair and cap by the equal-horizon
+mean B MSE divided by retained A target population variances. Its selected
+pair/cap is shared across horizons. Ties use ascending cap, then standard,
+min--max, tanh, tanh/min--max, and min--max/tanh. Common-only selection
+includes the three distinct diagonal scalers; duplicate common maps
+created by hybrid pairs do not add selection opportunities.
+
+The ten complete procedures are raw ridge, raw Nystr\"om RBF, histogram
+gradient boosting, persistence, common geometry, bounded KAHM and RBF
+departures, their unbounded-departure counterparts, and the selected
+non-KAHM policy. Each concatenated geometry head is fitted to the same
+raw-ridge A residual targets. Its common coefficients and intercept are
+refitted with its own departure block. The unbounded variants omit the
+departure radial bound while retaining the bounded common block.
+
+Raw RBF receives all three input scalers. For each scaler, B selects
+bandwidth and penalty by horizon and then one scaler across horizons.
+Boosting retains raw inputs and its four configurations. This comparator
+expansion prevents a history-scaler search being available only to the
+geometric candidates. It does not equalize their representations, search
+costs, or statistical capacities.
+
+After B selections are fixed, C chooses a multiplier from
+$\{0,1/4,1/2,1\}$ by horizon for each nonridge procedure, blending its
+forecast toward the shared raw-ridge incumbent. C also chooses one complete
+non-KAHM family in the order ridge, raw RBF, boosting, persistence, common,
+bounded RBF, unbounded RBF, by normalized mean-horizon C loss. It cannot
+revise any B-selected scaler, cap, or penalty. The retained unit-multiplier
+diagnostics forward those selected identities. Secondary complete-procedure
+contexts fix cap two or twenty, fix each scaler pair with B-selected cap,
+or hold KAHM's selected bank fixed for a matched RBF comparison.
+
+\subsection{Four primary claims}
+
+The family comprises nonlinear 3\% superiority of selected KAHM over the
+selected non-KAHM policy and independently selected bounded RBF; nonlinear
+3\% superiority of tanh/tanh KAHM over standard/standard KAHM, each with
+its own B-selected cap; and 5\% linear-control noninferiority of selected
+KAHM to raw ridge. Each uses calibrated forecasts and the simultaneous
+paired-$t$ rule of Appendix~\ref{app:followup-inference}.
+Table~\ref{tab:supp-pp-primary} reports every claim, including failures.
+Only \PPPrimaryEstablished\ of \PPPrimaryCount\ criteria is established.
+KAHM's selected nonlinear loss is \PPNonlinearLoss. Its
+\PPRBFPenalty\% excess over RBF and \PPPolicyPenalty\% excess over the
+policy do not support a general predictive advantage. Tanh's
+\PPTanhPenalty\% excess over standard scaling does not support a general
+improvement from that transform under this protocol. Failure of a positive
+margin test alone is not an equivalence test.
+
+\begin{table}[t]
+\centering\small
+\caption{All four primary preprocessing comparisons. Gains are
+$100(1-L_c/L_m)$; lower gaps apply the 3\% superiority or 5\% linear
+noninferiority margin and a four-comparison Bonferroni correction.
+The sampling units are \PPRepetitions\ repetition aggregates.}
+\label{tab:supp-pp-primary}
+\input{generated/preprocessing_dimension/primary_table}
+\end{table}
+
+\subsection{Fixed-common P/R mechanism}
+
+Sort the original A episode identifiers. The first thirty-two form P and
+the other thirty-two form R; their retained row counts need not be equal.
+P fits the raw-ridge incumbent and the common-model candidates. B selects
+their penalties and one common cap within each of the three common-scaler
+rows. These scores use P target variances, so R outcomes cannot influence
+the common selection through a denominator. The selected common multiplier
+is fixed at one. For a common row, freeze
+\[
+ f_{\mathrm{base},h}(x)=f_{\mathrm{com},h}(x)+\beta_h,
+ \qquad \beta_h=\operatorname{mean}_{i\in B}
+       \{y_{ih}-f_{\mathrm{com},h}(x_i)\}.
+\]
+Both quantities are identical for all departures compared within that row.
+B is reused for development and does not provide an unbiased evaluation.
+
+R supplies residual targets $r_{ih}=y_{ih}-f_{\mathrm{com},h}(x_i)$.
+The common fitting and selection do not use R targets. Departure geometry
+and history scalers are fitted on P, while post-map feature standardizers
+and means use R. For bounded features $\varphi_m$, form the R-centered
+design $\varphi_m(x_i)-\bar\varphi_{m,R}$ and center each residual response.
+The ridge slope $v_{m,h}$ minimizes
+\begin{equation}
+ \frac1{n_R}\sum_{i\in R}
+ \left[r_{ih}-\bar r_{R,h}
+       -(\varphi_m(x_i)-\bar\varphi_{m,R})^\top v\right]^2
+ +\alpha_h\|v\|_2^2.
+ \label{eq:supp-followup-centered-head}
+\end{equation}
+At a query, add only
+$\eta_{m,h}(\varphi_m(x)-\bar\varphi_{m,R})^\top v_{m,h}$
+to the shared baseline. The residual mean is not restored as a new
+intercept, and no query-set mean is subtracted. Subtracting the fixed
+$\beta_h$ before centering the response leaves the slope unchanged.
+
+B independently selects the departure penalties and cap for KAHM and
+RBF in each of the five scaler cells, using P target-variance normalizers.
+C selects the incremental $\eta$ by horizon from the same four-value grid.
+A matched RBF diagnostic uses KAHM's cap with its own penalty and $\eta$.
+Different common-scaler rows have different frozen predictors and residuals.
+Final D scoring uses full-A target variances for all rows, matching the
+study's evaluation scale. This normalization does not enter P-only common
+fitting or selection.
+
+\begin{table}[t]
+\centering\small
+\caption{All prescribed nonlinear P/R fixed-common scaler cells. KAHM
+and independently selected RBF share their row's exact common predictor
+and B bias. Every entry is a secondary descriptive result.}
+\label{tab:supp-pp-fixed}
+\input{generated/preprocessing_dimension/fixed_common_table}
+\end{table}
+
+\begin{table}[t]
+\centering\small
+\caption{KAHM minus independently selected RBF in the same five P/R
+cells. Intervals are unadjusted two-sided 95\% paired-$t$ intervals;
+``wins'' count lower KAHM loss among \PPRepetitions\ repetition aggregates.
+These are neither an additional simultaneous family nor a rule for
+selecting a scaler after observing D.}
+\label{tab:supp-pp-fixed-intervals}
+\input{generated/preprocessing_dimension/fixed_common_intervals}
+\end{table}
+
+The complete set of cells in Tables~\ref{tab:supp-pp-fixed}
+and~\ref{tab:supp-pp-fixed-intervals} supports conditional incremental
+value when the common forecast is held fixed. It does not supersede
+Table~\ref{tab:supp-pp-primary}, and its thirty-two/thirty-two allocation
+does not permit a paired comparison with the next study's full-A procedure.
+
+\subsection{Verification and limits}
+
+The source/configuration/analysis freeze preceded ABC generation. Fits and
+C choices for every task were sealed before D generation; fixed-state
+predictions were sealed before scoring targets were released. The
+independent audit passed \PPAuditAssertions\ assertions, checked all
+\PPAuditLossRows\ recorded task-loss rows and their repetition aggregates,
+and independently reconstructed \PPAuditBases\ primary local bases.
+Its raw-forecast-to-loss replay covered \PPAuditRawTasks\ tasks and
+\PPAuditRawArrays\ arrays; it did not replay every raw forecast of the
+\PPTasks-task study. Secondary history-scaler metadata were checked
+against P, without independently reconstructing every secondary basis.
+The audit receipt records these narrower scopes explicitly.
+
+The maximum selected error ratio was \PPMaxErrorRatio\ against the
+threshold five. No coefficient or query-bound violation was recorded.
+Numerical guards and zero-rank cases retain their declared meanings and
+are counted separately from unexpected factorization failures. The saved
+whole-stage timings include candidate search and shared work; primitive
+timings do not establish an isolated KAHM-versus-RBF cost ranking.
+This finite synthetic study supports neither natural-data adoption nor
+theoretical risk-certificate coverage.
+

@@ -1,0 +1,20 @@
+% Generated from the audited forecasting-utility extension; no model fitting.
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Actual archive decoder sizes on post-hoc common support after the selected pretest refit. Entries are ranges across three retained series per source, or two for Car Parts. Requested landmarks are capped by available fitting histories; the retained Nystr\"om rank can be smaller still. Raw basis width includes the appended history coordinates. Additive methods preserve this same raw head and add a separate ridge correction.}
+\label{tab:utility-decoder-sizes}
+\begin{tabular}{lrrrrr}
+\toprule
+Source & Requested $M$ & Raw landmarks & Raw rank & Raw width & Concat. rank \\
+\midrule
+Weather & 16 & 16 & 4--16 & 32--44 & 4--16 \\
+Weather & 64 & 64 & 15--60 & 43--88 & 15--60 \\
+Solar Weekly & 16 & 16 & 16 & 22 & 16 \\
+Solar Weekly & 64 & 34 & 34 & 40 & 34 \\
+COVID-19 Deaths & 16 & 16 & 5--16 & 33--44 & 5--16 \\
+COVID-19 Deaths & 64 & 64 & 16--62 & 44--90 & 16--62 \\
+Car Parts & 16 & 16 & 10--12 & 16--18 & 10--12 \\
+Car Parts & 64 & 33 & 17--18 & 23--24 & 17--18 \\
+\bottomrule
+\end{tabular}
+\end{table}

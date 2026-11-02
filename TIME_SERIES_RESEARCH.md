@@ -1,8 +1,39 @@
-# Evidence on KAHM representations for time-series forecasting
+# Evidence on geometry-induced forecasting representations
 
-The research examines whether local reconstruction gives a finite forecasting decoder useful functions of the observed history. A deterministic transformation cannot add information to its input, although it can make a predictive relationship easier for a restricted model to express. The strongest current evidence supports conditional feature and residual-correction value on the studied synthetic laws. A general KAHM-specific advantage over independently tuned alternatives or a complete forecasting selection policy has not been established.
+The [current manuscript](papers/soft_state_forecasting/) studies geometry-induced soft-state abstractions and their predictive enrichment. This guide separates the new representation ablation from the previously completed forecasting studies. The [research index](docs/RESEARCH_INDEX.md) maps their files; the [reproducibility guide](REPRODUCIBILITY.md) explains their computational evidence.
 
-## Principal findings and follow-up evidence
+**Status: all 256 tasks, the frozen analysis, and the independent production audit are complete.** The scientific source is [commit `2b7d19b5`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/2b7d19b5b47f46b5b21b28d24960688f7969d96f). The [audit receipt](extensions/soft_state_ablation_20261102/verification/independent_audit_summary.json) records verification coverage and limits. Three of four primary criteria are established; the KAHM-versus-RBF superiority margin is not.
+
+A deterministic transformation cannot add information to its input, although it can make a predictive relationship easier for a restricted decoder to express. The completed studies support conditional feature and residual-correction value on the studied synthetic laws. A general KAHM-specific advantage over independently tuned alternatives or a complete forecasting selection policy has not been established.
+
+## Current question: memberships, position, and reconstruction enrichment
+
+The evaluated locality gates are nonnegative and sum to one within each reference partition. Their collection lies in a product of simplices. Gate-weighted principal coordinates retain within-region position; KAHM or matched RBF departures add signed observables. The enriched descriptor is not simplex-valued. Shared memberships do not make the two reconstruction maps identical, and distinct raw feature spans do not establish forecasting superiority.
+
+The new [soft-state ablation](extensions/soft_state_ablation_20261102/) has completed its fixed budget of 32 fresh repetition units and 256 tasks under the same four simulation laws, with horizons 1, 4, and 12. Four arms compare memberships (G), memberships plus local position (P), P plus KAHM departures (K), and P plus matched RBF departures (R), predicting the same external observations. The frozen analysis is complete, and the independent production audit has passed. Primary P-selected shared-bank comparisons have their own four-criterion family; independently selected banks are secondary.
+
+This design addresses a gap in the earlier studies: their common feature block already included local position, so it was not a membership-only control. The new study can distinguish the contribution of position from the incremental contribution of reconstruction. A successful readout would still not establish a sufficient Markov state or an autonomous soft-coordinate evolution model. The companion score-normalized KAHM abstraction uses a different membership map.
+
+### Four-arm primary results
+
+The shared-bank nonlinear mean SMSEs are G **0.09887034**, P **0.03045071**, K **0.02726601**, and R **0.02727398**. Relative gains use the ratio of the corresponding mean losses.
+
+| Primary comparison | Panel | Relative gain | Prescribed criterion | Established |
+| --- | --- | ---: | --- | --- |
+| P versus G | Nonlinear | 69.201% | 3% superiority | Yes |
+| K versus P | Nonlinear | 10.459% | 3% superiority | Yes |
+| K versus R | Nonlinear | 0.0292% | 3% superiority | No |
+| K versus P | Linear | -1.111% | 5% noninferiority | Yes |
+
+Three of four primary criteria are established. Local position materially improves the memberships-only readout, and KAHM departures improve the common-coordinate readout under the prescribed procedure. The KAHM-specific superiority margin over matched RBF remains unestablished; the small mean difference is not an equivalence finding. Linear KAHM loss is 1.111% higher than P while satisfying the 5% noninferiority criterion. These are direct observed-output forecasts, not evidence of sufficient Markov states or autonomous soft-state dynamics.
+
+The confidence family uses one-sided Bonferroni-adjusted paired Student bounds across 32 independent repetition aggregates, with 31 degrees of freedom; windows and horizons are not independent inference units. The 3% and 5% thresholds are inherited research criteria, not deployment-derived utility thresholds.
+
+In the secondary independently selected context, nonlinear K and R means are 0.02675457 and 0.02675071. K improves P by 12.138% but is 0.0144% worse than R. These descriptive comparisons do not replace or reverse the primary family. The observed value of richer observables should therefore be separated from a unique advantage for the KAHM reconstruction rule. [Primary contrasts](extensions/soft_state_ablation_20261102/analysis/primary_contrasts.csv), [panel losses](extensions/soft_state_ablation_20261102/analysis/panel_summary.csv), and [secondary comparisons](extensions/soft_state_ablation_20261102/analysis/secondary_descriptive.csv) retain the complete numbers.
+
+The exact-closure proposition concerns a specified deterministic evolution and a fixed observable space. Equal augmented raw spans have the same invariance status. This standard implication does not show that either fitted representation closes, and it does not equate norm-constrained or ridge-penalized predictions after a general coordinate change.
+
+## Earlier dimension-selected experiment and follow-up evidence
 
 **Feature distinctness depends on the reference geometry.** Direct transfer of normalized KAHM weights to reference targets is a ratio of two kernel-ridge predictions. Some symmetric reference sets give the same augmented raw feature span as matched RBF reconstruction. An irregular three-reference construction demonstrates that a KAHM reconstruction departure can also lie outside that span. Equality or inequality of raw spans alone does not determine the predictions obtained after feature normalization and regularization.
 
@@ -54,21 +85,23 @@ The [separate natural evaluation](extensions/policy_augmentation_natural_2026110
 | [Online adaptation](extensions/adaptive_development/REPRODUCING.md) | Do maintained geometry and residual predictors justify their cost? | Both capacity tiers fail the prescribed accuracy criteria; severe extrapolation remains after a numerical solver repair. |
 | [Historical fixed-cap reconstruction departures](extensions/reconstruction_mechanism/README.md) | Do distinct, bounded reconstruction features improve a matched forecasting procedure? | The common-feature comparison and linear-control noninferiority criterion are satisfied; the four other useful-improvement criteria are not established. |
 
-The studies use different procedures, populations, normalization conventions, and selection budgets. Their numerical scores should be interpreted within the corresponding protocol, and their observations are not pooled as independent evidence for a single test. The coordinated manuscript edition predates the fresh policy-augmentation and natural-series evaluations, whose separate records report the subsequent evidence.
+The studies use different procedures, populations, normalization conventions, and selection budgets. Their numerical scores should be interpreted within the corresponding protocol, and their observations are not pooled as independent evidence for a single test. The current paper includes the policy-augmentation and natural-series evidence. The older document edition under `extensions/tmlr_integration/` predates those evaluations and remains available as a historical release.
 
 ## Statistical and computational scope
 
-The principal study has 24 independent repetition aggregates. Each repetition combines four simulation laws and two paired noise levels; the primary nonlinear result averages the three nonlinear laws and both noise levels equally. Forecast windows, horizons, and noise conditions within a repetition are dependent. Its six simultaneous lower bounds use a Bonferroni-adjusted paired Student t calculation with 23 degrees of freedom. The preprocessing and cross-fit studies each retain their own four-comparison family and repetition-level inference. Failure to establish a 3% margin does not establish equality between methods.
+The earlier dimension study has 24 independent repetition aggregates. Each repetition combines four simulation laws and two paired noise levels; the primary nonlinear result averages the three nonlinear laws and both noise levels equally. Forecast windows, horizons, and noise conditions within a repetition are dependent. Its six simultaneous lower bounds use a Bonferroni-adjusted paired Student t calculation with 23 degrees of freedom. The preprocessing and cross-fit studies each retain their own four-comparison family and repetition-level inference. Failure to establish a 3% margin does not establish equality between methods.
 
-The nonlinear laws were known during method development. Fresh random realizations provide independent sampling under those laws, not independent application domains. The principal and preprocessing protocols were frozen locally before production; this was not public preregistration. The cross-fit reproduction has a different chronology: earlier reported outcomes were known, the original completed records were unavailable, and the same seeds were regenerated under recovered scientific code. New seals and the independent audit verify that retained execution without authenticating the missing original bytes or historical seals. It is not an independent confirmation sample.
+The nonlinear laws were known during method development. Fresh random realizations provide independent sampling under those laws, not independent application domains. The dimension and preprocessing protocols were frozen locally before production; this was not public preregistration. The cross-fit reproduction has a different chronology: earlier reported outcomes were known, the original completed records were unavailable, and the same seeds were regenerated under recovered scientific code. New seals and the independent audit verify that retained execution without authenticating the missing original bytes or historical seals. It is not an independent confirmation sample.
 
-Audit coverage also differs. The principal audit covers all 192 tasks and its 27 tables. The preprocessing audit reconstructs all aggregate arithmetic and the four primary comparisons, while its raw forecast-to-loss replay covers the prespecified eight repetition-zero tasks. The cross-fit audit checks all 192 tasks, 8,064 retained forecast arrays and 24,192 horizon losses. Each receipt defines its own limits; computational consistency is not external scientific replication.
+Audit coverage also differs. The dimension-study audit covers all 192 tasks and its 27 tables. The preprocessing audit reconstructs all aggregate arithmetic and the four primary comparisons, while its raw forecast-to-loss replay covers the prespecified eight repetition-zero tasks. The cross-fit audit checks all 192 tasks, 8,064 retained forecast arrays and 24,192 horizon losses. Each receipt defines its own limits; computational consistency is not external scientific replication.
 
 Each study retains its original decision rule. Passing a baseline comparison, noninferiority control or stability screen does not replace a failed superiority claim. The conclusions concern the evaluated procedures and budgets and do not rule out different representations, decoders or forecasting populations.
 
 ## Access and manuscript provenance
 
-- [Main paper, Supporting Studies, and editable source](extensions/tmlr_integration/README.md)
+- [Current paper and editable source](papers/soft_state_forecasting/)
+- [New G/P/K/R study and execution status](extensions/soft_state_ablation_20261102/)
+- [Historical coordinated manuscript edition](extensions/tmlr_integration/README.md)
 - [Mathematical definitions and derivations](extensions/reconstruction_mechanism/MATHEMATICAL_BACKGROUND.md)
 - [Complete principal results](extensions/dimension_forecasting/FINDINGS.md)
 - [Principal evidence restoration, analysis, and replay](extensions/dimension_forecasting/README.md)
@@ -77,11 +110,13 @@ Each study retains its original decision rule. Passing a baseline comparison, no
 - [Fresh policy-augmentation results and primary criteria](extensions/policy_augmentation_20261101/RESULTS.md)
 - [Separate natural policy findings and selected cases](extensions/policy_augmentation_natural_20261101/FINDINGS.md)
 - [Complete policy-augmentation numerical archive index](extensions/policy_augmentation_20261101/reporting/ARCHIVE_INDEX.json)
-- [Coordinated document release](extensions/tmlr_integration/review/COORDINATED_MANUSCRIPT_RELEASE.json)
+- [Historical coordinated document release](extensions/tmlr_integration/review/COORDINATED_MANUSCRIPT_RELEASE.json)
 - [Earlier Koopman result provenance](reproduction/reported_results.tsv)
 
-The main manuscript contains the core proofs, principal experimental protocol and follow-up comparisons. The self-contained *Supporting Studies* document retains the complementary methods, results and technical appendices, including the preprocessing and residual-target studies. Generated displays have separate study namespaces and retain their evidence identities. This coordinated reporting edition changes neither frozen protocols nor numerical evidence and performs no new forecasting experiment.
+The canonical paper directory holds the current main manuscript, supplementary studies, individual editable files and build instructions. The revision places the completed four-arm analysis alongside retained earlier findings, whose full protocols and comparison families remain in their study records and supplementary material. Generated displays have separate study namespaces and retain their evidence identities. The new ablation has its own complete cohort and analysis; its independent production audit has passed. Reorganizing the paper does not modify the frozen procedures or outcomes of previous experiments.
 
-The current dimension-study records and historical fixed-cap saved-forecast archive have distinct scopes, as specified in the document guide. The editable source preserves required author-identifying license attribution and is distributed separately from the anonymous review files. The documents' TMLR formatting does not claim submission or acceptance.
+The dimension-study records and historical fixed-cap saved-forecast archive have distinct scopes, as specified in their study guides. The editable source preserves required author-identifying license attribution and is distributed separately from the anonymous review files. The documents' TMLR formatting does not claim submission or acceptance.
 
 KAHM is the local reconstruction used in the forecasting representations. KAHKM is the earlier Koopman architecture. The distinction is maintained throughout the result documentation.
+
+The completed four-arm results and computational audit were published and hash-verified in [commit `65ecf679`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/65ecf679796cc38b2342e2a4c12fa0226dc9ac78), separately from the frozen scientific source and manuscript edition.

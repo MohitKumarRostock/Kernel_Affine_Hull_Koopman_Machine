@@ -1,0 +1,219 @@
+\section{Policy-augmentation specifications and reproducibility}
+\label{app:policy-augmentation}
+
+This appendix gives the construction, chronology, selection diagnostics,
+and computational scope for Section~\ref{sec:policy-augmentation-supp}.
+The source and statistical family are separate from those of the
+dimension, preprocessing, and reproduced residual-target studies.
+
+\subsection{Construction and complete tuning grids}
+
+History transformations are A-fitted standardization, unclipped min--max
+scaling, and $\tanh$ of standardized histories with multiplier one.
+Tanh histories receive no subsequent history standardization; feature
+scaling and radial bounding remain distinct later operations. Common
+and departure maps fit their reference geometry and all feature
+statistics using A. The bank uses partitions of sizes $2,4,8$, at most
+twenty-four references per local model, and at most $512$ bank-fitting
+rows. The feature scale floor is $10^{-6}$ and the inherited relative
+normalizer guard is $10^{-10}$.
+
+For requested cap $c$, ambient dimension $d$, and local reference count
+$n_j$, native initialization is
+\begin{equation}
+ r_j^{\mathrm{init}}=\min\{c,d,n_j-1\}.
+ \label{eq:supp-pa-rank}
+\end{equation}
+The existing positive-variance and projected-range rules can reduce the
+realized rank. No additional normal direction is reserved. New local
+corrections search caps $1,2,4,8,12$ independently for KAHM and RBF.
+The inherited complete search retains cap twenty, which duplicates cap
+twelve at $d=12$; its tie order favors twelve. Neither requested cap
+nor feature width is identified with realized local rank.
+
+\begin{table}[t]
+\centering\small
+\caption{Frozen parameter grids. B selects penalties separately by
+horizon and then one map by mean normalized horizon loss. Existing
+complete procedures and new residual corrections retain their stated
+calibration targets.}
+\label{supp:pa-grids}
+\begin{tabular}{@{}p{0.26\linewidth}p{0.68\linewidth}@{}}
+\toprule
+Component & Candidate values and fitting role \\
+\midrule
+History maps & Standard, min--max, $\tanh(z)$; fit A, select B. \\
+New local corrections & Caps $\{1,2,4,8,12\}$ crossed with the three maps. \\
+Inherited geometry & Caps $\{1,2,4,8,12,20\}$; common/departure pairs
+$(s,s),(m,m),(t,t),(t,m),(m,t)$, where $s,m,t$ denote standard,
+min--max, and $\tanh(z)$. \\
+Ridge penalties & $\{10^{-4},10^{-3},10^{-2},10^{-1},1\}$; B by horizon. \\
+Calibration & $\{0,\tfrac14,\tfrac12,1\}$; C by horizon. Legacy blends
+toward raw ridge; new residual heads toward common plus bias. \\
+Complete raw RBF & $64$ A landmarks; bandwidth factors
+$\{0.5,1,2\}$; three history maps. \\
+Extra raw-RBF residual & $64$ A landmarks; bandwidth factors
+$\{0.25,0.5,1,2,4\}$; three history maps. \\
+Histogram boosting & Learning rates $\{0.05,0.1\}$, maximum leaves
+$\{7,15\}$, $100$ iterations, L2 penalty $1$. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Bandwidth factors multiply the median squared landmark distance.
+Each new family has fifteen map configurations, seventy-five B scores
+per horizon, four C multiplier choices per horizon, and one additional
+C family slot. The independently selected KAHM and local-RBF corrections
+have width $168$ in the retained fits. Extra raw-RBF residual designs
+include the raw history and retained Nystr\"om directions, giving widths
+$66$--$76$ in simulation and $59$--$76$ on natural series. Matching the
+score counts therefore does not match width or function class.
+
+\subsection{Simulation allocation and diagnostics}
+
+Master seed $2026110191$ defines twenty-four repetitions. The $1,272$
+intended-distinct streams were checked against one another and prior
+study exclusions, including the complete earlier cross-fit cohort.
+Each task has $64/32/32/128$ episodes in A/B/C/D and retained row caps
+$512/256/256$ for A/B/C. D retains thirteen origins from each of its
+$128$ episodes, giving $1,664$ rows. Episode independence separates
+the four roles; overlap among origins within an episode does not create
+new inferential units. All fits were sealed before D generation and
+all forecasts before D target release. The protocol required execution to halt on unexpected failures rather
+than replacing tasks or changing menus.
+
+\begin{table}[t]
+\centering\small
+\caption{Simulation law/noise summaries. Every condition is retained;
+these means and C-selection frequencies are descriptive, with no
+additional superiority test or selection of a favorable target population.}
+\label{supp:pa-conditions}
+\input{generated/policy_augmentation/synthetic_condition_table}
+\end{table}
+
+\begin{table}[t]
+\centering\small
+\caption{B-selected requested caps and transformations. Counts refer to
+candidate fits, including tasks on which C ultimately rejects KAHM.
+They neither rank transformations using D nor identify a universal
+preferred dimension.}
+\label{supp:pa-selections}
+\input{generated/policy_augmentation/selection_table}
+\end{table}
+
+The $2,688$ selected KAHM local-model occurrences in simulation have
+realized ranks from zero to twelve, including five admissible zero-rank
+bases. The $672$ natural occurrences have ranks from one to twelve and
+no zero-rank basis. Bank occurrences are not independent observations.
+The inherited solver attempts its original ridge SVD and uses a logged
+alternative driver only after the declared linear-algebra exception.
+Simulation records contain one successful recovery and no unrecovered
+failure; natural fitting contains neither a recovery nor a failed task.
+Numerical recovery and native rank reduction are different events.
+
+\subsection{Natural roster, chronological windows, and loss scales}
+
+The pinned M4 Train snapshot contains $359$ Weekly and $414$ Hourly
+series. Length eligibility requires $N\geq475$; $258$ Weekly series
+qualify. The full list of seventy-two prior pilot identities is
+excluded; twenty-four are Hourly, leaving $390$ eligible Hourly series.
+Within each frequency, the protocol sorts SHA-256 hashes of
+\texttt{kahm-policy-augmentation-natural-2026-11-01-v1|Frequency|ID}
+and selects the first twenty-four. Observation magnitudes, validation
+errors, and model success never enter this rule. The complete retained
+roster appears in Table~\ref{supp:pa-roster}.
+
+\begin{table}[t]
+\centering\small
+\caption{Complete natural-series roster from the fixed identity-hash
+rule. These forty-eight anonymous identities are benchmark units, not
+asserted independent application sources.}
+\label{supp:pa-roster}
+\input{generated/policy_augmentation/natural_roster_table}
+\end{table}
+
+At origin $t$, the history is $(y_{t-11},\ldots,y_t)$ and targets are
+$y_{t+h}$ for $h\in\{1,4,12\}$. D contains the final thirty-two
+eligible origins. Moving backwards gives sixty-four C and sixty-four
+B origins, with twelve intervening origins omitted at each boundary.
+A contains $\min(512,N-219)$ preceding origins, also separated from B
+by twelve omitted origins. The largest target index of an earlier
+block precedes the next block's first origin, so targets do not overlap
+between blocks. Within-block histories and origins remain dependent.
+The realized A size is $291$ for W38, $481$ for selected length-$700$
+Hourly series, and $512$ for the other selected series. No parameter
+is refitted after C. Later D histories can include earlier D outcomes
+already observed at the current origin.
+
+Seasonal naive accesses the latest available observation at the same
+seasonal position, using lag $52$ Weekly and $24$ Hourly. The Weekly
+lag is a declared annual control, not the official M4 Weekly Naive2
+convention. Drift uses the earliest observation entering an A history
+and the current observation. Both controls are causal at each origin.
+The complete natural-policy tie order is the seven inherited non-KAHM
+families, shared-bias common, in-sample RBF, seasonal naive, drift, and
+finally the relevant added family.
+
+SMSE uses the horizon-specific A-target population variance with floor
+$10^{-12}$. Secondary seasonal MASE uses an A-only raw-prefix mean
+absolute seasonal difference at lags $52/24$; frequency MASE uses
+lags $1/24$. The prefix extends from the first observation in an A
+history through the last A target. Both denominator floors are
+$10^{-12}$ and neither activates. Overall seasonal MASE for
+$(P_0,P_1,P_0^+)$ is $(0.626066,0.630946,0.629528)$; frequency MASE is
+$(1.380930,1.390215,1.404932)$. These are descriptive,
+study-specific repeated-origin scores.
+
+\subsection{Source identity, computation, and verification scope}
+
+The combined scientific source is commit
+\texttt{b1915813e98a59572a4bbb800adc2bd1f3fccc1b}; the subsequent
+results release is
+\texttt{b59410407a7cd34155aa1955fe0c801f62381364}.
+The M4 input snapshot is
+\texttt{6c1067e5a57161249b17289a565178dc7a3fb3ca}.
+The simulation extension is \path{extensions/policy_augmentation_20261101}
+and the natural extension is
+\path{extensions/policy_augmentation_natural_20261101}.
+Each retains its own protocol, source/configuration freeze, fit and
+prediction seals, target-release record, analysis, and audit receipt.
+
+The simulation local freeze preceded new A/B/C/D generation and its
+source was published before terminal D generation. The natural source
+was frozen locally before numerical parsing and published after its
+evaluation. Raw public Train bytes remained available throughout;
+staged parsing and target masking document execution order without
+providing cryptographic access isolation. Neither design is a public
+preregistration. Earlier method-development outcomes were known, and
+the new simulation laws were not unseen application domains.
+
+\begin{table}[t]
+\centering\small
+\caption{Recorded whole-suite resources, including rejected and
+diagnostic candidates. Worker times sum concurrent work; peak RSS is
+the largest individual worker measurement. Complete compressed fitting
+records are not minimal deployed-model sizes.}
+\label{supp:pa-resources}
+\input{generated/policy_augmentation/resources_table}
+\end{table}
+
+Three fresh workers execute tasks with one numerical thread each.
+Summed worker durations are distinct from stage elapsed time, and the
+largest worker RSS is not aggregate concurrent memory. Shared fits
+prevent interpreting whole-suite costs as isolated marginal costs of
+$P_0$ or $P_1$; the extra-family timing excludes its shared common
+predictor.
+
+The synthetic saved-record audit passes for all $192$ tasks, $9,600$
+forecast arrays, and $5,376$ selected local bases. It reconstructs every
+retained terminal loss and all four primary bounds, checks seed
+exclusions and B/C decisions, verifies exact policy forwarding, and
+independently solves selected extra-RBF ridge coefficients. The natural
+audit covers all $48$ series, $2,016$ forecast arrays, $10,800$ B
+penalty paths, $576$ C multiplier decisions, $144$ policy decisions,
+and $576$ selected ridge normal equations, including raw-source
+indexing and causal direct controls. Both audits reuse inherited feature
+maps; they do not independently reimplement every KAHM map or refit
+every unselected candidate. Their successful checks establish
+consistency of the retained computation, not external scientific
+replication, forecast accuracy, or a distribution-free risk guarantee.

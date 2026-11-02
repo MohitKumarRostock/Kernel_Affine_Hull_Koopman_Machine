@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Standalone confirmation methods, equally weighted across 4 original source families using the frozen within-source hierarchy. Loss is training-scale-normalized MSE. Wall and CPU seconds cover complete warm-library scientific pipelines. RSS is the averaged maximum recorded process high-water mark, not incremental memory; model size is serialized bytes in KiB. No uncertainty intervals are inferred from dependent tasks.}\label{tab:method-summary}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & Scaled MSE & Wall (s) & CPU (s) & RSS (MiB) & Model (KiB) \\
+\midrule
+Raw ridge & 0.7798 & 0.188 & 0.1879 & 171.5 & 5.655 \\
+Raw RBF & 0.8075 & 0.1688 & 0.1687 & 171.5 & 37.32 \\
+Affine local & 0.9449 & 0.5002 & 0.4897 & 171.5 & 93.2 \\
+Locality local & 0.8964 & 0.2898 & 0.2898 & 171.5 & 93.4 \\
+KAHM local & 0.9354 & 0.3218 & 0.3214 & 171.5 & 164.6 \\
+Raw + affine & 0.8458 & 0.3379 & 0.3265 & 171.5 & 107.8 \\
+Raw + locality & 0.8462 & 0.2791 & 0.279 & 171.5 & 107.8 \\
+Raw + KAHM & 0.8419 & 0.3874 & 0.3814 & 171.5 & 179.2 \\
+Seasonal naive & 1.05 & 0.1614 & 0.1613 & 171.5 & 0.1382 \\
+Holt & 2.373 & 0.3449 & 0.3446 & 171.5 & 0.4219 \\
+Histogram boosting & 0.9555 & 8.91 & 8.901 & 171.5 & 2591 \\
+MLP & 0.8785 & 1.463 & 1.462 & 171.5 & 71.62 \\
+\bottomrule
+\end{tabular}
+\end{table}

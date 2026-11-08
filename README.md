@@ -21,6 +21,7 @@ Information retention, numerical stability, and predictive performance are separ
 | What is the motivation and mathematical contribution? | [Article](papers/score_enrichment/main.pdf), with [editable sources](papers/score_enrichment/) |
 | How are observations, features, prediction rules, and comparisons defined? | [Supplement](papers/score_enrichment/supplement.pdf) and [recorded protocol](extensions/score_enrichment_20261102/protocol.json) |
 | What happens in every primary comparison? | [Complete primary table](extensions/score_enrichment_20261102/primary_contrasts.csv) |
+| How do I interpret and check a primary comparison? | [Worked examples and experiment guide](docs/EXPERIMENT_GUIDE.md) |
 | Which checks can I run from this branch? | [Reproduction guide](REPRODUCIBILITY.md) |
 | How do the other studies relate to this experiment? | [Scientific interpretation](TIME_SERIES_RESEARCH.md) and [research index](docs/RESEARCH_INDEX.md) |
 

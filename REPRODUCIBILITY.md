@@ -2,6 +2,8 @@
 
 This guide describes the files and commands in the enrichment publication branch. Different checks answer different questions: a document build checks presentation, a summary calculation checks arithmetic conditional on reported statistics, and a model replay checks predictions from saved numerical inputs.
 
+For a guided comparison, start with the [worked examples and experiment guide](docs/EXPERIMENT_GUIDE.md). The explanation script uses the original primary table and only the Python standard library.
+
 ## Choose a task
 
 | Task | Supported by this branch? | Inputs or requirements |

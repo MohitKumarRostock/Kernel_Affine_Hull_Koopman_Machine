@@ -1,5 +1,7 @@
 # Numerical reproduction
 
+The [experiment guide](docs/EXPERIMENT_GUIDE.md) connects each scientific question to its input records, executable checks, outputs, and interpretation.
+
 ## Environment and execution
 
 The supplied replay was checked with Python 3.12.14, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, and threadpoolctl 3.6.0. `requirements.txt` records the Python dependencies. The default replay requires no data download or access to a previous workspace.

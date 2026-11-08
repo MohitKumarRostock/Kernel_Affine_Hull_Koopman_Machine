@@ -29,6 +29,8 @@ The [article](manuscript/manuscript.pdf) contains the theory, complete proofs, e
 
 The Bike feasible predictions use assessment targets to establish capacity on those observations. They are not newly trained predictors with a guarantee for future data. Population-risk certificates, fixed-dataset capacity calculations, and numerical output checks retain their different assumptions and conclusions.
 
+For a guided route from a research question to its records and commands, start with the [experiment guide](docs/EXPERIMENT_GUIDE.md).
+
 ## Recompute the stored numerical checks
 
 Run from the root of this risk-certificate branch. Use Python 3.12 and the recorded dependencies:

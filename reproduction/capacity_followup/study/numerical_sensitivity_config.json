@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "phase": "posthoc_numerical_sensitivity",
+  "system": "vanderpol",
+  "repetitions": 24,
+  "features": ["kahm:local", "kahm:scores"],
+  "landmark_counts": [64, 256],
+  "source_phase": "capacity_confirmation",
+  "source_jobs": "results_capacity/r00..r23_forecast_van_der_pol",
+  "change": "Only rescale each Gaussian query-kernel row by exp(-max(log kernel)) before multiplying by the unchanged B and normalizing signed weights.",
+  "fixed": "Training AE, references, PCA, covariance metric, partition, input scaler, source observations, seeds, head grids, target bounds, and exact-zero denominator convention.",
+  "heads": "Refit heads on stabilized training features; retune only on the same validation data, using exact phase4 head seeds and grids.",
+  "comparators": "Original KAHM predictions, raw RBF and matched affine-local RBF at the same landmark count from the source phase4 records.",
+  "analysis": "All24 banks retained; descriptive paired differences, mean MSEs, signs, source normalizer counts and feature differences. No confidence intervals or new confirmatory interpretation.",
+  "motivation": "Exact-zero inner normalizers in original VDP query evaluation raise a numerical-artifact alternative explanation for positive results.",
+  "diagnostics": "All train/validation/test query-cluster normalizers; remaining cancellation zeros; original all-zero Gaussian rows; maximum feature differences; unchanged raw/affine/centroid controls; unchanged frozen model state.",
+  "arithmetic_checks": "Nonunderflow reconstruction agreement at rtol1e-9/atol1e-11; invariance to common log-row offsets; artificial Gaussian underflow repair; context restoration even on exception.",
+  "archive": "Predictions,Y,groups,groupedlosses,selectedparameters,sourcehashes,per-splitdiagnostics; no alterations to source stage1 orstage2 outputs."
+}

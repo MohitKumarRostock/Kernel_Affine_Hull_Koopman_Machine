@@ -7,10 +7,38 @@
     "papers/score_enrichment": "5bb3be5cbcc3d58533b999ac02d9c23bc451b2d1",
     "extensions/score_enrichment_20261102": "c68248f12786bbd032aafe8c33419375191c36b5"
   },
-  "root_entries": [".github", ".gitignore", "CITATION.cff", "DATA_LICENSE", "LICENSE", "README.md", "REPRODUCIBILITY.md", "TIME_SERIES_RESEARCH.md", "TMLR.md", "docs", "extensions", "papers", "scripts"],
-  "retention_rule": "Keep the approved current paper and published study subtree byte-for-byte, retain licenses and relevant guidance, and preserve previous manuscripts and experiments at the archived parent commit rather than in the active checkout.",
+  "root_entries": [
+    ".github",
+    ".gitignore",
+    "CITATION.cff",
+    "DATA_LICENSE",
+    "LICENSE",
+    "README.md",
+    "REPRODUCIBILITY.md",
+    "TIME_SERIES_RESEARCH.md",
+    "TMLR.md",
+    "docs",
+    "extensions",
+    "papers",
+    "reproduction",
+    "scripts"
+  ],
+  "retention_rule": "Preserve the original public manuscript and study subtrees byte-for-byte, retain licenses and reader guidance, and keep earlier research reachable through retained Git history. Place the central saved-loss analysis and supplementary capacity implementation in separately documented experiment bundles.",
   "history_rewritten": false,
   "full_experimental_release_mirrored": false,
   "large_numerical_archives_published": false,
-  "scope": "Publication-tree cleanup only; no change to experiments, statistical decisions, manuscript text, or existing data availability limits."
+  "scope": "Original public manuscript and study files are unchanged. Experiment-only bundles add saved-loss reconstruction and the recovered supplementary capacity study. No model fitting, new numerical results, revised manuscript upload, or history rewrite is included.",
+  "reproduction_bundles": {
+    "reproduction/score_enrichment": {
+      "scope": "Independent statistical reconstruction from preserved central-study loss records",
+      "original_model_generation_code_recovered": false
+    },
+    "reproduction/capacity_followup": {
+      "scope": "Supplementary capacity implementation and original compact records",
+      "source_commit": "a67c40190458bab7b3e56b4fac76770798d074b3",
+      "source_path": "extensions/predictive_geometry",
+      "scientific_snapshot_entries": 51,
+      "archive_entries": 17
+    }
+  }
 }

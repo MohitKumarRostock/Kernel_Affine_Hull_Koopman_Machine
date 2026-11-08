@@ -1,0 +1,73 @@
+{
+  "format": "kahm_capacity_followup_experiment_bundle_v1",
+  "source_repository": "MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine",
+  "source_commit": "a67c40190458bab7b3e56b4fac76770798d074b3",
+  "source_subtree": "extensions/predictive_geometry",
+  "scientific_snapshot": {
+    "manifest": "study/SNAPSHOT.json",
+    "sha256": "1cd1abde423659b79b4e4fd9373a3c80677917ada3490df08136c415e7c1d530",
+    "entries": 51,
+    "upstream_commit": "d6d74d1953a4310b73065a556df816e5ab5e3ebc"
+  },
+  "historical_archive": {
+    "manifest": "archive/MANIFEST.json",
+    "sha256": "06945a564dd20beb41afa5b610c0621da380c144d4cc33537441aa92fab11bec",
+    "entries": 17
+  },
+  "capacity_design": {
+    "independent_repetitions_per_law": 24,
+    "laws": [
+      "nonlinear_ar",
+      "vanderpol",
+      "duffing"
+    ],
+    "landmark_counts": [
+      64,
+      256
+    ],
+    "primary_comparisons": 12,
+    "loss": "MSE",
+    "comparison_direction": "reference_minus_kahm_local",
+    "family_alpha": 0.05,
+    "interval": "paired Student t approximation with Bonferroni adjustment"
+  },
+  "immutable_scientific_files": "All entries listed in both original manifests are unchanged.",
+  "orchestration_adaptations": [
+    {
+      "path": "reproduce/__main__.py",
+      "source_git_blob": "7c74b97d640a53075ec29615b39cae8ed7155b44",
+      "changes": [
+        "Adds standard-library-only verify command.",
+        "Retains experiment, archived-statistics audit and reduced fitting commands.",
+        "Removes manuscript, paper-asset and submission commands/steps; scientific execution order and numerical checks are unchanged."
+      ]
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "source_git_blob": "3da11f4a8ee66a354d0b3d33fd88c32e1c34ca19",
+      "changes": [
+        "Retains code and data attribution; omits notices concerning excluded manuscript styles and submission packaging."
+      ]
+    }
+  ],
+  "new_documentation": [
+    "README.md",
+    "PROVENANCE.json"
+  ],
+  "excluded_materials": [
+    "manuscript/",
+    "submission/",
+    "paper and submission asset builders",
+    "draft/readiness/review-package notes"
+  ],
+  "scope": "Supplementary capacity follow-up and its supporting earlier-stage and numerical-sensitivity evidence. Separate from KAHM-SCORE-20261102-v1 and its 64-repetition, four-law, 40-comparison main experiment.",
+  "unavailable_in_compact_archive": [
+    "complete fitted model states",
+    "all per-episode prediction arrays"
+  ],
+  "licenses": [
+    "LICENSE",
+    "study/vendor/upstream/LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ]
+}

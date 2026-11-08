@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - paper/geometry-induced-soft-state-clean-2026-11-02
-  pull_request:
-    branches:
-      - paper/geometry-induced-soft-state-enrichment-2026-11-02
   workflow_dispatch:
 permissions:
   contents: read
@@ -40,7 +37,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-publishers lmodern poppler-utils python3-venv
           python3 -m venv "$RUNNER_TEMP/summary-env"
-          "$RUNNER_TEMP/summary-env/bin/python" -m pip install --quiet scipy==1.17.0
+          "$RUNNER_TEMP/summary-env/bin/python" -m pip install --quiet -r reproduction/score_enrichment/requirements.txt
       - name: Recompute all forty primary-summary decisions
         shell: bash
         run: |
@@ -49,6 +46,26 @@ jobs:
           echo '## Primary-summary arithmetic' >> "$GITHUB_STEP_SUMMARY"
           echo '```json' >> "$GITHUB_STEP_SUMMARY"
           cat "$RUNNER_TEMP/primary-summary-check.json" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Reconstruct central-study statistics from saved losses
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/summary-env/bin/python" reproduction/score_enrichment/check_saved_losses.py | tee "$RUNNER_TEMP/saved-loss-check.json"
+          "$RUNNER_TEMP/summary-env/bin/python" -m unittest discover -s reproduction/score_enrichment/tests -v
+          echo '## Central saved-loss reconstruction' >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/saved-loss-check.json" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify supplementary capacity source and archive identities
+        working-directory: reproduction/capacity_followup
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -S -m reproduce verify | tee "$RUNNER_TEMP/capacity-identity-check.json"
+          echo '## Supplementary capacity bundle identities' >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/capacity-identity-check.json" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
       - name: Compile documents without modifying published PDFs
         shell: bash

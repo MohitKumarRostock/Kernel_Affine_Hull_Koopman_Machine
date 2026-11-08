@@ -45,23 +45,54 @@ The full identifiers append the predictor, `linear` or `nonlinear`. `K`, `A`, an
 
 Each procedure makes its own validation choice using the same validation observations within a task. The CSV label `independent` refers to these separate choices. Geometric procedures select a dimension cap as well as predictor settings; raw histories select predictor settings only. There is no refit on the combined training and validation data. Consequently, a comparison does not isolate adding coordinates while holding every fitted choice fixed. See the [recorded protocol](../extensions/score_enrichment_20261102/protocol.json) for the complete design.
 
-## Check all 40 primary comparisons
+## Rebuild all 40 primary comparisons from saved losses
 
-With SciPy installed, run the existing summary checker:
+The [central bundle](../reproduction/score_enrichment/) contains 17 original evidence records, including `selected_losses.csv.gz`. It holds 26,624 selected-loss rows covering four laws, 64 repetitions, 26 procedures, two selection rules and two assessment splits.
+
+From the repository root, using Python 3.12:
 
 ```bash
-python3 extensions/score_enrichment_20261102/verify_primary_summary.py
+python3 -m pip install -r reproduction/score_enrichment/requirements.txt
+python3 reproduction/score_enrichment/check_saved_losses.py
 ```
 
-| Command | Input | Output and interpretation |
+The independent checker verifies the distributed records and the exact decompressed CSV identity. It reconstructs 416 procedure summaries, the 2,560 paired differences behind the primary family, and all 40 comparison rows. It also checks the selected-record roster and consistency of recorded settings. Its JSON report gives `status: PASS` when the reconstructed values agree with the originals within the declared arithmetic tolerances.
+
+To save the rebuilt tables, use a new directory outside the bundle:
+
+```bash
+python3 reproduction/score_enrichment/check_saved_losses.py --output /tmp/kahm-score-analysis
+```
+
+Inspect `rebuilt_primary_paired_repetitions.csv` to follow individual paired differences and `rebuilt_primary_contrasts.csv` for their intervals and decisions. `rebuilt_all_procedure_summary.csv` contains the procedure-level means and standard deviations; `verification.json` records the checks. The primary reconstruction uses only terminal D losses under the `independent` selection rule.
+
+| Command | Inputs | Scope |
 | --- | --- | --- |
-| `scripts/explain_primary_comparison.py` | Original `primary_contrasts.csv` | A readable explanation or JSON for selected rows; no model computation |
-| `extensions/score_enrichment_20261102/verify_primary_summary.py` | The same CSV and SciPy's Student quantile | JSON confirming file identity, all 40 comparison identities, standard errors, intervals, relative gains, and decisions |
+| `scripts/explain_primary_comparison.py` | Original primary-summary table | Readable explanation or JSON for selected rows; standard library only |
+| `reproduction/score_enrichment/check_saved_losses.py` | Complete saved selected-loss rows and original evidence tables | Independent reconstruction of procedure summaries, paired differences and primary comparisons |
+| `extensions/score_enrichment_20261102/verify_primary_summary.py` | Reported means and standard deviations | Original, narrower summary-arithmetic check using SciPy |
 
-A successful full check reports `status: passed`, `rows_checked: 40`, and counts of 16 lower-loss, 7 higher-loss, and 17 unresolved comparisons. These comprise five questions, four laws, and two predictor families. The two-sided intervals use Bonferroni adjustment over that entire family. Their coverage depends on the paired-Student approximation; arithmetic agreement does not make the intervals distribution-free.
+The primary decisions are 16 lower candidate mean losses, 7 higher candidate mean losses and 17 unresolved comparisons. They cover five questions, four laws and two predictor families. The intervals use Bonferroni adjustment over this complete family and retain the paired-Student approximation; numerical agreement does not make the intervals distribution-free.
 
-## Continue to prediction reproduction
+The checker starts from saved standardized losses. It can verify each three-horizon average, but the raw predictions, training targets and target variances are not supplied. It therefore does not recompute those losses from forecast errors or demonstrate that each selected setting was the optimum over all validation candidates. The [bundle guide](../reproduction/score_enrichment/README.md) identifies the exact checks and preserved historical receipts.
 
-The commands above use released summary statistics. Recalculating those statistics from repetition losses requires the selected-loss records and analysis code. Recomputing forecasts additionally requires the original implementation, prepared observations, and fitted models. Those materials, the exact task roster, the complete environment record, and the numerical archives are absent from this branch. No public download endpoint for the complete experiment is established here.
+## Explore the supplementary capacity question
 
-The [reproduction guide](../REPRODUCIBILITY.md) separates supported checks from these additional requirements, and the [availability record](../extensions/score_enrichment_20261102/AVAILABILITY.md) preserves the documented distribution status. The present results concern direct forecasts in the specified simulated settings; they do not test autonomous evolution of the abstract states or a universal advantage for KAHM.
+The separate [capacity follow-up](../reproduction/capacity_followup/) asks whether KAHM local-coordinate benefits persist at 64 and 256 Nyström landmarks. It provides its original source and archived records for 24 repetitions under three laws. Its 12 comparisons use MSE, not the central experiment's variance-standardized SMSE.
+
+From the repository root, check its files without installing numerical packages:
+
+```bash
+cd reproduction/capacity_followup
+python3 -m reproduce verify
+```
+
+For the saved-record statistical audit, install that bundle's pinned requirements in a suitable Python 3.12 environment and run `python3 -m reproduce audit --output runs/archive-audit` from the same directory. It rebuilds both the supporting first-stage analysis and the capacity comparisons without fitting models. The bundle also supplies a `full` mode for regenerating its observations and fitted predictors; see its README before running it.
+
+**The comparison direction differs between the studies.** Central comparisons use candidate minus reference, so a negative value favors the candidate. The capacity table uses reference minus KAHM, so a positive value favors KAHM. Its practical margins and 12-comparison confidence family belong to that separate protocol. A result at 256 landmarks concerns that tested finite predictor and does not establish superiority over every possible raw-input predictor.
+
+## Continue to central prediction reproduction
+
+The central saved-loss analysis is executable here. Recomputing its features and forecasts still requires the original implementation, exact task roster, prepared observations and fitted numerical models. The central generator, runner and complete numerical archives are not supplied, and no public download endpoint for those archives is established.
+
+The [reproduction guide](../REPRODUCIBILITY.md) separates these requirements. The [original availability record](../extensions/score_enrichment_20261102/AVAILABILITY.md) documents the earlier publication subset and remains historical; the reproduction bundle README describes the current saved-loss release. The central results concern direct forecasts in the specified simulated settings. They do not test autonomous evolution of the abstract states or establish a universal KAHM advantage.

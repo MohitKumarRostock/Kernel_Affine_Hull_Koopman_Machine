@@ -19,10 +19,11 @@ Information retention, numerical stability, and predictive performance are separ
 | Reader's question | Resource |
 | --- | --- |
 | What is the motivation and mathematical contribution? | [Article](papers/score_enrichment/main.pdf), with [editable sources](papers/score_enrichment/) |
-| How are observations, features, prediction rules, and comparisons defined? | [Supplement](papers/score_enrichment/supplement.pdf) and [recorded protocol](extensions/score_enrichment_20261102/protocol.json) |
-| What happens in every primary comparison? | [Complete primary table](extensions/score_enrichment_20261102/primary_contrasts.csv) |
+| How are observations, features, prediction rules, and comparisons defined? | [Supplement](papers/score_enrichment/supplement.pdf) and [recorded protocol](reproduction/score_enrichment/evidence/protocol.json) |
+| What happens in every primary comparison? | [Complete primary table](reproduction/score_enrichment/evidence/primary_contrasts.csv) |
 | How do I interpret and check a primary comparison? | [Worked examples and experiment guide](docs/EXPERIMENT_GUIDE.md) |
-| Which checks can I run from this branch? | [Reproduction guide](REPRODUCIBILITY.md) |
+| Can I rebuild the comparisons from individual repetition losses? | [Central evidence and independent checker](reproduction/score_enrichment/) |
+| Which other checks can I run from this branch? | [Reproduction guide](REPRODUCIBILITY.md) |
 | How do the other studies relate to this experiment? | [Scientific interpretation](TIME_SERIES_RESEARCH.md) and [research index](docs/RESEARCH_INDEX.md) |
 
 ## Complete primary findings
@@ -41,22 +42,33 @@ Each row covers four laws and two predictors. “Local” includes memberships a
 
 The findings support local-position enrichment in specified settings. They do not establish a universal advantage for KAHM over the reconstruction controls. Common-cap summaries and related studies retain their separate interpretation and are not pooled with the primary family.
 
-## What can be reproduced here?
+## Recompute the central comparisons
 
-From the repository root, with SciPy installed, check the published primary-summary arithmetic:
+The [central evidence bundle](reproduction/score_enrichment/) contains 17 original records, including the complete selected-loss table as `selected_losses.csv.gz`. Its independent checker rebuilds 416 procedure summaries, 2,560 paired differences and all 40 primary comparisons from 26,624 saved loss rows.
+
+From the repository root, using Python 3.12:
 
 ```bash
-python3 extensions/score_enrichment_20261102/verify_primary_summary.py
+python3 -m pip install -r reproduction/score_enrichment/requirements.txt
+python3 reproduction/score_enrichment/check_saved_losses.py
 ```
 
-This verifies the 40 comparison identities and recomputes standard errors, intervals, effect ratios, and decisions from the reported means and standard deviations. It does not reconstruct repetition-level losses or model predictions.
+The command prints a JSON report. Add `--output /tmp/kahm-score-analysis` to write the rebuilt tables to a new directory. The checker verifies record identities and reconstructs statistics from saved losses; the original model-generation source, exact task roster, fitted models and forecast arrays are still required to regenerate the central experiment.
 
-Document compilation requires Python and a compatible TeX installation:
+## Explore the supplementary capacity study
+
+The [decoder-capacity bundle](reproduction/capacity_followup/) contains the original experiment source and archived records for the separate 24-repetition, three-law study. It compares KAHM local-coordinate features with raw-history and affine-coordinate controls at 64 and 256 Nyström landmarks. It supports file verification, statistical analysis of saved records and a full computational rerun. Its MSE outcomes and 12-comparison family remain separate from the central study's SMSE outcomes and 40 comparisons.
+
+The [reproduction directory](reproduction/README.md) explains the two bundles. The [reproduction guide](REPRODUCIBILITY.md) gives commands, dependencies and the meaning of each check.
+
+## Documents and historical records
+
+Compile the distributed article and supplement with Python and a compatible TeX installation:
 
 ```bash
 python3 papers/score_enrichment/scripts/build.py
 ```
 
-The publication branch contains the manuscript sources, static tables, protocol, primary-summary table, and summary checker. The complete simulation and encoding source, exact task roster, environment fingerprint, repetition-level execution release, and model/episode archives are not present. No public download endpoint for the complete archives is established here. The [reproduction guide](REPRODUCIBILITY.md) identifies the inputs required for each further task.
+The original paper and study directories retain their publication files and historical availability records. Use the reproduction bundles above for the currently accessible numerical evidence. The [historical availability record](extensions/score_enrichment_20261102/AVAILABILITY.md) identifies the missing original central source package and numerical archives; it predates the saved-loss bundle and does not describe that bundle's contents.
 
 Original software uses the [MIT License](LICENSE); research outputs retain the terms in [DATA_LICENSE](DATA_LICENSE). The source distribution retains author attribution and third-party notices.

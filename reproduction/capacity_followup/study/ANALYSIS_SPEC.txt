@@ -1,0 +1,271 @@
+KAHM GEOMETRY STUDY: PRESPECIFIED ANALYSIS
+Version 1.1, prepared before confirmation data generation
+
+STATUS AND SCOPE
+This plan distinguishes an independent development pilot from a frozen
+confirmation experiment. It is a prospective analysis plan for this study,
+not an externally registered protocol. It does not guarantee publication,
+power, distribution-free coverage, or superiority of KAHM as a family.
+
+The principal objective is to identify whether the KAHM reconstruction
+operator, scalar score construction, affinity normalization, or decoder
+restriction accounts for prediction differences. The core geometric
+comparison shares the training-fitted input scaler, training groups,
+reference observations, score formula, association parameters, and head
+selection procedure. Only the reconstruction operator differs between the
+KAHM and matched affine-projection conditions. Any other geometric baseline
+is a separately described comparator, not a same-component substitution.
+
+The executable protocol records all generator parameters, feature formulas,
+reference caps, dimensions, hyperparameter grids, noise laws, and seed rules.
+This analysis plan must be frozen with that protocol and the source hashes
+before any confirmation data are generated. Exact seed identifiers and the
+pilot-derived numerical margins are stored in the freeze manifest.
+
+1. EXPERIMENTAL UNITS AND DATA SEPARATION
+
+There are two independent pilot replicates and 24 confirmation replicates.
+Pilot and confirmation use disjoint random streams. The number 24 is fixed
+before confirmation and is a resource decision; no prospective power claim
+is made. Every planned replicate is retained, regardless of its results.
+
+Within each replicate, training, validation, and test observations or complete
+episodes use separate random streams. Inputs and targets from the test split
+are never used to fit preprocessing, groups, reference models, feature
+standardization, hyperparameters, or decoder coefficients. Validation may
+select among the frozen candidate grid. Ties use a fixed deterministic rule.
+The final test assesses the complete train-and-validation selection pipeline.
+
+The cosine-branch study uses S uniform on {-1,+1}, T uniform on [-1,+1],
+independent, and X=(T,c*cos(pi*T)+a*S), a>0. Its target is
+Y=sqrt(1-lambda)*S + sqrt(3*lambda)*T + epsilon, with independent centered
+bounded epsilon of fixed variance. The main comparison has no input noise.
+At fixed c and training size, all lambda targets share the same input draws
+and frozen unsupervised feature bank. Latent S and T are available only to
+generate targets and conduct explicit diagnostic analyses; they do not
+provide oracle group labels to the learned geometry. The same noise draws
+may be reused across lambda for pairing, if recorded in the protocol.
+
+Branch training sizes are 256 and 1024; validation size is 512 and test size
+is 2048. The 1024 training size belongs to the primary family. The smaller
+size is a prespecified secondary sample-size diagnostic.
+
+The forecasting laws are nonlinear_ar, Van der Pol, and Duffing. Each
+confirmation replicate has 128 independent training episodes, 128 independent
+validation episodes, and 512 independent test episodes. Thirteen prescribed
+origins per training episode give 1664 fitting rows. These rows are not 1664
+independent episodes. Exact horizons, origins, episode lengths, initial-state
+laws, and dynamical parameters are fixed by the executable protocol.
+
+For forecasting, first average squared errors over the prescribed horizons,
+output coordinates, and origins within each episode. Then average equally
+over the independent test episodes to produce one method MSE per replicate.
+The comparison estimand weights the declared horizons equally unless the
+executable protocol explicitly supplies fixed alternative weights before
+confirmation. Individual-horizon and individual-origin findings are secondary.
+
+For the branch experiment, average squared errors over all test observations
+to produce one method MSE per replicate. The primary endpoint uses noisy
+observed Y. Errors against the analytically known conditional mean are a
+secondary noise-separated diagnostic, not a replacement selected after results.
+
+2. PILOT AND FREEZE BOUNDARY
+
+The two pilot replicates may be used for implementation checks, runtime and
+numerical diagnostics, and choosing a feasible common hyperparameter grid.
+Pilot outcomes must be identified as development results and excluded from
+confirmation means, uncertainty intervals, and success counts.
+
+Before confirmation, freeze: all nine primary settings, all three primary
+cellwise contrasts and two target-alignment interactions, all feature and head
+formulas, the common grids and tie rules, the
+24 confirmation seed identifiers, the full failure-handling rule, source
+hashes, the input and data-generation specifications, and the numerical
+practical-effect margin for every primary setting. Preserve the pilot records
+used to derive those margins. A machine-readable freeze manifest should
+contain these items or hashes of the files that contain them.
+
+No method, setting, seed, metric, model-selection rule, or interval construction
+may be altered in response to confirmation results while keeping the original
+confirmation label. Any such follow-up must be separately identified as
+exploratory, or use a new prerecording and fresh independent confirmation data.
+
+3. PRIMARY FAMILY: 27 CELLWISE CONTRASTS AND TWO INTERACTIONS
+
+Primary settings are:
+  B1: branch, train=1024, c=0, lambda=0
+  B2: branch, train=1024, c=0, lambda=0.5
+  B3: branch, train=1024, c=0, lambda=1
+  B4: branch, train=1024, c=1, lambda=0
+  B5: branch, train=1024, c=1, lambda=0.5
+  B6: branch, train=1024, c=1, lambda=1
+  F1: nonlinear_ar, train=128 independent episodes
+  F2: Van der Pol, train=128 independent episodes
+  F3: Duffing, train=128 independent episodes
+
+All three primary contrasts use the common validation-selected affine/ridge
+output head, with its intercept and training-only feature standardization.
+The flexible-head results are secondary. The compared encodings and any
+finite budgets are precisely defined in the executable protocol.
+
+For every setting and confirmation replicate r, define improvement as
+control MSE minus candidate MSE, so a positive value favors the candidate.
+
+  G: matched affine reconstruction + phi
+       MINUS KAHM reconstruction + phi.
+     This estimates the KAHM reconstruction-operator advantage under the
+     otherwise shared pipeline. It does not establish universal superiority.
+
+  N: KAHM + phi
+       MINUS KAHM + phi augmented with the log normalizer.
+     This tests the effect of retaining absolute score scale. At an affine
+     head, it can reflect information and/or decoder accessibility; the
+     score-vector and flexible-head diagnostics help distinguish these.
+
+  L: KAHM + phi
+       MINUS KAHM + the protocol-defined local-coordinate augmentation.
+     This tests whether retaining within-group positional information improves
+     the fitted forecast. The additional dimension and computation are reported.
+
+Two additional paired target-alignment contrasts use the same branch bank
+within each replicate. At each c in {0,1}, and train=1024, define
+
+  I_c = G(c,lambda=0) - G(c,lambda=1).
+
+A positive I_c means the KAHM reconstruction-operator advantage is larger
+for the regime target than for the within-branch target. This directly tests
+the difference of advantages; a significant result in one cell and an
+inconclusive result in another would not establish this interaction. There
+is no primary interaction test comparing the two curvature values.
+
+There are exactly 9*3+2=29 primary paired contrasts. The simultaneous family
+contains every one of them, including unfavorable and inconclusive outcomes.
+No choice of the most favorable setting, decoder, or encoding defines a
+primary comparison after seeing results.
+
+4. ESTIMAND, UNCERTAINTY, AND MULTIPLICITY
+
+For a primary contrast, let D_r be its paired test-MSE improvement in replicate
+r, r=1,...,24. Report the mean Dbar, unbiased standard deviation s_D,
+standard error s_D/sqrt(24), and interval
+
+  Dbar +/- t_(23, 1 - 0.05/(2*29)) * s_D/sqrt(24).
+
+These are two-sided Bonferroni-adjusted paired-replicate Student t intervals.
+The intended family confidence level is 95% under the paired-normal model;
+with nonnormal replicate differences their coverage is approximate. They are
+not distribution-free risk certificates and are not applications of the
+manuscript's bounded-loss certificate hierarchy. The report must state this
+distinction prominently. Bonferroni does not require independent contrasts,
+but each per-contrast t interval still relies on its own distributional model
+or an adequate normal approximation. Twenty-four observations do not prove
+that approximation. Inspect and display replicate variability and influential
+replicates without removing them because of their outcome.
+
+Different contrasts can share trained banks, test observations, and targets.
+That dependence is intentional pairing and does not require treating their
+rows as independent. The independent replication unit for these intervals
+is the complete train/validation/test replicate, not an overlapping window,
+horizon, test point, candidate fit, or reused target mixture.
+
+Because synthetic data are regenerated independently in each replicate, the
+reported mean includes training/validation randomness and finite test-sample
+variation under the specified generator. It does not estimate a population of
+real-world forecasting tasks. For any separate natural-data follow-up using
+one fixed test cohort, variation over fitting seeds is conditional on that
+cohort and must not be presented as independent population replication.
+
+The frozen practical-effect threshold in each setting is
+
+  delta_setting = 0.05 * mean(pilot raw-input ridge test MSEs),
+
+where the mean uses exactly the two pilot replicates for that setting. Each
+interaction's practical threshold is the arithmetic mean of its lambda=0
+and lambda=1 cell thresholds; equivalently, 5% of the mean of the four
+raw-ridge pilot MSEs at its two endpoints. These
+pilot-derived numerical thresholds are fixed before confirmation. They are
+study-design thresholds, not externally validated application requirements.
+Conditional on the pilot, they are fixed comparison thresholds. Their
+estimation uncertainty is not hidden or described as a known population scale.
+The unrounded threshold and both pilot MSEs must be retained in the manifest.
+
+Use the same simultaneous interval to classify each primary contrast:
+  lower endpoint > delta_setting: evidence of a practical benefit under the
+    declared margin and parametric interval assumptions;
+  lower endpoint > 0, but not > delta_setting: evidence of a positive effect,
+    with a practical benefit at the declared threshold unresolved;
+  upper endpoint < 0: evidence of harm under the declared protocol;
+  otherwise: direction unresolved.
+
+An interval lying entirely inside [-delta_setting,+delta_setting] may be
+described as supporting an effect within that prespecified practical band
+under the same interval assumptions. A nonsignificant comparison by itself
+does not establish equivalence, adequacy, or absence of an effect.
+
+Report all absolute test MSEs and paired improvements. A descriptive relative
+improvement may divide a mean difference by a clearly identified mean control
+MSE, but a ratio of means is not automatically covered by the difference
+interval. Do not attach an uncomputed ratio confidence interval to it.
+
+5. PRESPECIFIED SECONDARY DIAGNOSTICS
+
+The following are secondary unless a separate fresh-data protocol is frozen:
+  - Branch training size 256 and comparisons of sample-size trends.
+  - Flexible heads on the same frozen feature banks.
+  - Full score vectors and score-vector/phi-plus-log-normalizer comparisons.
+  - Raw-input ridge and flexible baselines, and other matched geometric baselines.
+  - Individual forecasting horizons and episode distributions.
+  - Branch conditional-mean MSE and the known noise variance.
+  - Reflection-distance diagnostics and retention of S or T.
+  - Reference/group balance, reconstruction residuals, feature conditioning,
+    coordinate counts, fit/transform/head time, and numerical failures.
+
+Secondary point estimates and uncertainty summaries are clearly labelled.
+Unadjusted intervals do not authorize a claim that the best secondary result
+is confirmed. Do not turn a selected favorable secondary contrast into a
+primary conclusion. A paired bootstrap over whole confirmation replicates,
+if computed with a fixed resampling seed, is only a sensitivity diagnostic;
+percentile bootstrap intervals are not simultaneous and do not repair a
+failed parametric assumption. There is no bootstrap requirement.
+
+6. NUMERICAL FAILURES, EXCLUSIONS, AND REPRODUCIBILITY
+
+Retain every prescribed attempt, its status, and its random identifiers.
+Do not silently drop failed methods or replace difficult replicates.
+Deterministic retries for technical interruptions may reuse the exact same
+frozen inputs and configuration; document both attempts. A substantive code
+bug requires an explicit audit record, preserved earlier outputs, amended
+source hashes, and complete rerunning of every affected cell. If a correction
+was informed by confirmation performance, report it as such and obtain new
+independent confirmation streams for inferential claims.
+
+No primary t interval is produced from a silently reduced replicate count.
+If any of a contrast's planned 24 paired outcomes is unavailable, mark that
+contrast incomplete. A separate descriptive incomplete-case summary may be
+shown, with the missingness and its potential bias explained. Zero-variance
+paired differences yield a degenerate t interval mechanically; report that
+fact without claiming robustness to unobserved variability.
+
+Archive per-replicate selected hyperparameters, validation scores, test MSEs,
+episode summaries where feasible, feature dimensions, timings, diagnostic
+values, configuration and source hashes, environment versions, and generator
+seed identities. Aggregate reported tables directly from these records.
+An independent analyzer checks pairing, completeness, primary-family size,
+pilot/confirmation separation, margin provenance, and interval arithmetic.
+
+7. CLAIM BOUNDARIES
+
+This study measures specified implementations under specified synthetic laws.
+It does not show that all KAHM models have an invariant-score bottleneck,
+that every normalized affinity discards useful information, or that a null
+contrast proves KAHM and affine geometries equivalent. Better local-coordinate
+results do not establish a favorable accuracy-computation tradeoff unless
+the added dimensions, memory, and timing are included. Stronger flexible-head
+results diagnose the joint representation/head construction, not the Bayes
+information loss without further argument.
+
+Theoretical identities in THEORETICAL_NOTE.txt are mathematical explanations,
+not new discoveries established by this experiment. Any approximate-symmetry
+inequality has explicit population and decoder-budget assumptions. The
+experiment does not claim novelty for the basic normalization identity or
+the generic Lipschitz reconstruction-to-risk bound.

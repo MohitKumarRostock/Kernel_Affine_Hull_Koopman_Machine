@@ -1,0 +1,164 @@
+KAHM GEOMETRY STUDY: FRESH DECODER-CAPACITY FOLLOW-UP
+Version 1.1, to be frozen before phase-4 observations are generated
+
+MOTIVATION AND RELATION TO THE FIRST STAGE
+This is a separately planned, data-motivated follow-up. It was proposed after
+inspecting the completed first-stage secondary RBF-head results. It is not
+part of the first stage's original 29-comparison confirmation family.
+
+The question is whether the performance of KAHM local-coordinate features
+relative to raw histories and matched affine local-coordinate features
+persists with a larger finite Nyström landmark budget. A favorable result
+with 64 landmarks alone does not establish representation superiority or an
+advantage over a well-tuned unrestricted kernel method.
+
+All choices below, the executable follow-up configuration, source hashes,
+and numerical practical-effect margins must be frozen before generating any
+phase-4 observation. The first-stage outputs may motivate these choices, but
+the new confirmation observations must be independent of all first-stage
+training, validation, and test observations. No first-stage row is reused as
+a new confirmation unit.
+
+1. DATA, FEATURES, AND DECODERS
+
+Use phase='capacity_confirmation', RNG phase code 4, master seed 20261030,
+and 24 complete independent replicates, IDs 0,...,23. The three systems are
+nonlinear_ar, Van der Pol, and Duffing, with setting IDs matching stage 1:
+forecast_nonlinear_ar, forecast_van_der_pol, and forecast_duffing.
+
+Each system and replicate uses 128 independent training episodes, 128
+independent validation episodes, and 512 independent test episodes. Histories,
+horizons, origins, dynamical laws, noise laws, and bounds are unchanged from
+the frozen first-stage configuration. Thirteen origins per episode provide
+1664 training rows, not 1664 independent episodes. Equal-weight averaging
+over horizons and origins within each episode precedes equal-weight averaging
+over test episodes.
+
+Fit one fresh unsupervised geometric bank per system and replicate, using
+training inputs only. Reuse exactly that bank and the same train/validation/
+test observations for all four encodings and both landmark budgets:
+  raw; affine:local; kahm:local; kahm:scores.
+
+The local encodings are the existing soft affinities augmented with
+affinity-gated PCA coordinates of raw histories about their local reference
+centers. They are not the full KAHM reconstructed vectors. KAHM and matched
+affine conditions share the scaler, group partition, references, PCA bases,
+and score formula, as in the first-stage controlled geometry experiment.
+
+The head is the existing finite Nyström RBF head with a retained linear
+component. Test n_landmarks in {64,256}, retaining the same prespecified
+ridge-penalty and bandwidth-multiplier grids and validation selection rule.
+Training data alone determine feature standardization, landmarks, bandwidth
+heuristics, and all head coefficients. Validation chooses the final ridge
+penalty and bandwidth. Test loss must not choose them.
+
+Changing the landmark budget can also change the sampled landmarks and the
+training-derived median bandwidth. This study compares these two declared
+finite-head pipelines; it does not isolate a mathematical width parameter
+while holding every other realized basis value fixed. Report actual retained
+head dimensions, landmark counts, timing, and memory context. A 256-landmark
+head is still not a universal-decoder oracle or an exhaustive tuning frontier.
+
+A secondary operational selector chooses one complete pipeline among the
+eight feature-by-landmark-budget candidates by the mean validation loss
+alone, with ties resolved in the fixed executable pipeline order. The
+selected pipeline is evaluated on the same untouched test episodes. This
+selection rule is fixed before phase-4 data generation. Its outputs are
+descriptive secondary outcomes, not additional primary contrasts. They are
+stored as feature='validation_selector', head='selected', landmarks=0, with
+the actual selected feature, landmark budget, and hyperparameters recorded.
+
+2. PRIMARY FAMILY: TWELVE CONTRASTS
+
+For each system s and landmark budget M in {64,256}, and every replicate r,
+define paired improvements:
+
+  D_raw(s,M,r) = MSE(raw,RBF_M) - MSE(kahm:local,RBF_M),
+  D_affine(s,M,r) = MSE(affine:local,RBF_M)
+                    - MSE(kahm:local,RBF_M).
+
+Positive values favor KAHM local-coordinate features. There are exactly
+3 systems * 2 budgets * 2 contrasts = 12 primary comparisons. All unfavorable
+and inconclusive results remain in the primary table. kahm:scores is a
+prespecified secondary diagnostic.
+
+The primary family tests benefits separately at each budget. A significant
+benefit at one budget and an inconclusive benefit at the other does not by
+itself prove that benefits differ between budgets. Differences across budgets
+may be described using point estimates and paired descriptive diagnostics;
+there is no primary width-interaction hypothesis in this twelve-comparison
+family. A benefit at 256 landmarks means it survives that tested finite-head
+budget, not every stronger decoder.
+
+3. PRACTICAL-EFFECT MARGINS
+
+For each system, define a fixed margin using the complete 24 first-stage
+confirmation raw-input RBF-head results:
+
+  delta_s = 0.05 * mean(first-stage raw/RBF test MSE for system s).
+
+Use the same delta_s for both landmark budgets and both contrasts. Preserve
+all 24 contributing MSEs, their record hashes, the immutable first-stage
+record-file hash, and the resulting unrounded margin in capacity_margins.json.
+These are data-motivated study-design margins fixed before new confirmation;
+they are not externally specified application tolerances. Conditional on the
+completed first-stage data, the margins are fixed for the new experiment.
+
+4. UNCERTAINTY AND CLAIMS
+
+For each primary contrast, compute its mean Dbar and unbiased standard
+deviation s_D across exactly 24 complete independent replicate differences.
+The reported interval is
+
+  Dbar +/- t_(23, 1 - 0.05/(2*12)) * s_D/sqrt(24).
+
+These are two-sided Bonferroni paired-replicate Student t intervals. The
+intended simultaneous confidence is 95% within this twelve-comparison family
+under the paired-normal model; with nonnormal differences it is an
+approximation. It is not a distribution-free risk certificate. Report
+replicate variability and retain influential outcomes.
+
+This new 95% family and the first stage's 95% family do NOT jointly constitute
+one 95% simultaneous event over all 41 comparisons. Do not make that claim.
+The follow-up's inferential interpretation is conditional on the completed
+first stage and the frozen follow-up choices, with fresh independent data.
+
+Use the fixed margin to interpret the same simultaneous interval:
+  lower endpoint > delta_s: practical benefit under the declared threshold;
+  lower endpoint > 0 only: positive effect, practical size unresolved;
+  upper endpoint < 0: negative effect under the declared comparison;
+  otherwise: direction unresolved.
+
+An interval entirely contained in [-delta_s,+delta_s] supports a mean effect
+within that declared band under the interval assumptions. Nonsignificance
+alone does not establish equivalence. Report absolute MSEs as well as paired
+differences. Relative reductions are descriptive unless their uncertainty is
+separately derived.
+
+5. INDEPENDENCE, FAILURES, AND AUDIT
+
+The unit for the paired t intervals is the complete independently regenerated
+train/validation/test replicate. Sharing data across features and budgets
+within one replicate is deliberate pairing. Dependent origins and horizons
+do not increase the number of independent replicates.
+
+Run all 24 prescribed replicate IDs and all systems, features, and budgets.
+Retain failures and do not replace poor-performing seeds. An incomplete
+primary pair receives no nominal 24-replicate interval. Technical reruns must
+use the exact frozen inputs/configuration and preserve previous failure logs.
+Any substantive change after observing follow-up results is separately
+identified and requires fresh data for a further confirmatory claim.
+
+Archive row-level method summaries, selected parameters, predictions, test
+targets, episode identifiers, and episode loss arrays. An independent
+analyzer recomputes all twelve paired intervals and can reconstruct episode
+losses directly from archived predictions and targets. Frozen source hashes
+and stage-1 margin provenance are independently checked. No source file from
+the first-stage frozen experiment is changed by this follow-up.
+
+There are 576 RBF-grid outcome rows and 72 secondary-selector rows, for a
+total of 648. The version-1.1 selector addition and the corresponding analyzer
+revision were made before the full follow-up protocol freeze and before any
+phase-4 data, after capacity_margins.json had frozen its numerical margins.
+That numerical-margin file is preserved unchanged; the final follow-up freeze
+pins these revised analysis files separately.

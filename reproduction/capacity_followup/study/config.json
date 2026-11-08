@@ -1,0 +1,13 @@
+{
+  "study_version": "1.0",
+  "master_seed": 20261030,
+  "pilot_repetitions": 2,
+  "confirmation_repetitions": 24,
+  "natural_repetitions": 24,
+  "geometry": {"cluster_counts": [2, 4, 8], "rank": 2, "max_refs": 24, "max_fit": 1600, "scaling": "standard", "omega": 16.0, "tau": 0.000001},
+  "heads": {"alphas": [1e-8, 1e-6, 1e-4, 0.001, 0.01, 0.1, 1.0], "n_landmarks": 64, "bandwidth_multipliers": [0.25, 1.0, 4.0]},
+  "forecast": {"systems": ["nonlinear_ar", "vanderpol", "duffing"], "train_episodes": 128, "validation_episodes": 128, "test_episodes": 512, "history": 12, "horizons": [1, 4, 12], "stride": 4},
+  "branch": {"curvatures": [0, 1], "lambdas": [0.0, 0.5, 1.0], "train_sizes": [1024, 256], "validation_size": 512, "test_size": 2048, "separation": 0.5, "noise": 0.1},
+  "inference": {"family_size": 29, "family_alpha": 0.05, "practical_margin_fraction_of_pilot_raw_mse": 0.05, "distribution": "paired Student t approximation across independent full repetitions", "primary_branch_train_size": 1024},
+  "natural": {"dataset": "UCI Airfoil Self-Noise", "split": "fixed disjoint nonfrequency setting groups", "split_seed": 2026103007, "status": "secondary descriptive robustness check; repeated fits reuse the same observed dataset"}
+}

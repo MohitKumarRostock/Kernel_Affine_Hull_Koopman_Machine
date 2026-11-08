@@ -1,0 +1,96 @@
+{
+  "schema": "step19-full-cohort-protocol-v1",
+  "title": "Deterministic geometric class decisions on the fixed Step18 cohort",
+  "study_status": "A declared computational follow-up after Step18 outcomes; not a fresh patient experiment or prospective confirmation",
+  "parent_step18_freeze_sha256": "393229c92bd45c76c5c66d7d701c2d710b9240ca711b73d1793f23451986869a",
+  "parent_step18_archive_sha256": "f2ad19753464412fae58acd0ace1019920ee34abbab1eeb4426f880a23db7bae",
+  "parent_step18_selected_models_sha256": "d2682acdc7bf89f9044985d9d85ac47b9461c0e980eb5aa582cf4d3be9f5ee37",
+  "research_question": "Can geometric constraints exclude a frozen regularity-constrained decoder class on the entire known cohort when sampling uncertainty is removed, and how does tightening the computational relaxation change the decision?",
+  "population": {
+    "size": 8192,
+    "row_order": "All 4096 saved Step18 calibration rows followed by all 4096 saved terminal rows, preserving each saved order",
+    "unit": "One prespecified history/target pair per documented patient",
+    "target": "The exact real value represented by each stored binary64 Step18 Y entry; normalized clipped lead-II amplitude 40ms ahead",
+    "new_raw_data_access": false,
+    "reserve_patients": 5557,
+    "reserve_access": false,
+    "future_patient_inference": false
+  },
+  "frozen_models": {
+    "state_coordinate_counts": [2, 6, 14],
+    "feature_blocks": {"2": [[0, 2]], "6": [[0, 2], [2, 6]], "14": [[0, 2], [2, 6], [6, 14]]},
+    "class_metric": "Maximum Euclidean distance over feature blocks",
+    "regularity": "The same validation-selected kappa for each Step18 representation; all three selected kappas equal 1",
+    "decoder_range": [-1, 1],
+    "class": "All scalar kappa-Lipschitz decoders on each frozen canonical representation, clipped to the declared target range",
+    "reference": "The frozen Step18 validation-selected HGB15 predictor",
+    "retraining_or_reselection": false,
+    "geometry_scaling_concentration_changes": false,
+    "state_sizes_form_one_nested_geometry": false
+  },
+  "decision": {
+    "margin": "Exactly the existing Step18 10% MSE margin",
+    "primary_rule": "Exact rational full-cohort class lower > the unchanged stored Step18 threshold_upper",
+    "reference_arithmetic_crosscheck": "Also compare with exactly 11/10 times the exact mean squared loss of the frozen binary64 reference predictions and stored binary64 targets",
+    "strict_inequality": true,
+    "nominal_threshold_for_display": 0.005845887394931059,
+    "nonexclusion_means": "Inconclusive; not proof of class adequacy",
+    "exclusion_scope": "This frozen representation, kappa, target, metric, and finite cohort; not unrestricted decoders or all KAHM geometries",
+    "statistical_confidence_events": 0,
+    "sampling_penalty": 0
+  },
+  "constraint_schedule": {
+    "base_block_size": 32,
+    "base_families": ["consecutive", "greedy_nearest"],
+    "base_partition_rule": "The unchanged Step18 make_partition rule, applied to all 8192 nominal feature rows; greedy uses concatenated Euclidean distance, smallest-unused anchor, then nearest-unused distance/index ordering",
+    "block_sizes": [32, 64, 128],
+    "larger_partition_rule": "Concatenate adjacent pairs or quartets of the original 32-row groups within each family; do not rebuild greedy partitions at larger sizes",
+    "run_all_configurations": true,
+    "number_configurations": 18,
+    "number_new_block_programs": 2688,
+    "cross_family_combination": "Take maximum of valid full-cohort lower bounds; never add overlapping partition SSE lower bounds",
+    "within_family_nesting": "Every old edge remains in its parent block; extend child signed multipliers by zero on newly added edges"
+  },
+  "optimization": {
+    "implementation": "Unchanged Step18 signed-edge FISTA solver and canonical-radius correction, imported from frozen sources",
+    "max_iter": 4000,
+    "tolerance": 1e-7,
+    "check_every": 20,
+    "chunk_blocks": 16,
+    "initialization": "Each new block QP starts from zero; child witness is separately preserved as a candidate, so this is not a warm-start speed comparison",
+    "iteration_limits": "Retain and report the saved feasible dual regardless of convergence; do not change solver controls after outcomes",
+    "primal_scope": "Block primal and gap diagnose the relaxed block program, not global canonical class optimality"
+  },
+  "exact_postverification": {
+    "coordinate_grid_power": 28,
+    "coordinate_grid_denominator": 268435456,
+    "box_source": "Stored Step18 F_lo and F_hi coordinatewise canonical-feature enclosures, with immutable input hashes",
+    "box_quantization": "Outward integer floor/ceil onto the 2^-28 grid; assert finite bounds and integer range safety",
+    "edge_distance": "For each feature block, sum squared maximum coordinate separations of the two integer boxes; take the maximum across blocks and its exact integer ceiling square root, then divide by 2^28",
+    "arithmetic": "Signed binary64 duals, stored binary64 targets, and kappa interpreted as exact dyadic rationals; dual linear term, distance penalty and divergence quadratic evaluated with integers/rationals",
+    "witness_selection": "Recursively choose maximum EXACT block dual objective among zero, the newly optimized signed dual, and the zero-extended exact-best child witnesses; choosing zero means zero multipliers",
+    "aggregation": "Sum exact selected objectives over the disjoint partition and divide by exactly 8192; retain an exact rational result and outward-rounded display bounds",
+    "monotonicity": "Nested selected exact objectives cannot decrease; verify exact inequalities before reporting",
+    "numerical_scope": "Exact arithmetic conditional on inherited feature-box inclusion and the explicitly stored-target/predictor semantics; not a formal verification of the upstream feature engine or measurement process"
+  },
+  "diagnostics": {
+    "retain_step18_guarded_values": true,
+    "report_new_and_inherited_witnesses": true,
+    "report_exact_vs_guarded_discrepancy": true,
+    "report_feature_quantization_cost": true,
+    "necessary_regularity_from_same_witness": "Secondary deterministic interpretation only: preserve exact A=sum(linear-quadratic) and P=sum(D_Q*abs(lambda)) for each selected full-partition witness. For P>0, meeting the unchanged threshold requires kappa >= max(0,(A-M*threshold_upper)/P). Compare the exact-reference threshold as a crosscheck. If P=0 and A>M*threshold_upper, this witness excludes every finite kappa; otherwise it yields no positive lower requirement. Take maxima only within the same frozen geometry. This uses no new optimization or model selection, does not change the primary kappa=1 decision, and provides no adequacy guarantee above the necessary bound.",
+    "same_cohort_KL_comparison": "Apply the former range-only KL map 4*kl_minus(d_M/4, log(180)/8192) as an explicitly unnecessary diagnostic penalty on the same full-cohort lower, never as the decision rule",
+    "historical_comparison_caution": "Step18 n4096 versus Step19 M8192 changes observations as well as calibration; do not attribute that difference solely to removing the sampling penalty",
+    "timings": ["base_partition", "new_block_optimization", "feature_radius_correction", "child_embedding", "exact_postverification", "independent_replay"],
+    "resource_counts": ["block_programs", "edge_constraints", "saved_witness_bytes", "chunk_size"],
+    "new_prediction_or_storage_advantage_claim": false
+  },
+  "execution_and_integrity": {
+    "sources_frozen_before_new_natural_duals": true,
+    "manufactured_preflight_required": true,
+    "write_once_outputs": true,
+    "parent_step18_artifacts_immutable": true,
+    "portable_saved_evidence_replay_required": true,
+    "no_outcome_dependent_hyperparameter_or_threshold_changes": true
+  }
+}

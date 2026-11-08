@@ -1,0 +1,147 @@
+{
+  "assurance": "CONDITIONAL_ON_STORED_EXACT_FEATURE_COORDINATES",
+  "auditor_sha256": "d117520df3e63f4a3147c157b8a86fbc46eb8d64e47a54647227ef94aed0a9ba",
+  "baseline_checks": {
+    "no_baseline_refits_performed_by_audit": true,
+    "prediction_and_loss_receipts_verified": 18,
+    "trained_baseline_payloads_replayed": 3
+  },
+  "cohorts": {
+    "casual": {
+      "decision": 172,
+      "test": 177,
+      "train": 303
+    },
+    "cnt": {
+      "decision": 172,
+      "test": 177,
+      "train": 303
+    },
+    "registered": {
+      "decision": 172,
+      "test": 177,
+      "train": 303
+    }
+  },
+  "completed_utc": "2026-11-07T16:04:36.519660+00:00",
+  "exact_training_thresholds": {
+    "casual": "306489/9898000",
+    "cnt": "2322921/61862500",
+    "registered": "504811/14425830"
+  },
+  "independent_math_sha256": "3f440f427614ac230f4a09ac062d5bfc18eaa47babdaaff1c3c9b04b2c330308",
+  "limitations": [
+    "Stored payload replay establishes operational reproducibility, not ideal-real native-transform enclosure.",
+    "Repeated fit identities are independently matched to canonical proofs; the frozen runner and retained local trace establish the actual execution record.",
+    "One external dataset with three algebraically related targets; no independent-dataset or population inference.",
+    "Timing is conditional search time after shared encoders/features/templates and excludes disk evidence writes.",
+    "Generic safe pruning or exact pair optimization alone is not an established novelty claim."
+  ],
+  "model_checks": {
+    "casual": {
+      "heads": 36,
+      "local_rank_records_checked": 192,
+      "maps": 18
+    },
+    "cnt": {
+      "heads": 36,
+      "local_rank_records_checked": 192,
+      "maps": 18
+    },
+    "registered": {
+      "heads": 36,
+      "local_rank_records_checked": 192,
+      "maps": 18
+    }
+  },
+  "model_seal_sha256": "df0a1a36a80469f465f86cadd97a90af4f3b3060ed8b9256b41c161158010c9e",
+  "proof_counts": {
+    "affine_fit_proofs": 54,
+    "extension_fit_proofs": 54,
+    "feature_cohorts_replayed": 162,
+    "maps_replayed": 54,
+    "prediction_proofs": 216
+  },
+  "protocol_seal_sha256": "5e095bdd88140b8e80ac3b918661de209aeef7a9377118715cdd8ebe1635074a",
+  "protocol_semantic_checks": {
+    "full_24hour_causal_histories_and_target_timestamp_split": true,
+    "incidental_training_snippet_honestly_disclosed": true,
+    "incremental_fits_and_paired_timing_both_required_for_utility": true,
+    "one_external_dataset_three_correlated_targets": true,
+    "ordinary_cost_and_range_rules_matched": true,
+    "reserved_patient_cohort_remains_sealed": true,
+    "same_18_maps_and_two_heads_per_map": true,
+    "stored_feature_assurance_only": true,
+    "strict_bounds_preserve_equal_cost_candidates": true
+  },
+  "provenance_checks": {
+    "actual_ordered_search_executions": 33,
+    "all_targets_selected_before_any_test_counts": true,
+    "execution_events_verified": 76,
+    "local_hash_chain_is_not_external_trusted_timestamp": true,
+    "pretest_model_policy_files_sealed": 624,
+    "protocol_files_sealed": 41
+  },
+  "reserved_patient_arrays_accessed": 0,
+  "result_sha256": "d52cc6ba7412ae507df473b3d4a4da9216e661470ac268c7ad69f1ce7d7d8471",
+  "schema": "step36-independent-postrun-audit-v1",
+  "scientific_models_refitted_by_audit": 0,
+  "search_checks": {
+    "casual": {
+      "additional_fits_avoided": 0,
+      "certificate_calls_per_triggered_run": 0,
+      "epsilon": "306489/9898000",
+      "median_paired_seconds_saved": "159690869/274877906944",
+      "ordinary_fits": 2,
+      "positive_incremental_certificate_utility": false,
+      "selection": {
+        "abstained": false,
+        "candidate_id": "raw_standard::affine",
+        "decision_risk": {
+          "lower": "227943143948426101763414473206680060009928945100445859810651946689526558737423691/8544541444817322833232505180942595472082718084223763696286876191213424745853747200",
+          "upper": "227943143948426101763414473206680060009928945100445859810651946689526558737423691/8544541444817322833232505180942595472082718084223763696286876191213424745853747200",
+          "width": "0"
+        },
+        "deployment_payload_bytes": 2262,
+        "head_id": "head35:3b51b9ede11b3874b472115b9aff30ac030d08c1557fb15232479c1aff3a1f03"
+      },
+      "triggered_fits": 2
+    },
+    "cnt": {
+      "additional_fits_avoided": 0,
+      "certificate_calls_per_triggered_run": 6,
+      "epsilon": "2322921/61862500",
+      "median_paired_seconds_saved": "147153861633/274877906944",
+      "ordinary_fits": 36,
+      "positive_incremental_certificate_utility": false,
+      "selection": {
+        "abstained": true,
+        "candidate_id": null,
+        "head_id": null
+      },
+      "triggered_fits": 36
+    },
+    "registered": {
+      "additional_fits_avoided": 0,
+      "certificate_calls_per_triggered_run": 6,
+      "epsilon": "504811/14425830",
+      "median_paired_seconds_saved": "-57528461295/274877906944",
+      "ordinary_fits": 36,
+      "positive_incremental_certificate_utility": false,
+      "selection": {
+        "abstained": true,
+        "candidate_id": null,
+        "head_id": null
+      },
+      "triggered_fits": 36
+    }
+  },
+  "search_cost_totals": {
+    "actual_search_head_fits": 848,
+    "consistent_panel_incremental_utility": false,
+    "exact_selected_pair_distances": 880,
+    "pair_certificate_calls": 60
+  },
+  "started_utc": "2026-11-07T16:03:28.432195+00:00",
+  "status": "PASS"
+}

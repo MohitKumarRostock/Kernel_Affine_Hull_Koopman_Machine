@@ -1,0 +1,96 @@
+{
+  "clinical_scope": "Technical bounded waveform forecast only; no diagnostic or clinical adequacy claim",
+  "dataset": "PTB-XL",
+  "eligibility": "Every metadata patient; no outcome-based exclusion or missing-record substitution",
+  "expected_channels": 12,
+  "expected_samples": 5000,
+  "failure_policy": "Missing, malformed, unsupported or integrity-failing required record stops the stage visibly",
+  "history_clipping": "none",
+  "history_filtering": "none; causal raw-sample subsampling at the listed offsets",
+  "history_offsets": [
+    -155,
+    -150,
+    -145,
+    -140,
+    -135,
+    -130,
+    -125,
+    -120,
+    -115,
+    -110,
+    -105,
+    -100,
+    -95,
+    -90,
+    -85,
+    -80,
+    -75,
+    -70,
+    -65,
+    -60,
+    -55,
+    -50,
+    -45,
+    -40,
+    -35,
+    -30,
+    -25,
+    -20,
+    -15,
+    -10,
+    -5,
+    0
+  ],
+  "history_units": "mV",
+  "horizon_samples": 20,
+  "horizon_seconds": 0.04,
+  "lead": "II",
+  "origin": {
+    "algorithm": "SHA256 digest interpreted as unsigned big-endian integer",
+    "formula": "155 + digest_integer % 4825",
+    "hash_input": "step18-origin-v1:<canonical integer patient_id>",
+    "inclusive_range": [
+      155,
+      4979
+    ]
+  },
+  "record_selection": "Minimum integer ecg_id per integer patient_id; no chronological interpretation",
+  "sampling_hz": 500,
+  "schema": "step18-data-protocol-v1",
+  "split": {
+    "calibration_prefixes": [
+      512,
+      2048,
+      4096
+    ],
+    "evaluation_order": "Independent permutation of the ordered 8192 evaluation IDs; first 4096 calibration, remainder terminal",
+    "evaluation_rng_seed": 2026110619,
+    "input_order": "sorted integer patient IDs",
+    "rng": "numpy.random.default_rng",
+    "seed": 2026110618,
+    "sequential_counts": {
+      "evaluation": 8192,
+      "reserve": 5557,
+      "support": 512,
+      "train": 3072,
+      "validation": 1536
+    },
+    "stage_counts": {
+      "calibration": 4096,
+      "reserve": 5557,
+      "support": 512,
+      "terminal": 4096,
+      "train": 3072,
+      "validation": 1536
+    }
+  },
+  "stage_storage": "Write-once NPZ plus per-record integrity receipt; reserve extraction forbidden",
+  "support_target_policy": "Do not index, transform, return or store a target for support patients",
+  "target": "clip(lead_II_mV[origin+20], -2, 2)/2",
+  "target_bounds": [
+    -1.0,
+    1.0
+  ],
+  "target_clip_mV": 2.0,
+  "version": "1.0.3"
+}

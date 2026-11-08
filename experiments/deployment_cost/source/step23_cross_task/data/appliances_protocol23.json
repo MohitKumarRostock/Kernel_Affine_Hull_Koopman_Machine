@@ -1,0 +1,231 @@
+{
+  "schema": "step23-appliances-prospective-protocol-v1",
+  "status": "prospective protocol; no CSV values parsed and no benchmark fitted",
+  "source": {
+    "name": "Appliances Energy Prediction",
+    "uci_id": 374,
+    "doi": "10.24432/C5VC8G",
+    "catalog_url": "https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction",
+    "author_repository": "https://github.com/LuisM78/Appliances-energy-prediction-data",
+    "license": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "advertised_rows": 19735,
+    "advertised_predictor_columns_in_catalog": 28,
+    "catalog_missing_values": false,
+    "record_spacing_seconds": 600,
+    "opaque_source_receipt": "data/source_archive/source_lock23.json",
+    "expected_zip_member": "energydata_complete.csv",
+    "expected_csv_columns": [
+      "date",
+      "Appliances",
+      "lights",
+      "T1",
+      "RH_1",
+      "T2",
+      "RH_2",
+      "T3",
+      "RH_3",
+      "T4",
+      "RH_4",
+      "T5",
+      "RH_5",
+      "T6",
+      "RH_6",
+      "T7",
+      "RH_7",
+      "T8",
+      "RH_8",
+      "T9",
+      "RH_9",
+      "T_out",
+      "Press_mm_hg",
+      "RH_out",
+      "Windspeed",
+      "Visibility",
+      "Tdewpoint",
+      "rv1",
+      "rv2"
+    ],
+    "source_schema_and_row_count_verified_by_parsing": false,
+    "future_ingestion_rule": "Require the locked archive hash, exact declared columns/order and row count, and unique increasing source-naive timestamps at exactly600-second increments. Header/timestamp metadata may be checked across the record for integrity only. Before fitting, parse and check finite numeric values only in development segments. After the full six-task fit seal, parse and validate the test numeric fields before test prediction/loss. No full-dataframe parse before that seal. No interpolation, row removal, reordering, or alternative dataset fallback. A failed gate stops the stage; a late test-integrity failure invalidates evaluation without adaptive replacement."
+  },
+  "forecast": {
+    "target_column": "Appliances",
+    "target_units": "Wh per source ten-minute energy record",
+    "quantity": "Direct point forecast of the energy reading h records after the latest completed observed record; not cumulative h-step energy",
+    "horizons_records": [
+      1,
+      6,
+      36
+    ],
+    "horizons_minutes": [
+      10,
+      60,
+      360
+    ],
+    "primary_horizon_records": 6,
+    "lookback_records": 144,
+    "energy_lag_offsets_ordered": {
+      "first": 0,
+      "last": 143,
+      "step": 1
+    },
+    "common_anchor_roster_uses_max_horizon": true,
+    "direct_separate_readout_per_horizon": true,
+    "recursive_rollout_claim": false,
+    "target_clipping": "none",
+    "common_final_output_map_in_physical_units": "max(0, prediction_Wh), with no upper clip",
+    "target_standardization": "Training-head-label mean and population standard deviation per horizon; zero standard deviation uses divisor1. The same target map is used by every fitted family at that horizon and inverted before physical-unit output clipping and loss evaluation. Validation/test targets never fit this map.",
+    "primary_loss": "Mean squared error in Wh^2 on all common eligible test anchors",
+    "secondary_loss": "Root mean squared error in Wh, derived from the same physical-unit MSE",
+    "no_ecg_absolute_threshold_or_bounded_loss_transfer": true
+  },
+  "features": {
+    "dimension": 167,
+    "history_energy_coordinates": 144,
+    "current_local_channels": [
+      "T1",
+      "RH_1",
+      "T2",
+      "RH_2",
+      "T3",
+      "RH_3",
+      "T4",
+      "RH_4",
+      "T5",
+      "RH_5",
+      "T6",
+      "RH_6",
+      "T7",
+      "RH_7",
+      "T8",
+      "RH_8",
+      "T9",
+      "RH_9",
+      "lights"
+    ],
+    "calendar_channels": [
+      "time_of_day_sin",
+      "time_of_day_cos",
+      "day_of_week_sin",
+      "day_of_week_cos"
+    ],
+    "calendar_definition": "At the current origin timestamp, let f=(3600*hour+60*minute+second)/86400. Use sin(2*pi*f), cos(2*pi*f), sin(2*pi*(weekday+f)/7), cos(2*pi*(weekday+f)/7), with Monday=0. Preserve source-naive calendar stamps; do not infer a timezone or use a future measured covariate.",
+    "excluded_airport_weather_columns": [
+      "T_out",
+      "Press_mm_hg",
+      "RH_out",
+      "Windspeed",
+      "Visibility",
+      "Tdewpoint"
+    ],
+    "weather_exclusion_reason": "The official metadata says hourly airport weather was interpolated. Its availability/interpolation direction at an online forecast origin is not established. Exclude the six channels rather than assuming causal interpolation.",
+    "excluded_random_columns": [
+      "rv1",
+      "rv2"
+    ],
+    "source_date_column_role": "Calendar construction only; no unrestricted numeric timestamp coordinate",
+    "all_inputs_available_by_origin": true,
+    "future_sensor_or_weather_values": false,
+    "same_features_for_geometric_and_raw_fitted_procedures": true
+  },
+  "partitions": {
+    "index_convention": "Zero-based raw row indices; all segment and anchor ranges are half-open",
+    "raw_segments_zero_based_half_open": {
+      "outer_train": [
+        0,
+        11841
+      ],
+      "validation": [
+        11841,
+        15788
+      ],
+      "test": [
+        15788,
+        19735
+      ]
+    },
+    "eligible_anchors_zero_based_half_open": {
+      "outer_train": [
+        143,
+        11805
+      ],
+      "validation": [
+        11984,
+        15752
+      ],
+      "test": [
+        15931,
+        19699
+      ]
+    },
+    "eligible_anchor_counts": {
+      "outer_train": 11662,
+      "validation": 3768,
+      "test": 3768
+    },
+    "footprint_for_every_horizon": "[origin-143, origin+36] inclusive lies wholly in its outer raw segment",
+    "reference_bank": {
+      "size": 512,
+      "generator": "numpy.random.PCG64",
+      "seed": 2026110623001,
+      "numpy_version_for_exact_index_replay": "2.3.5",
+      "algorithm": "Generator(PCG64(seed)).permutation(np.arange(143,11805,dtype=np.int64))[:512]",
+      "selection_observes": "Indices only; no feature magnitudes or target values",
+      "retained_priority_order": "Original random permutation order; do not replace with chronological order before taking any reference-bank prefix",
+      "feature_use": "Geometry and its input scalers may use reference features; forecast labels at the 512 reference anchors are not provided as training labels to the encoder or readouts",
+      "nystrom_use": "The same reference bank is available to Nystr\u00f6m controls; when a smaller bank prefix is used, use the retained random priority order",
+      "input_scaler_use": "Fit each candidate geometry input scaler on the designated reference-bank feature rows only; retain MinMax01 and standard-scaling comparison policy specified by the global protocol"
+    },
+    "head_training_count": 11150,
+    "head_training_rule": "Use all outer-training eligible anchors except the 512 reference anchors, in chronological order. Every supervised model family uses the same head-training anchors and per-horizon labels.",
+    "within_outer_training_overlap": "Reference and head anchor sets are disjoint, but their raw history/target footprints may overlap. This is permitted training-data reuse, not an independence claim.",
+    "outer_partition_overlap": "None: full history/target footprints do not cross training, validation, or test boundaries.",
+    "refit_on_train_plus_validation": false,
+    "test_inspection_before_procedure_seal": false,
+    "ecg_reserve_access": false
+  },
+  "baseline_information_controls": {
+    "persistence": "predict Appliances[origin]",
+    "daily_seasonal": "predict Appliances[origin+horizon-144]; this is one of the 144 allowed history coordinates for every declared horizon",
+    "training_mean": "Mean of head-training labels at that horizon",
+    "fitted_controls": [
+      "raw-input ridge",
+      "raw-input histogram gradient-boosted trees",
+      "Nystr\u00f6m RBF ridge"
+    ],
+    "global_protocol_defines_menus_and_selectors": true,
+    "same_physical_unit_output_map_and_loss": true
+  },
+  "statistical_scope": {
+    "real_world_unit": "One building observed over one short chronological record",
+    "test_origin_count_is_not_independent_sample_size": true,
+    "history_windows_overlap_within_each_role": true,
+    "repeated_fitting_seeds_are_not_independent_test_datasets": true,
+    "test_temporal_stability_summary": "Report paired loss means for the 26 consecutive complete 144-origin blocks starting at first test anchor15931, and retain the final24 origins separately. Primary MSE still uses all3768 origins.",
+    "time_block_summary_is_descriptive": true,
+    "population_or_across_building_claim": false,
+    "no_automatic_iid_confidence_interval": true,
+    "cross_task_claim_limit": "This supplies a new domain and chronological holdout; it does not establish generalization across buildings or seasons. Statistical resampling, if added by the global frozen protocol, must state dependence/stationarity assumptions separately from arithmetic enclosures."
+  },
+  "source_refs": [
+    {
+      "title": "UCI Appliances Energy Prediction catalog",
+      "url": "https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction",
+      "retrieved_date": "2026-11-06",
+      "supports": "Dataset identity, record count, cadence, target units, missingness declaration, interpolated airport weather, license and DOI"
+    },
+    {
+      "title": "Author dataset repository",
+      "url": "https://github.com/LuisM78/Appliances-energy-prediction-data",
+      "retrieved_date": "2026-11-06",
+      "supports": "Dataset provenance and original article citation"
+    },
+    {
+      "title": "Author variable descriptions",
+      "url": "https://github.com/LuisM78/Appliances-energy-prediction-data/blob/master/variables%20description.txt",
+      "retrieved_date": "2026-11-06",
+      "supports": "Local sensor/light units, airport weather and artificial random-variable roles"
+    }
+  ]
+}

@@ -1,169 +1,54 @@
-# Kernel Affine Hull Koopman Machine
+# A Hierarchy of Risk Certificates for Forecasting Representations
 
-Research software and reproducibility artifacts for Kernel Affine Hull Koopman Machine (KAHKM) experiments.
+**Mohit Kumar and Somayeh Kargaran**
 
-The repository contains the KAHKM implementation, experiment runners, hyperparameter-search scripts, archived numerical outputs, figure and table generators, and provenance records used to reproduce the reported results.
+This repository accompanies the manuscript in [manuscript/manuscript.pdf](manuscript/manuscript.pdf). It contains the article's editable sources and the numerical evidence for its empirical claims. Experiments are organized by the scientific question they address.
 
-The software and reproducibility records are maintained independently of the
-publication venue of any accompanying manuscript.
+The paper distinguishes population-risk certificates, deterministic finite-cohort capacity certificates, and numerical prediction-fidelity checks. Their assumptions and conclusions differ. The implementation preserves these distinctions and the unsuccessful predictive, screening, and deployment outcomes.
 
-## KAHM forecasting and risk certification
+## Reproduce the numerical evidence
 
-The [certified forecasting extension](extensions/certified_forecasting/)
-develops KAHM soft representations for direct prediction of future observed
-outputs, retained representation refinement, and prediction-risk certification.
-Its [editable manuscript](extensions/certified_forecasting/paper/) is titled
-**A Hierarchy of Risk Certificates for Forecasting Representations**.
-For bounded scalar targets, centered Lipschitz regression on independent
-blocks connects the pair obstruction to a monotone population hierarchy that
-converges to optimal class risk on compact metric representation spaces.
-Larger blocks need not improve finite-sample endpoints; fixed block sizes
-can remain arbitrarily loose. An independently audited eight-law benchmark
-retains every block size and the often stronger full-sample comparator.
-Its application studies evaluate synthetic dynamics, pen
-trajectories, and speech energy; compare input scaling and geometric
-representations under matched decoder choices; and assess lower risk bounds
-and minimum feasible representation cost. The [scientific study guide](extensions/certified_forecasting/docs/STUDY_GUIDE.md)
-explains the questions, independent sampling units, and interpretation of each
-experiment. The comparisons report both improvements and deteriorations, along
-with inconclusive certification outcomes.
-
-The speech input-scaling comparison evaluates standardization, raw histories,
-and training-only scaling to [-1,+1], with and without query clipping. It
-reports all preprocessing arms and retains complete paired group scores;
-preprocessing is treated as a model choice determined using development data.
-
-A new [learned-KAHM decision study](extensions/certified_forecasting/experiments/learned_kahm_decision/)
-fits the actual KAHM implementation on fresh continuous synthetic histories.
-At 4,096 independent calibration episodes, stratified lower certificates
-establish minimum feasible cost in all twenty repairable trials and exclude
-both declared classes in all twenty irreducible trials. All trials at 256
-episodes remain unresolved. A single 0.05 failure allocation covers both
-regimes, every trial, all four sample sizes, and the entire certificate family.
-These are controlled mechanism results; natural-data lower certificates retain
-their reported limitations.
-
-The [learned-geometry hierarchy study](extensions/certified_forecasting/experiments/learned_kahm_hierarchy/)
-connects the new theory to all forty archived learned KAHM banks using fresh
-independent calibration episodes. On the independent-future control, blocks
-of eight or sixteen observations exclude both declared classes for all twenty
-banks at 1,024 episodes, while unconditional pairs do not. Full-sample empirical
-minimization is stronger at the matched 256-episode size. The study retains
-all 1,760 endpoints, optimization gaps, and unresolved cases under one 0.05
-failure allocation. Its conclusions are conditional on fixed fitted banks;
-they do not establish that noise can be repaired by changing representations.
-
-The [local-dimension study](extensions/dimension_certificates/README.md)
-compares cap two, native cap twenty and validation-selected caps while fixing
-one history/cap bank and all of its retained prefixes before calibration.
-Across 26 synthetic repetitions, dimension selection improves test MSE in 18
-and ties in eight. Mean error decreases on five of six laws, but the selected
-forecasts receive identical tolerance decisions under all three policies.
-None of the 234 dimension-policy improvement endpoints is positive under the
-campaign-wide 4,680-tail allocation. These findings distinguish observed
-accuracy gains from improved certificate resolution. The
-[complete results](extensions/dimension_certificates/FINDINGS.md) retain all
-policies, competing procedures and unresolved outcomes.
-
-The main paper keeps all theorem proofs. A separately compiled
-[experimental supplement](extensions/certified_forecasting/paper/supplement.pdf)
-retains complete secondary tables and implementation details. The
-[revision record](extensions/certified_forecasting/docs/JMLR_REPRESENTATION_REVISION.md)
-explains the scientific changes, evidence, and verification scope.
-
-Use the extension's own [reproduction guide](extensions/certified_forecasting/docs/REPRODUCIBILITY.md)
-for its Linux/Python environment and experiment commands. The parent KAHKM
-study and its reference environment below retain their original provenance.
-
-## Reproducibility
-
-The authoritative mapping from each reported result to its generator, experiment runner, configuration, seeds, raw or per-run output, and aggregate artifact is:
-
-`reproduction/reported_results.tsv`
-
-Entries marked `PASS` correspond to retained reported results with an identified reproducibility chain. Entries marked `REMOVE` identify legacy outputs that are not part of the canonical reported result set.
-
-### Reference environment
-
-The reference environment is native Apple Silicon (`arm64`) macOS.
-
-Key files:
-
-- `requirements.txt` — direct Python dependencies.
-- `requirements-lock-arm64.txt` — frozen reference dependency environment.
-- `scripts/bootstrap_arm64.sh` — native Apple Silicon environment bootstrap.
-- `scripts/verify_environment.py` — architecture, dependency, and import verification.
-- `provenance/reference_arm64_environment/` — captured hardware, operating-system, Python, NumPy, and package metadata.
-
-Create the reference environment with:
+Use Python 3.12 and install the recorded dependencies:
 
 ```bash
-bash scripts/bootstrap_arm64.sh
+python -m pip install -r requirements.txt
+python reproduce.py --output reproduction
 ```
 
-Verify it with:
+The command verifies file integrity and runs all seven experiment groups. It writes a JSON summary, a result for each group, and execution logs to the selected output directory. A successful verification means that the archived numerical claims reproduce; some scientific hypotheses have negative outcomes.
+
+| Experiment | Evidence reproduced | Manuscript location |
+| --- | --- | --- |
+| [Controlled calibration](experiments/controlled_calibration/) | Block duals, fitted forecasts, calibration endpoints, and necessity/adequacy decisions | Controlled necessity, adequacy, and calibration limits |
+| [ECG cohort](experiments/ecg_cohort/) | Exact cohort witnesses, reference threshold, and sensitivity requirement | Natural-data exclusion of a specified class |
+| [Class diagnosis](experiments/class_diagnosis/) | Full-graph distances, primal feasibility, weak-dual bounds, and fitted-head excess risk | Adequate classes with unsuccessful fitted heads |
+| [Deployment cost](experiments/deployment_cost/) | Raw-input forecasts, exact losses, complete numeric inventories, and recorded timing medians | Predictive and operational limits |
+| [Public screening](experiments/public_screening/) | Screening certificates and decisions in the Beijing and Bike studies | Predictive and operational limits |
+| [Decoder diagnostics](experiments/decoder_diagnostics/) | Selected forecast losses, primary comparisons, and all assessed affine-ablation configurations | Preserved unsuccessful comparisons |
+| [Affine forecasting](experiments/affine_forecasting/) | Exact forecast comparisons, output-certificate challenges, and recorded cost summaries | Conditional numerical output fidelity |
+
+For an individual group:
 
 ```bash
-.venv-arm64/bin/python scripts/verify_environment.py
+python reproduce.py --only ecg_cohort --output reproduction_ecg
 ```
 
-### Canonical derived-result generators
+See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for the verification scope and [DATA.md](DATA.md) for data attribution. Original scientific implementation modules and protocols are included with each experiment. Legacy record identifiers in those frozen files identify their sources; the experiment directory names provide the navigation for this article.
 
-The reported composite tables and figures can be regenerated with:
+The release includes the [numerical verification summary](validation/summary.json) and [manuscript build diagnostics](validation/manuscript_build.json).
+
+## Build the manuscript
+
+With a configured TeX Live installation containing pdfLaTeX and BibTeX:
 
 ```bash
-.venv-arm64/bin/python scripts/generate_selection_table.py
-.venv-arm64/bin/python scripts/generate_behavioral_summary.py
-.venv-arm64/bin/python scripts/generate_search_protocol.py
-.venv-arm64/bin/python scripts/generate_spectral_figures.py
+python manuscript/build_manuscript.py
 ```
 
-Other reported tables and figures use the corresponding `step_*` generators and experiment runners identified in `reproduction/reported_results.tsv`.
+The build produces `manuscript/manuscript.pdf`. The article uses the bundled JMLR style and includes its proofs, empirical protocols, numerical-fidelity appendix, and bibliography.
 
-## Reproducibility evidence
+## Scope
 
-The reproducibility evidence is documented in:
+The numerical replay uses fixed observations, stored feature coordinates, forecasts, model payloads, and optimization witnesses, as specified separately for each study. It does not retrain the entire research campaign, remeasure historical latency, or turn a finite-cohort observation into a population guarantee. Native-feature error enclosures are inherited only where explicitly stated. The forecasting output checker is conditional on trusted stored features and a fixed rational head.
 
-- `reproduction/REPRODUCIBILITY_EVIDENCE.md` — consolidated evidence and its scope.
-- `reproduction/reproducibility_evidence.json` — machine-readable form of the same summary.
-- `reproduction/raw_data/DATASET_CARD.md` — canonical raw scientific input package.
-- `reproduction/run_accounting/README.md` — historical run-accounting audit.
-- `reproduction/prospective_campaigns/duffing_reference_27/README.md` — prospective 27-job Duffing reference rerun.
-
-The historical Duffing reference archive contains 18 of the 27 scheduled jobs.
-A separate prospective campaign records all 27 attempts and their exit statuses
-from a fixed source commit. These later results establish the reproducibility
-of the complete grid; the historical archive remains incomplete. Execution
-ledgers covering every failed attempt are available for the prospective campaign
-but not for all historical campaigns.
-
-## Repository organization
-
-- `experiment_*.py` — primary experiment implementations.
-- `run_*.py` — experiment and hyperparameter-search runners.
-- `step_*.py` — table and figure generation workflows.
-- `scripts/` — environment and canonical reproducibility utilities.
-- `reproduction/` — result-provenance matrix and canonical generated artifacts.
-- `provenance/` — environment and dependency provenance.
-- `figures/` — generated figures used by the associated research work.
-- `kahkm_*` directories and archives — experiment outputs and derived artifacts.
-
-## Licensing
-
-Original source code in this repository is licensed under the MIT License. See `LICENSE`.
-
-Unless otherwise indicated, original generated research data and non-code research outputs are licensed under the Creative Commons Attribution 4.0 International license (CC BY 4.0). See `DATA_LICENSE`.
-
-Third-party dependencies and any separately identified third-party material remain under their respective licenses.
-
-## Citation
-
-Citation metadata is provided in `CITATION.cff`.
-
-`CITATION.cff` identifies the repository and associated research work. It does
-not currently specify an archival DOI; the commit identifier distinguishes the
-software revision used in a study.
-
-## Repository
-
-https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine
+Original source, data, and manuscript license terms are preserved in [LICENSE](LICENSE), [DATA_LICENSE](DATA_LICENSE), and the bundled JMLR style notice. Third-party datasets retain their own terms.

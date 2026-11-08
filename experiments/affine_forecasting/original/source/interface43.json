@@ -1,0 +1,75 @@
+{
+  "schema": "step43-producer-interface-contract-v1",
+  "risk": {"n": "positive integer", "sse": "canonical exact rational string", "mse": "sse/n rational string", "rmse": "sqrt(float(mse))", "mae": "exact average absolute error rational string"},
+  "fit_bank": {
+    "path": "output/{task}/{stage}/seed_{seed}/fits43.json",
+    "fields": ["schema", "task", "stage", "seed", "protocol_seal_sha256", "training_cohort", "normalization", "representation_metadata", "maps", "heads", "affine_rows", "baseline_rows", "wall_seconds"],
+    "maps": "dict by map name; each {name,family,scaling,dimension,feature_id,map:{path,sha256,bytes},training_features:{path,sha256,bytes}}",
+    "heads": "file reference to heads43.json, a dict keyed candidate_id with {fit,head,deployment}",
+    "affine_rows": "list of exact model43.affine_configs() entries present in this bank",
+    "baseline_rows": "list of exact baseline configs plus payload:{path,sha256,bytes}, pickle_sha256, pickle_bytes; each gzip-compressed protocol5 pickle is retained",
+    "final_bank_rule": "Only final selected candidates are fitted; the unchanged18-map factory is still run, but only needed maps/training features are retained. Complete factory metadata is retained."
+  },
+  "fit_seal": {
+    "path": "output/{task}/{stage}/fit_seal43.json",
+    "schema": "step43-stage-fit-seal-v1",
+    "fields": ["task", "stage", "seeds", "protocol_seal_sha256", "bound_files"],
+    "closure": "All bank files for all3seeds, excluding later validation files and the seal itself"
+  },
+  "validation_predictions": {
+    "path": "output/{task}/{stage}/seed_{seed}/validation_predictions43.json",
+    "fields": ["schema", "task", "stage", "seed", "protocol_seal_sha256", "fit_sha256", "validation_cohort", "query_ids", "maps", "candidate_predictions"],
+    "candidate_predictions": "dict keyed candidate_id with {reported_physical_hex:[...],exact_physical:[...] or null}",
+    "maps": "dict map name to retained validation-feature array reference"
+  },
+  "validation_scores": {
+    "path": "output/{task}/{stage}/seed_{seed}/validation_scores43.json",
+    "fields": ["schema", "task", "stage", "seed", "n", "prediction_sha256", "candidate_rows"],
+    "candidate_rows": "dict candidate_id -> {configuration,physical_risk,exact_reference_risk or null}"
+  },
+  "selection": {
+    "path": "output/{task}/selection_seed_{seed}43.json",
+    "fields": ["schema", "task", "seed", "development_n", "fold_scores", "candidate_rows", "selections"],
+    "candidate_rows": "dict candidate_id -> {configuration,physical_risk,folds}",
+    "selections": "dict raw/nystrom/kahm/all_map/ordinary/ridge -> {candidate_id,pool_size,physical_risk}"
+  },
+  "selected_roster": {
+    "path": "output/selected_roster43.json",
+    "schema": "step43-selected-roster-v1",
+    "fields": ["protocol_seal_sha256", "tasks"],
+    "tasks": "dict task -> {selections:{seed::policy -> selected record},selection_files:[references]}"
+  },
+  "selection_seal": {
+    "path": "output/selection_seal43.json",
+    "schema": "step43-selection-seal-v1",
+    "fields": ["protocol_seal_sha256", "bound_files"],
+    "closure": "Selected roster, all9selection files and all final fit-bank files/seals"
+  },
+  "query": {
+    "path": "output/assessment/{task}/queries/{index:04d}/predictions43.json",
+    "fields": ["schema", "task", "query_id", "query_index", "protocol_seal_sha256", "selection_seal_sha256", "history_receipt_sha256", "history", "raw_features", "predictions", "evaluations"],
+    "predictions": "flat dict all18seed::policy keys -> {candidate_id,evaluation_id,reported_physical_hex}; affine entries also exact_physical",
+    "evaluations": "ID is affine::deployment_id for affine, or baseline::digest({candidate_id,pickle_sha256}) for baselines; deduplicate identical IDs; each has recipe,candidate_id,aliases,reported_physical_hex,fit_bank reference; affine also deployment,features,map,assay",
+    "assay": "model43.prediction_assay result with binary64 and float32 reported-value conditions",
+    "ordering": "Every query prediction file is immutable before data43.reveal_assessment_target reads the target"
+  },
+  "assessment": {
+    "path": "output/assessment/{task}/assessment43.json",
+    "fields": ["schema", "task", "n", "queries", "policy_results", "monthly_results", "primary_comparisons", "primary_certificate_coverage", "certificate_summary"],
+    "queries": "ordered records {query_index,query_id,month,prediction,target}",
+    "policy_results": "all18seed::policy keys -> {candidate_id,physical_risk,exact_reference_risk or null,accepted_packets,packet_count}",
+    "primary_comparisons": "ordinary and ridge each {raw_risk,reference_risk,mse_ratio or null,within_five_percent_mse}",
+    "certificate_summary": "Counts over deduplicated actual evaluation identities/query pairs, separate from alias-level coverage"
+  },
+  "misbinding": {
+    "path": "output/assessment/{task}/misbinding43.json",
+    "rule": "After complete assessment, challenge every unique selected certified deployment on query0; stale features are fixed query1 for that deployment; identical bytes remain not applicable"
+  },
+  "cost": {
+    "path": "output/benchmarks/{task}/cost43.json",
+    "rule": "seed3901 selected identities; m=min(32,n), indices floor((2j+1)n/(2m)); full inference pair order alternates sample ordinal; all primitive raw timings and sizes retained"
+  },
+  "result": {"path": "output/result43.json", "rule": "Aggregate fixed policy risks, exact primary conjunction, certificate assays and actual costs. Validity requires separately bound final independent audit PASS."},
+  "audit_paths": {"preflight": "audit/preflight43.json", "preassessment": "audit/preassessment43.json", "final": "audit/postrun_audit43.json"},
+  "event_logs": {"data_access": "output/data_access43.jsonl", "controller": "output/execution_events43.jsonl", "producer": "output/events43.jsonl"}
+}

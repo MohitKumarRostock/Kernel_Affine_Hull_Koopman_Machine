@@ -1,0 +1,584 @@
+
+\section{What a representation-risk certificate establishes}
+\label{sec:object}
+
+Let $X$ denote the information available at a forecast origin and $Y$ its
+scalar observed target. Condition on all development data and choices, so
+the representation $\Gamma:\mathcal X\to\mathcal U$, its measurable
+finite-valued pseudometric $d$, and a sensitivity budget $\kappa\geq0$ are
+fixed. Assume $Y$ lies almost surely in a known interval
+$I=[y_-,y_+]$ of diameter $D>0$, and put $B=D^2$.
+Define
+\begin{align}
+ \mathcal G_\kappa(d)
+ &=\{g:\mathcal U\to I\text{ measurable}:
+       |g(u)-g(v)|\leq\kappa d(u,v)\ \text{for all }u,v\},
+       \label{eq:class}\\
+ R(g)&=\mathbb E[(Y-g(\Gamma(X)))^2],
+ &R^*_\kappa&=\inf_{g\in\mathcal G_\kappa(d)}R(g).
+       \label{eq:risk}
+\end{align}
+All displayed infima and statistics are assumed measurable. The expectation
+uses the declared evaluation law, conditional on development, and not the
+law conditional on an individual query. Scalar clipping to $I$ preserves
+the Lipschitz constraint and decreases squared loss. Hence this bounded
+class has the same optimal risk as the corresponding unrestricted scalar
+Lipschitz class. Constants belong to it, giving
+$0\leq R^*_\kappa\leq\operatorname{Var}(Y)\leq B/4$.
+When $D=0$, the target and interval-valued predictions are the same constant;
+all risks and certificates are zero, without any division by $B$.
+
+The representation, metric, budget, target, loss, and evaluation law jointly
+specify the certification problem. Changing feature scaling while retaining
+the same numerical budget generally changes the class. A ridge penalty
+does not establish a hard Lipschitz budget. A fitted upper endpoint can be
+paired with a class lower endpoint only after establishing that the fitted
+decoder $\widehat g$ belongs to that class.
+
+The standard conditional-expectation decomposition explains the scope of
+this risk. With $M_X=\mathbb E[Y\mid X]$ and
+$M_U=\mathbb E[Y\mid\Gamma(X)]$, orthogonality in $L^2$ gives
+\begin{equation}
+ R^*_\kappa
+ =\underbrace{\mathbb E(Y-M_X)^2}_{\text{future uncertainty}}
+  +\underbrace{\mathbb E(M_X-M_U)^2}_{\text{conditional-mean information loss}}
+  +\underbrace{\inf_{g\in\mathcal G_\kappa(d)}
+       \mathbb E(M_U-g(\Gamma(X)))^2}_{\text{sensitivity restriction}}.
+ \label{eq:decomposition}
+\end{equation}
+The three residual components are pairwise orthogonal because
+$\Gamma(X)$ is measurable with respect to $X$; taking the infimum yields
+the identity. A positive lower risk certificate does not separate these
+terms. It is therefore neither a certificate of unrestricted information
+loss nor a sufficient rule for discovering a successful refinement.
+
+\subsection{The pairwise starting point}
+
+Draw a variable $A$, and then draw $(U,Y)$ and $(U',Y')$ independently from
+the same conditional law given $A$, where each copy has the declared
+marginal law and $U=\Gamma(X)$. With $z_+=\max\{z,0\}$, define
+\begin{equation}
+ W_{\kappa,A}
+ =\frac12\mathbb E\bigl(|Y-Y'|-\kappa d(U,U')\bigr)_+^2.
+ \label{eq:pair}
+\end{equation}
+Taking $A$ constant gives unconditional independent pairing. A common
+forecast origin or a frozen stratum gives a different admissible
+construction when its conditional independence and marginal-law conditions
+hold. Arbitrary nearest-neighbor matching need not meet these conditions.
+
+\begin{proposition}[Pairwise obstruction]
+\label{prop:pair}
+Under this pairing construction, $W_{\kappa,A}\leq R^*_\kappa$.
+\end{proposition}
+
+\begin{proof}
+For any fixed admissible $g$, put $r=Y-g(U)$ and $r'=Y'-g(U')$.
+The triangle inequality implies
+$(|Y-Y'|-\kappa d(U,U'))_+\leq|r-r'|$.
+Conditional independence gives
+$\frac12\mathbb E(r-r')^2
+=\mathbb E r^2-\mathbb E\{\mathbb E[r\mid A]^2\}\leq R(g)$.
+Square the pointwise inequality, take expectations, and then take the
+infimum over $g$.
+\end{proof}
+
+Paired Lipschitz obstruction arguments have prior precedents
+\citep{akash2021inverse}. The role of the pair score here is its exact
+connection to a centered hierarchy, including explicit cases in which
+pairwise information is arbitrarily loose.
+
+\section{A centered hierarchy and its finite-block limits}
+\label{sec:hierarchy}
+
+For $b\geq2$ unconditional iid observations $(U_i,Y_i)$ from the fixed
+evaluation law, define
+\begin{equation}
+ T_b=\frac1{b-1}\min_{v\in\mathbb R^b}
+ \left\{\sum_{i=1}^b(Y_i-v_i)^2:
+    |v_i-v_j|\leq\kappa d(U_i,U_j)\quad(i,j\leq b)\right\},
+ \qquad \mathcal W_b=\mathbb E T_b.
+ \label{eq:block}
+\end{equation}
+The feasible set is nonempty and closed and the objective is strictly
+convex and coercive, so the minimizer exists and is unique. Clipping its
+values to $I$ preserves feasibility and cannot increase the objective.
+If $a_b$ is the usual empirical minimum MSE, then
+$T_b=b a_b/(b-1)$. The factor $1/(b-1)$ exploits translation-invariant
+difference constraints; it is not a generic normalization for empirical
+risk minimization.
+
+\begin{theorem}[Centered scalar block hierarchy]
+\label{thm:hierarchy}
+For the fixed class in \eqref{eq:class} and bounded scalar target above:
+\begin{enumerate}
+\item $T_2=\frac12(|Y_1-Y_2|-\kappa d(U_1,U_2))_+^2$, so
+$\mathcal W_2=W_{\kappa,A}$ for constant $A$.
+\item With
+\begin{equation}
+ C_b=\frac{B\lfloor b^2/4\rfloor}{b(b-1)},
+ \qquad 0\leq T_b\leq C_b,
+ \qquad \mathcal W_b\leq R^*_\kappa.
+ \label{eq:range}
+\end{equation}
+\item If $T_m(S)$ denotes the score on a subset $S$ of $m$ observations
+from a realized $b$-block, then for $2\leq m\leq b$,
+\begin{equation}
+ \binom bm^{-1}\sum_{|S|=m}T_m(S)\leq T_b.
+ \label{eq:subset}
+\end{equation}
+Consequently $\mathcal W_2\leq\mathcal W_3\leq\cdots\leq R^*_\kappa$.
+\item If $(\mathcal U,d)$ is a compact metric space, then
+$\mathcal W_b\uparrow R^*_\kappa$ as $b\to\infty$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+For two observations, if the target separation exceeds the allowed fitted
+separation by $e>0$, the optimum has opposite residuals $e/2$ and $-e/2$.
+Its squared residual sum is $e^2/2$. Otherwise both targets are feasible.
+This proves the first assertion.
+
+For any fixed admissible $g$, let $r_i=Y_i-g(U_i)$ and
+$\bar r=b^{-1}\sum_i r_i$. The translated fitted values
+$g(U_i)+\bar r$ satisfy every difference constraint. Thus
+\[
+ T_b\leq\frac1{b-1}\sum_i(r_i-\bar r)^2,
+ \qquad \mathcal W_b\leq\operatorname{Var}(Y-g(U))\leq R(g).
+\]
+Taking the infimum gives the risk bound. Choosing the constant fitted value
+$\bar Y$ bounds $T_b$ by the unbiased sample variance of $Y_1,\ldots,Y_b$.
+That variance is convex in each target coordinate; its maximum on $I^b$
+occurs at interval endpoints. With $k$ upper endpoints its value is
+$B k(b-k)/\{b(b-1)\}$. Maximizing over integer $k$ proves the range.
+
+Let $v$ minimize the full-block objective and set $r_i=Y_i-v_i$.
+Translation invariance implies $\sum_i r_i=0$. Therefore
+\[
+ T_b=\frac1{b(b-1)}\sum_{i<j}(r_i-r_j)^2.
+\]
+Restricting $v$ to $S$ and translating by that subset's residual mean gives
+\[
+ T_m(S)\leq\frac1{m(m-1)}
+              \sum_{i<j,\ i,j\in S}(r_i-r_j)^2.
+\]
+A uniformly chosen $m$-subset contains each pair with probability
+$m(m-1)/\{b(b-1)\}$. Averaging yields \eqref{eq:subset}; taking
+expectations gives monotonicity. This does not order arbitrary realized
+blocks of different sizes.
+
+For consistency, every finite feasible vector admits the scalar extension
+$g_v(u)=\min_i\{v_i+\kappa d(u,U_i)\}$. The triangle inequality makes it
+$\kappa$-Lipschitz and the finite constraints give $g_v(U_i)=v_i$.
+After clipping to $I$, this identifies $a_b$ with the empirical infimum over
+the same bounded Lipschitz class as the population problem. On a compact
+metric space that class is compact in the uniform norm by boundedness and
+equicontinuity. Choose a finite uniform $1/j$-net for each integer $j$.
+The strong law holds simultaneously on their countable union. Since
+\[
+ |(y-f(u))^2-(y-g(u))^2|\leq2D\|f-g\|_\infty
+ \quad(y,f(u),g(u)\in I),
+\]
+net approximation yields uniform convergence of empirical risks and hence
+$a_b\to R^*_\kappa$ almost surely. Now $T_b=b a_b/(b-1)$ and
+$0\leq T_b\leq B/2$. Dominated convergence proves the claimed limit.
+\end{proof}
+
+The strengthened information comes from requiring jointly consistent fitted
+values across all pairs in a block. Monotonic expected sample-average
+minima and batch lower estimation are established precedents
+\citep{mak1999montecarlo,linderoth2006empirical}. The specific connection
+here is the centered normalization, its exact pair member, its subset
+inequality, and its Lipschitz-risk limit. It does not supply a new
+concentration inequality or a vector-target consistency theorem.
+
+\subsection{No fixed block size is uniformly informative}
+
+\begin{proposition}[Rare-conflict and noisy-support laws]
+\label{prop:limits}
+For $(U,Y)=(3,0),(0,-1),(1,1)$ with probabilities
+$1-2\varepsilon,\varepsilon,\varepsilon$, where
+$0<\varepsilon<1/2$, and $\kappa=1$ with ordinary distance,
+\begin{equation}
+ R^*_\kappa=\varepsilon/2,
+ \qquad
+ \mathcal W_b=
+ \frac{2b\varepsilon-1+(1-2\varepsilon)^b}{4(b-1)}.
+ \label{eq:rare}
+\end{equation}
+For $U$ uniform on $M$ points with pairwise distances at least $D/\kappa$,
+where $D,\kappa>0$, and an independent equiprobable target
+$Y\in\{0,D\}$,
+\begin{equation}
+ R^*_\kappa=D^2/4,
+ \qquad
+ \mathcal W_b=\frac{D^2}{4(b-1)}
+       \left[b-M\{1-(1-1/M)^b\}\right].
+ \label{eq:occupancy}
+\end{equation}
+For each fixed $b$, the ratio $\mathcal W_b/R^*_\kappa$ tends to zero as
+$\varepsilon\downarrow0$ in the first law or $M\to\infty$ in the second.
+\end{proposition}
+
+\begin{proof}
+In the first law, the two rare fitted values must differ by at most one.
+Their minimum unweighted sum of squared errors is $1/2$, attained at
+$-1/2$ and $1/2$; the common atom can be fitted at zero. A scalar
+Lipschitz extension realizes these values, proving the population optimum.
+In a block, let $N_-,N_+$ count the rare atoms and put $N=N_-+N_+$.
+Their constrained weighted residual sum is $N_-N_+/N$ when $N>0$ and
+zero otherwise. Since $N\sim\operatorname{Binomial}(b,2\varepsilon)$ and
+$N_-\mid N\sim\operatorname{Binomial}(N,1/2)$, the expected sum is
+$\{\mathbb EN-\Pr(N\geq1)\}/4$. Dividing by $b-1$ proves
+\eqref{eq:rare}.
+
+In the second law, all interval-valued fitted values at distinct support
+points satisfy the distance constraints. At a point observed $n_j>0$
+times, fitting its target mean has expected residual sum
+$(n_j-1)D^2/4$. If $O_b$ is the number of occupied points, the total
+expected sum is $D^2\mathbb E(b-O_b)/4$, and
+$\mathbb EO_b=M\{1-(1-1/M)^b\}$. The constant $D/2$ attains the
+population risk $D^2/4$ because the target is independent of $U$.
+The stated limits follow from the displayed formulas.
+\end{proof}
+
+The noisy-support examples are finite compact spaces; their diameter can
+remain $D/\kappa$ as $M$ grows. Thus block size and target range, even
+together with a bound on representation diameter, do not yield a uniform
+vanishing approximation error over these spaces. Consistency is a statement
+for a fixed evaluation law, not a universal finite-block guarantee.
+
+\paragraph{Common forecast origins require a different limit.}
+If the observations in a block are independent only conditional on a common
+$A$, validity and monotonicity still hold. For finite-valued $A$ under the
+corresponding compactness conditions, the limiting quantity is
+\[
+ \sum_a\Pr(A=a)\inf_{g\in\mathcal G_\kappa(d)}
+                  \mathbb E[(Y-g(U))^2\mid A=a].
+\]
+It need not equal the risk of one shared optimal decoder. For example,
+with constant $U$ and a target determined by a nonconstant common origin,
+all within-origin block scores vanish although the shared constant decoder
+has positive risk. Drawing an independent origin in each independent
+episode instead produces unconditional iid observations from the declared
+episode--origin mixture.
+
+\section{Computable lower values and simultaneous calibration}
+\label{sec:calibration}
+
+Optimization validity and statistical calibration are separate steps. A
+primal objective bounds an empirical minimum from above and therefore
+cannot supply the lower value needed below. Sparse or unfinished dual
+calculations can supply valid lower values if their arithmetic is verified.
+
+\subsection{A deterministic finite-cohort certificate}
+
+For any fixed cohort $(u_i,y_i)_{i=1}^n$ with $y_i\in I$, define
+$a_n=\inf_{g\in\mathcal G_\kappa(d)}n^{-1}\sum_i(y_i-g(u_i))^2$.
+The scalar extension used above identifies $n a_n$ with the finite
+quadratic minimum under all pairwise Lipschitz constraints. This equality
+uses no independence or population sampling assumption.
+
+\begin{proposition}[Verified graph duals and disjoint reuse]
+\label{prop:dual}
+Orient any selected graph of pair constraints and let $M$ be its incidence
+matrix, with one $+1$ and one $-1$ in each column. For a finite signed
+multiplier vector $\lambda$, put $s=M\lambda$. Then
+\begin{equation}
+ D_G(\lambda)
+ =s^\top y-\kappa\sum_{e=(i,j)}d(u_i,u_j)|\lambda_e|
+       -\frac14\|s\|_2^2
+ \ \leq\ n a_n.
+ \label{eq:dual}
+\end{equation}
+Let $S_1,\ldots,S_K$ be disjoint subsets of cohort indices and let
+$\underline A_k$ be verified nonnegative lower bounds on their minimum
+squared residual sums. Then
+\begin{equation}
+ d_n=\frac1n\sum_k\underline A_k\leq a_n.
+ \label{eq:reuse}
+\end{equation}
+Uncovered observations remain in the denominator $n$.
+\end{proposition}
+
+\begin{proof}
+For a feasible vector $v$, the term
+$\lambda^\top M^\top v-\kappa\sum_e d(u_i,u_j)|\lambda_e|$ is
+nonpositive. Add it to $\|y-v\|_2^2$ and minimize over all $v$.
+The minimizer is $y-s/2$, with value \eqref{eq:dual}, proving weak
+duality without a convergence or optimality assumption. For
+\eqref{eq:reuse}, restrict any full feasible vector to each disjoint
+subset. Its residual sum on that subset is at least the corresponding
+minimum; residuals at uncovered observations are nonnegative. Summing
+and taking the full infimum proves the result.
+\end{proof}
+
+For equal blocks of size $b$ and
+$\underline T_k=\underline A_k/(b-1)$, the reused value is
+\begin{equation}
+ d_n=\frac{K(b-1)}n\left(\frac1K\sum_k\underline T_k\right).
+ \label{eq:normalization}
+\end{equation}
+This factor separates the centered block statistic from a full empirical
+MSE. On disjoint vertex sets the graph-dual objectives add exactly.
+Objectives from overlapping blocks cannot simply be summed because their
+squared-norm terms have cross terms. They may instead be embedded in one
+graph whose full objective is verified, or combined by a maximum of lower
+values for the same $a_n$. Reuse requires no additional optimization solve;
+it still incurs arithmetic and calibration work.
+
+\subsection{Two lower calibrations with different independent sample sizes}
+
+For $q,p\in[0,1]$, let
+\[
+ \operatorname{kl}(q\Vert p)
+ =q\log(q/p)+(1-q)\log\{(1-q)/(1-p)\},
+\]
+with the usual zero-numerator and infinite boundary conventions.
+For $c>0$, let $k_-(q,c)$ and $k_+(q,c)$ be the smallest and largest
+$p$ with $\operatorname{kl}(q\Vert p)\leq c$. Both are nondecreasing
+in $q$; increasing $c$ lowers $k_-$ and raises $k_+$.
+The established bounded-mean Chernoff argument gives, for iid
+$V_i\in[0,C]$, each of the one-sided statements
+\begin{equation}
+ C k_-(\bar V/C,\log(1/\alpha)/N)\leq\mathbb E V_1,
+ \qquad
+ \mathbb E V_1\leq C k_+(\bar V/C,\log(1/\alpha)/N)
+ \label{eq:kl}
+\end{equation}
+with failure probability at most $\alpha$ \citep{hoeffding1963}.
+The observations need not be Bernoulli. Indeed, convexity bounds their
+exponential moments by $1-p+pe^t$, with $p=\mathbb EV_1/C$.
+Independence and exponential Markov yield
+$\exp\{-N\operatorname{kl}(q\Vert p)\}$ for the appropriate one-sided
+empirical tail; inversion gives \eqref{eq:kl}. The two directions require
+separate allocation when both are claimed. At $C=0$ use zero endpoints.
+
+\begin{proposition}[An empirical-infimum lower endpoint]
+\label{prop:empirical}
+Let a fixed nonempty class have losses in $[0,B]$ and measurable empirical
+infimum $a_n$ on $n$ iid observations. Any measurable returned value
+$0\leq d_n\leq a_n$ pointwise satisfies
+\begin{equation}
+ B k_-(d_n/B,\log(1/\alpha)/n)\leq
+       \inf_g\mathbb E\ell_g
+ \label{eq:empirical}
+\end{equation}
+with probability at least $1-\alpha$.
+\end{proposition}
+
+\begin{proof}
+Choose fixed population competitors $g_j$ whose risks $r_j$ decrease to
+$r^*=\inf_g\mathbb E\ell_g$. They are proof devices, not predictors
+chosen from calibration. Since
+$d_n\leq a_n\leq n^{-1}\sum_i\ell_{g_j}(X_i,Y_i)$, monotonicity of
+$k_-$ and \eqref{eq:kl} give
+$\Pr\{B k_-(d_n/B,c)>r_j\}\leq\alpha$ for each $j$.
+These events increase to $\{B k_-(d_n/B,c)>r^*\}$, where
+$c=\log(1/\alpha)/n$. Continuity of probability proves the claim even
+when the infimum is not attained.
+\end{proof}
+
+This fixed-competitor argument needs no uniform-complexity penalty for a
+class \emph{lower} endpoint. It supplies neither a fitted-on-calibration
+upper bound nor an excess-risk guarantee. It is an inherited calibration
+ingredient, not a new general principle of statistical class falsification.
+
+Now freeze a finite family of classes $m$ and fitted members $\widehat g_m$
+using independent development data. Each record uses its declared known
+range $B$, ordinary squared loss, target, and evaluation law. From $n$ iid
+calibration observations, form $K_b=\lfloor n/b\rfloor\geq1$
+predetermined disjoint blocks and pointwise lower scores
+$0\leq\underline T_{m,b,k}\leq T_{m,b,k}$.
+Also allow any pointwise value $0\leq d_{m,n}\leq a_{m,n}$ and verified
+fitted-loss upper values $\ell_{m,i}\leq\overline\ell_{m,i}\leq B$.
+For separately allocated probabilities, set
+\begin{align}
+ L^{\rm blk}_{m,b}
+ &=C_b k_-\!\left(
+     \frac{K_b^{-1}\sum_k\underline T_{m,b,k}}{C_b},
+     \frac{\log(1/\alpha^{\rm blk}_{m,b})}{K_b}\right),
+        \label{eq:Lblock}\\
+ L^{\rm emp}_m
+ &=B k_-(d_{m,n}/B,\log(1/\alpha^{\rm emp}_m)/n),
+        \label{eq:Lemp}\\
+ U_m&=B k_+\!\left(
+       \frac{n^{-1}\sum_i\overline\ell_{m,i}}B,
+       \frac{\log(1/\alpha^{\rm up}_m)}n\right).
+        \label{eq:upper}
+\end{align}
+Take $L_m$ to be the maximum of the covered lower endpoints, or zero
+when none are used. Numerical implementations report lower endpoints no
+larger and upper endpoints no smaller than these exact-real quantities.
+
+\begin{theorem}[Simultaneous class and fitted-risk certificate]
+\label{thm:certificate}
+If the finite event ledger is fixed before calibration and its allocated
+failure probabilities sum to at most $\delta$, then, conditional on
+development, with probability at least $1-\delta$,
+\begin{equation}
+ L_m\leq R_m^*\leq R_m(\widehat g_m)\leq U_m
+ \label{eq:sandwich}
+\end{equation}
+simultaneously for every covered record. Each block endpoint separately
+also lower-bounds its $\mathcal W_{m,b}$. Different events may reuse data.
+\end{theorem}
+
+\begin{proof}
+For each block event, apply the lower inequality in \eqref{eq:kl} to
+the exact iid scores $T_{m,b,k}\in[0,C_b]$. Their verified lower mean
+cannot increase that endpoint. Theorem~\ref{thm:hierarchy} then gives
+the class lower bound. Proposition~\ref{prop:empirical} gives the
+empirical-infimum event. For a fitted upper, apply the upper inequality
+in \eqref{eq:kl} to the exact iid losses; a larger verified mean is
+conservative. Membership supplies $R_m^*\leq R_m(\widehat g_m)$.
+A conditional union bound gives the common event; maxima of its lower
+endpoints and outward numerical arithmetic preserve it. Integrating over
+development yields the same unconditional probability statement.
+\end{proof}
+
+The block endpoint calibrates $K_b$ independent scores, not $n$ individual
+observations. Larger blocks strengthen $\mathcal W_b$ but reduce $K_b$;
+their finite-sample endpoints need not improve. The empirical-infimum
+endpoint instead uses $n$ for the distinct pointwise objective $a_n$.
+Neither calibration uniformly dominates the other. Numerical paths,
+graphs, or partitions may be chosen adaptively when they still return a
+pointwise lower value for the same fixed $a_n$. This does not authorize
+changing a prediction class after inspecting calibration. Additional block
+sizes, class choices, or sample-size looks require their own simultaneous
+or sequential validity argument.
+
+Independent episodes may contain arbitrarily dependent windows. An episode
+average is one bounded fitted-loss observation. One independently sampled
+origin per episode supplies the unconditional iid scalar observations for
+\eqref{eq:block}. Counting overlapping windows as independent calibration
+units is not justified by this theorem. Training extrema do not establish
+an almost-sure target range, and capped-loss upper bounds cannot be combined
+with the ordinary-MSE lower construction.
+
+\subsection{Arithmetic semantics and the scope of a numerical certificate}
+
+For \eqref{eq:dual}, treat retained multipliers and parameters according
+to their declared exact semantics. An upper enclosure of each distance,
+a lower enclosure of the linear term, and upper enclosures of subtracted
+terms give a valid lower objective. The lower KL root and its final
+rescaling must be rounded down; the upper root and rescaling must be
+rounded up. Both directions use an upper enclosure of
+$\log(1/\alpha)/N$. Rigorous deterministic arithmetic consumes no extra
+statistical failure probability.
+
+The declared feature map and the evaluated head must match the certificate.
+A guarantee conditional on stored feature vectors does not certify their
+upstream computation. Likewise, a mathematically Lipschitz affine head
+and a rounded prediction program are distinct objects: rounding can
+introduce discontinuities. Verifying output fidelity to a fixed head does
+not establish that head's future prediction risk. These are separate
+statistical and numerical claims. Coupled numerical enclosures transfer
+safely through the monotone KL maps above; a variance-dependent empirical
+Bernstein endpoint additionally needs a valid variance enclosure or iid
+computed scores.
+
+\section{Refinement and decisions within a declared family}
+\label{sec:decisions}
+
+Let $\Phi_j$ be fixed feature blocks and retain
+$\Gamma_s=(\Phi_1,\ldots,\Phi_s)$ with metric
+$\rho_s(u,v)=\max_{j\leq s}\|u_j-v_j\|_2$.
+The scalar clipped affine family
+\begin{equation}
+ \mathcal F_{s,\kappa}
+ =\left\{x\mapsto\operatorname{clip}_I\!\left(
+ a+\sum_{j\leq s}\theta_j^\top\Phi_j(x)\right):
+             \sum_{j\leq s}\|\theta_j\|_2\leq\kappa\right\}
+ \label{eq:refinement}
+\end{equation}
+is a fitted subclass of the Lipschitz comparator. Coefficients and budgets
+must use the physical target units after any inverse target transform.
+
+\begin{proposition}[Retained blocks preserve the comparator]
+\label{prop:refinement}
+Every member of \eqref{eq:refinement} is $\kappa$-Lipschitz in
+$\rho_s$. Appending an unchanged old-coordinate stack and a new block
+embeds the earlier feasible family and cannot increase its optimal risk.
+Appending an exact duplicate block leaves that predictor class and its
+induced distance unchanged. The corresponding inclusions and duplication
+invariance also hold for all Lipschitz predictors on the retained stack.
+\end{proposition}
+
+\begin{proof}
+Cauchy--Schwarz and the triangle inequality bound the unprojected
+prediction difference by
+$\sum_j\|\theta_j\|_2\|u_j-v_j\|_2\leq\kappa\rho_s(u,v)$.
+Clipping is nonexpansive. Assigning zero coefficients to a new block embeds
+every old predictor. For a duplicate, merge its coefficients with those
+of the copied block; the triangle inequality shows that the total norm
+does not increase. This gives reverse inclusion. The maximum distance is
+unchanged by an exact duplicate. For a general Lipschitz decoder,
+composition with the coordinate projection embeds the old class because
+that projection is nonexpansive. For duplication, composition with
+$u\mapsto(u,u_j)$ gives the reverse inclusion because this map preserves
+the maximum metric.
+\end{proof}
+
+Group norm constraints are established tools \citep{bach2008group}; here
+they keep the sensitivity meaning compatible with retained blocks. These
+are class-inclusion statements, not monotonicity claims for separately
+trained estimators. A squared ridge penalty can change under duplication
+even when the feasible class does not. Refitting old blocks or changing the
+budget is a new comparison, not this particular nesting construction.
+
+\begin{corollary}[Adequacy, exclusion, and minimum feasible cost]
+\label{cor:decisions}
+Fix an MSE tolerance $\tau\geq0$ and class costs $c_m\geq0$ before
+calibration. On the joint event \eqref{eq:sandwich}, $U_m\leq\tau$
+certifies an exhibited adequate predictor, while $L_m>\tau$ excludes
+every decoder in that class. Otherwise the decision is unresolved.
+Define a feasible class by the existence of a member with risk at most
+$\tau$, and let $c^*$ be the minimum cost of a feasible class. With the
+minimum of an empty set taken as $+\infty$,
+\begin{equation}
+ c_-:=\min_{m:L_m\leq\tau}c_m
+ \ \leq\ c^*\ \leq\
+ c_+:=\min_{m:U_m\leq\tau}c_m.
+ \label{eq:cost}
+\end{equation}
+If $c_-=c_+<\infty$, an accepted fit attains the minimum feasible cost
+within the declared family. If every class is excluded, that family is
+infeasible at the requested tolerance.
+\end{corollary}
+
+\begin{proof}
+Every accepted fitted member exhibits feasibility. Every genuinely feasible
+class is nonexcluded, since its lower endpoint cannot exceed the risk of
+an adequate member. These inclusions give the cost interval and both
+conclusions without assuming attainment of a population infimum.
+\end{proof}
+
+An RMSE tolerance $\epsilon$ uses $\tau=\epsilon^2$. With several
+required horizons, acceptance requires all covered upper tests, while one
+covered lower test suffices to exclude a compatible joint class. When
+$c_-<c_+$, the selected fit has minimum cost only among accepted fits.
+Feature count, stored bytes, and runtime are different cost definitions;
+the cost bracket does not establish savings in the total resources used
+to search, fit, and certify candidates.
+
+The comparison $L_c-U_r>0$ certifies that the exhibited replacement
+outperforms every member of the coarse class by at least $L_c-U_r$.
+Calling this a retained-coordinate refinement additionally requires the
+class inclusion above. Its successful discovery is an empirical question.
+Before attempting any adequacy test, the KL upper endpoint has the
+deterministic zero-loss floor
+\begin{equation}
+ U\geq B(1-\alpha^{1/n}).
+ \label{eq:floor}
+\end{equation}
+This follows from monotonicity and $k_+(0,c)=1-e^{-c}$. It is a necessary
+feasibility check, not a power guarantee for a nonzero-risk predictor.
+A certificate can be valid yet too weak to decide the requested tolerance.
+
+\paragraph{Resolution beyond validity.}
+Appendix~\ref{app:resolution} bounds finite-block population bias using an
+internal uniform cover and gives a sufficient decision-resolution inequality.
+It separates that bias from statistical calibration and verified numerical
+slack. These sufficient bounds explain why a valid certificate can remain
+inconclusive; they do not claim an optimal sample-complexity rate.

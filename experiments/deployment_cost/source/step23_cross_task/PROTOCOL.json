@@ -1,0 +1,301 @@
+{
+  "schema": "step23-cross-task-prospective-protocol-v1",
+  "title": "Predictive information, decoder limitations, and complete cost across two forecasting settings",
+  "phase": "Prospective protocol only. Benchmark execution belongs to Step24.",
+  "public_preregistration": false,
+  "study_question": "Under a fixed validation policy, when do normalized KAHM states support useful forecasting, and can score-retaining or coordinate controls distinguish actionable finite-predictor limitations?",
+  "known_prior_outcomes": {
+    "step22": "72 new fits; 9 evaluated selected models; 0 accuracy passes, 6 storage passes, 0 joint passes on an already observed ECG cohort.",
+    "new_tasks_selected_before_new_outcomes": true,
+    "unopened_ecg_reserve_rows": 5557,
+    "ecg_data_access_allowed": false,
+    "ecg_absolute_threshold_transfer_allowed": false,
+    "new_benchmark_trajectories_or_fits_in_step23": 0,
+    "appliances_csv_rows_parsed_in_step23": 0
+  },
+  "benchmark_contracts": {
+    "controlled": "controlled/hmm_spec23.json",
+    "real": "data/appliances_protocol23.json",
+    "controlled_units": "Five independently seeded train/validation/test replications of one fixed four-state law, not five different laws.",
+    "real_unit": "One building and one chronological record; windows within a role are dependent.",
+    "task_ids": [
+      {
+        "id": "hmm_0",
+        "geometry_seed": 2026110600
+      },
+      {
+        "id": "hmm_1",
+        "geometry_seed": 2026110601
+      },
+      {
+        "id": "hmm_2",
+        "geometry_seed": 2026110602
+      },
+      {
+        "id": "hmm_3",
+        "geometry_seed": 2026110603
+      },
+      {
+        "id": "hmm_4",
+        "geometry_seed": 2026110604
+      },
+      {
+        "id": "appliances",
+        "geometry_seed": 2026110605
+      }
+    ],
+    "primary_horizons": {
+      "hmm": 4,
+      "appliances": 6
+    },
+    "secondary_horizons": {
+      "hmm": [
+        1,
+        16
+      ],
+      "appliances": [
+        1,
+        36
+      ]
+    },
+    "no_recursive_rollout_or_Koopman_closure_claim": true
+  },
+  "geometry": {
+    "reference_rows": 512,
+    "reference_features_only": true,
+    "reference_targets_forbidden_as_encoder_or_readout_labels": true,
+    "scalings_in_order": [
+      "minmax01",
+      "standard"
+    ],
+    "minmax_policy": "Primary candidate and first deterministic tie order, not a fixed global winner. No clipping of later inputs to [0,1].",
+    "support_constant_axes": "Preserve inherited geometry scaler: set constant support axes to zero for every query; record this separately from no-clipping policy. Same geometry scaler semantics for Nystrom.",
+    "head_constant_axes": "Training-only ridge standardization uses divisor1 on constant axes; preserve any future variation before the fixed readout.",
+    "local_caps": [
+      2,
+      8,
+      20
+    ],
+    "local_dimension_rule": "min(requested_cap, ambient_dimension, retained_local_reference_count-1), with inherited numerical rank policy; requested and realized ranks recorded.",
+    "reference_cap": "20 implements the user reference min(20,n,N-1), not presumed optimal.",
+    "blocks": [
+      2,
+      4,
+      8,
+      16
+    ],
+    "state_prefix_coordinates": [
+      2,
+      6,
+      14,
+      30
+    ],
+    "concentrations": [
+      0.5,
+      4.0,
+      64.0
+    ],
+    "tau": 1e-06,
+    "geometry_seed": "Per task as listed; native block seed = geometry_seed % 2**31 + 104729*(block_index+1). Same partition/references for all caps.",
+    "fitting": "Pinned Step6/native geometry algorithm, learned partition only; full KMeans, max_train_per_cluster=Nb=24, max_fit=512, model_dtype=float64, inherited float32 reference rounding, singleton augmentation0.05. Fit maximal cap and refit lower caps on exactly the same retained reference arrays. No task-target labels used.",
+    "unused_regrouped_controls": "Not candidates. If the inherited fit_family constructs them, record their compute separately; they cannot enter selection.",
+    "source_snapshot": "protocol/inherited_source_manifest23.json",
+    "actual_block_mismatch": "Stop if actual block counts differ from2,4,8,16; do not relabel or shrink the roster."
+  },
+  "representations": {
+    "construction": "In each J-wide block: c=clip(s,0,1); u=1-c+tau; v=log(u); eta=omega*v; m=logsumexp(eta); P=exp(eta-m). H is the nonconstant Sylvester Walsh matrix; r=H*v/J.",
+    "primary": {
+      "P": "Concatenated normalized probabilities, including allJ coordinates in each block."
+    },
+    "score_control": {
+      "CS": "Concatenated clipped scores; no concentration parameter or duplicate omega search."
+    },
+    "matched_diagnostics": {
+      "LR0": "(r,0) within each block",
+      "LRM": "(r,m) within each block",
+      "LW": "omega*v within each block"
+    },
+    "diagnostic_binding": "Use the scaling, cap, prefix, and concentration of the primary-horizon global P accuracy winner. Fit the fixed six heads for each of LR0,LRM,LW; reuse the six P and six CS heads already fitted at this same geometry. Select ridge and HGB separately within each matched view.",
+    "exact_equivalence": "Canonical P and LR0 have equal information; CS, LW, and LRM have equal information at fixed geometry/omega. This is an exact-real identity, not equality of finite decoder classes or floating representations.",
+    "underflow_policy": "Do not floor or renormalize rounded probabilities. Logsumexp is required, but final binary64 P may contain zeros at omega64. Record zeros, positive range, clipping counts, and discrepancies. Stop on NaN/infinity; zero is an audited finite representational outcome, not silently repaired.",
+    "claims": "Neither a finite-head mass gain nor an oracle gap proves unrestricted information loss. Nominal P-vs-LR0 differences can include coordinate, training, and rounding effects."
+  },
+  "readouts": {
+    "common_target_map": "Per horizon, fit mean and population standard deviation from head-training labels only; divisor1 if constant. Every fitted family shares this map. Invert before the task output map and physical-unit loss.",
+    "ridge": {
+      "alphas": [
+        0.0001,
+        0.01,
+        1.0
+      ],
+      "objective": "mean squared standardized-target error + alpha*||w||^2, unpenalized intercept",
+      "feature_map": "mean and population SD fitted to head-training features only",
+      "solver": "sklearn Ridge cholesky, sklearn alpha = n_training*declared_alpha",
+      "deployment": "Fold the head scaler and target inverse into deployed coefficients/intercept when applicable; retain any nonfoldable encoder input scaler. Audit the exported predictor on all validation rows; future evaluation uses that frozen export."
+    },
+    "hgb": {
+      "max_leaf_nodes": [
+        7,
+        15,
+        31
+      ],
+      "l2_regularization": 1.0,
+      "learning_rate": 0.1,
+      "max_iter": 200,
+      "min_samples_leaf": 20,
+      "max_bins": 255,
+      "loss": "squared_error",
+      "early_stopping": false,
+      "categorical_features": null,
+      "max_depth": null,
+      "max_features": 1.0,
+      "warm_start": false,
+      "seed": 2026110623,
+      "feature_scaler": "None beyond the declared representation",
+      "deployment": "Retain full TreePredictor structured node arrays plus all prediction-required maps, base value, and target inverse. No post-test pruning or alternative exporter."
+    },
+    "fit_failures": "Fail the entire task/run with a recorded cause; do not silently discard a candidate, replace settings, shrink references, or tune to runtime. Operational resumption may continue identical unfinished work. Scientific fixes require a versioned amendment before new test access.",
+    "no_refit_on_validation": true
+  },
+  "comparators": {
+    "raw_ridge_candidates": 3,
+    "raw_hgb_candidates": 3,
+    "raw_features": "Exactly the same permitted raw history/covariates as KAHM; raw ridge fits its own training standardizer; raw HGB uses these raw coordinates.",
+    "nystrom": {
+      "scalings": [
+        "minmax01",
+        "standard"
+      ],
+      "landmark_counts": [
+        32,
+        128,
+        512
+      ],
+      "gamma_multipliers": [
+        0.1,
+        1.0,
+        10.0
+      ],
+      "ridge_alphas": [
+        0.0001,
+        0.01,
+        1.0
+      ],
+      "landmark_order": "The same512 reference bank, with declared priority order; use its firstm rows.",
+      "bandwidth": "Let d2 be all strictly positive pairwise squared Euclidean distances in the scaled512-row reference bank. gamma = multiplier / median(d2). If there is no positive distance, stop; no fallback.",
+      "kernel": "exp(-gamma*||x-z||^2)",
+      "features": "K_XZ * W^(-1/2), where W=K_ZZ is symmetrized and every eigenvalue is floored at1e-12*lambda_max; stop if lambda_max is nonpositive/nonfinite. Use a fixed symmetric eigensolver.",
+      "deployment": "Collapse W^(-1/2), fitted feature standardization, ridge coefficients, and target inverse into m kernel coefficients and an intercept. Retain scaled landmarks, input scaler, gamma, coefficients and intercept; do not charge an unused dense W to this compact query implementation. Retain W as training evidence only.",
+      "candidates": 54
+    },
+    "unfitted_hmm": [
+      "persistence",
+      "training_mean"
+    ],
+    "unfitted_appliances": [
+      "persistence",
+      "daily_seasonal",
+      "training_mean"
+    ],
+    "oracle_in_selection": false,
+    "baseline_tie_order": "raw ridge, raw HGB, Nystrom candidate order; then persistence, daily seasonal where applicable, training mean. No data-dependent rearrangement."
+  },
+  "budget": {
+    "primary_fits_per_task": {
+      "P": 432,
+      "CS": 144,
+      "raw_ridge": 3,
+      "raw_hgb": 3,
+      "nystrom": 54,
+      "matched_diagnostics": 18,
+      "total": 654
+    },
+    "primary_total_six_tasks": 3924,
+    "primary_hgb_total_six_tasks": 1800,
+    "primary_geometry_banks_per_task": 6,
+    "secondary_head_fit_upper_bound_per_task": 42,
+    "secondary_head_fit_upper_bound_six_tasks": 252,
+    "candidate_templates": "protocol/candidate_templates23.json",
+    "reuse": "Cache identical geometry/scores/features within development; reuse Nystrom kernel/decomposition across penalties. This does not waive full end-to-end deployment cost.",
+    "interpretation": "Fixed-budget panel; search opportunities, capacities, and compute are explicitly unequal across model families."
+  },
+  "selection": {
+    "loss": "Primary-horizon validation MSE after frozen export, target inverse, and task output map; HMM [-1,1] clipping, Appliances max(0,prediction_Wh) without upper clipping.",
+    "tie_break": "Exact equality of stored nominal validation MSE: candidate index. Never inspect test outcomes to break a tie.",
+    "C_accuracy": "Minimum validation MSE across ALL comparator candidates, including unfitted task baselines.",
+    "allowance": {
+      "numerator": 11,
+      "denominator": 10,
+      "meaning": "A prospective operational tolerance, not a statistical significance or equivalence margin inferred from data."
+    },
+    "validation_cap": "(11/10) * validation MSE of C_accuracy",
+    "C_cost": "Among ALL comparator candidates within the validation cap, minimize (complete_numeric_bytes, validation_MSE, candidate_index).",
+    "P_accuracy": "Minimum validation MSE across432 P candidates.",
+    "CS_accuracy": "Minimum validation MSE across144 CS candidates.",
+    "P_cost": "Among P candidates within the same validation cap, minimize (complete_numeric_bytes, validation_MSE, candidate_index); none if empty.",
+    "CS_cost": "Analogous separate selector for CS. Its success cannot be attributed to normalized P.",
+    "primary_roster": "Union of P/CS ridge and HGB global winners; P_cost and CS_cost when present; each fitted comparator family accuracy winner; C_accuracy and C_cost; all unfitted baselines; five matched views P,CS,LR0,LRM,LW with ridge and HGB winners each. Deduplicate by exact candidate id; never by rounded forecasts.",
+    "diagnostics_cannot_replace_primary_cost_selection": true,
+    "secondary_roster": "Take every distinct fitted primary-roster configuration. At each secondary horizon transfer scaler, geometry, prefix, concentration, representation, head family and hyperparameters unchanged; refit only the head and common horizon-specific training target map. No secondary validation selection. All unfitted baselines/oracle receive their declared horizon. Max21 unique fitted configuration references before deduplication yields max42 secondary fits/task.",
+    "all_six_tasks_selected_before_any_test_access": true,
+    "fit_seal": "Seal selected ids, fitted payload hashes, all validation predictions, secondary configurations, implementation/environment manifest, and fit inventory before generating/parsing any test numeric observation or derived predictive feature; integrity-only header/timestamp access is permitted."
+  },
+  "utility_rule": {
+    "type": "Observed primary-horizon operational screen, not a population noninferiority theorem.",
+    "accuracy": "MSE_test(K) <= (11/10)*MSE_test(C_accuracy)",
+    "memory": "complete_numeric_bytes(K) < complete_numeric_bytes(C_cost)",
+    "latency": "median_warm_batch_nanoseconds_per_row(K) <= same metric(C_cost)",
+    "report_separately": [
+      "accuracy gate",
+      "accuracy+memory gate",
+      "all three gates"
+    ],
+    "cost_reference_test_risk": "Always report it, even if C_cost fails the test accuracy cap. The reference may not be replaced by another test winner.",
+    "no_qualifying_model": "Record no qualifying candidate and screen failure. If a trivial comparator leaves no possible storage saving, retain that outcome without fallback.",
+    "cross_task_rule": "Report P_cost and CS_cost separately. Call a procedure consistently successful on this panel only if it passes all three primary gates in ALL five HMM replications AND the Appliances task. Partial passes remain mixed evidence; do not average a failed task away.",
+    "claim_limit": "Even six passes concern one controlled law and one building; no general superiority across dynamical systems, buildings, or seasons."
+  },
+  "risk_and_numerics": {
+    "primary_estimand": "Risk of the frozen exported operational predictor actually evaluated and timed, under its declared floating-point feature construction; not a hypothetical real-arithmetic predictor.",
+    "risk_accumulation": "Store binary64 forecasts and retained binary64 target values; HMM symbols are exactly representable, while Appliances targets are parsed as binary64. Treat those retained operational numbers as exact dyadic rationals for independent squared-error replay; this is not a claim of exact decimal-source physical measurement. Export outward binary64 bounds. For the11/10 comparison use an exact rational multiplier. Resolve pass/fail using exact risk differences; if an implementation only provides overlapping enclosures, report unresolved, not pass.",
+    "oracle": "Exact rational same32-observation Bayes conditional mean/variance, evaluation-only. Report realized test MSE, mean exact conditional regret (f-mu)^2, and mean conditional variance separately. A realized MSE difference is not identically conditional regret.",
+    "canonical_information_diagnostics": "Exact P/LR0 and CS/LRM/LW identities refer to canonical mathematics. To assert a canonical-risk or pure-coordinate diagnosis, reuse/extend the inherited score/transform/head enclosures and independently audit their validity. Otherwise restrict conclusions to the frozen operational procedures and report rounding differences. Numerical intervals are never confidence intervals.",
+    "required_manufactured_implementation_checks_before_data": "Validate all four block widths including16 (the existing Step22 wrapper only accepts2,4,8), selected export algebra, normalization/underflow cases, full cost inventory, metadata disjointness, candidate roster, and no unintended outcome access. Seal the later runner/source before development use.",
+    "test_replay": "Independent prediction/metric replay for every selected model; record any cache-vs-fresh discrepancy. No changed-feature tree discrepancy can be treated as unchanged predictions without analysis.",
+    "no_new_statistical_interval_rule_selected_after_test": true
+  },
+  "statistical_reporting": {
+    "controlled": "Report all five replication MSEs, exact conditional-regret sample means, equal-weight aggregate, minimum/maximum and standard deviation. No formal population confidence or significance claim in this panel. Sample means of conditional regret still have finite-history sampling uncertainty.",
+    "real": "Report all3768 test origins, the26 fixed144-origin blocks and final24 origins separately. Blocks are descriptive, not independent observations or confidence intervals.",
+    "favorable_test_selection_forbidden": true,
+    "mechanism_claim": "A finite matched-head gain is a usable hypothesis about this procedure. It does not identify unrestricted representation loss, guarantee sufficiency, or transport a Lipschitz class across coordinates.",
+    "engineered_fixture": "Four exact score states with scale-relevant risks1 vs0 and scale-ancillary risks0 vs0 validate an elementary normalization example only. No learned KAHM is asserted to attain these scores."
+  },
+  "cost_and_timing": {
+    "numeric_storage": "Inventory the entire single deployed model: encoder references/bases/coefficient matrices, scaler offsets/divisors/masks, retained centers, representation constants and Walsh arrays where retained, head parameters, full tree structured fields, target inverse and output-map numeric parameters. Count each retained array/scalar once; no cross-model amortization. No free unreported encoder.",
+    "separate_costs": [
+      "serialized artifact bytes",
+      "shared incoming history/input buffer",
+      "transient feature/work memory",
+      "process peak RSS including runtime",
+      "training/selection wall time",
+      "cold-start time",
+      "optional canonical numerical-assurance overhead"
+    ],
+    "timing_input": "The same already-available raw feature rows; begin before model-specific input scaling, encoding, representation, head, target inverse and output map. Raw history-window construction is common and measured separately. No cached geometric or Nystrom features.",
+    "threads": 1,
+    "rows": "First512 test anchors in fixed roster order; single-query descriptive panel uses first32.",
+    "timing": "Record one cold batch after imports, then one untimed warm-up; run nine warm512-row batches, ascending model-id order on odd repeats and reverse on even repeats. Use perf_counter_ns; primary cost metric is median total ns/512. Retain all nine observations. Single-query panel uses nine repeats over32 individual rows and is descriptive.",
+    "interpretation": "Measured implementation/hardware performance only. Compile/load costs and any canonical assurance work must be recorded separately and cannot be represented as zero.",
+    "training_cost": "Log actual fits, iterations, wall time, geometry and shared computations; no equal-compute claim."
+  },
+  "execution_gates": [
+    "Step23: manufactured checks, independent design review, prospective source/spec/candidate seal, report; no benchmark generation, CSV parsing, or fitting.",
+    "Step24 implementation: implement runner under this protocol, manufactured-only numerical/export/access tests, source and environment seal. Changes to scientific choices require a dated amendment before outcome access.",
+    "Development: generate HMM support/train/validation only. Stream Appliances header/timestamps and development numeric columns only; do not materialize full pandas dataframes or parse test numeric fields. Enforce archive/schema/cadence integrity and development numeric finiteness before fitting; test numeric finiteness is checked only after the full fit seal and before evaluation. Integrity failure stops the study.",
+    "Select and fit all six task procedures plus transferred secondary heads; freeze complete roster and payloads before any test feature/outcome access.",
+    "Evaluate each sealed test roster once; independently replay numerical metrics, report all gates and costs, then write results. No outcome-dependent changes.",
+    "Keep the5557-row ECG reserve outside this entire study."
+  ],
+  "deliverables": "Prospective PDF, machine-readable protocol and candidate templates, mathematical/source metadata checks, source locks, and a package that reproduces the manufactured checks. No benchmark runner, fitted model, or new forecast result is claimed in Step23."
+}

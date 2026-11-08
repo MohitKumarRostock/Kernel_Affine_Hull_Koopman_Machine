@@ -1,0 +1,102 @@
+\section{Related work and contribution boundary}
+\label{sec:related}
+\paragraph{Representations, KAHM and earlier prediction certificates.}
+KAHM reconstruction models are established geometric feature constructions
+\citep{kumar2024kahm,kumar2025collaborative}. Their use here does not assume
+that reconstruction affinity implies predictive sufficiency. The earlier
+analysis of \citet{kumar2026limits} already provides prediction-risk
+certificates, fitted-risk upper bounds, empirical-minimum comparisons, and
+independent evaluation, including common-target forecasting comparisons. It also
+recognizes the need for joint coverage when lower and fitted upper certificates
+are combined.
+The present mathematical focus is the centered scalar observed-output
+hierarchy and decisions over a declared retained family. The comparison in
+Table~\ref{tab:prior-comparison} concerns central certificate constructions,
+not a claim that every ingredient in the present pipeline is new.
+
+\paragraph{Sample-average optima and the centered hierarchy.}
+Monotone lower expectations of ordinary sample-average optimal values are
+established in stochastic programming \citep{mak1999montecarlo}.
+Our statistic is $T_b=b a_b/(b-1)$, where $a_b$ is the minimum empirical
+squared error under the fixed Lipschitz constraints. Since $b/(b-1)$
+decreases, ordinary sample-average monotonicity alone does not imply
+monotonicity of this centered sequence. Translation of the fitted values
+and an average-over-subsets variance identity provide the required
+argument. The specific construction joins an exact positive-part pair
+member to a monotone scalar hierarchy, a compact-support population limit,
+and finite-block laws that expose its slack. None of these population
+statements implies that finite-sample confidence endpoints improve with
+block size.
+
+\paragraph{Model-class falsification and empirical-infimum calibration.}
+Lower inference for the best risk in a model class is an established
+problem \citep{muller2025falsification}. The empirical infimum is bounded
+above by the empirical risk of each fixed population competitor; this is
+the basis of earlier optimal-value lower confidence bounds
+\citep[Appendix A.2, equations (A10)--(A11)]{guigues2017confidence}.
+The bounded-loss construction of \citet[Appendix A.1]{muller2025falsification}
+also uses a nearly optimal fixed competitor. We specify the binary-KL
+inversion used here and prove how a pointwise optimization lower value can
+replace the exact empirical infimum. This is a calibration and computational
+construction for the declared problem, not a new generic concentration
+principle. Summing valid lower values from disjoint blocks supplies one such
+value; all observations, including those outside the blocks, retain their
+place in the full-sample normalization.
+
+\paragraph{Pairwise obstructions and Lipschitz regression.}
+The paired-residual argument in \citet[Lemma~2]{akash2021inverse}
+uses target separation and a Lipschitz restriction to lower-bound an
+adversary's squared error. Finite-sample Lipschitz regression and extension
+also have established convex-optimization formulations
+\citep{gottlieb2017regression}. We use these ingredients to study a
+conditional squared-positive-part witness, its exactness and limitations,
+and its relation to the centered block hierarchy. The conditioning law,
+marginal target risk, decoder budget and representation metric are declared
+together. A positive class-risk lower bound alone does not distinguish
+irreducible noise from representation loss or a restrictive sensitivity
+budget.
+
+\paragraph{Calibrated decisions over representations.}
+Learn then Test connects predictive risk control to simultaneous hypothesis
+testing \citep{angelopoulos2025ltt}; statistical selection among candidate
+state abstractions has earlier finite-sample guarantees in model-based
+reinforcement learning \citep{jiang2015abstraction}. Here joint lower and
+upper endpoints answer a specific observed-output question: whether a
+declared decoder class is excluded by a loss tolerance, and whether a
+particular admissible fitted predictor meets that same tolerance.
+Excluding all cheaper declared classes while accepting one fit establishes
+minimum feasible cost within that family. This decision can add necessity
+assurance even if upper-only selection chooses the same forecast. It does
+not imply a better forecast, a globally optimal representation, or a
+computational saving from certificate-directed search.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{@{}p{0.20\linewidth}p{0.34\linewidth}p{0.40\linewidth}@{}}
+\toprule
+Question & \citet{kumar2026limits} & Present construction \\
+\midrule
+Target of the central exclusion certificate
+& Successor soft-coordinate prediction error
+& Fixed observed-output squared risk \\
+Decoder class for the central result
+& Linear coordinate predictors with a prescribed spectral-norm limit
+& Scalar Lipschitz class for the centered hierarchy; retained-block affine fits as a worked example \\
+Lower-certificate construction
+& Class-centered variation and reference-label deviation; empirical-minimum comparator
+& Exact positive-part pair member and centered, normalized block hierarchy \\
+Decision supplied
+& Class exclusion and fitted-risk upper bounds; joint coverage required for combined decisions
+& Centered-hierarchy and recycled-dual certificates; explicit minimum-feasible-cost conclusions within a declared family \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of the central certificate constructions with
+arXiv:2609.32652v3. The earlier work also includes fitted-risk upper
+bounds, independent evaluation and common-target forecasting comparisons.
+Standard concentration, empirical-infimum lower calibration and the KAHM
+reconstruction construction are shared foundations. The present hierarchy
+converges under the scalar, bounded-target, compact-support and unconditional
+iid assumptions stated in the theorem.}
+\label{tab:prior-comparison}
+\end{table}
+

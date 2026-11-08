@@ -1,0 +1,119 @@
+{
+  "status": "PASS",
+  "source_manifest": {
+    "sha256": "5836416a4a0642c20c295bd24e0d5a209759a8d73f1a5c725b1761393e074730",
+    "files": 751
+  },
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "packages": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "scikit-learn": "1.8.0",
+    "threadpoolctl": "3.6.0",
+    "mpmath": "1.3.0"
+  },
+  "groups": {
+    "controlled_calibration": {
+      "status": "PASS",
+      "return_code": 0,
+      "wall_seconds": 3.282079787000839,
+      "command": [
+        "python",
+        "experiments/controlled_calibration/replay.py",
+        "--output",
+        "controlled_calibration.json"
+      ],
+      "result_file": "controlled_calibration.json",
+      "result_sha256": "d85c84a86c8c14df83becfbfb2cd981a6b73961fa746f62701da47a8b67f55ec",
+      "log_file": "controlled_calibration.log"
+    },
+    "ecg_cohort": {
+      "status": "PASS",
+      "return_code": 0,
+      "wall_seconds": 6.220712476999324,
+      "command": [
+        "python",
+        "experiments/ecg_cohort/replay.py",
+        "--output",
+        "ecg_cohort.json"
+      ],
+      "result_file": "ecg_cohort.json",
+      "result_sha256": "27f60c181a4e400df02bd730db668c873ca173c4613330b9991162c9e23911b0",
+      "log_file": "ecg_cohort.log"
+    },
+    "class_diagnosis": {
+      "status": "PASS",
+      "return_code": 0,
+      "wall_seconds": 21.8865673170003,
+      "command": [
+        "python",
+        "experiments/class_diagnosis/replay.py",
+        "--output",
+        "class_diagnosis"
+      ],
+      "result_file": "class_diagnosis/summary.json",
+      "result_sha256": "6c268758c498e8be85335c5399f7bd66e75290226f91f7d57f832af1a934fd71",
+      "log_file": "class_diagnosis.log"
+    },
+    "deployment_cost": {
+      "status": "PASS",
+      "return_code": 0,
+      "wall_seconds": 5.0234657660002995,
+      "command": [
+        "python",
+        "experiments/deployment_cost/replay.py",
+        "--output",
+        "deployment_cost.json",
+        "--predict"
+      ],
+      "result_file": "deployment_cost.json",
+      "result_sha256": "a888ac2fd206eafca0767254e09b6629e0c24ba5bdef10908187130bd9339f10",
+      "log_file": "deployment_cost.log"
+    },
+    "public_screening": {
+      "status": "PASS",
+      "return_code": 0,
+      "wall_seconds": 114.1805386369997,
+      "command": [
+        "python",
+        "experiments/public_screening/replay.py",
+        "--output",
+        "public_screening.json"
+      ],
+      "result_file": "public_screening.json",
+      "result_sha256": "d703e463f07b1585d264bc95d8dcc91546810b5e3051a9ee30f62ecc1d72cfce",
+      "log_file": "public_screening.log"
+    },
+    "decoder_diagnostics": {
+      "status": "PASS",
+      "return_code": 0,
+      "wall_seconds": 3.0160771330010903,
+      "command": [
+        "python",
+        "experiments/decoder_diagnostics/replay.py",
+        "--output",
+        "decoder_diagnostics.json"
+      ],
+      "result_file": "decoder_diagnostics.json",
+      "result_sha256": "77936f974a169dcaaae57e43ae0da5ee7e57fa56583459a8a58aacea06d5f844",
+      "log_file": "decoder_diagnostics.log"
+    },
+    "affine_forecasting": {
+      "status": "PASS",
+      "return_code": 0,
+      "wall_seconds": 2.092132623998623,
+      "command": [
+        "python",
+        "experiments/affine_forecasting/replay.py",
+        "--output",
+        "affine_forecasting.json"
+      ],
+      "result_file": "affine_forecasting.json",
+      "result_sha256": "8648e5dc1bf30dd20653fff5d2b983d33a7ef2d91747e7fef118b0425cbd9223",
+      "log_file": "affine_forecasting.log"
+    }
+  },
+  "source_integrity_rechecked": true,
+  "scope": "Numerical replay of fixed records; no full training rerun or new scientific timing campaign."
+}

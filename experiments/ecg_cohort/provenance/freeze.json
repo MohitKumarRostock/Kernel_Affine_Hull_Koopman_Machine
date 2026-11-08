@@ -1,0 +1,98 @@
+{
+  "schema": "step19-freeze-v1",
+  "frozen": "2026-11-06T11:46:10.834297+00:00",
+  "sources": {
+    "step18_natural_decisions/study/block_solver18.py": "c8caf46d3a33161bda708c4ccf421cda15f14c4832dbce62cf7fcf978d9e493d",
+    "step18_natural_decisions/study/certificate18.py": "41fae884365c415e711ce01e15c99ad47512237529fadd4c85073fa2822e59aa",
+    "step19_full_cohort/PROTOCOL.json": "d93fe7ebac82472bbf96e243888c57d9a39acdf8adeb35cca068d250c60be80a",
+    "step19_full_cohort/manuscript/step19_theory.tex": "aa232992ad5101c76055c316df0b1e5e8d6d2257f953c7d34d597c5e00780842",
+    "step19_full_cohort/study/audit19.py": "a1ed4f77ccfc4e6468ce45bbf495d1d7c7d90158279b67ff7cb623a0b511ae26",
+    "step19_full_cohort/study/check19.py": "1e98e7d600bd828e669f7917b2c029b06f1c2d8b4e55de9be473f91da4016136",
+    "step19_full_cohort/study/check_exact19.py": "b000a2621b347fe13b5e0d59da6ff78f888013eb77292c580471e0e696ccc303",
+    "step19_full_cohort/study/check_theory19.py": "73117b3f6c412ae603b8fb0579297cb056f4ab62f16da902a9c2070775312ffe",
+    "step19_full_cohort/study/core19.py": "13045cd938f36e56754cda517554824ed1cbd2a8566b9704c64514c9a61bcda8",
+    "step19_full_cohort/study/exact19.py": "2c58aec3e112b467d391b2dc598ee168823a36202a2ff5c5fe7e0aed4b13260b",
+    "step19_full_cohort/study/runner19.py": "6e5ed351b5aa7683497e5e3dbe59c1f92a0477bfb4877d45efa5d9086e05672c",
+    "step19_full_cohort/tests/exact_preflight19.json": "fe25a8e85e12ccd6bd5a73471381aad31af91cc34d1725475b7d748e890ab756",
+    "step19_full_cohort/tests/preflight19.json": "201486c2c1144a5ea479d41a2522cfb982a4aa1f72482a3440b17beec2bf1fd4",
+    "step19_full_cohort/tests/theory_preflight19.json": "7b5d7398f35c9bfdb85de194c3d96a2dc65a368d61548a774130078aa1978213"
+  },
+  "inputs": {
+    "step18_natural_decisions/study/run/cal/features.npz": "036cf320cbb5ba65f34968e1a132e74d51c6cc39e5a2fd3bc740cc33bea0d3d0",
+    "step18_natural_decisions/study/run/cal/observations.npz": "5e1a87ec82a0a8aff6cb696635176e3df2aec5a080d7adbf98903975a2bb01fc",
+    "step18_natural_decisions/study/run/cal/predictions.npz": "119d8ef2ca1ed1577ed2401fe94635ef88c9884570608602cc58114e3087f902",
+    "step18_natural_decisions/study/run/cal_seal.json": "82263d66fefb5966feea159808a69d1a43602a3e8a203a1b2844572eef2b82fe",
+    "step18_natural_decisions/study/run/cal_validation.json": "7fc7c1375200c6a700ecd34af3b1876c9d307970e8f58222f155c432547b3a6f",
+    "step18_natural_decisions/study/run/census/results.json": "037dfa13c949f459d30703b2066cd4498df81f89ba076ae6f6a1ec757e47d242",
+    "step18_natural_decisions/study/run/census_seal.json": "aceaecc0dc4c1f2241a43f7d3f7bcb9b6212ea6c7074177303faa8746658ab61",
+    "step18_natural_decisions/study/run/fit/selected.json": "00eb7756f4c9063cd673fdeefb9a56715ffa6dffa8b47e2ade332cd1cdc00aa5",
+    "step18_natural_decisions/study/run/fit/selected_models.pkl": "d2682acdc7bf89f9044985d9d85ac47b9461c0e980eb5aa582cf4d3be9f5ee37",
+    "step18_natural_decisions/study/run/fit_seal.json": "7e57776968d1c68428e9800177f431406e3f3872e4214da0259fdf480a992775",
+    "step18_natural_decisions/study/run/fit_validation.json": "1e25d14f1fc4164b5115d91c70edabf037f20677fe3bcdc14f2c07cc3fb73208",
+    "step18_natural_decisions/study/run/freeze.json": "393229c92bd45c76c5c66d7d701c2d710b9240ca711b73d1793f23451986869a",
+    "step18_natural_decisions/study/run/terminal/features.npz": "b8427aae832f768b758d7e143970cf65a6bc562233cdddb8d78eb8f68a498676",
+    "step18_natural_decisions/study/run/terminal/observations.npz": "270b7463132fcf4e12fb81f2da65c5a69da070c9735eeeda129aa2c66ca373d7",
+    "step18_natural_decisions/study/run/terminal/predictions.npz": "75ae5baa575f796e5b25343efd7c24579dc76c174187ee2edff6a4eb64e43695",
+    "step18_natural_decisions/study/run/terminal_seal.json": "52d8d371e284cfb398441901bd2a632870b37be8ee4d45d65507ccd0798723a5",
+    "step18_natural_decisions/study/run/verification.json": "5c21e18df84257644b636785e13746616d7f0713eb88f367e9095f19ce6cb25a"
+  },
+  "configuration": {
+    "schema": "step19-producer-configuration-v1",
+    "prefixes": [
+      2,
+      6,
+      14
+    ],
+    "population": 8192,
+    "row_order": "Step18 cal then terminal; each existing order unchanged",
+    "kappa_by_prefix": {
+      "2": 1.0,
+      "6": 1.0,
+      "14": 1.0
+    },
+    "base_block_size": 32,
+    "families": [
+      "consecutive",
+      "greedy_nearest"
+    ],
+    "block_sizes": [
+      32,
+      64,
+      128
+    ],
+    "chunk_blocks": 16,
+    "solver": {
+      "max_iter": 4000,
+      "tolerance": 1e-07,
+      "check_every": 20
+    },
+    "configurations": 18,
+    "total_new_block_programs": 2688,
+    "initialization": "zero for every new optimizer; embedded children evaluated separately",
+    "larger_blocks": "concatenate adjacent base groups; never rerun greedy at larger sizes",
+    "guarded_choice": "best corrected SSE per block, new optimizer on ties",
+    "exact_choice": "official postverifier recursively selects max of zero,new,exact-best embedded children",
+    "guard_scope": "diagnostic only; retain explicit previous-level valid empirical lower",
+    "cross_family": "maximum, never sum overlapping partitions",
+    "target_bounds": [
+      -1.0,
+      1.0
+    ],
+    "statistical_confidence_events": 0,
+    "no_waveform_archive_access": true,
+    "no_model_fit_or_selection": true
+  },
+  "protocol_sha256": "d93fe7ebac82472bbf96e243888c57d9a39acdf8adeb35cca068d250c60be80a",
+  "parent_step18_freeze_sha256": "393229c92bd45c76c5c66d7d701c2d710b9240ca711b73d1793f23451986869a",
+  "parent_gate_sha256": {
+    "fit_validation.json": "1e25d14f1fc4164b5115d91c70edabf037f20677fe3bcdc14f2c07cc3fb73208",
+    "cal_validation.json": "7fc7c1375200c6a700ecd34af3b1876c9d307970e8f58222f155c432547b3a6f",
+    "verification.json": "5c21e18df84257644b636785e13746616d7f0713eb88f367e9095f19ce6cb25a"
+  },
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "scipy": "1.17.0",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "longdouble_mantissa_bits": 63,
+  "no_natural_duals_computed_before_freeze": true
+}

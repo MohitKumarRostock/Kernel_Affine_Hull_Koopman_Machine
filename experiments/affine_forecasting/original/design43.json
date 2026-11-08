@@ -1,0 +1,117 @@
+{
+  "schema": "step43-preaccess-design-v1",
+  "status": "FIXED_BEFORE_NEW_MEASUREMENT_DECODING",
+  "step": 43,
+  "question": "Does the raw-family norm-and-range-preserving affine selection policy motivated by Step42 retain competitive predictive performance and numerical-certificate coverage on previously unassessed task periods?",
+  "tasks": {
+    "household_power2008": {
+      "dataset": "UCI235 Individual Household Electric Power Consumption",
+      "target": "Global_active_power",
+      "unit": "kW",
+      "development_start": "2008-01-01",
+      "validation_months": ["2008-06", "2008-07", "2008-08"],
+      "assessment_start": "2008-09-01",
+      "assessment_stop_exclusive": "2008-12-01",
+      "freshness_scope": "Previously unassessed historical task-year within a previously retained source archive; not forward-calendar validation relative to2009/2010 studies"
+    },
+    "jena_temperature2018": {
+      "dataset": "MPI-BGC Beutenberg roof weather station",
+      "target": "T (degC)",
+      "unit": "degree Celsius",
+      "development_start": "2018-01-01",
+      "validation_months": ["2018-06", "2018-07", "2018-08"],
+      "assessment_start": "2018-09-01",
+      "assessment_stop_exclusive": "2018-12-01",
+      "freshness_scope": "Forward task-year after previously assessed2016/2017; new official source archives within a known domain"
+    },
+    "metro_traffic2018": {
+      "dataset": "UCI492 Metro Interstate Traffic Volume",
+      "target": "traffic_volume",
+      "unit": "vehicles per hour",
+      "development_start": "2017-11-01",
+      "validation_months": ["2018-04", "2018-05", "2018-06"],
+      "assessment_start": "2018-07-01",
+      "assessment_stop_exclusive": "2018-10-01",
+      "freshness_scope": "Forward assessment after the prior2017 task; exposed November2017 measurements are explicitly permitted as chronological training/history"
+    }
+  },
+  "forecasting": {
+    "target_hour": 23,
+    "horizon_hours": 24,
+    "input_count": 24,
+    "input_rule": "Own-target hourly snapshots from origin minus23hours through origin, oldest to newest; origin is24hours before target",
+    "missing_rule": "Exclude only dates lacking a required timestamp or containing a predeclared missing marker; no numeric outlier-based exclusion",
+    "minimum_training_rows_each_stage": 32,
+    "minimum_validation_rows_each_fold": 7,
+    "minimum_assessment_rows_per_task": 30,
+    "invalid_panel_policy": "Stop and report infeasibility; no outcome-driven task replacement"
+  },
+  "method": {
+    "maps": "Unchanged inherited18-map factory: raw2, Nystrom4, KAHM12",
+    "scalings": ["standard", "minmax01"],
+    "kahm_caps": [4, 12, 20],
+    "kahm_prefixes": [1, 2],
+    "ridge_lambdas": ["1/1000000", "1/10000", "1/100", "1", "100"],
+    "head": "P1R1C1: norm projection enabled, exact intercept recentering enabled, normalized clipping enabled",
+    "seeds": [3901, 4301, 4302],
+    "primary_seed": 3901,
+    "other_seeds": "Sensitivity analyses on the same observations; never independent replications or selection candidates",
+    "affine_candidates_per_stage": 90,
+    "baseline_candidates_per_development_stage": 44,
+    "baseline_panel": "Unchanged inherited same-information44-candidate panel, with declared seed substituted only in stochastic estimator parameters",
+    "selection": "Exact pooled physical-unit development MSE over3 expanding folds; lexical candidate identity breaks ties",
+    "final_assessment": "Only frozen development-selected raw, Nystrom, KAHM, all-map, ordinary and ridge policy identities; deduplicate equal identities; no full assessment oracle grid"
+  },
+  "primary_endpoint": {
+    "policy": "raw-family P1R1C1 at seed3901",
+    "comparators": ["development-selected conventional pool", "development-selected conventional ridge family"],
+    "predictive_rule": "20*SSE_raw <=21*SSE_reference for every task and both comparators, on identical task query cohorts",
+    "zero_reference_rule": "Use the cross-multiplied inequality directly: with zero reference SSE, only zero raw SSE passes; report ratio as null",
+    "certificate_rule": "Every primary-policy honest binary64 assessment packet must be accepted under the unchanged span*2^-40 numerical contract",
+    "claim_rule": "All predictive conditions, primary certificate coverage and independent scientific audit must pass",
+    "scope": "Finite-cohort practical tolerance; no population noninferiority, statistical significance or unseen-domain claim"
+  },
+  "secondary_analyses": {
+    "policies": ["Nystrom family", "KAHM family", "all representations"],
+    "stability": "All seed-specific and calendar-month paired loss results; descriptive only",
+    "no_assessment_winner_promotion": true,
+    "no_primary_ci_or_pvalue": true
+  },
+  "certificate_assay": {
+    "honest": "Original reported binary64 value and self-consistent packet",
+    "quantized": "Round physical output through float32 then back to binary64; generate a self-consistent packet for that reported value",
+    "acceptance_rule": "Acceptance must exactly equal an independent rational comparison of reported-value discrepancy to span*2^-40; rounded values are not assumed invalid",
+    "control": "Explicitly limited identity-binding-only check, with no numerical-discrepancy enforcement",
+    "misbinding": "Fixed wrong-query, wrong-deployment and stale-feature challenges on the first chronological query of each selected certified head",
+    "scope": "Numerical-contract and misbinding demonstrations; no authentication, ideal-feature-transform or future-label-accuracy guarantee"
+  },
+  "cost_assay": {
+    "seed": 3901,
+    "policies": "Actual selected certified policies and ordinary/ridge controls, deduplicated",
+    "queries": "32 deterministic equal-stratum chronological assessment queries per task, or all if fewer than32",
+    "warmups": 3,
+    "measured_repeats": 10,
+    "static_context_repeats": 100,
+    "primitives": ["unverified full map+head inference", "full map+head+packet+verification inference", "checker with trusted cached features/static context", "direct exact-reference recomputation without packet", "selected conventional prediction"],
+    "counterbalance": "Alternate full verified/unverified ordering by selected query index",
+    "bytes": ["packet", "stored query features", "static deployment", "map"],
+    "scope": "Measured local implementation costs, with raw repetitions retained; no speedup threshold or service-level guarantee"
+  },
+  "access_and_execution": {
+    "prefreeze_allowed": "Prior-study records, official metadata, opaque source transport, timestamp/header parsing and exact declared missing-marker checks only",
+    "numeric_access": "New measurement values decoded only after final protocol/source seal and independent preflight PASS",
+    "selection_gate": "Independent development/selection audit before fresh assessment",
+    "assessment_order": "Commit all selected policy/seed predictions for each query before revealing that query's target; historical own-target lag observations remain permitted",
+    "producer_grid_runs": 1,
+    "outcome_based_reruns": false,
+    "failure_policy": "Retain evidence and stop at a failed gate; no silent postfreeze scientific edits"
+  },
+  "scientific_claim_limits": [
+    "Freshness is relative to retained workflow exposure evidence, not an absolute historical never-seen assertion",
+    "Three known domains do not establish unseen-domain generalization",
+    "Raw/Nystrom deterministic results across seeds are not additional samples",
+    "Family search pools differ in size",
+    "Coefficient/range properties concern the exact fitted stored-feature reference; operational output has the certified numerical discrepancy",
+    "No exact optimizer, ideal transform, raw-input robustness, authentication or future-label coverage is certified"
+  ]
+}

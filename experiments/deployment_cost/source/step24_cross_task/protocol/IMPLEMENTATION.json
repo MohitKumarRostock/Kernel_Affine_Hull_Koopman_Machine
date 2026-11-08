@@ -1,0 +1,29 @@
+{
+  "schema": "step24-operational-implementation-v1",
+  "scientific_protocol": "../step23_cross_task/PROTOCOL.json",
+  "scientific_protocol_sha256": "e7109b924bc0899aa0d97c9091828c29068bd0f2b67714e754e59d594df588ef",
+  "scientific_menu_changes": false,
+  "scope": "The frozen exported binary64 operational predictors. No claim about canonical-real predictor risk, pure-coordinate causation, target sufficiency, or population confidence is made.",
+  "data_gates": "Source-bound implementation seal precedes all development generation/parsing. Complete source-bound six-task fit seal precedes every test numeric observation and predictive feature. Metadata-only source timestamps may be checked earlier. Test numeric integrity is checked after the fit seal.",
+  "target_maps": "Training-label binary64 mean and population standard deviation at each horizon, identical across fitted families; constant target divisor1. Every exported predictor returns physical units before the prescribed output map.",
+  "ridge": "sklearn Ridge(solver=cholesky), penalty training_rows*declared_alpha; training-only feature mean/popSD; fold scaler and target inverse into physical coefficients/intercept.",
+  "hgb": "Frozen200iterations and declared leaf menus; native TreePredictor export retains all structured node fields, bitsets/maps, baseline, target inverse and output bounds. No early stopping, categorical features, monotonic constraints or interaction constraints.",
+  "nystrom": "scipy spatial pdist/cdist squared Euclidean distances; positive-distance median over all512 reference rows; symmetric scipy.linalg.eigh(driver=evd); spectral floor1e-12*largest eigenvalue; symmetric inverse-square-root features. Dense transform/head scaler/target inverse collapse to kernel coefficients and intercept. W/eigenvalues retained only as fitting evidence.",
+  "export_fidelity": {
+    "absolute_factor": 1e-9,
+    "relative_tolerance": 1e-10,
+    "rule": "abs(export-reference) <= 1e-9*max(1,training_target_sd) +1e-10*abs(reference), for every validation row, both before and after the task output map. No tolerance changes after data access.",
+    "selected_validation_replay": "The complete selected deployment path must reproduce its cached model-selection validation predictions bit-for-bit for all families."
+  },
+  "numerical_geometry": "Pinned inherited native fitting/scoring, native1000-row batching, both input scales and all caps/blocks. Score reference constants retain the native float32 rounding. Stable logsumexp; no rounded-probability floor or renormalization. Direct contrasts computed by separate positive/negative Walsh sums, shared exactly between LR0/LRM. Walsh row storage is owned and pickle-stable.",
+  "query_layout": "Training and validation roles are scored separately; selected full validation queries replay that exact row layout. Test metrics use the full declared test roster.512-row and single-query timing are separate call layouts; all prediction/feature discrepancies are retained and analyzed. No numerical batch-shape drift is hidden as identical prediction.",
+  "independent_prediction_replay": "Raw/geometric ridge uses explicit ordered coefficient summation; HGB uses direct stored-node traversal. Compact Nyström uses128-row chunks, explicit coordinatewise squared-distance accumulation and ordered landmark summation without calling the nominal predictor. Compare with frozen tolerance; HGB on identical features must match bit-for-bit.",
+  "risk_arithmetic": "Exact dyadic squared-error accumulation on retained binary64 forecasts and targets; exact rational11/10 utility boundary. Nominal reports use correctly rounded exact risk and outward binary64 brackets.",
+  "oracle_arithmetic": "Exact per-history rational oracle means, variances and conditional regrets. Aggregate exact per-row values through outward adjacent-binary64 brackets and exact dyadic endpoint sums; this avoids denominator explosion while retaining rigorous finite-history sample-mean enclosures. Numerical bounds are not confidence intervals.",
+  "checkpoint_integrity": "Write-once task context binds source seal, raw development artifact, access receipt, every input/target array, horizon roster and target maps. Every bank/score/basis/head/prediction/candidate/secondary checkpoint is byte-hashed and context/upstream-bound before reuse. Completion binds all selected/final outputs; fit seal checks those existing commitments.",
+  "cost": "Inventory full retained array owner allocations and explicit numeric scalar slots, including complete encoder and view; no cross-model amortization. Deployment serialization must preserve numeric cost. Strings/Python runtime overhead are excluded from numeric bytes and serialized bytes/process peakRSS are separate.",
+  "parallel_development_workers": 3,
+  "native_threads_per_worker": 1,
+  "timing": "Fresh process per task after every model is fitted. Source verification/import/loading/startup measured separately. All selected model/horizon combinations receive one cold batch, one warmup, nine512-row warm batches with alternating id order, and nine passes of32 individual queries. Fit/evaluation jobs are not concurrent with timing.",
+  "failure_policy": "No skipped candidates, changed hyperparameter menu, replacement split or task, test-based reselection, or adaptive export tolerance. Identical unfinished operational work may resume only through verified checkpoints. A scientific amendment requires a new declared run before further outcome access."
+}

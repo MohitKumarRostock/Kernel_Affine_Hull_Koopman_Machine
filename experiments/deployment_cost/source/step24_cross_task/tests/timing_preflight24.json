@@ -1,0 +1,102 @@
+{
+  "schema": "step24-manufactured-timing-preflight-v1",
+  "passed": true,
+  "created_utc": "2026-11-06T23:11:17.633512+00:00",
+  "source_sha256": {
+    "step24_cross_task/tests/check_timing24.py": "02f150c3e07734a72ab097449c5a3b654860a46959bebd0d9724683b6504e7ec",
+    "step24_cross_task/src/timing24.py": "0d3397ef88f666884a4acbb6351ad5ee19279fcfe72562fb4bfb55c9becbcd3d",
+    "step24_cross_task/src/common24.py": "4639cef787e9092c7b796edbe5eb80fb096c8acce8815b2036d45f719f683786",
+    "step24_cross_task/src/evaluate24.py": "94ecb7672fb7d7f0379fd64ab6145359510847c48dd58f7e7360b2d4bf2b33a2",
+    "step24_cross_task/src/pipeline24.py": "bb4f07e35ae26ff4ff4c96b3930fe7ab057c87da26d4b47b947f0dc468f4ce14",
+    "step24_cross_task/src/models24.py": "0ac7f225317a215377a1e221c9290e26b00b054f4bdf001a7af3604f5715f12a",
+    "step24_cross_task/src/geometry24.py": "bdd0b5b76ecb99748c515c2dfa6dccd2efc8deda797811c93917bbbd73ee98b2",
+    "step24_cross_task/src/data24.py": "8a38c01b76a90dede7178f3182fb2015c9cfe8c785afe7b02f82fef96195b959",
+    "step23_cross_task/PROTOCOL.json": "e7109b924bc0899aa0d97c9091828c29068bd0f2b67714e754e59d594df588ef"
+  },
+  "checks": [
+    "Fake clock/predictor verifies every cold, untimed warm-up, nine alternating 512-row rounds and 288 singleton calls per pair; medians retain exact integers above 2^53",
+    "Same-layout bit checks reject warm-up drift, warm-repeat drift, singleton repeat drift and signed-zero changes",
+    "Rowwise tree audit permits explicitly recorded changed-feature jumps but rejects changed predictions on any numerically unchanged row; ridge and Nystrom use frozen fidelity tolerances",
+    "Numeric inventory rejects owner bytes lost on serialization, requires frozen/loaded/reloaded byte equality, and reports serializer length changes separately",
+    "Fresh-worker guard rejects evaluation-process reuse and prior timing in-process; each unfinished timing artifact blocks automatic rerun",
+    "Temporary fake worker seals timing outputs, defers all model feature replays until clocks finish, reuses verified completed timing without prediction, and refuses tampered completion or unsealed test access"
+  ],
+  "details": {
+    "fake_schedule": {
+      "model_horizon_pairs": 6,
+      "predict_calls": 1794,
+      "clocked_calls": 1788,
+      "nanoseconds_exceed_2_power_53": true,
+      "single_query_raw_observations_per_model": 288,
+      "warm_batch_observations_per_model": 9
+    },
+    "manufactured_tree_jump": {
+      "label": "manufactured changed-feature tree jump",
+      "rows": 3,
+      "passed": true,
+      "prediction_bit_identical": false,
+      "prediction_numeric_changed_rows": [
+        0
+      ],
+      "prediction_bit_changed_rows": [
+        0
+      ],
+      "max_abs_prediction_difference": 0.25,
+      "max_relative_prediction_difference_with_unit_floor": 0.25,
+      "features": {
+        "shape": [
+          3,
+          2
+        ],
+        "numeric_changed_rows": [
+          0
+        ],
+        "bit_changed_rows": [
+          0
+        ],
+        "numeric_changed_coordinates": 1,
+        "bit_changed_coordinates": 1,
+        "max_abs_difference": 1e-15
+      },
+      "unchanged_feature_prediction_change_rows": [],
+      "tree_jump_rows": [
+        {
+          "row": 0,
+          "reference_prediction": 1.0,
+          "actual_prediction": 1.25,
+          "prediction_difference": 0.25,
+          "max_abs_feature_difference": 1e-15
+        }
+      ],
+      "fixed_tolerance_audit": null,
+      "scope": "Operational raw-input layout comparison; no canonical predictor or information-loss inference",
+      "family": "hgb",
+      "changed_feature_tree_jumps_permitted_with_explicit_record": true
+    },
+    "pickle_numeric_storage": {
+      "frozen_complete_numeric_bytes": 88,
+      "loaded_complete_numeric_bytes": 88,
+      "reloaded_complete_numeric_bytes": 88,
+      "frozen_serialized_model_bytes": 291,
+      "loaded_reserialized_model_bytes": 280,
+      "reloaded_reserialized_model_bytes": 314,
+      "numeric_storage_stable": true,
+      "serialized_length_scope": "Reported separately; pickle memoization can change serialized length without changing numeric payload storage"
+    },
+    "temporary_worker": {
+      "predict_calls": 299,
+      "feature_replay_calls_after_all_clocks": 34,
+      "test_cache_loads": 1,
+      "valid_completed_reuse": true,
+      "corrupted_completion_rejected": true,
+      "unsealed_fit_access_rejected_before_load": true
+    }
+  },
+  "rejected_invalid_cases": 26,
+  "benchmark_trajectories_generated": 0,
+  "benchmark_model_fits": 0,
+  "source_csv_rows_parsed": 0,
+  "scientific_test_features_or_models_accessed": false,
+  "native_geometry_invoked": false,
+  "ECG_or_reserve_access": false
+}

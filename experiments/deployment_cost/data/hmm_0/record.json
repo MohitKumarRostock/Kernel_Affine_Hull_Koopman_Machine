@@ -1,0 +1,1212 @@
+{
+  "task": "hmm_0",
+  "primary_horizon": 4,
+  "names": {
+    "P_cost": "c0241",
+    "CS_cost": "c0511",
+    "C_accuracy": "c0620",
+    "C_cost": "c0578"
+  },
+  "batch_rows": 512,
+  "metrics": {
+    "c0241": {
+      "mse": 0.5130005479782557,
+      "mse_exact": {
+        "numerator": "87282520348889653826724377228937829657",
+        "denominator": "170141183460469231731687303715884105728"
+      },
+      "mse_enclosure": {
+        "value": 0.5130005479782557,
+        "lower": 0.5130005479782557,
+        "upper": 0.5130005479782558
+      },
+      "rmse": 0.7162405657167539,
+      "nominal_numpy_mse": 0.5130005479782557,
+      "rows": 8192,
+      "independent_exact_metric_replay_passed": true
+    },
+    "c0511": {
+      "mse": 0.5124048273145547,
+      "mse_exact": {
+        "numerator": "85137855205230184955479574990327111",
+        "denominator": "166153499473114484112975882535043072"
+      },
+      "mse_enclosure": {
+        "value": 0.5124048273145547,
+        "lower": 0.5124048273145546,
+        "upper": 0.5124048273145547
+      },
+      "rmse": 0.715824578590701,
+      "nominal_numpy_mse": 0.5124048273145547,
+      "rows": 8192,
+      "independent_exact_metric_replay_passed": true
+    },
+    "c0578": {
+      "mse": 0.48020201193464035,
+      "mse_exact": {
+        "numerator": "326808554442632304912922035304753583161",
+        "denominator": "680564733841876926926749214863536422912"
+      },
+      "mse_enclosure": {
+        "value": 0.48020201193464035,
+        "lower": 0.4802020119346403,
+        "upper": 0.48020201193464035
+      },
+      "rmse": 0.6929660972476506,
+      "nominal_numpy_mse": 0.4802020119346403,
+      "rows": 8192,
+      "independent_exact_metric_replay_passed": true
+    },
+    "c0620": {
+      "mse": 0.47449869007599366,
+      "mse_exact": {
+        "numerator": "4927476115720945441139700196708193",
+        "denominator": "10384593717069655257060992658440192"
+      },
+      "mse_enclosure": {
+        "value": 0.47449869007599366,
+        "lower": 0.47449869007599366,
+        "upper": 0.4744986900759937
+      },
+      "rmse": 0.6888386531518057,
+      "nominal_numpy_mse": 0.47449869007599366,
+      "rows": 8192,
+      "independent_exact_metric_replay_passed": true
+    }
+  },
+  "costs": {
+    "c0241": {
+      "complete_numeric_bytes": 72304,
+      "serialized_model_bytes": 74044,
+      "inventory": [
+        {
+          "path": "model.geometry.block_sizes",
+          "dtype": "int64",
+          "shape": [
+            2
+          ],
+          "logical_bytes": 16,
+          "retained_bytes": 16
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[0][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[0][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[0][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[0][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[0][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[1][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[1][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[1][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[1][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[1][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[0].cluster_centers",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[0].n_clusters",
+          "dtype": "int64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[0][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[0][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[0][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[0][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[0][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[1][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[1][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[1][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[1][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[1][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[2][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[2][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[2][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[2][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[2][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[3][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[3][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[3][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[3][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[3][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[1].cluster_centers",
+          "dtype": "float64",
+          "shape": [
+            32,
+            4
+          ],
+          "logical_bytes": 1024,
+          "retained_bytes": 1024
+        },
+        {
+          "path": "model.geometry.blocks[1].n_clusters",
+          "dtype": "int64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.geometry.scaler.constant_mask",
+          "dtype": "bool",
+          "shape": [
+            32
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.scaler.divisor",
+          "dtype": "float64",
+          "shape": [
+            32
+          ],
+          "logical_bytes": 256,
+          "retained_bytes": 256
+        },
+        {
+          "path": "model.geometry.scaler.offset",
+          "dtype": "float64",
+          "shape": [
+            32
+          ],
+          "logical_bytes": 256,
+          "retained_bytes": 256
+        },
+        {
+          "path": "model.geometry.score_batch_size",
+          "dtype": "int64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.head.coef",
+          "dtype": "float64",
+          "shape": [
+            6
+          ],
+          "logical_bytes": 48,
+          "retained_bytes": 48
+        },
+        {
+          "path": "model.head.intercept",
+          "dtype": "float64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.head.output_bounds",
+          "dtype": "float64",
+          "shape": [
+            2
+          ],
+          "logical_bytes": 16,
+          "retained_bytes": 16
+        },
+        {
+          "path": "model.transform.block_sizes",
+          "dtype": "int64",
+          "shape": [
+            2
+          ],
+          "logical_bytes": 16,
+          "retained_bytes": 16
+        },
+        {
+          "path": "model.transform.omega",
+          "dtype": "float64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.transform.tau",
+          "dtype": "float64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        }
+      ]
+    },
+    "c0511": {
+      "complete_numeric_bytes": 72288,
+      "serialized_model_bytes": 73993,
+      "inventory": [
+        {
+          "path": "model.geometry.block_sizes",
+          "dtype": "int64",
+          "shape": [
+            2
+          ],
+          "logical_bytes": 16,
+          "retained_bytes": 16
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[0][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[0][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[0][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[0][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[0][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[1][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[1][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[1][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[1][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[0].classifier[1][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[0].cluster_centers",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[0].n_clusters",
+          "dtype": "int64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[0][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[0][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[0][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[0][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[0][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[1][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[1][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[1][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[1][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[1][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[2][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[2][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[2][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[2][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[2][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[3][0].B",
+          "dtype": "float64",
+          "shape": [
+            24,
+            24
+          ],
+          "logical_bytes": 4608,
+          "retained_bytes": 4608
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[3][0].PC",
+          "dtype": "float64",
+          "shape": [
+            32,
+            2
+          ],
+          "logical_bytes": 512,
+          "retained_bytes": 512
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[3][0].sqrt_weights_matrix",
+          "dtype": "float64",
+          "shape": [
+            2,
+            2
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[3][0].y_data",
+          "dtype": "float64",
+          "shape": [
+            32,
+            24
+          ],
+          "logical_bytes": 6144,
+          "retained_bytes": 6144
+        },
+        {
+          "path": "model.geometry.blocks[1].classifier[3][0].y_data_n_subspace",
+          "dtype": "float64",
+          "shape": [
+            2,
+            24
+          ],
+          "logical_bytes": 384,
+          "retained_bytes": 384
+        },
+        {
+          "path": "model.geometry.blocks[1].cluster_centers",
+          "dtype": "float64",
+          "shape": [
+            32,
+            4
+          ],
+          "logical_bytes": 1024,
+          "retained_bytes": 1024
+        },
+        {
+          "path": "model.geometry.blocks[1].n_clusters",
+          "dtype": "int64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.geometry.scaler.constant_mask",
+          "dtype": "bool",
+          "shape": [
+            32
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.geometry.scaler.divisor",
+          "dtype": "float64",
+          "shape": [
+            32
+          ],
+          "logical_bytes": 256,
+          "retained_bytes": 256
+        },
+        {
+          "path": "model.geometry.scaler.offset",
+          "dtype": "float64",
+          "shape": [
+            32
+          ],
+          "logical_bytes": 256,
+          "retained_bytes": 256
+        },
+        {
+          "path": "model.geometry.score_batch_size",
+          "dtype": "int64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.head.coef",
+          "dtype": "float64",
+          "shape": [
+            6
+          ],
+          "logical_bytes": 48,
+          "retained_bytes": 48
+        },
+        {
+          "path": "model.head.intercept",
+          "dtype": "float64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.head.output_bounds",
+          "dtype": "float64",
+          "shape": [
+            2
+          ],
+          "logical_bytes": 16,
+          "retained_bytes": 16
+        },
+        {
+          "path": "model.transform.block_sizes",
+          "dtype": "int64",
+          "shape": [
+            2
+          ],
+          "logical_bytes": 16,
+          "retained_bytes": 16
+        }
+      ]
+    },
+    "c0578": {
+      "complete_numeric_bytes": 280,
+      "serialized_model_bytes": 616,
+      "inventory": [
+        {
+          "path": "model.head.coef",
+          "dtype": "float64",
+          "shape": [
+            32
+          ],
+          "logical_bytes": 256,
+          "retained_bytes": 256
+        },
+        {
+          "path": "model.head.intercept",
+          "dtype": "float64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.head.output_bounds",
+          "dtype": "float64",
+          "shape": [
+            2
+          ],
+          "logical_bytes": 16,
+          "retained_bytes": 16
+        }
+      ]
+    },
+    "c0620": {
+      "complete_numeric_bytes": 34368,
+      "serialized_model_bytes": 34928,
+      "inventory": [
+        {
+          "path": "model.model.coef",
+          "dtype": "float64",
+          "shape": [
+            128
+          ],
+          "logical_bytes": 1024,
+          "retained_bytes": 1024
+        },
+        {
+          "path": "model.model.gamma",
+          "dtype": "float64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.model.intercept",
+          "dtype": "float64",
+          "shape": [],
+          "logical_bytes": 8,
+          "retained_bytes": 8
+        },
+        {
+          "path": "model.model.landmarks",
+          "dtype": "float64",
+          "shape": [
+            128,
+            32
+          ],
+          "logical_bytes": 32768,
+          "retained_bytes": 32768
+        },
+        {
+          "path": "model.model.output_bounds",
+          "dtype": "float64",
+          "shape": [
+            2
+          ],
+          "logical_bytes": 16,
+          "retained_bytes": 16
+        },
+        {
+          "path": "model.model.scaler.constant_mask",
+          "dtype": "bool",
+          "shape": [
+            32
+          ],
+          "logical_bytes": 32,
+          "retained_bytes": 32
+        },
+        {
+          "path": "model.model.scaler.divisor",
+          "dtype": "float64",
+          "shape": [
+            32
+          ],
+          "logical_bytes": 256,
+          "retained_bytes": 256
+        },
+        {
+          "path": "model.model.scaler.offset",
+          "dtype": "float64",
+          "shape": [
+            32
+          ],
+          "logical_bytes": 256,
+          "retained_bytes": 256
+        }
+      ]
+    }
+  },
+  "timings": {
+    "c0241": {
+      "warm_batch_nanoseconds": [
+        2699312,
+        1999796,
+        2356490,
+        3268328,
+        2083579,
+        2234681,
+        2247970,
+        2068498,
+        2306006
+      ],
+      "median_warm_batch_nanoseconds_per_row": {
+        "numerator": "1123985",
+        "denominator": "256"
+      }
+    },
+    "c0511": {
+      "warm_batch_nanoseconds": [
+        1876525,
+        1977393,
+        1851769,
+        1759453,
+        1965986,
+        1787504,
+        1910085,
+        1589113,
+        2163837
+      ],
+      "median_warm_batch_nanoseconds_per_row": {
+        "numerator": "1876525",
+        "denominator": "512"
+      }
+    },
+    "c0578": {
+      "warm_batch_nanoseconds": [
+        33038,
+        28922,
+        34030,
+        30665,
+        35342,
+        33179,
+        37886,
+        28432,
+        39318
+      ],
+      "median_warm_batch_nanoseconds_per_row": {
+        "numerator": "33179",
+        "denominator": "512"
+      }
+    },
+    "c0620": {
+      "warm_batch_nanoseconds": [
+        798702,
+        945719,
+        937245,
+        819794,
+        814305,
+        794076,
+        852592,
+        808267,
+        996412
+      ],
+      "median_warm_batch_nanoseconds_per_row": {
+        "numerator": "409897",
+        "denominator": "256"
+      }
+    }
+  },
+  "expected_gates": {
+    "P_cost": {
+      "candidate_id": "c0241",
+      "candidate_group": "P",
+      "accuracy_reference_id": "c0620",
+      "cost_reference_id": "c0578",
+      "accuracy_reference_test_mse_exact": {
+        "numerator": "4927476115720945441139700196708193",
+        "denominator": "10384593717069655257060992658440192"
+      },
+      "cost_reference_test_mse_exact": {
+        "numerator": "326808554442632304912922035304753583161",
+        "denominator": "680564733841876926926749214863536422912"
+      },
+      "cost_reference_numeric_bytes": 280,
+      "cost_reference_latency_exact": {
+        "numerator": "33179",
+        "denominator": "512"
+      },
+      "test_accuracy_cap_exact": {
+        "numerator": "54202237272930399852536702163790123",
+        "denominator": "103845937170696552570609926584401920"
+      },
+      "cost_reference_accuracy_pass": true,
+      "no_qualifying_candidate": false,
+      "accuracy_pass": true,
+      "memory_pass": false,
+      "latency_pass": false,
+      "accuracy_memory_pass": false,
+      "all_three_pass": false,
+      "candidate_test_mse_exact": {
+        "numerator": "87282520348889653826724377228937829657",
+        "denominator": "170141183460469231731687303715884105728"
+      },
+      "candidate_numeric_bytes": 72304,
+      "candidate_latency_exact": {
+        "numerator": "1123985",
+        "denominator": "256"
+      },
+      "accuracy_margin_exact": {
+        "numerator": "7612125995397566458358777981079539331",
+        "denominator": "850705917302346158658436518579420528640"
+      },
+      "memory_saving_bytes": -72024,
+      "latency_margin_exact": {
+        "numerator": "-2214791",
+        "denominator": "512"
+      },
+      "reason": "Observed fixed-reference operational screen; no population claim"
+    },
+    "CS_cost": {
+      "candidate_id": "c0511",
+      "candidate_group": "CS",
+      "accuracy_reference_id": "c0620",
+      "cost_reference_id": "c0578",
+      "accuracy_reference_test_mse_exact": {
+        "numerator": "4927476115720945441139700196708193",
+        "denominator": "10384593717069655257060992658440192"
+      },
+      "cost_reference_test_mse_exact": {
+        "numerator": "326808554442632304912922035304753583161",
+        "denominator": "680564733841876926926749214863536422912"
+      },
+      "cost_reference_numeric_bytes": 280,
+      "cost_reference_latency_exact": {
+        "numerator": "33179",
+        "denominator": "512"
+      },
+      "test_accuracy_cap_exact": {
+        "numerator": "54202237272930399852536702163790123",
+        "denominator": "103845937170696552570609926584401920"
+      },
+      "cost_reference_accuracy_pass": true,
+      "no_qualifying_candidate": false,
+      "accuracy_pass": true,
+      "memory_pass": false,
+      "latency_pass": false,
+      "accuracy_memory_pass": false,
+      "all_three_pass": false,
+      "candidate_test_mse_exact": {
+        "numerator": "85137855205230184955479574990327111",
+        "denominator": "166153499473114484112975882535043072"
+      },
+      "candidate_numeric_bytes": 72288,
+      "candidate_latency_exact": {
+        "numerator": "1876525",
+        "denominator": "512"
+      },
+      "accuracy_margin_exact": {
+        "numerator": "7928622157292274042895742358685429",
+        "denominator": "830767497365572420564879412675215360"
+      },
+      "memory_saving_bytes": -72008,
+      "latency_margin_exact": {
+        "numerator": "-921673",
+        "denominator": "256"
+      },
+      "reason": "Observed fixed-reference operational screen; no population claim"
+    }
+  },
+  "origin_files": {
+    "step24_cross_task/run/hmm_0/test.npz": "7c1619de70faae0d3154935d9cf5658e91f0caeadfb49c6f83f69dc3f7509472",
+    "step24_cross_task/run/hmm_0/predictions.npz": "35341c4bb74d098f904e87d0dbd071713ec808d474e5b447d7b3de4afd608389",
+    "step24_cross_task/run/hmm_0/selected_models.pkl": "95a81ebbf4c2293bf63b65cec3c847d94d5d22fc0690e5d05129d798e2d714a4",
+    "step24_cross_task/run/hmm_0/selected.json": "f58b76c80867f4b7bc96676ed7dc21e1fd87985c42c18baf5dc2bd20f21ed4c5",
+    "step24_cross_task/run/hmm_0/selected_model_metadata.json": "89b4d26f0ca425e818c79fd7d437ac4e9418662c6f9bb0066f4cec29eac43037",
+    "step24_cross_task/run/hmm_0/results.json": "c48e52c7efa1cbeeebefdd50c3d4cdf06dca2535b173e25051fe3f2cf693c4fe",
+    "step24_cross_task/run/hmm_0/timing.json": "15d08429d9c5efc082687d9d3674da3286e5c5c4bad16a922f34d4050c6a1f4c"
+  }
+}

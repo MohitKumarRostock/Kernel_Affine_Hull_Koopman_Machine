@@ -1,0 +1,19 @@
+# Recorded execution: CPython 3.12.14, Linux x86_64 LP64, glibc 2.41.
+# These are recorded package versions, not a claim of minimal dependencies.
+# Native KAHM evaluation inherits the pinned source/runtime and environment
+# records included in the final archive. It requires C++17/g++, GMP headers,
+# libgmp.so.10, libmpfi.so.0 (MPFI 1.5.4), and libmpfr.so.6 (MPFR 4.2.2).
+# Kernels compile locally from included sources. System libraries and Python
+# wheels are not bundled. Exact numeric replay is checked on this platform.
+# Do not set PYTHONOPTIMIZE or run scientific sources with python -O.
+numpy==2.3.5
+scipy==1.17.0
+scikit-learn==1.8.0
+joblib==1.5.3
+threadpoolctl==3.6.0
+mpmath==1.3.0
+# Report plots and rendering:
+matplotlib==3.10.8
+pillow==13.0.0
+# PDF compilation additionally uses a LaTeX distribution with the packages
+# declared by the included report source. The compiled PDF is supplied.

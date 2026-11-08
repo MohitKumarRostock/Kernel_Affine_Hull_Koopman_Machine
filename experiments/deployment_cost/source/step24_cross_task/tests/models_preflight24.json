@@ -1,0 +1,507 @@
+{
+  "schema": "step24-manufactured-model-preflight-v1",
+  "completed_utc": "2026-11-06T22:48:23.276895+00:00",
+  "passed": true,
+  "checks": [
+    "Training target map is population mean/SD; constant target uses divisor1",
+    "Ridge head constant axes use divisor1 and retain future variation before readout",
+    "Ridge folds head standardizer and physical target inverse; independent ordered-sum replay passes",
+    "HMM exported ridge uses the same fixed output map for task-kind and replication ids",
+    "Physical-unit output maps clip HMM to[-1,1] and Appliances only below0",
+    "All three HGB menus fit200 iterations; exported/native and independent tree traversals agree exactly",
+    "Full structured tree node fields, including count/gain/depth and padding, are charged",
+    "Nystrom support scalers zero support-constant axes and never clip later variable axes",
+    "All Nystrom landmark counts use the prescribed positive-distance bandwidth and eigenvalue floor",
+    "Compact Nystrom collapse agrees within frozen tolerance and omits dense normalization storage",
+    "Inventory counts shared array owners once and includes full allocations retained through views",
+    "Malformed/nonfinite inputs, changed menus, no-bandwidth case, hidden payloads and export drift fail closed"
+  ],
+  "check_groups": 12,
+  "invalid_cases_rejected": 13,
+  "manufactured_head_fits": 8,
+  "manufactured_nystrom_bases": 3,
+  "benchmark_model_fits": 0,
+  "benchmark_trajectories_generated": 0,
+  "real_dataset_rows_parsed": 0,
+  "ECG_or_reserve_access": false,
+  "manufactured_seed": 2026110624002,
+  "retained_tree_node_fields": [
+    "value",
+    "count",
+    "feature_idx",
+    "num_threshold",
+    "missing_go_to_left",
+    "left",
+    "right",
+    "gain",
+    "depth",
+    "is_leaf",
+    "bin_threshold",
+    "is_categorical",
+    "bitset_idx"
+  ],
+  "export_abs_factor": 1e-09,
+  "export_relative_tolerance": 1e-10,
+  "observations": [
+    {
+      "case": "ridge_appliances",
+      "diagnostics": {
+        "family": "ridge",
+        "training_rows": 192,
+        "feature_dimension": 8,
+        "target_offset": 60.04259534951268,
+        "target_scale": 13.958040259684106,
+        "alpha": 0.01,
+        "sklearn_alpha": 1.92,
+        "training_objective": 0.010505865777168845,
+        "head_scaler_evidence": {
+          "offset": [
+            -0.0373850072984675,
+            -0.07807300779851759,
+            0.1068395877107292,
+            -0.03803243488581964,
+            0.003143511878049505,
+            0.10189867221178527,
+            -0.02512300118780465,
+            2.75
+          ],
+          "scale": [
+            0.9567529710285123,
+            1.0237968590353819,
+            0.9878595561956468,
+            0.9925916149786224,
+            1.0230740115271766,
+            1.0510458513714813,
+            1.024869935029936,
+            1.0
+          ],
+          "training_constant_mask": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        "warnings": [],
+        "unclipped_export": {
+          "export_passed": true,
+          "checked_rows": 61,
+          "max_abs_difference": 1.4210854715202004e-14,
+          "max_relative_difference_with_unit_floor": 1.9691720061609984e-16,
+          "absolute_tolerance": 1.3958040259684107e-08,
+          "relative_tolerance": 1e-10,
+          "scope": "Implementation-fidelity gate for frozen operational forecasts"
+        },
+        "clipped_export": {
+          "export_passed": true,
+          "checked_rows": 61,
+          "max_abs_difference": 1.4210854715202004e-14,
+          "max_relative_difference_with_unit_floor": 1.9691720061609984e-16,
+          "absolute_tolerance": 1.3958040259684107e-08,
+          "relative_tolerance": 1e-10,
+          "scope": "Implementation-fidelity gate for frozen operational forecasts"
+        },
+        "numeric_bytes": 80,
+        "fit_and_export_seconds": 0.001489586997195147
+      }
+    },
+    {
+      "case": "ridge_hmm",
+      "diagnostics": {
+        "family": "ridge",
+        "training_rows": 192,
+        "feature_dimension": 8,
+        "target_offset": -0.010334446039287494,
+        "target_scale": 0.662182105684125,
+        "alpha": 0.0001,
+        "sklearn_alpha": 0.019200000000000002,
+        "training_objective": 0.06878282306636802,
+        "head_scaler_evidence": {
+          "offset": [
+            -0.0373850072984675,
+            -0.07807300779851759,
+            0.1068395877107292,
+            -0.03803243488581964,
+            0.003143511878049505,
+            0.10189867221178527,
+            -0.02512300118780465,
+            2.75
+          ],
+          "scale": [
+            0.9567529710285123,
+            1.0237968590353819,
+            0.9878595561956468,
+            0.9925916149786224,
+            1.0230740115271766,
+            1.0510458513714813,
+            1.024869935029936,
+            1.0
+          ],
+          "training_constant_mask": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        "warnings": [],
+        "unclipped_export": {
+          "export_passed": true,
+          "checked_rows": 61,
+          "max_abs_difference": 4.440892098500626e-16,
+          "max_relative_difference_with_unit_floor": 4.20224679811012e-16,
+          "absolute_tolerance": 1e-09,
+          "relative_tolerance": 1e-10,
+          "scope": "Implementation-fidelity gate for frozen operational forecasts"
+        },
+        "clipped_export": {
+          "export_passed": true,
+          "checked_rows": 61,
+          "max_abs_difference": 3.3306690738754696e-16,
+          "max_relative_difference_with_unit_floor": 3.3306690738754696e-16,
+          "absolute_tolerance": 1e-09,
+          "relative_tolerance": 1e-10,
+          "scope": "Implementation-fidelity gate for frozen operational forecasts"
+        },
+        "numeric_bytes": 88,
+        "fit_and_export_seconds": 0.0008129140042001382
+      }
+    },
+    {
+      "case": "hgb_leaves7",
+      "diagnostics": {
+        "family": "hgb",
+        "training_rows": 192,
+        "feature_dimension": 8,
+        "target_offset": 60.04259534951268,
+        "target_scale": 13.958040259684106,
+        "parameters": {
+          "loss": "squared_error",
+          "learning_rate": 0.1,
+          "max_iter": 200,
+          "min_samples_leaf": 20,
+          "l2_regularization": 1.0,
+          "max_bins": 255,
+          "early_stopping": false,
+          "categorical_features": null,
+          "max_depth": null,
+          "max_features": 1.0,
+          "warm_start": false,
+          "monotonic_cst": null,
+          "interaction_cst": null,
+          "random_state": 2026110623,
+          "max_leaf_nodes": 7
+        },
+        "tree_count": 200,
+        "node_count": 2598,
+        "retained_node_fields": [
+          "value",
+          "count",
+          "feature_idx",
+          "num_threshold",
+          "missing_go_to_left",
+          "left",
+          "right",
+          "gain",
+          "depth",
+          "is_leaf",
+          "bin_threshold",
+          "is_categorical",
+          "bitset_idx"
+        ],
+        "node_dtype_itemsize": 56,
+        "warnings": [],
+        "unclipped_export": {
+          "export_passed": true,
+          "checked_rows": 61,
+          "max_abs_difference": 0.0,
+          "max_relative_difference_with_unit_floor": 0.0,
+          "absolute_tolerance": 1.3958040259684107e-08,
+          "relative_tolerance": 1e-10,
+          "scope": "Implementation-fidelity gate for frozen operational forecasts"
+        },
+        "clipped_export": {
+          "export_passed": true,
+          "checked_rows": 61,
+          "max_abs_difference": 0.0,
+          "max_relative_difference_with_unit_floor": 0.0,
+          "absolute_tolerance": 1.3958040259684107e-08,
+          "relative_tolerance": 1e-10,
+          "scope": "Implementation-fidelity gate for frozen operational forecasts"
+        },
+        "numeric_bytes": 145552,
+        "fit_and_export_seconds": 0.0703367529931711
+      },
+      "manual_replay_bit_identical": true,
+      "full_node_bytes": 145488
+    },
+    {
+      "case": "hgb_leaves15",
+      "diagnostics": {
+        "family": "hgb",
+        "training_rows": 192,
+        "feature_dimension": 8,
+        "target_offset": 60.04259534951268,
+        "target_scale": 13.958040259684106,
+        "parameters": {
+          "loss": "squared_error",
+          "learning_rate": 0.1,
+          "max_iter": 200,
+          "min_samples_leaf": 20,
+          "l2_regularization": 1.0,
+          "max_bins": 255,
+          "early_stopping": false,
+          "categorical_features": null,
+          "max_depth": null,
+          "max_features": 1.0,
+          "warm_start": false,
+          "monotonic_cst": null,
+          "interaction_cst": null,
+          "random_state": 2026110623,
+          "max_leaf_nodes": 15
+        },
+        "tree_count": 200,
+        "node_count": 2826,
+        "retained_node_fields": [
+          "value",
+          "count",
+          "feature_idx",
+          "num_threshold",
+          "missing_go_to_left",
+          "left",
+          "right",
+          "gain",
+          "depth",
+          "is_leaf",
+          "bin_threshold",
+          "is_categorical",
+          "bitset_idx"
+        ],
+        "node_dtype_itemsize": 56,
+        "warnings": [],
+        "unclipped_export": {
+          "export_passed": true,
+          "checked_rows": 61,
+          "max_abs_difference": 0.0,
+          "max_relative_difference_with_unit_floor": 0.0,
+          "absolute_tolerance": 1.3958040259684107e-08,
+          "relative_tolerance": 1e-10,
+          "scope": "Implementation-fidelity gate for frozen operational forecasts"
+        },
+        "clipped_export": {
+          "export_passed": true,
+          "checked_rows": 61,
+          "max_abs_difference": 0.0,
+          "max_relative_difference_with_unit_floor": 0.0,
+          "absolute_tolerance": 1.3958040259684107e-08,
+          "relative_tolerance": 1e-10,
+          "scope": "Implementation-fidelity gate for frozen operational forecasts"
+        },
+        "numeric_bytes": 158320,
+        "fit_and_export_seconds": 0.0779956120022689
+      },
+      "manual_replay_bit_identical": true,
+      "full_node_bytes": 158256
+    },
+    {
+      "case": "hgb_leaves31",
+      "diagnostics": {
+        "family": "hgb",
+        "training_rows": 192,
+        "feature_dimension": 8,
+        "target_offset": 60.04259534951268,
+        "target_scale": 13.958040259684106,
+        "parameters": {
+          "loss": "squared_error",
+          "learning_rate": 0.1,
+          "max_iter": 200,
+          "min_samples_leaf": 20,
+          "l2_regularization": 1.0,
+          "max_bins": 255,
+          "early_stopping": false,
+          "categorical_features": null,
+          "max_depth": null,
+          "max_features": 1.0,
+          "warm_start": false,
+          "monotonic_cst": null,
+          "interaction_cst": null,
+          "random_state": 2026110623,
+          "max_leaf_nodes": 31
+        },
+        "tree_count": 200,
+        "node_count": 2826,
+        "retained_node_fields": [
+          "value",
+          "count",
+          "feature_idx",
+          "num_threshold",
+          "missing_go_to_left",
+          "left",
+          "right",
+          "gain",
+          "depth",
+          "is_leaf",
+          "bin_threshold",
+          "is_categorical",
+          "bitset_idx"
+        ],
+        "node_dtype_itemsize": 56,
+        "warnings": [],
+        "unclipped_export": {
+          "export_passed": true,
+          "checked_rows": 61,
+          "max_abs_difference": 0.0,
+          "max_relative_difference_with_unit_floor": 0.0,
+          "absolute_tolerance": 1.3958040259684107e-08,
+          "relative_tolerance": 1e-10,
+          "scope": "Implementation-fidelity gate for frozen operational forecasts"
+        },
+        "clipped_export": {
+          "export_passed": true,
+          "checked_rows": 61,
+          "max_abs_difference": 0.0,
+          "max_relative_difference_with_unit_floor": 0.0,
+          "absolute_tolerance": 1.3958040259684107e-08,
+          "relative_tolerance": 1e-10,
+          "scope": "Implementation-fidelity gate for frozen operational forecasts"
+        },
+        "numeric_bytes": 158320,
+        "fit_and_export_seconds": 0.08058406700001797
+      },
+      "manual_replay_bit_identical": true,
+      "full_node_bytes": 158256
+    },
+    {
+      "case": "nystrom_minmax01_32_0.1",
+      "basis_summary": {
+        "scaling": "minmax01",
+        "landmark_count": 32,
+        "gamma_multiplier": 0.1,
+        "gamma": 0.3307432421330925,
+        "positive_pair_count": 130815,
+        "reference_pairwise_squared_distance_median": 0.3023493370720469,
+        "eigenvalue_floor": 2.8730592642652512e-11,
+        "largest_eigenvalue": 28.730592642652514,
+        "smallest_eigenvalue_before_floor": 3.313324490035231e-15,
+        "floored_eigenvalue_count": 1,
+        "normalization_max_asymmetry": 0.0,
+        "eigensolver": "scipy.linalg.eigh(driver='evd')",
+        "fit_seconds": 0.00463216000207467,
+        "W_is_training_evidence_not_deployment": true
+      },
+      "unclipped_collapse_audit": {
+        "export_passed": true,
+        "checked_rows": 61,
+        "max_abs_difference": 5.1074811047158164e-11,
+        "max_relative_difference_with_unit_floor": 5.1074811047158164e-11,
+        "absolute_tolerance": 1e-09,
+        "relative_tolerance": 1e-10,
+        "scope": "Implementation-fidelity gate for frozen operational forecasts"
+      },
+      "clipped_collapse_audit": {
+        "export_passed": true,
+        "checked_rows": 61,
+        "max_abs_difference": 5.1074811047158164e-11,
+        "max_relative_difference_with_unit_floor": 5.1074811047158164e-11,
+        "absolute_tolerance": 1e-09,
+        "relative_tolerance": 1e-10,
+        "scope": "Implementation-fidelity gate for frozen operational forecasts"
+      },
+      "complete_numeric_bytes": 2472
+    },
+    {
+      "case": "nystrom_standard_128_1.0",
+      "basis_summary": {
+        "scaling": "standard",
+        "landmark_count": 128,
+        "gamma_multiplier": 1.0,
+        "gamma": 0.0789636492888844,
+        "positive_pair_count": 130815,
+        "reference_pairwise_squared_distance_median": 12.664055030455241,
+        "eigenvalue_floor": 5.443611278304525e-11,
+        "largest_eigenvalue": 54.43611278304525,
+        "smallest_eigenvalue_before_floor": 1.1901285260916883e-14,
+        "floored_eigenvalue_count": 1,
+        "normalization_max_asymmetry": 0.0,
+        "eigensolver": "scipy.linalg.eigh(driver='evd')",
+        "fit_seconds": 0.005070162995252758,
+        "W_is_training_evidence_not_deployment": true
+      },
+      "unclipped_collapse_audit": {
+        "export_passed": true,
+        "checked_rows": 61,
+        "max_abs_difference": 5.398348434937361e-12,
+        "max_relative_difference_with_unit_floor": 5.398348434937361e-12,
+        "absolute_tolerance": 1e-09,
+        "relative_tolerance": 1e-10,
+        "scope": "Implementation-fidelity gate for frozen operational forecasts"
+      },
+      "clipped_collapse_audit": {
+        "export_passed": true,
+        "checked_rows": 61,
+        "max_abs_difference": 5.398348434937361e-12,
+        "max_relative_difference_with_unit_floor": 5.398348434937361e-12,
+        "absolute_tolerance": 1e-09,
+        "relative_tolerance": 1e-10,
+        "scope": "Implementation-fidelity gate for frozen operational forecasts"
+      },
+      "complete_numeric_bytes": 9384
+    },
+    {
+      "case": "nystrom_minmax01_512_10.0",
+      "basis_summary": {
+        "scaling": "minmax01",
+        "landmark_count": 512,
+        "gamma_multiplier": 10.0,
+        "gamma": 33.07432421330925,
+        "positive_pair_count": 130815,
+        "reference_pairwise_squared_distance_median": 0.3023493370720469,
+        "eigenvalue_floor": 7.791763137826315e-12,
+        "largest_eigenvalue": 7.791763137826314,
+        "smallest_eigenvalue_before_floor": 4.434094817675381e-16,
+        "floored_eigenvalue_count": 1,
+        "normalization_max_asymmetry": 0.0,
+        "eigensolver": "scipy.linalg.eigh(driver='evd')",
+        "fit_seconds": 0.055147444996691775,
+        "W_is_training_evidence_not_deployment": true
+      },
+      "unclipped_collapse_audit": {
+        "export_passed": true,
+        "checked_rows": 61,
+        "max_abs_difference": 3.070876886113183e-12,
+        "max_relative_difference_with_unit_floor": 2.0407694133579108e-12,
+        "absolute_tolerance": 1e-09,
+        "relative_tolerance": 1e-10,
+        "scope": "Implementation-fidelity gate for frozen operational forecasts"
+      },
+      "clipped_collapse_audit": {
+        "export_passed": true,
+        "checked_rows": 61,
+        "max_abs_difference": 1.6493473253831326e-12,
+        "max_relative_difference_with_unit_floor": 1.6493473253831326e-12,
+        "absolute_tolerance": 1e-09,
+        "relative_tolerance": 1e-10,
+        "scope": "Implementation-fidelity gate for frozen operational forecasts"
+      },
+      "complete_numeric_bytes": 37032
+    }
+  ],
+  "software": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "scikit-learn": "1.8.0"
+  },
+  "source_sha256": {
+    "src/models24.py": "0ac7f225317a215377a1e221c9290e26b00b054f4bdf001a7af3604f5715f12a",
+    "tests/check_models24.py": "23857a9d2976d2e0dde1be15bc644bdc113983bd4d6209867a2e939216e38c5f",
+    "../step23_cross_task/PROTOCOL.json": "e7109b924bc0899aa0d97c9091828c29068bd0f2b67714e754e59d594df588ef"
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "status": "PASS",
+  "assurance": "CONDITIONAL_ON_STORED_EXACT_FEATURE_COORDINATES",
+  "scope": "Fixed-cohort source, certificate, prediction, and policy replay; no new model fits or timing measurements.",
+  "arithmetic_selfchecks": {
+    "integer_outward_sqrt_perfect_nonperfect_zero": true,
+    "zero_distance_conflict_exact_dual": true,
+    "outside_range_targets_retained": true,
+    "block_upper_averaging_counterexample": true,
+    "pair_polygon_closed_and_degenerate_cases": 7
+  },
+  "beijing_pm25": {
+    "cohort_sizes": {
+      "pm25": {
+        "train": 877,
+        "decision": 329,
+        "test": 331
+      }
+    },
+    "head_checks": {
+      "heads": 36,
+      "prediction_and_loss_receipts": 72,
+      "exact_query_anchor_distances": 380160
+    },
+    "screening_checks": {
+      "class_blocks": 396,
+      "exact_block_pair_distances": 180198,
+      "whole_cohort_class_intervals": 36,
+      "decision_classes": 18,
+      "excluded_classes": [],
+      "eligible_heads": 18,
+      "choices": {
+        "screened": "raw_minmax01::affine",
+        "exhaustive_same_rule": "raw_minmax01::affine",
+        "ordinary_mse_minimizer": "kahm_minmax01_cap4_p2::affine"
+      },
+      "avoided_decoder_fits": 0,
+      "epsilon": "10042944/298082653",
+      "recorded_certificate_seconds": "1298769781531/68719476736",
+      "recorded_net_stage_seconds_saved": "-1298769781531/68719476736",
+      "positive_screening_utility_demonstrated": false
+    }
+  },
+  "bike_sharing": {
+    "cohort_sizes": {
+      "casual": {
+        "train": 303,
+        "decision": 172,
+        "test": 177
+      },
+      "registered": {
+        "train": 303,
+        "decision": 172,
+        "test": 177
+      },
+      "cnt": {
+        "train": 303,
+        "decision": 172,
+        "test": 177
+      }
+    },
+    "head_checks": {
+      "heads": 108,
+      "prediction_and_loss_receipts": 216,
+      "exact_query_anchor_distances": 603072
+    },
+    "screening_checks": {
+      "distinct_pair_certificates": 12,
+      "retained_pair_invocations": 60,
+      "search_executions": 33,
+      "tasks": {
+        "casual": {
+          "selection": {
+            "candidate_id": "raw_standard::affine",
+            "head_id": "head35:3b51b9ede11b3874b472115b9aff30ac030d08c1557fb15232479c1aff3a1f03",
+            "abstained": false,
+            "deployment_payload_bytes": 2262,
+            "decision_risk": {
+              "lower": "227943143948426101763414473206680060009928945100445859810651946689526558737423691/8544541444817322833232505180942595472082718084223763696286876191213424745853747200",
+              "upper": "227943143948426101763414473206680060009928945100445859810651946689526558737423691/8544541444817322833232505180942595472082718084223763696286876191213424745853747200",
+              "width": "0"
+            }
+          },
+          "epsilon": "306489/9898000",
+          "ordinary_fits": 2,
+          "triggered_fits": 2,
+          "additional_fits_avoided": 0,
+          "median_paired_seconds_saved": "159690869/274877906944",
+          "certificate_calls_per_triggered_run": 0,
+          "positive_incremental_certificate_utility": false
+        },
+        "registered": {
+          "selection": {
+            "candidate_id": null,
+            "head_id": null,
+            "abstained": true
+          },
+          "epsilon": "504811/14425830",
+          "ordinary_fits": 36,
+          "triggered_fits": 36,
+          "additional_fits_avoided": 0,
+          "median_paired_seconds_saved": "-57528461295/274877906944",
+          "certificate_calls_per_triggered_run": 6,
+          "positive_incremental_certificate_utility": false
+        },
+        "cnt": {
+          "selection": {
+            "candidate_id": null,
+            "head_id": null,
+            "abstained": true
+          },
+          "epsilon": "2322921/61862500",
+          "ordinary_fits": 36,
+          "triggered_fits": 36,
+          "additional_fits_avoided": 0,
+          "median_paired_seconds_saved": "147153861633/274877906944",
+          "certificate_calls_per_triggered_run": 6,
+          "positive_incremental_certificate_utility": false
+        }
+      },
+      "totals": {
+        "actual_search_head_fits": 848,
+        "pair_certificate_calls": 60,
+        "exact_selected_pair_distances": 880,
+        "consistent_panel_incremental_utility": false
+      }
+    }
+  },
+  "limitations": [
+    "Representation transforms are conditional on the retained exact dyadic feature coordinates; native feature-generation roundoff is not recertified.",
+    "Head byte counts are reconstructed exactly; representation payload byte counts remain inherited inputs to the archived policy.",
+    "Historical timing aggregates are recomputed from retained execution records, without a new timing campaign or independent attestation of execution times.",
+    "Three Bike targets share one dataset and satisfy cnt = casual + registered; they are not independent dataset replications.",
+    "The replay does not refit encoders or heads, verify every original lifecycle event, or establish population-risk or future-response coverage."
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "status": "PASS",
+  "candidate_risks_recomputed": 2930,
+  "ablation_configurations": 1440,
+  "results": [
+    {
+      "study": "training_transfer",
+      "task": "seoul",
+      "observations": 91,
+      "candidate_risks_checked": 6,
+      "primary_criterion_pass": false
+    },
+    {
+      "study": "temporal_selection",
+      "task": "metro_traffic",
+      "observations": 84,
+      "candidate_risks_checked": 6,
+      "primary_criterion_pass": false
+    },
+    {
+      "study": "temporal_selection",
+      "task": "tetouan_zone1",
+      "observations": 91,
+      "candidate_risks_checked": 7,
+      "primary_criterion_pass": false
+    },
+    {
+      "study": "mixed_head_selection",
+      "task": "household_power2009",
+      "observations": 91,
+      "candidate_risks_checked": 6,
+      "primary_criterion_pass": true
+    },
+    {
+      "study": "mixed_head_selection",
+      "task": "jena_temperature2016",
+      "observations": 86,
+      "candidate_risks_checked": 7,
+      "primary_criterion_pass": false
+    },
+    {
+      "study": "affine_comparison",
+      "task": "household_power2010",
+      "observations": 81,
+      "candidate_risks_checked": 9,
+      "primary_criterion_pass": false
+    },
+    {
+      "study": "affine_comparison",
+      "task": "jena_temperature2017",
+      "observations": 91,
+      "candidate_risks_checked": 9,
+      "primary_criterion_pass": false
+    },
+    {
+      "study": "affine_ablation",
+      "task": "household_power2010",
+      "configurations": 720,
+      "effects": {
+        "project": {
+          "pairs": 360,
+          "exact_equal": 360,
+          "exact_improved": 0,
+          "exact_worsened": 0
+        },
+        "recenter": {
+          "pairs": 360,
+          "exact_equal": 192,
+          "exact_improved": 116,
+          "exact_worsened": 52
+        },
+        "clip": {
+          "pairs": 360,
+          "exact_equal": 360,
+          "exact_improved": 0,
+          "exact_worsened": 0
+        }
+      },
+      "independent_confirmation": false
+    },
+    {
+      "study": "affine_ablation",
+      "task": "jena_temperature2017",
+      "configurations": 720,
+      "effects": {
+        "project": {
+          "pairs": 360,
+          "exact_equal": 356,
+          "exact_improved": 4,
+          "exact_worsened": 0
+        },
+        "recenter": {
+          "pairs": 360,
+          "exact_equal": 220,
+          "exact_improved": 114,
+          "exact_worsened": 26
+        },
+        "clip": {
+          "pairs": 360,
+          "exact_equal": 360,
+          "exact_improved": 0,
+          "exact_worsened": 0
+        }
+      },
+      "independent_confirmation": false
+    }
+  ],
+  "scope": "Losses and primary decisions recomputed from retained prediction intervals/binary64 outputs and original targets. This replay does not rerun training, feature construction, or optimization; exposed-period ablations remain diagnostic.",
+  "wall_seconds": 2.9536662569989858
+}

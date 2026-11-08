@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "title": "Matched-computation calibration of a learned geometry hierarchy",
+  "scope": "Constructed independent-episode mechanism experiment. Fresh tuned native KAHM fits. No natural-data or universal KAHM superiority claim.",
+  "regimes": [
+    "repairable",
+    "irreducible"
+  ],
+  "n_repetitions_per_regime": 12,
+  "sizes": {
+    "support": 256,
+    "train": 512,
+    "validation": 256,
+    "cal": 4096,
+    "test": 1024
+  },
+  "data_law": {
+    "history": "X_j=S_j*(0.9+U_j), independent equiprobable signs and U_j uniform[-0.1,0.1]",
+    "repairable": "Y=0.8*X_1*X_2+E",
+    "irreducible": "Y=0.8*V_1*V_2+E; V is an independent hidden draw from the history law",
+    "noise": "E uniform[-0.05,0.05], independent of every history",
+    "one_origin_per_episode": true,
+    "support_labels_generated": false,
+    "draw_order": "X signs then jitters; irreducible hidden V signs then jitters; target noise",
+    "law_status": "Same published mechanism as existing learned-KAHM decision study; new sampling pools and geometry fits"
+  },
+  "target_bounds": [
+    -0.85,
+    0.85
+  ],
+  "loss": "ordinary scalar squared prediction error; predictions clipped to declared target bounds; no loss capping",
+  "kappa": 2.0,
+  "mse_tolerance": 0.1,
+  "tolerance_rationale": "Inherited published mechanism-study tolerance and decoder budget; retained before new data, not selected for certificate success.",
+  "prefixes": [
+    2,
+    6
+  ],
+  "geometry_blocks": [
+    2,
+    4
+  ],
+  "geometry_menu": {
+    "scalings": [
+      "minmax01",
+      "standard"
+    ],
+    "local_caps": [
+      1,
+      2
+    ],
+    "concentrations": [
+      0.5,
+      4.0,
+      16.0,
+      64.0
+    ],
+    "max_geometry_inputs": 256,
+    "max_local_references": 24,
+    "power_tau": 1e-06,
+    "native_dimension_default": "min(20,input_dimension,local_reference_count-1); cap2 is the ambient-default baseline here, cap1 is the smaller alternative",
+    "geometry_fit": "support inputs only; shared partition references across local caps; no held-out clipping",
+    "raw_inputs_retained": false
+  },
+  "ridge_grid": [
+    0.0,
+    0.0001,
+    0.01
+  ],
+  "head": {
+    "family": "scalar BlockBoundedRidge; free intercept; sum of retained block Euclidean coefficient norms <=2",
+    "metric": "maximum Euclidean distance across retained soft blocks",
+    "tolerance": 1e-07,
+    "max_iter": 20000,
+    "coefficient_inward_margin": 1e-12,
+    "guard": "Radially shrink only if norm sum exceeds2-1e-12; recompute optimal training-mean intercept and objective/gap",
+    "nonconvergence": "Retain the finite feasible candidate with its recorded gap; no row exclusion"
+  },
+  "selection": {
+    "common_geometry": "Minimum largest-prefix validation MSE across all16 geometries and3 ridges; tie by geometry index then ridge index",
+    "geometry_order": "MinMax01 then standard; cap1 then2; concentration0.5,4,16,64",
+    "each_prefix_head": "Minimum validation MSE across the3 ridge candidates for the chosen common geometry; first ridge index breaks ties",
+    "nesting": "Every selected prefix retains identical earlier soft blocks, scaling, local cap and concentration. Zero extension preserves the decoder budget.",
+    "calibration_reselection": false,
+    "postselection_refit": false
+  },
+  "sample_sizes": [
+    256,
+    1024,
+    4096
+  ],
+  "primary_n": 1024,
+  "block_sizes": [
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "block_partition": "Consecutive disjoint complete blocks in original episode order; eachmaximal4096 draw reused by leading prefixes",
+  "certificate_methods": {
+    "hierarchy": "Maximum of five individually KL-calibrated centered block SSE/(b-1) endpoints using n/b independent blocks and the sharp scalar score range",
+    "recycled": "The identical signed-dual SSE values summed/n lower-bound one full-sample empirical Lipschitz infimum; maximize these values over five partitions and use one empirical-minimum KL event at sample size n and loss range1.7^2",
+    "combined": "Maximum of the already jointly covered hierarchy and recycled endpoints, with no additional optimization or confidence event",
+    "upper": "Common one-sided bounded-loss KL upper endpoint for the fixed fitted model",
+    "upper_only": "Cheapest fitted class passing U<=0.1; cannot exclude any entire class"
+  },
+  "confidence_delta": 0.05,
+  "confidence_events": 1008,
+  "alpha": 4.96031746031746e-05,
+  "event_count": "24 learning cases *2 retained classes *3 sample prefixes *(5 block lower +1 recycled empirical-minimum lower +1 fitted upper)",
+  "confidence_scope": "Joint over every listed class, case, sample prefix, and endpoint, conditional on all construction and selection data",
+  "allocation_note": "Equal per-endpoint alpha; the five-member block family receives five times the aggregate failure budget of the one recycled endpoint. Per-b recycled endpoints and their maximum are covered by the same empirical-infimum event.",
+  "solver": {
+    "algorithm": "unchanged signed-edge proximal FISTA; all signed multipliers retained",
+    "max_iter": 4000,
+    "tolerance": 1e-07,
+    "check_every": 20,
+    "unconverged": "Retain feasible dual lower value and actual gap; no solver-based sample rejection",
+    "arithmetic_failure": "Abort study stage explicitly; no replacement stream or silent numerical fallback"
+  },
+  "primary_endpoint": {
+    "repairable": "L_prefix2>0.1 and common U_prefix6<=0.1: refinement resolved",
+    "irreducible": "Both retained classes have lower endpoints>0.1: joint class exclusion",
+    "comparison": "At n1024, count paired both/hierarchy-only/recycled-only/neither outcomes over12 independent complete learning runs per regime",
+    "inference": "Descriptive paired procedure counts; no population superiority test over training data",
+    "secondary": "All endpoints and decisions at n256 and4096, combined endpoints, and terminal forecast quality"
+  },
+  "cost": {
+    "primary_order": "Retained prefixes2 then6; actual retained numerical payload is recorded and must increase in that order",
+    "fit": "Charge full geometry construction, unused regrouped banks, all feature encoding,96 candidate head fits and validation",
+    "certificate": "Shared block-dual solve time plus separate hierarchy/recycled/upper postprocessing; no new QP for recycled calibration",
+    "deployment": "Separate uncached1024-row forward queries for each retained prefix, encoder and head times, numerical payload and pickle bytes",
+    "not_claimed": "Fit-skipping savings, equality of simplex dimension and runtime, or end-to-end interval assurance"
+  },
+  "known_risk_scope": "Irreducible constant zero belongs to every declared class and attains known target variance; repairable noise variance is a Bayes floor, not an asserted learned-class optimum. Terminal conditional risks average over fresh sampled X, not exact integrated fitted population risks.",
+  "stream_ledger": {
+    "master": 2026110617,
+    "domain": 1195724617,
+    "formula": "uint64 SeedSequence([master,domain,regime_index,repetition,pool_index]).generate_state(1)",
+    "pool_order": [
+      "support",
+      "train",
+      "validation",
+      "cal",
+      "test",
+      "geometry"
+    ],
+    "cases": "case=12*regime_index+repetition; regime order repairable,irreducible",
+    "count": 144,
+    "prior_exclusion": "All explicit inherited Step10 reservations and Steps11-16 scientific/manufactured streams; no overlap",
+    "manufactured_seeds": "2026110617000 through2026110617099 reserved for preflight only"
+  },
+  "stages": [
+    "freeze",
+    "fit",
+    "independent fit audit",
+    "calibration",
+    "independent calibration audit",
+    "terminal",
+    "independent terminal audit"
+  ],
+  "reporting": "Every candidate, selected configuration, confidence endpoint, unresolved decision, optimization gap and runtime retained. No new data until freeze and preflight gates. No source or protocol changes after freeze."
+}

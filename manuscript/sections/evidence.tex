@@ -1,0 +1,83 @@
+\section{Empirical evaluation}
+\label{sec:evidence}
+The evaluation examines controlled population-risk decisions, natural-data class exclusion, finite-cohort class-versus-head diagnosis, and predictive and operational performance. These studies have distinct protocols and evaluation laws; their confidence allocations apply within each declared study.
+
+\subsection{Controlled necessity, adequacy, and calibration limits}
+In the controlled study, each history coordinate is
+$X_j=S_j(0.9+V_j)$, with independent equiprobable signs and
+$V_j\sim\operatorname{Unif}[-0.1,0.1]$.
+The repairable target is $Y=0.8X_1X_2+E$, where
+$E\sim\operatorname{Unif}[-0.05,0.05]$.
+The irreducible control replaces $X$ in the response by an independent unavailable history with the same law.
+Both targets and clipped fitted outputs lie in $[-0.85,0.85]$, so the squared-loss range is $B=2.89$.
+
+Twelve complete learning repetitions per regime select a geometry shared between their two prefixes before independent calibration, preserving two- and six-coordinate nested prefixes. The sensitivity budget is $\kappa=2$ and the design tolerance is MSE $0.1$. Both calibrations reuse the same block optimization outputs and the same fitted forecasts. At the prespecified primary size $n=1024$, both resolve all twelve repetitions in each regime (Table~\ref{tab:controlled}). In the repairable regime, the coarse class is excluded and the refined fitted head is accepted; in the independent-future regime, both classes are excluded. The conclusion applies to the selected geometry, not every geometry considered during development.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Regime & Calibration size & Both resolve & Block only & Recycled only & Neither\\
+\midrule
+Repairable & 256 (secondary) & 0 & 0 & 0 & 12\\
+Repairable & 1024 (primary) & 12 & 0 & 0 & 0\\
+Irreducible & 256 (secondary) & 1 & 0 & 11 & 0\\
+Irreducible & 1024 (primary) & 12 & 0 & 0 & 0\\
+\bottomrule
+\end{tabular}
+\caption{Controlled decision counts with matched optimization outputs. Both methods share representations, observations, block programs and fitted upper endpoints. Recycled calibration adds no optimization solve; it still has arithmetic and bookkeeping costs.}
+\label{tab:controlled}
+\end{table}
+
+The simultaneous allocation is $\alpha=0.05/1008$ per designated endpoint. At $n=256$, even a zero-loss fitted head has KL upper endpoint
+\[
+B(1-\alpha^{1/n})=0.109752706592>0.1.
+\]
+Refinement acceptance is therefore impossible at that size under the declared formula, regardless of how sharply the lower risk is optimized. At least 282 independent observations are necessary even for the zero-loss extreme. This is a formula-specific resolution limit, not a universal sample-complexity lower bound.
+
+At $n=256$, recycled calibration resolves eleven additional irreducible-regime repetitions by excluding both classes, but it adds no primary decisions. Neither improved lower endpoints nor their reuse changes the terminal predictions. The experiment uses guarded numerical replay and common feature sentinels; it is not an end-to-end interval proof of native feature construction.
+
+\subsection{Natural-data exclusion of a specified class}
+The natural-data exclusion study uses a fixed cohort of 8192 PTB-XL patients \citep{wagner2020ptbxl,wagner2022ptbxl103}. The bounded task predicts a clipped, normalized lead-II amplitude 40 ms ahead from 32 past measurements spanning 310 ms. The selected two-coordinate map uses min--max preprocessing, local cap two, concentration $0.5$, and maximum-block Euclidean sensitivity budget $\kappa=1$.
+
+Exact rational evaluation of retained dual witnesses, conditional on the inherited canonical-feature enclosures, gives
+\[
+R^\star_{\mathrm{cohort},\,2,\,1}
+\ \geq\ 0.00643206
+\ >\ 0.0058458874,
+\]
+where the lower display is rounded downward and the right-hand value approximates the unchanged conservative requirement threshold. The retained threshold is an upper enclosure of 1.1 times the frozen reference's cohort MSE; exceeding it proves failure of the unchanged 10\% allowance. Every decoder in this specified class fails that requirement. This is stronger than the failure of its fitted head, but it concerns the census rather than a future-patient population.
+
+The six- and fourteen-coordinate lower endpoints are $0.00515356$ and $0.00495880$, rounded downward, and do not exclude those classes. Their separately selected geometries are not a nested feature hierarchy. A retained witness additionally gives the necessary budget $\kappa\geq54.82579$ for adequacy of the same two-coordinate geometry, rounded downward. It is not sufficient and is coordinate dependent. The evaluated KAHM predictors did not satisfy the joint accuracy--storage criterion.
+
+\subsection{Adequate classes with unsuccessful fitted heads}
+A complementary diagnosis addresses already-examined Bike Sharing decision cohorts \citep{fanaee2013bike}: three related targets, 18 fixed maps per target, and 172 observations per cohort. The class consists of $2$-Lipschitz functions into $[0,1]$ under Euclidean distance on stored binary64 features. Original labels outside $[0,1]$ remain in the losses. These coordinates are treated as exact inputs; native transform error is not enclosed.
+
+Verified primal assignments and weak-dual witnesses bracket the full finite-cohort class optimum. All 54 classes have constructive upper bounds below their unchanged tolerances. In 39 of those classes both inherited fitted heads have risk lower bounds above the tolerance; all 108 fitted heads have strictly positive certified empirical excess over the class optimum. The maximum class-risk bracket width is approximately $2.181\times10^{-14}$ normalized MSE.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Target & Adequate classes & Inadequate classes & Both heads fail & Heads with positive excess\\
+\midrule
+Casual & 18 & 0 & 3 & 36\\
+Registered & 18 & 0 & 18 & 36\\
+Total & 18 & 0 & 18 & 36\\
+\bottomrule
+\end{tabular}
+\caption{Finite-cohort class-versus-head diagnosis on Bike Sharing. Total equals casual plus registered; the rows are not independent domain replications. Adequacy witnesses use the assessed labels and are not predictors trained before assessment.}
+\label{tab:diagnosis}
+\end{table}
+
+The consequence is decisive for interpreting the earlier failure to screen these classes. If $R_c^\star\leq U_c\leq\tau_c$, every sound lower bound obeys $L_c\leq\tau_c$ and cannot exclude class $c$ at that tolerance. A stronger optimizer or pair search cannot repair that particular exclusion objective. This does not identify the cause of each fitted head's gap: narrower head families, training, regularization, sample limitations and assessment shift remain possible. It also does not show that a future-accurate decoder can be learned from the available training data.
+
+\subsection{Predictive and operational limits}
+The operational studies assess whether certification reduces computation or deployment cost. A prospective screening study on Beijing air-quality data \citep{chen2015beijing} yielded no class exclusion among 18 candidates and added 18.899588 seconds. Its three-target follow-up avoided zero additional fits. The deployment comparison uses five replications of one HMM law and one chronological Appliances record \citep{candanedo2017appliances}. Its two KAHM procedures each met the observed accuracy allowance in six of six cases but achieved byte saving and latency criteria in none, giving zero joint utility passes. These cases establish neither screening savings nor a deployment advantage.
+
+Follow-ups with full-anchor Lipschitz heads and certified optimization resolution did not consistently close strong-comparator gaps. Some improved an inherited head substantially while still missing the prespecified external baseline requirement. Candidates resolved during optimization analysis had already been fitted; their elimination is not a count of saved fits. The two-domain affine-interface comparison did not meet its primary criterion. An affine ablation on those exposed periods provides diagnostic evidence only.
+
+A frozen affine forecasting study assesses three newly examined periods in known domains. A raw-feature primary policy meets all six prespecified finite-cohort inequalities requiring at most 5\% greater MSE than a conventional pool and its ridge subset (Appendix~\ref{app:numerical}). All 270 primary numerical packets are accepted. The narrowest accuracy margin is 0.0228 percentage points; some monthly comparisons exceed the allowance. This is a positive result for that fixed policy and cohort criterion, not a statistical noninferiority or population-risk result. KAHM's Jena MSE remains 31.82\% above ridge in the primary-seed secondary panel.
+
+The practical lesson is that certificates can change the justified diagnosis without changing a forecast or reducing its cost. Their value must be measured against the specific decision to be supported, the class actually certified, and the full cost of obtaining the evidence.
+

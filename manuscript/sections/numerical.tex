@@ -1,0 +1,72 @@
+\section{Supporting study: conditional numerical output fidelity}
+\label{app:numerical}
+The frozen affine forecasting study evaluates whether a numerically checked affine interface can meet a declared finite-cohort accuracy allowance under strong baseline controls. It is separate from population class-risk certification.
+
+\subsection{Frozen policy and assessed periods}
+At each daily 23:00 forecast origin, the task predicts the same variable 24 hours ahead using the 24 hourly snapshots available at or before that origin. Household uses minute-00 minute-average power, Jena minute-00 ten-minute temperature observations, and Metro reported hourly traffic volume. Household September--November 2008 is a newly assessed historical holdout within the retained workflow; Jena September--November 2018 and Metro July--September 2018 are forward periods. Each has 90 eligible queries. These are new assessed periods in known domains, not evidence of unseen-domain generalization or universal historical non-exposure.
+
+Three chronological development folds precede final fitting. The candidate factory includes two raw maps, four Nystr\"om maps (widths 8 and 24), and twelve KAHM maps (caps $4,12,20$ and prefixes one and two), crossing min--max and standard scaling. Five mean-loss ridge penalties, $10^{-6},10^{-4},10^{-2},1,100$, give 90 affine candidates. A training-derived metric scalar remains fixed. Coefficients are contracted if needed to Euclidean norm at most two, the intercept is recentered exactly, and normalized output is clipped to $[0,1]$.
+
+Selection minimizes pooled exact physical-unit development MSE with fixed lexical ties. Seed 3901 is primary; seeds 4301 and 4302 provide descriptive fitting sensitivities. The conventional reference pool has 44 candidates; its five-candidate ridge subset is a second reference. Only selected final candidates are assessed, with every policy/seed forecast alias sealed before its target is released.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Task (units) & Raw RMSE & Pool RMSE & Ridge RMSE & $\Delta$ vs pool & $\Delta$ vs ridge\\
+\midrule
+Household (kW) & 1.0969 & 1.0848 & 1.0709 & $+2.24\%$ & $+4.91\%$\\
+Jena ($ {}^\circ$C) & 2.6062 & 2.5437 & 2.5437 & $+4.98\%$ & $+4.98\%$\\
+Metro (vehicles/h) & 519.2678 & 531.2858 & 523.9567 & $-4.47\%$ & $-1.78\%$\\
+\bottomrule
+\end{tabular}
+\caption{Primary raw-feature policy on the three assessment periods. Percentage changes are in MSE, not RMSE. The two Jena references select the same ridge model.}
+\label{tab:accuracy}
+\end{table}
+
+The primary criterion is the conjunction of six exact inequalities
+$20\,\mathrm{SSE}_{\rm raw}\leq21\,\mathrm{SSE}_{\rm reference}$,
+acceptance of every primary packet, and the prescribed independent audit. All pass. Household is 4.9120\% above ridge MSE and Jena is 4.9772\% above its coincident references, leaving margins of 0.0880 and 0.0228 percentage points. The result is deterministic for these cohorts, not a statistical noninferiority test.
+
+At the primary seed the all-representation selector chooses KAHM, raw, and Nystr\"om on Household, Jena, and Metro. Its descriptive pass does not replace the primary raw policy. KAHM RMSE is 1.0828, 2.9204, and 530.6287 respectively; its Jena MSE is 31.82\% above ridge. Raw and Nystr\"om predictions are unchanged across the three seeds, which reuse the same targets.
+
+\subsection{Exact reference and checker contract}
+Trusted stored binary64 feature coordinates $z$, a fixed rational affine head, and training target offset $a$ and positive span $s$ define
+\[
+F(z)=a+s\,\clip_{[0,1]}(b+\beta^{\mathsf T}z),
+\qquad \|\beta\|_2\leq2.
+\]
+The reference lies in $[a,a+s]$ and is at most $2s$-Lipschitz in the supplied coordinates. The unchanged packet producer and independent checker bind the expected deployment, query, feature bytes, and reported output. Integer arithmetic evaluates the exact reference and outward numerical bounds. Acceptance requires
+\[
+|\widehat y-F(z)|\leq s\,2^{-40}.
+\]
+The reported binary64 value may lie outside an exact range endpoint by up to this budget. The claim concerns the stored head and supplied coordinates. It does not certify an exact training optimum, ideal feature-transform arithmetic, raw-input robustness, authentication, or coverage of a future label.
+
+Across 15 distinct selected affine deployments and 90 queries each, all 1350 honest outputs are accepted. Every tested float32 conversion changes the reported value; 1349 are over budget and rejected, while the one in-budget case is accepted. All 45 prescribed wrong-query, wrong-deployment, and stale-feature challenges are rejected. A deliberately limited binding-consistency control accepts all self-consistent float32 cases; it is not a comprehensive security baseline.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Task & Plain inference & Full certified & Cached checker & Cached exact\\
+\midrule
+Household & 0.018224 & 0.244745 & 0.061065 & 0.017733\\
+Jena & 0.018218 & 0.240890 & 0.061034 & 0.017559\\
+Metro & 0.018190 & 0.245817 & 0.060262 & 0.017273\\
+\bottomrule
+\end{tabular}
+\caption{Primary raw-policy costs in milliseconds: median across 32 prescribed queries of the per-query median over ten repeats after three warmups. Full inference includes the map and head; cached comparisons use trusted features and static context. Local I/O, process startup and network cost are outside these primitive timings.}
+\label{tab:cost}
+\end{table}
+
+Full certified inference is approximately 13.2--13.5 times plain inference on this panel. The cached checker is slower than direct exact evaluation of the affine reference, which it recomputes. This implementation is neither a succinct proof system nor a verification speedup. Sampled packet sizes are 447--453 bytes, separate from feature and static-context storage. The tiny numerical tolerance has not been linked to an externally motivated application decision, and detecting a precision conversion alone does not establish harmful forecast error.
+
+\subsection{Limits and reproducibility}
+All months remain in the aggregate comparison. September raw MSE exceeds ridge by 10.28\% on Household and 12.53\% on Metro; Jena exceeds its reference by 8.78\%. Monthly results are descriptive. The 270 dated targets are dependent observations from three known domains; no population guarantee follows from their aggregate pass.
+
+The retained execution contains 27 producer commands and three independent audit phases without outcome-based reruns. The reproduction records include exact losses, numerical packets, event logs, timings, and selected configurations. A standalone demonstration reproduces three honest acceptances and three expected float32 rejections on the fixed first queries. Hashes establish artifact consistency within retained records, not external attestation.
+
+Data come from the UCI Household power and Metro traffic datasets \citep{hebrail2006household,hogue2019metro}, and the MPI-BGC Beutenberg weather archives \citep{mpibgcweather}. Source URLs and hashes are retained in the original package. Official-archive byte identity of the pinned Household mirror remains unverified. Eligibility metadata was accessed before the measurement freeze as declared. These details bound the freshness and provenance claims.
+
+Earlier manufactured-configuration experiments supplied native feature-evaluator enclosures under their own assumptions. The affine study's use of exact stored coordinates does not inherit such enclosures for its public-data feature pipeline. Certifying that additional computation would be a separate extension; it is not needed for the conditional numerical contract reported here.
+

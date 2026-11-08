@@ -1,0 +1,216 @@
+{
+  "population_size": 8192,
+  "row_order": "Step18 cal then terminal; each existing order unchanged",
+  "selected_kappa": {
+    "2": 1.0,
+    "6": 1.0,
+    "14": 1.0
+  },
+  "selected_candidate_ids": {
+    "2": "k001",
+    "6": "k145",
+    "14": "k532"
+  },
+  "feature_blocks": {
+    "2": [
+      [
+        0,
+        2
+      ]
+    ],
+    "6": [
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        6
+      ]
+    ],
+    "14": [
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        6,
+        14
+      ]
+    ]
+  },
+  "selected_geometry": {
+    "2": {
+      "id": "g00",
+      "index": 0,
+      "scaling": "minmax01",
+      "cap": 2,
+      "concentration": 0.5
+    },
+    "6": {
+      "id": "g05",
+      "index": 5,
+      "scaling": "minmax01",
+      "cap": 8,
+      "concentration": 4.0
+    },
+    "14": {
+      "id": "g19",
+      "index": 19,
+      "scaling": "standard",
+      "cap": 8,
+      "concentration": 64.0
+    }
+  },
+  "reference_id": "b138",
+  "reference_slot": "hgb_15",
+  "reference_mse": 0.005314443086300962,
+  "reference_mse_lower": 0.005314443086300957,
+  "reference_mse_upper": 0.0053144430863009675,
+  "threshold": 0.005845887394931059,
+  "threshold_lower": 0.0058458873949310515,
+  "threshold_upper": 0.005845887394931065,
+  "fitted_canonical_mse_upper": {
+    "2": 0.006615914152420976,
+    "6": 0.006501553282918662,
+    "14": 0.006452186932522905
+  },
+  "no_model_change": true,
+  "no_new_prediction": true,
+  "no_reserved_patient_access": true,
+  "input_file_sha256": {
+    "step18_natural_decisions/study/run/cal/features.npz": "036cf320cbb5ba65f34968e1a132e74d51c6cc39e5a2fd3bc740cc33bea0d3d0",
+    "step18_natural_decisions/study/run/cal/observations.npz": "5e1a87ec82a0a8aff6cb696635176e3df2aec5a080d7adbf98903975a2bb01fc",
+    "step18_natural_decisions/study/run/cal/predictions.npz": "119d8ef2ca1ed1577ed2401fe94635ef88c9884570608602cc58114e3087f902",
+    "step18_natural_decisions/study/run/cal_seal.json": "82263d66fefb5966feea159808a69d1a43602a3e8a203a1b2844572eef2b82fe",
+    "step18_natural_decisions/study/run/cal_validation.json": "7fc7c1375200c6a700ecd34af3b1876c9d307970e8f58222f155c432547b3a6f",
+    "step18_natural_decisions/study/run/census/results.json": "037dfa13c949f459d30703b2066cd4498df81f89ba076ae6f6a1ec757e47d242",
+    "step18_natural_decisions/study/run/census_seal.json": "aceaecc0dc4c1f2241a43f7d3f7bcb9b6212ea6c7074177303faa8746658ab61",
+    "step18_natural_decisions/study/run/fit/selected.json": "00eb7756f4c9063cd673fdeefb9a56715ffa6dffa8b47e2ade332cd1cdc00aa5",
+    "step18_natural_decisions/study/run/fit/selected_models.pkl": "d2682acdc7bf89f9044985d9d85ac47b9461c0e980eb5aa582cf4d3be9f5ee37",
+    "step18_natural_decisions/study/run/fit_seal.json": "7e57776968d1c68428e9800177f431406e3f3872e4214da0259fdf480a992775",
+    "step18_natural_decisions/study/run/fit_validation.json": "1e25d14f1fc4164b5115d91c70edabf037f20677fe3bcdc14f2c07cc3fb73208",
+    "step18_natural_decisions/study/run/freeze.json": "393229c92bd45c76c5c66d7d701c2d710b9240ca711b73d1793f23451986869a",
+    "step18_natural_decisions/study/run/terminal/features.npz": "b8427aae832f768b758d7e143970cf65a6bc562233cdddb8d78eb8f68a498676",
+    "step18_natural_decisions/study/run/terminal/observations.npz": "270b7463132fcf4e12fb81f2da65c5a69da070c9735eeeda129aa2c66ca373d7",
+    "step18_natural_decisions/study/run/terminal/predictions.npz": "75ae5baa575f796e5b25343efd7c24579dc76c174187ee2edff6a4eb64e43695",
+    "step18_natural_decisions/study/run/terminal_seal.json": "52d8d371e284cfb398441901bd2a632870b37be8ee4d45d65507ccd0798723a5",
+    "step18_natural_decisions/study/run/verification.json": "5c21e18df84257644b636785e13746616d7f0713eb88f367e9095f19ce6cb25a"
+  },
+  "input_arrays_sha256": "f09d0aa0d1b04b94a71ad8338ccb1d71e2a355092e8341fcf1afb61f70aa3a74",
+  "freeze_sha256": "178f6bdb1a54bfbf015d6db069d51718f271d8ce389ac606762c081f9ff78595",
+  "array_shapes": {
+    "Y": [
+      8192
+    ],
+    "patient_id": [
+      8192
+    ],
+    "ecg_id": [
+      8192
+    ],
+    "origin": [
+      8192
+    ],
+    "F_2": [
+      8192,
+      2
+    ],
+    "F_lo_2": [
+      8192,
+      2
+    ],
+    "F_hi_2": [
+      8192,
+      2
+    ],
+    "block_radius_2": [
+      8192,
+      1
+    ],
+    "pred_2": [
+      8192
+    ],
+    "prediction_lo_2": [
+      8192
+    ],
+    "prediction_hi_2": [
+      8192
+    ],
+    "loss_lower_2": [
+      8192
+    ],
+    "loss_upper_2": [
+      8192
+    ],
+    "F_6": [
+      8192,
+      6
+    ],
+    "F_lo_6": [
+      8192,
+      6
+    ],
+    "F_hi_6": [
+      8192,
+      6
+    ],
+    "block_radius_6": [
+      8192,
+      2
+    ],
+    "pred_6": [
+      8192
+    ],
+    "prediction_lo_6": [
+      8192
+    ],
+    "prediction_hi_6": [
+      8192
+    ],
+    "loss_lower_6": [
+      8192
+    ],
+    "loss_upper_6": [
+      8192
+    ],
+    "F_14": [
+      8192,
+      14
+    ],
+    "F_lo_14": [
+      8192,
+      14
+    ],
+    "F_hi_14": [
+      8192,
+      14
+    ],
+    "block_radius_14": [
+      8192,
+      3
+    ],
+    "pred_14": [
+      8192
+    ],
+    "prediction_lo_14": [
+      8192
+    ],
+    "prediction_hi_14": [
+      8192
+    ],
+    "loss_lower_14": [
+      8192
+    ],
+    "loss_upper_14": [
+      8192
+    ],
+    "reference_pred": [
+      8192
+    ]
+  }
+}

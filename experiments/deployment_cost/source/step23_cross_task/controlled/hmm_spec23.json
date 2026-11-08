@@ -1,0 +1,57 @@
+{
+  "schema": "step23-controlled-hmm-specification-v1",
+  "study_phase": "prospective specification; no benchmark trajectories generated in Step23",
+  "state_order": ["negative_large", "negative_small", "positive_large", "positive_small"],
+  "initial_state_probabilities": {"numerators": [1, 1, 1, 1], "denominator": 4},
+  "transition": {
+    "numerators": [[465, 31, 15, 1], [31, 465, 1, 15], [15, 1, 465, 31], [1, 15, 31, 465]],
+    "denominator": 512,
+    "interpretation": "Independent sign flip probability1/32 and large/small amplitude flip probability1/16 per unit-time step"
+  },
+  "emission": {
+    "numerators": [[24, 6, 1, 1], [5, 18, 8, 1], [1, 1, 6, 24], [1, 8, 18, 5]],
+    "denominator": 32,
+    "symbol_numerators": [-2, -1, 1, 2],
+    "symbol_denominator": 2,
+    "stationary_observation_probabilities": {"numerators": [31, 33, 33, 31], "denominator": 128},
+    "stationary_mean": 0,
+    "stationary_second_moment": {"numerator": 157, "denominator": 256}
+  },
+  "observation_order": "Emit at initial time0, then transition before each later emission",
+  "time_unit": "one abstract simulation step",
+  "history_length": 32,
+  "history_order": "oldest observation first, newest last",
+  "horizons": [1, 4, 16],
+  "primary_horizon": 4,
+  "target_array_indices_zero_based": [32, 35, 47],
+  "trajectory_length_with_targets": 48,
+  "trajectory_length_support_only": 32,
+  "replication_ids": [0, 1, 2, 3, 4],
+  "rows_per_replication": {"support": 512, "train": 3072, "validation": 1536, "test": 8192},
+  "one_example_per_independently_initiated_trajectory": true,
+  "role_codes": {"support": 0, "train": 1, "validation": 2, "test": 3},
+  "randomness": {
+    "bit_generator": "NumPy PCG64DXSM",
+    "seed_sequence_entropy": ["2301", "replication_id", "role_code", "2026110623"],
+    "base_seed": 2026110623,
+    "namespace": 2301,
+    "categorical_sampling": "Uniform integer draws with bounds4,512,32 and cumulative integer probabilities",
+    "integer_call_order": "For each row: initialstate; emission0; then transition/emission for times1..length-1"
+  },
+  "oracle": {
+    "conditioning": "Exactly the same32raw observations as the learned input",
+    "prior": "Stationary uniform prior immediately before the first observation",
+    "uses_hidden_state": false,
+    "uses_earlier_history": false,
+    "uses_future_observations": false,
+    "model_parameters_known": true,
+    "role": "Informationally matched Bayes benchmark with known-generative-model knowledge, not a learned practical comparator",
+    "arithmetic": "Arbitrary-precision integer forward weights and exact rational conditional future-symbol law",
+    "mean": "belief * transition^h * emission * symbol_values",
+    "variance": "belief * transition^h * emission * symbol_values^2 minus mean^2",
+    "regret": "(clipped_prediction - oracle_mean)^2",
+    "oracle_used_for_training_or_validation_selection": false,
+    "learned_multistep_rollout_or_Koopman_claim": false
+  },
+  "interpretive_limit": "Excessrisk over the finite-history Bayes oracle does not by itself identify unrestricted informationloss of a KAHM state. A low-dimensional exact-real state can be injective on discrete history support."
+}

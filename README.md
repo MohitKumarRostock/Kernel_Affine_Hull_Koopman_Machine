@@ -20,7 +20,7 @@ This research studies how to retain useful information in geometric representati
 
 The central experiment uses 64 independent repetitions under each of four simulation laws. Its 40 adjusted paired comparisons favor KAHM local-position features over KAHM memberships in six of eight law–predictor settings. Comparisons with affine features, positive-kernel features, and raw histories are mixed. These findings support task-specific evaluation of enrichment.
 
-The publication branch supplies the paper, protocol, primary comparison table, and a checker for arithmetic based on the reported summary statistics. It does not supply the complete experiment runner, task roster, repetition-level execution release, or numerical archives. See the linked reproduction guide before choosing a check.
+The enrichment branch supplies the paper and a central saved-loss bundle with 17 original evidence records. An independent checker rebuilds all 40 primary comparisons from the complete selected-loss table. A separate supplementary decoder-capacity bundle includes its original experiment source, archived records, and verification, audit and full-rerun commands. The central experiment's original generator, runner, exact task roster and numerical model/forecast archives remain unavailable; saved-loss analysis does not regenerate its predictions. See the linked reproduction guide for each command's scope.
 
 ### Risk certificates
 
@@ -29,6 +29,16 @@ The publication branch supplies the paper, protocol, primary comparison table, a
 The framework combines lower bounds on the best class risk with upper bounds for admissible predictors to support exclusion, acceptance, or an unresolved decision. Population conclusions require the stated sampling, calibration, and numerical assumptions. Other experiments assess capacity on fixed datasets or the numerical evaluation of stored forecasts.
 
 The risk branch includes seven experiment groups and a driver that recomputes checks from fixed records. Replaying those records, refitting the original models, and collecting new observations are distinct tasks. Its guide explains what each command does and which inputs it uses.
+
+## Active branches and historical archive
+
+| Entry point | Purpose |
+| --- | --- |
+| [`main`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/main) | Repository navigation and the original Koopman-machine software and reproducibility records below |
+| [`paper/geometry-induced-soft-state-clean-2026-11-02`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02) | Predictive enrichment: central saved-loss analysis and the supplementary capacity experiment |
+| [`research/risk-certificates-consolidated-2026-11-08`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) | Risk certificates: seven experiment groups, fixed-record checks and a worked class-adequacy example |
+
+The retained historical archive is [`archive/pre-manuscript-cleanup-2026-11-02`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/5123365917ae630b684f8a3bebb0294ee695ce7a). Commit `5123365917ae630b684f8a3bebb0294ee695ce7a` defines its immutable contents. The [branch archive catalog](docs/BRANCH_ARCHIVE.json) records the retained historical head identities and their preservation links. The research index identifies other historical studies by commit. These records preserve their original protocols and outcomes; they are not extra repetitions of the central enrichment experiment.
 
 ## Related studies and original software
 

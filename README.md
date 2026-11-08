@@ -1,87 +1,40 @@
 # Kernel Affine Hull Koopman Machine
 
-## Current forecasting manuscript and four-arm study
+## Geometry-induced representations for forecasting
 
-**Geometry-Induced Soft-State Abstractions for Forecasting: Predictive Enrichment with Kernel Affine Hull Machines** is the current forecasting manuscript.
+A geometry-induced state abstraction summarizes an observed history through its affinities to reference regions. Such a summary can have a useful geometric interpretation while still losing distinctions needed for prediction. When a fitted forecaster performs poorly, its error alone does not identify whether the representation, the permitted predictor class, or the fitted model is responsible.
 
-The new G/P/K/R study has completed **32 independent repetitions and 256 tasks**, with independent numerical audit passed. On the primary P-selected shared bank, local position improves memberships-only nonlinear loss by **69.201%**, and KAHM enrichment improves the common coordinates by **10.459%**. Both establish their 3% margins. KAHM improves matched RBF by only **0.0292%**, leaving its 3% superiority margin unestablished. Linear KAHM loss is **1.111% higher** than P but satisfies the 5% noninferiority criterion: **three of four primary criteria** are established.
+This research studies how to retain useful information in geometric representations and how to assess their forecasting limits. Kernel Affine Hull Machines (KAHMs) provide the main reconstruction method; affine and positive-kernel reconstructions provide comparison methods.
 
-These findings support useful geometric enrichment under the specified direct readouts; they do not establish KAHM-specific superiority or autonomous soft-state dynamics. Secondary independently selected banks and earlier policy studies retain separate evidential scopes.
+## Choose a research question
 
-- [Main manuscript PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/papers/soft_state_forecasting/main.pdf) and [supplement](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/papers/soft_state_forecasting/supplement.pdf)
-- [Individual editable source files](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-soft-state-ablation-2026-11-02/papers/soft_state_forecasting/) and [build guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/papers/soft_state_forecasting/README_BUILD.md)
-- [Primary comparison table](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/extensions/soft_state_ablation_20261102/analysis/primary_contrasts.csv), [study protocol](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/extensions/soft_state_ablation_20261102/PROTOCOL.md), and [audit receipt](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/extensions/soft_state_ablation_20261102/verification/independent_audit_summary.json)
-- [Research and evidence index](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-soft-state-ablation-2026-11-02/docs/RESEARCH_INDEX.md)
+| Question | Contribution | Reading and code |
+| --- | --- | --- |
+| What can a geometry-induced abstraction predict, and when can its state evolve autonomously? | Analysis of prediction limits and Koopman closure for geometric soft states. | [Foundational preprint](https://arxiv.org/abs/2609.32652v3) |
+| What information should accompany geometric memberships? | Explicit recovery relations for normalization factors and weighted local coordinates, followed by matched forecasting comparisons. | [Predictive enrichment](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02) and its [reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/REPRODUCIBILITY.md) |
+| Could any predictor in a specified representation class meet an error requirement? | A hierarchy of lower risk bounds, calibrated decisions, and experiments distinguishing class limitations from unsuccessful fitted predictors. | [Risk certificates](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) and its [reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/REPRODUCIBILITY.md) |
 
-Scientific source was published before production as [commit `2b7d19b5`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/2b7d19b5b47f46b5b21b28d24960688f7969d96f). The branch links above identify the current document and result edition. Earlier manuscripts and frozen studies remain available below.
+### Predictive enrichment
 
-## Earlier dimension-selected forecasting manuscript
+**Predictive Enrichment of Geometry-Induced Soft-State Abstractions: Information Retention and Decoder Access** asks what a forecasting model can gain when geometric memberships are augmented. Memberships with log normalizers recover the reconstruction scores. Membership-weighted local coordinates can preserve the input under explicit positivity and rank conditions. Whether a fitted predictor benefits also depends on its architecture, regularization, and training data.
 
-**Kernel Affine Hull Features for Time-Series Forecasting: Feature Spans,
-Bounded Corrections, and Matched Evaluation** studies reconstruction-derived
-feature spaces, bounded residual corrections, and their forecasting value.
-The manuscript specifies the native local-dimension policy and evaluates
-procedure-specific validation selection before calibration and test.
-It uses anonymous TMLR review formatting.
+The central experiment uses 64 independent repetitions under each of four simulation laws. Its 40 adjusted paired comparisons favor KAHM local-position features over KAHM memberships in six of eight law–predictor settings. Comparisons with affine features, positive-kernel features, and raw histories are mixed. These findings support task-specific evaluation of enrichment.
 
-- [Main manuscript PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript.pdf)
-- [Supporting studies PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/tmlr_integration/review/KAHM_Supplementary_Studies.pdf)
-- [Complete editable LaTeX source archive](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/tmlr_integration/review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
-- [Scientific findings and all six primary comparisons](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/dimension_forecasting/FINDINGS.md)
-- [Study code, protocol, and reproduction commands](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/dimension_forecasting/README.md)
-- [Manuscript build instructions and verification records](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/kahm-manuscript-dimension-revision-2026-11-01/extensions/tmlr_integration/manuscript/README_BUILD.md)
+The publication branch supplies the paper, protocol, primary comparison table, and a checker for arithmetic based on the reported summary statistics. It does not supply the complete experiment runner, task roster, repetition-level execution release, or numerical archives. See the linked reproduction guide before choosing a check.
 
-The principal experiment compares ten complete procedures on **192 task
-suites**, with **24 independent repetition aggregates** as the inferential
-units. The dimension-selected bounded KAHM procedure reduces nonlinear
-aggregate normalized MSE by **9.01%** relative to independently selected common
-features and by **8.01%** relative to raw-input RBF; the prespecified margins
-are established for these comparisons. Together with linear-control
-noninferiority, **three of six primary criteria** are established. The complete
-joint criterion remains unmet, and KAHM has **4.08% higher** aggregate error
-than the selected non-KAHM policy.
+### Risk certificates
 
-Selecting the cap improves nonlinear aggregate error by **3.26%** relative to
-the historical cap-two procedure, while native cap twenty increases it by
-**8.39%**. Dimension selection is therefore part of the forecasting procedure;
-these results do not establish a universal advantage for larger subspaces or
-for KAHM. Earlier supporting studies retain their original configurations and
-evidential scope.
+**A Hierarchy of Risk Certificates for Forecasting Representations** asks whether a feature map and a specified predictor class can meet a mean-squared-error requirement. The class includes a distance and a limit on how much predictions may change as features move apart. This sensitivity restriction is part of the claim.
 
-## Risk certificates for forecasting representations
+The framework combines lower bounds on the best class risk with upper bounds for admissible predictors to support exclusion, acceptance, or an unresolved decision. Population conclusions require the stated sampling, calibration, and numerical assumptions. Other experiments assess capacity on fixed datasets or the numerical evaluation of stored forecasts.
 
-**A Hierarchy of Risk Certificates for Forecasting Representations** develops
-normalized block-risk lower bounds and calibrated decisions for declared
-representation-decoder classes. Learned KAHM dictionaries provide a concrete
-implementation. The complete main paper contains the proofs; the experimental
-supplement contains the detailed protocols and secondary results.
+The risk branch includes seven experiment groups and a driver that recomputes checks from fixed records. Replaying those records, refitting the original models, and collecting new observations are distinct tasks. Its guide explains what each command does and which inputs it uses.
 
-- [Main manuscript PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/certified_forecasting/paper/main.pdf)
-- [Experimental supplement PDF](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/certified_forecasting/paper/supplement.pdf)
-- [Complete editable LaTeX source archive](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/certified_forecasting/review/Risk_Certificates_Manuscript_Source.zip)
-- [Manuscript source and build instructions](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/certified_forecasting/paper/README_BUILD.txt)
-- [Dimension-policy findings](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/dimension_certificates/FINDINGS.md)
-- [Study code, protocol, and reproduction commands](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-manuscript-dimension-revision-2026-11-01/extensions/dimension_certificates/README.md)
+## Related studies and original software
 
-The targeted dimension-policy study uses **26 fitting repetitions** and a
-study-wide allocation over **4,680 designated one-sided statements**.
-Validation-selected caps improve descriptive test error in **18 repetitions**
-and tie in eight relative to cap two. The selected-forecast certificate
-decisions remain unchanged. Improved fitted accuracy is distinct from improved
-class-exclusion resolution; the manuscript retains that distinction and the
-separate scope of the historical studies.
+The [research index](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/docs/RESEARCH_INDEX.md) links the earlier controlled, capacity, correction, and model-selection studies with their original results. Their different targets, populations, and comparison criteria should be interpreted separately.
 
-## Research materials and availability
-
-The [earlier forecasting branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/kahm-manuscript-dimension-revision-2026-11-01) and
-[certificate branch](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-manuscript-dimension-revision-2026-11-01) contain the reviewed manuscripts,
-editable sources, computational code, protocols, analysis tables, and audit
-receipts. The large numerical-records archives are separately supplied and
-are not included in these Git branches. Replaying saved numerical records
-requires those archives; the study guides identify their checksums and the
-commands for fresh computation.
-
-The original Koopman-machine implementation and its documentation follow below.
+The material below concerns the original Koopman-machine software on this default branch. The two papers above use their own existing branches and reproduction instructions.
 
 ## Original Koopman-machine software
 
@@ -181,7 +134,3 @@ A persistent archival identifier such as a DOI should be cited once an immutable
 ## Repository
 
 https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine
-
-The completed four-arm results and computational audit were published and hash-verified in [commit `65ecf679`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/65ecf679796cc38b2342e2a4c12fa0226dc9ac78), separately from the frozen scientific source and manuscript edition.
-
-The completed manuscript edition, editable source and document verification are published at [commit `6c39a003`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/6c39a003e61ace058851ec6badca3e8dd13ef183).

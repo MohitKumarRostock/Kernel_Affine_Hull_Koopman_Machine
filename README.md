@@ -38,7 +38,7 @@ The risk branch includes seven experiment groups and a driver that recomputes ch
 | [`paper/geometry-induced-soft-state-clean-2026-11-02`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02) | Feature augmentation: central saved-loss analysis and the supplementary capacity experiment |
 | [`research/risk-certificates-consolidated-2026-11-08`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) | Prediction-risk bounds: seven experiment groups, fixed-record checks and a worked example of predictor-class capacity |
 
-The [study archive](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/5123365917ae630b684f8a3bebb0294ee695ce7a) provides code, data and protocols at commit `5123365917ae630b684f8a3bebb0294ee695ce7a`. The [source index](docs/BRANCH_ARCHIVE.json) identifies code snapshots for individual studies. Each study has its own observations and analysis; its results are not additional repetitions of the central feature-augmentation experiment.
+The [study archive](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/archive/pre-manuscript-cleanup-2026-11-02/extensions) provides code, data and protocols for the supporting experiments. The [source index](docs/BRANCH_ARCHIVE.json) records their exact scientific source identifiers. Each study has its own observations and analysis; its results are not additional repetitions of the central feature-augmentation experiment.
 
 ## Related studies and original software
 

@@ -1,129 +1,33 @@
 # Reproducibility
 
-This repository provides a reproducible reference environment and experiment workflow for the Kernel Affine Hull Koopman Machine (KAHKM).
+Reproduction commands are organized by study and by the inputs they use. Statistical analysis of stored losses, numerical checks of stored forecasts and regeneration of observations and fitted models have different requirements.
 
-The repository is intentionally independent of any particular journal, conference, or publication venue.
+## Study commands and evidence
 
-## Reference platform
+| Task | Instructions | Scope |
+| --- | --- | --- |
+| Recompute the central feature-augmentation comparisons | [Saved-loss analysis](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/reproduction/score_enrichment/README.md) | Reconstructs statistical comparisons from the supplied per-run loss table |
+| Verify or regenerate the supplementary predictor-capacity experiment | [Predictor-capacity experiment](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/reproduction/capacity_followup/README.md) | Provides source, stored records, verification, analysis and full-rerun commands for that separate experiment |
+| Analyze the supporting forecasting studies | [Supporting-study index](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/archive/pre-manuscript-cleanup-2026-11-02/docs/RESEARCH_INDEX.md) | Each study specifies its own observations, experimental protocol and available checks |
+| Recompute the prediction-risk experiments | [Prediction-risk reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/REPRODUCIBILITY.md) | Replays the documented numerical and statistical checks from stored experiment records |
 
-The reference computational environment is:
+The central feature-augmentation experiment does not supply its original data generator, experiment runner, exact task roster, execution environment, fitted model states or forecast arrays. Its saved-loss checker verifies the analysis of the supplied losses; it cannot regenerate the observations or predictions that produced them. The storage size of numerical archives and the availability of source code, input definitions and environment records are separate constraints.
 
-- Apple Silicon (`arm64`)
-- Apple M1
-- macOS
-- Python 3.14
-- native ARM64 execution
-- Homebrew under `/opt/homebrew`
+The supplementary predictor-capacity experiment and the supporting studies have their own data and protocols. Their records do not replace missing inputs from the central experiment. The prediction-risk guide likewise distinguishes a replay of stored results from refitting models or collecting new observations.
 
-The captured reference-platform metadata are stored under:
+## Numerical library on this branch
 
-`provenance/reference_arm64_environment/`
-
-## Python dependencies
-
-`requirements.txt` contains the direct Python dependencies used by the project.
-
-`requirements-lock-arm64.txt` records the complete resolved Python package environment used for the reference Apple Silicon configuration.
-
-Local virtual-environment directories are intentionally excluded from version control.
-
-## Creating the reference environment on Apple Silicon
-
-Install native Homebrew Python 3.14 if necessary:
+The [library overview](README.md#numerical-library) describes the reusable reconstruction and forecasting modules. Install their direct dependencies with:
 
 ```bash
-/opt/homebrew/bin/brew install python@3.14
+python -m pip install -r requirements.txt
+python -c "import kernel_affine_hull_koopman_machines"
 ```
 
-Create the reference environment from a fresh clone:
+The [dependency file](requirements.txt) specifies NumPy, SciPy, scikit-learn, joblib, Numba and tqdm. These pins describe the numerical library dependencies. Use each study's environment instructions for its experiment commands.
 
-```bash
-bash scripts/bootstrap_arm64.sh
-```
+Matching package versions alone does not specify an entire execution environment. Record the Python version, operating system, architecture and numerical libraries when running experiments. Where a study checks exact input or output hashes, its verification requires byte-identical arrays and stops if those hashes differ.
 
-Activate it:
+## Identifying the source used
 
-```bash
-source .venv-arm64/bin/activate
-```
-
-Verify the environment and core project imports:
-
-```bash
-python scripts/verify_environment.py
-```
-
-A successful verification terminates with:
-
-```text
-ENVIRONMENT VERIFICATION PASSED
-```
-
-## Reference dependency versions
-
-The principal direct dependencies are:
-
-- NumPy 2.4.4
-- SciPy 1.17.1
-- scikit-learn 1.8.0
-- Matplotlib 3.10.9
-- Gymnasium 1.3.0
-- joblib 1.5.3
-- Numba 0.67.0
-- tqdm 4.70.1
-
-The lock file is authoritative for the complete resolved environment.
-
-## Environment provenance
-
-The `provenance/` directory records the software and computational environment used for the reference reproduction workflow.
-
-It intentionally excludes machine serial numbers, hardware UUIDs, credentials, local editor configuration, and virtual-environment directories.
-
-## Reproduction principles
-
-The repository follows these principles for reproducible experimental results:
-
-1. Experiment parameters are stored in version-controlled configuration or manifest files.
-2. Random seeds are explicit and recorded for every stochastic run.
-3. Training, tuning, and final evaluation data are separated explicitly.
-4. The 27-job reference experiment records every scheduled attempt, exit status and log, including failures.
-5. Unaggregated experimental outputs are supplied where available, and missing outputs are identified.
-6. Aggregated results are derived programmatically from raw outputs.
-7. Tables and figures are generated programmatically.
-8. Every reported result is traceable to the runs that produced it.
-9. The exact source commit and execution environment are recorded.
-10. Distributed files have cryptographic checksums.
-
-## Experimental reproduction
-
-Environment reproduction and scientific-result reproduction are treated as separate stages.
-
-The environment bootstrap establishes a validated computational environment. Experiment manifests, raw-data capture, run ledgers, result indexing, and full reproduction commands are maintained separately so that each stage can be audited independently.
-
-## Evidence map
-
-The evidence summary is:
-
-`reproduction/REPRODUCIBILITY_EVIDENCE.md`
-
-Its machine-readable counterpart is:
-
-`reproduction/reproducibility_evidence.json`
-
-The principal evidence layers are:
-
-- `reproduction/raw_data/DATASET_CARD.md` for raw scientific inputs;
-- `reproduction/run_accounting/README.md` for coverage checks of archived runs;
-- `reproduction/prospective_campaigns/duffing_reference_27/README.md` for the separate 27-job Duffing reference experiment;
-- `reproduction/reported_results.tsv` for the mapping from reported results to source code and data.
-
-The archived Duffing reference search contains records for 18 of its 27 scheduled jobs. The separate 27-job reference experiment records every attempt, exit status, log and output checksum. These are records of different executions.
-
-The execution log covers every attempt in the 27-job experiment. The other
-archives do not establish that every failed attempt was saved.
-
-## Environment scope
-
-The reference environment is the documented native Apple Silicon configuration. Results produced with another environment require the corresponding software and platform records.
-
+Use the exact commit and study protocol associated with each analysis. The [source index](docs/BRANCH_ARCHIVE.json) records source identifiers, and [CITATION.cff](CITATION.cff) contains software citation metadata. The [study index](TMLR.md) links the two research questions and their evidence guides.

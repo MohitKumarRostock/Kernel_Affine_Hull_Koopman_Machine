@@ -1,142 +1,44 @@
 # Kernel Affine Hull Koopman Machine
 
-## Reconstruction-based representations for forecasting
+This repository provides numerical methods for kernel affine hull reconstruction and forecasting, together with code and evidence for two studies of forecasting representations. A reconstruction-based representation assigns normalized weights to local models according to how well they reconstruct an observed time-series history. The studies ask which additional features help prediction and how to assess the best prediction error achievable within a specified predictor class.
 
-A reconstruction-based representation maps an observed time-series history to normalized similarity weights for a set of reference regions. Each weight measures how well a local model reconstructs the history. Normalization makes the weights easy to compare, but it can remove information needed to predict future observations. When a fitted forecaster performs poorly, its error alone does not identify whether the representation, the permitted predictor class, or the fitted model is responsible.
+## Forecasting studies
 
-This research studies how to retain useful information in geometric representations and how to assess their forecasting limits. Kernel Affine Hull Machines (KAHMs) provide the main reconstruction method; affine and kernel-weighted averaging reconstructions provide comparison methods.
-
-## Choose a research question
-
-| Question | Contribution | Reading and code |
+| Study | Scientific question | Code and evidence |
 | --- | --- | --- |
-| What can normalized reconstruction weights predict, and when do they support an autonomous transition model? | Prediction limits and conditions for a closed Koopman model of the representation. | [Foundational preprint](https://arxiv.org/abs/2609.32652v3) |
-| Which additional features should accompany normalized reconstruction weights? | Explicit recovery relations for normalization factors and weighted local coordinates, followed by matched forecasting comparisons. | [Feature augmentation](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02) and its [reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/REPRODUCIBILITY.md) |
-| Could any predictor in a specified representation class meet an error requirement? | A hierarchy of lower risk bounds, calibrated decisions, and experiments distinguishing class limitations from unsuccessful fitted predictors. | [Prediction-risk bounds](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) and its [reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/REPRODUCIBILITY.md) |
+| **Feature Augmentation for Forecasting with Reconstruction-Based Representations** | Which normalization factors and local coordinates should accompany normalized reconstruction weights? | [Study guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02), [reproduction instructions](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/REPRODUCIBILITY.md) |
+| **A Hierarchy of Lower Bounds on Prediction Risk for Forecasting Representations** | Can any predictor in a specified class meet a mean-squared-error requirement? | [Study guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08), [reproduction instructions](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/REPRODUCIBILITY.md) |
 
-### Feature augmentation
+The feature-augmentation study supplies the central per-run loss records and a checker for its statistical comparisons. Its separate predictor-capacity experiment includes experiment source and regeneration commands. The [supporting studies](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/archive/pre-manuscript-cleanup-2026-11-02/docs/RESEARCH_INDEX.md) cover controlled forecasting comparisons, representation dimension, preprocessing, residual prediction, feature correction and common-weight feature ablation. Each study has its own observations, predictors and comparison criteria.
 
-**Feature Augmentation for Forecasting with Reconstruction-Based Representations** asks what a forecasting model can gain when geometric memberships are augmented. Memberships with log normalizers recover the reconstruction scores. Membership-weighted local coordinates can preserve the input under explicit positivity and rank conditions. Whether a fitted predictor benefits also depends on its architecture, regularization, and training data.
+The prediction-risk study provides seven experiment groups and commands that recompute checks from stored records. Its claims distinguish population risk, predictor-class capacity on fixed evaluation datasets and numerical checks of stored forecasts. The conditions on the predictor class and sampling procedure are part of each conclusion.
 
-The central experiment uses 64 independent repetitions under each of four data-generating distributions. Its 40 adjusted paired comparisons favor KAHM local-position features over KAHM memberships in six of eight distribution–predictor settings. Comparisons with affine features, kernel-weighted averaging features, and raw histories are mixed. These findings support task-specific evaluation of enrichment.
+See [Reproducibility](REPRODUCIBILITY.md) for the scope of these commands and [the study index](TMLR.md) for additional entry points. The central feature-augmentation records support statistical recomputation; its original generator, experiment runner, exact task roster, execution environment, fitted model states and forecast arrays are not supplied.
 
-The enrichment branch supplies 17 experiment records, including the per-run loss table. Its reproduction guide describes the available data, analysis scripts and their limits. An independent checker rebuilds all 40 primary comparisons from the complete selected-loss table. A separate supplementary predictor-capacity bundle includes its original experiment source, archived records, and verification, audit and full-rerun commands. The central experiment's original generator, runner, exact task roster and numerical model/forecast archives remain unavailable; saved-loss analysis does not regenerate its predictions. See the linked reproduction guide for each command's scope.
+## Numerical library
 
-### Lower bounds on prediction risk
+The Python modules on this branch implement kernel affine hull reconstruction and Koopman prediction:
 
-**A Hierarchy of Lower Bounds on Prediction Risk for Forecasting Representations** asks whether a feature map and a specified predictor class can meet a mean-squared-error requirement. The class includes a distance and a limit on how much predictions may change as features move apart. This sensitivity restriction is part of the claim.
-
-The framework combines lower bounds on the best class risk with upper bounds for admissible predictors to support exclusion, acceptance, or an unresolved decision. Population conclusions require the stated sampling, calibration, and numerical assumptions. Other experiments assess capacity on fixed datasets or the numerical evaluation of stored forecasts.
-
-The risk branch includes seven experiment groups and a driver that recomputes checks from fixed records. Replaying those records, refitting the original models, and collecting new observations are distinct tasks. Its guide explains what each command does and which inputs it uses.
-
-## Research code and data
-
-| Entry point | Purpose |
+| Module | Purpose |
 | --- | --- |
-| [`main`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/main) | Repository navigation and the original Koopman-machine software and reproducibility records below |
-| [`paper/geometry-induced-soft-state-clean-2026-11-02`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02) | Feature augmentation: central saved-loss analysis and the supplementary capacity experiment |
-| [`research/risk-certificates-consolidated-2026-11-08`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) | Prediction-risk bounds: seven experiment groups, fixed-record checks and a worked example of predictor-class capacity |
+| [kernel_affine_hull_koopman_machines.py](kernel_affine_hull_koopman_machines.py) | Representation fitting, associations, Koopman prediction and evaluation |
+| [autoencoder.py](autoencoder.py) and [autoencoder_filtering_extended.py](autoencoder_filtering_extended.py) | Fit local reconstruction models and evaluate their reconstructions and distances |
+| [parallel_autoencoders.py](parallel_autoencoders.py) and [combine_multiple_autoencoders_extended.py](combine_multiple_autoencoders_extended.py) | Fit and combine multiple reconstruction models |
+| [dim_reduce.py](dim_reduce.py) | Principal-component projection |
+| [kernel_regularized_least_squares.py](kernel_regularized_least_squares.py) | Regularized kernel regression |
+| [kxx_matrix.py](kxx_matrix.py), [kxa_matrix.py](kxa_matrix.py) and [distance_matrix.py](distance_matrix.py) | Kernel matrices and pairwise distances |
 
-The [study archive](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/archive/pre-manuscript-cleanup-2026-11-02/extensions) provides code, data and protocols for the supporting experiments. The [source index](docs/BRANCH_ARCHIVE.json) records their exact scientific source identifiers. Each study has its own observations and analysis; its results are not additional repetitions of the central feature-augmentation experiment.
-
-## Related studies and original software
-
-The [research index](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/docs/RESEARCH_INDEX.md) links the controlled experiments, predictor-capacity comparisons, residual forecasting studies and model-selection results. Their different targets, populations, and comparison criteria should be interpreted separately.
-
-The material below describes the Koopman-machine software. The two linked studies provide their own code, data and reproduction instructions.
-
-## Original Koopman-machine software
-
-Research software and reproducibility artifacts for Kernel Affine Hull Koopman Machine (KAHKM) experiments.
-
-The repository contains the KAHKM implementation, experiment runners, hyperparameter-search scripts, archived numerical outputs, figure and table generators, and provenance records used to reproduce the reported results.
-
-## Reproducibility
-
-The authoritative mapping from each reported result to its generator, experiment runner, configuration, seeds, raw or per-run output, and aggregate artifact is:
-
-`reproduction/reported_results.tsv`
-
-Entries marked `PASS` identify results with documented inputs, code and outputs. Entries marked `REMOVE` are excluded from the reported result set.
-
-### Reference environment
-
-The reference environment is native Apple Silicon (`arm64`) macOS.
-
-Key files:
-
-- `requirements.txt` — direct Python dependencies.
-- `requirements-lock-arm64.txt` — fixed reference dependency environment.
-- `scripts/bootstrap_arm64.sh` — native Apple Silicon environment bootstrap.
-- `scripts/verify_environment.py` — architecture, dependency, and import verification.
-- `provenance/reference_arm64_environment/` — captured hardware, operating-system, Python, NumPy, and package metadata.
-
-Create the reference environment with:
+Install the library dependencies and check the main import with:
 
 ```bash
-bash scripts/bootstrap_arm64.sh
+python -m pip install -r requirements.txt
+python -c "import kernel_affine_hull_koopman_machines"
 ```
 
-Verify it with:
+[requirements.txt](requirements.txt) specifies the numerical library dependencies. Each linked study provides its own experiment configuration, environment information and verification commands. Use those study instructions to evaluate the corresponding scientific results.
 
-```bash
-.venv-arm64/bin/python scripts/verify_environment.py
-```
+## Source identification and licensing
 
-### Table and figure generators
+The [source index](docs/BRANCH_ARCHIVE.json) records scientific source identifiers. Cite the study protocol and exact commit used, together with the software metadata in [CITATION.cff](CITATION.cff).
 
-The summary tables and figures can be generated with:
-
-```bash
-.venv-arm64/bin/python scripts/generate_selection_table.py
-.venv-arm64/bin/python scripts/generate_behavioral_summary.py
-.venv-arm64/bin/python scripts/generate_search_protocol.py
-.venv-arm64/bin/python scripts/generate_spectral_figures.py
-```
-
-Other reported tables and figures use the corresponding `step_*` generators and experiment runners identified in `reproduction/reported_results.tsv`.
-
-## Reproducibility evidence
-
-The following files describe the data and checks supporting the results:
-
-- `reproduction/REPRODUCIBILITY_EVIDENCE.md` — evidence summary and limitations.
-- `reproduction/reproducibility_evidence.json` — machine-readable form of the same summary.
-- `reproduction/raw_data/DATASET_CARD.md` — raw scientific inputs.
-- `reproduction/run_accounting/README.md` — coverage checks for archived experiment runs.
-- `reproduction/prospective_campaigns/duffing_reference_27/README.md` — separate 27-job Duffing reference experiment.
-
-The run-accounting audit documents an incomplete Duffing reference-search archive. A separate 27-job experiment records every scheduled attempt, exit status and output checksum. The two sets of records describe different executions.
-
-The available records do not establish that every failed execution in every
-experiment was saved.
-
-## Repository organization
-
-- `experiment_*.py` — primary experiment implementations.
-- `run_*.py` — experiment and hyperparameter-search runners.
-- `step_*.py` — table and figure generation workflows.
-- `scripts/` — environment and reproducibility utilities.
-- `reproduction/` — result-to-source mapping and generated tables, figures and checks.
-- `provenance/` — environment and dependency provenance.
-- `figures/` — generated figures used by the associated research work.
-- `kahkm_*` directories and archives — experiment outputs and derived artifacts.
-
-## Licensing
-
-Original source code in this repository is licensed under the MIT License. See `LICENSE`.
-
-Unless otherwise indicated, original generated research data and non-code research outputs are licensed under the Creative Commons Attribution 4.0 International license (CC BY 4.0). See `DATA_LICENSE`.
-
-Third-party dependencies and any separately identified third-party material remain under their respective licenses.
-
-## Citation
-
-Citation metadata is provided in `CITATION.cff`.
-
-Use the repository and article metadata in `CITATION.cff`, together with the commit identifier for the code used.
-
-## Repository
-
-https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine
+Source code is available under the [MIT License](LICENSE). Unless otherwise indicated, original generated data and non-code research outputs use [CC BY 4.0](DATA_LICENSE). Separately identified third-party material remains under its own license.

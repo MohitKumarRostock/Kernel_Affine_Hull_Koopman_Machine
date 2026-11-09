@@ -1,31 +1,27 @@
 """
-Kernel Affine Hull Koopman Machines using the original KAHM/OTFL folding pipeline.
+Kernel affine hull representations and Koopman prediction.
 
-This standalone version keeps the KAHKM state-regime abstraction code local.
-It keeps the KAHKM-specific state-regime abstraction, association normalization,
-folding-distance evaluation, and NLMS Koopman closure in this file.
-
-It still depends on the original local KAHM/OTFL helper modules that perform the
-autoencoder training and folding-score evaluation:
+This module learns local reconstruction models, normalizes their similarity
+scores into feature vectors, and fits a linear transition model for those
+features. The local reconstruction models use these helper modules:
 
 - ``parallel_autoencoders.py``
 - ``combine_multiple_autoencoders_extended.py``
 
-Important design choices
-------------------------
-1. Regimes are learned directly in current-state space ``X0`` by KMeans or
-   MiniBatchKMeans over state columns.
-2. One original KAHM/OTFL autoencoder set is trained per state-regime cluster.
-3. Only the manuscript normalization is implemented:
+Representation and prediction
+-----------------------------
+1. Current states ``X0`` are clustered by KMeans or MiniBatchKMeans, with
+   observations stored as columns.
+2. A set of kernel affine hull reconstruction models is fitted in each cluster.
+3. Reconstruction distances ``T_c(x)`` define normalized features:
 
        psi_c(x) = (1 - T_c(x) + tau)^omega
                   / sum_l (1 - T_l(x) + tau)^omega.
 
-4. Hierarchical ``y_then_x`` clustering and the regression script's alternative
-   soft mapper are intentionally not used, because this file implements KAHKM
-   regime abstraction rather than the earlier output-regression workflow.
-5. Omega is treated as an abstraction sharpness parameter and should be selected
-   by external validation/sensitivity analysis.
+4. A normalized least-mean-squares update fits a linear transition model to
+   paired feature vectors.
+5. ``omega`` controls the concentration of the normalized weights and is
+   selected using validation data or sensitivity analysis.
 
 Data layout
 -----------
@@ -128,9 +124,9 @@ def _call_combine_multiple_autoencoders_extended(
     *,
     n_jobs: int | None = None,
 ) -> Any:
-    """Call combine_multiple_autoencoders_extended across API variants.
+    """Call the reconstruction helper with supported optional arguments.
 
-    Older local helper versions did not accept ``n_jobs``. Signature inspection
+    Signature inspection determines whether the helper accepts ``n_jobs`` and
     avoids swallowing unrelated ``TypeError`` exceptions raised inside the helper.
     """
     fn = cast(Any, combine_multiple_autoencoders_extended)
@@ -1166,13 +1162,12 @@ def fit_kahkm(
     preload_classifier_after_fit: bool = False,
     verbose: bool = True,
 ) -> KAHKMFitResult:
-    """Fit a Kernel Affine Hull Koopman Machine using original KAHM folding.
+    """Fit a Kernel Affine Hull Koopman Machine.
 
-    The KAHM/OTFL abstraction model is trained locally by clustering current
-    states and training one original KAHM/OTFL autoencoder set per state-regime
-    cluster. This file does not import the earlier regression helper.
+    Current states are clustered, and a set of local kernel affine hull
+    reconstruction models is fitted within each cluster.
 
-    After the abstraction is fixed, the Koopman closure is learned from
+    After the representation is fitted, the linear transition is learned from
     Phi = Psi(X0), Chi = Psi(X1).
     """
     X0_arr, X1_arr = _validate_snapshot_pair(X0, X1)

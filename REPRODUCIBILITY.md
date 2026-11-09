@@ -30,6 +30,20 @@ The deployment-cost group also reconstructs forecasts from the stored raw inputs
 
 These checks start from the supplied observations, features and model records. They do not verify every data-acquisition or feature-generation step, train every model, or independently authenticate execution logs. The scientific source and protocols specify the data, software environments and order of steps required for model training. The commands above reproduce the supported calculations from saved records.
 
+## Single-trajectory certification
+
+The [single-trajectory experiment](experiments/single_trajectory_certification/) uses a separate driver and an exact-rational scientific source archive. Its verified environment uses Python 3.12.14 and the standard library for calculations; optional figure generation also needs Matplotlib. The root driver above continues to run its seven listed studies.
+
+From the repository root:
+
+```bash
+python3 experiments/single_trajectory_certification/reproduce.py --mode check --output /absolute/path/trajectory_check
+```
+
+The check verifies archive members and supplied evidence, executes 97 tests, checks the complete table of 2,400 outcomes, reconstructs the 12 saved full certificate and population-oracle records, and reproduces the aggregate results and two post-hoc diagnostics. The outcome table is stored losslessly as `runs.jsonl.gz`; the manifest records both its stored identity and its decompressed logical identity. A complete new experiment is available through `--mode run`, with its fixed protocol and deterministic random streams.
+
+The [methods](experiments/single_trajectory_certification/METHODS.md) specify the stationary binary law, the representation and decoder classes, the raw-block layout, exact numerical bounds, and the population oracle. The [reproduction guide](experiments/single_trajectory_certification/REPRODUCIBILITY.md) gives commands and output definitions. The scientific risk guarantee is unconditional over development and calibration and requires a supplied dependence envelope. The confidence limits for the repeated simulation study are separate statements. Cells sharing a random-stream prefix are not pooled as independent repetitions.
+
 ## Data and arithmetic
 
 Binary64 coordinates are interpreted as exact dyadic rationals where the numerical analysis specifies this. Exact fractions, outward bounds, and strict versus inclusive decision inequalities retain their original meaning. Targets outside a fitted predictor's output range remain in the losses. Confidence allocations are study-specific; related tasks and reused observations are not independent replications.
@@ -39,3 +53,4 @@ The compact records retain the inputs needed for the displayed claims. Each expe
 ## Interpreting unsuccessful outcomes
 
 A reproduction `PASS` means agreement with the recorded scientific result. It does not mean that every proposed method succeeds. The results include zero joint deployment-utility passes, unsuccessful screening, mixed or failed predictor-transfer criteria, and monthly forecasting failures. The aggregate affine-forecasting criterion compares mean squared errors on a fixed evaluation dataset. It is not a statistical noninferiority test.
+

@@ -44,6 +44,23 @@ The script evaluates the stored interval and decision arithmetic with exact rati
 
 Each group has a README with its full protocol, expected outcomes, and original-source paths. These groups assess different observations and claims; their rows are not interchangeable independent replications of one experiment.
 
+## Certification from one stationary trajectory
+
+The [single-trajectory study](../experiments/single_trajectory_certification/) assesses simultaneous class-risk and fitted-risk bounds under a known dependent data-generating law. Its empirical loss uses all retained forecasting windows, while the confidence calculation uses the number of separated raw blocks. A dependence allowance covers the boundary after development and the boundaries between those blocks. The [methods](../experiments/single_trajectory_certification/METHODS.md) define the process, feature maps, sensitivity constraints, confidence allocations, numerical calculations, and population risks.
+
+The study has 12 settings and 200 repetitions per setting. All 2,400 joint risk sandwiches cover the known population quantities. This observation does not mean that all predictors are accepted: several settings have no accepted predictor, and minimum feasible coordinate cost is seldom certified. The diagnostic calculations separate failure of the fitted predictor, weakness of the selected graph constraints, and statistical uncertainty.
+
+Its standard-library driver is separate from the seven groups in the table above:
+
+```bash
+python3 experiments/single_trajectory_certification/reproduce.py --mode check --output /absolute/path/trajectory_check
+python3 experiments/single_trajectory_certification/reproduce.py --mode run --output /absolute/path/trajectory_run --workers 6
+```
+
+The first command verifies the retained evidence, runs the original 97 tests, reconstructs saved full certificates, and reproduces the summaries and both post-hoc diagnostics. The second repeats the complete fixed experiment. The [reproduction guide](../experiments/single_trajectory_certification/REPRODUCIBILITY.md) defines their outputs and optional figure generation. Choose a separate output directory outside the study's source and evidence directory.
+
+These population decisions concern stationary average squared error under supplied process assumptions. They do not establish those assumptions from an arbitrary finite record or provide conditional accuracy for each next observation. The implementation evaluates its declared rational affine-score features exactly; applying the same theorem to a Gaussian KAHM feature pipeline requires numerical guarantees for that pipeline.
+
 ## Recompute one group's evidence
 
 Use Python 3.12 and install the recorded dependencies:
@@ -91,3 +108,4 @@ For Bike, feasible predictions establish that all 54 examined classes can meet t
 `PASS` means that a checker agrees with the retained numerical result under its stated premises. Checksum agreement identifies the supplied files; it does not independently authenticate execution or establish an independent scientific replication.
 
 The experiment directories retain the original source and protocols for further investigation. Full feature generation, model fitting, and raw-data extraction require each study's declared data, environment, and execution sequence. Use its README and provenance records to identify those requirements before adapting the original source. The supported driver above starts from the retained numerical inputs and checks calculations conditional on the supplied inputs.
+

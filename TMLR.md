@@ -1,9 +1,11 @@
-# Manuscript and review materials
+# Research materials
 
-This branch provides evidence for **Predictive Enrichment of Geometry-Induced Soft-State Abstractions: Information Retention and Decoder Access**. Its [source directory](papers/score_enrichment/) preserves an earlier article and supplement, complete primary tables, and build inputs. The revised manuscript and LaTeX package are distributed separately. Availability statements in the retained manuscript belong to that earlier edition; the current repository scope is described in [REPRODUCIBILITY.md](REPRODUCIBILITY.md).
+This branch provides code and numerical evidence for **Feature Augmentation for Forecasting with Reconstruction-Based Representations**. The study compares forecasting models that use normalized reconstruction affinities, normalization constants or membership-weighted local coordinates. Kernel Affine Hull Machines are compared with affine reconstruction, kernel-weighted averaging and raw time-series histories.
 
-The title describes the scientific question. KAHM is identified in the abstract and method as the principal reconstruction construction, with affine and positive-kernel controls. The paper distinguishes information retention, fitted prediction, and exact dynamical closure. It makes no universal forecasting or autonomous-closure claim.
+The [experiment guide](docs/EXPERIMENT_GUIDE.md) explains the comparisons. [REPRODUCIBILITY.md](REPRODUCIBILITY.md) lists the supported commands and their limits. The [document directory](papers/score_enrichment/) contains LaTeX sources, static tables and build inputs.
 
-Review formatting does not assert submission or acceptance. The public source preserves identifying license and provenance information and is not an anonymous supporting-code archive. Authors remain responsible for comparing the exact other-venue manuscript and supplement, preparing permitted anonymous review materials, checking authorship and disclosures, and confirming the stated evidence availability.
+The central checker reconstructs the statistical analysis from saved per-run losses. The full simulation and fitting implementation, complete task roster and numerical model/forecast archives are unavailable. The separate predictor-capacity study includes its own source and saved records. These studies use different data and comparison families.
 
-The original numerical source and results have separate identities from this publication. [REPRODUCIBILITY.md](REPRODUCIBILITY.md) describes the current saved-loss bundle and the original execution materials that remain unavailable. Historically reported author-delivered package names and hashes do not establish present access to those packages. A successful document build is not a model replay or an external scientific replication.
+The information-preservation results do not imply that every fitted predictor will forecast accurately. The experiment also does not test whether the representation evolves autonomously under a closed transition model.
+
+The repository contains author attribution and third-party license notices. Journal-format headers do not indicate submission or acceptance.

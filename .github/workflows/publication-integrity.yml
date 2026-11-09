@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - name: Check out publication and archive metadata
+      - name: Check out source and reference metadata
         shell: bash
         run: |
           set -euo pipefail
@@ -20,15 +20,15 @@ jobs:
           git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
           git -c protocol.version=2 fetch --filter=blob:none --depth=2 origin "$GITHUB_SHA" 5123365917ae630b684f8a3bebb0294ee695ce7a
           git checkout --detach "$GITHUB_SHA"
-      - name: Check preserved files, links and document dependencies
+      - name: Check scientific files, links and document dependencies
         shell: bash
         run: |
           set -euo pipefail
           python3 scripts/verify_publication_tree.py --output-dir "$RUNNER_TEMP/publication-check"
           python3 papers/score_enrichment/scripts/publish_documents.py --verify-inputs
-          echo '## Publication-tree preservation' >> "$GITHUB_STEP_SUMMARY"
+          echo '## Scientific file verification' >> "$GITHUB_STEP_SUMMARY"
           echo '```json' >> "$GITHUB_STEP_SUMMARY"
-          cat "$RUNNER_TEMP/publication-check/cleanup_audit.json" >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/publication-check/verification.json" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
       - name: Install verification and document dependencies
         shell: bash
@@ -80,5 +80,5 @@ jobs:
           fi
           git diff --exit-code
           echo '## Document build' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Passed: 12-page article and 14-page supplement rebuilt from retained sources. Tracked PDF bytes are unchanged. No experiment, model fitting, full audit, or history rewrite was performed.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Document build passed: article=12 pages; supplement=14 pages; tracked files unchanged.'
+          echo 'Passed: 12-page article and 14-page supplement compiled. This command compiles documents; it does not fit models or evaluate forecasts.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Document build passed: article=12 pages; supplement=14 pages.'

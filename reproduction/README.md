@@ -5,9 +5,9 @@ This directory provides two distinct routes from the research questions to execu
 | Bundle | Scientific question | Available computation |
 | --- | --- | --- |
 | [Central score enrichment](score_enrichment/) | Does retaining normalization scale or local position improve the selected forecasting procedures? | Rebuild summaries and all 40 primary comparisons from 26,624 saved loss rows; 17 original evidence records are supplied |
-| [Supplementary decoder capacity](capacity_followup/) | Do local-coordinate benefits persist with 64 or 256 Nyström landmarks? | Verify original files, audit saved repetition records, or regenerate the original supplementary models and observations |
+| [Supplementary predictor capacity](capacity_followup/) | Do local-coordinate benefits persist with 64 or 256 Nyström landmarks? | Verify original files, audit saved repetition records, or regenerate the original supplementary models and observations |
 
-The central study uses 64 repetitions under four laws and standardized MSE. The capacity follow-up uses 24 repetitions under three laws, MSE and 12 primary comparisons. The supporting first-stage analysis in the capacity bundle supplies its practical margins. These observations and comparison families are not pooled.
+The central study uses 64 repetitions under four data-generating distributions and standardized MSE. The capacity follow-up uses 24 repetitions under three data-generating distributions, MSE and 12 primary comparisons. The supporting first-stage analysis in the capacity bundle supplies its practical margins. These observations and comparison families are not pooled.
 
 ## Rebuild central statistics
 
@@ -34,4 +34,4 @@ python3 -m reproduce audit --output runs/archive-audit
 
 The audit rebuilds the original first-stage and capacity statistics from archived records without model fitting. From the same directory, `python3 -m reproduce full --workers 4 --run-dir runs/full` generates observations and fits the original experiments. Its [bundle guide](capacity_followup/README.md) explains runtime, output files, resumption and verification limits.
 
-Neither bundle builds manuscript documents. The original publication directories remain separately available. Use the root [reproduction guide](../REPRODUCIBILITY.md) for document commands, historical provenance and the central materials still required for model regeneration.
+The root [reproduction guide](../REPRODUCIBILITY.md) gives document-build commands, source identifiers and the inputs required for model regeneration. The commands in these two bundles perform numerical checks and experiments.

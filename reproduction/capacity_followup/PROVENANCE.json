@@ -31,36 +31,8 @@
     "family_alpha": 0.05,
     "interval": "paired Student t approximation with Bonferroni adjustment"
   },
-  "immutable_scientific_files": "All entries listed in both original manifests are unchanged.",
-  "orchestration_adaptations": [
-    {
-      "path": "reproduce/__main__.py",
-      "source_git_blob": "7c74b97d640a53075ec29615b39cae8ed7155b44",
-      "changes": [
-        "Adds standard-library-only verify command.",
-        "Retains experiment, archived-statistics audit and reduced fitting commands.",
-        "Removes manuscript, paper-asset and submission commands/steps; scientific execution order and numerical checks are unchanged."
-      ]
-    },
-    {
-      "path": "THIRD_PARTY_NOTICES.md",
-      "source_git_blob": "3da11f4a8ee66a354d0b3d33fd88c32e1c34ca19",
-      "changes": [
-        "Retains code and data attribution; omits notices concerning excluded manuscript styles and submission packaging."
-      ]
-    }
-  ],
-  "new_documentation": [
-    "README.md",
-    "PROVENANCE.json"
-  ],
-  "excluded_materials": [
-    "manuscript/",
-    "submission/",
-    "paper and submission asset builders",
-    "draft/readiness/review-package notes"
-  ],
-  "scope": "Supplementary capacity follow-up and its supporting earlier-stage and numerical-sensitivity evidence. Separate from KAHM-SCORE-20261102-v1 and its 64-repetition, four-law, 40-comparison main experiment.",
+  "immutable_scientific_files": "Every scientific file listed in the source and archive manifests matches its recorded identity.",
+  "scope": "Supplementary predictor-capacity experiment, supporting first-stage analysis and numerical-sensitivity checks. This study uses different data from KAHM-SCORE-20261102-v1, which has 64 repetitions under four distributions and 40 primary comparisons.",
   "unavailable_in_compact_archive": [
     "complete fitted model states",
     "all per-episode prediction arrays"
@@ -69,5 +41,27 @@
     "LICENSE",
     "study/vendor/upstream/LICENSE",
     "THIRD_PARTY_NOTICES.md"
+  ],
+  "entry_points": [
+    {
+      "path": "reproduce/__main__.py",
+      "source_git_blob": "7c74b97d640a53075ec29615b39cae8ed7155b44",
+      "capabilities": [
+        "Checks file identities using only the Python standard library.",
+        "Runs experiments, statistical analysis of archived results and reduced fitting commands.",
+        "Follows the specified experimental execution order and numerical checks."
+      ]
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "source_git_blob": "3da11f4a8ee66a354d0b3d33fd88c32e1c34ca19",
+      "contents": [
+        "Code and data attribution and applicable license notices."
+      ]
+    }
+  ],
+  "documentation": [
+    "README.md",
+    "PROVENANCE.json"
   ]
 }

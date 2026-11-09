@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""Verify a paper-focused checkout against its archived predecessor.
+"""Verify scientific file identities, documentation links and LaTeX inputs.
 
-This checks file preservation, local links and document inputs. It does not
-refit models, authenticate the original experiment, or rewrite Git history.
+Scientific files are checked against a specified source commit. Reader guides
+are checked for valid links. These checks do not fit models or evaluate forecasts.
 """
 from __future__ import annotations
 import argparse
-from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -16,8 +15,10 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 
+
 def git(*args: str) -> bytes:
     return subprocess.check_output(['git', *args], cwd=ROOT)
+
 
 def tree(ref: str) -> dict[str, dict[str, str]]:
     records = {}
@@ -29,51 +30,75 @@ def tree(ref: str) -> dict[str, dict[str, str]]:
         records[raw_path.decode()] = {'mode': mode, 'type': kind, 'git_object': oid}
     return records
 
+
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise AssertionError(message)
+
+
+def verify_scientific_files(reference: dict, current: dict,
+                            prefixes: list[str], documentation: set[str]) -> int:
+    """Check complete scientific-file sets and Git identities within each prefix."""
+    for path in documentation:
+        require(path.endswith('.md') and path in reference and path in current,
+                f'Invalid reader-documentation path: {path}')
+        require(any(path.startswith(prefix + '/') for prefix in prefixes),
+                f'Documentation path is outside the declared directories: {path}')
+    checked = 0
+    for prefix in prefixes:
+        expected = {p: v for p, v in reference.items()
+                    if p.startswith(prefix + '/') and p not in documentation}
+        observed = {p: v for p, v in current.items()
+                    if p.startswith(prefix + '/') and p not in documentation}
+        require(bool(expected), f'No scientific files at source path: {prefix}')
+        require(set(observed) == set(expected),
+                f'Scientific file set differs from the source specification: {prefix}')
+        for path, entry in expected.items():
+            require(observed[path] == entry, f'Scientific file identity differs: {path}')
+        checked += len(expected)
+    return checked
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, required=True)
     args = parser.parse_args()
     out = args.output_dir.resolve()
-    require(not out.exists(), 'Choose a new output directory; audit records are not overwritten.')
+    require(not out.exists(), 'Choose a new output directory; existing reports are not overwritten.')
     plan = json.loads((ROOT/'docs/PUBLICATION_SCOPE.json').read_text())
-    baseline = plan['archive_commit']
-    before, after = tree(baseline), tree('HEAD')
-    protected_count = 0
-    for prefix, expected in plan['unchanged_subtrees'].items():
-        require(git('rev-parse', f'{baseline}:{prefix}').decode().strip() == expected,
-                f'Archive subtree differs: {prefix}')
-        require(git('rev-parse', f'HEAD:{prefix}').decode().strip() == expected,
-                f'Protected subtree changed: {prefix}')
-        protected_count += sum(p.startswith(prefix+'/') for p in after)
-    for path, entry in after.items():
+    reference_commit = plan['reference_commit']
+    reference, current = tree(reference_commit), tree('HEAD')
+    for prefix, expected in plan['scientific_subtrees'].items():
+        require(git('rev-parse', f'{reference_commit}:{prefix}').decode().strip() == expected,
+                f'Source subtree identity differs: {prefix}')
+    scientific_count = verify_scientific_files(
+        reference, current, list(plan['scientific_subtrees']),
+        set(plan['reader_documentation']))
+    for path, entry in current.items():
         require(entry['type'] == 'blob' and entry['mode'] in ('100644', '100755'),
                 f'Unexpected submodule or symbolic link: {path}')
         data = (ROOT/path).read_bytes()
         oid = hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
-        require(oid == entry['git_object'], f'Working file differs from commit: {path}')
-    require({p.split('/')[0] for p in after} == set(plan['root_entries']),
-            'The active root differs from its declared publication scope.')
-    require({p.split('/')[1] for p in after if p.startswith('papers/')} == {'score_enrichment'},
+        require(oid == entry['git_object'], f'Working file differs from its Git checksum: {path}')
+    require({p.split('/')[0] for p in current} == set(plan['root_entries']),
+            'Repository root entries differ from the declared file specification.')
+    require({p.split('/')[1] for p in current if p.startswith('papers/')} == {'score_enrichment'},
             'Unexpected manuscript directory.')
-    require({p.split('/')[1] for p in after if p.startswith('extensions/')} == {'score_enrichment_20261102'},
+    require({p.split('/')[1] for p in current if p.startswith('extensions/')} == {'score_enrichment_20261102'},
             'Unexpected study directory.')
-    local_links = archive_links = tex_dependencies = 0
-    archive_prefix = plan['archive_url'].rstrip('/')+'/'
-    for name in after:
+    local_links = reference_links = tex_dependencies = 0
+    reference_prefix = plan['reference_url'].rstrip('/')+'/'
+    for name in current:
         path = ROOT/name
         if path.suffix == '.md':
             text = path.read_text(encoding='utf-8')
             for link in re.findall(r'\]\(([^\s)]+)(?:\s+[^)]*)?\)', text):
                 link = link.strip('<>')
-                if link.startswith(archive_prefix):
-                    target = unquote(link[len(archive_prefix):]).split('#')[0].rstrip('/')
-                    require(target in before or any(p.startswith(target+'/') for p in before),
-                            f'Unknown archived path: {target}')
-                    archive_links += 1
+                if link.startswith(reference_prefix):
+                    target = unquote(link[len(reference_prefix):]).split('#')[0].rstrip('/')
+                    require(target in reference or any(p.startswith(target+'/') for p in reference),
+                            f'Unknown source path: {target}')
+                    reference_links += 1
                 elif not urlsplit(link).scheme and not link.startswith('#'):
                     target = unquote(urlsplit(link).path)
                     resolved = (path.parent/target).resolve()
@@ -90,30 +115,22 @@ def main() -> None:
                         dep = dep.with_suffix(suffix)
                     require(dep.is_file(), f'Missing document dependency in {name}: {item}')
                     tex_dependencies += 1
-    removed = sorted(set(before)-set(after))
     report = {
-        'status': 'passed', 'archive_commit': baseline,
+        'status': 'passed', 'reference_commit': reference_commit,
         'checked_commit': git('rev-parse', 'HEAD').decode().strip(),
-        'scope': 'Working-tree preservation, local links, pinned historical paths and TeX dependencies; no numerical model replay.',
-        'files_before': len(before), 'files_after': len(after),
-        'files_removed': len(removed),
-        'files_added': len(set(after)-set(before)),
-        'files_modified': sum(before[p] != after[p] for p in set(before)&set(after)),
-        'protected_files_unchanged': protected_count,
-        'local_links_checked': local_links, 'archived_paths_checked': archive_links,
+        'scope': 'Scientific file identities, tracked-file checksums, documentation links and LaTeX dependencies.',
+        'tracked_files_checked': len(current),
+        'scientific_reference_files_checked': scientific_count,
+        'reader_documentation_files': len(plan['reader_documentation']),
+        'local_links_checked': local_links, 'source_paths_checked': reference_links,
         'tex_dependencies_checked': tex_dependencies,
-        'current_tracked_bytes': sum((ROOT/p).stat().st_size for p in after),
-        'removed_by_root': dict(sorted(Counter(p.split('/')[0] for p in removed).items())),
-        'history_rewritten': False,
-        'size_note': 'Current-file bytes exclude Git history; this is not a claim about full clone size.'
+        'tracked_file_bytes': sum((ROOT/p).stat().st_size for p in current),
+        'model_fitting_performed': False
     }
     out.mkdir(parents=True)
-    (out/'cleanup_audit.json').write_text(json.dumps(report, indent=2, sort_keys=True)+'\n')
-    with (out/'removed_files.tsv').open('w', encoding='utf-8') as handle:
-        handle.write('path\tmode\tgit_object\tarchive_commit\n')
-        for p in removed:
-            handle.write(f"{p}\t{before[p]['mode']}\t{before[p]['git_object']}\t{baseline}\n")
+    (out/'verification.json').write_text(json.dumps(report, indent=2, sort_keys=True)+'\n')
     print(json.dumps(report, indent=2, sort_keys=True))
+
 
 if __name__ == '__main__':
     main()

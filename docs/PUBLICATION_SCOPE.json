@@ -1,16 +1,39 @@
 {
-  "schema": "kahm-scientific-file-verification-v1",
-  "reference_commit": "5123365917ae630b684f8a3bebb0294ee695ce7a",
-  "reference_branch": "archive/pre-manuscript-cleanup-2026-11-02",
-  "reference_url": "https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/5123365917ae630b684f8a3bebb0294ee695ce7a",
-  "scientific_subtrees": {
-    "papers/score_enrichment": "5bb3be5cbcc3d58533b999ac02d9c23bc451b2d1",
-    "extensions/score_enrichment_20261102": "c68248f12786bbd032aafe8c33419375191c36b5"
+  "schema": "kahm-code-evidence-verification-v1",
+  "repository": "MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine",
+  "scientific_sources": {
+    "extensions/score_enrichment_20261102": {
+      "commit": "5123365917ae630b684f8a3bebb0294ee695ce7a",
+      "tree": "c68248f12786bbd032aafe8c33419375191c36b5",
+      "reader_documentation": [
+        "extensions/score_enrichment_20261102/README.md",
+        "extensions/score_enrichment_20261102/AVAILABILITY.md"
+      ]
+    },
+    "reproduction/score_enrichment": {
+      "commit": "f039e74a248e874c08530bab4617d5ad011d6d21",
+      "tree": "10e3fe40a68740d01750fbea4f0363984e70a5d8",
+      "reader_documentation": [
+        "reproduction/score_enrichment/README.md"
+      ],
+      "documentation_manifests": {
+        "reproduction/score_enrichment/MANIFEST.json": [
+          "README.md"
+        ]
+      }
+    },
+    "reproduction/capacity_followup": {
+      "commit": "f039e74a248e874c08530bab4617d5ad011d6d21",
+      "tree": "4ae6d9560955cfd5fdd3cd8ec0e4e5716d315d31",
+      "reader_documentation": [
+        "reproduction/capacity_followup/README.md"
+      ]
+    }
   },
-  "reader_documentation": [
-    "papers/score_enrichment/README.md",
-    "extensions/score_enrichment_20261102/README.md",
-    "extensions/score_enrichment_20261102/AVAILABILITY.md"
+  "source_link_commits": [
+    "5123365917ae630b684f8a3bebb0294ee695ce7a",
+    "a67c40190458bab7b3e56b4fac76770798d074b3",
+    "00d7741f1feaf4693630f039d8d37b9db6d9f14f"
   ],
   "root_entries": [
     ".github",
@@ -24,11 +47,24 @@
     "TMLR.md",
     "docs",
     "extensions",
-    "papers",
     "reproduction",
-    "scripts"
+    "scripts",
+    "tests"
   ],
-  "scope": "Scientific input identities, tracked-file checksums, documentation links and LaTeX dependencies.",
+  "study_directories": {
+    "extensions": [
+      "score_enrichment_20261102"
+    ],
+    "reproduction": [
+      "score_enrichment",
+      "capacity_followup"
+    ]
+  },
+  "excluded_document_roots": [
+    "papers",
+    "manuscript"
+  ],
+  "scope": "Scientific code and evidence identities, documentation-manifest consistency, tracked-file checksums, and documentation links.",
   "full_central_execution_package_included": false,
   "large_numerical_archives_included": false,
   "reproduction_bundles": {
@@ -37,7 +73,7 @@
       "original_model_generation_code_available": false
     },
     "reproduction/capacity_followup": {
-      "scope": "Simulation and model training for the supplementary capacity study, with saved evaluation records",
+      "scope": "Simulation and model training for the separate predictor-capacity study, with saved evaluation records",
       "source_commit": "a67c40190458bab7b3e56b4fac76770798d074b3",
       "source_path": "extensions/predictive_geometry",
       "scientific_snapshot_entries": 51,

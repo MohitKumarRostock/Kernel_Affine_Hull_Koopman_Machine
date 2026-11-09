@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Explain a published comparison from the KAHM score-enrichment study.
+"""Explain a saved comparison from the forecasting feature-augmentation study.
 
-This read-only command displays summary-statistic evidence from the original
+This read-only command displays summary-statistic evidence from the specified
 40-comparison family. It does not fit models, reconstruct repetition losses,
-or recompute confidence intervals. Use the existing verify_primary_summary.py
+or recompute confidence intervals. Use verify_primary_summary.py
 checker for the full summary-arithmetic checks.
 """
 from __future__ import annotations
@@ -37,18 +37,18 @@ LAWS = {
 PREDICTORS = {
     "linear": "Linear ridge regression",
     "nonlinear": (
-        "Ridge regression on linear inputs plus Gaussian Nyström features "
+        "Ridge regression on the representation concatenated with Gaussian-kernel Nyström features "
         "from 64 training landmarks"
     ),
 }
 RECONSTRUCTIONS = {
     "K": "KAHM",
-    "A": "Affine-reconstruction",
-    "R": "Positive-kernel-reconstruction",
+    "A": "Affine projection",
+    "R": "Kernel-weighted averaging",
 }
 ENCODINGS = {
     "mem": "memberships",
-    "norm": "memberships with log normalizers",
+    "norm": "memberships with log normalization constants",
     "local": "memberships with membership-weighted local coordinates",
     "score": "full reconstruction scores",
 }
@@ -80,8 +80,8 @@ def read_published_records(path: Path) -> list[dict[str, str]]:
     contents = path.read_bytes()
     if hashlib.sha256(contents).hexdigest() != PUBLISHED_SHA256:
         raise ValueError(
-            "CSV identity does not match the original published primary summary. "
-            "Use the unchanged primary_contrasts.csv; this command's protocol "
+            "CSV identity does not match the specified primary summary. "
+            "Use the supplied primary_contrasts.csv; this command's protocol "
             "interpretation is specific to that 40-comparison family."
         )
     reader = csv.DictReader(io.StringIO(contents.decode("utf-8")))
@@ -92,7 +92,7 @@ def read_published_records(path: Path) -> list[dict[str, str]]:
         raise ValueError("Expected the 40 distinct published comparisons.")
     for row in rows:
         if row["law"] not in LAWS or row["decoder"] not in PREDICTORS:
-            raise ValueError(f"Unexpected law or predictor in {row['id']}")
+            raise ValueError(f"Unexpected data-generating process or predictor in {row['id']}")
         if row["view"] != "independent" or int(row["n"]) != 64:
             raise ValueError(f"Unexpected selection rule or sample size in {row['id']}")
         for field in ("candidate_mean_smse", "reference_mean_smse",
@@ -114,7 +114,7 @@ def evidence_context(path: Path) -> dict:
         "source_csv": str(path.resolve()),
         "published_sha256": PUBLISHED_SHA256,
         "file_identity_verified": True,
-        "evidence_level": "Published summary statistics; no new experimental evidence.",
+        "evidence_level": "Saved primary summary statistics.",
         "protocol_id": "KAHM-SCORE-20261102-v1",
         "family_size": 40,
         "paired_repetitions_per_comparison": 64,
@@ -131,7 +131,7 @@ def evidence_context(path: Path) -> dict:
         "selection": (
             "The stored view 'independent' means separately selected settings using "
             "the same B validation data within a repetition. It does not mean "
-            "independent validation samples. Geometric dimension caps and decoder "
+            "independent validation samples. Local dimension caps and predictor "
             "settings may differ; raw histories have no cap. These comparisons "
             "assess complete selected procedures."
         ),
@@ -156,14 +156,14 @@ def explain(row: dict[str, str]) -> dict:
     if classification == "candidate_lower_mean_loss":
         interpretation = (
             "The adjusted interval is wholly below zero. This comparison favors "
-            "lower mean forecast loss for the candidate under the stated law and "
+            "lower mean forecast loss for the candidate under the stated data-generating process and "
             "selected procedures."
         )
     elif classification == "candidate_higher_mean_loss":
         interpretation = (
             "The adjusted interval is wholly above zero. This comparison favors "
             "the reference: the candidate has higher mean forecast loss under "
-            "the stated law and selected procedures."
+            "the stated data-generating process and selected procedures."
         )
     else:
         difference = float(row["mean_difference"])
@@ -202,7 +202,7 @@ def explain(row: dict[str, str]) -> dict:
 def print_explanation(item: dict) -> None:
     print(f"\n{item['id']}")
     print(f"Question: {item['question']}")
-    print(f"Law: {item['law']}")
+    print(f"Process: {item['law']}")
     print(f"Predictor: {item['predictor']}")
     print(f"Candidate: {item['candidate']['representation']} ({item['candidate']['id']})")
     print(f"Reference: {item['reference']['representation']} ({item['reference']['id']})")
@@ -229,7 +229,7 @@ def main(argv: list[str] | None = None) -> int:
     modes.add_argument("--examples", action="store_true", help="Explain one lower-loss, one higher-loss, and one unresolved result")
     parser.add_argument("--json", action="store_true", help="Emit JSON; selected comparisons include exact CSV field strings")
     parser.add_argument("--csv", type=Path, default=DEFAULT_CSV,
-                        help="Path to the original published CSV; its SHA256 must match")
+                        help="Path to the specified primary-summary CSV; its SHA256 must match")
     args = parser.parse_args(argv)
     if args.comparison_id and (args.list or args.examples):
         parser.error("Choose a comparison ID, --list, or --examples.")
@@ -256,7 +256,7 @@ def main(argv: list[str] | None = None) -> int:
                               "evidence": context, "comparisons": items},
                              indent=2, ensure_ascii=False, allow_nan=False))
             return 0
-        print("Published primary comparison summaries: KAHM score enrichment")
+        print("Primary comparison summaries: feature augmentation for forecasting")
         print("KAHM = Kernel Affine Hull Machine.")
         print(f"Source: {context['source_csv']} (published file identity verified)")
         print(context["evidence_level"])

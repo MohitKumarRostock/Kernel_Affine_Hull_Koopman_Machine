@@ -1,52 +1,49 @@
 # Feature Augmentation for Forecasting with Reconstruction-Based Representations
 
-## Why add features to normalized reconstruction weights?
+This repository contains experiment code, protocols, saved per-run losses, statistical results, and verification tools for forecasting with reconstruction-based representations. The central study evaluates additional features derived from local reconstruction models. A separate predictor-capacity study supplies simulation and model-fitting code as well as saved results.
 
-For each observed history, local reconstruction models produce similarity weights for a set of reference regions. Normalizing these weights gives the representation called memberships in the stored results. Forecasting also requires distinctions that matter for future observations. Normalization can remove the overall reconstruction-affinity scale, while reconstruction scores can hide position within a region. This study asks what information should accompany memberships, and whether a specified predictive model can use it.
+## Feature construction and scientific questions
 
-Kernel Affine Hull Machines (KAHMs) provide the main reconstruction method. Matched affine and kernel-weighted averaging reconstructions, together with raw histories, help identify which findings concern enrichment and which depend on the reconstruction method.
+Each local reference model reconstructs an observed time-series history. Reconstruction scores are converted to positive affinities, then normalized across reference regions to form membership features. These weights describe relative reconstruction quality; they are not calibrated probabilities of future outcomes. Normalization can remove the overall affinity scale, and reconstruction scores can discard the input's position within a region.
 
-## What the study contributes
+Kernel Affine Hull Machines (KAHMs) provide the main reconstruction method. Affine projection and kernel-weighted averaging of reference histories provide controls. The study evaluates two feature augmentations:
 
-1. **Recovery of reconstruction scores.** Memberships together with log normalizers recover the full score vector in exact arithmetic.
-2. **Recovery of input information.** Memberships together with weighted local coordinates can recover the input under explicit positivity and rank conditions. A conditioning bound describes the sensitivity of this recovery.
-3. **Matched forecasting evidence.** The experiment compares complete procedures with validation-selected predictor settings; reconstruction-based procedures also select their maximum local dimension. The results show where enrichment improves forecasting and where reconstruction controls perform better or remain unresolved.
+1. **Log normalization constants** restore the total affinity removed by normalization and make the full reconstruction-score vector recoverable in exact arithmetic.
+2. **Membership-weighted local coordinates** can preserve the input under explicit positivity and rank conditions. A conditioning bound describes the sensitivity of input recovery.
 
-Information retention, numerical stability, and predictive performance are separate questions. The experiments fit direct forecasts; they do not fit an autonomous transition matrix for the representation.
+Information preservation, numerical stability, and forecast accuracy require separate checks. Every evaluated procedure predicts future observations directly. The linear predictor fits ridge regression to the representation. The nonlinear predictor fits ridge regression to the representation concatenated with Gaussian-kernel Nyström features from 64 training landmarks.
 
-## Inspect the documents and evidence
+## Code and evidence guide
 
-The guides below describe the experiment, its saved numerical results and the available verification commands. The central analysis starts from saved per-run losses; it does not regenerate the observations or fitted predictors.
-
-| Reader's question | Resource |
+| Question | Resource |
 | --- | --- |
-| Where are the document sources and compiled files? | [Repository article PDF](papers/score_enrichment/main.pdf) and [document sources](papers/score_enrichment/) |
-| How are observations, features, prediction rules, and comparisons defined? | [Repository supplement PDF](papers/score_enrichment/supplement.pdf) and [recorded protocol](reproduction/score_enrichment/evidence/protocol.json) |
+| How are observations, features, predictors, and comparisons defined? | [Recorded protocol](reproduction/score_enrichment/evidence/protocol.json) and [experiment guide](docs/EXPERIMENT_GUIDE.md) |
 | What happens in every primary comparison? | [Complete primary table](reproduction/score_enrichment/evidence/primary_contrasts.csv) |
-| How do I interpret and check a primary comparison? | [Worked examples and experiment guide](docs/EXPERIMENT_GUIDE.md) |
-| Can I rebuild the comparisons from individual repetition losses? | [Central evidence and independent checker](reproduction/score_enrichment/) |
-| Which other checks can I run from this branch? | [Reproduction guide](REPRODUCIBILITY.md) |
-| How do the other studies relate to this experiment? | [Scientific interpretation](TIME_SERIES_RESEARCH.md) and [research index](docs/RESEARCH_INDEX.md) |
+| How can I inspect an individual comparison? | [Explanation command and worked examples](docs/EXPERIMENT_GUIDE.md) |
+| Can I recalculate the primary comparisons from per-run losses? | [Central statistical-analysis bundle](reproduction/score_enrichment/) |
+| Which experiments can I regenerate? | [Predictor-capacity source and records](reproduction/capacity_followup/) |
+| How do I check file identities, links, and statistical calculations? | [Reproduction and verification guide](REPRODUCIBILITY.md) |
+| How do the other studies relate to the central experiment? | [Scientific interpretation](TIME_SERIES_RESEARCH.md) and [research index](docs/RESEARCH_INDEX.md) |
 
 ## Complete primary findings
 
-Protocol `KAHM-SCORE-20261102-v1` uses 64 independent repetitions for each of four data-generating distributions, giving 256 combinations of distribution and repetition. The primary family contains 40 two-sided paired comparisons with Bonferroni adjustment. Each procedure selects its own settings using the same validation observations within a task; the stored label `independent` denotes separate choices, not independent validation samples.
+Protocol `KAHM-SCORE-20261102-v1` uses 64 independent repetitions for each of four data-generating processes, giving 256 process–repetition combinations. The primary family contains 40 two-sided paired comparisons with Bonferroni adjustment. Each procedure selects its hyperparameters using the same validation observations within a task. The stored label `independent` denotes separate choices, not independent validation samples.
 
 | Candidate / reference | Lower candidate mean loss | Higher candidate mean loss | Unresolved |
 | --- | ---: | ---: | ---: |
 | KAHM-local / KAHM-memberships | 6 | 0 | 2 |
 | KAHM-normalizer / KAHM-memberships | 3 | 0 | 5 |
 | KAHM-local / affine-local | 1 | 4 | 3 |
-| KAHM-local / kernel-weighted local features | 3 | 0 | 5 |
+| KAHM-local / Kernel-local | 3 | 0 | 5 |
 | KAHM-local / raw history | 3 | 3 | 2 |
 
-Each row covers four data-generating distributions and two predictors. “Local” includes memberships and weighted local coordinates; “normalizer” includes memberships and log normalizers. Directions follow adjusted intervals, with no practical-benefit or equivalence margin. Coverage depends on the adequacy of the paired-Student approximation. An unresolved interval does not establish equivalence. All four nonlinear-predictor KAHM/kernel-weighted averaging comparisons remain unresolved.
+Each row covers four data-generating processes and two predictors. “Local” includes memberships and membership-weighted local coordinates; “normalizer” includes memberships and log normalization constants. “Kernel-local” uses kernel-weighted averaging with local-coordinate features. Directions follow adjusted intervals, with no practical-benefit or equivalence margin. Coverage depends on the paired-Student approximation. An interval containing zero is classified as unresolved and does not establish equivalence. All four nonlinear-predictor comparisons between KAHM and kernel-weighted averaging are unresolved.
 
-The findings support adding local-coordinate features in specified settings. They do not establish a universal advantage for KAHM over the reconstruction controls. The analysis with a shared dimension limit and the related studies use different comparison rules. Their results are reported separately from the primary comparisons.
+The results support local-coordinate augmentation in some settings, while comparisons between reconstruction methods favor different methods or remain inconclusive. The secondary analysis using a common dimension cap and the related studies have separate comparison rules.
 
-## Recompute the central comparisons
+## Recalculate the central comparisons
 
-The [central evidence bundle](reproduction/score_enrichment/) contains 17 original records, including the complete selected-loss table as `selected_losses.csv.gz`. Its independent checker rebuilds 416 procedure summaries, 2,560 paired differences and all 40 primary comparisons from 26,624 saved loss rows.
+The [central evidence bundle](reproduction/score_enrichment/) contains 17 experiment records, including `selected_losses.csv.gz`. Its independent analysis script reconstructs 416 procedure summaries, 2,560 paired differences, and all 40 primary comparisons from 26,624 saved loss rows.
 
 From the repository root, using Python 3.12:
 
@@ -55,22 +52,16 @@ python3 -m pip install -r reproduction/score_enrichment/requirements.txt
 python3 reproduction/score_enrichment/check_saved_losses.py
 ```
 
-The command prints a JSON report. Add `--output /tmp/kahm-score-analysis` to write the rebuilt tables to a new directory. The checker verifies record identities and reconstructs statistics from saved losses; the original model-generation source, exact task roster, fitted models and forecast arrays are still required to regenerate the central experiment.
+The command prints a JSON report. Add `--output /tmp/kahm-score-analysis` to write the calculated tables to a new directory. The analysis verifies statistical calculations conditional on the saved losses. The complete central simulation and fitting source, exact task list, fitted model states, and forecast arrays are unavailable, so this bundle does not regenerate the central experiment.
 
-## Explore the supplementary capacity study
+## Predictor-capacity experiments
 
-The [predictor-capacity bundle](reproduction/capacity_followup/) contains the original experiment source and archived records for a separate study with 24 repetitions under three data-generating distributions. It compares KAHM local-coordinate features with raw-history and affine-coordinate controls at 64 and 256 Nyström landmarks. It supports file verification, statistical analysis of saved records and a full computational rerun. Its MSE outcomes and 12-comparison family remain separate from the central study's SMSE outcomes and 40 comparisons.
+The [predictor-capacity bundle](reproduction/capacity_followup/) contains experiment source and saved records for a separate study with 24 repetitions under three data-generating processes. It compares KAHM local-coordinate features with raw histories and affine local-coordinate features at 64 and 256 Nyström landmarks. It supports file verification, statistical analysis of saved records, and full experiment regeneration. Its MSE outcomes and 12-comparison family are separate from the central study's SMSE outcomes and 40 comparisons.
 
-The [reproduction directory](reproduction/README.md) explains the two bundles. The [reproduction guide](REPRODUCIBILITY.md) gives commands, dependencies and the meaning of each check.
+The [reproduction directory](reproduction/README.md) maps the two bundles. The [reproduction guide](REPRODUCIBILITY.md) gives commands, dependencies, source identifiers, and the scope of each check.
 
-## Document build and evidence availability
+## Availability and licenses
 
-Compile the repository article and supplement with Python and a compatible TeX installation:
+The [availability guide](extensions/score_enrichment_20261102/AVAILABILITY.md) identifies supplied records and unavailable central execution materials. Experiment records list sixteen numerical archives totaling 9.024 GiB; the complete set is unavailable for independent verification. Archive volume is a distribution constraint, separate from the unavailable implementation, task list, and complete numerical environment.
 
-```bash
-python3 papers/score_enrichment/scripts/build.py
-```
-
-The [availability guide](extensions/score_enrichment_20261102/AVAILABILITY.md) lists the supplied evidence and the missing execution materials. The saved-loss checker verifies statistical calculations conditional on the recorded losses; a document build verifies typesetting.
-
-Original software uses the [MIT License](LICENSE); research outputs retain the terms in [DATA_LICENSE](DATA_LICENSE). The source distribution retains author attribution and third-party notices.
+Code uses the [MIT License](LICENSE); research outputs retain the terms in [DATA_LICENSE](DATA_LICENSE). The source distribution includes author attribution and third-party notices.

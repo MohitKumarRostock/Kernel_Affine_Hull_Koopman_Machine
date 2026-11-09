@@ -1,21 +1,19 @@
 # Predictor-capacity follow-up for geometric forecasting features
 
 This experiment asks whether a forecasting advantage of Kernel Affine Hull
-Machine (KAHM) local-coordinate features persists when the predictor has a larger Gaussian-kernel feature
-budget. It compares those features with raw histories and matched affine
+Machine (KAHM) local-coordinate features persists when the predictor has a larger set of Gaussian-kernel features. It compares those features with raw histories and matched affine
 local-coordinate features, using **64 or 256 training landmarks** in a finite
 Nyström approximation. The predictor also includes a linear component.
 
-The capacity study uses **24 independent repetitions under three synthetic data-generating distributions**:
+The capacity study uses **24 independent repetitions under three synthetic data-generating processes**:
 nonlinear autoregression, Van der Pol, and Duffing. Each repetition generates
 separate training, validation, and test episodes. Competing procedures within
 a repetition share the observations and fitted geometric reference models;
 each procedure selects its predictor settings by validation loss. The
-**12 primary comparisons** are three data-generating distributions × two landmark budgets × two
+**12 primary comparisons** are three data-generating processes × two landmark budgets × two
 references, each compared with KAHM local-coordinate features.
 
-This is the supplementary capacity study. It is separate from the enrichment
-paper's main 64-repetition experiment with four distributions and 40 comparisons. Its loss is
+This predictor-capacity study is separate from the central 64-repetition experiment with four data-generating processes and 40 comparisons. Its loss is
 **MSE**, averaged over origins and forecast horizons within an episode and then
 over test episodes. It is not the variance-standardized SMSE of the main
 experiment. These studies should not be pooled into one confidence family.
@@ -36,22 +34,22 @@ The primary CSV reports **reference MSE minus KAHM MSE**, so positive difference
 favor KAHM. Its intervals use the 24 complete repetition differences, with a
 paired Student approximation and Bonferroni adjustment across 12 comparisons.
 Origins, horizons, and episodes do not increase the number of repetitions.
-Each distribution's practical margin is 5% of its first-stage raw-input predictor's mean
+Each process's practical margin is 5% of its first-stage raw-input predictor's mean
 MSE, fixed before the capacity data were generated.
 
 The recorded outcomes include four practical benefits on Van der Pol, six
-comparisons with higher KAHM loss, and two unresolved directions. The original
-CSV calls these `practical_benefit`, `harm`, and `direction_unresolved`.
+comparisons with higher KAHM loss, and two unresolved directions. The saved
+CSV labels these `practical_benefit`, `harm`, and `direction_unresolved`.
 An unresolved direction does not establish equivalence. A benefit at 256
 landmarks applies to that tested finite predictor; it does not establish an
 advantage over every raw-input predictor. Changing the landmark budget can
 also change the sampled landmarks and the training-derived bandwidth.
 
 The 648 capacity records contain eight feature-by-budget procedures and one
-validation-selected procedure for each of 72 combinations of distribution and repetition. Full KAHM
+validation-selected procedure for each of 72 combinations of process and repetition. Full KAHM
 score features and the selector are secondary results. Supporting first-stage
-and sensitivity records remain because the original protocols, practical
-margins, and numerical checks depend on them.
+and sensitivity records support the protocol checks, practical
+margins, and numerical-sensitivity analysis.
 
 ## Verify files and recompute saved-record statistics
 
@@ -64,7 +62,7 @@ python -m reproduce verify
 
 `verify` needs only the Python standard library. It checks all **51 scientific
 snapshot entries and 17 archive entries**, including decompressed hashes for
-gzip files. A missing or changed file is an error. The two original manifests
+gzip files. A missing or changed file is an error. The two scientific manifests
 are [`study/SNAPSHOT.json`](study/SNAPSHOT.json) and
 [`archive/MANIFEST.json`](archive/MANIFEST.json).
 
@@ -89,7 +87,7 @@ The compact archive supports repetition-level statistical recomputation.
 It does not contain all fitted models or prediction arrays. Reconstructing
 episode losses directly from predictions requires a full computational rerun.
 
-## Regenerate the original experiments
+## Regenerate the experiments
 
 The full command regenerates the first-stage experiments, capacity follow-up,
 and numerical-sensitivity checks from their published random streams. It fits
@@ -110,7 +108,7 @@ repetitions. Runtime and memory measurements depend on the execution environment
 For a smaller fitting check, `python -m reproduce smoke --run-dir runs/smoke`
 runs reduced examples and the archived arithmetic audit. Its reduced examples
 do not reproduce the reported means. `python -m reproduce --help` lists the
-available commands. No command in this bundle builds a manuscript.
+available commands.
 
 ## Provenance and licenses
 

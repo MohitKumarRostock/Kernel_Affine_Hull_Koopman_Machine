@@ -1,11 +1,11 @@
-# Research materials
+# Research resources
 
-This branch provides code and numerical evidence for **Feature Augmentation for Forecasting with Reconstruction-Based Representations**. The study compares forecasting models that use normalized reconstruction affinities, normalization constants or membership-weighted local coordinates. Kernel Affine Hull Machines are compared with affine reconstruction, kernel-weighted averaging and raw time-series histories.
+This repository provides code and numerical evidence for **Feature Augmentation for Forecasting with Reconstruction-Based Representations**. The central study compares forecasting models using normalized reconstruction affinities, memberships augmented with log normalization constants, and memberships augmented with weighted local coordinates. KAHM reconstructions are evaluated alongside affine projection, kernel-weighted averaging, and raw time-series histories.
 
-The [experiment guide](docs/EXPERIMENT_GUIDE.md) explains the comparisons. [REPRODUCIBILITY.md](REPRODUCIBILITY.md) lists the supported commands and their limits. The [document directory](papers/score_enrichment/) contains LaTeX sources, static tables and build inputs.
+The [experiment guide](docs/EXPERIMENT_GUIDE.md) explains the comparisons. [REPRODUCIBILITY.md](REPRODUCIBILITY.md) lists commands, dependencies, source identities, and the scope of each available check. The [research index](docs/RESEARCH_INDEX.md) links related experiments.
 
-The central checker reconstructs the statistical analysis from saved per-run losses. The full simulation and fitting implementation, complete task roster and numerical model/forecast archives are unavailable. The separate predictor-capacity study includes its own source and saved records. These studies use different data and comparison families.
+The central statistical-analysis script reconstructs procedure summaries, paired differences, and all primary comparisons from saved per-run losses. The complete central simulation and fitting implementation, exact task list, fitted model states, and forecast arrays are unavailable. The separate predictor-capacity study provides simulation and fitting source and saved records. These studies use different data and comparison families.
 
-The information-preservation results do not imply that every fitted predictor will forecast accurately. The experiment also does not test whether the representation evolves autonomously under a closed transition model.
+Information preservation does not guarantee accurate fitted predictions. The central experiment predicts future observations directly; it does not evaluate a closed transition model for the feature vector.
 
-The repository contains author attribution and third-party license notices. Journal-format headers do not indicate submission or acceptance.
+Author attribution and third-party license notices accompany the source and data files.

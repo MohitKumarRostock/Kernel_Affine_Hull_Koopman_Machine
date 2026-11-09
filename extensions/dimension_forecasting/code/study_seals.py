@@ -123,7 +123,13 @@ def verify_freeze(root):
     record = read(root / "freeze.json")
     require(record["status"] == "frozen", "Invalid source freeze")
     require(record["config_sha256"] == sha(root / "config.json"), "Frozen configuration changed")
-    verify_files(root, record)
+    if (root / "source_distribution.json").exists():
+        from source_distribution import verify_source_distribution
+        verification = verify_source_distribution(root, record)
+        record = dict(record)
+        record["distribution_verification"] = verification
+    else:
+        verify_files(root, record)
     return record
 
 
@@ -274,8 +280,13 @@ def main():
     functions = {"freeze": source_freeze, "fits": fits_lock, "predictions": predictions_lock,
                  "release": target_release, "verify": verify_freeze}
     result = functions[args.phase](root)
-    print(json.dumps({"phase": args.phase, "status": result["status"],
-                      "task_count": result.get("task_count"), "file_count": len(result["files"])}))
+    summary = {"phase": args.phase, "status": result["status"],
+               "task_count": result.get("task_count"), "file_count": len(result["files"])}
+    if "distribution_verification" in result:
+        summary["status"] = "verified_available_source"
+        summary["file_count_scope"] = "historical_freeze_entries"
+        summary["distribution_verification"] = result["distribution_verification"]
+    print(json.dumps(summary))
 
 
 if __name__ == "__main__":

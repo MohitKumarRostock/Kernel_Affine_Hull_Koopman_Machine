@@ -45,6 +45,30 @@ commit `7dda356138675934aab5e327ec667bde0a5eda79` of
 The verified central dimension policy has SHA-256
 `c03d9a1923b5d9c8ade8a4198fd06e2b24c6add9bf0e0992c469f90d7621efa2`.
 
+## Source distribution and verification
+
+The computational distribution retains the original numerical implementation,
+configuration, observation generators, source freeze and result locks. Two manuscript provenance passages are outside this distribution.
+Their paths and original hashes remain recorded in the historical inventories.
+[source_distribution.json](source_distribution.json) enumerates these two
+omissions and identifies the distributed documentation and verification files.
+
+The normal `python code/study_seals.py verify --root .` command checks the
+145 unchanged files in the historical source inventory against their original
+hashes. It checks the runtime README and the three source-verification entry
+points against their explicit distribution hashes and verifies the additional
+distribution-checking module. The same source check is used by data
+preparation, model execution and reanalysis. Its output lists the omitted
+manuscript files and states that their contents have not been verified.
+Numerical calculations and result-lock checks are unchanged. The original
+freeze and result locks retain their recorded identities.
+
+The original pre-production audit in `audit/review_prefreeze.py` is retained
+with its recorded identity. That audit requires the complete historical source
+bundle, including manuscript provenance, and does not verify this computational
+distribution. The available-source check above provides the corresponding
+verification for the distributed files.
+
 ## Environment
 
 Run commands from `extensions/dimension_forecasting` in the repository source
@@ -112,10 +136,11 @@ historical2, native20, matched controls and gamma-one results are secondary.
 
 ## Reproduce the complete numerical execution
 
-Use a clean copy of the frozen source tree without `prepared/`, `results/`,
+Use a clean copy of the computational source distribution without `prepared/`, `results/`,
 `predictions/`, `execution/`, `FIT_LOCK.json`, `PREDICTION_LOCK.json`, or
-`TARGET_RELEASE.json`. Preserve the existing source freeze and every file it
-lists. The following commands reproduce the same declared seeds and design;
+`TARGET_RELEASE.json`. Preserve the original source freeze, the distribution
+inventory and every distributed source file. The following commands reproduce
+the same declared seeds and design;
 they do not create a new independent research sample.
 
 ```bash

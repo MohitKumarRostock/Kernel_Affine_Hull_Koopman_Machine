@@ -53,17 +53,23 @@ def validate_config(c):
 def verify_chain(root,c):
     phases=(("freeze.json","frozen","source"),("FIT_LOCK.json","sealed","fits"),
             ("PREDICTION_LOCK.json","sealed","predictions"),("TARGET_RELEASE.json","sealed","target_release"))
-    records={}; hashes={}; checked={}
+    records={}; hashes={}; checked={}; distribution=None; verified_source_paths=set()
     config_hash=digest(root/"config.json")
     for name,status,phase in phases:
         record=read(root/name)
         require(record["status"]==status and record["phase"]==phase and record["task_count"]==192 and record["config_sha256"]==config_hash,"Invalid seal: "+name)
         require(record["files"],"Empty seal file map")
-        for relative,expected in record["files"].items():
-            path=confined(root,relative)
-            actual=checked.get(relative)
-            if actual is None: actual=checked[relative]=digest(path)
-            require(actual==expected,"Sealed file changed: "+relative)
+        if name=="freeze.json" and (root/"source_distribution.json").exists():
+            sys.path.insert(0,str(ROOT/"code"))
+            from source_distribution import verify_source_distribution
+            distribution=verify_source_distribution(root,record)
+            verified_source_paths=set(record["files"])-set(distribution["omitted_manuscripts"])
+        else:
+            for relative,expected in record["files"].items():
+                path=confined(root,relative)
+                actual=checked.get(relative)
+                if actual is None: actual=checked[relative]=digest(path)
+                require(actual==expected,"Sealed file changed: "+relative)
         records[name]=record; hashes[name]=digest(root/name)
     for name in ("FIT_LOCK.json","PREDICTION_LOCK.json","TARGET_RELEASE.json"):
         require(records[name]["freeze_sha256"]==hashes["freeze.json"],"Source predecessor differs")
@@ -74,8 +80,15 @@ def verify_chain(root,c):
     require(moments==sorted(moments),"Seal chronology differs")
     require(records["freeze.json"]["production_data_generated"] is False and records["FIT_LOCK.json"]["D_generated"] is False and records["PREDICTION_LOCK.json"]["D_scoring_started"] is False and records["TARGET_RELEASE.json"]["targets_read_for_scoring_before_release"] is False,"Data role declarations differ")
     for path in Path(__file__).parent.glob("*.py"):
-        require(records["freeze.json"]["files"].get("analysis_code/"+path.name)==digest(path),"Analyzer is not frozen: "+path.name)
-    return records,{"seal_sha256":hashes,"verified_distinct_files":len(checked),"verified_before_terminal_target_access":True}
+        relative="analysis_code/"+path.name
+        expected=records["freeze.json"]["files"].get(relative)
+        if distribution is not None and relative in distribution["verified_replacement_files"]:
+            expected=distribution["verified_replacement_files"][relative]["distributed_sha256"]
+        require(expected==digest(path),"Analyzer source identity differs: "+path.name)
+    integrity={"seal_sha256":hashes,"verified_distinct_files":len(set(checked)|verified_source_paths),"verified_before_terminal_target_access":True}
+    if distribution is not None:
+        integrity["source_distribution"]=distribution
+    return records,integrity
 
 
 def manifest_roster(manifest):

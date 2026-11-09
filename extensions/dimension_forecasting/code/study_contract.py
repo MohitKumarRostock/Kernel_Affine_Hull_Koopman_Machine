@@ -97,7 +97,13 @@ def verify_freeze(root,freeze_file):
     if freeze.get('status')!='frozen':raise ValueError('Source/configuration freeze is not final')
     if freeze.get('config_sha256')!=digest(root/'config.json'):raise ValueError('Frozen configuration changed')
     if freeze.get('task_count')!=len(task_roster(config)):raise ValueError('Frozen task count differs')
-    verify_file_map(root,freeze['files'])
+    if (root/'source_distribution.json').exists():
+        from source_distribution import verify_source_distribution
+        verification=verify_source_distribution(root,freeze)
+        freeze=dict(freeze)
+        freeze['distribution_verification']=verification
+    else:
+        verify_file_map(root,freeze['files'])
     return freeze
 
 

@@ -1,10 +1,10 @@
-# Selected affine forecasting policies
+# Model selection and numerical verification for affine forecasting
 
-This directory contains the focused S43 experiment: development selection on
-three forecasting tasks, exact numerical verification of selected clipped
-affine predictions, and a retained implementation-cost assay. The release
-preserves the original computation source and the numerical premises needed
-for an offline replay. It does not require the historical reporting PDFs.
+This experiment selects clipped affine forecasting models on development data
+for three tasks, measures their prediction error and verifies their numerical
+outputs. It also measures the computational cost of numerical verification.
+The directory contains the source code and saved inputs needed to repeat the
+reported checks.
 
 ## Run the numerical replay
 
@@ -15,38 +15,38 @@ python experiments/affine_forecasting/replay.py --output results/affine_forecast
 ```
 
 The output location must be outside this experiment directory. The replay
-reads JSON/gzip witnesses and exact binary64 coordinates; it does not load a
+reads JSON/gzip records and exact binary64 coordinates; it does not load a
 pickle, download data, fit a model, or overwrite retained observations.
 
 The replay performs these computations:
 
 - Reconstructs 1,206 pooled development losses from all 134 candidate forecast
   sequences for each of three tasks and three seeds, then repeats all 54
-  policy selections with the frozen lexical tie rule.
-- Checks all 15 distinct stored affine deployments, including exact coefficient
-  norm, class identity, and deployment identity checks.
+  policy selections with the fixed lexical tie rule.
+- Checks all 15 distinct stored affine models, including exact coefficient
+  norm, predictor-class identity and stored-model identity checks.
 - Computes 1,350 exact clipped affine references with rational arithmetic and
-  verifies the corresponding packets with the original separate integer
+  verifies the corresponding output records with a separate integer
   arithmetic verifier. Every one of the 270 assessment queries is covered by
-  five distinct selected affine deployments.
-- Applies the same exact error calculation to all 1,350 physical-output
-  float32 conversions. It also replays the 45 wrong-query, wrong-deployment,
-  and stale-feature challenges against the external expected context.
-- Recomputes every retained assessment and monthly policy loss from physical
-  forecasts and unclipped targets, including all seeds and adverse months.
+  five distinct selected affine models.
+- Applies the same exact error calculation to all 1,350 float32 conversions of predictions
+  in the original target units. It also replays the 45 checks for incorrect query, model or
+  feature associations against the expected identifiers.
+- Recomputes every retained assessment and monthly policy loss from forecasts in the original
+  target units and unclipped targets, including all seeds and adverse months.
 - Reaggregates the original ten timing repetitions at each of 32 selected
   queries per task. These are summaries of recorded measurements, not a new
   runtime benchmark.
 
 ## Results and their scope
 
-The frozen primary policy is the raw-feature affine family selected with seed
+The primary procedure selects an affine model of the raw input features with seed
 3901. Its comparison pool is the conventional family of 44 configurations
 (`ordinary`, called Pool in the manuscript) and its five-configuration ridge
 subset. The 90-candidate affine representation pool (`all_map`) is a different
 secondary policy. Selection uses only the three development folds.
 
-The primary finite-assessment criterion is
+The primary criterion on the evaluation dataset is
 `20 * SSE_raw <= 21 * SSE_reference` for both references on each task. Each
 task has 90 assessment targets. All six pooled inequalities pass:
 
@@ -56,63 +56,64 @@ task has 90 assessment targets. All six pooled inequalities pass:
 | Jena temperature, 2018 (°C) | 2.60618700 | 2.54365436 | 2.54365436 | +4.9772% | +4.9772% |
 | Metro traffic, 2018 (vehicles/hour) | 519.26784944 | 531.28576995 | 523.95665851 | −4.4729% | −1.7818% |
 
-This is a comparison on a fixed historical assessment roster. It is not a
+This comparison uses a fixed set of evaluation observations. It is not a
 population noninferiority test. The seed repetitions reuse the same targets.
 The five-percent condition fails in eight task/month/reference comparisons:
 household September and October versus ridge and November versus Pool; Jena
 September and October versus both references; Metro September versus ridge.
-Those months remain in the witness inputs and generated report. The earlier
-S41 primary status remains **NOT_ESTABLISHED**, and the S42 periods remain
-**DIAGNOSTIC_ALREADY_EXPOSED_PERIODS**.
+Every month is included in the input records and generated report. The
+[forecasting-model comparisons](../decoder_diagnostics/) also report failed
+5% MSE criteria on Household and Jena and ablations on those same periods.
+Those ablations use data already examined during model development and do
+not provide an independent confirmation.
 
-All 1,350 honest binary64 packets are accepted. Quantization changes every
-reported value; 1,349 float32 variants exceed the frozen discrepancy budget
+All 1,350 unmodified binary64 forecast records are accepted. Quantization changes every
+reported value; 1,349 float32 variants exceed the fixed discrepancy budget
 and are rejected, while one remains inside the budget and is accepted. All
-45 prescribed misbindings are rejected. Acceptance certifies the discrepancy
-between the supplied physical prediction and the fixed stored rational affine
+45 prescribed incorrect query, model or feature associations are rejected. Acceptance certifies the discrepancy
+between the supplied prediction in original target units and the fixed stored rational affine
 reference, conditional on the supplied exact binary64 feature coordinates.
-The normalized budget is `2^-40`; the physical budget is the training target
-span multiplied by that value. Labels are not inputs to packet verification.
+The normalized budget is `2^-40`; the budget in original target units is the training target
+span multiplied by that value. Target labels are not inputs to numerical output verification.
 
-The contract does not enclose errors of an ideal real-arithmetic KAHM/native
-transform, certify a training optimum, provide future-label coverage, or
-authenticate a source. Hashes bind retained content; they are not signatures.
+This guarantee is conditional on the stored feature values. It does not bound
+errors introduced during feature generation, establish a training optimum or
+guarantee accuracy on future targets. File hashes establish content identity;
+they do not authenticate the source.
 
 The retained timing observations are unfavorable to a speedup claim. For the
 primary raw policy, the median full verified prediction costs 13.22–13.51
-times the median plain prediction. A cached packet check costs 3.44–3.49
+times the median plain prediction. A check using a cached verification record costs 3.44–3.49
 times the corresponding direct exact-reference recomputation. The report
 includes all selected policies, not only the primary timing row.
 
-## Inputs and original generation source
+## Inputs and data-generation source
 
-`witnesses/assessment.json.gz` stores exact deployment parameters, binary64
-feature hex strings, honest and quantized packet contents, physical forecast
-values, query IDs, targets, and misbinding challenges. Features are explicit
-trusted premises. The original per-query `.npy` hashes are retained alongside
+`witnesses/assessment.json.gz` stores exact model parameters, binary64
+feature hex strings, unmodified and quantized forecast records, predictions
+in original target units, query IDs, targets and incorrect-association checks. Feature values are trusted inputs to these checks. The original per-query `.npy` hashes are retained alongside
 their exact coordinates. `development.json.gz` stores candidate configurations,
 fold forecast values, targets, and numerical reference outcomes.
 `timing.json.gz` retains the actual nanosecond repetitions. `source_inventory.json`
 records paths, hashes, and sizes of the original evidence files used to build
-the compact inputs. `reference_result.json.gz` is the historical aggregate;
-the replay computes its scientific outcomes from the other premises.
+the compact inputs. `reference_result.json.gz` contains the recorded aggregate results;
+the replay computes those results from the other inputs.
 
-`original/source/` retains the original representation factory, native affine
+`original/source/` retains the original representation factory, affine
 and baseline fitting adapters, data access and generation code, producer,
 verifier, cost assay, and audit code. `original/inputs/native/` retains the exact
-native KAHM sources expected by that factory. `original/output/data43/` contains
-all training and development validation cohorts, their raw lag arrays, exact
+KAHM source files used by that factory. `original/output/data43/` contains
+all training and validation datasets, their raw lag arrays, exact
 target tokens, and training-only normalization records. These are sufficient
-for offline method development from the curated cohorts. The original design
-and frozen protocol describe the complete data extraction, exposure checks,
-fit grid, seeds, and chronology.
+for offline method development from the supplied datasets. The original design
+and protocol describe data extraction, checks for overlap with data used in
+model development, the hyperparameter grid, random seeds and execution order.
 
-The consolidated entrypoint is a numerical replay, not a rerun of the original
-data-acquisition and sealing workflow. Historical paths inside the original
-receipts identify their original run locations. Reproduction of the raw-source
-extraction would additionally require the archives identified below and the
-documented original workflow. Full model retraining was not run during this
-consolidation.
+The replay evaluates the supplied numerical records. Repeating raw-data
+extraction requires the archives identified below and the documented extraction
+procedure. Model training requires those inputs, the specified environment and
+the training source. The paths recorded with the data identify the source
+files and execution directories.
 
 ## Dataset provenance
 
@@ -123,10 +124,10 @@ consolidation.
 | Metro traffic | UCI Metro Interstate Traffic Volume, DOI [10.24432/C5X60B](https://doi.org/10.24432/C5X60B), CC BY 4.0 | Retained official UCI archive, SHA256 `b99aeabcbd6cc86f642da3a79d90883425798f58abd3b3302da2fa19dda73768`. |
 
 The original data adapters use only each task's own lagged target. Household
-power and Jena use the recorded minute-00 snapshots; these must not be described
-as hourly averages. Source timestamps retain the original recorded conventions.
+power and Jena use the recorded minute-00 snapshots; these are observations at the start of each hour,
+not hourly averages. Source timestamps retain the original recorded conventions.
 Exact URLs, archive/member hashes, measurement semantics, missing-data rules,
-and transport qualifications are preserved in the source receipts.
+and transport qualifications are preserved in the source records.
 
 Code and original study outputs follow the repository licenses. Third-party
 dataset terms and attribution remain those of their respective providers.

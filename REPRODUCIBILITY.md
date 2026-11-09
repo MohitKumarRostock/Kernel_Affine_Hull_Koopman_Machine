@@ -14,7 +14,7 @@ Start with the [experiment guide](docs/EXPERIMENT_GUIDE.md) for the scientific q
 | Recalculate supplementary capacity and supporting first-stage statistics | `python3 -m reproduce audit` in that bundle | Reconstructs statistics from saved repetition records using the original analysis source |
 | Regenerate the supplementary experiments | `python3 -m reproduce full` in that bundle | Generates observations, fits models and compares regenerated outputs with the archive |
 | Recompute central features or predictions, or regenerate its models | Original generator, runner, roster and numerical states are still required | Not supported by the central saved-loss bundle |
-| Compile the distributed article and supplement | `papers/score_enrichment/scripts/build.py` | Builds the supplied documents and static tables; no numerical experiment is run |
+| Compile the retained repository article and supplement | `papers/score_enrichment/scripts/build.py` | Builds the supplied documents and static tables; no numerical experiment is run |
 
 ## Central study: rebuild the saved-loss analysis
 
@@ -82,7 +82,9 @@ To regenerate the first-stage, capacity and numerical-sensitivity experiments, s
 
 This mode fits the original models and checks regenerated predictions and losses against the archive. It is substantially more work than the saved-record audit. Add `--resume` to continue a compatible incomplete run. Reusing published random streams checks computational reproduction and does not add independent repetitions. This command concerns the supplementary study; it cannot generate the central 64-repetition cohort.
 
-## Build and check the publication files
+## Build and check the retained publication files
+
+The repository preserves an earlier manuscript edition and its original build inputs. The revised manuscript and LaTeX package are distributed separately. Availability statements in the retained PDFs are historical; this guide describes the currently accessible evidence and checks.
 
 From the repository root, with a compatible TeX installation:
 
@@ -105,7 +107,7 @@ Use a new output directory. The checker uses [PUBLICATION_SCOPE.json](docs/PUBLI
 
 The original central generator and experiment runner, exact `cohort.json` roster and stream labels, complete source snapshot, fitted models and forecast arrays remain unavailable here. The historical records identify `KAHM_Step8_Repository_Update.zip` and the expected path `extensions/score_enrichment_20261102/release/`, but neither a package name nor a hash supplies the missing files.
 
-The recorded original source-manifest SHA256 is `af4357d382f23a58797cc111f73eca9cb6e8b283415ed31f3cd586af2fe4ba28`. The saved-loss bundle's manifest records its own distributed files and original evidence identities; it is not that original source manifest. The historical receipts refer to sixteen numerical archives totaling 9.024 GiB. Those archives and a public download endpoint are not supplied.
+The recorded original source-manifest SHA256 is `af4357d382f23a58797cc111f73eca9cb6e8b283415ed31f3cd586af2fe4ba28`. The saved-loss bundle's manifest records its own distributed files and original evidence identities; it is not that original source manifest. The historical receipts refer to sixteen numerical archives totaling 9.024 GiB. This is historical metadata, not a measurement of an archive set verified with the current release. Those archives and a public download endpoint are not supplied. Archive volume is a practical distribution constraint, separate from the unavailable original implementation, complete task roster and environment fingerprint. Omitting stored numerical outputs would not by itself prevent regeneration if the complete execution materials were available.
 
 The [original availability record](extensions/score_enrichment_20261102/AVAILABILITY.md) describes the earlier publication subset and remains a historical provenance document. The present reproduction bundles and their READMEs describe the files accessible in this checkout.
 

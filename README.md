@@ -16,10 +16,12 @@ Information retention, numerical stability, and predictive performance are separ
 
 ## Read the paper and inspect the evidence
 
+The manuscript files below are retained earlier editions; their availability statements are historical. The revised manuscript and LaTeX package are distributed separately. The guides and reproduction bundles below describe the materials currently available here.
+
 | Reader's question | Resource |
 | --- | --- |
-| What is the motivation and mathematical contribution? | [Article](papers/score_enrichment/main.pdf), with [editable sources](papers/score_enrichment/) |
-| How are observations, features, prediction rules, and comparisons defined? | [Supplement](papers/score_enrichment/supplement.pdf) and [recorded protocol](reproduction/score_enrichment/evidence/protocol.json) |
+| What is the motivation and mathematical contribution? | [Retained article edition](papers/score_enrichment/main.pdf), with [retained sources](papers/score_enrichment/) |
+| How are observations, features, prediction rules, and comparisons defined? | [Retained supplement edition](papers/score_enrichment/supplement.pdf) and [recorded protocol](reproduction/score_enrichment/evidence/protocol.json) |
 | What happens in every primary comparison? | [Complete primary table](reproduction/score_enrichment/evidence/primary_contrasts.csv) |
 | How do I interpret and check a primary comparison? | [Worked examples and experiment guide](docs/EXPERIMENT_GUIDE.md) |
 | Can I rebuild the comparisons from individual repetition losses? | [Central evidence and independent checker](reproduction/score_enrichment/) |
@@ -63,7 +65,7 @@ The [reproduction directory](reproduction/README.md) explains the two bundles. T
 
 ## Documents and historical records
 
-Compile the distributed article and supplement with Python and a compatible TeX installation:
+Compile the retained repository article and supplement with Python and a compatible TeX installation:
 
 ```bash
 python3 papers/score_enrichment/scripts/build.py

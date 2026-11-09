@@ -4,11 +4,15 @@ name: Reconstruction mechanism numerical checks
     paths:
     - extensions/reconstruction_mechanism/**
     - extensions/tmlr_integration/**
+    - scripts/materialize_scientific_context.py
+    - tests/test_materialize_scientific_context.py
     - .github/workflows/reconstruction-mechanism.yml
   pull_request:
     paths:
     - extensions/reconstruction_mechanism/**
     - extensions/tmlr_integration/**
+    - scripts/materialize_scientific_context.py
+    - tests/test_materialize_scientific_context.py
     - .github/workflows/reconstruction-mechanism.yml
   workflow_dispatch: null
 permissions:
@@ -28,6 +32,9 @@ jobs:
   scientific-evidence:
     runs-on: ubuntu-24.04
     timeout-minutes: 35
+    defaults:
+      run:
+        working-directory: ${{ runner.temp }}/kahm-mechanism-context
     steps:
     - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       with:
@@ -37,6 +44,11 @@ jobs:
         python-version: 3.12.14
         cache: pip
         cache-dependency-path: extensions/reconstruction_mechanism/requirements.txt
+    - name: Create isolated scientific input context
+      working-directory: ${{ github.workspace }}
+      run: |
+        git fetch --no-tags --depth=1 origin 5123365917ae630b684f8a3bebb0294ee695ce7a
+        python scripts/materialize_scientific_context.py --output "$RUNNER_TEMP/kahm-mechanism-context"
     - name: Restore exact mechanism and adaptive evidence from lossless parts
       run: python -m extensions.reconstruction_mechanism.evidence unpack
     - name: Install the specified numerical environment

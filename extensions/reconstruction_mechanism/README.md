@@ -16,13 +16,18 @@ The local prospective checkpoint fixes the scientific code, inputs, design, and 
 
 ## Restore and verify saved evidence
 
-Use Python 3.12 from the repository root. Large evidence files are stored in lossless parts. Restoration checks each part, the combined archives, and every extracted file; it accepts identical existing files and refuses conflicting replacements.
+Use Python 3.12 and a complete repository checkout. Create the recorded experimental source context before restoring or auditing evidence. The helper checks the recorded source identities and requires a new output directory:
 
 ```bash
+git fetch --no-tags --refetch --no-filter --depth=1 origin 5123365917ae630b684f8a3bebb0294ee695ce7a
+python scripts/materialize_scientific_context.py --output /tmp/kahm-scientific-context
+cd /tmp/kahm-scientific-context
 python -m pip install -r extensions/reconstruction_mechanism/requirements.txt
 python -m extensions.reconstruction_mechanism.evidence unpack
 python -m extensions.reconstruction_mechanism.run verify
 ```
+
+All restoration, analysis, audit, and selected-state replay commands below run inside this source context. Large evidence files are stored in lossless parts. Restoration checks each part, the combined archives, and every extracted file; it accepts identical existing files and refuses conflicting replacements.
 
 The standalone reproduction ZIP already contains the expanded mechanism evidence and does not require the unpack command. The repository transport contains the mechanism and adaptive studies; the standalone mechanism archive contains the principal study and its numerical dependencies.
 

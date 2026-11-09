@@ -51,6 +51,8 @@ python -m extensions.target_geometry.analysis \
   --run-dir /tmp/kahm-target-rerun --output /tmp/kahm-target-audit
 ```
 
+Input verification requires byte-identical regenerated arrays with the recorded input hashes and stops on a mismatch. Matching Python and package versions alone does not guarantee the complete execution environment.
+
 Existing outputs require explicit `--resume`; their source/configuration/roster
 must match. Failures and unsuccessful work are retained. Prepared arrays are derived from the pinned official records. The `data.py prepare` command writes the prescribed roster into an empty destination.
 

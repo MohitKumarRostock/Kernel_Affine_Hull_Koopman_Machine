@@ -44,4 +44,6 @@ The [reporting guide](extensions/soft_state_ablation_20261102/reporting/README.m
 | Policy augmentation | [Synthetic experiment](extensions/policy_augmentation_20261101/README.md) and [natural series](extensions/policy_augmentation_natural_20261101/REPRODUCTION.md) |
 | Root KAHKM experiments | [Reproduction evidence](reproduction/REPRODUCIBILITY_EVIDENCE.md) |
 
+Target-geometry input verification requires byte-identical regenerated arrays with the recorded hashes and stops on a mismatch. Matching Python and package versions alone does not guarantee the complete execution environment. Its [study guide](extensions/target_geometry/README.md) gives the recorded-source context and verification commands.
+
 Use new output directories for repeated computation. Preserve recorded results and original protocol identities. Reanalysis of saved losses, replay of saved fitted states, model refitting, and experiments on new independent data answer different questions.

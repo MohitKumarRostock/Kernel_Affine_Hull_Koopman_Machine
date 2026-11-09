@@ -18,7 +18,7 @@ The original generator, experiment runner, complete source snapshot, `cohort.jso
 
 The experiment records describe sixteen numerical archives totaling 9.024 GiB. The complete set and a public download endpoint are unavailable, so the recorded total has not been independently verified from all archive bytes. Archive volume is a distribution constraint separate from the missing implementation, evaluation roster, and environment. Complete source and execution inputs would permit regeneration without distributing every saved model state.
 
-The recorded original environment uses Python 3.13.5, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, threadpoolctl 3.6.0, and pytest 9.0.2. The saved-loss checker uses its own pinned Python 3.12 environment. The root requirements serve the root KAHKM experiments and are not a replacement for either environment.
+The recorded original environment uses Python 3.13.5, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, threadpoolctl 3.6.0, and pytest 9.0.2. The saved-loss checker uses its own pinned Python 3.12 environment. The root requirements describe the reusable numerical library. Each study has its own pinned dependencies.
 
 ## Four-representation local-position experiment
 
@@ -31,19 +31,31 @@ python extensions/soft_state_ablation_20261102/reporting/restore_compact_records
 
 The [reporting guide](extensions/soft_state_ablation_20261102/reporting/README.md) gives statistical and saved-state checks, and the [protocol](extensions/soft_state_ablation_20261102/PROTOCOL.md) defines the source and execution requirements. Full regeneration requires the inherited dimension-study runtime and policy-study numerical solver in addition to this extension. Numerical replay requires the separately indexed data, forecasts, and fitted-state archives. An archive inventory is not a download service.
 
-## Supporting experiments
+## Supporting forecasting studies
 
 | Study | Reproduction guide |
 | --- | --- |
 | Controlled representations and predictor capacity | [Predictive geometry](extensions/predictive_geometry/REPRODUCING.md) |
 | Validation-selected dimension | [Dimension forecasting](extensions/dimension_forecasting/README.md) |
-| Reconstruction departures | [Reconstruction mechanism](extensions/reconstruction_mechanism/README.md) |
-| Forecast-trained reconstruction parameters | [Direct reconstruction](extensions/direct_reconstruction/README.md) |
-| Supervised metrics and residual targets | [Target geometry](extensions/target_geometry/README.md) |
-| Online updates | [Adaptive development](extensions/adaptive_development/REPRODUCING.md) |
+| Input preprocessing and dimension | [Preprocessing study](extensions/preprocessing_dimension/FINDINGS.md) |
+| Residual prediction | [Computational reproduction](extensions/crossfit_residual_reproduction_20261101/README.md) |
 | Policy augmentation | [Synthetic experiment](extensions/policy_augmentation_20261101/README.md) and [natural series](extensions/policy_augmentation_natural_20261101/REPRODUCTION.md) |
-| Root KAHKM experiments | [Reproduction evidence](reproduction/REPRODUCIBILITY_EVIDENCE.md) |
 
-Target-geometry input verification requires byte-identical regenerated arrays with the recorded hashes and stops on a mismatch. Matching Python and package versions alone does not guarantee the complete execution environment. Its [study guide](extensions/target_geometry/README.md) gives the recorded-source context and verification commands.
+Verify the distributed scientific sources and their shared dependencies from the repository root:
 
-Use new output directories for repeated computation. Preserve recorded results and original protocol identities. Reanalysis of saved losses, replay of saved fitted states, model refitting, and experiments on new independent data answer different questions.
+```bash
+python scripts/verify_study_sources.py
+```
+
+This command checks file hashes against the retained source freezes, including bundled implementations, the residual study's source-provenance files, and the reference statistical function. Its report distinguishes these source checks from unavailable execution inputs. It does not generate data, fit predictors, or verify forecasts.
+
+The controlled-representation study includes a self-contained reproduction package. After installing `extensions/predictive_geometry/requirements.txt`, its reduced execution and saved-evidence checks run with:
+
+```bash
+cd extensions/predictive_geometry
+python -m reproduce smoke
+```
+
+The [numerical-check guide](reproduction/README.md) gives the four-comparison local-position analysis and reporting commands. Other studies require their own data or fitted-state archives for the corresponding execution stages. An archived inventory identifies expected files; it does not establish that all files are distributed.
+
+Use new output directories for repeated computation. Recorded results and protocol identities define the evidence being checked. Reanalysis of saved losses, replay of saved fitted states, model refitting, and experiments on independent data answer different questions.

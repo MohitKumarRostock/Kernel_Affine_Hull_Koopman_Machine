@@ -18,13 +18,10 @@
 | Enlarging a forecasting policy | [Policy augmentation](../extensions/policy_augmentation_20261101/RESULTS.md): neither nonlinear practical-superiority criterion established |
 | Natural-series policy use | [M4 training-series evaluation](../extensions/policy_augmentation_natural_20261101/FINDINGS.md): descriptive 2.273% loss increase after KAHM augmentation; no official M4 Test data |
 
-Supervised geometry, directly trained reconstructions, scaling, and online adaptation remain separate development investigations under `extensions/`. Their representations and update rules do not establish closure of the present score map.
+## Shared computational resources
 
+The dimension study supplies the bundled geometry implementation and data-generation source used by the preprocessing, residual-prediction, policy-augmentation, and local-position studies. Each study retains its own protocol, source hashes, observations, and analysis.
 
-## Other code and evidence
+The residual study verifies its scientific source against the frozen files in `extensions/crossfit_residual_v2/`. The dimension-study statistical checks use [`paired_margin_contrast`](../extensions/reconstruction_mechanism/analyze.py) as a reference implementation. These files are dependencies of the supported studies.
 
-Root `experiment_*.py`, `step_*.py`, `kahkm_*` outputs, [reproduction](../reproduction/), and [provenance](../provenance/) concern Kernel Affine Hull Koopman Machine (KAHKM) experiments. KAHKM, a KAHM reconstruction map, distance-based soft assignments, and normalized reconstruction affinities are different constructions. Their targets, predictors, and statistical units must not be interchanged.
-
-The [forecasting evidence guide](../extensions/tmlr_integration/README.md) identifies the dimension, preprocessing, residual-target, and fixed-reconstruction studies. Each has its own sampling units and comparison family. No observations are pooled merely because the studies share a repository.
-
-The [reproducibility guide](../REPRODUCIBILITY.md) states which computations the available files support.
+[Reproduction programs](../reproduction/README.md) provide statistical checks, kernel-identity diagnostics, and table generation. The [reproducibility guide](../REPRODUCIBILITY.md) states the inputs and limits of each computation.

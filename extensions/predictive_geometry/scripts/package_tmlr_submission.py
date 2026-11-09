@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
-"""Build deterministic TMLR review bundles without changing scientific evidence.
+"""Verify scientific source and archive manifests.
 
-Run from the extension root:
-    python scripts/package_tmlr_submission.py --output-dir dist/tmlr
-    python scripts/package_tmlr_submission.py --verify-dir /path/to/extracted/supplement
-
-Review metadata is a separate view. Historical source, archive, freeze records,
-published citations and required license notices retain their exact bytes.
+Run with --verify-dir to check a previously created evidence bundle.
+Historical source and data identities retain their original definitions.
 """
 from __future__ import annotations
 
@@ -281,8 +277,8 @@ python -m reproduce paper
 
 The latter command additionally requires latexmk and a LaTeX distribution. The
 separate TMLR_Manuscript_Source.zip can also be built directly with
-`latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex`. The previous named
-PDF is excluded from both ZIPs; build the anonymous manuscript from its sources.
+`latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex`. The source archive
+contains editable document sources.
 
 ## Evidence and provenance
 
@@ -439,14 +435,12 @@ def build_packages(root, output_dir):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--output-dir", type=Path)
-    group.add_argument("--verify-dir", type=Path)
+    parser.add_argument("--verify-dir", type=Path, required=True)
     args = parser.parse_args()
     try:
-        result = verify_directory(args.verify_dir) if args.verify_dir else build_packages(ROOT, args.output_dir)
+        result = verify_directory(args.verify_dir)
     except (OSError, ValueError, KeyError, zipfile.BadZipFile) as error:
-        parser.exit(1, f"Submission packaging failed: {error}\n")
+        parser.exit(1, f"Evidence verification failed: {error}\n")
     print(json.dumps(result, indent=2, sort_keys=True))
 
 

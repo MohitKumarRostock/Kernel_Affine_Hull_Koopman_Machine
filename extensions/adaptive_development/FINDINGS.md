@@ -40,13 +40,13 @@ The small tier permits 64 shared geometric references and 128 supervised replay 
 
 The first 35% of each series initializes the model; 35-50% is chronological calibration; the latter half is evaluation. Each observation first scores previously issued forecasts, then releases newly matured labels, updates the model and issues immutable future predictions. At evaluation start, each horizon selects a mixing weight from 0, 0.25, 0.5 and 1 using only calibration forecasts whose targets have already arrived. The weight stays fixed thereafter; the underlying model may continue learning from matured evaluation labels.
 
-No bandwidth, penalty, history, reference-policy or refresh search was performed. Dominick and Sunspot were deliberately chosen from previously inspected manuscript inputs, including contrasting earlier KAHM outcomes. Their reuse supports development decisions, not new-source confirmation.
+No bandwidth, penalty, history, reference-policy or refresh search was performed. Dominick and Sunspot were deliberately chosen from previously inspected study inputs, including contrasting earlier KAHM outcomes. Their reuse supports development decisions, not new-source confirmation.
 
 Evidence: PROTOCOL.md, config.json, DATA_PROVENANCE.md, prepared_inputs/manifest.json and run.py. The original and amended scientific source checkpoints are local, not public preregistration.
 
 ## 2. Forecasting results
 
-Primary loss is MSE divided by the mean squared seasonal difference in the initial fitting prefix. Average origins within horizon, horizons within series, then series within collection. The natural mean weights Dominick and Sunspot equally; synthetic conditions remain separate. Smaller is better; bold marks the best value, including numerical ties. This online schedule and scale differ from the earlier manuscript tables, so their numerical scores are not directly comparable.
+Primary loss is MSE divided by the mean squared seasonal difference in the initial fitting prefix. Average origins within horizon, horizons within series, then series within collection. The natural mean weights Dominick and Sunspot equally; synthetic conditions remain separate. Smaller is better; bold marks the best value, including numerical ties. This online schedule and scale differ from the static forecasting experiments, so their numerical scores are not directly comparable.
 
 ### Small tier: 64 references and 128 replay rows
 

@@ -1,9 +1,11 @@
-# Manuscript and review materials
+# Research guides
 
-The current article is **Predictive Enrichment of Geometry-Induced Soft-State Abstractions: Information Retention and Decoder Access**. Its [source directory](papers/score_enrichment/) contains the article, focused supplement, complete primary tables, and build inputs.
+| Topic | Scientific resources |
+| --- | --- |
+| Feature Augmentation for Forecasting with Reconstruction-Based Representations | [Experiment guide, code, and saved-loss analysis](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02) |
+| A Hierarchy of Lower Bounds on Prediction Risk for Forecasting Representations | [Theory, implementation, and numerical examples](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) |
+| Supporting forecasting studies | [Research index](docs/RESEARCH_INDEX.md) |
 
-The title describes the scientific question. KAHM is identified in the abstract and method as the principal reconstruction construction, with affine and positive-kernel controls. The paper distinguishes information retention, fitted prediction, and exact dynamical closure. It makes no universal forecasting or autonomous-closure claim.
+The feature-augmentation experiment distinguishes information retained by a representation from accuracy achieved by a fitted predictor. The risk study analyzes lower bounds under explicitly stated loss, sampling, and reference-class assumptions. Neither study establishes universal forecasting superiority or autonomous dynamical closure.
 
-Review formatting does not assert submission or acceptance. The public source preserves identifying license and provenance information and is not an anonymous supporting-code archive. Authors remain responsible for comparing the exact other-venue manuscript and supplement, preparing permitted anonymous review materials, checking authorship and disclosures, and confirming the stated evidence availability.
-
-The original numerical source and results have separate identities from this publication. [REPRODUCIBILITY.md](REPRODUCIBILITY.md) documents the difference between the published subset, the author-delivered compact scientific package, and the unavailable complete numerical-archive set. A successful document build is not a model replay or an external scientific replication.
+[REPRODUCIBILITY.md](REPRODUCIBILITY.md) describes the available statistical checks, model replay, and simulation regeneration for each experiment. Source identities and numerical checks have separate scopes, and repeated computation does not add independent observations.

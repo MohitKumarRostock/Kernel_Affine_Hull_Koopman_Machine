@@ -1,4 +1,4 @@
-"""Reproduce experiments, audit evidence, build the paper, and package TMLR files."""
+"""Reproduce forecasting experiments and verify saved numerical evidence."""
 from __future__ import annotations
 
 import argparse
@@ -64,7 +64,7 @@ def worker_command(command, work, *extra):
 def assets(input_dir, output_dir):
     script = ROOT / "scripts/build_paper_assets.py"
     if not script.is_file():
-        raise FileNotFoundError("Missing paper asset builder scripts/build_paper_assets.py")
+        raise FileNotFoundError("Missing table and figure generator scripts/build_paper_assets.py")
     call([sys.executable, script, "--input", input_dir, "--output", output_dir])
 
 
@@ -119,20 +119,16 @@ def main():
         p.add_argument("--run-dir", type=Path)
         p.add_argument("--resume", action="store_true")
         p.add_argument("--workers", type=int, default=4)
-    p = commands.add_parser("tables", help="Regenerate paper tables and figures from archived or fresh records")
+    p = commands.add_parser("tables", help="Regenerate tables and figures from archived or fresh records")
     p.add_argument("--input", type=Path, default=ROOT / "archive")
-    p.add_argument("--output", type=Path, default=ROOT / "manuscript/generated")
+    p.add_argument("--output", type=Path, default=ROOT / "runs/tables")
     p = commands.add_parser("audit", help="Check immutable hashes, paired statistics, and fresh-run predictions when supplied")
     p.add_argument("--run-dir", type=Path)
     p.add_argument("--output", type=Path, default=ROOT / "runs/archive-audit")
-    p = commands.add_parser("paper", help="Build manuscript PDF after regenerating archived assets; requires latexmk")
     p = commands.add_parser("review-diagnostics", help="Regenerate explicitly retrospective influence and saved-bank geometry diagnostics")
     p.add_argument("--run-dir", type=Path, help="Completed full run required for saved-bank rank and gate checks")
     p.add_argument("--input", type=Path, help="Override the paired-contrast source directory")
-    p.add_argument("--output", type=Path, default=ROOT / "runs/review-diagnostics", help="Use manuscript/generated explicitly to update the paper after a full run")
-    p = commands.add_parser("submission", help="Create deterministic TMLR source and reproducibility ZIPs")
-    p.add_argument("--output-dir", type=Path, default=ROOT / "dist/tmlr")
-    p.add_argument("--verify-dir", type=Path, help="Verify an extracted submission bundle instead of packaging")
+    p.add_argument("--output", type=Path, default=ROOT / "runs/review-diagnostics", help="Directory for numerical diagnostic output")
     args = parser.parse_args()
     if getattr(args, "workers", 1) < 1:
         parser.error("--workers must be positive")
@@ -153,16 +149,6 @@ def main():
             if args.input:
                 command.extend(["--input", args.input.resolve()])
             call(command)
-        elif args.command == "submission":
-            command = [sys.executable, ROOT / "scripts/package_tmlr_submission.py"]
-            if args.verify_dir:
-                command.extend(["--verify-dir", args.verify_dir.resolve()])
-            else:
-                command.extend(["--output-dir", check_destination(args.output_dir)])
-            call(command)
-        elif args.command == "paper":
-            assets(ROOT / "archive", ROOT / "manuscript/generated")
-            call(["latexmk", "-pdf", "-interaction=nonstopmode", "-halt-on-error", "main.tex"], ROOT / "manuscript")
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Reproduction failed: {error}\n")
 

@@ -59,7 +59,7 @@ The nonlinear laws were known during development. Independent seeds provide new 
 
 The conclusions are limited by the selected methods, reference width, sample sizes, penalty grids, noise levels, and horizons. The 3% improvement and 5% noninferiority margins are study-design criteria, not application-derived utility thresholds. The paired t calculation is an approximation under its stated distributional assumptions.
 
-The protocol required all six accuracy conditions and the stability checks to be satisfied before further forecasting-performance experiments. Because four accuracy conditions were not established, the recorded combined decision is `STOP_FORECASTING_PERFORMANCE_BRANCH`; no subsequent application or adaptive experiment was used to replace this result. This decision concerns the evaluated procedures and does not prove that every geometric representation or decoder must fail.
+The protocol required all six accuracy conditions and the stability checks to be satisfied before further forecasting-performance experiments. Because four accuracy conditions were not established, the recorded combined decision is `STOP_FORECASTING_PERFORMANCE_BRANCH`; no subsequent application or adaptive experiment was used to replace this result. This decision concerns the evaluated procedures and does not prove that every geometric representation or predictor must fail.
 
 ## Evidence
 

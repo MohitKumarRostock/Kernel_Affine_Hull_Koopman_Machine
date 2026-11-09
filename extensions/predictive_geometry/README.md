@@ -1,11 +1,11 @@
-# When Kernel Affine Hull Geometry Helps Prediction
+# Controlled reconstruction features and predictor capacity
 
-**Local Coordinates, Decoder Capacity, and Conditional Gains**
+**Local coordinates, predictor capacity, and conditional gains**
 
 This extension accompanies a focused study of when KAHM geometry helps a predictive model. It includes
 matched KAHM/affine representations, controlled target laws, forecasting tests,
 a fresh capacity follow-up, and a numerical underflow sensitivity check.
-The results are included in the [integrated manuscript](../tmlr_integration/README.md). The local manuscript directory retains the earlier standalone study document.
+The [research index](../../docs/RESEARCH_INDEX.md) links other experiments with separate designs and sampling units.
 
 The contribution is a testable account of **conditional predictive gains**.
 The experiments retain favorable and unfavorable outcomes, use matched
@@ -13,12 +13,11 @@ reference observations and PCA bases, and include raw-input baselines. They do
 not establish that every task benefits from KAHMs or that better reconstruction
 implies better prediction.
 
-Read the [reproduction guide](REPRODUCING.md), [contribution and evidence summary](PAPER_READINESS.md), and [historical archive guide](TMLR_SUBMISSION.md). Tables, figures, and headline numerical macros are generated from archived records; supporting quantities are checked against those same records.
+Read the [reproduction guide](REPRODUCING.md). Tables, figures, and numerical summaries are generated from archived records and checked against those records.
 
 ## Quick start
 
-Use Python 3.12 and a Linux environment. From the extension directory or an
-extracted reproducibility supplement:
+Use Python 3.12 and a Linux environment. From the extension directory:
 
 ```bash
 python -m venv .venv
@@ -30,10 +29,10 @@ python -m reproduce smoke
 The smoke command runs provenance and loss-audit tests, the unchanged geometry
 tests, numerical arithmetic checks, reduced fits for all three forecasting
 systems plus branch and Airfoil data, both full archived primary analyses, and
-the paper asset builder. Its reduced fits are execution checks and are never
+the numerical table and figure generator. Its reduced fits are execution checks and are never
 used as research findings.
 
-**Regenerate every experiment, audit the results, and rebuild the paper assets:**
+**Regenerate every experiment, audit the results, and rebuild the tables and figures:**
 
 ```bash
 python -m reproduce full --workers 4
@@ -58,53 +57,22 @@ To verify archival hashes and independently recompute all 29 first-stage and
 python -m reproduce audit
 ```
 
-To compile the manuscript after rebuilding its assets, install `latexmk` and a
-LaTeX distribution with the packages used in `manuscript/main.tex`, then run:
+The execution record in [VALIDATION.json](VALIDATION.json) reports a full run that reproduced all 15,234 saved method MSEs exactly and passed the required prediction audits. It took about 194 seconds with four workers in the recorded environment; smoke checks took about 35 seconds. These timings apply to that environment.
 
-```bash
-python -m reproduce paper
-```
-
-The historical release check in [VALIDATION.json](VALIDATION.json) records successful runs
-of all five routes. The complete local rerun reproduced all 15,234 saved method
-MSEs exactly and passed the required prediction audits. It took about 194 seconds
-with four workers in the recorded environment; the smoke route took about
-35 seconds. These are observed timings for that environment, not a performance
-guarantee for another machine. It is historical evidence for the earlier release,
-not a validation claim about later edits. The historical review-format build has a separate verification record in `TMLR_VALIDATION.json`; that record does not certify later document editions.
-
-To check the archived paired differences and build the two submission ZIPs while
-preserving the manuscript's committed diagnostic assets:
+To check the archived paired differences:
 
 ```bash
 python -m reproduce review-diagnostics --output runs/review-diagnostics
-python -m reproduce submission --output-dir dist/tmlr
 ```
 
-That diagnostic command checks paired outcomes only. To regenerate the
-manuscript's additional saved-bank rank and gate checks, pass the directory
-of a completed full run explicitly:
+To inspect saved reconstruction banks, first create a complete run and then supply its path explicitly:
 
 ```bash
-python -m reproduce review-diagnostics --run-dir runs/full-review --output manuscript/generated
-python -m reproduce paper
+python -m reproduce full --workers 4 --run-dir runs/full-review
+python -m reproduce review-diagnostics --run-dir runs/full-review --output runs/review-diagnostics-full
 ```
 
-Here `runs/full-review` must first be created with
-`python -m reproduce full --workers 4 --run-dir runs/full-review`.
-
-The package command verifies the historical hashes, includes the complete
-executable study and compact result archive, and writes deterministic ZIPs with
-per-file hashes and content-tree digests. It excludes Git history, prior named
-PDFs and first-party author metadata. Required license notices, ordinary
-published citations and immutable upstream provenance remain; these narrow
-exceptions are listed explicitly in each package manifest. See
-[TMLR_SUBMISSION.md](TMLR_SUBMISSION.md) for the review-view contract.
-
-The Python experiment dependencies are pinned in `requirements.txt`. LaTeX is
-needed only to compile the manuscript PDF; experiment execution and asset
-generation do not require it. This is a source-checkout research bundle, not a
-standalone PyPI wheel.
+The second diagnostic mode adds bank-rank and gate checks using saved model states. The Python dependencies are pinned in `requirements.txt`. Numerical execution and table or figure generation do not require a TeX installation.
 
 ## What is preserved
 
@@ -117,8 +85,7 @@ standalone PyPI wheel.
 | `archive/numerical_sensitivity/` | All 96 robustness records and numerical audit |
 | `archive/MANIFEST.json` | Compressed-file and decompressed-content hashes |
 | `reproduce/` | Portability, execution, and auditing code, versioned separately from the scientific snapshot |
-| `scripts/build_paper_assets.py` | Source-derived manuscript table and figure generator |
-| `scripts/package_tmlr_submission.py` | Deterministic manuscript/reproducibility ZIPs and review-view integrity verification |
+| `scripts/build_paper_assets.py` | Source-derived numerical tables and figures |
 | `tests/` | Provenance, run-isolation, completeness, and independent-loss checks |
 | `ci/kahm-predictive-geometry.yml` | Source of the workflow installed at the parent repository root |
 | `runs/` | New execution manifests, generated states, predictions, audits, and assets; never committed |
@@ -137,7 +104,7 @@ Its scope is therefore a controlled reconstruction comparison, not a complete
 end-to-end optimization of every model family.
 
 The capacity follow-up uses distinct phase-4 random streams and two specified
-Nyström decoder budgets. Its 12 primary comparisons form their own confidence
+Nyström predictor budgets. Its 12 primary comparisons form their own confidence
 family; they do not combine with the first stage into a single 95% statement.
 The validation selector is a secondary complete-pipeline result.
 

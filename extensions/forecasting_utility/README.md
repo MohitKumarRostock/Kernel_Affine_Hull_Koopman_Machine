@@ -163,17 +163,17 @@ imports, downloads, and reporting. Model size describes the actual retained
 serialized state; synthetic gamma-zero selections may retain the bank fitted
 during selection even though prediction bypasses it.
 
-## Manuscript and scope
+## Scientific scope
 
-The [integrated manuscript](../tmlr_integration/manuscript/main.tex) asks:
+The experiment asks:
 **When does a forecasting representation contain useful predictive structure,
 and when is additional representation complexity justified?**
 
 For this empirical study, useful structure means a correction that improves a
 specified fitted predictor on reserved outcomes. Complexity is assessed using
 the declared validation rule and measured error-cost tradeoffs. These results
-do not estimate unrestricted Bayes risk or certify that every cheaper decoder
-class is inadequate. An exclusion claim about every cheaper decoder would require a specified decoder class and additional assumptions.
+do not estimate unrestricted Bayes risk or certify that every cheaper predictor
+class is inadequate. An exclusion claim about every cheaper predictor would require a specified predictor class and additional assumptions.
 
 The analysis distinguishes this additive-correction experiment from the original natural-data confirmation and the post-hoc scaling study. Incomplete coverage and unfavorable results remain part of the empirical conclusion.
 

@@ -1,4 +1,4 @@
-"""Build manuscript displays from the completed adaptive development study.
+"""Build numerical tables and figures from the completed adaptive development study.
 
 Reporting only: no model fitting, tuning, new forecasts, or protocol changes.
 The source remains the amended saved evidence, with the first attempt retained.
@@ -18,7 +18,7 @@ from statistics import mean
 
 ROOT = Path(__file__).resolve().parents[2]
 STUDY = ROOT / "extensions/adaptive_development"
-DEFAULT_OUTPUT = Path(__file__).resolve().parent / "manuscript/generated/adaptive_development"
+DEFAULT_OUTPUT = ROOT / "extensions/adaptive_development/reporting/generated"
 METHODS = (
     ("ridge", "Raw ridge"),
     ("fixed_kahm", "Fixed KAHM"),
@@ -70,7 +70,7 @@ def build(study: Path, output: Path) -> dict:
     if audit["status"] != "passed" or audit["run_count"] != 144 or audit["scored_forecasts"] != 387900:
         raise ValueError("A matching successful saved-evidence audit is required")
     if decision["decision"] != "DEFER" or not decision["technical_validity"] or decision["cap_violations"]:
-        raise ValueError("This manuscript section describes the completed, valid DEFER study")
+        raise ValueError("These results describe the completed, valid DEFER study")
     for field in ("framework_error_count", "framework_fallback_forecasts", "prediction_fallback_calls",
                   "training_feature_fallback_rows", "reencoded_feature_fallback_rows"):
         if any(int(r[field]) for r in tasks):
@@ -163,7 +163,7 @@ def build(study: Path, output: Path) -> dict:
     for budget in BUDGETS:
         tier = next(t for t in decision["capacity_tiers"] if t["budget"] == budget)
         if (tier["decision"], tier["mechanism_gate"], tier["natural_gate"], tier["p99_allowance_gate"]) != ("DEFER", False, False, True):
-            raise ValueError("Tier decision no longer matches the manuscript")
+            raise ValueError("Tier decision differs from the recorded result")
         if not math.isclose(tier["worst_kahm_stream_p99_ms"], maxima[(budget, "adaptive_kahm")][0], rel_tol=1e-12):
             raise ValueError("Decision and task timing maxima disagree")
         kahm = aggregated[(budget, "natural_equal_collection", "adaptive_kahm")]

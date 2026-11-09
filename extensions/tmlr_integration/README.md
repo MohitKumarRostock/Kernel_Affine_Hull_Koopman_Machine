@@ -1,26 +1,21 @@
-# KAHM forecasting: feature spans, bounded corrections, and matched evidence
+# Forecasting features, residual corrections, and matched evaluation
 
-**Kernel Affine Hull Features for Time-Series Forecasting: Feature Spans,
-Bounded Corrections, and Matched Evaluation** studies which functions local
-reconstructions add to a forecasting representation, how large a fitted
-residual correction can become, and whether the resulting complete forecasting
-procedure improves on competing procedures.
+This guide connects the local-dimension, preprocessing, residual-target, and reconstruction experiments. The implementation and reported evidence are specific to each study.
 
-- [Main manuscript](review/KAHM_Reconstruction_Prediction_Manuscript.pdf)
-- [Supporting Studies](review/KAHM_Supplementary_Studies.pdf)
-- [Editable manuscript sources](review/KAHM_Reconstruction_Prediction_Manuscript_Source.zip)
-- [Main LaTeX entry point](manuscript/main.tex) and [supporting-study entry point](manuscript/supplement.tex)
-- [Principal forecasting experiment](../dimension_forecasting/README.md) and [findings](../dimension_forecasting/FINDINGS.md)
-- [Preprocessing study](../preprocessing_dimension/README.md) and [findings](../preprocessing_dimension/FINDINGS.md)
-- [Cross-fit reproduction](../crossfit_residual_reproduction_20261101/README.md) and [findings](../crossfit_residual_reproduction_20261101/reporting/RESULTS.md)
-- [Coordinated manuscript release record](review/COORDINATED_MANUSCRIPT_RELEASE.json)
+- [Dimension forecasting](../dimension_forecasting/README.md) and [findings](../dimension_forecasting/FINDINGS.md)
+- [Preprocessing](../preprocessing_dimension/README.md) and [findings](../preprocessing_dimension/FINDINGS.md)
+- [Cross-fit computational reproduction](../crossfit_residual_reproduction_20261101/README.md) and [findings](../crossfit_residual_reproduction_20261101/reporting/RESULTS.md)
+- [Fixed reconstruction departures](../reconstruction_mechanism/README.md)
+- [Target geometry](../target_geometry/README.md)
+- [Direct reconstruction training](../direct_reconstruction/README.md)
+- [Online adaptation](../adaptive_development/REPRODUCING.md)
 
 ## Scientific scope
 
-The main manuscript develops conditional feature-span equivalence and
+The analysis develops conditional feature-span equivalence and
 distinctness results for KAHM and RBF reconstructions, together with a uniform
 bound on the ridge residual correction including its free intercept. A
-reconstruction can change the functions accessible to a finite decoder;
+reconstruction can change the functions accessible to a finite predictor;
 neither deterministic reconstruction nor a correction-amplitude bound
 guarantees improved forecasting accuracy.
 
@@ -44,8 +39,7 @@ are distinct quantities. A fixed cap is not an accuracy guarantee.
 
 ### Preprocessing and residual-target follow-ups
 
-The coordinated edition adds the completed follow-ups without changing the
-principal study or combining their comparison families:
+The follow-up studies use distinct evaluation procedures and comparison families:
 
 | Study | Primary family | Established criteria | Main limitation |
 | --- | --- | --- | --- |
@@ -84,36 +78,7 @@ performance does not establish the marginal value of adding it. A prospective
 comparison would hold the baseline policy fixed, add a prespecified KAHM
 candidate, and control the extra search opportunity on fresh data.
 
-The self-contained *Supporting Studies* document retains the complementary
-controlled, natural-data, scaling, additive-correction, target-geometry,
-direct-training and adaptation studies and supplies the follow-up methods and
-results. Historical construction choices, sampling units and uncertainty
-statements remain specific to their studies. Their outcomes are not pooled
-with the principal experiment. The coordinated edition adds no natural-data
-validation.
-
-## Compile the documents
-
-Install TeX Live with `latexmk`, pdfLaTeX and BibTeX. From `manuscript/`:
-
-```bash
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
-```
-
-All display assets, bibliography files and licensed TMLR style dependencies
-needed for compilation are included. Compilation does not fit forecasting
-models or require the numerical-record archives. Both PDFs retain anonymous
-TMLR review mode. The editable source retains scientific licenses and
-attribution; it is not itself an anonymized submission package.
-
-The [build guide](manuscript/README_BUILD.md) describes the source and evidence
-scope. `core_followup_experiments.tex` supplies the main-paper follow-up
-synthesis. `build_followup_assets.py` reads the completed study evidence and
-writes the separate `generated/preprocessing_dimension/` and
-`generated/crossfit_residual/` namespaces. Their committed tables and macros
-support standalone source-ZIP compilation. Regenerating those displays is a
-separate operation requiring the corresponding study evidence.
+The controlled, natural-data, scaling, additive-correction, target-geometry, direct-training, and adaptation experiments each have their own construction choices, sampling units, and uncertainty statements. Their outcomes are not pooled with the dimension-selected experiment.
 
 ## Reproduce the numerical evidence
 
@@ -129,7 +94,7 @@ independent final audit accompany the source extension.
 The principal inference uses 24 independent repetition aggregates and six
 approximate simultaneous paired-t bounds. It does not treat overlapping
 forecast origins as independent observations and does not supply the
-bounded-loss certificates studied in the separate risk manuscript. Fixed-cap
+bounded-loss certificates studied in the separate risk study. Fixed-cap
 sensitivity results and matched-bank mechanism comparisons remain secondary.
 
 The [preprocessing package guide](../preprocessing_dimension/RESULTS_PACKAGE.md)
@@ -147,26 +112,18 @@ execution regenerates the same 24 original cross-fit units after earlier
 reported outcomes were known. It adds zero independent repetitions and does
 not authenticate the unavailable original completed-run bytes or seals.
 
-## Historical evidence and reporting provenance
+## Scientific verification utilities
 
-The [fixed-cap reconstruction study](../reconstruction_mechanism/README.md)
-and its saved-forecast archive retain the original experiment and verification
-scope. `package_tmlr_review.py`, `verify_saved_forecasts.py` and the original
-`package_submission.py` refer to that fixed-cap saved-forecast schema. Their
-192-task archive and eight recomputed tables must not be used as evidence for
-the dimension-selected principal experiment or the later follow-ups.
+The package modules retain source-identity, numerical-audit, and archive-verification routines. Prepare the recorded experimental source context using the [target-geometry guide](../target_geometry/README.md), then run these study-specific audits inside it:
 
-Similarly, `build_mechanism_assets.py` regenerates historical reconstruction
-assets. The dimension, preprocessing and cross-fit displays have separate
-namespaces and evidence identities. Historical result files and verification
-receipts retain their original meanings.
+```bash
+cd /tmp/kahm-scientific-context
+python -m extensions.reconstruction_mechanism.package_results audit
+python -m extensions.tmlr_integration.package_utility audit
+python -m extensions.tmlr_integration.package_target audit
+python -m extensions.tmlr_integration.package_direct audit
+```
 
-The coordinated edition changes manuscript source, generated displays and
-repository guidance. Frozen study protocols, configurations, numerical source,
-scientific analyzers, retained evidence and phase seals remain unchanged.
-Scientific experiments and document editions have separate identities; the
-[coordinated release record](review/COORDINATED_MANUSCRIPT_RELEASE.json)
-identifies this document package. A successful document build verifies
-compilation, while the study audits verify their stated numerical scope.
-Neither is external scientific replication. The repository makes no claim
-of journal submission or acceptance.
+These commands require the numerical inputs named by each study's guide. The fixed-reconstruction saved-forecast checker, `verify_saved_forecasts.py`, expects its own 192-task evidence schema; those tasks and eight recomputed tables do not substitute for the dimension-selected or follow-up experiments.
+
+Derived numerical tables are stored with their studies under `reporting/`. The reporting generators read completed results and write to separate output directories. They do not change model selection or supply new independent repetitions.

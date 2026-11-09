@@ -51,23 +51,25 @@ The restored files match the original hashes in `analysis/analysis_summary.json`
 and the original full-audit identity. They can therefore be used with the
 unchanged reporting builder and inspected with ordinary CSV/JSON tools.
 
-## Paper build, display regeneration, and computational replay
+## Statistical checks and computational replay
 
-The supplied paper already includes generated tables and figures. Compile
-`papers/soft_state_forecasting/main.tex` and `supplement.tex` using the
-[paper build instructions](../../../papers/soft_state_forecasting/README_BUILD.md).
-Compilation does not require restoration, numerical archives, or model fitting.
-
-For full display regeneration, first restore the three compact records, then
-run the existing reporting builder into a new output directory:
+The independent primary checker recomputes all four paired comparisons from the compact analysis tables:
 
 ```bash
-python papers/soft_state_forecasting/build_soft_state_assets.py --output /tmp/soft_state_assets_rebuilt
+python reproduction/audits/local_position_forecasting/verify_primary.py \
+  --evidence extensions/soft_state_ablation_20261102/analysis \
+  --output /tmp/local_position_checks.json
 ```
 
-This verifies the released tables, full audit binding, and four primary bounds
-before writing displays. The compact tables and restored audit suffice; raw
-data and fitted states are not needed by the display builder.
+After restoring the compact records, the reporting source can verify the full audit binding and rebuild numerical summaries and displays in a new directory:
+
+```bash
+python reproduction/reporting/soft_state_ablation/build_soft_state_assets.py \
+  --study-root extensions/soft_state_ablation_20261102 \
+  --output /tmp/soft_state_reporting
+```
+
+These commands use saved results; they do not fit models. The complete audit and analysis tables are required by the reporting source. Its outputs include CSV/JSON statistics and table and figure formats.
 
 A complete independent numerical replay additionally needs the three numerical
 archives: `Data_and_Forecasts.zip`, `Fitted_Models_00_15.zip`, and

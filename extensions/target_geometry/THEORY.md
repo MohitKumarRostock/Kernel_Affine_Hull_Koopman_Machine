@@ -195,7 +195,7 @@ The new metric is learned through a leave-group-out Gaussian kernel regression
 proxy on development residuals. It is then used by matched KAHM, affine,
 locality, and RBF geometric controls. This is supervised metric learning with
 a shared proxy objective; it is not end-to-end optimization of the KAHM
-forecast loss. The proxy can improve while the final geometric decoder does
+forecast loss. The proxy can improve while the final geometric predictor does
 not. The experiment measures that transfer rather than assuming it.
 
 After fitting, a deterministic positive diagonal transformation changes the
@@ -212,8 +212,8 @@ results with their own fixed-class and calibration assumptions.
 
 ## Sources and relation to prior work
 
-- The original revised prediction manuscript states the conditional-mean
-  residual oracle and distinguishes information retention from finite-decoder
+- The forecasting analysis states the conditional-mean
+  residual oracle and distinguishes information retention from finite-predictor
   usefulness. These notes make the donor-to-final distinction explicit.
 - Weinberger and Tesauro (2007), *Metric Learning for Kernel Regression*,
   AISTATS, PMLR 2:612--619, learns distances by a regression objective. This is

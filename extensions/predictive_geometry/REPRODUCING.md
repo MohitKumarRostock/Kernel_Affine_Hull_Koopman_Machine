@@ -1,6 +1,6 @@
 # Reproducing the controlled representation experiments
 
-This guide covers the controlled study in this directory. The [integrated manuscript](../tmlr_integration/README.md) combines its evidence with later studies, each of which has a separate reproduction procedure.
+This guide covers the controlled study in this directory. Other experiments in the [research index](../../docs/RESEARCH_INDEX.md) have separate reproduction procedures.
 
 
 ## Supported environment
@@ -27,21 +27,18 @@ differ.
 
 ## Routes
 
-Run all commands from `extensions/predictive_geometry`, or from the root of the
-extracted TMLR reproducibility supplement.
+Run all commands from `extensions/predictive_geometry`.
 
 | Command | Work performed |
 |---|---|
 | `python -m reproduce smoke` | Unit and numerical checks, small execution examples, archived statistics, and asset generation |
-| `python -m reproduce full --workers 4` | All declared experiments from their published random seeds, independent audits, numerical sensitivity, and new paper assets |
+| `python -m reproduce full --workers 4` | All declared experiments from their published random seeds, independent audits, numerical sensitivity, and numerical tables and figures |
 | `python -m reproduce audit` | Verify all committed snapshot/archive hashes and recompute both primary statistical families |
 | `python -m reproduce audit --run-dir runs/NAME` | Audit generated predictions/losses and rebuild summaries for a completed full run |
-| `python -m reproduce tables` | Generate manuscript assets from the compact committed archive |
+| `python -m reproduce tables` | Generate tables and figures from the compact committed archive |
 | `python -m reproduce tables --input runs/NAME/results --output runs/NAME/paper_assets` | Generate assets from a fresh full computational reproduction |
-| `python -m reproduce paper` | Rebuild archival assets and compile `manuscript/main.pdf` with `latexmk` |
-| `python -m reproduce review-diagnostics --output runs/review-diagnostics` | Check archived paired outcomes without replacing the manuscript's complete diagnostic assets |
-| `python -m reproduce review-diagnostics --run-dir runs/full-review --output manuscript/generated` | Recompute paired-outcome and saved-bank rank/gate diagnostics using a completed full run |
-| `python -m reproduce submission --output-dir dist/tmlr` | Verify evidence hashes and build the manuscript-source and reproducibility ZIPs |
+| `python -m reproduce review-diagnostics --output runs/review-diagnostics` | Check archived paired outcomes |
+| `python -m reproduce review-diagnostics --run-dir runs/full-review --output runs/review-diagnostics-full` | Recompute paired-outcome and saved-bank rank/gate diagnostics using a completed full run |
 
 A chosen output directory makes the full command easy to resume:
 
@@ -53,15 +50,13 @@ python -m reproduce full --workers 4 --run-dir runs/reproduction --resume
 Resume requires matching execution mode and orchestration/source manifests.
 Completed scientific jobs additionally check their original source signatures.
 Incomplete or corrupted jobs fail validation. Executions using changed code require a new run directory. Output locations cannot overlap the source,
-historical archive, or manuscript directories.
+historical archive, or other protected input directories.
 
 The saved-bank diagnostic command requires `--run-dir` pointing to an already
 completed full run. It inspects 192 banks and replays their original held-out
 inputs without refitting. A command without `--run-dir` performs only the
 paired-outcome checks; it cannot reconstruct bank rank or gate diagnostics from
-the compact archive. The example writes those checks to `runs/review-diagnostics`. The
-normal `paper` command preserves the committed `review_*` assets while
-rebuilding the original paper tables and figures.
+the compact archive. The example writes those checks to `runs/review-diagnostics`.
 
 ## Full execution order and counts
 
@@ -150,7 +145,7 @@ runs/NAME/
 ```
 
 `reproduction_comparison.json` matches records by phase, replicate, setting,
-feature, head, and decoder width where relevant. It reports the maximum MSE
+feature, head, and predictor width where relevant. It reports the maximum MSE
 drift and counts within `rtol=1e-6, atol=1e-10`. If any matched MSE exceeds that
 tolerance, the full command and fresh-run audit return a nonzero validation
 result, retain the execution outputs, and do not label the run a verified
@@ -176,34 +171,6 @@ pickle is distributed through Git.
 
 ## Continuous integration and licensing
 
-The parent repository installs the source workflow
-`ci/kahm-predictive-geometry.yml` at
-`.github/workflows/kahm-predictive-geometry.yml`. It runs smoke checks, archived
-paired diagnostics, and submission packaging on the research branches, and
-uploads the execution manifest, generated assets, and review packages. The smoke route verifies reduced execution examples; reproducing the complete study requires the full route.
+The parent repository installs the source workflow `ci/kahm-predictive-geometry.yml` at `.github/workflows/kahm-predictive-geometry.yml`. It runs smoke checks and archived paired diagnostics, then uploads execution records and numerical outputs. Smoke checks exercise reduced examples; reproducing the complete study requires the full route.
 
-Source/data licenses and attribution are in `LICENSE` and
-`THIRD_PARTY_NOTICES.md`. Public repository citation metadata are separate from
-the anonymous review packages.
-
-## Verifying a review package
-
-Before rebuilding generated files, run:
-
-```bash
-python scripts/package_tmlr_submission.py --verify-dir .
-```
-
-This compares every distributed file with `SUBMISSION_MANIFEST.json`, recomputes
-the package content-tree digest, and checks the original snapshot/archive
-manifests. The manifest has no current-study repository URL. Its source-to-package
-map records any optional review metadata transformation, including removal of
-the project-author field from the packaged `pyproject.toml`. This does not modify
-the corresponding public repository metadata or any scientific source.
-
-`study/` and `archive/` retain their exact original bytes, including generic
-historical scratch paths. Historical source and input records retain their original identities. Required license notices and published upstream attribution
-are retained and listed as narrow review-view exceptions; these attributions identify software and data provenance. The package excludes
-Git history, `CITATION.cff`, prior named manuscript PDFs, caches and run outputs.
-See `REVIEWER_README.md` in the generated supplement and
-[TMLR_SUBMISSION.md](TMLR_SUBMISSION.md) for the complete packaging policy.
+Source and data licenses and attribution are in `LICENSE` and `THIRD_PARTY_NOTICES.md`. The `study/` and `archive/` directories retain the exact original source and evidence bytes, including their recorded execution paths and upstream attribution.

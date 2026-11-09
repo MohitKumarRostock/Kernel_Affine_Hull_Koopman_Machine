@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-"""Build and audit the integrated anonymous TMLR review artifacts.
+"""Verify scientific source, saved numerical evidence, and archive identities.
 
-This is post-study packaging code. It never changes the registered scientific
-sources, frozen diagnostics, or recorded outcomes. The review export omits
-identifying historical overviews and carries its own explicitly post-study
-inventory; it is not represented as the original complete repository checkpoint.
+The audit and verification commands do not refit forecasting models.
+Recorded source, input, and output identities define each check's scope.
 """
 from __future__ import annotations
 
@@ -332,7 +330,7 @@ def supplement_payload(repository: Path, run_directory: Path) -> tuple[dict[str,
         "original_checkpoint_manifest_sha256": sha256(checkpoint_original),
         "original_repository_checkpoint_files_verified_at_export": 217,
         "tracked_file_sha256": inventory,
-        "scope": "Post-study inventory of the included unchanged source and data bytes. Identifying overviews and prior manuscript versions are omitted. The original 217-file public checkpoint and scientific freeze records remain unchanged outside this review projection. This is not a preregistration or a replacement historical freeze.",
+        "scope": "Post-study inventory of the included unchanged source and data bytes. Identifying overviews and unrelated documents are omitted. The original 217-file public checkpoint and scientific freeze records remain unchanged outside this review projection. This is not a preregistration or a replacement historical freeze.",
     }
     files[(NATURAL / "CHECKPOINT.json").as_posix()] = json_bytes(review_checkpoint)
     for name, raw in manuscript_payload(repository).items():
@@ -359,7 +357,7 @@ def supplement_payload(repository: Path, run_directory: Path) -> tuple[dict[str,
             "change": "Historical overview replaced only in the review projection by neutral entry-point instructions; scientific bytes are unchanged.",
         }
     return files, {"source_checks": checks, "review_transformations": transformations,
-                   "omitted_categories": ["Git history", "first-party citation/contact metadata", "named repository links in publication records and historical overviews", "prior manuscript versions", "unrelated repository files", "build caches"],
+                   "omitted_categories": ["Git history", "first-party citation/contact metadata", "named repository links in publication records and historical overviews", "unrelated documents", "unrelated repository files", "build caches"],
                    "original_scientific_sources_freezes_and_outcomes_modified": False,
                    "new_evidence": "Bounded, paired post-hoc geometry-scaling sensitivity; no new source confirmation."}
 
@@ -642,11 +640,9 @@ draft and does not certify journal submission or author approval.
 
 CONTROLLED_README = """# Controlled predictive-geometry evidence
 
-This review projection preserves the scientific source snapshot, archived
-records, and reproduction code unchanged. The integrated paper is in
-`../tmlr_integration/manuscript/`. Use the top-level REVIEWER_README.md for
-review commands. The older manuscript and identifying historical overviews are
-omitted; ordinary citations and required copyright notices remain.
+This directory contains scientific source snapshots, archived records, and
+reproduction code. Use the top-level REVIEWER_README.md for verification
+commands. Citations and required copyright notices identify their sources.
 """
 
 NATURAL_README = """# Natural-source forecasting evidence
@@ -736,7 +732,7 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ## What anonymity changes, and what it does not
 
 This export omits Git history, identifying overview/contact/citation metadata,
-named repository links, prior manuscript versions, and unrelated files. Optional
+named repository links, unrelated documents, and unrelated files. Optional
 project-author metadata is removed from one build configuration. The original
 full-repository checkpoint metadata is replaced only in this export by a clearly
 labeled post-study inventory of the included unchanged source/data subset. The
@@ -768,11 +764,6 @@ def main(argv=None):
         command.add_argument("path", type=Path)
         if name == "replay":
             command.add_argument("--output", required=True, type=Path)
-    command = commands.add_parser("build")
-    command.add_argument("--pdf", required=True, type=Path)
-    command.add_argument("--output", required=True, type=Path)
-    command.add_argument("--run-dir", type=Path, default=REPOSITORY / NATURAL / "runs/natural_v1")
-    command.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
     sys.dont_write_bytecode = True
     if args.command == "check-source":
@@ -782,8 +773,6 @@ def main(argv=None):
     elif args.command in {"audit", "replay"}:
         with repository_view(args.path.resolve()) as root:
             result = audit(root, args.output if args.command == "replay" else None)
-    else:
-        result = build(REPOSITORY, args.run_dir, args.pdf, args.output, args.overwrite)
     print(json.dumps(result, sort_keys=True, indent=2, allow_nan=False))
     return 0
 

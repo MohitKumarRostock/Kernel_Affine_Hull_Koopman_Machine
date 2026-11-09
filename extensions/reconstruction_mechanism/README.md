@@ -1,10 +1,10 @@
 # Reconstruction departures for KAHM forecasting
 
-This experiment asks whether a KAHM reconstruction provides useful additional functions to a finite forecasting decoder. It compares a bounded KAHM reconstruction departure with a common gate-and-coordinate basis, a matched radial-basis-function (RBF) departure, raw-history RBF features, boosted trees, and other controls.
+This experiment asks whether a KAHM reconstruction provides useful additional functions to a finite forecasting predictor. It compares a bounded KAHM reconstruction departure with a common gate-and-coordinate basis, a matched radial-basis-function (RBF) departure, raw-history RBF features, boosted trees, and other controls.
 
 The KAHM procedure reduces aggregate nonlinear normalized mean squared error by 12.58% relative to the common basis. Its 1.17% gain over matched RBF departures and 3.92% gain over raw-history RBF features do not establish the prespecified 3% improvement under the simultaneous analysis. Boosted trees and the validation-selected non-KAHM procedure have lower aggregate errors. The linear-control noninferiority criterion and all specified numerical stability checks are satisfied.
 
-Read the [mathematical background](MATHEMATICAL_BACKGROUND.md), [complete findings](FINDINGS.md), [six primary comparisons](analysis/decision.json), and [manuscript](../tmlr_integration/README.md).
+Read the [mathematical background](MATHEMATICAL_BACKGROUND.md), [complete findings](FINDINGS.md), [six primary comparisons](analysis/decision.json).
 
 ## Design and evidence
 
@@ -48,11 +48,11 @@ These operations verify the recorded computation. They do not add independent ex
 
 ### Numerical portability
 
-Saved-forecast statistical reproduction and selected-state inference are separate checks. The original numeric forecasts and A-target variance scales reproduce the reported losses, repetition aggregates, and six primary confidence bounds directly. The anonymous saved-forecast supplement performs this calculation without loading fitted Python model objects.
+Saved-forecast statistical reproduction and selected-state inference are separate checks. The original numeric forecasts and A-target variance scales reproduce the reported losses, repetition aggregates, and six primary confidence bounds directly. The saved-forecast checker performs this calculation without loading fitted Python model objects.
 
 Selected-state replay uses relative tolerance `1e-10` and absolute tolerance `1e-12`. It requires compatible numerical kernels as well as matching software versions. A controlled diagnostic under Python 3.12.14, NumPy 2.3.5, and glibc 2.39 reproduces the recorded raw-RBF predictions for Van der Pol task `vanderpol__noise0__seed946100` exactly with default processor dispatch. Disabling NumPy's AVX512 dispatch before import causes 49 of its 4,992 raw-RBF predictions to exceed the original pointwise tolerance; the largest absolute difference is approximately `1.07e-10`. This is a failed strict replay under that dispatch configuration. The diagnostic concerns numerical inference portability; reported losses and confidence bounds are computed from the archived forecast arrays. The [numerical portability record](publication_validation/NUMERICAL_REPLAY_PORTABILITY.json) gives the environment, invocation, source hashes, and complete targeted comparison.
 
-## Numerical checks and manuscript build
+## Numerical checks
 
 The numerical tests use fabricated data or a development seed excluded from the research roster:
 
@@ -62,16 +62,7 @@ python -m unittest extensions.reconstruction_mechanism.test_models \
   extensions.reconstruction_mechanism.test_analysis -v
 ```
 
-To regenerate the principal displays and compile the paper:
-
-```bash
-python extensions/tmlr_integration/build_mechanism_assets.py
-python -m extensions.tmlr_integration.format_manuscript_assets
-cd extensions/tmlr_integration/manuscript
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-```
-
-The bundled manuscript displays also permit compilation without restoring evidence or fitting models. The [continuous-integration workflow](../../.github/workflows/reconstruction-mechanism.yml) describes the automated verification sequence.
+The [continuous-integration workflow](../../.github/workflows/reconstruction-mechanism.yml) describes the automated scientific checks. Derived numerical tables are available under [reporting/generated](reporting/generated/).
 
 ## Repeat the fitting experiment
 
@@ -97,6 +88,6 @@ Refitting reproduces the fixed procedure; it is not a newly designed confirmator
 | `analyze.py`, `analysis/` | Statistical analysis and complete primary and secondary results |
 | `audit.py`, `results/audit.json` | Independent-code evaluation within the study |
 | `evidence.py`, `PACKED_EVIDENCE.json`, `evidence_parts/` | Lossless evidence storage and restoration |
-| `package_results.py` | Verification and packaging of the manuscript and principal reproduction archive |
+| `package_results.py` | Verification of scientific evidence and numerical archive identities |
 
 Evidence transport, independent verification, and packaging utilities were added after experiment execution. Their provenance is recorded separately from the prospective scientific checkpoint.

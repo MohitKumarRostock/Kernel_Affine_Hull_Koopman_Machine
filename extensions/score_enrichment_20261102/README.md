@@ -1,19 +1,17 @@
-# Reconstruction-score enrichment study
+# Reconstruction-affinity feature augmentation
 
-Protocol `KAHM-SCORE-20261102-v1` evaluates KAHM, affine, and positive-kernel reconstruction-score representations for direct observed-response prediction. Geometry is matched at a fixed native cap, but each reconstruction produces its own scores and memberships. Normalizers and gated local coordinates are parallel enrichments. Linear ridge and a 64-landmark Gaussian Nyström decoder use the same observed targets.
+Protocol `KAHM-SCORE-20261102-v1` evaluates KAHM, affine reconstruction, and kernel-weighted averaging for direct prediction of future observations. Each method produces its own reconstruction scores and normalized affinities. Log normalization constants and membership-weighted local coordinates provide two feature augmentations. Linear ridge and a 64-landmark Gaussian Nyström predictor use the same observed targets.
 
-The study contains 64 repetitions for each of four laws. A fits candidates, B selects independently within each complete procedure, C supplies diagnostics, and D evaluates fixed predictions. The complete 40-comparison Bonferroni family has 16 lower candidate mean losses, seven higher losses, and 17 unresolved comparisons. Local enrichment improves KAHM memberships in six of eight law–decoder cells. All four nonlinear-decoder KAHM/positive-kernel comparisons are unresolved. Unresolved intervals are not equivalence findings; the paired-Student approximation is not distribution-free.
-
-## Published records
+The evaluation has 64 repetitions under each of four data-generating distributions. A fits candidates, B selects each complete procedure's settings, C supplies diagnostics, and D evaluates fixed predictions. The 40-comparison Bonferroni family contains 16 lower candidate mean losses, seven higher losses, and 17 unresolved comparisons. Local coordinates improve KAHM memberships in six of eight distribution–predictor combinations. All four nonlinear-predictor comparisons between KAHM and kernel-weighted averaging are unresolved. These intervals do not establish equivalence, and their paired-Student approximation is not distribution-free.
 
 | Record | Scope |
 | --- | --- |
-| [Primary comparisons](primary_contrasts.csv) | Exact released 40-row summary, including unfavorable and unresolved outcomes |
-| [Protocol](protocol.json) | Original fixed configuration; historical title and status preserved |
-| [Prospective freeze](PROSPECTIVE_FREEZE.json) | Original local source identity, not public preregistration |
-| [Results release](RESULTS_RELEASE.json) | Original completed-release receipt; referenced files belong to the full scientific package |
-| [Availability](AVAILABILITY.md) | Precise distinction between this branch and separately delivered evidence |
+| [Primary comparisons](primary_contrasts.csv) | Exact 40-row summary, including unfavorable and unresolved outcomes |
+| [Protocol](protocol.json) | Recorded experimental configuration |
+| [Source identity](PROSPECTIVE_FREEZE.json) | Local source checkpoint; it does not establish public preregistration |
+| [Results identity](RESULTS_RELEASE.json) | Recorded output identities; some referenced files are unavailable here |
+| [Availability](AVAILABILITY.md) | Available statistical checks and missing execution inputs |
 
-Run `python verify_primary_summary.py` with SciPy installed to check summary arithmetic and original byte identity. This is not a repetition-level or model-level audit. The [article and supplement](../../papers/score_enrichment/) contain all definitions, the full primary decision matrix, and the complete static tables.
+From the repository root, run `python extensions/score_enrichment_20261102/verify_primary_summary.py` with SciPy installed. It checks summary arithmetic and original byte identity. The [saved-loss bundle](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02/reproduction/score_enrichment) reconstructs the comparisons from individual repetition losses and documents its separate scope.
 
-The independently selected procedures are primary. The secondary common cap is selected by affine-local linear ridge, an asymmetric reference procedure. Its favorable outcomes do not replace primary comparisons. The study does not fit autonomous coordinate dynamics, establish Koopman closure, or demonstrate universal KAHM superiority.
+The primary procedures select their settings independently. In a secondary analysis, the affine reconstruction control with linear ridge selects a dimension limit shared across methods. That asymmetric selection rule defines a different comparison. The experiment does not fit autonomous feature dynamics, establish Koopman closure, or demonstrate universal KAHM superiority.

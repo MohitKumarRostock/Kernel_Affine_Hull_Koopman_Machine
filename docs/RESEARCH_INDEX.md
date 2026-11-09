@@ -1,15 +1,17 @@
 # Research and evidence index
 
-## Current manuscript
+## Main research topics
 
-[Predictive Enrichment of Geometry-Induced Soft-State Abstractions](../papers/score_enrichment/) studies information retention and finite-decoder access in reconstruction-score representations. The [study directory](../extensions/score_enrichment_20261102/) contains its exact primary-summary evidence and source identities. Its 64-repetition-per-law cohort and 40-comparison family are separate from all earlier studies. The [reproducibility guide](../REPRODUCIBILITY.md) states which materials are published in this branch and which remain in the author-delivered package.
+[Feature Augmentation for Forecasting with Reconstruction-Based Representations](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02) studies information retention and forecasting with normalized reconstruction-affinity features. The [local study directory](../extensions/score_enrichment_20261102/) contains its exact primary-summary evidence and protocol identities. The linked reproduction bundle reconstructs the 40 primary comparisons from saved repetition losses.
+
+[A Hierarchy of Lower Bounds on Prediction Risk for Forecasting Representations](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) studies lower bounds under explicit assumptions on prediction losses and reference classes. Its numerical experiments have their own inputs and statistical analysis.
 
 ## Related studies
 
 | Scientific question | Study and evidence |
 | --- | --- |
-| Score-based local coordinates and decoder capacity | [Predictive geometry](../extensions/predictive_geometry/README.md): complete controlled and capacity studies, including unfavorable laws |
-| Center-distance gates, position, and departures | [Four-arm ablation](../extensions/soft_state_ablation_20261102/README.md): different gate map and a separate 32-repetition cohort |
+| Score-based local coordinates and predictor capacity | [Predictive geometry](../extensions/predictive_geometry/README.md): complete controlled and capacity studies, including unfavorable laws |
+| Distance-based soft assignments, local position, and reconstruction differences | [Four-arm ablation](../extensions/soft_state_ablation_20261102/README.md): different gate map and a separate 32-repetition evaluation dataset |
 | Validation-selected native dimension in residual forecasting | [Dimension study](../extensions/dimension_forecasting/README.md): separate retained-baseline architecture and six-criterion family |
 | Input preprocessing and dimension | [Preprocessing study](../extensions/preprocessing_dimension/FINDINGS.md): complete-procedure and secondary comparisons remain distinct |
 | Residual target construction | [Computational reproduction](../extensions/crossfit_residual_reproduction_20261101/README.md): original simulation units with prior outcome knowledge, not fresh independent repetitions |
@@ -18,10 +20,11 @@
 
 Supervised geometry, directly trained reconstructions, scaling, and online adaptation remain separate development investigations under `extensions/`. Their representations and update rules do not establish closure of the present score map.
 
-## Preserved documents and earlier architecture
 
-Earlier article editions remain in [local_position_forecasting](../papers/local_position_forecasting/), [soft_state_forecasting](../papers/soft_state_forecasting/), and [tmlr_integration](../extensions/tmlr_integration/). These are not the current manuscript entry point. Their original records and paths are retained.
+## Other code and evidence
 
-Root `experiment_*.py`, `step_*.py`, `kahkm_*` outputs, [reproduction](../reproduction/), and [provenance](../provenance/) concern earlier Kernel Affine Hull Koopman Machine (KAHKM) work. KAHKM, a KAHM reconstruction map, center-distance gates, and reconstruction-score memberships are different objects. Their targets, decoders, and statistical units must not be interchanged.
+Root `experiment_*.py`, `step_*.py`, `kahkm_*` outputs, [reproduction](../reproduction/), and [provenance](../provenance/) concern Kernel Affine Hull Koopman Machine (KAHKM) experiments. KAHKM, a KAHM reconstruction map, distance-based soft assignments, and normalized reconstruction affinities are different constructions. Their targets, predictors, and statistical units must not be interchanged.
 
-No observations or comparison families are pooled merely because their studies share this repository. Historical snapshots remain at their original paths, and no unfavorable evidence is removed.
+The [forecasting evidence guide](../extensions/tmlr_integration/README.md) identifies the dimension, preprocessing, residual-target, and fixed-reconstruction studies. Each has its own sampling units and comparison family. No observations are pooled merely because the studies share a repository.
+
+The [reproducibility guide](../REPRODUCIBILITY.md) states which computations the available files support.

@@ -55,7 +55,7 @@ Relative to fixed KAHM, reconstruction training reduces mean synthetic MSE by **
 
 Every row compares **reconstruction KAHM** with the named comparator. The paired difference is comparator MSE minus KAHM MSE, so positive values favor KAHM. Gain is `100 × (mean comparator MSE − mean KAHM MSE) / mean comparator MSE`. Intervals concern **absolute MSE differences**, not percentages.
 
-The family uses twelve independent repetition means per law, a paired-difference normal approximation, 11 degrees of freedom, family alpha 0.05, and a two-sided Bonferroni adjustment for 18 comparisons. The critical t value is **3.83345205638**. This family gives **two positive, six negative, and ten unresolved intervals**. Coverage does not extend to every historical or descriptive contrast in the manuscript. An interval including zero does not establish equivalence. [Frozen analysis specification](results/protocol.json) · [Full-precision interval table](results/primary_contrasts.csv)
+The family uses twelve independent repetition means per law, a paired-difference normal approximation, 11 degrees of freedom, family alpha 0.05, and a two-sided Bonferroni adjustment for 18 comparisons. The critical t value is **3.83345205638**. This family gives **two positive, six negative, and ten unresolved intervals**. Coverage does not extend to comparisons from other experiments or descriptive analyses. An interval including zero does not establish equivalence. [Frozen analysis specification](results/protocol.json) · [Full-precision interval table](results/primary_contrasts.csv)
 
 | Law | Comparator | Gain | Adjusted absolute-difference interval | Outcome |
 |---|---|---:|---:|---|

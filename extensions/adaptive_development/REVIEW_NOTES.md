@@ -25,7 +25,7 @@ does not disprove all possible KAHM forecasting constructions.
 
 Use the four previously preserved real series: three Dominick weekly series and
 one Sunspot daily series. Their selection is deliberately informed by prior
-results and must be described as development. The current manuscript reports
+results and must be described as development. The static forecasting results show
 KAHM gains over ridge on Dominick and essentially baseline-only behavior with
 stronger raw RBF performance on Sunspot.
 

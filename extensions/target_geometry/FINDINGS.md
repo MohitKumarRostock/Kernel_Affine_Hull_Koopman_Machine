@@ -43,7 +43,7 @@ Learned KAHM improves all four collection means, but only **7 of 12 individual s
 
 ## All prespecified simultaneous comparisons
 
-Differences are control MSE minus candidate MSE; positive favors the candidate. Each row uses twelve complete independent repetitions and the shared 18-comparison Bonferroni critical value. Coverage relies on the stated paired-difference normal approximation. No joint coverage is claimed with the manuscript’s older comparison families.
+Differences are control MSE minus candidate MSE; positive favors the candidate. Each row uses twelve complete independent repetitions and the shared 18-comparison Bonferroni critical value. Coverage relies on the stated paired-difference normal approximation. No joint coverage is claimed with the comparison families of other experiments.
 
 | Law | Control | Candidate | Mean difference | Simultaneous interval | Decision |
 |---|---|---|---:|---:|---|
@@ -87,4 +87,4 @@ The study uses capped univariate histories, three familiar simulation laws, four
 - [Scientific freeze](freeze.json)
 - [Protocol](PROTOCOL.md)
 
-The independent auditor reconstructs input arrays, final losses, residual identities, donor exclusions, metric objectives and computation dependencies. It checks the chosen minimum against complete recorded validation grids; it does not independently refit each trial. The source and manuscript artifacts retain this qualification.
+The independent auditor reconstructs input arrays, final losses, residual identities, donor exclusions, metric objectives and computation dependencies. It checks the chosen minimum against complete recorded validation grids; it does not independently refit each trial. The audit records state this scope explicitly.

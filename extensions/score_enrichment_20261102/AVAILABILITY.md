@@ -1,16 +1,11 @@
 # Evidence availability and source identity
 
-This publication branch contains the manuscript build inputs, complete static tables, the exact primary-summary CSV, the protocol, and the original source/results receipts. It does not contain the complete frozen implementation, repetition-level loss tables, model states, or episode arrays. A document build and the included summary-arithmetic check are therefore the reproducibility operations available from this branch alone.
+This directory contains the exact primary-summary CSV, its arithmetic checker, the experimental protocol, and recorded source and output identities. It supports the summary check described in [README.md](README.md).
 
-The complete author-delivered compact scientific release is preserved in two packages:
+The [saved-loss bundle](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02/reproduction/score_enrichment) contains 17 original evidence records and an independently implemented statistical checker. It reconstructs 416 procedure summaries, 2,560 paired differences, and all 40 primary comparisons from 26,624 selected-loss rows. The selected-loss table is losslessly compressed; the other records retain their original bytes.
 
-| Package | Bytes | SHA256 |
-| --- | ---: | --- |
-| `KAHM_Step8_Repository_Update.zip` | 6348062 | `8ef7bca05707c86f87922de1698719e971d0ce2b182c2ce264cd6a3c6c414637` |
-| `KAHM_Step8_Complete_Author_Package.zip` | 10209590 | `b48ea9fbdcaa9c17d47e08a1a99b371b9ab47735b05e32b4112ddf8dd7de87fe` |
+The original generator, experiment runner, complete source snapshot, `cohort.json` evaluation roster and random-stream labels, fitted model states, forecast arrays, and original environment fingerprint are unavailable here. The saved-loss checker cannot verify raw forecast errors, the entire validation search, or the reported model-replay audit. It does not supply full experimental regeneration.
 
-These identifiers describe author-delivered files and do not establish a permanent public download location. The repository-overlay archive contains 230 manifest-bound files, including the unchanged 155-file compact scientific release. Repository publication does not alter that release or reinterpret its local prospective freeze as public preregistration.
+The recorded source-manifest SHA256 is `af4357d382f23a58797cc111f73eca9cb6e8b283415ed31f3cd586af2fe4ba28`. The original records refer to a compact execution package and sixteen numerical archives totaling 9.024 GiB. Their identifiers specify expected materials; they are not public download links. The complete numerical archive set is unavailable for independent size and integrity checks.
 
-Full fitted-model replay additionally requires sixteen separately indexed numerical archives. Only one copy was available during editorial checks; it had 425,687,604 bytes instead of the indexed 654,521,424 bytes, failed its recorded hash, and was unreadable as a ZIP. The other fifteen were absent. The defective copy is excluded. This is a distribution limitation, not a finding that the underlying scientific calculation was wrong.
-
-The full source package supplies a separate regeneration route, with its recorded environment and preflight checks. That route has not been re-executed during this publication. The complete computational audit retains its shared-encoder and shared-native-routine limitations.
+The archive volume is a practical distribution constraint, separate from the missing source, evaluation roster, and environment. Complete execution inputs could support regeneration without distributing every fitted model. [REPRODUCIBILITY.md](../../REPRODUCIBILITY.md) gives the available computational routes and the recorded software versions.

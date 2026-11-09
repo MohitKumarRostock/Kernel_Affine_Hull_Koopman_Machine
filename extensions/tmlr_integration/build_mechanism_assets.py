@@ -26,7 +26,7 @@ from scipy.stats import t as student_t
 
 ROOT = Path(__file__).resolve().parents[2]
 STUDY = ROOT / "extensions/reconstruction_mechanism"
-OUTPUT = Path(__file__).resolve().parent / "manuscript/generated/reconstruction_mechanism"
+OUTPUT = ROOT / "extensions/reconstruction_mechanism/reporting/generated"
 METHODS = (
     ("ridge", "Raw ridge"), ("raw_rbf", "Raw RBF"),
     ("raw_hgb", "Boosted trees"), ("persistence", "Persistence blend"),

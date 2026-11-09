@@ -1,7 +1,7 @@
 # Sensitivity to geometry input scaling
 
 This extension compares training z-score geometry scaling with training min-max
-scaling to `[-1, 1]` in the integrated manuscript. It is a
+scaling to `[-1, 1]` for the forecasting representations. It is a
 paired **post-hoc sensitivity analysis** on already inspected natural sources
 and synthetic draws. The original studies and their recorded results remain
 unchanged. No scaler or benefit diagnostic is selected using these new test
@@ -24,7 +24,7 @@ subsample. The natural validation-search and final pretest fits learn separate
 scalers. Queries outside the fitting range remain outside `[-1, 1]`: there is
 no input clipping. Exactly constant training coordinates map to zero in the
 geometry; the raw skip retains its original standardization. Feature and target
-scales, original target clipping rules, data splits, seeds, decoder capacities,
+scales, original target clipping rules, data splits, seeds, predictor capacities,
 validation grids, and query arithmetic are unchanged.
 
 Changing a scaler upstream of an unchanged z-score step would largely cancel.
@@ -62,7 +62,7 @@ The natural restoration is needed only when its reference run is absent. Sensiti
 
 `analysis.py` independently reconstructs natural losses, input/target scaler
 statistics, source hierarchies, archived parity, cost-node sums, and all
-controlled episode-loss summaries. `report.py` generates the manuscript tables
+controlled episode-loss summaries. `report.py` generates the numerical tables
 and number macros only from the audited summary. To regenerate into a new
 directory:
 

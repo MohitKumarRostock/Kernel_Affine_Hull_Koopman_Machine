@@ -332,7 +332,7 @@ a shared host with one numerical thread per worker and three workers; they
 are descriptive and do not establish isolated hardware speed rankings. The
 full fit stage took 308.219 seconds and prediction took
 227.521 seconds. ([Task resources](analysis/task_resources.csv),
-[execution receipts](execution/).)
+[archive inventory](documentation/KAHM_Forecasting_Dimension_Records_manifest.json).)
 
 ## Interpretation and limits
 

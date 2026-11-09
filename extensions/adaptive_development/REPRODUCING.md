@@ -10,17 +10,32 @@ The small tier permits 64 shared geometric references and 128 supervised replay 
 
 The first 35% of each stream initializes the model, the next 15% supplies chronological calibration, and the final 50% supplies evaluation. At each observation, the procedure scores previously issued forecasts, releases newly available targets, updates its state, and issues new forecasts. A correction multiplier is selected separately for each horizon from 0, 0.25, 0.5, and 1 using calibration targets available at the evaluation boundary. This multiplier remains fixed during evaluation, although the model can continue learning from newly observed targets.
 
-The synthetic streams comprise four stationary nonlinear autoregressive series and four paired recurring-regime series. Natural inputs comprise three Dominick weekly profit series and one Sunspot daily series, all selected from previously inspected manuscript inputs. Their use provides development evidence rather than independent confirmation on new data sources. Equations, chronology, settings, and data attribution are specified in [PROTOCOL.md](PROTOCOL.md), [config.json](config.json), and [DATA_PROVENANCE.md](DATA_PROVENANCE.md).
+The synthetic streams comprise four stationary nonlinear autoregressive series and four paired recurring-regime series. Natural inputs comprise three Dominick weekly profit series and one Sunspot daily series, all selected from previously inspected study inputs. Their use provides development evidence rather than independent confirmation on new data sources. Equations, chronology, settings, and data attribution are specified in [PROTOCOL.md](PROTOCOL.md), [config.json](config.json), and [DATA_PROVENANCE.md](DATA_PROVENANCE.md).
 
 ## Numerical amendment and provenance
 
 The first complete execution encountered four unexpected model exceptions and generated 8,659 framework fallback forecasts. Its source and evidence remain in `archives/initial_attempt.zip`. Amendment A1 replaced the correction-head solver with a numerically stable solution of the same ridge objective, applied to every geometric procedure. The full roster was then evaluated again on the same inputs and with the same calibration grid and decision criteria.
 
-The amended execution comprises 144 method–tier–stream runs and 387,900 forecasts, with no unexpected model exceptions, framework fallback forecasts, or observed storage-cap violations. Both executions belong to one development study; they are not independent replications. The exact source identities are recorded in `DEVELOPMENT_FREEZE.json` and the amendment records. The original `README.md` is included in that immutable checkpoint; this guide is the current reader entry point.
+The amended execution comprises 144 method–tier–stream runs and 387,900 forecasts, with no unexpected model exceptions, framework fallback forecasts, or observed storage-cap violations. Both executions belong to one development study; they are not independent replications. The exact source identities are recorded in `DEVELOPMENT_FREEZE.json` and the amendment records.
+
+## Recorded experimental source context
+
+Use Python 3.12 and a complete repository checkout. Create an isolated context
+for the registered scientific inputs:
+
+```bash
+git fetch --no-tags --refetch --no-filter --depth=1 origin 5123365917ae630b684f8a3bebb0294ee695ce7a
+python scripts/materialize_scientific_context.py --output /tmp/kahm-scientific-context
+cd /tmp/kahm-scientific-context
+```
+
+The helper checks the recorded source identities and requires a new output
+directory. The commands below run inside this context. Generated results use
+separate output paths.
 
 ## Recompute the saved analysis
 
-From the repository root, use Python 3.12 and the pinned dependencies:
+Install the pinned dependencies and restore the numerical records:
 
 ```bash
 python -m pip install -r extensions/adaptive_development/requirements.txt
@@ -35,7 +50,7 @@ The repository's lossless transport restores the adaptive and reconstruction-dep
 
 ## Repeat the forecasting procedure
 
-Use a new output directory:
+From the experimental source context above, use a new output directory:
 
 ```bash
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \

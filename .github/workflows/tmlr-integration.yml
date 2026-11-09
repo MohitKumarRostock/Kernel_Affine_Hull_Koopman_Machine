@@ -1,29 +1,25 @@
-name: Historical forecasting evidence integrity
-
-on:
+name: Forecasting evidence integrity
+'on':
   push:
     paths:
-      - 'extensions/tmlr_integration/package.py'
-      - 'extensions/tmlr_integration/package_tests.py'
-      - 'extensions/scaling_sensitivity/**'
-      - 'scripts/materialize_historical_checkpoint.py'
-      - '.github/workflows/tmlr-integration.yml'
+    - extensions/tmlr_integration/package.py
+    - extensions/tmlr_integration/package_tests.py
+    - extensions/scaling_sensitivity/**
+    - scripts/materialize_historical_checkpoint.py
+    - .github/workflows/tmlr-integration.yml
   pull_request:
     paths:
-      - 'extensions/tmlr_integration/package.py'
-      - 'extensions/tmlr_integration/package_tests.py'
-      - 'extensions/scaling_sensitivity/**'
-      - 'scripts/materialize_historical_checkpoint.py'
-      - '.github/workflows/tmlr-integration.yml'
-  workflow_dispatch:
-
+    - extensions/tmlr_integration/package.py
+    - extensions/tmlr_integration/package_tests.py
+    - extensions/scaling_sensitivity/**
+    - scripts/materialize_historical_checkpoint.py
+    - .github/workflows/tmlr-integration.yml
+  workflow_dispatch: null
 permissions:
   contents: read
-
 concurrency:
   group: tmlr-integration-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 env:
   OPENBLAS_NUM_THREADS: '1'
   OMP_NUM_THREADS: '1'
@@ -31,51 +27,62 @@ env:
   NUMEXPR_NUM_THREADS: '1'
   PYTHONDONTWRITEBYTECODE: '1'
   MPLBACKEND: Agg
-
 jobs:
   preserved-evidence:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@v7
-        with:
-          python-version: '3.12.14'
-          cache: pip
-          cache-dependency-path: extensions/natural_forecasting/requirements.txt
-      - name: Install pinned analysis dependencies
-        run: python -m pip install -r extensions/natural_forecasting/requirements.txt
-      - name: Materialize the exact historical source checkpoint
-        run: |
-          python - <<'PY'
-          import json, re, subprocess
-          from pathlib import Path
-          checkpoint = json.loads(Path('extensions/natural_forecasting/CHECKPOINT.json').read_text())
-          commit = checkpoint['checkpoint_commit']
-          if not re.fullmatch(r'[0-9a-f]{40}', commit):
-              raise ValueError('Invalid historical commit identifier')
-          subprocess.run(['git', 'fetch', '--no-tags', '--refetch', '--no-filter', '--depth=1', 'origin', commit], check=True)
-          PY
-          python scripts/materialize_historical_checkpoint.py \
-            --verify-current-source \
-            --include extensions/natural_forecasting \
-            --include extensions/scaling_sensitivity \
-            --include extensions/tmlr_integration \
-            --output "$RUNNER_TEMP/kahm-historical-evidence"
-      - name: Run current packaging and synthetic scientific tests
-        run: |
-          python -m unittest extensions.tmlr_integration.package_tests -v
-          python -m unittest extensions.scaling_sensitivity.test_natural extensions.scaling_sensitivity.test_controlled extensions.scaling_sensitivity.test_analysis extensions.scaling_sensitivity.test_reference -v
-      - name: Restore saved natural and sensitivity artifacts in the historical tree
-        working-directory: ${{ runner.temp }}/kahm-historical-evidence
-        run: |
-          python extensions/natural_forecasting/package.py restore-reference extensions/natural_forecasting/reference/natural_v1.zip.parts.json
-          python -m extensions.scaling_sensitivity.reference restore
-      - name: Verify all scientific source and historical checkpoints
-        working-directory: ${{ runner.temp }}/kahm-historical-evidence
-        run: python extensions/tmlr_integration/package.py check-source
-      - name: Audit saved evidence without forecasting fits
-        working-directory: ${{ runner.temp }}/kahm-historical-evidence
-        run: python extensions/tmlr_integration/package.py audit .
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@v7
+      with:
+        python-version: 3.12.14
+        cache: pip
+        cache-dependency-path: extensions/natural_forecasting/requirements.txt
+    - name: Install pinned analysis dependencies
+      run: python -m pip install -r extensions/natural_forecasting/requirements.txt
+    - name: Verify current registered numerical dependencies
+      run: |
+        python - <<'PY'
+        import json
+        from pathlib import Path
+        from extensions.natural_forecasting.package import _verify_scientific_hashes
+        repository = Path.cwd()
+        registration = repository / 'extensions/natural_forecasting/registration'
+        for name in ('initial_freeze.json', 'confirmation_freeze.json'):
+            freeze = json.loads((registration / name).read_text())
+            _verify_scientific_hashes(repository, freeze)
+        print('Current scientific dependencies match both registered source manifests.')
+        PY
+    - name: Materialize the exact historical source checkpoint
+      run: |
+        python - <<'PY'
+        import json, re, subprocess
+        from pathlib import Path
+        checkpoint = json.loads(Path('extensions/natural_forecasting/CHECKPOINT.json').read_text())
+        commit = checkpoint['checkpoint_commit']
+        if not re.fullmatch(r'[0-9a-f]{40}', commit):
+            raise ValueError('Invalid historical commit identifier')
+        subprocess.run(['git', 'fetch', '--no-tags', '--refetch', '--no-filter', '--depth=1', 'origin', commit], check=True)
+        PY
+        python scripts/materialize_historical_checkpoint.py \
+          --include extensions/natural_forecasting \
+          --include extensions/scaling_sensitivity \
+          --include extensions/tmlr_integration \
+          --output "$RUNNER_TEMP/kahm-historical-evidence"
+    - name: Run current packaging and synthetic scientific tests
+      run: |
+        python -m unittest extensions.tmlr_integration.package_tests -v
+        python -m unittest extensions.scaling_sensitivity.test_natural extensions.scaling_sensitivity.test_controlled extensions.scaling_sensitivity.test_analysis extensions.scaling_sensitivity.test_reference -v
+    - name: Restore saved natural and sensitivity artifacts in the historical tree
+      working-directory: ${{ runner.temp }}/kahm-historical-evidence
+      run: |
+        python extensions/natural_forecasting/package.py restore-reference extensions/natural_forecasting/reference/natural_v1.zip.parts.json
+        python -m extensions.scaling_sensitivity.reference restore
+    - name: Verify all scientific source and historical checkpoints
+      working-directory: ${{ runner.temp }}/kahm-historical-evidence
+      run: python extensions/tmlr_integration/package.py check-source
+    - name: Audit saved evidence without forecasting fits
+      working-directory: ${{ runner.temp }}/kahm-historical-evidence
+      run: python extensions/tmlr_integration/package.py audit .

@@ -20,11 +20,11 @@ def digest(path: Path) -> str:
 
 
 def build() -> dict:
-    generated = HERE / "manuscript/generated"
+    generated = HERE / "reporting/generated"
     generated.mkdir(parents=True, exist_ok=True)
     sources = {}
-    for stage, extension in (("controlled", "predictive_geometry"), ("natural", "natural_forecasting")):
-        source = ROOT / "extensions" / extension / "manuscript/generated"
+    for stage, source in (("controlled", ROOT / "extensions/predictive_geometry/reporting"),
+                          ("natural", ROOT / "extensions/natural_forecasting/runs/natural_v1/reports")):
         for path in sorted(source.rglob("*")):
             if not path.is_file():
                 continue
@@ -91,7 +91,7 @@ def build() -> dict:
     result = {"format": "tmlr_integrated_assets_v2", "scope": "Post-study reporting from unchanged original archives and separately recorded post-hoc scaling sensitivity; no model fitting or outcome selection",
               "input_sha256": sources, "macros": macros,
               "generated_sha256": {str(p.relative_to(generated)): digest(p) for p in sorted(generated.rglob('*')) if p.is_file()}}
-    (HERE / "manuscript/ASSET_PROVENANCE.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+    (HERE / "reporting/ASSET_PROVENANCE.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     return {"status": "passed", "source_files": len(sources), "generated_files": len(result["generated_sha256"]), "forecasting_fits": 0}
 
 

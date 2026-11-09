@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-"""Package the revised manuscript and target-geometry evidence, without refits.
+"""Verify scientific source, saved numerical evidence, and archive identities.
 
-This release reuses path safety, byte descriptions, JSON encoding, manuscript
-collection rules and fixed ZIP metadata from the historical utility packager.
-Historical packagers and scientific freezes are never modified. The evidence
-ZIP concerns only target geometry; the manuscript source also includes earlier
-generated tables and figures needed to compile the complete integrated paper.
+The audit and verification commands do not refit forecasting models.
+Recorded source, input, and output identities define each check's scope.
 """
 from __future__ import annotations
 
@@ -111,7 +108,7 @@ def audit_results(root, run_dir, reports_dir):
 
 
 def source_readme():
-    return f"""# Complete editable revised manuscript
+    return f"""# Complete editable document source
 
 This is the public, unsubmitted KAHM prediction manuscript, including the new
 target-geometry study and the preserved earlier studies. It is not a journal
@@ -156,7 +153,7 @@ retain their incurred computation. Packaging never refits or replaces them.
 Earlier controlled, natural, scaling, and forecasting-utility evidence remains
 in {REPOSITORY_URL}. This bundle is not a replacement export for those studies.
 The separate complete manuscript-source ZIP includes their generated tables and
-figures so that the entire revised paper compiles without regenerating them.
+figures so that the complete document compiles without regenerating them.
 
 ## Audit saved evidence without forecasting fits
 
@@ -261,7 +258,7 @@ def manuscript_payload(root):
                 "generated/target_geometry/numbers.tex", "generated/target_geometry/assets.json")
     for name in required:
         if name not in files:
-            raise ValueError(f"Missing revised manuscript input: {name}")
+            raise ValueError(f"Missing document input: {name}")
     files["README_RELEASE.md"] = source_readme().encode()
     return files
 
@@ -316,7 +313,7 @@ def write_archive(path, files, *, kind, freeze_sha, publication, audit):
     if INVENTORY in files:
         raise ValueError("Reserved inventory name in payload")
     inventory = {"schema_version": 1, "kind": kind,
-                 "scope": "Public unsubmitted revised manuscript; target-geometry evidence only in the reproduction ZIP.",
+                 "scope": "Target-geometry scientific evidence in the reproduction ZIP; document sources have a separate inventory.",
                  "scientific_freeze_sha256": freeze_sha, "public_execution_commit": publication["commit"],
                  "evidence_audit": audit,
                  "files": {name: description(content) for name, content in sorted(files.items())}}
@@ -416,7 +413,7 @@ def build(pdf, output, run_dir, reports_dir):
         write_archive(temporary / REPRO_NAME, reproduction, kind="target_geometry_reproduction", freeze_sha=freeze_sha,
                       publication=publication, audit=audit)
         manifest = {"schema_version": 1,
-                    "scope": "Public, unsubmitted revised manuscript; complete new target-geometry evidence; historical full evidence remains in the repository.",
+                    "scope": "Target-geometry scientific evidence and separately inventoried document sources.",
                     "source_repository": REPOSITORY_URL, "public_execution_commit": publication["commit"],
                     "scientific_freeze_sha256": freeze_sha, "evidence_audit": audit,
                     "artifacts": {name: description((temporary / name).read_bytes())
@@ -438,20 +435,13 @@ def build(pdf, output, run_dir, reports_dir):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    build_parser = subparsers.add_parser("build")
-    build_parser.add_argument("--pdf", type=Path, required=True)
-    build_parser.add_argument("--output", type=Path, required=True)
-    build_parser.add_argument("--run-dir", type=Path, default=ROOT / RUN)
-    build_parser.add_argument("--reports-dir", type=Path, default=ROOT / REPORTS)
     verify_parser = subparsers.add_parser("verify")
     verify_parser.add_argument("archive", type=Path)
     audit_parser = subparsers.add_parser("audit")
     audit_parser.add_argument("--run-dir", type=Path, default=ROOT / RUN)
     audit_parser.add_argument("--reports-dir", type=Path, default=ROOT / REPORTS)
     args = parser.parse_args()
-    if args.command == "build":
-        result = build(args.pdf, args.output, args.run_dir, args.reports_dir)
-    elif args.command == "verify":
+    if args.command == "verify":
         result = verify_archive(args.archive)
     else:
         result = audit_results(ROOT, args.run_dir, args.reports_dir)

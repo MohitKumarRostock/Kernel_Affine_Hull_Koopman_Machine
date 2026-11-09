@@ -3,8 +3,7 @@
 ## Main finding
 
 Training-only, unclipped min-max geometry scaling changes some KAHM errors
-and a secondary controlled ranking, but **does not reverse the integrated
-paper's main natural or KAHM-local controlled comparisons**. The natural
+and a secondary controlled ranking, but **does not reverse the main natural-series or KAHM-local controlled comparisons**. The natural
 raw-plus-KAHM aggregate is nearly unchanged; the largest KAHM-local controlled
 improvement occurs on Duffing, where simpler predictors still have lower error.
 
@@ -18,7 +17,7 @@ The fixed protocol and execution code were published before the new fits at
 `c5b8817a9157de685fd1c70a22d83542a7bdf766`. The intervention replaced the scaler
 inside the geometry pipeline, where it affects partitions, local directions,
 reconstruction and gates. The standardized raw-input skip/reference, targets,
-splits, seeds, decoder budgets, query conventions, and validation grids were
+splits, seeds, predictor budgets, query conventions, and validation grids were
 preserved. Fitting statistics came only from the appropriate training set;
 future queries were not clipped.
 
@@ -96,8 +95,7 @@ min-max KAHM error **3.7741** remains above raw **2.8364**, min-max affine
 worsens by 6.03% and 4.78% on Van der Pol at 64/256 landmarks. At 256 landmarks,
 standardized KAHM scores (**1.0499**) beat standardized affine-local
 (**1.0780**), whereas min-max KAHM scores (**1.1001**) trail min-max
-affine-local (**1.0812**), in the same units. The paper explicitly distinguishes
-this reversal from the main KAHM-local comparisons.
+affine-local (**1.0812**), in the same units. This reversal concerns a separate comparison from the main KAHM-local tests.
 
 ## Costs and input-range diagnostics
 
@@ -152,5 +150,4 @@ The tested scaling alternative does not account for the unfavorable aggregate na
 Exact results are in [analysis/summary.json](analysis/summary.json),
 [analysis/AUDIT.json](analysis/AUDIT.json), and the adjacent CSV files.
 The [reproduction guide](README.md) gives restoration, audit and full-run
-commands. The integrated paper and anonymous review package use these same
-audited values.
+commands. The displayed results use these audited values.

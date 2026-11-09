@@ -8,7 +8,7 @@ The complete adjusted synthetic comparison family has two favorable, six unfavor
 
 Three planned rideshare tasks contain no complete geometry-training windows. The full four-collection natural-data aggregate is therefore undefined. The seven available series provide descriptive evidence from three collections; they do not replace the complete planned aggregate. These restrictions remain part of the study's interpretation.
 
-The central unresolved issue is the incremental forecasting value of the KAHM construction after controlling for predictive supervision, decoder capacity, and simpler geometric features. A lower training loss or a gain over a restricted baseline does not, by itself, answer that question.
+The central unresolved issue is the incremental forecasting value of the KAHM construction after controlling for predictive supervision, predictor capacity, and simpler geometric features. A lower training loss or a gain over a restricted baseline does not, by itself, answer that question.
 
 ## Distinct interventions in the research program
 
@@ -22,8 +22,8 @@ These interventions have different data, selection rules, and statistical units.
 
 ## Interpretation
 
-A useful geometric representation must make relevant functions accessible to the chosen decoder. Deterministic features do not add information to an observed history, but they can change how efficiently a restricted predictor expresses a relationship. Exact feature-span arguments, finite-sample error, numerical stability, and measured computational cost address different parts of that claim.
+A useful geometric representation must make relevant functions accessible to the chosen predictor. Deterministic features do not add information to an observed history, but they can change how efficiently a restricted predictor expresses a relationship. Exact feature-span arguments, finite-sample error, numerical stability, and measured computational cost address different parts of that claim.
 
 The direct-training results support a conditional effect of forecast supervision within KAHM. They do not prove that every KAHM forecaster fails, and they do not justify assuming that additional parameters, references, or adaptation will improve prediction. A broader claim requires a specified target population, comparison set, selection budget, and evaluation procedure.
 
-The [integrated manuscript](../tmlr_integration/README.md) presents the resulting theoretical and empirical account. Each original protocol and scientific checkpoint continues to identify the exact procedure that produced its corresponding results.
+The [research index](../../docs/RESEARCH_INDEX.md) links the theoretical and empirical studies. Each original protocol and scientific checkpoint continues to identify the exact procedure that produced its corresponding results.

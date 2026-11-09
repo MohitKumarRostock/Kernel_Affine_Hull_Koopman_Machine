@@ -178,5 +178,5 @@ are outside this measure. Serialized state bytes are not peak resident memory.
 
 This is a static forecasting experiment. It does not evaluate incremental
 geometry updates, drift, delayed-label streaming, or deployment resource
-ceilings. The manuscript reports whether the observed accuracy justifies a
+ceilings. The study tests whether the observed accuracy supports a
 distinctive predictive claim under this protocol; it does not assume one.

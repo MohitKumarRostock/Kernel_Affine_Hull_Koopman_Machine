@@ -21,12 +21,12 @@ The [complete results](RESULTS.md), [primary table](analysis/primary_contrasts.c
 
 The scientific source is commit `2b7d19b5b47f46b5b21b28d24960688f7969d96f`. The source freeze and publication receipt identify the implementation before production preparation. Earlier research informed the design; the record does not assert external preregistration or cryptographic target isolation.
 
-The repository [reproducibility guide](../../REPRODUCIBILITY.md) gives exact commands for compact-record restoration, full simulation regeneration, and audit replay. Full regeneration requires the inherited dimension-study runtime and policy-study numerical solver, not just this directory. It starts in a clean source-only worktree with the original freeze and genuine publication receipt. Existing completed evidence is not a generation workspace.
+The [reporting guide](reporting/README.md) gives commands for compact-record restoration and numerical checks. The protocol and source checkpoint specify full simulation regeneration. Full regeneration requires the inherited dimension-study runtime and policy-study numerical solver, not just this directory. It starts in a clean source-only worktree with the original freeze and genuine publication receipt. Existing completed evidence is not a generation workspace.
 
 Three large records are stored losslessly compressed: B candidate scores, basis dimensions, and the complete audit receipt. The [compact manifest](reporting/compact_release_manifest.json) binds both compressed and original bytes. Prepared episodes, fitted states, forecasts, and execution records are held in three separately indexed numerical archives; their [inventory](reporting/numerical_archive_summary.json) does not assert a public download URL. Source is available to regenerate the study without those author-delivered arrays.
 
 The audit reconstructs feature maps, refits B penalty paths using a different linear-algebra calculation, replays C/D forecasts, and recomputes aggregation and inference. It does not independently reimplement physical-law integration or partition clustering and is not an external scientific replication.
 
-## Manuscript
+## Scientific scope
 
-The [article and focused supplement](../../papers/local_position_forecasting/) study predictive enrichment for direct observed-output readouts. They do not claim Markov sufficiency, Koopman invariance, autonomous state propagation, or general KAHM forecasting superiority. Related studies retain their original sampling units and comparison families.
+The experiment evaluates direct forecasts of observed outputs. It does not establish Markov sufficiency, Koopman invariance, autonomous state propagation, or general KAHM forecasting superiority. Related studies have separate sampling units and comparison families.

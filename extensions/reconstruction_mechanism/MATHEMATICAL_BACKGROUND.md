@@ -1,6 +1,6 @@
 # Mathematical background for reconstruction-based forecasting
 
-This guide defines the local reconstruction maps, explains when their feature spans agree or differ, and derives the bound used for the forecast correction. The results concern specified feature maps and decoders. They do not imply that accurate reconstruction alone guarantees accurate forecasting.
+This guide defines the local reconstruction maps, explains when their feature spans agree or differ, and derives the bound used for the forecast correction. The results concern specified feature maps and predictors. They do not imply that accurate reconstruction alone guarantees accurate forecasting.
 
 All vectors in this guide are columns. A superscript $\top$ denotes transpose. The norm $\|\cdot\|$ is the Euclidean norm for vectors and its induced operator norm for matrices unless a different norm is specified. The span of a collection of scalar functions means all finite linear combinations of those functions with coefficients that do not depend on the query.
 
@@ -233,6 +233,6 @@ $$
 \frac{|\mathbf1_M^\top w_0|}{\|w_0\|_1}>\tau,
 $$
 
-where $\|w_0\|_1=\sum_i|w_{0,i}|$ and $\tau>0$ is the configured tolerance. This implies $\|\omega(x)\|_1<1/\tau$ and therefore $\|A_K(x)\|<\max_i\|q_i\|/\tau$. With $\tau=10^{-10}$, that guard is primarily a numerical safeguard; the radial feature map supplies the substantially smaller decoder correction bound.
+where $\|w_0\|_1=\sum_i|w_{0,i}|$ and $\tau>0$ is the configured tolerance. This implies $\|\omega(x)\|_1<1/\tau$ and therefore $\|A_K(x)\|<\max_i\|q_i\|/\tau$. With $\tau=10^{-10}$, that guard is primarily a numerical safeguard; the radial feature map supplies the substantially smaller predictor correction bound.
 
 The implemented fallback for an unsafe reconstruction is specified in the protocol and counted in the results. No such local fallback occurred in the principal experiment. These safeguards do not diagnose the earlier online extrapolation failures: a previously examined large KAHM forecast had a safe denominator.

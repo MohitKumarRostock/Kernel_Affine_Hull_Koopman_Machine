@@ -11,10 +11,10 @@ The following values are source-balanced means from the saved confirmation resul
 | Procedure | Scaled test MSE | Warm pipeline wall time per task |
 | --- | ---: | ---: |
 | Raw-history RBF | 0.8075209 | 0.168791 s |
-| Raw history plus KAHM, with an RBF decoder | 0.8419228 | 0.387412 s |
+| Raw history plus KAHM, with an RBF predictor | 0.8419228 | 0.387412 s |
 | Raw-history ridge | 0.7798112 | 0.188043 s |
 
-RBF denotes a finite radial-basis-function decoder. Adding KAHM produces 4.26% higher scaled mean squared error and 2.30 times the measured warm pipeline cost of raw-history RBF. The cost includes the specified preparation, search, selection, refitting, prediction, serialization, cleanup, and bookkeeping. It is a measurement of this implementation and host, not a hardware-independent complexity ratio.
+RBF denotes a finite radial-basis-function predictor. Adding KAHM produces 4.26% higher scaled mean squared error and 2.30 times the measured warm pipeline cost of raw-history RBF. The cost includes the specified preparation, search, selection, refitting, prediction, serialization, cleanup, and bookkeeping. It is a measurement of this implementation and host, not a hardware-independent complexity ratio.
 
 In the predeclared diagnostic comparison, adding geometric diagnostic features to source metadata and a low-cost predictive probe changes none of the 80 confirmation decisions. The complete portfolio and source-level results are in `runs/natural_v1/confirmation_analysis.json` and `runs/natural_v1/reports/summary.json` after evidence restoration.
 
@@ -28,7 +28,7 @@ These are public execution records. They are not registration with a dedicated p
 
 ## Create an isolated historical source tree
 
-The natural-study audit verifies all 217 historical files, including their original documentation. The repository's current manuscript and reader guides have a separate document identity. To run that whole-checkpoint audit, create an isolated tree containing the exact historical files and the natural-study implementation:
+The natural-study audit verifies all 217 files in its recorded source checkpoint, including documentation. To run that whole-checkpoint audit, create an isolated tree containing those exact files and the natural-study implementation:
 
 ```bash
 python scripts/materialize_historical_checkpoint.py --output /tmp/kahm-natural-reference
@@ -82,7 +82,7 @@ python -m extensions.natural_forecasting.run analyze --run-root "$NATURAL_RUN"
 python -m extensions.natural_forecasting.report \
   --run-root "$NATURAL_RUN" \
   --reports-dir "$NATURAL_RUN/reports" \
-  --manuscript-dir "$NATURAL_RUN/manuscript-generated"
+  --manuscript-dir "$NATURAL_RUN/tables"
 ```
 
 The fetch command verifies included source archives and downloads only missing pinned public snapshots. Preparation selects the prescribed roster through training-prefix eligibility and a salted hash of source and series identity. Targets must fall entirely within the relevant chronological partition. Missing windows do not trigger replacement series, and the loader does not interpolate missing values.
@@ -99,7 +99,7 @@ Resource records distinguish wall time, process CPU time, serialized model size,
 
 Availability affects interpretation. The longer Hospital and Traffic settings have only 21 and 29 initial training windows, respectively. The longer setting for NN5 series T88 has seven test origins. History length and forecast horizon change together, so their separate effects are not identified. FRED-MD is a fixed-vintage archive whose upstream processing is not completely audited at the series level; training-only preprocessing claims apply to this study's handling of that snapshot.
 
-## Files and manuscript
+## Files
 
 | Location | Contents |
 | --- | --- |
@@ -112,4 +112,4 @@ Availability affects interpretation. The longer Hospital and Traffic settings ha
 | `runs/natural_v1/` | Restored prepared inputs, predictions, results, and analyses |
 | `package.py` | Historical checkpoint verification, evidence restoration, and replay |
 
-The [integrated manuscript](../tmlr_integration/README.md) contains this study's methods, results, and limitations. The local `manuscript/` directory retains the earlier standalone study document.
+The [forecasting evidence guide](../tmlr_integration/README.md) links this experiment with related studies, whose sampling units and uncertainty statements remain separate.

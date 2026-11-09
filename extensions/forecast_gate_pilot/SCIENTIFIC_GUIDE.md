@@ -44,6 +44,6 @@ The module maintains a capped window through rank-one additions and deletions, w
 | `pilot_results/` | Inputs, selected predictions, candidate losses, optimizer records, source snapshot, and audit |
 | `CONFIRMATORY_PROTOCOL_DRAFT.md` | An archived, unexecuted protocol proposal, separate from the pilot findings |
 
-The original `README.md` is part of the pilot's immutable source checkpoint. This guide supplies the current scientific description without altering that historical record. The pilot code was implemented from equations and protocol descriptions, and its results are not a bitwise replay of the supplied manuscript's prior experiments.
+The pilot code implements the stated equations and protocol. Its random streams and implementation are specific to this evaluation. Exact source bytes and numerical inputs are identified in `pilot_results/`; matching equations alone does not establish bitwise computational reproduction of a different experiment.
 
 Optimizing through a ridge solve and maintaining a bounded kernel or feature window are established numerical ideas. The scientific question is whether the complete KAHM forecasting procedure supplies a useful advantage over equally trained alternatives. The subsequent [direct reconstruction study](../direct_reconstruction/README.md) evaluates a separate, specified intervention on reconstruction bandwidths and gates; its evidence is reported independently.

@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-"""Package completed reconstruction-mechanism findings without forecast refits.
+"""Verify scientific source, saved numerical evidence, and archive identities.
 
-This post-execution utility is deliberately outside the scientific freeze.
-It never imports the forecasting implementation or unpickles fitted states.
-The only numerical subprocess is the new study's frozen independent analyzer;
-historical studies, their auditors and their CPU-sensitive replays are untouched.
+The audit and verification commands do not refit forecasting models.
+Recorded source, input, and output identities define each check's scope.
 """
 from __future__ import annotations
 
@@ -457,7 +455,7 @@ def reproduction_payload(root, audit):
     for name in required:
         files[name] = safe_file(root, name)
     files[ASSET_BUILDER.as_posix()] = safe_file(root, ASSET_BUILDER)
-    files.update(_tree_files(root, PAPER / ASSETS))
+    files.update(_tree_files(root, STUDY / "reporting/generated"))
     for name in list(files):
         for parent in Path(name).parents:
             initializer = parent / "__init__.py"
@@ -595,20 +593,13 @@ def build(pdf, output, *, root=ROOT, overwrite=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    audit = commands.add_parser("audit", help="verify complete new evidence and reanalyze predictions; no forecast refits")
+    audit = commands.add_parser("audit", help="verify complete evidence and reanalyze predictions; no forecast refits")
     audit.add_argument("--root", type=Path, default=ROOT)
-    create = commands.add_parser("build", help="package a compiled final-results manuscript and completed study")
-    create.add_argument("--root", type=Path, default=ROOT)
-    create.add_argument("--pdf", type=Path, required=True)
-    create.add_argument("--output", type=Path, required=True)
-    create.add_argument("--overwrite", action="store_true", help="replace only the four named products, preserving scientific evidence")
     verify = commands.add_parser("verify", help="verify ZIP or release byte inventories without importing models")
     verify.add_argument("path", type=Path)
     args = parser.parse_args()
     if args.command == "audit":
         result = audit_results(args.root)
-    elif args.command == "build":
-        result = build(args.pdf, args.output, root=args.root, overwrite=args.overwrite)
     else:
         result = verify_release(args.path) if args.path.is_dir() else verify_archive(args.path)
     print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))

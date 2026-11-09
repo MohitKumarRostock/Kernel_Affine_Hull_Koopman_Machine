@@ -74,7 +74,6 @@ python reporting/build_findings.py
 python reporting/render_documents.py --output /absolute/path/to/output
 ```
 
-The report and protocol PDFs are also supplied separately. The original
-[README](README.md) specifies fresh numerical execution from the frozen
+The [README](README.md) specifies numerical execution from the recorded
 configuration, and the [protocol](PROTOCOL.md) fixes all split roles and
 decision rules.

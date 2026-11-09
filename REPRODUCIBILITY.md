@@ -1,41 +1,47 @@
-# Reproduction scope
+# Reproduction tasks and available materials
 
-## Documents
+Each experiment has its own source identity, dependencies, observations, and statistical analysis. The [research index](docs/RESEARCH_INDEX.md) links its scientific guide. Agreement with saved evidence establishes the specified computational checks; it does not add independent experimental observations.
 
-The approved manuscript is **Predictive Enrichment of Geometry-Induced Soft-State Abstractions: Information Retention and Decoder Access**. From the repository root, run:
+## Reconstruction-affinity feature augmentation
 
-```bash
-python papers/score_enrichment/scripts/build.py
-```
-
-This builds `main.pdf` and `supplement.pdf` in the paper directory using the supplied static tables. It requires Python and a TeX installation with pdfLaTeX, BibTeX, and the imported packages. Supplied `.bbl` files permit a build without BibTeX. No simulation or numerical archive is needed. A branch-restricted GitHub workflow performs the same document build and publishes only the two PDFs and a document-build receipt. Its output is a document build, not a forecasting audit.
-
-The publication manifest records the 41 approved document-build inputs. Their Git subtree before publication documentation is `2906ac70db2806f480fc4e3de1683c1859b848b1`. Matching these inputs establishes source identity, not scientific correctness. Recompiled PDF bytes may differ with TeX versions, fonts, timestamps, or document identifiers.
-
-## Primary-summary arithmetic
-
-The exact released `primary_contrasts.csv` is included under `extensions/score_enrichment_20261102/`. With SciPy installed:
+This branch includes the exact 40-row primary summary for protocol `KAHM-SCORE-20261102-v1`. With SciPy installed, run from the repository root:
 
 ```bash
 python extensions/score_enrichment_20261102/verify_primary_summary.py
 ```
 
-The checker verifies the original CSV hash, all 40 comparison identities, sample sizes, Student critical value, standard errors, confidence endpoints, effect ratios, and decision counts. It operates on reported means and standard deviations. It does not reconstruct the 2,560 paired repetition differences, authenticate predictions, or rerun a model. The distinction from a repetition-level saved-loss check is deliberate.
+The checker verifies the CSV identity, comparison roster, sample sizes, Student critical value, standard errors, confidence endpoints, effect ratios, and decision counts from the reported means and standard deviations. It does not reconstruct repetition-level differences or rerun a model.
 
-## Complete scientific execution package
+The [central saved-loss bundle](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02/reproduction/score_enrichment) provides a separate check using 17 original evidence records. Its independently implemented checker reads 26,624 saved selected-loss rows and reconstructs 416 procedure summaries, 2,560 paired differences, and all 40 primary comparisons. It cannot recalculate losses from predictions or verify the complete validation search because the required inputs are absent. Use the bundle's pinned dependencies and commands in its README.
 
-The separately delivered author package contains the unchanged compact source/results release under `extensions/score_enrichment_20261102/release/`. That full release is not mirrored in this publication branch. It contains the frozen numerical implementation, cohort roster, selected losses, paired repetitions, analysis scripts, computational audit, and stage records. The recorded protocol is `KAHM-SCORE-20261102-v1`; its source-manifest SHA256 is `af4357d382f23a58797cc111f73eca9cb6e8b283415ed31f3cd586af2fe4ba28`.
+The original generator, experiment runner, complete source snapshot, `cohort.json` evaluation roster and random-stream labels, fitted models, forecast arrays, and environment fingerprint are unavailable here. The source-manifest SHA256 recorded by the experiment is `af4357d382f23a58797cc111f73eca9cb6e8b283415ed31f3cd586af2fe4ba28`. A source hash identifies the expected bytes; it does not supply them.
 
-The historical freeze retains its original title and local-publication status. Publishing these identifiers after the experiment does not turn the local prospective freeze into public preregistration. The results receipt has a separate identity and cites files in the complete release; its references are not a claim that every file is included here.
+The experiment records describe sixteen numerical archives totaling 9.024 GiB. The complete set and a public download endpoint are unavailable, so the recorded total has not been independently verified from all archive bytes. Archive volume is a distribution constraint separate from the missing implementation, evaluation roster, and environment. Complete source and execution inputs would permit regeneration without distributing every saved model state.
 
-The exact repository-overlay package is `KAHM_Step8_Repository_Update.zip`, 6,348,062 bytes, SHA256 `8ef7bca05707c86f87922de1698719e971d0ce2b182c2ce264cd6a3c6c414637`. It contains the complete author-delivered compact release and its file manifests. Its guarded application utility is intended for the original base checkout; it must not be forced over this publication edition or conflicting local changes. The complete author ZIP is separately identified in the study availability statement. Neither package name is a public download URL.
+The recorded original environment uses Python 3.13.5, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, threadpoolctl 3.6.0, and pytest 9.0.2. The saved-loss checker uses its own pinned Python 3.12 environment. The root requirements serve the root KAHKM experiments and are not a replacement for either environment.
 
-Full regeneration uses the complete source package in a new output tree, not a preserved completed-results tree. Its recorded environment uses Python 3.13.5, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, threadpoolctl 3.6.0, and pytest 9.0.2, with three workers and one numerical thread each. The environment preflight checks the recorded platform and library signature. The root requirements belong to older research and are not a replacement environment. No full regeneration was performed as part of repository publication.
+## Four-representation local-position experiment
 
-## Model replay and availability
+The [study guide](extensions/soft_state_ablation_20261102/README.md) describes the separate 32-repetition design. Restore and verify its three compact records with:
 
-The original inventory describes sixteen large numerical archives totaling 9.024 GiB. The complete archives are not distributed here and have no established public endpoint. The only supplied copy available during editorial checking was incomplete and unreadable; it is not included in this branch. These delivery limitations do not by themselves establish an error in the original computation, but they prevent full replay from the supplied copies.
+```bash
+python extensions/soft_state_ablation_20261102/reporting/restore_compact_records.py --check-only
+python extensions/soft_state_ablation_20261102/reporting/restore_compact_records.py
+```
 
-The retained computational audit reports distinct ridge calculations and forecast replay, while sharing the feature encoder and native primitives. It does not independently reimplement clustering or physical-law integration and is not external scientific replication. Archive hashes, saved-loss checks, model replay, refitting, and external replication have different scopes.
+The [reporting guide](extensions/soft_state_ablation_20261102/reporting/README.md) gives statistical and saved-state checks, and the [protocol](extensions/soft_state_ablation_20261102/PROTOCOL.md) defines the source and execution requirements. Full regeneration requires the inherited dimension-study runtime and policy-study numerical solver in addition to this extension. Numerical replay requires the separately indexed data, forecasts, and fitted-state archives. An archive inventory is not a download service.
 
-Related studies retain their own environments, source identities, and sampling units. Their reproduction instructions are linked from [the research index](docs/RESEARCH_INDEX.md).
+## Supporting experiments
+
+| Study | Reproduction guide |
+| --- | --- |
+| Controlled representations and predictor capacity | [Predictive geometry](extensions/predictive_geometry/REPRODUCING.md) |
+| Validation-selected dimension | [Dimension forecasting](extensions/dimension_forecasting/README.md) |
+| Reconstruction departures | [Reconstruction mechanism](extensions/reconstruction_mechanism/README.md) |
+| Forecast-trained reconstruction parameters | [Direct reconstruction](extensions/direct_reconstruction/README.md) |
+| Supervised metrics and residual targets | [Target geometry](extensions/target_geometry/README.md) |
+| Online updates | [Adaptive development](extensions/adaptive_development/REPRODUCING.md) |
+| Policy augmentation | [Synthetic experiment](extensions/policy_augmentation_20261101/README.md) and [natural series](extensions/policy_augmentation_natural_20261101/REPRODUCTION.md) |
+| Root KAHKM experiments | [Reproduction evidence](reproduction/REPRODUCIBILITY_EVIDENCE.md) |
+
+Use new output directories for repeated computation. Preserve recorded results and original protocol identities. Reanalysis of saved losses, replay of saved fitted states, model refitting, and experiments on new independent data answer different questions.

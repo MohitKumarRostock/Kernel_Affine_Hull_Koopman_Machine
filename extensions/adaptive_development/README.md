@@ -1,16 +1,13 @@
 # Focused development study: bounded adaptive KAHM
 
-This extension implements the small development study requested after the
-forecast-trained manuscript. It compares six online procedures on eight paired
-synthetic streams and four previously inspected natural series, at two capacity
-tiers. It is not independent source confirmation. The frozen protocol and
-automatically reconstructed findings, including unfavorable outcomes, govern
-the recommendation about a larger manuscript extension.
+This development study compares six online procedures on eight paired synthetic
+streams and four previously inspected natural series at two capacity tiers.
+It does not provide independent source confirmation. The protocol and complete
+findings specify the accuracy, resource, and stability criteria.
 
 Read `PROTOCOL.md`, `DATA_PROVENANCE.md`, `config.json`, and the completed
 `analysis/decision.json`. `DEVELOPMENT_FREEZE.json` fixes scientific source and
-inputs before the reported runs. Original manuscript sources and archived
-studies are unchanged.
+inputs before the reported runs.
 
 The current source incorporates numerical amendment A1 after the original
 complete attempt returned TECHNICAL_BLOCK. Read AMENDMENT_A1.md. The full
@@ -18,14 +15,19 @@ original source and evidence are preserved in archives/initial_attempt.zip.
 The repeat uses the same data, models' mathematical objectives, calibration
 grid and decision rules, with a stable correction-head solve applied to all
 geometric arms. Both attempts are development evidence; neither is independent
-confirmation. FINDINGS.md and the PDF explain the resulting manuscript decision.
+confirmation. FINDINGS.md reports all accuracy, resource, and stability criteria.
 
 ## Reproduce
 
-From the repository root, install the versions in this extension's
-`requirements.txt`, then:
+Use Python 3.12. From a complete repository checkout, create the recorded
+experimental source context and install the pinned numerical dependencies.
+The context helper checks the recorded source identities and requires a new output directory:
 
 ```bash
+git fetch --no-tags --refetch --no-filter --depth=1 origin 5123365917ae630b684f8a3bebb0294ee695ce7a
+python scripts/materialize_scientific_context.py --output /tmp/kahm-scientific-context
+cd /tmp/kahm-scientific-context
+python -m pip install -r extensions/adaptive_development/requirements.txt
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m unittest extensions.adaptive_development.tests_models extensions.adaptive_development.tests_protocol -v
 python -m extensions.adaptive_development.run --all --output /tmp/kahm_adaptive_replay
 python -m extensions.adaptive_development.analyze --results /tmp/kahm_adaptive_replay --output /tmp/kahm_adaptive_analysis
@@ -65,5 +67,5 @@ follows from this prototype.
 Software follows the repository MIT license. Reused natural observations retain
 their original CC BY 4.0 attribution and notices in DATA_PROVENANCE.md and the
 prepared input manifest. AI tools assisted implementation, numerical checks,
-analysis and reporting; this development package is not a submitted paper or
-an external independent replication.
+analysis and reporting; this development evaluation is not an external
+independent replication.

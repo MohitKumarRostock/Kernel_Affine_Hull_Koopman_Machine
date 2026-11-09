@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-"""Package the forecast-trained manuscript and preserved evidence without refits.
+"""Verify scientific source, saved numerical evidence, and archive identities.
 
-The new run is re-audited on a temporary copy with its frozen numerical source.
-Its supplied reports must match that replay exactly. Historical studies remain
-separate: the manuscript includes their existing publication assets, while the
-reproduction ZIP includes the new extension, its exact inherited dependencies,
-and the preserved exploratory gate pilot at their repository-relative paths.
+The audit and verification commands do not refit forecasting models.
+Recorded source, input, and output identities define each check's scope.
 """
 from __future__ import annotations
 
@@ -570,7 +567,7 @@ def verify_archive(path):
         elif inventory["kind"] == "manuscript_source":
             required = {"main.tex", "section_direct_reconstruction.tex", "appendix_direct_reconstruction.tex"}
             if not required <= set(names):
-                raise ValueError("Complete revised manuscript source is missing")
+                raise ValueError("Complete document source is missing")
             for name in GENERATED_FILES:
                 expected = inventory["evidence_audit"]["report_files"]["generated/" + name]
                 if description(archive.read("generated/direct_reconstruction/" + name)) != expected:
@@ -689,21 +686,13 @@ def build(pdf, output, run_dir=None, *, overwrite=False, work_dir=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    release = commands.add_parser("build", help="audit and package an already compiled manuscript")
-    release.add_argument("--pdf", type=Path, required=True)
-    release.add_argument("--output", type=Path, required=True)
-    release.add_argument("--run-dir", type=Path, default=ROOT / RUN)
-    release.add_argument("--work-dir", type=Path, default=ROOT / "review")
-    release.add_argument("--overwrite", action="store_true", help="replace only the four named products in an existing output directory")
     audit = commands.add_parser("audit", help="replay the frozen saved-evidence audit on a temporary copy")
     audit.add_argument("--run-dir", type=Path, default=ROOT / RUN)
     audit.add_argument("--work-dir", type=Path, default=ROOT / "review")
     verify = commands.add_parser("verify", help="verify a ZIP or complete release directory without model imports")
     verify.add_argument("path", type=Path)
     args = parser.parse_args()
-    if args.command == "build":
-        result = build(args.pdf, args.output, args.run_dir, overwrite=args.overwrite, work_dir=args.work_dir)
-    elif args.command == "audit":
+    if args.command == "audit":
         result = audit_results(ROOT, args.run_dir, args.work_dir)
     else:
         result = verify_release(args.path) if args.path.is_dir() else verify_archive(args.path)

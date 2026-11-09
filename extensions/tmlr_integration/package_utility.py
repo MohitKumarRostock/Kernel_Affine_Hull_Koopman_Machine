@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Package the public forecasting-utility research release, without model fits.
+"""Verify scientific source, saved numerical evidence, and archive identities.
 
-The reproduction ZIP contains the new extension and its exact frozen numerical
-dependencies, prepared inputs, and expanded results for all attempted tasks. Historical study
-archives remain in the public repository; this is not their replacement export.
+The audit and verification commands do not refit forecasting models.
+Recorded source, input, and output identities define each check's scope.
 """
 from __future__ import annotations
 
@@ -412,18 +411,12 @@ def build(pdf, output, run_dir):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    build_parser = subparsers.add_parser("build")
-    build_parser.add_argument("--pdf", type=Path, required=True)
-    build_parser.add_argument("--output", type=Path, required=True)
-    build_parser.add_argument("--run-dir", type=Path, default=ROOT / RUN)
     verify_parser = subparsers.add_parser("verify")
     verify_parser.add_argument("archive", type=Path)
     audit_parser = subparsers.add_parser("audit")
     audit_parser.add_argument("--run-dir", type=Path, default=ROOT / RUN)
     args = parser.parse_args()
-    if args.command == "build":
-        result = build(args.pdf, args.output, args.run_dir)
-    elif args.command == "verify":
+    if args.command == "verify":
         result = verify_archive(args.archive)
     else:
         result = audit_results(ROOT, args.run_dir.resolve())

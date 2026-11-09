@@ -1,4 +1,4 @@
-"""Reconstruct manuscript assets for the separate forecasting-utility extension.
+"""Reconstruct numerical tables and figures for the separate forecasting-utility extension.
 
 Reporting only: this script never fits, tunes, or selects a forecasting model.
 It requires an audited, fully attempted run with explicit failure accounting,
@@ -53,7 +53,7 @@ def digest(path):
 def number(value, digits=4):
     value = float(value)
     if not math.isfinite(value):
-        raise ValueError("Nonfinite value cannot enter a manuscript table")
+        raise ValueError("Nonfinite value cannot enter a result table")
     return f"{value:.{digits}f}"
 
 
@@ -488,6 +488,6 @@ def build(run_dir, output):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-dir", type=Path, default=STUDY / "results/utility_v1")
-    parser.add_argument("--output-dir", type=Path, default=HERE / "manuscript/generated/utility")
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "extensions/forecasting_utility/reporting")
     args = parser.parse_args()
     print(json.dumps(build(args.run_dir, args.output_dir), indent=2))

@@ -1,35 +1,41 @@
-# Predictive Enrichment of Geometry-Induced Soft-State Abstractions
+# Reconstruction-based representations for forecasting
 
-## Information retention and decoder access
+This repository studies how reconstruction features affect forecasting accuracy, information retention, and prediction-risk bounds. Kernel Affine Hull Machines (KAHMs) are compared with affine reconstruction, kernel-weighted averaging, and forecasting baselines under matched evaluation designs.
 
-Geometric affinities describe relationships to reference regions, but their interpretation does not establish predictive usefulness. Reconstruction-score normalization can discard absolute affinity information, while local position may be absent from the scores themselves. Even an information-preserving enrichment can be difficult for a finite decoder to use. This research separates those questions using Kernel Affine Hull Machines (KAHMs), matched affine and positive-kernel reconstructions, and common observed-response targets.
+## Research guides
 
-The [manuscript directory](papers/score_enrichment/) contains the approved article, supplementary sources, complete static tables, bibliography, and build instructions. The [study guide](extensions/score_enrichment_20261102/README.md) identifies the numerical evidence and its distribution scope. The [research index](docs/RESEARCH_INDEX.md) preserves earlier studies without pooling their sampling units or comparison families.
+| Topic | Code and evidence |
+| --- | --- |
+| Feature Augmentation for Forecasting with Reconstruction-Based Representations | [Experiment guide and reproduction bundles](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02) |
+| A Hierarchy of Lower Bounds on Prediction Risk for Forecasting Representations | [Theory, implementation, and experiment guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) |
+| Supporting forecasting experiments | [Research index](docs/RESEARCH_INDEX.md) |
 
-## Complete primary findings
+The experiments use separate sampling units, selection procedures, losses, and comparison families. Results are interpreted within their own protocols.
 
-Protocol `KAHM-SCORE-20261102-v1` has 64 repetitions under each of four laws, 256 task suites, and 40 two-sided paired comparisons in one Bonferroni family. Primary procedures independently select their native dimension and decoder settings on validation data.
+## Reconstruction-affinity features
+
+Normalized reconstruction affinities give soft assignments to local reference regions. Their normalization can discard absolute reconstruction-score information. Log normalization constants and membership-weighted local coordinates supply two ways to augment these features. The experiment tests whether these additions help a fitted predictor.
+
+Protocol `KAHM-SCORE-20261102-v1` specifies 64 repetitions under each of four data-generating distributions, 256 process–repetition combinations, and 40 two-sided paired comparisons in one Bonferroni family. Each primary procedure selects its dimension and predictor settings separately, using the same validation observations within each task.
 
 | Candidate / reference | Lower candidate mean loss | Higher candidate mean loss | Unresolved |
 | --- | ---: | ---: | ---: |
 | KAHM-local / KAHM-memberships | 6 | 0 | 2 |
 | KAHM-normalizer / KAHM-memberships | 3 | 0 | 5 |
 | KAHM-local / affine-local | 1 | 4 | 3 |
-| KAHM-local / positive-kernel-local | 3 | 0 | 5 |
+| KAHM-local / kernel-weighted local features | 3 | 0 | 5 |
 | KAHM-local / raw history | 3 | 3 | 2 |
 
-Each row covers four laws and two decoders. Directions follow adjusted intervals, not point ordering alone. The counts are not an omnibus success criterion. Coverage relies on a paired-Student approximation; no practical or equivalence margin is assigned. All four nonlinear-decoder KAHM/positive-kernel comparisons are unresolved. The [complete primary summary](extensions/score_enrichment_20261102/primary_contrasts.csv) retains favorable, unfavorable, and unresolved comparisons.
+Each row covers four distributions and two predictors. Directions follow adjusted intervals. The counts are not an omnibus success criterion. Coverage uses a paired-Student approximation; the protocol specifies no practical or equivalence margin. All four nonlinear-predictor KAHM comparisons with kernel-weighted averaging are unresolved. The [complete primary summary](extensions/score_enrichment_20261102/primary_contrasts.csv) includes favorable, unfavorable, and unresolved comparisons.
 
-On Van der Pol with the nonlinear decoder, KAHM-local has 62.09% lower mean loss than raw input and 2.51% lower loss than affine-local, with resolved adjusted comparisons. Its approximately 0.038% difference from positive-kernel-local is unresolved. On Duffing, the same KAHM procedure has higher loss than raw and affine-local. These are conditional results for the specified procedures, not general KAHM superiority.
+On Van der Pol with the nonlinear predictor, KAHM-local has 62.09% lower mean loss than raw input and 2.51% lower loss than affine-local, with resolved adjusted comparisons. Its approximately 0.038% difference from kernel-weighted local features is unresolved. On Duffing, the same KAHM procedure has higher loss than raw and affine-local. These results concern the specified procedures and distributions.
 
-## Mathematical scope
+## Information and prediction
 
-Partition normalizers recover the full score vector from memberships in exact arithmetic. Gated local coordinates preserve the input under positivity and a full-rank basis-stack condition, although the inverse may be ill-conditioned. Matched raw reconstruction spaces can coincide or differ. These statements neither order fitted risks nor establish Koopman closure of nonlinear score coordinates. No autonomous transition matrix is fitted in this study.
+Memberships and log normalization constants recover the full reconstruction scores in exact arithmetic. Membership-weighted local coordinates recover the input under positive weights and a full-column-rank condition on the combined coordinate matrices. The inverse can be ill-conditioned. These identities do not order fitted forecasting risks or establish Koopman closure of nonlinear features. This experiment does not fit an autonomous transition model.
 
-## Publication and reproduction scope
+## Reproduction
 
-This branch publishes the document sources and static tables, the exact 40-row primary summary, and the original protocol and source/release identities. It is not a complete mirror of the separately delivered scientific execution package. That package contains the frozen implementation, repetition-level loss tables, audit receipts, and stage records. The supplied large numerical-archive inventory does not establish a public download service.
+This branch contains the [primary-summary arithmetic checker](extensions/score_enrichment_20261102/README.md) and code and evidence for the supporting studies. The [saved-loss bundle](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02/reproduction/score_enrichment) reconstructs all 40 central comparisons from repetition-level losses. The central generator, experiment runner, complete evaluation roster, fitted states, and forecast arrays are unavailable here, so full model regeneration is not supported for that experiment. [REPRODUCIBILITY.md](REPRODUCIBILITY.md) describes the available checks and the separate requirements of other studies.
 
-[REPRODUCIBILITY.md](REPRODUCIBILITY.md) distinguishes document builds, summary-arithmetic checks, saved-loss analysis, and full model replay. The publication manifest identifies the document inputs checked against the approved author package. Earlier frozen experiments and manuscript editions remain unchanged. The public repository is attributed research material, not an anonymous review-code archive.
-
-Original software retains the [MIT License](LICENSE); research outputs retain the terms in [DATA_LICENSE](DATA_LICENSE). Third-party licenses and attribution are preserved. Cite the manuscript version, study protocol, and immutable repository commit used.
+Software follows the [MIT License](LICENSE); research outputs follow [DATA_LICENSE](DATA_LICENSE). Third-party licenses and attribution remain applicable. Cite the relevant protocol and immutable source commit when using the code or results.

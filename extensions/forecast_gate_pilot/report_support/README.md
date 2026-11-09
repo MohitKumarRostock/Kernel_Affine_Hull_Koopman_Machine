@@ -1,14 +1,5 @@
-# Rebuild the report
+# Pilot reporting utilities
 
-This reporting script was written after the pilot code/configuration freeze.
-It reads saved outcomes; it does not fit or select a forecasting model.
-Its figures and prose are post-run reporting, not preregistration.
+The reporting code reads the completed pilot's numerical records. It derives the comparison summary and figure from saved outcomes without fitting models. The scientific implementation and exact run inputs are retained under `pilot_results/`.
 
-From the package root, with the scientific and report dependencies installed:
-
-```bash
-python report_support/build_report.py --project . --output reports/KAHM_Research_Continuation.pdf
-```
-
-The script also writes PILOT_FINDINGS.json and a comparison figure next to the PDF.
-The original numerical source and checks remain under pilot_results/source_snapshot.
+The [scientific guide](../SCIENTIFIC_GUIDE.md) describes the design, complete comparison set, numerical audit, and interpretation. The exploratory three-repetition means do not carry confirmatory confidence intervals.

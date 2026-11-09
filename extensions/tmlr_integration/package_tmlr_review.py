@@ -1,4 +1,4 @@
-"""Build an anonymous saved-forecast supplement for the TMLR manuscript.
+"""Build a portable saved-forecast verification bundle.
 
 The package contains the original numeric forecast archives, compact copies of
 training targets and variance scales, reported analysis tables, and a standalone
@@ -29,8 +29,8 @@ ARCHIVE_NAME = "KAHM_TMLR_Saved_Forecasts.zip"
 
 README = r'''# Saved-forecast reproduction for KAHM reconstruction departures
 
-This supplement reproduces the numerical forecasting comparison in the
-manuscript's reconstruction-departure experiment. It contains the original
+This bundle reproduces the numerical forecasting comparison in the
+reconstruction-departure experiment. It contains the original
 forecast arrays for every method and task, the training targets that determine
 the loss scales, the reported numerical analysis, and an independently
 implemented verification program.
@@ -49,8 +49,8 @@ verification of these numerical results. It does not generate trajectories,
 fit forecasting models, repeat hyperparameter or correction selection,
 reproduce feature-bound diagnostics, or measure computation time. The complete
 fitting implementation and experiment records are distributed separately from
-this anonymous review archive. The manuscript gives the mathematical methods,
-selection rules, and scope of each experiment.
+this compact numerical bundle. The study protocol specifies the mathematical
+methods, selection rules, and scope of the experiment.
 
 ## Reproduction
 

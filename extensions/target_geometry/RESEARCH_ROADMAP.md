@@ -28,10 +28,10 @@ The finite experiments distinguish a useful complete correction from an identifi
 
 The [direct reconstruction experiment](../direct_reconstruction/README.md) subsequently optimized bounded local bandwidths and gate temperatures against actual horizon-specific forecasting error. It has a separate roster, budget, and statistical analysis. The [online adaptation study](../adaptive_development/REPRODUCING.md) evaluates a different chronological update procedure with bounded storage. The [reconstruction-departure experiment](../reconstruction_mechanism/README.md) isolates additional reconstruction functions and bounds the residual correction.
 
-Those studies test different interventions and do not retroactively change this experiment's results. The [integrated manuscript](../tmlr_integration/README.md) compares their implications while retaining their separate populations, losses, and uncertainty statements.
+Those studies test different interventions and do not retroactively change this experiment's results. The [research index](../../docs/RESEARCH_INDEX.md) links their separate populations, losses, and uncertainty statements.
 
 ## Generality
 
 The present study uses finite tuning grids, capped univariate histories, three previously studied simulation laws, and four selected archive collections. Additional random realizations test the same simulation laws; related series and overlapping windows do not increase the number of independent application domains. The Bitcoin tasks concern activity indicators rather than prices.
 
-The evidence leaves open which geometric and decoder conditions make a KAHM correction useful on a new forecasting population. Answering that question requires hypotheses and controls that identify the proposed mechanism, together with data and selection rules appropriate to the intended generalization claim. It cannot be inferred solely from a smaller reconstruction loss, a converged proxy optimizer, or a more complex representation.
+The evidence leaves open which geometric and predictor conditions make a KAHM correction useful on a new forecasting population. Answering that question requires hypotheses and controls that identify the proposed mechanism, together with data and selection rules appropriate to the intended generalization claim. It cannot be inferred solely from a smaller reconstruction loss, a converged proxy optimizer, or a more complex representation.

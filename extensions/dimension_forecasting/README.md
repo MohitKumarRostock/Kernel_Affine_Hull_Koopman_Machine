@@ -12,7 +12,7 @@ improves over historical cap 2, while native cap 20 has higher mean nonlinear
 error. The C-selected non-KAHM policy has lower aggregate error than KAHM.
 See [FINDINGS.md](FINDINGS.md) for the complete ten-procedure table, simultaneous
 margin tests, heterogeneity, numerical diagnostics and interpretation.
-The manuscript-style report and figure-generation entry points are described
+Numerical reporting and figure-generation entry points are described
 in [reporting/README.md](reporting/README.md).
 
 ## Study definition and records

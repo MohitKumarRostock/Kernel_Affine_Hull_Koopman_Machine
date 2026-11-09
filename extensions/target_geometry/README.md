@@ -22,7 +22,6 @@ correction rows. Raw ridge is the main baseline. The comparison has its own proc
   including the limits of cross-fitted residuals after a baseline changes.
 - [Source provenance](sources/README.md): four archive collections not used in the preceding studies, exact
   selected series, attribution and data licenses.
-- [Manuscript source](../tmlr_integration/manuscript/main.tex): the integrated research paper.
 
 The full roster has 36 synthetic tasks (three established laws, twelve fresh
 independent repetitions) and 12 archive tasks (three series from each of four
@@ -33,9 +32,14 @@ not price forecasts.
 
 ## Reproduce
 
-From the repository root in Python 3.12:
+Use Python 3.12. From a complete repository checkout, create the recorded
+experimental source context. The helper checks the recorded source identities and requires
+a new output directory. Run the scientific commands inside that context:
 
 ```bash
+git fetch --no-tags --refetch --no-filter --depth=1 origin 5123365917ae630b684f8a3bebb0294ee695ce7a
+python scripts/materialize_scientific_context.py --output /tmp/kahm-scientific-context
+cd /tmp/kahm-scientific-context
 python -m pip install -r extensions/target_geometry/requirements.txt
 python -m unittest extensions.target_geometry.test_models \
   extensions.target_geometry.test_protocol extensions.target_geometry.test_analysis -v

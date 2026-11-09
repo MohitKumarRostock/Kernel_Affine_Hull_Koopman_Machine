@@ -215,7 +215,7 @@ against assuming that the evaluated cross-fitting procedure improves terminal
 forecasting. The experiment establishes neither a general preference for
 in-sample residuals nor a universal limitation of cross-fitting. It provides
 no natural-series adoption result, risk-certificate validation, or basis for
-changing the original manuscript's broader theoretical claims.
+establishing broader theoretical claims about forecasting representations.
 
 The repository release includes primary, panel, descriptive-contrast, condition,
 B-selection-count, and C-choice-count tables under `reporting/published_tables/`,

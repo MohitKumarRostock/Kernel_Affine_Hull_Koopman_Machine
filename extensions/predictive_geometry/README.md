@@ -4,9 +4,7 @@
 
 This extension accompanies a focused study of when KAHM geometry helps a predictive model. It includes
 matched KAHM/affine representations, controlled target laws, forecasting tests,
-a fresh capacity follow-up, and a numerical underflow sensitivity check.
-The manuscript is prepared in anonymous TMLR submission format. This statement
-does not assert submission, acceptance or publication.
+a capacity follow-up, and a numerical underflow sensitivity check.
 
 The contribution is a testable account of **conditional predictive gains**.
 The experiments retain favorable and unfavorable outcomes, use matched
@@ -14,13 +12,21 @@ reference observations and PCA bases, and include raw-input baselines. They do
 not establish that every task benefits from KAHMs or that better reconstruction
 implies better prediction.
 
-Read the [LaTeX source](manuscript/main.tex),
-[TMLR packaging guide](TMLR_SUBMISSION.md), and
-[paper readiness assessment](PAPER_READINESS.md). Tables, figures, and headline
-number macros are generated from archived records; supporting numerical prose
-is checked against the same source records. The readiness assessment separates
-completed reproduction work from the additional evidence that would strengthen
-a journal submission.
+The [reproduction guide](REPRODUCING.md), scientific source snapshot, and compact
+result archives specify the experimental procedures and evidence. Tables,
+figures, and numerical macros are generated from those records.
+
+## Distribution scope
+
+This distribution contains the scientific implementation, experiment inputs,
+saved numerical records, and reporting assets. Manuscript documents and their
+typesetting inputs are distributed separately. Generated LaTeX tables and
+figure PDFs remain numerical experiment outputs.
+
+The archival `audit`, `tables`, `review-diagnostics`, and `full` commands below
+operate on scientific source and result records. Manuscript compilation,
+submission exports, and the manuscript-packaging tests included in the
+all-tests `smoke` route require the separate manuscript files.
 
 ## Quick start
 
@@ -31,16 +37,13 @@ extracted reproducibility supplement:
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-python -m reproduce smoke
+python -m reproduce audit
 ```
 
-The smoke command runs provenance and loss-audit tests, the unchanged geometry
-tests, numerical arithmetic checks, reduced fits for all three forecasting
-systems plus branch and Airfoil data, both full archived primary analyses, and
-the paper asset builder. Its reduced fits are execution checks and are never
-used as research findings.
+The audit checks the recorded source and archive hashes and independently
+recomputes the archived paired comparisons. It fits no forecasting model.
 
-**Regenerate every experiment, audit the results, and rebuild the paper assets:**
+**Regenerate the experiments, audit the results, and rebuild numerical assets:**
 
 ```bash
 python -m reproduce full --workers 4
@@ -55,7 +58,7 @@ are excluded from Git.
 To regenerate tables and figures immediately from the small committed archive:
 
 ```bash
-python -m reproduce tables
+python -m reproduce tables --output runs/archived-assets
 ```
 
 To verify archival hashes and independently recompute all 29 first-stage and
@@ -65,54 +68,29 @@ To verify archival hashes and independently recompute all 29 first-stage and
 python -m reproduce audit
 ```
 
-To compile the manuscript after rebuilding its assets, install `latexmk` and a
-LaTeX distribution with the packages used in `manuscript/main.tex`, then run:
+The historical validation record [VALIDATION.json](VALIDATION.json) describes
+the complete distribution used for that recorded check. Its full rerun
+reproduced all 15,234 saved method MSEs and passed the prediction audits.
+Recorded timings describe that environment and execution. They do not certify
+a later distribution or a different machine. Additional validation records
+are retained in `TMLR_VALIDATION.json`.
 
-```bash
-python -m reproduce paper
-```
-
-The historical release check in [VALIDATION.json](VALIDATION.json) records successful runs
-of all five routes. The complete local rerun reproduced all 15,234 saved method
-MSEs exactly and passed the required prediction audits. It took about 194 seconds
-with four workers in the recorded environment; the smoke route took about
-35 seconds. These are observed timings for that environment, not a performance
-guarantee for another machine. It is historical evidence for the earlier release,
-not a validation claim about later edits. The TMLR revision records its actual
-checks separately in `TMLR_VALIDATION.json`.
-
-To check the archived paired differences and build the two submission ZIPs while
-preserving the manuscript's committed diagnostic assets:
+To check archived paired differences:
 
 ```bash
 python -m reproduce review-diagnostics --output runs/review-diagnostics
-python -m reproduce submission --output-dir dist/tmlr
 ```
 
-That diagnostic command checks paired outcomes only. To regenerate the
-manuscript's additional saved-bank rank and gate checks, pass the directory
-of a completed full run explicitly:
+To include saved-bank rank and gate checks, first produce a complete run and
+then pass its directory explicitly:
 
 ```bash
-python -m reproduce review-diagnostics --run-dir runs/full-review --output manuscript/generated
-python -m reproduce paper
+python -m reproduce full --workers 4 --run-dir runs/full-review
+python -m reproduce review-diagnostics --run-dir runs/full-review --output runs/full-review-diagnostics
 ```
 
-Here `runs/full-review` must first be created with
-`python -m reproduce full --workers 4 --run-dir runs/full-review`.
-
-The package command verifies the historical hashes, includes the complete
-executable study and compact result archive, and writes deterministic ZIPs with
-per-file hashes and content-tree digests. It excludes Git history, prior named
-PDFs and first-party author metadata. Required license notices, ordinary
-published citations and immutable upstream provenance remain; these narrow
-exceptions are listed explicitly in each package manifest. See
-[TMLR_SUBMISSION.md](TMLR_SUBMISSION.md) for the review-view contract.
-
-The Python experiment dependencies are pinned in `requirements.txt`. LaTeX is
-needed only to compile the manuscript PDF; experiment execution and asset
-generation do not require it. This is a source-checkout research bundle, not a
-standalone PyPI wheel.
+The Python experiment dependencies are pinned in `requirements.txt`.
+Experiment execution and numerical asset generation do not require LaTeX.
 
 ## What is preserved
 
@@ -125,8 +103,8 @@ standalone PyPI wheel.
 | `archive/numerical_sensitivity/` | All 96 robustness records and numerical audit |
 | `archive/MANIFEST.json` | Compressed-file and decompressed-content hashes |
 | `reproduce/` | New portability, execution, and auditing code, versioned separately from the scientific snapshot |
-| `scripts/build_paper_assets.py` | Source-derived manuscript table and figure generator |
-| `scripts/package_tmlr_submission.py` | Deterministic manuscript/reproducibility ZIPs and review-view integrity verification |
+| `scripts/build_paper_assets.py` | Table and figure generator from recorded numerical outcomes |
+| `scripts/package_tmlr_submission.py` | Exporter for a complete distribution with separate manuscript inputs |
 | `tests/` | Provenance, run-isolation, completeness, and independent-loss checks |
 | `ci/kahm-predictive-geometry.yml` | Source of the workflow installed at the parent repository root |
 | `runs/` | New execution manifests, generated states, predictions, audits, and assets; never committed |

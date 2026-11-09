@@ -6,6 +6,14 @@ The declared design has eight original source families, 26 selected series, and 
 
 This guide explains the observed findings, evidence, reproduction commands, and limits on interpreting them. Detailed settings and provenance are in [PROTOCOL.md](PROTOCOL.md), [protocol.json](protocol.json), and [data_sources.json](data_sources.json).
 
+## Distribution scope
+
+This distribution provides the scientific code, source data, protocols, saved results, and numerical reporting assets. Manuscript documents and their typesetting inputs are distributed separately. The files retained under `manuscript/generated/` are numerical tables and experimental figures.
+
+The original 217-file repository checkpoint includes manuscript files. The `check-source`, reference restoration, audit, replay, and complete-run validation procedures below require every file in that checkpoint. They apply to an original complete distribution that satisfies the recorded inventory. The checkpoint and scientific freezes retain their original contents and scope.
+
+The separate [forecasting-utility reproduction bundle](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/releases/tag/forecasting-utility-v0.1.0) provides its own scientific inputs, saved results, and numerical checks. Its 52-file scientific freeze excludes manuscript documents; that bundle covers the forecasting-utility study rather than this earlier natural-source evaluation.
+
 ## Observed confirmation results
 
 The reserved confirmation results did not show an average benefit for adding KAHM to the raw-history RBF pipeline. The following are source-balanced means from the [archived method summary](runs/natural_v1/reports/method_summary.csv), available after restoring the reference run:
@@ -20,11 +28,11 @@ Raw history + KAHM had **4.26% higher scaled MSE** and **2.30 times the measured
 
 These 80 task instances come from **four independent confirmation source families**. Related series, history/horizon settings, capacities, and seeds remain dependent. The study does not validate a general criterion for predicting when KAHM will help; its numerical results and computational costs describe this bounded source collection and implementation.
 
-## Preserve and inspect the evidence first
+## Scientific provenance
 
 The original repository checkpoint is `a67c40190458bab7b3e56b4fac76770798d074b3`; [CHECKPOINT.json](CHECKPOINT.json) binds all 217 previously tracked files. The new scientific code, source allocation, task identities, and analysis specification were frozen before development outcomes. The public protocol commit is [`2600e45220b0562b5f67ef0c769fcae6c11e120e`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/2600e45220b0562b5f67ef0c769fcae6c11e120e). After development, the diagnostic freeze was published at [`4ab972ba08a4d5678347c1ea124ed6509c806d5a`](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/commit/4ab972ba08a4d5678347c1ea124ed6509c806d5a) before confirmation execution. These repository records are not registration with a dedicated preregistration service.
 
-From the repository root, the following check needs only Python's standard library:
+In an original complete distribution, the following check runs from the repository root and needs only Python's standard library:
 
 ```bash
 python extensions/natural_forecasting/package.py check-source
@@ -32,7 +40,7 @@ python extensions/natural_forecasting/package.py check-source
 
 It verifies all historical files and the registered scientific dependency hashes. Post-study documentation, reporting, and packaging tools are separate additions; they do not redefine the frozen forecasting implementation. The release manifest binds their delivered bytes.
 
-## Inspect the archived results without repeating forecasting fits
+## Audit the original complete distribution
 
 Git stores the reference run as ordered 8 MiB binary parts and the manifest `reference/natural_v1.zip.parts.json`. The manifest records each part's filename, size, and SHA-256, together with the complete ZIP's size and SHA-256. This avoids per-request upload limits while preserving the exact archive bytes. In a source checkout whose reference run has not been expanded, verify and restore it with:
 
@@ -80,7 +88,7 @@ python extensions/natural_forecasting/package.py replay . --output ../natural-an
 
 Both `audit` and `replay` also accept the reproducibility ZIP path. They verify it before extracting into a temporary directory and remove that temporary copy afterward. Use a fresh Python CLI process for each operation.
 
-## Four-stage computational workflow
+## Four-stage workflow for the original complete distribution
 
 Full computational reproduction repeats the declared forecasting fits. It does not provide new independent source evidence. Use a fresh run directory so the delivered `runs/natural_v1` remains intact. Start from the repository root in the pinned environment:
 
@@ -126,50 +134,20 @@ Confirmation requires intact scientific code, dependencies, roster, coefficients
 
 Final analysis evaluates the frozen policies, recomputes prediction errors, and checks preservation of all historical tracked files. The run's `VALIDATION.json` records the completed checks. Recorded timing scopes and source-level aggregation are retained in derived results.
 
-### Stage 4 — Report the results, build the manuscript, and package the release
+### Stage 4 — Report numerical results
 
-For a fresh computational run, regenerate numerical summaries and paper assets inside that run directory:
+For a completed computational run, regenerate numerical summaries, tables, and figures inside that run directory:
 
 ```bash
 python -m extensions.natural_forecasting.report \
   --run-root "$NATURAL_RUN" \
   --reports-dir "$NATURAL_RUN/reports" \
-  --manuscript-dir "$NATURAL_RUN/manuscript-generated"
+  --manuscript-dir "$NATURAL_RUN/report-assets"
 ```
 
-The reporter consumes saved predictions and validated analysis results; it performs no new model fitting or diagnostic selection. The delivered manuscript already includes the reference run's generated figures and tables. Its LaTeX sources are in `manuscript/`. Install TeX Live, `latexmk`, and `lmodern` (the Latin Modern font package). From the repository root, change to the manuscript directory before building:
+The reporter consumes saved predictions and validated analysis results. It performs no new model fitting or diagnostic selection. The `--manuscript-dir` argument names the output directory for generated reporting assets; it does not compile a manuscript.
 
-```bash
-cd extensions/natural_forecasting/manuscript
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-cd ../../..
-```
-
-The official JMLR style and its provenance are bundled. Paper compilation performs no model fitting. Checksum verification should precede rebuilding an extracted archive because LaTeX adds auxiliary files.
-
-After the final PDF and complete run are stable, create the release from the repository root:
-
-```bash
-python extensions/natural_forecasting/package.py build \
-  --run-dir extensions/natural_forecasting/runs/natural_v1 \
-  --manuscript-pdf /path/to/Natural_Forecasting_Manuscript.pdf \
-  --output /path/to/release \
-  --handoff
-```
-
-The builder requires all 208 complete records, the full twelve-method portfolio per task, verified prediction artifacts, both freezes, final analyses, a passed final validation, all eight original data ZIPs, and the preserved historical checkpoint. It rejects a PDF older than its manuscript inputs. It produces separate manuscript-source and reproducibility ZIPs, the paper PDF, a release hash manifest, a handoff guide, and the optional encompassing handoff ZIP. Existing named archives are protected unless `--overwrite` is explicitly supplied. A final PDF already at its intended release path is accepted as the build input.
-
-The full archive includes all 217 historical files, the new extension, source metadata/data, prepared arrays, predictions, result JSON, freezes, analyses, logs/reports, manuscript sources/assets, and this verification script. Other ignored experiment runs, temporary manuscript builds, and interpreter caches are excluded. `--extra-log PATH` can include a specifically named external execution log without changing its contents.
-
-For durable storage of the completed reference run in Git, build its compact archive after all final reports are present:
-
-```bash
-python extensions/natural_forecasting/package.py build-reference
-```
-
-The default destination is `extensions/natural_forecasting/reference/natural_v1.zip`. The builder retains this ordinary full ZIP locally and also writes `natural_v1.zip.part-001`, `natural_v1.zip.part-002`, and as many further parts as needed, plus `natural_v1.zip.parts.json`. **Commit only the parts and their manifest.** The full ZIP and temporary reference-build directories are ignored by Git. The run archive contains only the completed run and its payload manifest, without a second copy of the source repository. An explicit `--overwrite` replaces a previous generated set; stale parts are removed only when the prior manifest identifies them and their bytes still match it. Unrelated files are preserved.
-
-The full release includes expanded run files and excludes the entire reference-storage directory to avoid recursive inclusion. Committing the reference parts is a separate repository operation; the packager does not commit or push files. The manuscript PDF belongs in the release output, not in the Git-backed reference archive.
+The committed reference storage consists of `reference/natural_v1.zip.part-*` and `reference/natural_v1.zip.parts.json`. The manifest records the size and SHA-256 of each part and the complete run archive. These files preserve the completed run and its payload inventory. Manuscript compilation and source/PDF export require the separate manuscript distribution.
 
 ## Scientific and resource interpretation
 
@@ -193,11 +171,11 @@ Short-source and availability limits matter: the longer Hospital/Traffic regimes
 | `models.py`, `baselines.py` | Standalone geometric pipelines and practical controls |
 | `run.py`, `protocol.json` | Frozen orchestration, search, measurements, and execution gates |
 | `analysis.py` | Source-balanced diagnostic analysis and required-cost policies |
-| `report.py` | Post-study numerical summaries and manuscript assets from saved results |
+| `report.py` | Numerical summaries, tables, and figures from saved results |
 | `registration/` | Public freeze/index records and validation provenance |
 | `runs/natural_v1/` | Delivered prepared arrays, saved predictions, results, and analyses |
 | `reference/natural_v1.zip.parts.json`, `reference/natural_v1.zip.part-*` | Git-backed multipart copy of the completed reference run; full ZIP retained only locally |
-| `manuscript/` | LaTeX, bibliography, official style, and generated assets |
+| `manuscript/generated/` | Numerical table and figure outputs |
 | `package.py`, `package_tests.py` | Post-study archive builder, verification/replay, and integrity tests |
 
-The new workflow `.github/workflows/natural-forecasting.yml` runs the synthetic scientific suite, packaging integrity tests, source-hash checks, and committed-archive verification. When multipart reference files are present, CI verifies them, restores the run into a source copy under `RUNNER_TEMP`, and performs the offline numerical audit there. It never launches the full forecasting benchmark. It builds the manuscript when LaTeX is already available; a manually requested optional job can install the LaTeX packages and validate the paper build. The historical CI workflow is preserved unchanged.
+The recorded workflow `.github/workflows/natural-forecasting.yml` defines the scientific test suite, packaging checks, source-hash checks, and reference-run verification. Its complete-repository checks require the original 217-file checkpoint, and its manuscript-build stages require the separate typesetting inputs. A historical workflow result establishes the status of the distribution on which that workflow ran.

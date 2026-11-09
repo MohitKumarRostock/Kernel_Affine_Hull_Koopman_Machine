@@ -1,0 +1,3304 @@
+{
+  "protocol_sha256": "9336d35b8594078152e965c09f5667137ad96aabdee07b6ee3c99e5f1735a0d7",
+  "source_run_manifest": {
+    "protocol_sha256": "9336d35b8594078152e965c09f5667137ad96aabdee07b6ee3c99e5f1735a0d7",
+    "source_sha256": {
+      "run_experiment.py": "26167b448388b16feab1b985cc4a5e157e80e8c37bffc1b8eea9fd0106c18e15",
+      "population_oracle.py": "fead80ef8747c0d58bd9d246cd6062b3e48caa6c1302bcc1f754b077a72566ee",
+      "experiment_statistics.py": "c8fa3f731a1fb62782dae9a7298e24cbd99c2d3827dd9e01d5e0d943df239ea8",
+      "certify_series.py": "62d06826d7d7ba8172ea8901adf7e6a37d9a1c87b540e751ba278b04667be6b2",
+      "certified_models.py": "e787981c53469ebacb4d013367554e8d43ffc682c921710e1dc85a1a80e7ba8d",
+      "certified_lower.py": "19a58ee88a8f0a6cef57eec855362846a906dda28ca6e127caa0b682cd3052e2",
+      "certified_kl.py": "b539751284b6828fdd733b33695d19485ff211ff7aa255fa6f256fbd90af52c2"
+    },
+    "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "workers": 6,
+    "started_utc": "2026-11-09T17:25:45.183153+00:00",
+    "timing_scope": "Per-process CPU seconds reported separately for producer, checker and oracle; not deployment latency.",
+    "simulation_scope": "Pseudorandom independent-replicate simulation under stipulated mathematical laws; no empirical assumption estimation."
+  },
+  "registered_cells": 12,
+  "repetitions_per_cell": 200,
+  "total_runs": 2400,
+  "global_counts_descriptive_only": {
+    "definite_failures": 0,
+    "oracle_unresolved": 0,
+    "operational_unavailable": 0,
+    "conservative_failure_count": 0
+  },
+  "inference_scope": "Each cell has 200 independent-replicate simulation units; cells share matched streams. Do not pool the 2400 rows as independent trials.",
+  "secondary_interval_scope": "Pointwise 95% Clopper-Pearson; not simultaneous across rates.",
+  "cells": [
+    {
+      "cell_id": "p005_K080",
+      "kind": "primary",
+      "p": "1/20",
+      "T": 7552,
+      "K": 80,
+      "q": 4,
+      "g": 79,
+      "sweeps": 8,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "237572505549684531930641038166334418317492549988343027568798575116815229738311/250000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "dependence_allowance": "2427494450315468069358961833665581682507450011656972431201424883184770261689/250000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "any_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "none": 200
+      },
+      "oracle_cost_counts": {
+        "4": 187,
+        "2": 13
+      },
+      "cost_bracket_counts": {
+        "2:infinity": 200
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 0.5029288150000184,
+          "mean": 0.4941046631450022
+        },
+        "checker_cpu_seconds": {
+          "median": 0.3394381310000085,
+          "mean": 0.33548226053000285
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.0053755475000230035,
+          "mean": 0.0065261300750034
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.0020524883270263672,
+          "mean_U": 0.1618797969818115,
+          "mean_width": 0.15982730865478514,
+          "mean_empirical_lower": 0.03206668330306911,
+          "mean_empirical_upper": 0.04853959752933588,
+          "mean_fitted_risk": 0.04817406591232128,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.11370573106949024
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 13,
+          "true_infeasible": 187,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 179,
+          "oracle_max_gap": "4764404046528443488621805531171129684900347144244533721/12705258104798090520899556570605548410641519275341091176448000000000",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 179,
+            "verified_weighted_primal_dual": 21
+          },
+          "mean_L": 0.03070889472961426,
+          "mean_U": 0.26917737901210786,
+          "mean_width": 0.2384684842824936,
+          "mean_empirical_lower": 0.10752762944642655,
+          "mean_empirical_upper": 0.12466762017341171,
+          "mean_fitted_risk": 0.12581919399000424,
+          "mean_class_opt_lower": 0.11604335001998077,
+          "mean_class_opt_upper": 0.11604335001998997,
+          "mean_upper_slack": 0.14335818502210362
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.004597602784633637,
+          "mean_U": 0.1617107030749321,
+          "mean_width": 0.15711310029029846,
+          "mean_empirical_lower": 0.04344769032563363,
+          "mean_empirical_upper": 0.04842899327748091,
+          "mean_fitted_risk": 0.04802293407972543,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.11368776899520668
+        }
+      ]
+    },
+    {
+      "cell_id": "p005_K320",
+      "kind": "primary",
+      "p": "1/20",
+      "T": 32832,
+      "K": 320,
+      "q": 4,
+      "g": 92,
+      "sweeps": 8,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "593829634808284822220517532054630139498215591086405989065355873174658471875214323920412319/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "dependence_allowance": "6170365191715177779482467945369860501784408913594010934644126825341528124785676079587681/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "any_accepted": {
+        "count": 152,
+        "denominator": 200,
+        "fraction": "19/25",
+        "pointwise_95_interval": [
+          "5827513/8388608",
+          "1714271/2097152"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 151,
+        "denominator": 200,
+        "fraction": "151/200",
+        "pointwise_95_interval": [
+          "11565543/16777216",
+          "6819233/8388608"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 1,
+        "denominator": 200,
+        "fraction": "1/200",
+        "pointwise_95_interval": [
+          "2123/16777216",
+          "462077/16777216"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "local_position": 151,
+        "none": 48,
+        "raw": 1
+      },
+      "oracle_cost_counts": {
+        "4": 187,
+        "2": 13
+      },
+      "cost_bracket_counts": {
+        "2:4": 150,
+        "2:infinity": 47,
+        "4:4": 1,
+        "2:6": 1,
+        "4:infinity": 1
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 1.6104576090000364,
+          "mean": 1.6035920670000041
+        },
+        "checker_cpu_seconds": {
+          "median": 1.070009878999997,
+          "mean": 1.0657254945099965
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.005078217500003035,
+          "mean": 0.006176262309998301
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 150,
+            "denominator": 200,
+            "fraction": "3/4",
+            "pointwise_95_interval": [
+              "11476239/16777216",
+              "6781291/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 50,
+            "denominator": 200,
+            "fraction": "1/4",
+            "pointwise_95_interval": [
+              "1607317/8388608",
+              "5300977/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.010030105710029602,
+          "mean_U": 0.09598189055919647,
+          "mean_width": 0.08595178484916687,
+          "mean_empirical_lower": 0.03212054563112815,
+          "mean_empirical_upper": 0.048466674591422815,
+          "mean_fitted_risk": 0.04817406591232128,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.04780782464687519
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 2,
+            "denominator": 200,
+            "fraction": "1/100",
+            "pointwise_95_interval": [
+              "5089/4194304",
+              "598187/16777216"
+            ]
+          },
+          "unresolved": {
+            "count": 198,
+            "denominator": 200,
+            "fraction": "99/100",
+            "pointwise_95_interval": [
+              "16179029/16777216",
+              "4189215/4194304"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 13,
+          "true_infeasible": 187,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 179,
+          "oracle_max_gap": "4764404046528443488621805531171129684900347144244533721/12705258104798090520899556570605548410641519275341091176448000000000",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 179,
+            "verified_weighted_primal_dual": 21
+          },
+          "mean_L": 0.06282607883214951,
+          "mean_U": 0.19189434081315995,
+          "mean_width": 0.12906826198101043,
+          "mean_empirical_lower": 0.10982726601937429,
+          "mean_empirical_upper": 0.1259120094518021,
+          "mean_fitted_risk": 0.12581919399000424,
+          "mean_class_opt_lower": 0.11604335001998077,
+          "mean_class_opt_upper": 0.11604335001998997,
+          "mean_upper_slack": 0.06607514682315571
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 151,
+            "denominator": 200,
+            "fraction": "151/200",
+            "pointwise_95_interval": [
+              "11565543/16777216",
+              "6819233/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 49,
+            "denominator": 200,
+            "fraction": "49/200",
+            "pointwise_95_interval": [
+              "1569375/8388608",
+              "5211673/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.016928708851337432,
+          "mean_U": 0.09573028832674027,
+          "mean_width": 0.07880157947540284,
+          "mean_empirical_lower": 0.04423482933334071,
+          "mean_empirical_upper": 0.048278501939152195,
+          "mean_fitted_risk": 0.04802293407972543,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.04770735424701484
+        }
+      ]
+    },
+    {
+      "cell_id": "p020_K080",
+      "kind": "primary",
+      "p": "1/5",
+      "T": 2592,
+      "K": 80,
+      "q": 4,
+      "g": 17,
+      "sweeps": 8,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "145451253696/152587890625",
+      "dependence_allowance": "1033121304/152587890625",
+      "any_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "none": 200
+      },
+      "oracle_cost_counts": {
+        "infinity": 200
+      },
+      "cost_bracket_counts": {
+        "2:infinity": 112,
+        "4:infinity": 88
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 0.5352668699999938,
+          "mean": 0.5294812425349995
+        },
+        "checker_cpu_seconds": {
+          "median": 0.35018195100000327,
+          "mean": 0.3360827655150005
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.015390509500036842,
+          "mean": 0.014982542080000072
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.004708516001701355,
+          "mean_U": 0.31673931926488874,
+          "mean_width": 0.3120308032631874,
+          "mean_empirical_lower": 0.04432984934622255,
+          "mean_empirical_upper": 0.1619211055904052,
+          "mean_fitted_risk": 0.16207836009429974,
+          "mean_class_opt_lower": 0.16,
+          "mean_class_opt_upper": 0.16,
+          "mean_upper_slack": 0.15466095917058903
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 88,
+            "denominator": 200,
+            "fraction": "11/25",
+            "pointwise_95_interval": [
+              "3104251/8388608",
+              "1073217/2097152"
+            ]
+          },
+          "unresolved": {
+            "count": 112,
+            "denominator": 200,
+            "fraction": "14/25",
+            "pointwise_95_interval": [
+              "1023935/2097152",
+              "5284357/8388608"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 97,
+          "oracle_max_gap": "170043483848978000625897336777739517113533073/2119462823668350423371554664632500277528378736640000000000",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 97,
+            "verified_weighted_primal_dual": 103
+          },
+          "mean_L": 0.09851199716329574,
+          "mean_U": 0.4083642193675041,
+          "mean_width": 0.3098522222042084,
+          "mean_empirical_lower": 0.21862611948975882,
+          "mean_empirical_upper": 0.24023009563551387,
+          "mean_fitted_risk": 0.23999044456755447,
+          "mean_class_opt_lower": 0.23196608947771505,
+          "mean_class_opt_upper": 0.23196608947772565,
+          "mean_upper_slack": 0.16837377479994964
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.04885611206293106,
+          "mean_U": 0.31556100100278855,
+          "mean_width": 0.2667048889398575,
+          "mean_empirical_lower": 0.14136632521452155,
+          "mean_empirical_upper": 0.16095722699552426,
+          "mean_fitted_risk": 0.16112764940317897,
+          "mean_class_opt_lower": 0.16,
+          "mean_class_opt_upper": 0.16,
+          "mean_upper_slack": 0.15443335159960958
+        }
+      ]
+    },
+    {
+      "cell_id": "p020_K320",
+      "kind": "primary",
+      "p": "1/5",
+      "T": 9472,
+      "K": 320,
+      "q": 4,
+      "g": 19,
+      "sweeps": 8,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "3624917008056/3814697265625",
+      "dependence_allowance": "37192366944/3814697265625",
+      "any_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "none": 200
+      },
+      "oracle_cost_counts": {
+        "infinity": 200
+      },
+      "cost_bracket_counts": {
+        "4:infinity": 195,
+        "6:infinity": 5
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 1.6441630155000269,
+          "mean": 1.651717527284997
+        },
+        "checker_cpu_seconds": {
+          "median": 0.9907804760000261,
+          "mean": 0.9879009297949987
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.005425261499993894,
+          "mean": 0.009997156329999724
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.01699948787689209,
+          "mean_U": 0.23383686751127242,
+          "mean_width": 0.21683737963438035,
+          "mean_empirical_lower": 0.04438480438396255,
+          "mean_empirical_upper": 0.1619893933780486,
+          "mean_fitted_risk": 0.16207836009429974,
+          "mean_class_opt_lower": 0.16,
+          "mean_class_opt_upper": 0.16,
+          "mean_upper_slack": 0.0717585074169727
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unresolved": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 97,
+          "oracle_max_gap": "170043483848978000625897336777739517113533073/2119462823668350423371554664632500277528378736640000000000",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 97,
+            "verified_weighted_primal_dual": 103
+          },
+          "mean_L": 0.15383117765188217,
+          "mean_U": 0.3201251164078712,
+          "mean_width": 0.16629393875598908,
+          "mean_empirical_lower": 0.22102254139084834,
+          "mean_empirical_upper": 0.23971548380482455,
+          "mean_fitted_risk": 0.23999044456755447,
+          "mean_class_opt_lower": 0.23196608947771505,
+          "mean_class_opt_upper": 0.23196608947772565,
+          "mean_upper_slack": 0.08013467184031678
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 5,
+            "denominator": 200,
+            "fraction": "1/40",
+            "pointwise_95_interval": [
+              "137005/16777216",
+              "481291/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 195,
+            "denominator": 200,
+            "fraction": "39/40",
+            "pointwise_95_interval": [
+              "7907317/8388608",
+              "16640211/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.08929224163293839,
+          "mean_U": 0.23271725416183472,
+          "mean_width": 0.14342501252889633,
+          "mean_empirical_lower": 0.14373191409029915,
+          "mean_empirical_upper": 0.16100724411499778,
+          "mean_fitted_risk": 0.16112764940317897,
+          "mean_class_opt_lower": 0.16,
+          "mean_class_opt_upper": 0.16,
+          "mean_upper_slack": 0.07158960475865574
+        }
+      ]
+    },
+    {
+      "cell_id": "p050_K080",
+      "kind": "primary",
+      "p": "1/2",
+      "T": 1312,
+      "K": 80,
+      "q": 4,
+      "g": 1,
+      "sweeps": 8,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "24/25",
+      "dependence_allowance": "0/1",
+      "any_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "none": 200
+      },
+      "oracle_cost_counts": {
+        "infinity": 200
+      },
+      "cost_bracket_counts": {
+        "4:infinity": 100,
+        "6:infinity": 100
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 0.5190912515000079,
+          "mean": 0.5231490653749986
+        },
+        "checker_cpu_seconds": {
+          "median": 0.32374724800001786,
+          "mean": 0.31780384384499977
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.005917460500015181,
+          "mean": 0.010073295904998156
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.0005168125033378601,
+          "mean_U": 0.4232996559143066,
+          "mean_width": 0.4227828434109688,
+          "mean_empirical_lower": 0.02083000835893472,
+          "mean_empirical_upper": 0.25356326431380877,
+          "mean_fitted_risk": 0.25341859275860973,
+          "mean_class_opt_lower": 0.25,
+          "mean_class_opt_upper": 0.25,
+          "mean_upper_slack": 0.16988106315569693
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unresolved": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 200
+          },
+          "mean_L": 0.11333856135606765,
+          "mean_U": 0.42052264273166656,
+          "mean_width": 0.3071840813755989,
+          "mean_empirical_lower": 0.23968293861868462,
+          "mean_empirical_upper": 0.2510558053234927,
+          "mean_fitted_risk": 0.25084795322603864,
+          "mean_class_opt_lower": 0.25,
+          "mean_class_opt_upper": 0.25,
+          "mean_upper_slack": 0.1696746895056279
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 100,
+            "denominator": 200,
+            "fraction": "1/2",
+            "pointwise_95_interval": [
+              "7191695/16777216",
+              "9585521/16777216"
+            ]
+          },
+          "unresolved": {
+            "count": 100,
+            "denominator": 200,
+            "fraction": "1/2",
+            "pointwise_95_interval": [
+              "7191695/16777216",
+              "9585521/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.10237879514694213,
+          "mean_U": 0.4214019048213959,
+          "mean_width": 0.31902310967445374,
+          "mean_empirical_lower": 0.22412430664321165,
+          "mean_empirical_upper": 0.25184876838856873,
+          "mean_fitted_risk": 0.25163017729253945,
+          "mean_class_opt_lower": 0.25,
+          "mean_class_opt_upper": 0.25,
+          "mean_upper_slack": 0.16977172752885641
+        }
+      ]
+    },
+    {
+      "cell_id": "p050_K320",
+      "kind": "primary",
+      "p": "1/2",
+      "T": 3712,
+      "K": 320,
+      "q": 4,
+      "g": 1,
+      "sweeps": 8,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "24/25",
+      "dependence_allowance": "0/1",
+      "any_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "none": 200
+      },
+      "oracle_cost_counts": {
+        "infinity": 200
+      },
+      "cost_bracket_counts": {
+        "6:infinity": 200
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 1.6338345759999768,
+          "mean": 1.6409477316900025
+        },
+        "checker_cpu_seconds": {
+          "median": 0.9836911109999846,
+          "mean": 0.9728182714350028
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.005377009500023178,
+          "mean": 0.009192615474997117
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.004608771800994873,
+          "mean_U": 0.3350615984201431,
+          "mean_width": 0.33045282661914827,
+          "mean_empirical_lower": 0.020928578554662635,
+          "mean_empirical_upper": 0.253497887878827,
+          "mean_fitted_risk": 0.25341859275860973,
+          "mean_class_opt_lower": 0.25,
+          "mean_class_opt_upper": 0.25,
+          "mean_upper_slack": 0.0816430056615334
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unresolved": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 200
+          },
+          "mean_L": 0.17167481780052185,
+          "mean_U": 0.3322835209965706,
+          "mean_width": 0.16060870319604872,
+          "mean_empirical_lower": 0.2415881290819152,
+          "mean_empirical_upper": 0.250921405769408,
+          "mean_fitted_risk": 0.25084795322603864,
+          "mean_class_opt_lower": 0.25,
+          "mean_class_opt_upper": 0.25,
+          "mean_upper_slack": 0.08143556777053192
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unresolved": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.15919725328683854,
+          "mean_U": 0.3331659510731697,
+          "mean_width": 0.17396869778633117,
+          "mean_empirical_lower": 0.22721479586216448,
+          "mean_empirical_upper": 0.251739447263134,
+          "mean_fitted_risk": 0.25163017729253945,
+          "mean_class_opt_lower": 0.25,
+          "mean_class_opt_upper": 0.25,
+          "mean_upper_slack": 0.08153577378063023
+        }
+      ]
+    },
+    {
+      "cell_id": "p095_K080",
+      "kind": "primary",
+      "p": "19/20",
+      "T": 7552,
+      "K": 80,
+      "q": 4,
+      "g": 79,
+      "sweeps": 8,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "237572505549684531930641038166334418317492549988343027568798575116815229738311/250000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "dependence_allowance": "2427494450315468069358961833665581682507450011656972431201424883184770261689/250000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "any_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "none": 200
+      },
+      "oracle_cost_counts": {
+        "4": 200
+      },
+      "cost_bracket_counts": {
+        "2:infinity": 200
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 0.5185586909999813,
+          "mean": 0.5108347976750013
+        },
+        "checker_cpu_seconds": {
+          "median": 0.33829570550005883,
+          "mean": 0.3354725494250033
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.005313009999994733,
+          "mean": 0.004754488200001166
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.002450637221336365,
+          "mean_U": 0.16020989924669266,
+          "mean_width": 0.15775926202535628,
+          "mean_empirical_lower": 0.03391564173188726,
+          "mean_empirical_upper": 0.04749699172133478,
+          "mean_fitted_risk": 0.04807481001053805,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.1121350892361546
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 200
+          },
+          "mean_L": 0.032368681728839874,
+          "mean_U": 0.26645709306001664,
+          "mean_width": 0.23408841133117675,
+          "mean_empirical_lower": 0.11109304785582026,
+          "mean_empirical_upper": 0.12225408111224897,
+          "mean_fitted_risk": 0.12333606103132999,
+          "mean_class_opt_lower": 0.11631034548375978,
+          "mean_class_opt_upper": 0.11631034548375978,
+          "mean_upper_slack": 0.14312103202868665
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.004384001493453979,
+          "mean_U": 0.15989682227373123,
+          "mean_width": 0.15551282078027726,
+          "mean_empirical_lower": 0.04262903812640161,
+          "mean_empirical_upper": 0.04729995663814043,
+          "mean_fitted_risk": 0.04790528557685449,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.11199153669687674
+        }
+      ]
+    },
+    {
+      "cell_id": "p095_K320",
+      "kind": "primary",
+      "p": "19/20",
+      "T": 32832,
+      "K": 320,
+      "q": 4,
+      "g": 92,
+      "sweeps": 8,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "593829634808284822220517532054630139498215591086405989065355873174658471875214323920412319/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "dependence_allowance": "6170365191715177779482467945369860501784408913594010934644126825341528124785676079587681/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "any_accepted": {
+        "count": 142,
+        "denominator": 200,
+        "fraction": "71/100",
+        "pointwise_95_interval": [
+          "10767827/16777216",
+          "12949377/16777216"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 141,
+        "denominator": 200,
+        "fraction": "141/200",
+        "pointwise_95_interval": [
+          "10679987/16777216",
+          "3218001/4194304"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "local_position": 141,
+        "none": 58,
+        "raw": 1
+      },
+      "oracle_cost_counts": {
+        "4": 200
+      },
+      "cost_bracket_counts": {
+        "2:4": 141,
+        "2:infinity": 58,
+        "2:6": 1
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 1.7377089625000508,
+          "mean": 1.7342615952999985
+        },
+        "checker_cpu_seconds": {
+          "median": 1.080686157499997,
+          "mean": 1.0875847917600026
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.005291948999968099,
+          "mean": 0.004903373854996129
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 140,
+            "denominator": 200,
+            "fraction": "7/10",
+            "pointwise_95_interval": [
+              "10592297/16777216",
+              "12794479/16777216"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 60,
+            "denominator": 200,
+            "fraction": "3/10",
+            "pointwise_95_interval": [
+              "3982737/16777216",
+              "6184919/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.011463021636009216,
+          "mean_U": 0.09631319582462311,
+          "mean_width": 0.08485017418861389,
+          "mean_empirical_lower": 0.03475139577860773,
+          "mean_empirical_upper": 0.048720849280919534,
+          "mean_fitted_risk": 0.04807481001053805,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.04823838581408505
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 0,
+          "true_infeasible": 200,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 200
+          },
+          "mean_L": 0.0649558237195015,
+          "mean_U": 0.18890540778636933,
+          "mean_width": 0.12394958406686783,
+          "mean_empirical_lower": 0.1127084085600427,
+          "mean_empirical_upper": 0.12322859257196069,
+          "mean_fitted_risk": 0.12333606103132999,
+          "mean_class_opt_lower": 0.11631034548375978,
+          "mean_class_opt_upper": 0.11631034548375978,
+          "mean_upper_slack": 0.06556934675503934
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 141,
+            "denominator": 200,
+            "fraction": "141/200",
+            "pointwise_95_interval": [
+              "10679987/16777216",
+              "3218001/4194304"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 59,
+            "denominator": 200,
+            "fraction": "59/200",
+            "pointwise_95_interval": [
+              "976303/4194304",
+              "6097229/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.01713993400335312,
+          "mean_U": 0.09612292796373367,
+          "mean_width": 0.07898299396038055,
+          "mean_empirical_lower": 0.044578716349528806,
+          "mean_empirical_upper": 0.04857799876561239,
+          "mean_fitted_risk": 0.04790528557685449,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.048217642386879186
+        }
+      ]
+    },
+    {
+      "cell_id": "p005_K320_q1",
+      "kind": "block_size_ablation",
+      "p": "1/20",
+      "T": 31872,
+      "K": 320,
+      "q": 1,
+      "g": 92,
+      "sweeps": 8,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "593829634808284822220517532054630139498215591086405989065355873174658471875214323920412319/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "dependence_allowance": "6170365191715177779482467945369860501784408913594010934644126825341528124785676079587681/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "any_accepted": {
+        "count": 118,
+        "denominator": 200,
+        "fraction": "59/100",
+        "pointwise_95_interval": [
+          "4348835/8388608",
+          "5526997/8388608"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 118,
+        "denominator": 200,
+        "fraction": "59/100",
+        "pointwise_95_interval": [
+          "4348835/8388608",
+          "5526997/8388608"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 1,
+        "denominator": 200,
+        "fraction": "1/200",
+        "pointwise_95_interval": [
+          "2123/16777216",
+          "462077/16777216"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "local_position": 118,
+        "none": 82
+      },
+      "oracle_cost_counts": {
+        "4": 187,
+        "2": 13
+      },
+      "cost_bracket_counts": {
+        "2:4": 117,
+        "2:infinity": 81,
+        "4:4": 1,
+        "4:infinity": 1
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 0.6416858140000272,
+          "mean": 0.6311404992749993
+        },
+        "checker_cpu_seconds": {
+          "median": 0.4534416080000483,
+          "mean": 0.4462894226449967
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.0044256119999914745,
+          "mean": 0.005162653350000514
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 117,
+            "denominator": 200,
+            "fraction": "117/200",
+            "pointwise_95_interval": [
+              "538313/1048576",
+              "10973413/16777216"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 83,
+            "denominator": 200,
+            "fraction": "83/200",
+            "pointwise_95_interval": [
+              "5803803/16777216",
+              "510263/1048576"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.0124738609790802,
+          "mean_U": 0.09722555816173553,
+          "mean_width": 0.08475169718265534,
+          "mean_empirical_lower": 0.03624758350490083,
+          "mean_empirical_upper": 0.04953094270918154,
+          "mean_fitted_risk": 0.04817406591232128,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.049051492249414255
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 2,
+            "denominator": 200,
+            "fraction": "1/100",
+            "pointwise_95_interval": [
+              "5089/4194304",
+              "598187/16777216"
+            ]
+          },
+          "unresolved": {
+            "count": 198,
+            "denominator": 200,
+            "fraction": "99/100",
+            "pointwise_95_interval": [
+              "16179029/16777216",
+              "4189215/4194304"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 13,
+          "true_infeasible": 187,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 179,
+          "oracle_max_gap": "4764404046528443488621805531171129684900347144244533721/12705258104798090520899556570605548410641519275341091176448000000000",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 179,
+            "verified_weighted_primal_dual": 21
+          },
+          "mean_L": 0.06445929259061814,
+          "mean_U": 0.19281341135501862,
+          "mean_width": 0.12835411876440048,
+          "mean_empirical_lower": 0.11190097745246476,
+          "mean_empirical_upper": 0.12671158577093591,
+          "mean_fitted_risk": 0.12581919399000424,
+          "mean_class_opt_lower": 0.11604335001998077,
+          "mean_class_opt_upper": 0.11604335001998997,
+          "mean_upper_slack": 0.06699421736501439
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 118,
+            "denominator": 200,
+            "fraction": "59/100",
+            "pointwise_95_interval": [
+              "4348835/8388608",
+              "5526997/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 82,
+            "denominator": 200,
+            "fraction": "41/100",
+            "pointwise_95_interval": [
+              "2861611/8388608",
+              "4039773/8388608"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.01727936923503876,
+          "mean_U": 0.0969838672876358,
+          "mean_width": 0.07970449805259705,
+          "mean_empirical_lower": 0.04453576475063528,
+          "mean_empirical_upper": 0.04935010333187165,
+          "mean_fitted_risk": 0.04802293407972543,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.048960933207910375
+        }
+      ]
+    },
+    {
+      "cell_id": "p005_K320_q16",
+      "kind": "block_size_ablation",
+      "p": "1/20",
+      "T": 36672,
+      "K": 320,
+      "q": 16,
+      "g": 92,
+      "sweeps": 8,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "593829634808284822220517532054630139498215591086405989065355873174658471875214323920412319/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "dependence_allowance": "6170365191715177779482467945369860501784408913594010934644126825341528124785676079587681/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "any_accepted": {
+        "count": 178,
+        "denominator": 200,
+        "fraction": "89/100",
+        "pointwise_95_interval": [
+          "14062725/16777216",
+          "3899725/4194304"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 178,
+        "denominator": 200,
+        "fraction": "89/100",
+        "pointwise_95_interval": [
+          "14062725/16777216",
+          "3899725/4194304"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 2,
+        "denominator": 200,
+        "fraction": "1/100",
+        "pointwise_95_interval": [
+          "5089/4194304",
+          "598187/16777216"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "local_position": 178,
+        "none": 22
+      },
+      "oracle_cost_counts": {
+        "4": 187,
+        "2": 13
+      },
+      "cost_bracket_counts": {
+        "2:4": 176,
+        "2:infinity": 22,
+        "4:4": 2
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 5.528700802499998,
+          "mean": 5.519038447964998
+        },
+        "checker_cpu_seconds": {
+          "median": 3.4994335080000383,
+          "mean": 3.5503240352950014
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.0053165809999882185,
+          "mean": 0.005807819809998956
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 175,
+            "denominator": 200,
+            "fraction": "7/8",
+            "pointwise_95_interval": [
+              "6887267/8388608",
+              "7696109/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 25,
+            "denominator": 200,
+            "fraction": "1/8",
+            "pointwise_95_interval": [
+              "692499/8388608",
+              "1501341/8388608"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.009953761398792267,
+          "mean_U": 0.09527404427528381,
+          "mean_width": 0.08532028287649154,
+          "mean_empirical_lower": 0.032055268199796955,
+          "mean_empirical_upper": 0.047908157455826765,
+          "mean_fitted_risk": 0.04817406591232128,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.047099978362962536
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 2,
+            "denominator": 200,
+            "fraction": "1/100",
+            "pointwise_95_interval": [
+              "5089/4194304",
+              "598187/16777216"
+            ]
+          },
+          "unresolved": {
+            "count": 198,
+            "denominator": 200,
+            "fraction": "99/100",
+            "pointwise_95_interval": [
+              "16179029/16777216",
+              "4189215/4194304"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 13,
+          "true_infeasible": 187,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 179,
+          "oracle_max_gap": "4764404046528443488621805531171129684900347144244533721/12705258104798090520899556570605548410641519275341091176448000000000",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 179,
+            "verified_weighted_primal_dual": 21
+          },
+          "mean_L": 0.061937435567379,
+          "mean_U": 0.1912731072306633,
+          "mean_width": 0.1293356716632843,
+          "mean_empirical_lower": 0.10877245716543257,
+          "mean_empirical_upper": 0.12533032613241654,
+          "mean_fitted_risk": 0.12581919399000424,
+          "mean_class_opt_lower": 0.11604335001998077,
+          "mean_class_opt_upper": 0.11604335001998997,
+          "mean_upper_slack": 0.06545391324065908
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 178,
+            "denominator": 200,
+            "fraction": "89/100",
+            "pointwise_95_interval": [
+              "14062725/16777216",
+              "3899725/4194304"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 22,
+            "denominator": 200,
+            "fraction": "11/100",
+            "pointwise_95_interval": [
+              "294579/4194304",
+              "2714491/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.016732940673828123,
+          "mean_U": 0.09508533209562302,
+          "mean_width": 0.0783523914217949,
+          "mean_empirical_lower": 0.0439796577795687,
+          "mean_empirical_upper": 0.047767626859353415,
+          "mean_fitted_risk": 0.04802293407972543,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.04706239801589759
+        }
+      ]
+    },
+    {
+      "cell_id": "p005_K320_s0",
+      "kind": "optimization_ablation",
+      "p": "1/20",
+      "T": 32832,
+      "K": 320,
+      "q": 4,
+      "g": 92,
+      "sweeps": 0,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "593829634808284822220517532054630139498215591086405989065355873174658471875214323920412319/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "dependence_allowance": "6170365191715177779482467945369860501784408913594010934644126825341528124785676079587681/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "any_accepted": {
+        "count": 152,
+        "denominator": 200,
+        "fraction": "19/25",
+        "pointwise_95_interval": [
+          "5827513/8388608",
+          "1714271/2097152"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 151,
+        "denominator": 200,
+        "fraction": "151/200",
+        "pointwise_95_interval": [
+          "11565543/16777216",
+          "6819233/8388608"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "local_position": 151,
+        "none": 48,
+        "raw": 1
+      },
+      "oracle_cost_counts": {
+        "4": 187,
+        "2": 13
+      },
+      "cost_bracket_counts": {
+        "2:4": 151,
+        "2:infinity": 48,
+        "2:6": 1
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 1.545152943500014,
+          "mean": 1.5376623266600007
+        },
+        "checker_cpu_seconds": {
+          "median": 1.0541098605000343,
+          "mean": 1.0495052874600026
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.00529722649999087,
+          "mean": 0.005093113704999679
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 150,
+            "denominator": 200,
+            "fraction": "3/4",
+            "pointwise_95_interval": [
+              "11476239/16777216",
+              "6781291/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 50,
+            "denominator": 200,
+            "fraction": "1/4",
+            "pointwise_95_interval": [
+              "1607317/8388608",
+              "5300977/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.00373941570520401,
+          "mean_U": 0.09598189055919647,
+          "mean_width": 0.09224247485399246,
+          "mean_empirical_lower": 0.018857421874627106,
+          "mean_empirical_upper": 0.048466674591422815,
+          "mean_fitted_risk": 0.04817406591232128,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.04780782464687519
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 200,
+            "denominator": 200,
+            "fraction": "1/1",
+            "pointwise_95_interval": [
+              "8235303/8388608",
+              "1/1"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 13,
+          "true_infeasible": 187,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 179,
+          "oracle_max_gap": "4764404046528443488621805531171129684900347144244533721/12705258104798090520899556570605548410641519275341091176448000000000",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 179,
+            "verified_weighted_primal_dual": 21
+          },
+          "mean_L": 0.03477348119020462,
+          "mean_U": 0.19189434081315995,
+          "mean_width": 0.15712085962295533,
+          "mean_empirical_lower": 0.07148610874895894,
+          "mean_empirical_upper": 0.1259120094518021,
+          "mean_fitted_risk": 0.12581919399000424,
+          "mean_class_opt_lower": 0.11604335001998077,
+          "mean_class_opt_upper": 0.11604335001998997,
+          "mean_upper_slack": 0.06607514682315571
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 151,
+            "denominator": 200,
+            "fraction": "151/200",
+            "pointwise_95_interval": [
+              "11565543/16777216",
+              "6819233/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 49,
+            "denominator": 200,
+            "fraction": "49/200",
+            "pointwise_95_interval": [
+              "1569375/8388608",
+              "5211673/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.0062539055943489075,
+          "mean_U": 0.09573028832674027,
+          "mean_width": 0.08947638273239136,
+          "mean_empirical_lower": 0.02461292147743734,
+          "mean_empirical_upper": 0.048278501939152195,
+          "mean_fitted_risk": 0.04802293407972543,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.04770735424701484
+        }
+      ]
+    },
+    {
+      "cell_id": "p005_K320_s32",
+      "kind": "optimization_ablation",
+      "p": "1/20",
+      "T": 32832,
+      "K": 320,
+      "q": 4,
+      "g": 92,
+      "sweeps": 32,
+      "joint": {
+        "repetitions": 200,
+        "definite_failures": 0,
+        "oracle_unresolved": 0,
+        "operational_unavailable": 0,
+        "conservative_failure_count": 0,
+        "observed_failure_fraction_lower": "0/1",
+        "observed_failure_fraction_upper": "0/1",
+        "mc_alpha": "1/240",
+        "mc_failure_probability_upper": "113377/4194304",
+        "mc_upper_direct_check": true
+      },
+      "complete_runs": 200,
+      "covered_runs": 200,
+      "theorem_coverage_at_least": "593829634808284822220517532054630139498215591086405989065355873174658471875214323920412319/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "dependence_allowance": "6170365191715177779482467945369860501784408913594010934644126825341528124785676079587681/625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "any_accepted": {
+        "count": 152,
+        "denominator": 200,
+        "fraction": "19/25",
+        "pointwise_95_interval": [
+          "5827513/8388608",
+          "1714271/2097152"
+        ]
+      },
+      "compressed_accepted": {
+        "count": 151,
+        "denominator": 200,
+        "fraction": "151/200",
+        "pointwise_95_interval": [
+          "11565543/16777216",
+          "6819233/8388608"
+        ]
+      },
+      "all_excluded": {
+        "count": 0,
+        "denominator": 200,
+        "fraction": "0/1",
+        "pointwise_95_interval": [
+          "0/1",
+          "153305/8388608"
+        ]
+      },
+      "minimum_cost_certified": {
+        "count": 1,
+        "denominator": 200,
+        "fraction": "1/200",
+        "pointwise_95_interval": [
+          "2123/16777216",
+          "462077/16777216"
+        ]
+      },
+      "optimal_claim_violations": 0,
+      "optimal_claim_oracle_unresolved": 0,
+      "cost_bracket_violations": 0,
+      "cost_bracket_oracle_unresolved": 0,
+      "oracle_exact_cost_count": 200,
+      "cost_count_scope": {
+        "completed_runs": 200,
+        "unavailable_runs": 0,
+        "infinity_label": "infinity"
+      },
+      "selected_counts": {
+        "local_position": 151,
+        "none": 48,
+        "raw": 1
+      },
+      "oracle_cost_counts": {
+        "4": 187,
+        "2": 13
+      },
+      "cost_bracket_counts": {
+        "2:4": 150,
+        "2:infinity": 47,
+        "4:4": 1,
+        "2:6": 1,
+        "4:infinity": 1
+      },
+      "timing": {
+        "producer_cpu_seconds": {
+          "median": 1.6989577029999907,
+          "mean": 1.7175872977800037
+        },
+        "checker_cpu_seconds": {
+          "median": 1.0745706000000261,
+          "mean": 1.067917033405002
+        },
+        "oracle_cpu_seconds": {
+          "median": 0.005258359000009705,
+          "mean": 0.005143120089992586
+        }
+      },
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "cost": 6,
+          "accepted": {
+            "count": 150,
+            "denominator": 200,
+            "fraction": "3/4",
+            "pointwise_95_interval": [
+              "11476239/16777216",
+              "6781291/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 50,
+            "denominator": 200,
+            "fraction": "1/4",
+            "pointwise_95_interval": [
+              "1607317/8388608",
+              "5300977/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.010276043713092804,
+          "mean_U": 0.09598189055919647,
+          "mean_width": 0.08570584684610366,
+          "mean_empirical_lower": 0.032581224253108304,
+          "mean_empirical_upper": 0.048466674591422815,
+          "mean_fitted_risk": 0.04817406591232128,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.04780782464687519
+        },
+        {
+          "candidate_id": "memberships",
+          "cost": 2,
+          "accepted": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 2,
+            "denominator": 200,
+            "fraction": "1/100",
+            "pointwise_95_interval": [
+              "5089/4194304",
+              "598187/16777216"
+            ]
+          },
+          "unresolved": {
+            "count": 198,
+            "denominator": 200,
+            "fraction": "99/100",
+            "pointwise_95_interval": [
+              "16179029/16777216",
+              "4189215/4194304"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 13,
+          "true_infeasible": 187,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 179,
+          "oracle_max_gap": "4764404046528443488621805531171129684900347144244533721/12705258104798090520899556570605548410641519275341091176448000000000",
+          "oracle_methods": {
+            "exact_feasible_atom_means": 179,
+            "verified_weighted_primal_dual": 21
+          },
+          "mean_L": 0.06515747547149658,
+          "mean_U": 0.19189434081315995,
+          "mean_width": 0.12673686534166337,
+          "mean_empirical_lower": 0.11286271539324388,
+          "mean_empirical_upper": 0.1259120094518021,
+          "mean_fitted_risk": 0.12581919399000424,
+          "mean_class_opt_lower": 0.11604335001998077,
+          "mean_class_opt_upper": 0.11604335001998997,
+          "mean_upper_slack": 0.06607514682315571
+        },
+        {
+          "candidate_id": "local_position",
+          "cost": 4,
+          "accepted": {
+            "count": 151,
+            "denominator": 200,
+            "fraction": "151/200",
+            "pointwise_95_interval": [
+              "11565543/16777216",
+              "6819233/8388608"
+            ]
+          },
+          "excluded": {
+            "count": 0,
+            "denominator": 200,
+            "fraction": "0/1",
+            "pointwise_95_interval": [
+              "0/1",
+              "153305/8388608"
+            ]
+          },
+          "unresolved": {
+            "count": 49,
+            "denominator": 200,
+            "fraction": "49/200",
+            "pointwise_95_interval": [
+              "1569375/8388608",
+              "5211673/16777216"
+            ]
+          },
+          "unavailable_count": 0,
+          "true_feasible": 200,
+          "true_infeasible": 0,
+          "true_feasibility_unresolved": 0,
+          "false_acceptances": 0,
+          "false_exclusions": 0,
+          "exclusion_truth_unresolved": 0,
+          "oracle_exact": 200,
+          "oracle_max_gap": "0/1",
+          "oracle_methods": {
+            "exact_affine_bayes_witness": 200
+          },
+          "mean_L": 0.017399015128612517,
+          "mean_U": 0.09573028832674027,
+          "mean_width": 0.07833127319812774,
+          "mean_empirical_lower": 0.04501372364171857,
+          "mean_empirical_upper": 0.048278501939152195,
+          "mean_fitted_risk": 0.04802293407972543,
+          "mean_class_opt_lower": 0.0475,
+          "mean_class_opt_upper": 0.0475,
+          "mean_upper_slack": 0.04770735424701484
+        }
+      ]
+    }
+  ],
+  "paired_ablations": [
+    {
+      "baseline": "p005_K320",
+      "alternative": "p005_K320_q1",
+      "planned_pairs": 200,
+      "completed_pairs": 200,
+      "unavailable_pairs": 0,
+      "difference_scope": "Numerical paired differences use both-completed pairs; no unavailable pair is silently replaced.",
+      "operational_acceptance_gained_all_runs": 26,
+      "operational_acceptance_lost_all_runs": 60,
+      "any_acceptance_gained": 26,
+      "any_acceptance_lost": 60,
+      "minimum_cost_claim_gained": 0,
+      "minimum_cost_claim_lost": 0,
+      "mean_producer_cpu_difference": -0.9724515677250047,
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "L_increased": 125,
+          "L_decreased": 75,
+          "L_equal": 0,
+          "mean_L_difference": 0.0024437552690505984,
+          "mean_U_difference": 0.0012436676025390624,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        },
+        {
+          "candidate_id": "memberships",
+          "L_increased": 111,
+          "L_decreased": 89,
+          "L_equal": 0,
+          "mean_L_difference": 0.0016332137584686279,
+          "mean_U_difference": 0.0009190705418586731,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        },
+        {
+          "candidate_id": "local_position",
+          "L_increased": 103,
+          "L_decreased": 97,
+          "L_equal": 0,
+          "mean_L_difference": 0.00035066038370132444,
+          "mean_U_difference": 0.0012535789608955383,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        }
+      ]
+    },
+    {
+      "baseline": "p005_K320",
+      "alternative": "p005_K320_q16",
+      "planned_pairs": 200,
+      "completed_pairs": 200,
+      "unavailable_pairs": 0,
+      "difference_scope": "Numerical paired differences use both-completed pairs; no unavailable pair is silently replaced.",
+      "operational_acceptance_gained_all_runs": 44,
+      "operational_acceptance_lost_all_runs": 18,
+      "any_acceptance_gained": 44,
+      "any_acceptance_lost": 18,
+      "minimum_cost_claim_gained": 1,
+      "minimum_cost_claim_lost": 0,
+      "mean_producer_cpu_difference": 3.915446380964994,
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "L_increased": 95,
+          "L_decreased": 105,
+          "L_equal": 0,
+          "mean_L_difference": -7.63443112373352e-05,
+          "mean_U_difference": -0.0007078462839126587,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        },
+        {
+          "candidate_id": "memberships",
+          "L_increased": 102,
+          "L_decreased": 98,
+          "L_equal": 0,
+          "mean_L_difference": -0.0008886432647705078,
+          "mean_U_difference": -0.000621233582496643,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        },
+        {
+          "candidate_id": "local_position",
+          "L_increased": 96,
+          "L_decreased": 104,
+          "L_equal": 0,
+          "mean_L_difference": -0.00019576817750930787,
+          "mean_U_difference": -0.0006449562311172485,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        }
+      ]
+    },
+    {
+      "baseline": "p005_K320",
+      "alternative": "p005_K320_s0",
+      "planned_pairs": 200,
+      "completed_pairs": 200,
+      "unavailable_pairs": 0,
+      "difference_scope": "Numerical paired differences use both-completed pairs; no unavailable pair is silently replaced.",
+      "operational_acceptance_gained_all_runs": 0,
+      "operational_acceptance_lost_all_runs": 0,
+      "any_acceptance_gained": 0,
+      "any_acceptance_lost": 0,
+      "minimum_cost_claim_gained": 0,
+      "minimum_cost_claim_lost": 1,
+      "mean_producer_cpu_difference": -0.0659297403400034,
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "L_increased": 0,
+          "L_decreased": 200,
+          "L_equal": 0,
+          "mean_L_difference": -0.006290690004825592,
+          "mean_U_difference": 0.0,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        },
+        {
+          "candidate_id": "memberships",
+          "L_increased": 0,
+          "L_decreased": 200,
+          "L_equal": 0,
+          "mean_L_difference": -0.028052597641944885,
+          "mean_U_difference": 0.0,
+          "excluded_gained": 0,
+          "excluded_lost": 2
+        },
+        {
+          "candidate_id": "local_position",
+          "L_increased": 0,
+          "L_decreased": 200,
+          "L_equal": 0,
+          "mean_L_difference": -0.010674803256988526,
+          "mean_U_difference": 0.0,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        }
+      ]
+    },
+    {
+      "baseline": "p005_K320",
+      "alternative": "p005_K320_s32",
+      "planned_pairs": 200,
+      "completed_pairs": 200,
+      "unavailable_pairs": 0,
+      "difference_scope": "Numerical paired differences use both-completed pairs; no unavailable pair is silently replaced.",
+      "operational_acceptance_gained_all_runs": 0,
+      "operational_acceptance_lost_all_runs": 0,
+      "any_acceptance_gained": 0,
+      "any_acceptance_lost": 0,
+      "minimum_cost_claim_gained": 0,
+      "minimum_cost_claim_lost": 0,
+      "mean_producer_cpu_difference": 0.11399523077999969,
+      "candidates": [
+        {
+          "candidate_id": "raw",
+          "L_increased": 200,
+          "L_decreased": 0,
+          "L_equal": 0,
+          "mean_L_difference": 0.0002459380030632019,
+          "mean_U_difference": 0.0,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        },
+        {
+          "candidate_id": "memberships",
+          "L_increased": 200,
+          "L_decreased": 0,
+          "L_equal": 0,
+          "mean_L_difference": 0.0023313966393470765,
+          "mean_U_difference": 0.0,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        },
+        {
+          "candidate_id": "local_position",
+          "L_increased": 200,
+          "L_decreased": 0,
+          "L_equal": 0,
+          "mean_L_difference": 0.00047030627727508547,
+          "mean_U_difference": 0.0,
+          "excluded_gained": 0,
+          "excluded_lost": 0
+        }
+      ]
+    }
+  ]
+}

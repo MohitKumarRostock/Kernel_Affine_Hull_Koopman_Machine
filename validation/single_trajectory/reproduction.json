@@ -1,0 +1,148 @@
+{
+  "attempts": [
+    {
+      "commands": [
+        {
+          "arguments": [
+            "-m",
+            "unittest",
+            "discover",
+            "-q"
+          ],
+          "finished_utc": "2026-11-09T18:55:40.305391+00:00",
+          "log": "logs/attempt_001/01_unit_tests.log",
+          "log_sha256": "4efb9a048681fec0cce04ce6b13c02753af06e12dbd9ea0dd8ca4cae05d385e9",
+          "name": "unit_tests",
+          "returncode": 0,
+          "started_utc": "2026-11-09T18:55:39.490639+00:00"
+        },
+        {
+          "arguments": [
+            "audit_saved.py",
+            "--protocol",
+            "/tmp/single_trajectory_sources_hf4jhumy/protocol.json",
+            "--results",
+            "/workspace/scratch/6412d3ebae86/work_step6/reproduction_validation/results"
+          ],
+          "finished_utc": "2026-11-09T18:55:50.912708+00:00",
+          "log": "logs/attempt_001/02_saved_certificate_audit.log",
+          "log_sha256": "baea1b99c59bca4756819a3e64dda4abd47d96adf6340b4a969a0374d429ed98",
+          "name": "saved_certificate_audit",
+          "returncode": 0,
+          "started_utc": "2026-11-09T18:55:40.306041+00:00"
+        },
+        {
+          "arguments": [
+            "summarize_experiment.py",
+            "--protocol",
+            "/tmp/single_trajectory_sources_hf4jhumy/protocol.json",
+            "--results",
+            "/workspace/scratch/6412d3ebae86/work_step6/reproduction_validation/results"
+          ],
+          "finished_utc": "2026-11-09T18:55:51.794624+00:00",
+          "log": "logs/attempt_001/03_summary.log",
+          "log_sha256": "32bff30f2b1eaa37b5d86f1e5b191f58c28dc05b94e7fc5be28e46a4aa6e3ae9",
+          "name": "summary",
+          "returncode": 0,
+          "started_utc": "2026-11-09T18:55:50.913244+00:00"
+        },
+        {
+          "arguments": [
+            "diagnose_saved_graph.py",
+            "--protocol",
+            "/tmp/single_trajectory_sources_hf4jhumy/protocol.json",
+            "--results",
+            "/workspace/scratch/6412d3ebae86/work_step6/reproduction_validation/results",
+            "--out",
+            "/workspace/scratch/6412d3ebae86/work_step6/reproduction_validation/results/posthoc_graph_diagnostic.json"
+          ],
+          "finished_utc": "2026-11-09T18:55:52.823845+00:00",
+          "log": "logs/attempt_001/04_posthoc_graph_diagnostic.log",
+          "log_sha256": "dd739a53b19c73726f333588a99146e2cd35d9f252e3d47ca28774c12e860a83",
+          "name": "posthoc_graph_diagnostic",
+          "returncode": 0,
+          "started_utc": "2026-11-09T18:55:51.795101+00:00"
+        },
+        {
+          "arguments": [
+            "describe_bottlenecks.py",
+            "--runs",
+            "/workspace/scratch/6412d3ebae86/work_step6/reproduction_validation/results/runs.jsonl",
+            "--out",
+            "/workspace/scratch/6412d3ebae86/work_step6/reproduction_validation/results/bottleneck_diagnostics.json"
+          ],
+          "finished_utc": "2026-11-09T18:55:53.180668+00:00",
+          "log": "logs/attempt_001/05_posthoc_bottleneck_description.log",
+          "log_sha256": "c5ed569a574618f5407ac67ddb0430b80e48677ecf146cc84b0c1616f450de2f",
+          "name": "posthoc_bottleneck_description",
+          "returncode": 0,
+          "started_utc": "2026-11-09T18:55:52.824344+00:00"
+        },
+        {
+          "arguments": [
+            "plot_results.py",
+            "--summary",
+            "/workspace/scratch/6412d3ebae86/work_step6/reproduction_validation/results/summary.json",
+            "--out",
+            "/workspace/scratch/6412d3ebae86/work_step6/reproduction_validation/figures"
+          ],
+          "finished_utc": "2026-11-09T18:55:54.988114+00:00",
+          "log": "logs/attempt_001/06_figures.log",
+          "log_sha256": "1854a8917801ce13ce55970037ee6c78aaf89ca416e03205b0781dad0762da34",
+          "name": "figures",
+          "returncode": 0,
+          "started_utc": "2026-11-09T18:55:53.181437+00:00"
+        }
+      ],
+      "figures_requested": true,
+      "finished_utc": "2026-11-09T18:55:55.047760+00:00",
+      "full_certificates_reconstructed": 12,
+      "output_files_sha256": {
+        "figures/matched_ablations.pdf": "4b31094e6422993de6f47730d8c5dfc2268c26179e680dbbf931027e5bb4af74",
+        "figures/matched_ablations.png": "9a2785176d508effa0e90e15371c8a52e763b73281bdee34ec3b8c93187bf296",
+        "figures/primary_decisions.pdf": "f529a662828d712582d8d220c72132be5abaf7d12a3ff5309a28f6f6f244f7e9",
+        "figures/primary_decisions.png": "407c84d06697fe1317e07283d179bb9bff135284d9c8a9ff6e0f416782ab65af",
+        "results/bottleneck_diagnostics.json": "a537511b80dfc32ca70604c9284a065625cb67ab7e436694c1325b0a8501def7",
+        "results/certificates/p005_K080_r000.json": "70e5c6d8558f256fe8081105c9d99a14bc3695c21ea03f84199503ee04e88967",
+        "results/certificates/p005_K320_q16_r000.json": "ed3a1ec9515b343bd73b7d1e7c9b9d2e53e8f54597632a741e0d75102bba33de",
+        "results/certificates/p005_K320_q1_r000.json": "ce529ddde279d7b96dbea7af9f16378d30859fda38a273130a31eb6e7a335ca2",
+        "results/certificates/p005_K320_r000.json": "a15c0c5821d100b334132622ce21bc68fd22541faf8ffa193c6cfe84e0fdc27d",
+        "results/certificates/p005_K320_s0_r000.json": "fd5f7cdb090b6e03af8f47c7ba2ca805abc27875c0746b363ac25b5b8d697675",
+        "results/certificates/p005_K320_s32_r000.json": "8313fd24061b2899c7e21988ce432791846b05bae31cba61999f62e4cd5f559d",
+        "results/certificates/p020_K080_r000.json": "dfda50859a9236e8ab6e4293a711c536dbdeb7dce4a2a34eb7f87bd7ab7b1346",
+        "results/certificates/p020_K320_r000.json": "3e982eb669772e9c94d7615d04fbc70b435285e6a1690d394a458787d7c048b5",
+        "results/certificates/p050_K080_r000.json": "0a800c014d841e4e395c06a784ceaf1a4091fccbaaa361b94e5a92341ecb6db2",
+        "results/certificates/p050_K320_r000.json": "31540679bcadc96d2ae001f9cb26955b137ec2486f9df60b4f3d2fec67450eef",
+        "results/certificates/p095_K080_r000.json": "e18d3d08fecabc18084bcb78d802dda163fcccf94ef1ec3466d81ccec3666604",
+        "results/certificates/p095_K320_r000.json": "aa3401b07eaf31c2574fc32b0160e9d6e8861f9880b28c9b67fa15dfae74b576",
+        "results/completion.json": "3f7cf1108b9e6b4b6c630c3042cba983058419faf2fd6e4b7651e8519103a19e",
+        "results/independent_summary_audit.json": "99af08d5f919a701811dc2864caa398235024ce1a427987175f046b40d0efeb5",
+        "results/posthoc_graph_diagnostic.json": "dd739a53b19c73726f333588a99146e2cd35d9f252e3d47ca28774c12e860a83",
+        "results/run_manifest.json": "70c6621ea6fc1974df18c6fd81bfbb4063096cbede3a400fd56e9ed2e7b4f6e7",
+        "results/runs.jsonl": "8af10519b1f9d770f2af1cf454193d753f57af838dab4f1881eb23ff910a4e50",
+        "results/saved_audit.json": "baea1b99c59bca4756819a3e64dda4abd47d96adf6340b4a969a0374d429ed98",
+        "results/summary.json": "fb33cdc1dad8ac7dca29425b01c57e2fbee65c869e64c1c05c2e4edadf0a67a6"
+      },
+      "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "recomputed_files_match": [
+        "summary.json",
+        "saved_audit.json",
+        "posthoc_graph_diagnostic.json",
+        "bottleneck_diagnostics.json"
+      ],
+      "resume": false,
+      "retained_runs_checked": 2400,
+      "started_utc": "2026-11-09T18:55:39.450637+00:00",
+      "status": "passed",
+      "supplied_evidence_unchanged": true,
+      "tests_passed": 97,
+      "workers": 6,
+      "wrapper_sha256": "dd4fcb61685aeeef7b12c3e9dae4ecd945a4a9fb9f7f8ccfacae61781840b338"
+    }
+  ],
+  "mode": "check",
+  "protocol_sha256": "9336d35b8594078152e965c09f5667137ad96aabdee07b6ee3c99e5f1735a0d7",
+  "schema": "single_trajectory_reproduction_v1",
+  "source_archive_sha256": "60b176a759b50c13ec20ec59e71ea886dfa7f63974b8e0ae6062baacb8ccedae",
+  "source_manifest_sha256": "05136f7c4611212ceda6b36929e37a2ca1ada8f510c1b10617bc12e051cd3097"
+}

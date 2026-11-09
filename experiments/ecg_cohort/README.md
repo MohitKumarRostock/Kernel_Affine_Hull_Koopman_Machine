@@ -1,11 +1,11 @@
 # Class-risk lower bounds on the PTB-XL evaluation dataset
 
 This experiment evaluates lower bounds on the best mean squared error in a predictor class on the fixed
-8,192-patient evaluation dataset used by the manuscript. It compares three separately
+8,192-patient evaluation dataset. It compares three separately
 selected feature maps of 2, 6, and 14 coordinates, two partition rules, and
 block sizes 32, 64, and 128. These feature maps do not form a nested family.
 
-## Reproduce the manuscript results
+## Reproduce the numerical results
 
 From the repository root:
 
@@ -42,5 +42,7 @@ this command. Their original records are in `step19_reproducibility.zip`.
 
 Data originate from PTB-XL version 1.0.3, distributed by PhysioNet under
 CC BY 4.0: https://physionet.org/content/ptb-xl/1.0.3/.
-The manuscript contains the dataset citation. The replay needs Python and
-NumPy and performs no network access.
+The dataset release has DOI [10.13026/kfzx-aw45](https://doi.org/10.13026/kfzx-aw45);
+Wagner et al. describe PTB-XL in *Scientific Data* 7, 154 (2020),
+DOI [10.1038/s41597-020-0495-6](https://doi.org/10.1038/s41597-020-0495-6).
+The replay needs Python and NumPy and performs no network access.

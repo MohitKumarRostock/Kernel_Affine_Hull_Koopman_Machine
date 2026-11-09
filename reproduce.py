@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the fixed numerical evidence accompanying the manuscript."""
+"""Verify the stored numerical results for the forecasting experiments."""
 from pathlib import Path
 import argparse, hashlib, importlib.metadata, json, os, platform, subprocess, sys, time
 
@@ -25,7 +25,7 @@ def main():
     ap.add_argument('--only',choices=GROUPS,nargs='+')
     ap.add_argument('--output',type=Path,default=ROOT/'reproduction')
     args=ap.parse_args();output=args.output.resolve()
-    if output==ROOT or any(output.is_relative_to(ROOT/p) for p in ['manuscript','experiments','validation']):
+    if output==ROOT or any(output.is_relative_to(ROOT/p) for p in ['docs','experiments','scripts','validation']):
         ap.error('Choose a separate reproduction output directory.')
     output.mkdir(parents=True,exist_ok=True)
     integrity=verify_manifest();groups=args.only or GROUPS

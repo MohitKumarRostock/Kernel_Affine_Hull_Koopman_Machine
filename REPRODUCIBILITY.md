@@ -12,7 +12,7 @@ python reproduce.py --output reproduction
 
 The driver checks `MANIFEST.json`, invokes each experiment in a separate process, and stops on a failed check. It reads the supplied input records and writes results to the selected output directory. `reproduction/summary.json` identifies the checked source manifest, environment, commands, completion status, and per-group results.
 
-`MANIFEST.json` covers the scientific sources, replay code, documentation, and fixed numerical inputs. The rendered manuscript and the reports in `validation/` are generated outputs. The manuscript checksum and build diagnostics are recorded in `validation/manuscript_build.json`; rebuilding the PDF does not invalidate the numerical-input manifest. The driver checks the source manifest again after all requested experiments finish.
+`MANIFEST.json` covers the scientific sources, replay code, documentation, and fixed numerical inputs. Generated reports in `validation/` and reproduction output directories are excluded. The driver checks the source manifest again after all requested experiments finish.
 
 The deployment-cost group also reconstructs forecasts from the stored raw inputs and model parameters. Its comparison against stored predictions uses the original implementation-fidelity tolerances; the associated MSEs are recomputed exactly from the stored binary64 forecasts and targets. The timing summaries aggregate the saved measurements; they do not measure execution time on the computer running the replay.
 
@@ -35,14 +35,6 @@ These checks start from the supplied observations, features and model records. T
 Binary64 coordinates are interpreted as exact dyadic rationals where the numerical analysis specifies this. Exact fractions, outward bounds, and strict versus inclusive decision inequalities retain their original meaning. Targets outside a fitted predictor's output range remain in the losses. Confidence allocations are study-specific; related tasks and reused observations are not independent replications.
 
 The compact records retain the inputs needed for the displayed claims. Each experiment provides provenance tying its records and original source modules to the preserved research archive. Checksums detect changes to these files; they are not evidence of independent attestation or a substitute for numerical verification.
-
-## Manuscript build
-
-```bash
-python manuscript/build_manuscript.py
-```
-
-The script runs the LaTeX and bibliography passes and checks for unresolved citations/references and overflow. On installations where TeX trees are present but not configured, `--texmf-root PATH` may be supplied repeatedly; a normally configured TeX installation needs no such option.
 
 ## Interpreting unsuccessful outcomes
 

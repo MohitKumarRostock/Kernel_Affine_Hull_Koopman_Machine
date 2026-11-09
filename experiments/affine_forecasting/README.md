@@ -42,7 +42,7 @@ The replay performs these computations:
 
 The primary procedure selects an affine model of the raw input features with seed
 3901. Its comparison pool is the conventional family of 44 configurations
-(`ordinary`, called Pool in the manuscript) and its five-configuration ridge
+(`ordinary`) and its five-configuration ridge
 subset. The 90-candidate affine representation pool (`all_map`) is a different
 secondary policy. Selection uses only the three development folds.
 
@@ -59,7 +59,7 @@ task has 90 assessment targets. All six pooled inequalities pass:
 This comparison uses a fixed set of evaluation observations. It is not a
 population noninferiority test. The seed repetitions reuse the same targets.
 The five-percent condition fails in eight task/month/reference comparisons:
-household September and October versus ridge and November versus Pool; Jena
+household September and October versus ridge and November versus the conventional pool; Jena
 September and October versus both references; Metro September versus ridge.
 Every month is included in the input records and generated report. The
 [forecasting-model comparisons](../decoder_diagnostics/) also report failed

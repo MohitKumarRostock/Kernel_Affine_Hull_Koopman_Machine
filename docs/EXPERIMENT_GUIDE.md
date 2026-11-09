@@ -34,7 +34,7 @@ The script evaluates the stored interval and decision arithmetic with exact rati
 
 | Question | Group for `--only` | Retained inputs and what to inspect |
 | --- | --- | --- |
-| When do calibrated bounds support refinement or identify a class that cannot meet the error requirement? | `controlled_calibration` | [Calibration records](../experiments/controlled_calibration/records/) contain fixed random streams, observations, features, coefficients, candidate predictions, and optimization lower-bound records. Inspect the lower and upper endpoints and decisions at each calibration size. |
+| When do calibrated bounds support feature augmentation or identify a class that cannot meet the error requirement? | `controlled_calibration` | [Calibration records](../experiments/controlled_calibration/records/) contain fixed random streams, observations, features, coefficients, candidate predictions, and optimization lower-bound records. Inspect the lower and upper endpoints and decisions at each calibration size. |
 | Can one class be excluded on an already specified patient evaluation dataset? | `ecg_cohort` | [Evaluation data](../experiments/ecg_cohort/records/) contain targets, reference predictions, feature enclosures, partitions, and optimization lower-bound records. Inspect the class lower bound relative to the specified tolerance. |
 | Can a class meet its dataset requirement even when its fitted predictors fail? | `class_diagnosis` | [Decision inputs](../experiments/class_diagnosis/inputs/decision/) and [class-bound records](../experiments/class_diagnosis/records/classes/) support risk brackets and fitted-predictor excess bounds on the Bike observations. |
 | Does a selected procedure meet accuracy, storage, and latency requirements together? | `deployment_cost` | [Deployment data](../experiments/deployment_cost/data/) contain selected models, forecasts, model-storage inventories, and original timing samples. Inspect each component of the joint criterion. |
@@ -54,7 +54,7 @@ python3 reproduce.py --help
 python3 reproduce.py --only ecg_cohort --output reproduction_ecg
 ```
 
-Replace `ecg_cohort` with a group from the table. The driver verifies the current source/input manifest, invokes that group's numerical checker, and checks the manifest again. Use a separate output directory for each run. It must not be the repository root or lie under `manuscript/`, `experiments/`, or `validation/`.
+Replace `ecg_cohort` with a group from the table. The driver verifies the current source/input manifest, invokes that group's numerical checker, and checks the manifest again. Use a separate output directory for each run. It must not be the repository root or lie under `docs/`, `experiments/`, `scripts/`, or `validation/`.
 
 For the ECG command, inspect:
 

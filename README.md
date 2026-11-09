@@ -4,17 +4,15 @@
 
 ## Why assess a representation class?
 
-A fitted forecaster that misses an accuracy requirement leaves an important question unanswered: could another predictor use the same features successfully? This paper develops bounds on the best mean squared error within a specified predictor class, so an unsuccessful fit can be distinguished from a limitation of that class.
+A fitted forecaster that misses an accuracy requirement leaves an important question unanswered: could another predictor use the same features successfully? This repository provides numerical experiments for bounds on the best mean squared error within a specified predictor class, so an unsuccessful fit can be distinguished from a limitation of that class.
 
 Each predictor class is specified by a feature map, a distance between feature vectors, an output range and a Lipschitz constant. The constant limits how much predictions may change as features move apart. The experiments use Kernel Affine Hull Machine (KAHM) features to study whether changing the representation can help meet a prediction-error requirement.
 
-## What the paper contributes
+## Risk bounds and decisions
 
-The theoretical construction minimizes total squared error on groups of observations under the declared sensitivity constraints and divides by one less than the group size. For a fixed prediction problem with bounded scalar targets and outputs and independent and identically distributed (iid) observations, the expected scores form a nondecreasing hierarchy of lower bounds on the best class risk. On a compact metric feature domain, they converge to that risk. Larger groups do not automatically produce tighter finite-sample confidence bounds.
+The theoretical construction minimizes total squared error on groups of observations under the declared Lipschitz and output-range constraints and divides by one less than the group size. For a fixed prediction problem with bounded scalar targets and outputs and independent and identically distributed (iid) observations, the expected scores form a nondecreasing hierarchy of lower bounds on the best class risk. On a compact metric feature domain, they converge to that risk. Larger groups do not automatically produce tighter finite-sample confidence bounds.
 
 Verified optimization lower bounds and statistical calibration can exclude a class from meeting an error requirement. An upper bound for an admissible fitted predictor can establish acceptance. When neither criterion is met, the decision remains unresolved. These conclusions concern the declared class; a lower bound alone does not separate future uncertainty, information lost by the representation, and the sensitivity restriction.
-
-The [article](manuscript/manuscript.pdf) contains the theory, complete proofs, empirical studies, and detailed appendices. [Editable manuscript sources](manuscript/) accompany it.
 
 ## Which evidence answers which question?
 
@@ -33,7 +31,7 @@ For a guided route from a research question to its records and commands, start w
 
 ## Recompute the stored numerical checks
 
-Run from the root of this risk-certificate branch. Use Python 3.12 and the recorded dependencies:
+Run from the repository root. Use Python 3.12 and the recorded dependencies:
 
 ```bash
 python3 -m pip install -r requirements.txt
@@ -48,21 +46,11 @@ For one group:
 python3 reproduce.py --only ecg_cohort --output reproduction_ecg
 ```
 
-Choose a separate output directory outside `manuscript/`, `experiments/`, and `validation/`. Use `python3 reproduce.py --help` for the available group names and options.
+Choose a separate output directory outside `docs/`, `experiments/`, `scripts/`, and `validation/`; the repository root itself is also excluded. Use `python3 reproduce.py --help` for the available group names and options.
 
 These commands recompute checks from stored observations, features, forecasts, model parameters, and optimization records. The deployment group also regenerates forecasts from stored raw inputs and model parameters. Model training and runtime benchmarking require separate execution of the supplied source under each study's data and environment requirements. The checks above use the saved timing measurements.
 
 See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for the calculation performed by each group and [DATA.md](DATA.md) for attribution and input provenance. The [recorded verification summary](validation/summary.json) identifies the completed checks for its recorded source state.
-
-## Build the manuscript
-
-With a configured TeX installation containing pdfLaTeX, BibTeX, and the required packages:
-
-```bash
-python3 manuscript/build_manuscript.py
-```
-
-The command produces `manuscript/manuscript.pdf` and document-build diagnostics. It compiles the manuscript without running the experiment groups. The bundled JMLR style and bibliography retain their original notices.
 
 ## Scope and licenses
 

@@ -5,7 +5,7 @@ conventional accuracy and cost references. The panel comprises five
 replications of one hidden Markov model and one chronological Appliances
 record. It does not supply six independent application domains.
 
-## Reproduce the manuscript results
+## Reproduce the numerical results
 
 From the repository root:
 

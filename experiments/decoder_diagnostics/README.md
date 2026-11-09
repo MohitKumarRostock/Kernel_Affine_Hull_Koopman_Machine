@@ -4,7 +4,7 @@ These experiments compare predictor families and hyperparameter-selection
 rules on specified forecasting periods. The results include every primary
 comparison, including those that fail the required error threshold.
 
-## Reproduce the manuscript results
+## Reproduce the numerical results
 
 From the repository root:
 

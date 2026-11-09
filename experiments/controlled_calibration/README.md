@@ -7,7 +7,7 @@ dual values from those groups to bound the minimum loss over the full
 calibration dataset. It uses 12 complete training repetitions in each of two
 bounded synthetic settings, with two nested feature sets per repetition.
 
-## Reproduce the manuscript results
+## Reproduce the numerical results
 
 From the repository root:
 

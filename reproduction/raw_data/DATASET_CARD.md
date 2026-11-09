@@ -1,14 +1,14 @@
-# Canonical raw-data package
+# Raw-data package
 
 ## Scope
 
-This package contains the canonical raw scientific inputs used by the retained
+This package contains the raw scientific inputs used by the retained
 empirical results R01--R22.
 
 R23 is a documentary hyperparameter-search protocol and therefore has no
 standalone raw scientific input dataset.
 
-The package was generated from the frozen Git commit:
+The package was generated from the fixed Git commit:
 
 `ac531aefc66066c3fc320d94c0b362fb88f94967`
 
@@ -19,7 +19,7 @@ Every family capture started from a clean Git working tree.
 The raw inputs are stored in seven compressed NumPy family archives. Each family
 archive has a JSON sidecar describing its logical subdatasets, generation
 parameters, array shapes and dtypes, environment, Git provenance, and both
-archive-level and canonical array-content SHA-256 hashes.
+archive-level and array-content SHA-256 hashes.
 
 | Family | Logical subdatasets | Purpose |
 | --- | ---: | --- |
@@ -66,7 +66,7 @@ The training-noise random seed depends on:
 Consequently, the noise-aware sweep contains a distinct raw noisy training input
 for every `(seed, C, omega, noise_level)` job.
 
-The frozen noise-seed expression is recorded in:
+The expression defining the random seed for training noise is recorded in:
 
 `reproduction/raw_data/canonical_input_plan.json`
 
@@ -79,10 +79,10 @@ required by their respective experiment collectors.
 ## Integrity
 
 `canonical/manifest.json` verifies all seven family archives and records the
-frozen capture commit.
+fixed capture commit.
 
 `canonical/SHA256SUMS` contains SHA-256 hashes for every distributed file in the
-canonical package except the checksum file itself.
+package except the checksum file itself.
 
 `canonical/dataset_index.tsv` is a compact index of family counts, archive
 hashes, content hashes, metadata hashes, and capture provenance.

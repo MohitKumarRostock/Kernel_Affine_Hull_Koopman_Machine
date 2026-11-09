@@ -256,8 +256,8 @@ def prospective_duffing_summary() -> dict[str, Any]:
         "git_tree_clean_before_campaign": True,
         "git_tree_clean_after_campaign": True,
         "provenance_interpretation": (
-            "Prospective reproducibility rerun; closes the evidence gap without "
-            "being represented as historical original output."
+            "These records establish completion of this 27-job execution. "
+            "They are separate from the incomplete Duffing reference-search archive."
         ),
         "summary_path": str((base / "campaign_summary.json").relative_to(ROOT)),
         "verification_path": str(
@@ -299,9 +299,8 @@ def build_evidence() -> dict[str, Any]:
     evidence = {
         "schema_version": 1,
         "purpose": (
-            "Reviewer-facing consolidation of repository reproducibility evidence. "
-            "Historical audit findings and prospective gap-closing evidence are "
-            "kept explicitly distinct."
+            "Inputs, execution records and checks supporting the reported reproducibility "
+            "claims, with the scope and limitations of each experiment stated separately."
         ),
         "source_checkpoints": CHECKPOINTS,
         "reported_results": result_matrix_summary(),
@@ -311,25 +310,22 @@ def build_evidence() -> dict[str, Any]:
         "repository_controls": repository_controls_summary(),
         "claim_boundaries": {
             "historical_archive": (
-                "The historical repository has complete archived schedule coverage "
-                "for 7 of 8 checked campaign structures. The documented Duffing "
-                "reference grid remains historically incomplete at 18/27."
+                "The archived outputs cover 7 of 8 checked experiment grids. The Duffing "
+                "reference-search archive contains 18 of its 27 scheduled jobs."
             ),
             "prospective_closure": (
-                "A separately labeled prospective campaign attempted and passed "
-                "all 27 Duffing reference jobs from a frozen clean commit."
+                "The separate Duffing reference experiment attempted and passed all 27 jobs "
+                "using the recorded source commit and a clean working tree."
             ),
             "no_cherry_picking": (
-                "The prospective Duffing campaign preserves every scheduled attempt "
-                "and exit status. Historical campaigns have archived schedule "
-                "coverage evidence, but a blanket claim that every failed historical "
-                "execution attempt was preserved would be stronger than the current "
-                "evidence supports."
+                "The separate 27-job Duffing experiment records every scheduled attempt and "
+                "exit status. The other archives document scheduled-job coverage but "
+                "do not establish that every failed execution was saved."
             ),
-            "remaining_release_work": [
-                "manuscript cleanup for the two REMOVE items and clarified captions",
-                "final immutable archival release and DOI/version metadata",
-                "final end-to-end release verification after manuscript/repository cleanup",
+            "availability_limits": [
+                "Two event-label results marked REMOVE are excluded from the supported reported results.",
+                "No archival DOI is assigned in these records.",
+                "A complete archival-release verification is not recorded here.",
             ],
         },
     }
@@ -346,29 +342,24 @@ def write_markdown(evidence: dict[str, Any]) -> None:
 
     text = f"""# Reproducibility evidence summary
 
-This file consolidates the repository's current reproducibility evidence in one
-reviewer-facing location. Historical evidence and prospective gap-closing runs
-are deliberately kept separate.
+This file summarizes the inputs, execution records and checks supporting the reported KAHKM results. It identifies incomplete records and distinguishes different experimental executions.
 
-## Current evidence state
+## Available evidence
 
 | Evidence area | Status | Repository evidence |
 | --- | --- | --- |
 | Reported-result audit | PASS for retained results | {results['retained_pass_results']} retained `PASS` results; {results['remove_results']} results marked `REMOVE` in `{results['matrix_path']}` |
-| Canonical raw scientific inputs | PASS | {raw['family_archives']} family archives; {raw['logical_subdatasets']} logical raw-input subdatasets; all captures started clean |
+| Raw scientific inputs | PASS | {raw['family_archives']} family archives; {raw['logical_subdatasets']} logical raw-input subdatasets; all captures started clean |
 | Declared result-source resolution | PASS | {historical['resolved_source_files']} unique source files; {historical['tabular_source_rows']:,} tabular rows; {historical['missing_declared_references']} missing declared references |
-| Historical expected-run audit | PARTIAL | {historical['pass_checks']}/{historical['expected_run_checks']} checks complete; Duffing reference archive remains {historical['historical_gap']['represented_jobs']}/{historical['historical_gap']['documented_jobs']} |
-| Prospective Duffing reference closure | PASS | {prospective['attempted_jobs']}/{prospective['scheduled_jobs']} attempted; {prospective['passed_jobs']} passed; {prospective['failed_jobs']} failed; {prospective['verified_output_files']} output files verified |
-| Environment capture | PASS | {controls['reference_platform']}; Python {controls['reference_python']}; frozen lockfile and bootstrap/verifier scripts |
+| Archived-run coverage audit | PARTIAL | {historical['pass_checks']}/{historical['expected_run_checks']} checks complete; Duffing reference archive remains {historical['historical_gap']['represented_jobs']}/{historical['historical_gap']['documented_jobs']} |
+| Separate Duffing reference experiment | PASS | {prospective['attempted_jobs']}/{prospective['scheduled_jobs']} attempted; {prospective['passed_jobs']} passed; {prospective['failed_jobs']} failed; {prospective['verified_output_files']} output files verified |
+| Environment capture | PASS | {controls['reference_platform']}; Python {controls['reference_python']}; fixed lockfile and bootstrap/verifier scripts |
 | Licensing and citation metadata | PASS | `LICENSE`, `DATA_LICENSE`, and `CITATION.cff` present |
-| Final immutable archival release | PENDING | DOI/version metadata should be added only at final immutable release |
+| Final immutable archival release | PENDING | No archival DOI is assigned in these records |
 
 ## Reported-result provenance
 
-The canonical result matrix audits {results['total_audited_results']} manuscript
-results. {results['retained_pass_results']} are retained as `PASS`; the two
-obsolete event-label items remain marked `REMOVE` rather than being presented as
-supported results.
+The result matrix assesses {results['total_audited_results']} items. It identifies {results['retained_pass_results']} supported results as `PASS`. Two event-label items are marked `REMOVE` and are excluded from the supported result set.
 
 Primary evidence:
 
@@ -376,9 +367,9 @@ Primary evidence:
 - generated result-specific tables/figures under `reproduction/generated/`
 - version-controlled generator scripts under `scripts/`
 
-## Canonical raw scientific inputs
+## Raw scientific inputs
 
-The canonical raw-data release contains {raw['family_archives']} compressed
+The raw-data package contains {raw['family_archives']} compressed
 family archives representing {raw['logical_subdatasets']} logical raw-input
 subdatasets. The manifest verifies every family and records that every capture
 started from a clean Git tree at:
@@ -392,9 +383,9 @@ Primary evidence:
 - `{raw['dataset_card_path']}`
 - `reproduction/raw_data/canonical/SHA256SUMS`
 
-## Historical run-accounting audit
+## Coverage of archived runs
 
-The historical audit resolves all declared raw/per-run file references for the
+The audit resolves all declared raw/per-run file references for the
 {historical['retained_results_covered']} retained results:
 
 - {historical['resolved_source_files']} unique resolved source files;
@@ -404,27 +395,25 @@ The historical audit resolves all declared raw/per-run file references for the
 Expected-run coverage is complete for {historical['pass_checks']} of
 {historical['expected_run_checks']} checked campaign structures.
 
-The preserved historical gap is the Duffing reference search. The documented
+The documented gap is the Duffing reference search. The documented
 grid has {historical['historical_gap']['documented_jobs']} jobs, while tracked
-historical run-level evidence represents {historical['historical_gap']['represented_jobs']}.
+archived run-level evidence represents {historical['historical_gap']['represented_jobs']}.
 The missing jobs are the nine `C=35` combinations.
 
-This historical gap remains visible in:
+The following files document the missing outputs:
 
 - `{historical['completeness_path']}`
 - `{historical['audit_note_path']}`
 
-It is not rewritten or relabeled as historically complete.
+These archived records do not establish completion of all 27 scheduled jobs.
 
-## Prospective Duffing reference closure
+## Separate Duffing reference experiment
 
-A separately labeled prospective reproducibility campaign was executed from
-frozen clean commit:
+The complete 27-job reference experiment was executed from commit:
 
 `{prospective['campaign_git_commit']}`
 
-The campaign scheduled all {prospective['scheduled_jobs']} combinations rather
-than only rerunning the nine historically absent jobs.
+The experiment scheduled all {prospective['scheduled_jobs']} parameter combinations.
 
 Results:
 
@@ -443,19 +432,14 @@ Primary evidence:
 - `{prospective['verification_path']}`
 - `reproduction/prospective_campaigns/duffing_reference_27/run_eab0ad4/SHA256SUMS`
 
-These outputs close the reproducibility evidence gap but are explicitly not
-represented as original historical outputs.
+These records establish completion of this 27-job experiment. They are separate from the incomplete reference-search archive.
 
-## No-cherry-picking claim boundary
+## Coverage of execution records
 
-The prospective Duffing campaign has strong failure-preserving accounting:
-every scheduled attempt has a ledger row, exit code, logs, and output hashes.
+The 27-job Duffing experiment records every scheduled attempt, exit code,
+log and output checksum.
 
-For the older historical campaigns, the repository now provides archived
-schedule-completeness evidence, but it does not have equivalent execution ledgers
-for every historical attempt. Therefore the repository should not claim that
-every failed historical execution was preserved unless additional evidence is
-added.
+The other archived experiments include checks of scheduled-job coverage but do not provide equivalent execution logs for every attempt. Their records therefore do not establish that every failed execution was saved.
 
 ## Environment, licensing, and citation
 
@@ -469,18 +453,9 @@ Reference environment and controls:
 - `{controls['data_license']}`
 - `{controls['citation_metadata']}`
 
-## Remaining release work
+## Interpretation
 
-Before the final immutable release:
-
-1. remove the two `REMOVE` manuscript items and apply the already identified
-   caption/protocol clarifications;
-2. run final end-to-end repository verification after manuscript cleanup;
-3. create the immutable archival release and then add final DOI/version metadata
-   to citation/release files.
-
-The evidence summary intentionally does not mark those remaining steps complete
-before they have been performed.
+The status entries above describe the available records and the checks performed on them. A complete execution log supports conclusions about that execution; it does not establish completeness of another experiment. Hashes establish file identity, not the correctness of a scientific claim.
 """
 
     OUTPUT_MD.write_text(text, encoding="utf-8")
@@ -498,11 +473,11 @@ def main() -> None:
     print(f"Wrote {OUTPUT_JSON}")
     print(f"Wrote {OUTPUT_MD}")
     print("PASS: 23 retained reported results verified in audit matrix")
-    print("PASS: 7 canonical raw-data families / 553 logical subdatasets")
-    print("PASS: 320 historical source files / 11,501 tabular rows / 0 missing refs")
-    print("PASS: historical completeness preserved as 7 PASS / 1 GAP")
-    print("PASS: prospective Duffing closure = 27 attempted / 27 passed / 0 failed")
-    print("PASS: claim boundary for historical failed-attempt preservation retained")
+    print("PASS: 7 raw-data families / 553 logical subdatasets")
+    print("PASS: 320 source files / 11,501 tabular rows / 0 missing refs")
+    print("PASS: archived-run coverage is 7 PASS / 1 GAP")
+    print("PASS: Duffing reference experiment = 27 attempted / 27 passed / 0 failed")
+    print("PASS: scope of saved execution logs recorded")
 
 
 if __name__ == "__main__":

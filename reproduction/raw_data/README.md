@@ -1,25 +1,12 @@
 # Raw scientific inputs
 
-This directory is reserved for raw scientific input datasets captured by the
-final frozen reproduction campaign.
+The `canonical/` directory contains the trajectory, state-transition and training-noise arrays used by the reported empirical results. The [dataset card](DATASET_CARD.md) describes the seven archive families and their 553 logical datasets. Per-run metric CSV files are analysis outputs; they do not replace these input arrays.
 
-The repository already contains extensive unaggregated run-level result files,
-but the pre-campaign inventory shows that underlying state-transition or
-trajectory arrays were not systematically persisted for every retained result.
-Those metric-level files are therefore not relabeled as raw scientific data.
+The data-capture utility is `scripts/raw_data_capture.py`. Each captured dataset has:
 
-Final-campaign raw datasets are written with `scripts/raw_data_capture.py`.
-Each dataset consists of:
-
-- a compressed `.npz` archive containing the actual numerical input arrays;
-- a JSON sidecar recording dataset ID, role, source script, generation seed,
-  generation parameters, array shapes and dtypes, Git commit, working-tree
-  state, Python/NumPy/platform information, and the reference lockfile hash;
+- a compressed `.npz` archive containing the numerical arrays;
+- a JSON sidecar recording the dataset ID, role, generation parameters, random seed, array shapes and dtypes, source commit, working-tree state and software environment;
 - an archive SHA-256 checksum;
-- a canonical array-content SHA-256 checksum independent of ZIP-container
-  metadata.
+- an array-content SHA-256 checksum independent of ZIP-container metadata.
 
-A later campaign manifest will enumerate every captured dataset used by the
-retained reported results and will verify all sidecars and checksums.
-
-The pre-campaign evidence audit is stored under `reproduction/data_inventory/`.
+`canonical/manifest.json` lists the distributed archives and their metadata. `canonical/dataset_index.tsv` provides a dataset index, and `canonical/SHA256SUMS` provides file checksums. The input-coverage audit is under `reproduction/data_inventory/`.

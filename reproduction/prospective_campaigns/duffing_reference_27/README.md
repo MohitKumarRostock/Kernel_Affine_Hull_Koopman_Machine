@@ -1,20 +1,14 @@
-# Prospective Duffing reference reproducibility campaign
+# Duffing reference experiment: 27 parameter combinations
 
-This directory preserves a prospective reproducibility rerun of the complete
-documented Duffing reference sensitivity grid.
+This directory contains the complete Duffing reference sensitivity experiment. The separate run-accounting audit in `reproduction/run_accounting/` describes an archive that lacks the nine `C=35` combinations. The two directories describe different executions.
 
-The campaign is **not** represented as an original historical experiment
-archive. The historical run-accounting audit remains preserved separately under
-`reproduction/run_accounting/` and records that the tracked historical outputs
-did not contain the nine `C=35` jobs from the documented reference grid.
-
-## Frozen campaign
+## Experimental configuration
 
 Executed Git commit:
 
 `eab0ad4042bff713e86188309de53a95e79df51c`
 
-Historical audit checkpoint:
+Run-accounting source commit:
 
 `03cd857`
 
@@ -50,13 +44,7 @@ No failed attempts were omitted; this particular campaign had zero failures.
 
 ## Interpretation
 
-These outputs provide prospective evidence that the complete documented
-27-combination Duffing reference campaign is executable under the frozen
-reference environment and code revision.
-
-They close the reproducibility evidence gap identified by the historical audit,
-but they do not retroactively convert the previously missing `C=35` historical
-artifacts into original historical outputs.
+The records show that all 27 parameter combinations completed in the specified environment. They provide evidence for this execution only. They do not supply the missing outputs from the separate archived reference search.
 
 ## Verification
 

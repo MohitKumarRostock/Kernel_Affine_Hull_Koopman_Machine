@@ -87,13 +87,13 @@ The repository follows these principles for reproducible experimental results:
 1. Experiment parameters are stored in version-controlled configuration or manifest files.
 2. Random seeds are explicit and recorded for every stochastic run.
 3. Training, tuning, and final evaluation data are separated explicitly.
-4. Prospective reproducibility campaigns use failure-preserving run ledgers that record every scheduled attempt, including failures.
-5. Raw unaggregated experimental outputs used as reproducibility evidence are retained where available, with historical gaps reported explicitly rather than inferred away.
+4. The 27-job reference experiment records every scheduled attempt, exit status and log, including failures.
+5. Unaggregated experimental outputs are supplied where available, and missing outputs are identified.
 6. Aggregated results are derived programmatically from raw outputs.
 7. Tables and figures are generated programmatically.
 8. Every reported result is traceable to the runs that produced it.
 9. The exact source commit and execution environment are recorded.
-10. Release artifacts are protected by cryptographic checksums; the final immutable archival release is created only at the release stage.
+10. Distributed files have cryptographic checksums.
 
 ## Experimental reproduction
 
@@ -103,7 +103,7 @@ The environment bootstrap establishes a validated computational environment. Exp
 
 ## Evidence map
 
-The current reviewer-facing evidence summary is:
+The evidence summary is:
 
 `reproduction/REPRODUCIBILITY_EVIDENCE.md`
 
@@ -113,23 +113,17 @@ Its machine-readable counterpart is:
 
 The principal evidence layers are:
 
-- `reproduction/raw_data/DATASET_CARD.md` for canonical raw scientific inputs;
-- `reproduction/run_accounting/README.md` for the historical run-accounting audit;
-- `reproduction/prospective_campaigns/duffing_reference_27/README.md` for the prospective Duffing reference campaign;
-- `reproduction/reported_results.tsv` for result-level provenance and retention status.
+- `reproduction/raw_data/DATASET_CARD.md` for raw scientific inputs;
+- `reproduction/run_accounting/README.md` for coverage checks of archived runs;
+- `reproduction/prospective_campaigns/duffing_reference_27/README.md` for the separate 27-job Duffing reference experiment;
+- `reproduction/reported_results.tsv` for the mapping from reported results to source code and data.
 
-The historical and prospective evidence are deliberately distinguished. The
-historical run-accounting audit preserves a documented gap in the original
-Duffing reference-search archive. A separately labeled prospective campaign
-then reruns the complete 27-job grid from a frozen clean commit and records every
-attempt, exit status, log, and output checksum.
+The archived Duffing reference search contains records for 18 of its 27 scheduled jobs. The separate 27-job reference experiment records every attempt, exit status, log and output checksum. These are records of different executions.
 
-This supports a strong failure-preserving claim for that prospective campaign.
-It does not establish that every failed execution attempt from every historical
-campaign was preserved.
+The execution log covers every attempt in the 27-job experiment. The other
+archives do not establish that every failed attempt was saved.
 
-## Historical environments
+## Environment scope
 
-Development may have occurred under earlier or different Python environments. Such historical environments are not presented as the reference reproduction environment unless their provenance can be established independently.
+The reference environment is the documented native Apple Silicon configuration. Results produced with another environment require the corresponding software and platform records.
 
-The reference environment documented here is the validated native Apple Silicon environment used for the reproducibility workflow.

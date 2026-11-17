@@ -1,19 +1,21 @@
-# Forecasting studies and numerical evidence
+# Forecasting studies and experimental records
 
-The repository organizes code and data around two research questions. The [numerical library](README.md#numerical-library) supplies reusable reconstruction and forecasting methods. Each study's guide describes its experimental implementation, data and analysis.
+The repository contains two studies and a shared [numerical library](README.md#numerical-library). Each study specifies its data, predictors, comparison criteria, and reproduction commands.
 
 ## Feature augmentation
 
-**Feature Augmentation for Forecasting with Reconstruction-Based Representations** studies which additional features help predictors use normalized reconstruction affinities. The [experiment code and records](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02) compare KAHM, affine and kernel-weighted averaging features with raw histories. The [reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/REPRODUCIBILITY.md) explains the statistical analysis of saved per-run losses and the separate predictor-capacity experiment.
+**Feature Augmentation for Forecasting with Reconstruction-Based Representations** evaluates additional features for predictors using normalized reconstruction weights. The [code and records](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02) compare KAHM, affine, and kernel-weighted averaging features with raw histories. The [reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/REPRODUCIBILITY.md) covers saved-loss analysis and the separate predictor-capacity experiment.
 
-The central checker reconstructs primary comparisons from saved losses. It does not regenerate the central observations, fitted models or forecast arrays. The supplementary capacity experiment has its own source, observations and statistical comparison family.
+The central checker recomputes statistical comparisons from saved losses, not the observations, fitted models, or forecast arrays. The supplementary capacity experiment has separate source, observations, and statistical comparisons.
 
-## Lower bounds on prediction risk
+## Prediction-risk bounds
 
-**A Hierarchy of Risk Certificates for Representation-Based Forecasting** asks whether any predictor in a specified class can meet a prediction-error requirement. The [experiment code and records](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) contain six experiment groups. Its [reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/REPRODUCIBILITY.md) distinguishes population-risk confidence bounds using independent episodes, empirical-risk bounds on fixed datasets, and forecasting comparisons with computational measurements. The retained Household 2010 and Jena 2017 affine constraint ablations are included in the predictor-diagnostics group.
+**A Hierarchy of Risk Certificates for Representation-Based Forecasting** studies minimum mean squared error over bounded Lipschitz predictors. Its [six experiment groups](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) evaluate population-risk confidence bounds with independent episodes, empirical-risk bounds on fixed datasets, predictor fitting, and computational cost.
+
+The [reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/REPRODUCIBILITY.md) identifies the stored inputs and calculations for each group. Household 2010 and Jena 2017 constraint ablations remain in `decoder_diagnostics`; they are separate from the removed affine numerical-output study.
 
 ## Supporting experiments
 
-The [supporting-study index](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/archive/pre-manuscript-cleanup-2026-11-02/docs/RESEARCH_INDEX.md) links controlled forecasting comparisons, representation-dimension and preprocessing studies, residual prediction, feature correction and common-weight feature ablation. Each study specifies its own observations, predictors, loss function and uncertainty analysis. Their results are interpreted separately.
+The [supporting-study index](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/archive/pre-manuscript-cleanup-2026-11-02/docs/RESEARCH_INDEX.md) lists forecasting comparisons, representation-dimension and preprocessing studies, residual prediction, feature correction, and common-weight feature ablation. These studies have distinct observations, predictors, losses, and uncertainty analyses.
 
-The [reproducibility overview](REPRODUCIBILITY.md) explains which commands analyze stored records and which regenerate experimental inputs and predictions.
+The [reproducibility overview](REPRODUCIBILITY.md) distinguishes calculations from stored records from regeneration of inputs and fitted models.

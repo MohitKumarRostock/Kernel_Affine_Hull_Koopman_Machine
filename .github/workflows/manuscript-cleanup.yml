@@ -32,7 +32,17 @@ jobs:
       - name: Install recorded replay dependencies
         run: python -m pip install -r requirements.txt
       - name: Apply scoped cleanup and verify unchanged scientific inputs
-        run: python .maintenance/align_manuscript.py
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('.maintenance/align_manuscript.py')
+          text = p.read_text()
+          old = "if target and not ((ROOT / name).parent / target).exists():"
+          new = "if target and not target.startswith('validation/') and not ((ROOT / name).parent / target).exists():"
+          assert text.count(old) == 1
+          p.write_text(text.replace(old, new, 1))
+          PY
+          python .maintenance/align_manuscript.py
       - name: Recompute all six retained experiment groups
         run: python reproduce.py --output "$RUNNER_TEMP/reproduction_clean"
       - name: Check the worked example and reproduction entry point
@@ -49,8 +59,9 @@ jobs:
       - name: Record successful validation and commit only the scoped cleanup
         run: |
           python - <<'PY'
-          import json, os, shutil, subprocess
+          import json, os, re, shutil, subprocess
           from pathlib import Path
+          from urllib.parse import unquote
           import reproduce
           root = Path.cwd()
           tmp = Path(os.environ['RUNNER_TEMP'])
@@ -63,6 +74,12 @@ jobs:
           shutil.copytree(results, root / 'validation')
           shutil.copy2(tmp / 'manuscript_cleanup_audit.json', root / 'validation/cleanup_audit.json')
           shutil.copy2(tmp / 'bike_worked_example.json', root / 'validation/bike_worked_example.json')
+          for name in ['README.md', 'REPRODUCIBILITY.md', 'DATA.md', 'docs/EXPERIMENT_GUIDE.md']:
+              for target in re.findall(r'\[[^\]]*\]\(([^)]+)\)', (root / name).read_text()):
+                  if '://' in target or target.startswith('#'):
+                      continue
+                  target = unquote(target.split('#', 1)[0])
+                  assert not target or ((root / name).parent / target).exists(), (name, target)
           subprocess.run(['git', 'add', '-A'], check=True)
           for group in reproduce.GROUPS:
               subprocess.run(['git', 'diff', '--cached', '--exit-code', '--', 'experiments/' + group], check=True)

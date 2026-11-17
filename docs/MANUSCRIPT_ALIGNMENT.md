@@ -1,30 +1,28 @@
-# Alignment with the revised JMLR manuscript
+# Experiments retained in the revised manuscript
 
-This source tree supports **A Hierarchy of Risk Certificates for Representation-Based Forecasting**, by Mohit Kumar and Somayeh Kargaran, after removal of the single-stationary-trajectory contribution and the separate affine numerical-output appendix.
+This source tree accompanies **A Hierarchy of Risk Certificates for Representation-Based Forecasting**, by Mohit Kumar and Somayeh Kargaran, after removal of the single-stationary-trajectory analysis and the separate affine numerical-output appendix.
 
-## Retained experiments
-
-| Directory under `experiments/` | Manuscript evidence |
+| Directory under `experiments/` | Manuscript result |
 | --- | --- |
-| `controlled_calibration` | Simultaneous population-risk confidence bounds using independent episodes |
-| `ecg_cohort` | Empirical-risk lower bounds for the fixed PTB-XL dataset |
-| `class_diagnosis` | Bike Sharing empirical-risk bounds for 54 predictor classes and 108 fitted predictors |
-| `deployment_cost` | Forecast accuracy, storage, and inference time for the retained deployment comparisons |
-| `public_screening` | Beijing and Bike Sharing predictor-class screening and fit-avoidance results |
-| `decoder_diagnostics` | Retained predictor comparisons and Household 2010/Jena 2017 affine constraint ablations |
+| `controlled_calibration` | Population-risk confidence bounds using independent episodes |
+| `ecg_cohort` | Minimum empirical-risk lower bounds on fixed PTB-XL observations |
+| `class_diagnosis` | Minimum empirical-risk and fitted-predictor excess-risk bounds for 54 Bike Sharing classes |
+| `deployment_cost` | Prediction accuracy, storage, and inference time |
+| `public_screening` | Beijing and Bike Sharing class exclusions and fitted-model counts |
+| `decoder_diagnostics` | Predictor comparisons and Household 2010/Jena 2017 constraint ablations |
 
-The source, inputs, and recorded outcomes inside these six experiment directories are unchanged. In particular, the affine constraint ablations remain: they are separate from the deleted three-period numerical-output experiment. Household, Jena, and Metro data used by retained predictor comparisons are also preserved.
+Scientific code, numerical inputs, and recorded experimental outcomes are preserved. Current documentation and its checksum entries are revised separately. The retained Household/Jena ablations are distinct from the deleted numerical-output study; Household, Jena, and Metro data needed by retained comparisons remain available.
 
-## Removed material and source history
+## Source history
 
-The current paper tree excludes `experiments/affine_forecasting` and `experiments/single_trajectory_certification`, their active reproduction commands, and their validation outputs. Historical commits are preserved for provenance; this cleanup does not rewrite Git history or remove material belonging to the separate feature-augmentation paper.
+The active tree excludes `experiments/affine_forecasting` and `experiments/single_trajectory_certification`, their reproduction commands, and their validation outputs. Historical commits and the separate feature-augmentation study are preserved.
 
-The consolidated source before cleanup was commit `8878ae4ebe922c0184aed1e0fbb2afbb52c304f3`. The former trajectory branch was at `02589f72a5694dfa89f1d37f89de105780b0872a`. All six retained experiment directories had identical Git tree hashes in those two revisions.
+Before cleanup, the consolidated branch pointed to `8878ae4ebe922c0184aed1e0fbb2afbb52c304f3` and the trajectory branch to `02589f72a5694dfa89f1d37f89de105780b0872a`. The six retained experiment directories had identical Git tree hashes at those revisions. The cleanup commit is `472edf8ede85d93d716e2d9db43510e82a8b4623`.
 
 ## Verification and citation
 
-`MANIFEST.json` lists the SHA-256 hashes of the retained source, documentation, and numerical inputs. `validation/summary.json` records the numerical replay actually performed for the manifest identified in that report. A replay is a check of stored records, not a new model-training run or a new timing study.
+Cite the exact commit used for reproduction. The earlier manuscript link, `4c09d24a27837d7f165b253f3ab4d3cf28b71c0e`, identifies a historical snapshot that still contains the removed affine experiment.
 
-Use the exact cleaned commit in the manuscript's repository links. The previously cited commit `4c09d24a27837d7f165b253f3ab4d3cf28b71c0e` is a historical snapshot and still includes the deleted affine experiment.
+`MANIFEST.json` lists source, documentation, and input hashes. `validation/summary.json` records the numerical checks for its stated manifest. Reproduction checks stored records; it does not repeat all training or timing experiments.
 
-This alignment follows the uploaded manuscript source and the subsequent section and appendix deletions agreed in the manuscript revision. The final 49-page source was not available for a new line-by-line manuscript-to-code audit.
+This index follows the reviewed manuscript source and the agreed deletions. The final 49-page source was not supplied for a new line-by-line manuscript-to-code comparison.

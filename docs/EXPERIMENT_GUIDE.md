@@ -1,90 +1,67 @@
-# Experiments on lower bounds for prediction risk
+# Experimental calculations and outputs
 
-A forecast error describes one fitted predictor. A class-risk bound asks whether any predictor using a specified representation, distance, Lipschitz bound, and output range could meet an error requirement. The experiments also evaluate whether selecting predictors using risk bounds improves forecasting accuracy or reduces computational cost.
+A predictor class fixes the feature map, feature metric, output interval, and Lipschitz constant. For feature distance `d`, admissible predictions differ by at most `kappa * d`. A fitted predictor is one member of this class.
 
-The Lipschitz bound limits how predictions may change: if two feature vectors are distance `d` apart, their predictions may differ by at most `kappa * d`. The declared class contains all predictors satisfying this rule and the output-range constraint. An admissible fitted predictor is one member whose coefficients or other parameters have been chosen from training data. Failure of that member need not imply failure of the whole class.
+The experiments distinguish **population risk**, the expected squared error under the evaluation distribution, from **empirical risk**, the mean squared error (MSE) on specified observations. Empirical excess risk is a fitted predictor's empirical risk minus the minimum empirical risk over its class.
 
-This guide maps those questions to the retained inputs and executable checks. Run all commands from the repository root. The [reproduction guide](../REPRODUCIBILITY.md) records the environment and numerical assumptions; the [data guide](../DATA.md) identifies the original datasets and provenance.
+## Worked example: Bike Sharing
 
-## Start with a fixed-dataset worked example
+Run from the repository root:
 
 ```bash
 python3 scripts/explain_bike_certificate.py
 python3 scripts/explain_bike_certificate.py --json
 ```
 
-This explanation uses only the Python standard library. It reads one registered-rentals forecasting case with 172 assessed observations and a 24-hour horizon. The chosen Kernel Affine Hull Machine (KAHM) representation, `kahm_minmax01_cap4_p1`, has eight stored coordinates. The class has output range `[0, 1]` and Lipschitz constant 2 with respect to Euclidean distance. Its [saved class record](../experiments/class_diagnosis/records/classes/registered/kahm_minmax01_cap4_p1.json) and associated protocol and evaluation dataset records are checked against the root manifest.
+This standard-library script reads a registered-rentals task with 172 evaluation observations and a 24-hour horizon. The [stored representation](../experiments/class_diagnosis/records/classes/registered/kahm_minmax01_cap4_p1.json), `kahm_minmax01_cap4_p1`, has eight KAHM coordinates. The predictor class uses output interval `[0, 1]` and Lipschitz constant 2 under Euclidean distance.
 
-Here, **class risk** is the best achievable average squared error within the declared class on these observations. A fitted predictor's **excess risk** is its average squared error minus that best class risk.
+Targets are normalized using the training minimum and range. Evaluation targets are not clipped; 15 lie outside `[0, 1]`. The threshold is 0.95 times the normalized training MSE of persistence prediction, which repeats the most recent observation.
 
-Targets are normalized by subtracting the training minimum and dividing by the training range. Assessment targets remain unclipped: 15 lie outside `[0, 1]`, although predictions are constrained to that interval. The tolerance is fixed at 0.95 times the normalized training MSE of the persistence forecast, which repeats the latest observed value.
-
-| Quantity | Normalized MSE, rounded for display | Conclusion from the exact numbers |
+| Quantity | Normalized MSE interval, rounded for display | Decision |
 | --- | --- | --- |
-| Tolerance | 0.03499354976 | The requirement is risk at most this value. |
-| Best class risk | [0.02085061427, 0.02085061427] | The class upper bound meets the requirement. |
-| Clipped affine ridge predictor | [0.07055668204, 0.07055668204] | Its risk lower bound exceeds the tolerance. |
-| Clipped Lipschitz extension from 32 training examples | [0.05554788133, 0.05554788133] | Its risk lower bound exceeds the tolerance. |
+| Threshold | 0.03499354976 | MSE must not exceed this value. |
+| Minimum empirical risk | [0.02085061427, 0.02085061427] | A feasible prediction vector meets the threshold. |
+| Clipped affine ridge predictor | [0.07055668204, 0.07055668204] | Its MSE lower bound exceeds the threshold. |
+| Clipped Lipschitz extension from 32 training examples | [0.05554788133, 0.05554788133] | Its MSE lower bound exceeds the threshold. |
 
-Both endpoints of each interval round to the same displayed value; they are not asserted to be equal. The class-risk bracket has width about `1.615e-14`. All decisions use the exact rational endpoints and the exact tolerance `504811/14425830`. The class therefore admits sufficiently accurate predictions on these observations even though both fitted predictors fail their requirement and have positive excess risk.
+Displayed interval endpoints coincide after rounding, not necessarily before it. The interval for minimum empirical risk has width approximately `1.615e-14`. Decisions use exact rational endpoints and threshold `504811/14425830`.
 
-The script evaluates the stored interval and decision arithmetic with exact rational numbers. It uses the saved checks of feasibility, dual bounds and fitted-predictor class membership; it does not repeat those checks or train a model. The feasible class prediction uses assessment targets and establishes capacity on this fixed dataset, not future-prediction performance. The `class_diagnosis` replay below performs the fuller numerical checks across all 54 classes.
+The script checks the input records against the root manifest and recomputes interval and decision arithmetic. It uses stored feasibility, dual-bound, and predictor-membership checks rather than repeating them. The feasible predictions use evaluation targets and establish an empirical-risk upper bound. The `class_diagnosis` group performs the full distance, feasibility, dual, and excess-risk checks for all 54 classes.
 
-## Choose the scientific question
+## Experiment groups
 
-| Question | Group for `--only` | Retained inputs and what to inspect |
-| --- | --- | --- |
-| When do calibrated bounds support feature augmentation or identify a class that cannot meet the error requirement? | `controlled_calibration` | [Calibration records](../experiments/controlled_calibration/records/) contain fixed random streams, observations, features, coefficients, candidate predictions, and optimization lower-bound records. Inspect the lower and upper endpoints and decisions at each calibration size. |
-| Can one class be excluded on an already specified patient evaluation dataset? | `ecg_cohort` | [Evaluation data](../experiments/ecg_cohort/records/) contain targets, reference predictions, feature enclosures, partitions, and optimization lower-bound records. Inspect the class lower bound relative to the specified tolerance. |
-| Can a class meet its dataset requirement even when its fitted predictors fail? | `class_diagnosis` | [Decision inputs](../experiments/class_diagnosis/inputs/decision/) and [class-bound records](../experiments/class_diagnosis/records/classes/) support risk brackets and fitted-predictor excess bounds on the Bike observations. |
-| Does a selected procedure meet accuracy, storage, and latency requirements together? | `deployment_cost` | [Deployment data](../experiments/deployment_cost/data/) contain selected models, forecasts, model-storage inventories, and original timing samples. Inspect each component of the joint criterion. |
-| Do class bounds exclude candidates or avoid predictor fits? | `public_screening` | [Screening records](../experiments/public_screening/witnesses/) and [original inputs](../experiments/public_screening/original/) retain the Beijing and Bike decision, prediction, and search records. Inspect exclusions, additional fits avoided, and certificate cost. |
-| Do alternative prediction families or selection rules improve the recorded comparisons? | `decoder_diagnostics` | [Assessment data](../experiments/decoder_diagnostics/data/) retain selected predictions, targets, criteria, and all affine-ablation configurations. Inspect each study's own primary requirement. |
+| Group for `--only` | Inputs and calculation |
+| --- | --- |
+| [controlled_calibration](../experiments/controlled_calibration/) | Fixed random streams, observations, features, fitted coefficients, and block optimization records; compare confidence bounds and decisions across calibration sizes. |
+| [ecg_cohort](../experiments/ecg_cohort/) | Targets, reference predictions, feature intervals, partitions, and dual variables; compare a minimum empirical-risk lower bound with the MSE threshold. |
+| [class_diagnosis](../experiments/class_diagnosis/) | Bike Sharing feature arrays, feasible predictions, and dual variables; bound minimum empirical risk and fitted-predictor excess risk. |
+| [deployment_cost](../experiments/deployment_cost/) | Stored inputs, selected model parameters, forecasts, storage inventories, and timing samples; check accuracy, storage, and inference-time requirements. |
+| [public_screening](../experiments/public_screening/) | Beijing and Bike Sharing prediction, optimization, and search records; recompute class exclusions, selected models, fitted-model counts, and screening cost. |
+| [decoder_diagnostics](../experiments/decoder_diagnostics/) | Predictions, targets, comparison thresholds, and affine-ablation configurations; recompute each experiment's specified comparison. |
 
-Each group has a README with its full protocol, expected outcomes, and original-source paths. These groups assess different observations and claims; their rows are not interchangeable independent replications of one experiment.
+## Commands and outputs
 
-## Recompute one group's evidence
-
-Use Python 3.12 and install the recorded dependencies:
+Use Python 3.12 and run from the repository root:
 
 ```bash
 python3 -m pip install -r requirements.txt
 python3 reproduce.py --help
 python3 reproduce.py --only ecg_cohort --output reproduction_ecg
-```
-
-Replace `ecg_cohort` with a group from the table. The driver verifies the current source/input manifest, invokes that group's numerical checker, and checks the manifest again. Use a separate output directory for each run. It must not be the repository root or lie under `docs/`, `experiments/`, `scripts/`, or `validation/`.
-
-For the ECG command, inspect:
-
-| Output | Meaning |
-| --- | --- |
-| `reproduction_ecg/summary.json` | Overall completion status, source-manifest identity, environment, command, and per-group result location |
-| `reproduction_ecg/ecg_cohort.json` | Recomputed evaluation dataset results, threshold comparisons, and numerical checks |
-| `reproduction_ecg/ecg_cohort.log` | Checker output and any failure information |
-
-Other groups use the same layout with their group name. `class_diagnosis` instead writes a subdirectory containing `summary.json`, `class_risk.csv`, and `head_excess.csv`. The first CSV contains all 54 class-risk brackets and tolerances; the second contains all 108 fitted-predictor risk and excess intervals. Its exact arithmetic may take several minutes.
-
-Run the complete retained evidence checks with:
-
-```bash
 python3 reproduce.py --output reproduction_all
 ```
 
-The controlled group regenerates calibration observations from the fixed random streams and checks the stored optimization records without calling an optimizer. The deployment group also regenerates forecasts from stored raw inputs and model parameters. The other group READMEs identify the exact calculations performed. These commands evaluate the supplied records. Model training and runtime benchmarking require separate execution of the corresponding source.
+Choose a separate output directory, not the repository root or a directory under `docs/`, `experiments/`, `scripts/`, or `validation/`. The driver checks the source manifest before and after the selected calculations.
 
-## Interpret the result at the right level
+For the ECG command, `reproduction_ecg/summary.json` records the source, environment, and status; `ecg_cohort.json` contains numerical results; and `ecg_cohort.log` contains the checker output. Other groups use their own names. The class-diagnosis subdirectory contains `class_risk.csv` for all 54 minimum empirical-risk intervals and thresholds, and `head_excess.csv` for all 108 predictor-risk and excess-risk intervals.
 
-**Population-risk decisions.** In the controlled experiment, independent episodes support the stated calibration. Exclusion uses a lower bound above the tolerance. Acceptance requires an upper bound at or below that tolerance for a fitted predictor belonging to the same declared class. Otherwise the decision remains unresolved. These conclusions depend on the sampling, calibration, class-membership, and numerical assumptions.
+## Interpreting the results
 
-**Fixed-dataset decisions.** The ECG calculation concerns 8,192 distinct patients, with one specified history–target pair per patient. Its exact arithmetic is conditional on the recorded bounds on feature values. Excluding the two-coordinate class does not exclude every KAHM geometry; the three separately selected geometries are not a nested sequence of feature sets. The unresolved larger classes are not thereby certified adequate.
+For the controlled experiment, a lower confidence bound above the threshold excludes every predictor in a class. An upper confidence bound at or below the threshold establishes that the corresponding fitted predictor meets it. Otherwise the bounds leave the decision unresolved. The guarantee requires the stated sampling, class-membership, and numerical assumptions.
 
-For Bike, feasible predictions establish that all 54 examined classes can meet their requirements on the assessed observations, while both fitted predictors fail in 39 classes. Those feasible predictions use assessment targets. They demonstrate capacity on that dataset, without establishing future performance of a predictor trained independently of those targets. The related rental targets are not independent application replications.
+The ECG calculation uses one history--target pair per patient and recorded feature bounds. Its separately selected 2-, 6-, and 14-coordinate representations are not nested. Excluding the two-coordinate class does not exclude all KAHM representations. The larger classes remain unresolved.
 
-**Accuracy and computational cost.** A successful reproduction preserves unsuccessful scientific results. The deployment procedures have zero cases meeting the joint accuracy, storage and latency requirement; the screening experiments retain zero additional fits avoided under their respective comparisons. The timing summaries use the original measurements. Running the check on another computer does not turn them into measurements of that computer.
+The Bike Sharing analysis establishes empirical feasibility for all 54 classes; both fitted predictors fail in 39. The feasible predictions use evaluation targets, and the three related rental targets are not independent application replications.
 
-## Continue to model regeneration
+The deployment procedures fail the combined accuracy, storage, and inference-time requirement in every case. Screening avoids no additional predictor fits. `PASS` preserves these reported outcomes. Saved timing measurements are not new measurements on the machine running the checker.
 
-`PASS` means that a checker agrees with the retained numerical result under its stated premises. Checksum agreement identifies the supplied files; it does not independently authenticate execution or establish an independent scientific replication.
-
-The experiment directories retain the original source and protocols for further investigation. Full feature generation, model fitting, and raw-data extraction require each study's declared data, environment, and execution sequence. Use its README and provenance records to identify those requirements before adapting the original source. The supported driver above starts from the retained numerical inputs and checks calculations conditional on the supplied inputs.
+The commands verify stored records, not complete model-training runs. The controlled group regenerates calibration observations; the deployment group also regenerates forecasts from stored inputs and models. Each experiment README specifies its remaining inputs and checks. See [REPRODUCIBILITY.md](../REPRODUCIBILITY.md) for numerical assumptions and [DATA.md](../DATA.md) for dataset attribution.

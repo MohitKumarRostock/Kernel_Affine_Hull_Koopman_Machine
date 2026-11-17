@@ -1,63 +1,39 @@
-# Accuracy and complete deployment cost
+# Prediction accuracy, model storage, and inference time
 
-This experiment evaluates two fixed KAHM cost-selection procedures against
-conventional accuracy and cost references. The panel comprises five
-replications of one hidden Markov model and one chronological Appliances
-record. It does not supply six independent application domains.
+## Design and decision criteria
 
-## Reproduce the numerical results
+Two fixed KAHM-based model-selection procedures are compared with conventional accuracy and cost references. The six cases comprise five replications of one hidden Markov model and one chronological Appliances record, not six independent application domains. Primary forecast horizons are four steps for the synthetic process and six for Appliances. The records contain 23 distinct selected models; the two references coincide in one case.
 
-From the repository root:
+`P_cost` selects predictors using normalized KAHM affinities; `CS_cost` uses clipped reconstruction scores. `C_accuracy` and `C_cost` are the conventional accuracy and cost references. Candidates and references are fixed before evaluation. A procedure must satisfy all three criteria:
+
+| Quantity | Requirement |
+| --- | --- |
+| Mean squared error (MSE) | At most 1.1 times the MSE of `C_accuracy` |
+| Numerical parameter storage | Strictly fewer bytes than `C_cost` |
+| Median inference time per observation | No greater than `C_cost`, measured in batches after warm-up |
+
+Both procedures meet the accuracy requirement in all six cases. Neither meets the storage or inference-time requirement in any case. Both therefore fail the combined criterion in all six cases.
+
+## Reproduction
+
+Run from the repository root:
 
 ```bash
 python experiments/deployment_cost/replay.py --output results/deployment_cost.json
 ```
 
-To also regenerate the saved predictions from raw inputs and the retained
-model parameters:
+To regenerate predictions from stored raw inputs and model parameters:
 
 ```bash
 python experiments/deployment_cost/replay.py --predict --output results/deployment_cost_predictions.json
 ```
 
-The replay reconstructs exact squared losses from the stored binary64 targets
-and forecasts, storage sizes of the complete numerical model parameters, and latency medians
-from the original nine-repeat timing samples. The primary horizons are four
-steps for the synthetic process and six steps for Appliances. There are 23
-distinct retained primary models; the two references coincide in one
-case.
+The checker recomputes exact squared losses from binary64 targets and forecasts, numerical parameter sizes, and latency medians from the original nine-repeat timing samples. It runs offline with NumPy, SciPy, scikit-learn, and threadpoolctl.
 
-The two procedures select from normalized KAHM affinities (`P_cost`) and
-clipped reconstruction scores (`CS_cost`). The references are the fixed
-conventional accuracy choice (`C_accuracy`) and conventional cost choice
-(`C_cost`). Each successful procedure must meet all of the following criteria:
+## Files and measurement scope
 
-- MSE no greater than 1.1 times the accuracy reference's MSE.
-- Strictly fewer bytes of numerical model parameters than the cost reference.
-- Median inference time per observation after warm-up, measured in batches, no greater than the cost reference.
+`data/` contains primary-horizon evaluation rows, selected parameters, forecasts, expected risks, timing samples, and procedure identifiers. `source/` retains the protocol, model implementation, selection procedures, and evaluation code. `source_provenance.json` and per-task records identify the original archive and files.
 
-Each procedure passes the accuracy allowance in all six cases and passes
-neither the byte-saving nor the latency criterion in any case. Thus both
-fail the joint accuracy, storage and latency criterion in all six cases.
-The references and candidates are fixed before evaluation.
+Storage includes representation and predictor arrays and scalars, not Python-object or runtime-library overhead. It is not process-memory usage. Timing summaries use saved measurements rather than new benchmarks. Prediction regeneration evaluates fixed models without refitting or reselection; the comparison concerns the specified observations rather than a population-risk noninferiority guarantee. It does not verify exact real-arithmetic feature values.
 
-## Evidence and scope
-
-`data` contains the complete primary-horizon assessment rows, selected model
-parameters, forecasts, exact expected risks, original timing samples, and
-fixed procedure identities. `source` preserves the original protocol,
-model implementation, selection procedures, and evaluation code.
-`source_provenance.json` and the per-task records identify the original
-archive and source files.
-
-The numeric inventory includes the retained encoder and predictor arrays and
-scalars. It excludes Python-object and runtime-library overhead; it is not
-a process-memory measurement. Original timing samples are replayed, not
-remeasured. The optional prediction replay evaluates the stored
-models; it does not refit or reselect them, establish ideal real-arithmetic
-feature values, or confer a population noninferiority guarantee.
-
-The replay is offline and requires NumPy, SciPy, scikit-learn, and
-threadpoolctl. The serialized models store
-parameter dictionaries and arrays. Use the accompanying integrity checks before
-loading those files.
+Serialized models contain parameter dictionaries and arrays. Verify their integrity before loading them.

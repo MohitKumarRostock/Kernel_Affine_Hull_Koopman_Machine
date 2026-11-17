@@ -2,59 +2,48 @@
 
 **Mohit Kumar and Somayeh Kargaran**
 
-## Why assess a representation class?
+## Prediction-risk bounds
 
-A fitted forecaster that misses an accuracy requirement leaves an important question unanswered: could another predictor use the same features successfully? This repository provides numerical experiments for bounds on the best mean squared error within a specified predictor class, so an unsuccessful fit can be distinguished from a limitation of that class.
+This repository contains the experiments for the paper. We evaluate the minimum mean squared error (MSE) over bounded Lipschitz predictors using a fixed feature representation. Each predictor class specifies a feature map, a distance metric, an output interval, and a Lipschitz constant. A fitted predictor is one member of that class; its error need not equal the minimum error over the class.
 
-Each predictor class is specified by a feature map, a distance between feature vectors, an output range and a Lipschitz constant. The constant limits how much predictions may change as features move apart. The experiments use Kernel Affine Hull Machine (KAHM) features to study whether changing the representation can help meet a prediction-error requirement.
+For blocks of `b >= 2` independent and identically distributed (iid) observations with targets in the bounded predictor output interval, the method minimizes total squared error subject to pairwise Lipschitz and output constraints and divides the minimum by `b - 1`. The expected values are nondecreasing lower bounds on minimum population risk and converge to that risk on compact metric feature spaces. This monotonicity does not imply that larger blocks give tighter finite-sample confidence bounds.
 
-## Risk bounds and decisions
+Population risk is expected squared prediction error; empirical risk is average squared error on a specified dataset. With iid evaluation observations independent of model development, simultaneous confidence bounds can establish that every predictor in a class exceeds an MSE threshold or that an admissible fitted predictor meets it. Deterministic optimization instead bounds minimum empirical risk on fixed observations.
 
-The theoretical construction minimizes total squared error on groups of observations under the declared Lipschitz and output-range constraints and divides by one less than the group size. For a fixed prediction problem with bounded scalar targets and outputs and independent and identically distributed (iid) observations, the expected scores form a nondecreasing hierarchy of lower bounds on the best class risk. On a compact metric feature domain, they converge to that risk. Larger groups do not automatically produce tighter finite-sample confidence bounds.
+## Experiments
 
-Verified optimization lower bounds and statistical calibration can exclude a class from meeting an error requirement. An upper bound for an admissible fitted predictor can establish acceptance. When neither criterion is met, the decision remains unresolved. These conclusions concern the declared class; a lower bound alone does not separate future uncertainty, information lost by the representation, and the sensitivity restriction.
+| Directory | Calculation and result |
+| --- | --- |
+| [controlled_calibration](experiments/controlled_calibration/) | Compares two confidence-bound procedures using independent synthetic episodes and nested feature sets. |
+| [ecg_cohort](experiments/ecg_cohort/) | Excludes a specified two-coordinate Lipschitz predictor class from meeting an empirical MSE threshold on 8,192 PTB-XL patients. |
+| [class_diagnosis](experiments/class_diagnosis/) | All 54 Bike Sharing predictor classes admit predictions meeting their empirical thresholds; both fitted predictors fail in 39 classes. |
+| [deployment_cost](experiments/deployment_cost/) | Two KAHM-based procedures meet the accuracy allowance in all six cases but fail the combined storage and inference-time requirements. |
+| [public_screening](experiments/public_screening/) | Risk bounds avoid no additional predictor fits in the Beijing and Bike Sharing experiments. |
+| [decoder_diagnostics](experiments/decoder_diagnostics/) | Reports predictor comparisons and affine constraint ablations, including unsuccessful comparisons. |
 
-## Which evidence answers which question?
+The Bike Sharing feasible predictions use evaluation targets. They establish minimum empirical-risk upper bounds, not the future accuracy of independently trained predictors. The [experiment guide](docs/EXPERIMENT_GUIDE.md) includes a worked example and identifies each group's inputs and outputs.
 
-| Question | Experiment and records | Interpretation |
-| --- | --- | --- |
-| Can calibrated bounds identify a useful change in the feature map? | [Controlled calibration](experiments/controlled_calibration/) | Independent-episode population decisions under the stated sampling and numerical assumptions |
-| Can a chosen representation class be ruled out on a fixed dataset? | [ECG evaluation dataset](experiments/ecg_cohort/) | A lower bound on the specified evaluation dataset, conditional on the recorded bounds on feature values; no future-patient guarantee |
-| Does a failed fitted predictor imply an inadequate class? | [Class diagnosis](experiments/class_diagnosis/) | All 54 examined Bike classes admit predictions meeting their dataset requirements; both tested predictors fail in 39 classes |
-| Does selection using risk bounds improve accuracy and cost? | [Deployment cost](experiments/deployment_cost/) and [public screening](experiments/public_screening/) | Evaluation of the specified accuracy, storage and latency criteria, including unsuccessful outcomes |
-| Do prediction and feature alternatives improve the tested procedures? | [Predictor diagnostics](experiments/decoder_diagnostics/) | Selected forecast losses, fixed comparisons, and the complete assessed affine-ablation configurations |
+## Reproduction
 
-The Bike analysis constructs feasible predictions using the evaluation targets. This establishes what the class can represent on those observations, without establishing future prediction accuracy. Population-risk confidence bounds and empirical-risk bounds on fixed datasets answer different questions and require different assumptions.
-
-For a guided route from a research question to its records and commands, start with the [experiment guide](docs/EXPERIMENT_GUIDE.md).
-
-## Recompute the stored numerical checks
-
-Run from the repository root. Use Python 3.12 and the recorded dependencies:
+Run from this branch's repository root with Python 3.12 and the pinned dependencies:
 
 ```bash
 python3 -m pip install -r requirements.txt
 python3 reproduce.py --output reproduction
 ```
 
-The driver validates the input manifest and runs the six experiment groups in separate processes. It writes a summary, group results, and execution logs to the selected output directory, then checks the manifest again. A reproduction `PASS` means agreement with the recorded result, including a negative scientific outcome.
-
-For one group:
+To check one group:
 
 ```bash
 python3 reproduce.py --only ecg_cohort --output reproduction_ecg
 ```
 
-Choose a separate output directory outside `docs/`, `experiments/`, `scripts/`, and `validation/`; the repository root itself is also excluded. Use `python3 reproduce.py --help` for the available group names and options.
+The driver verifies `MANIFEST.json`, runs the six groups in separate processes, writes results and logs, and rechecks file integrity. `PASS` means that the numerical checks reproduce the stored results, including unsuccessful method outcomes. These commands check stored records; they do not retrain all models or collect new timing measurements. The deployment group also regenerates predictions from stored raw inputs and model parameters.
 
-These commands recompute checks from stored observations, features, forecasts, model parameters, and optimization records. The deployment group also regenerates forecasts from stored raw inputs and model parameters. Model training and runtime benchmarking require separate execution of the supplied source under each study's data and environment requirements. The checks above use the saved timing measurements.
+Use an output directory outside `docs/`, `experiments/`, `scripts/`, and `validation/`, and not the repository root. See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for the environment, arithmetic assumptions, and verification scope; [DATA.md](DATA.md) for attribution; and [validation/summary.json](validation/summary.json) for the recorded run.
 
-See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for the calculation performed by each group and [DATA.md](DATA.md) for attribution and input provenance. The [recorded verification summary](validation/summary.json) identifies the completed checks for its recorded source state.
+## Source version and licenses
 
-## Scope and licenses
+Cite the exact commit used. `MANIFEST.json` identifies the source, documentation, and numerical inputs by SHA-256 hash. The [manuscript experiment index](docs/MANUSCRIPT_ALIGNMENT.md) maps the six groups to the revised paper. Historical protocols and source records retain their original identifiers.
 
-The numerical checks use the supplied feature values or recorded bounds on those values. They do not verify every step of feature generation. Results on a fixed dataset do not establish population guarantees.
-
-This branch supplies the six experiment groups used by the revised manuscript. Cite the exact commit used for reproduction. Individual experiment directories retain the historical provenance of their source and numerical records. File identities are recorded in `MANIFEST.json`. The [manuscript alignment record](docs/MANUSCRIPT_ALIGNMENT.md) identifies the retained experiments and the scope of this cleanup.
-
-Original source and research-output license terms appear in [LICENSE](LICENSE) and [DATA_LICENSE](DATA_LICENSE). Third-party datasets retain their own terms.
+Source and research-output licenses are specified in [LICENSE](LICENSE) and [DATA_LICENSE](DATA_LICENSE). Third-party datasets retain their providers' terms.

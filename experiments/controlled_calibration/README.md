@@ -1,51 +1,25 @@
-# Controlled exclusion, adequacy, and calibration
+# Population-risk confidence bounds with independent episodes
 
-This experiment compares two ways to construct confidence bounds for the
-best mean squared error in a predictor class. One calibrates the average of
-minimum losses on disjoint groups of observations. The other reuses feasible
-dual values from those groups to bound the minimum loss over the full
-calibration dataset. It uses 12 complete training repetitions in each of two
-bounded synthetic settings, with two nested feature sets per repetition.
+## Design and results
 
-## Reproduce the numerical results
+The experiment compares two lower-confidence-bound procedures for minimum population mean squared error (MSE) over a specified Lipschitz predictor class. The first averages normalized minimum-loss bounds from disjoint observation blocks. The second uses feasible dual values from those blocks to bound minimum empirical loss over the full calibration dataset before statistical calibration.
 
-From the repository root:
+Each of two bounded synthetic settings has 12 complete training repetitions and two nested feature sets per repetition. At 1,024 calibration observations, both procedures resolve all 12 repetitions in each setting. At 256 observations, reuse of the dual values excludes both classes in 11 additional repetitions when the target is independent of the history. Neither procedure resolves the history-dependent setting at that size. Outputs include all three calibration sizes and unresolved decisions.
+
+## Reproduction
+
+Run from the repository root:
 
 ```bash
 python experiments/controlled_calibration/replay.py --output results/controlled_calibration.json
 ```
 
-The command regenerates all 4,096 calibration observations for every learning
-case from the fixed random streams, recomputes selected fitted predictions,
-evaluates all 190,464 stored block programs, and reconstructs 1,008 one-sided
-confidence endpoints and the paired decision counts. No optimizer is called.
-The data files use NumPy arrays and JSON; the replay does not load pickles.
+The command regenerates 4,096 calibration observations for each learning case from fixed random streams, recomputes selected fitted predictions, evaluates 190,464 stored block optimization records, and reconstructs 1,008 one-sided confidence endpoints and paired decision counts. It does not call an optimizer or refit models. Inputs use NumPy arrays and JSON, not pickles.
 
-At the primary calibration size of 1,024, both methods resolve all 12
-repetitions in each regime. At the secondary size of 256, reusing the dual values
-excludes both tested classes in 11 additional repetitions when the target is
-independent of the observed history. Neither method resolves the setting with a
-history-dependent target at that calibration size. The output includes all three
-calibration sizes and every learning case, including unresolved outcomes.
+## Files and numerical assumptions
 
-## Evidence and numerical scope
+`records/` contains dual vectors, candidate prediction vectors, numerical diagnostics, features, observations, fitted coefficients, and expected endpoints. `protocol/` contains the fixed design. `source/` retains the data-generation code, independent checker, model code, and numerical routines. `provenance/` records source identities and checksums. Original source identifiers are unchanged.
 
-The `records` directory contains all signed duals and primal proposals used
-by this replay, their numerical diagnostics, stored feature vectors,
-calibration observations, fitted coefficients, and expected endpoints.
-`protocol` contains the fixed design. `source` retains the original
-producer, independent auditor, and model and numerical-runtime source modules used by the experiment.
-`provenance` records source-file identities and checksums. The original
-record identifiers in those source files preserve their scientific identity.
+The calculations use floating-point safeguards and recorded feature checks. Reproduction does not bound every feature-generation or optimization rounding error and does not repeat feature construction. The original archive, `geometry_step17_reproducibility.zip`, also contains all training candidates and coordinate-wise feature bounds.
 
-This command verifies the stored mathematical calculations and decisions.
-It does not refit the models or rerun feature construction. The
-study uses floating-point calculations with numerical safeguards and recorded
-feature checks. The replay does not provide interval bounds for every step of
-feature generation and optimization.
-The original complete archive, `geometry_step17_reproducibility.zip`, also
-contains all candidate models considered during training and coordinate-wise bounds on generated features.
-
-All inputs here are synthetic. The replay needs Python, NumPy, and SciPy
-and performs no network access. The original training sources additionally
-use scikit-learn and the recorded numerical runtime.
+Inputs are synthetic. The checker requires Python, NumPy, and SciPy and makes no network requests. Original training additionally uses scikit-learn and the recorded numerical software.

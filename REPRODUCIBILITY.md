@@ -1,40 +1,48 @@
-# Numerical reproduction
+# Reproduction of stored experimental results
 
-The [experiment guide](docs/EXPERIMENT_GUIDE.md) connects each scientific question to its input records, executable checks, outputs, and interpretation.
+## Environment and commands
 
-## Environment and execution
-
-The supplied replay was checked with Python 3.12.14, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, and threadpoolctl 3.6.0. `requirements.txt` records the Python dependencies. The default replay reads the supplied files locally.
+The recorded environment uses Python 3.12.14, NumPy 2.3.5, SciPy 1.17.0, scikit-learn 1.8.0, threadpoolctl 3.6.0, and mpmath 1.3.0. Install the pinned packages and run from the repository root:
 
 ```bash
-python reproduce.py --output reproduction
+python3 -m pip install -r requirements.txt
+python3 reproduce.py --output reproduction
 ```
 
-The driver checks `MANIFEST.json`, invokes each experiment in a separate process, and stops on a failed check. It reads the supplied input records and writes results to the selected output directory. `reproduction/summary.json` identifies the checked source manifest, environment, commands, completion status, and per-group results.
+To select one experiment:
 
-`MANIFEST.json` covers the scientific sources, replay code, documentation, and fixed numerical inputs. Generated reports in `validation/` and reproduction output directories are excluded. The driver checks the source manifest again after all requested experiments finish.
+```bash
+python3 reproduce.py --only ecg_cohort --output reproduction_ecg
+python3 reproduce.py --help
+```
 
-The deployment-cost group also reconstructs forecasts from the stored raw inputs and model parameters. Its comparison against stored predictions uses the original implementation-fidelity tolerances; the associated MSEs are recomputed exactly from the stored binary64 forecasts and targets. The timing summaries aggregate the saved measurements; they do not measure execution time on the computer running the replay.
+The driver checks `MANIFEST.json`, runs each selected group in a separate process, stops on a failed check, and verifies the manifest again after completion. The output directory must not be the repository root or lie under `docs/`, `experiments/`, `scripts/`, or `validation/`.
 
-## What the checks establish
+`summary.json` records the source-manifest hash, environment, commands, results, and log locations. Most groups write `<group>.json` and `<group>.log`. `class_diagnosis` writes a subdirectory containing `summary.json`, `class_risk.csv`, and `head_excess.csv`.
 
-| Check | Recomputed quantities | Scope |
+## Calculations performed
+
+| Group | Recomputed quantities | Evaluation setting |
 | --- | --- | --- |
-| Controlled calibration | All 190,464 block programs, 1,008 one-sided endpoints, fitted forecasts, and paired decisions | The selected independent-episode study; guarded arithmetic retains its stated limits |
-| ECG evaluation dataset | All 2,688 exact dual objectives and 18 configurations, the specified reference threshold, and sensitivity requirement | The fixed 8,192-patient evaluation dataset, conditional on the recorded bounds on feature values |
-| Class diagnosis | Complete-graph distance enclosures, feasible vectors, signed dual values, 54 class decisions, and 108 predictor excess bounds | The specified Bike evaluation datasets and exact stored coordinates |
-| Deployment cost | Primary forecasts, exact losses, model-storage inventories, timing medians, and both procedures' utility criteria | Five replications of one hidden Markov model and one Appliances record |
-| Public screening | Stored certificate and policy calculations, including unsuccessful screening and fit-avoidance outcomes | The declared Beijing and Bike panels |
-| Predictor diagnostics | Selected assessment losses, fixed primary criteria, and 1,440 affine-ablation configurations | The specified evaluation datasets; ablation remains diagnostic |
+| `controlled_calibration` | 190,464 stored block optimization records, 1,008 one-sided confidence endpoints, fitted predictions, and decisions | Independent synthetic episodes; numerical safeguards have the scope stated in the group README |
+| `ecg_cohort` | 2,688 exact dual objective values, 18 configurations, the MSE threshold, and a necessary lower bound on the Lipschitz constant | Fixed 8,192-patient dataset, conditional on recorded feature bounds |
+| `class_diagnosis` | Pairwise distance bounds, feasible predictions, dual objective values, 54 minimum empirical-risk intervals, and 108 empirical excess-risk intervals | Fixed Bike Sharing observations and stored feature coordinates |
+| `deployment_cost` | Predictions, exact squared losses, numerical parameter sizes, timing medians, and accuracy/storage/time comparisons | Five replications of one hidden Markov model and one Appliances record |
+| `public_screening` | Prediction and optimization records, class exclusions, selected models, and fitted-model counts | Specified Beijing and Bike Sharing datasets |
+| `decoder_diagnostics` | Prediction losses, primary comparisons, and 1,440 affine-ablation configurations | Specified forecasting periods |
 
-These checks start from the supplied observations, features and model records. They do not verify every data-acquisition or feature-generation step, train every model, or independently authenticate execution logs. The scientific source and protocols specify the data, software environments and order of steps required for model training. The commands above reproduce the supported calculations from saved records.
+The controlled group regenerates calibration observations from fixed random streams. The deployment group regenerates forecasts from stored raw inputs and model parameters, using the original comparison tolerances. Its MSE calculations treat stored binary64 targets and forecasts as exact values.
 
-## Data and arithmetic
+## Numerical assumptions and file integrity
 
-Binary64 coordinates are interpreted as exact dyadic rationals where the numerical analysis specifies this. Exact fractions, outward bounds, and strict versus inclusive decision inequalities retain their original meaning. Targets outside a fitted predictor's output range remain in the losses. Confidence allocations are study-specific; related tasks and reused observations are not independent replications.
+Each group specifies whether stored feature coordinates are exact inputs or are enclosed by numerical intervals. Binary64 values are treated as exact dyadic rationals where required. Exact fractions, outward rounding, and strict or inclusive threshold comparisons follow the corresponding protocol. Targets outside a predictor's output interval remain in the loss calculations.
 
-The compact records retain the inputs needed for the displayed claims. Each experiment provides provenance tying its records and original source modules to the preserved research archive. Checksums detect changes to these files; they are not evidence of independent attestation or a substitute for numerical verification.
+`MANIFEST.json` covers source code, documentation, and stored numerical inputs. Generated validation reports and reproduction outputs are excluded. Experiment packages also verify their local manifests where supplied. Checksums identify file contents; the numerical checkers verify calculations under the stated input assumptions.
 
-## Interpreting unsuccessful outcomes
+## Interpretation
 
-A reproduction `PASS` means agreement with the recorded scientific result. It does not mean that every proposed method succeeds. The results include zero joint deployment-utility passes, unsuccessful screening, and mixed or failed predictor-transfer criteria. These outcomes remain part of the retained evidence.
+`PASS` means agreement with the stored numerical result, not success of every proposed method. The recorded results include no joint deployment-criterion passes, no additional predictor fits avoided by screening, and mixed or unsuccessful predictor comparisons.
+
+Population-risk confidence bounds use the controlled experiment's independent observations and prespecified calibration procedure. The PTB-XL and Bike Sharing optimization results concern minimum empirical risk on fixed datasets. Related rental targets and reused evaluation periods are not independent experimental replications.
+
+The commands check stored inputs and calculations. They do not repeat every data-acquisition or feature-generation step, retrain all models, or authenticate the original execution history. Timing summaries use saved measurements rather than new benchmarks. Each experiment's source, protocol, and provenance files specify the inputs and execution steps for further regeneration. See the [experiment guide](docs/EXPERIMENT_GUIDE.md) and [data attribution](DATA.md).

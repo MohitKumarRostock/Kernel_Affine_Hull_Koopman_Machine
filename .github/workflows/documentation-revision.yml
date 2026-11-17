@@ -41,11 +41,63 @@ jobs:
           p=Path('.maintenance/rewrite_documentation.py')
           s=p.read_text()
           s=s.replace('specified additional-cost criterion','specified comparison criterion')
+          s=s.replace('The class-diagnosis package also checks its local manifest.', 'Experiment packages also verify their local manifests where supplied.')
+          start=s.index('# Update only the documentation entry in the package-local manifest.')
+          end=s.index('\nunchanged=0',start)
+          replacement='''# Update only entries identifying revised documentation in package manifests.
+          updated_manifests=set()
+          for directory in sorted((ROOT/'experiments').iterdir()):
+              if not directory.is_dir():
+                  continue
+              for filename in ('manifest.json','MANIFEST.json'):
+                  local=directory/filename
+                  if not local.is_file():
+                      continue
+                  m=json.loads(local.read_text())
+                  changed=False
+                  if isinstance(m.get('sha256'),dict):
+                      for name,value in list(m['sha256'].items()):
+                          target=local.parent/name
+                          relative=str(target.relative_to(ROOT))
+                          if relative in DOCS:
+                              m['sha256'][name]=digest(target)
+                              changed=True
+                  if isinstance(m.get('files'),dict):
+                      for name,row in m['files'].items():
+                          target=local.parent/name
+                          relative=str(target.relative_to(ROOT))
+                          if relative in DOCS:
+                              if not isinstance(row,dict) or 'sha256' not in row:
+                                  raise RuntimeError('Unsupported documentation checksum: '+str(local))
+                              row['sha256']=digest(target)
+                              if 'bytes' in row:
+                                  row['bytes']=target.stat().st_size
+                              changed=True
+                  if isinstance(m.get('files'),list):
+                      for row in m['files']:
+                          target=local.parent/row['path']
+                          relative=str(target.relative_to(ROOT))
+                          if relative in DOCS:
+                              row['sha256']=digest(target)
+                              if 'bytes' in row:
+                                  row['bytes']=target.stat().st_size
+                              changed=True
+                  if changed:
+                      local.write_text(json.dumps(m,indent=2)+'\\n')
+                      updated_manifests.add(str(local.relative_to(ROOT)))
+          allowed=set(DOCS)|updated_manifests
+          '''
+          s=s[:start]+replacement+s[end:]
+          s=s.replace("'root_and_class_diagnosis_manifests_updated':True,", "'root_manifest_updated':True, 'package_manifests_updated':sorted(updated_manifests),")
           p.write_text(s)
           PY
           python .maintenance/rewrite_documentation.py
       - name: Recompute all six experiment groups
-        run: python reproduce.py --output "$RUNNER_TEMP/risk-documentation-reproduction"
+        run: |
+          if ! python reproduce.py --output "$RUNNER_TEMP/risk-documentation-reproduction"; then
+            find "$RUNNER_TEMP/risk-documentation-reproduction" -name '*.log' -type f -exec sh -c 'echo "=== $1 ==="; tail -n 100 "$1"' _ {} \;
+            exit 1
+          fi
       - name: Verify the worked example and command-line help
         run: |
           python scripts/explain_bike_certificate.py --json > "$RUNNER_TEMP/risk-documentation-example.json"
@@ -71,7 +123,8 @@ jobs:
           audit.write_text(json.dumps(data,indent=2)+'\n')
           PY
           git rm -f .maintenance/rewrite_documentation.py .github/workflows/documentation-revision.yml
-          git add README.md REPRODUCIBILITY.md DATA.md docs experiments/*/README.md experiments/class_diagnosis/MANIFEST.json MANIFEST.json validation
+          git add -u
+          git add validation/documentation_audit.json
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'Use precise scientific terminology in paper documentation; verify all six groups'

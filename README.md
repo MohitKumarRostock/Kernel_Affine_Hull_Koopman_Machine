@@ -6,7 +6,7 @@
 
 This repository contains the experiments for the paper. We evaluate the minimum mean squared error (MSE) over bounded Lipschitz predictors using a fixed feature representation. Each predictor class specifies a feature map, a distance metric, an output interval, and a Lipschitz constant. A fitted predictor is one member of that class; its error need not equal the minimum error over the class.
 
-For blocks of `b >= 2` independent and identically distributed (iid) observations, the method minimizes total squared error subject to pairwise Lipschitz and output constraints and divides the minimum by `b - 1`. The expected values are nondecreasing lower bounds on minimum population risk and converge to that risk on compact metric feature spaces. This monotonicity does not imply that larger blocks give tighter finite-sample confidence bounds.
+For blocks of `b >= 2` independent and identically distributed (iid) observations with targets in the bounded predictor output interval, the method minimizes total squared error subject to pairwise Lipschitz and output constraints and divides the minimum by `b - 1`. The expected values are nondecreasing lower bounds on minimum population risk and converge to that risk on compact metric feature spaces. This monotonicity does not imply that larger blocks give tighter finite-sample confidence bounds.
 
 Population risk is expected squared prediction error; empirical risk is average squared error on a specified dataset. With iid evaluation observations independent of model development, simultaneous confidence bounds can establish that every predictor in a class exceeds an MSE threshold or that an admissible fitted predictor meets it. Deterministic optimization instead bounds minimum empirical risk on fixed observations.
 

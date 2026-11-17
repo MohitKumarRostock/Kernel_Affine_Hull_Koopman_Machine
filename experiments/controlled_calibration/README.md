@@ -18,7 +18,7 @@ The command regenerates 4,096 calibration observations for each learning case fr
 
 ## Files and numerical assumptions
 
-`records/` contains dual vectors, candidate feasible predictions, numerical diagnostics, features, observations, fitted coefficients, and expected endpoints. `protocol/` contains the fixed design. `source/` retains the data-generation code, independent checker, model code, and numerical routines. `provenance/` records source identities and checksums. Original source identifiers are unchanged.
+`records/` contains dual vectors, candidate prediction vectors, numerical diagnostics, features, observations, fitted coefficients, and expected endpoints. `protocol/` contains the fixed design. `source/` retains the data-generation code, independent checker, model code, and numerical routines. `provenance/` records source identities and checksums. Original source identifiers are unchanged.
 
 The calculations use floating-point safeguards and recorded feature checks. Reproduction does not bound every feature-generation or optimization rounding error and does not repeat feature construction. The original archive, `geometry_step17_reproducibility.zip`, also contains all training candidates and coordinate-wise feature bounds.
 

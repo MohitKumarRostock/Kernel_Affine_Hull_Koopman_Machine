@@ -10,7 +10,7 @@ The central checker reconstructs primary comparisons from saved losses. It does 
 
 ## Lower bounds on prediction risk
 
-**A Hierarchy of Lower Bounds on Prediction Risk for Forecasting Representations** asks whether any predictor in a specified class can meet a prediction-error requirement. The [experiment code and records](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) contain seven experiment groups. Its [reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/REPRODUCIBILITY.md) distinguishes population-risk conclusions, class capacity on fixed evaluation datasets and numerical checks of stored forecasts.
+**A Hierarchy of Risk Certificates for Representation-Based Forecasting** asks whether any predictor in a specified class can meet a prediction-error requirement. The [experiment code and records](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08) contain six experiment groups. Its [reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/REPRODUCIBILITY.md) distinguishes population-risk confidence bounds using independent episodes, empirical-risk bounds on fixed datasets, and forecasting comparisons with computational measurements. The retained Household 2010 and Jena 2017 affine constraint ablations are included in the predictor-diagnostics group.
 
 ## Supporting experiments
 

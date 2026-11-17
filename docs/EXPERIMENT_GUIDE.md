@@ -1,6 +1,6 @@
 # Experiments on lower bounds for prediction risk
 
-A forecast error describes one fitted predictor. A class-risk bound asks whether any predictor using a specified representation, distance, Lipschitz bound, and output range could meet an error requirement. The experiments separate this question from two others: whether a selection rule improves deployment costs, and whether a stored prediction is evaluated accurately.
+A forecast error describes one fitted predictor. A class-risk bound asks whether any predictor using a specified representation, distance, Lipschitz bound, and output range could meet an error requirement. The experiments also evaluate whether selecting predictors using risk bounds improves forecasting accuracy or reduces computational cost.
 
 The Lipschitz bound limits how predictions may change: if two feature vectors are distance `d` apart, their predictions may differ by at most `kappa * d`. The declared class contains all predictors satisfying this rule and the output-range constraint. An admissible fitted predictor is one member whose coefficients or other parameters have been chosen from training data. Failure of that member need not imply failure of the whole class.
 
@@ -40,7 +40,6 @@ The script evaluates the stored interval and decision arithmetic with exact rati
 | Does a selected procedure meet accuracy, storage, and latency requirements together? | `deployment_cost` | [Deployment data](../experiments/deployment_cost/data/) contain selected models, forecasts, model-storage inventories, and original timing samples. Inspect each component of the joint criterion. |
 | Do class bounds exclude candidates or avoid predictor fits? | `public_screening` | [Screening records](../experiments/public_screening/witnesses/) and [original inputs](../experiments/public_screening/original/) retain the Beijing and Bike decision, prediction, and search records. Inspect exclusions, additional fits avoided, and certificate cost. |
 | Do alternative prediction families or selection rules improve the recorded comparisons? | `decoder_diagnostics` | [Assessment data](../experiments/decoder_diagnostics/data/) retain selected predictions, targets, criteria, and all affine-ablation configurations. Inspect each study's own primary requirement. |
-| Are the selected stored affine forecasts evaluated within their numerical error budgets? | `affine_forecasting` | [Numerical records](../experiments/affine_forecasting/witnesses/) contain development predictions, fixed models, supplied features, query identities, output checks, assessment targets, and timing samples. Numerical error and forecast error are separate quantities. |
 
 Each group has a README with its full protocol, expected outcomes, and original-source paths. These groups assess different observations and claims; their rows are not interchangeable independent replications of one experiment.
 
@@ -81,8 +80,6 @@ The controlled group regenerates calibration observations from the fixed random 
 **Fixed-dataset decisions.** The ECG calculation concerns 8,192 distinct patients, with one specified history–target pair per patient. Its exact arithmetic is conditional on the recorded bounds on feature values. Excluding the two-coordinate class does not exclude every KAHM geometry; the three separately selected geometries are not a nested sequence of feature sets. The unresolved larger classes are not thereby certified adequate.
 
 For Bike, feasible predictions establish that all 54 examined classes can meet their requirements on the assessed observations, while both fitted predictors fail in 39 classes. Those feasible predictions use assessment targets. They demonstrate capacity on that dataset, without establishing future performance of a predictor trained independently of those targets. The related rental targets are not independent application replications.
-
-**Numerical-output checks.** In affine forecasting, an accepted output has sufficiently small discrepancy from a fixed rational affine reference evaluated on the trusted stored features. This does not bound the prediction error against a future observation or verify every step of feature generation. The record also contains the separate evaluation dataset accuracy comparisons, adverse monthly results, and checking costs.
 
 **Accuracy and computational cost.** A successful reproduction preserves unsuccessful scientific results. The deployment procedures have zero cases meeting the joint accuracy, storage and latency requirement; the screening experiments retain zero additional fits avoided under their respective comparisons. The timing summaries use the original measurements. Running the check on another computer does not turn them into measurements of that computer.
 

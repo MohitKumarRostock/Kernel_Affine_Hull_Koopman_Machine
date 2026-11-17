@@ -1,4 +1,4 @@
-# A Hierarchy of Lower Bounds on Prediction Risk for Forecasting Representations
+# A Hierarchy of Risk Certificates for Representation-Based Forecasting
 
 **Mohit Kumar and Somayeh Kargaran**
 
@@ -23,9 +23,8 @@ Verified optimization lower bounds and statistical calibration can exclude a cla
 | Does a failed fitted predictor imply an inadequate class? | [Class diagnosis](experiments/class_diagnosis/) | All 54 examined Bike classes admit predictions meeting their dataset requirements; both tested predictors fail in 39 classes |
 | Does selection using risk bounds improve accuracy and cost? | [Deployment cost](experiments/deployment_cost/) and [public screening](experiments/public_screening/) | Evaluation of the specified accuracy, storage and latency criteria, including unsuccessful outcomes |
 | Do prediction and feature alternatives improve the tested procedures? | [Predictor diagnostics](experiments/decoder_diagnostics/) | Selected forecast losses, fixed comparisons, and the complete assessed affine-ablation configurations |
-| Are specified stored forecasts evaluated accurately? | [Affine forecasting](experiments/affine_forecasting/) | Numerical output checks conditional on stored features and a fixed rational predictor; forecast error and checking cost are separate measurements |
 
-The Bike analysis constructs feasible predictions using the evaluation targets. This establishes what the class can represent on those observations, without establishing future prediction accuracy. Population-risk bounds, capacity calculations on a fixed dataset and numerical output checks answer different questions and require different assumptions.
+The Bike analysis constructs feasible predictions using the evaluation targets. This establishes what the class can represent on those observations, without establishing future prediction accuracy. Population-risk confidence bounds and empirical-risk bounds on fixed datasets answer different questions and require different assumptions.
 
 For a guided route from a research question to its records and commands, start with the [experiment guide](docs/EXPERIMENT_GUIDE.md).
 
@@ -38,7 +37,7 @@ python3 -m pip install -r requirements.txt
 python3 reproduce.py --output reproduction
 ```
 
-The driver validates the input manifest and runs the seven experiment groups in separate processes. It writes a summary, group results, and execution logs to the selected output directory, then checks the manifest again. A reproduction `PASS` means agreement with the recorded result, including a negative scientific outcome.
+The driver validates the input manifest and runs the six experiment groups in separate processes. It writes a summary, group results, and execution logs to the selected output directory, then checks the manifest again. A reproduction `PASS` means agreement with the recorded result, including a negative scientific outcome.
 
 For one group:
 
@@ -54,8 +53,8 @@ See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for the calculation performed by ea
 
 ## Scope and licenses
 
-The numerical checks use the supplied feature values or recorded bounds on those values. They do not verify every step of feature generation. Results on a fixed dataset do not establish population guarantees. The affine forecast checker bounds numerical error relative to a fixed rational predictor evaluated on trusted stored features.
+The numerical checks use the supplied feature values or recorded bounds on those values. They do not verify every step of feature generation. Results on a fixed dataset do not establish population guarantees.
 
-The experiment source is available at [commit 4c09d24a27837d7f165b253f3ab4d3cf28b71c0e](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/4c09d24a27837d7f165b253f3ab4d3cf28b71c0e). File identities are recorded in `MANIFEST.json`.
+This branch supplies the six experiment groups used by the revised manuscript. Cite the exact commit used for reproduction. Individual experiment directories retain the historical provenance of their source and numerical records. File identities are recorded in `MANIFEST.json`. The [manuscript alignment record](docs/MANUSCRIPT_ALIGNMENT.md) identifies the retained experiments and the scope of this cleanup.
 
 Original source and research-output license terms appear in [LICENSE](LICENSE) and [DATA_LICENSE](DATA_LICENSE). Third-party datasets retain their own terms.

@@ -1,11 +1,11 @@
 {
   "status": "PASS",
   "source_manifest": {
-    "sha256": "5836416a4a0642c20c295bd24e0d5a209759a8d73f1a5c725b1761393e074730",
-    "files": 751
+    "sha256": "c68790a89d69045195e4d042c2f5084ab6437191c4c537d9215395b3bdbb9802",
+    "files": 627
   },
   "python": "3.12.14",
-  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
   "packages": {
     "numpy": "2.3.5",
     "scipy": "1.17.0",
@@ -17,7 +17,7 @@
     "controlled_calibration": {
       "status": "PASS",
       "return_code": 0,
-      "wall_seconds": 3.282079787000839,
+      "wall_seconds": 2.790794617000003,
       "command": [
         "python",
         "experiments/controlled_calibration/replay.py",
@@ -25,13 +25,13 @@
         "controlled_calibration.json"
       ],
       "result_file": "controlled_calibration.json",
-      "result_sha256": "d85c84a86c8c14df83becfbfb2cd981a6b73961fa746f62701da47a8b67f55ec",
+      "result_sha256": "7bb0773bc001b11f7df46e1448d4b563e83aa1f2945ee18198d2c3cb1c3fad48",
       "log_file": "controlled_calibration.log"
     },
     "ecg_cohort": {
       "status": "PASS",
       "return_code": 0,
-      "wall_seconds": 6.220712476999324,
+      "wall_seconds": 4.4940961229999985,
       "command": [
         "python",
         "experiments/ecg_cohort/replay.py",
@@ -39,13 +39,13 @@
         "ecg_cohort.json"
       ],
       "result_file": "ecg_cohort.json",
-      "result_sha256": "27f60c181a4e400df02bd730db668c873ca173c4613330b9991162c9e23911b0",
+      "result_sha256": "cb346fb3c152c0b078c1313f2cb3459923e3138bbc38126a4917008f783705b8",
       "log_file": "ecg_cohort.log"
     },
     "class_diagnosis": {
       "status": "PASS",
       "return_code": 0,
-      "wall_seconds": 21.8865673170003,
+      "wall_seconds": 20.620165555,
       "command": [
         "python",
         "experiments/class_diagnosis/replay.py",
@@ -59,7 +59,7 @@
     "deployment_cost": {
       "status": "PASS",
       "return_code": 0,
-      "wall_seconds": 5.0234657660002995,
+      "wall_seconds": 3.546784356999993,
       "command": [
         "python",
         "experiments/deployment_cost/replay.py",
@@ -68,13 +68,13 @@
         "--predict"
       ],
       "result_file": "deployment_cost.json",
-      "result_sha256": "a888ac2fd206eafca0767254e09b6629e0c24ba5bdef10908187130bd9339f10",
+      "result_sha256": "2561d845d392b6fbc1a4a8241c3d059f349057935dfba483dadd22dc2b507344",
       "log_file": "deployment_cost.log"
     },
     "public_screening": {
       "status": "PASS",
       "return_code": 0,
-      "wall_seconds": 114.1805386369997,
+      "wall_seconds": 104.404467374,
       "command": [
         "python",
         "experiments/public_screening/replay.py",
@@ -88,7 +88,7 @@
     "decoder_diagnostics": {
       "status": "PASS",
       "return_code": 0,
-      "wall_seconds": 3.0160771330010903,
+      "wall_seconds": 2.806555909999986,
       "command": [
         "python",
         "experiments/decoder_diagnostics/replay.py",
@@ -96,22 +96,8 @@
         "decoder_diagnostics.json"
       ],
       "result_file": "decoder_diagnostics.json",
-      "result_sha256": "77936f974a169dcaaae57e43ae0da5ee7e57fa56583459a8a58aacea06d5f844",
+      "result_sha256": "d83aae38da8372b2513917a1a482615ed6a8b75676ddab73ba833e98ff1d3d03",
       "log_file": "decoder_diagnostics.log"
-    },
-    "affine_forecasting": {
-      "status": "PASS",
-      "return_code": 0,
-      "wall_seconds": 2.092132623998623,
-      "command": [
-        "python",
-        "experiments/affine_forecasting/replay.py",
-        "--output",
-        "affine_forecasting.json"
-      ],
-      "result_file": "affine_forecasting.json",
-      "result_sha256": "8648e5dc1bf30dd20653fff5d2b983d33a7ef2d91747e7fef118b0425cbd9223",
-      "log_file": "affine_forecasting.log"
     }
   },
   "source_integrity_rechecked": true,

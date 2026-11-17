@@ -4,7 +4,7 @@ from pathlib import Path
 import argparse, hashlib, importlib.metadata, json, os, platform, subprocess, sys, time
 
 ROOT=Path(__file__).resolve().parent
-GROUPS=('controlled_calibration','ecg_cohort','class_diagnosis','deployment_cost','public_screening','decoder_diagnostics','affine_forecasting')
+GROUPS=('controlled_calibration','ecg_cohort','class_diagnosis','deployment_cost','public_screening','decoder_diagnostics')
 
 def digest(path):
     h=hashlib.sha256()

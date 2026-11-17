@@ -1,0 +1,141 @@
+{
+  "case": {
+    "dataset": "UCI Bike Sharing",
+    "feature_dimension": 8,
+    "first_target": "2012-01-01T23",
+    "horizon_hours": 24,
+    "last_target": "2012-06-30T23",
+    "map": "kahm_minmax01_cap4_p1",
+    "observations": 172,
+    "target": "registered",
+    "targets_outside_output_interval": 15
+  },
+  "check_status": "CONSISTENT",
+  "class_risk": {
+    "lower": "164462116776598660383255935015916079177/7887638926987690789811191095703564713984",
+    "lower_source": "rounded_edge_dual",
+    "upper": "693174037277881032244861141819974435813026362437359/33244777744366048680379218889797289848113497555075072",
+    "upper_source": "solver_envelope",
+    "width": "1610297674053948532051513576356950478029/99734333233098146041137656669391869544340492665225216"
+  },
+  "class_risk_meaning": "An interval enclosing the smallest average squared error among all admissible decoders on this cohort. The lower endpoint rules out smaller errors; the feasible upper endpoint shows an error attainable at that level or below.",
+  "computed_class_diagnosis": "ADEQUATE",
+  "content_integrity": {
+    "checked_files": [
+      {
+        "bytes": 569170,
+        "path": "experiments/class_diagnosis/records/classes/registered/kahm_minmax01_cap4_p1.json",
+        "sha256": "7622fe27e2ae7c4ad6049accad5effa676fba8ec3619017ae6550524d90cbbbf"
+      },
+      {
+        "bytes": 6514,
+        "path": "experiments/class_diagnosis/protocol/protocol.json",
+        "sha256": "0a02527f96d8a4cdc2ff8925f2a44f46c03cd64aee8da2b419298c882d29cb60"
+      },
+      {
+        "bytes": 10665,
+        "path": "experiments/class_diagnosis/inputs/prior/protocol36.json",
+        "sha256": "4377b08b9653ea36d46afa77b1957ae4952bba83463272286e7fa9f4e572450c"
+      },
+      {
+        "bytes": 14102,
+        "path": "experiments/class_diagnosis/inputs/decision/registered/cohort.json",
+        "sha256": "e3ebe49e460237244ade30a0c2f3a90227cef72653082d57f1a667603ced42d1"
+      }
+    ],
+    "reference": "Repository MANIFEST.json"
+  },
+  "decoder_class": {
+    "assurance": "CONDITIONAL_ON_STORED_EXACT_FEATURE_COORDINATES",
+    "kappa": "2",
+    "metric": "Euclidean",
+    "output_interval": [
+      "0",
+      "1"
+    ]
+  },
+  "excess_risk_meaning": "A fitted predictor's cohort risk minus the best risk in its declared class.",
+  "fuller_replay_command": "python3 experiments/class_diagnosis/replay.py --output reproduction_class_diagnosis",
+  "fuller_replay_scope": "Rechecks pairwise constraints, lower-bound witnesses and excess arithmetic for all 54 classes; fitted-predictor membership/risk proofs remain inherited. No fitting or optimizer rerun.",
+  "independently_checked_here": [
+    "Selected file sizes and SHA256 digests against the repository manifest",
+    "Case, cohort identity, declared class and threshold consistency",
+    "Exact interval widths, threshold comparisons and excess-risk arithmetic"
+  ],
+  "inherited_not_recomputed_here": [
+    "All pairwise feature distances and feasibility of predictions under the class constraints (primal checks)",
+    "The lower-bound calculation using signed edge multipliers (dual witness)",
+    "Fitted-predictor class membership and achieved-risk enclosures",
+    "Training persistence MSE used to choose the stored threshold"
+  ],
+  "interpretation": [
+    "The stored feasible class witness meets the requirement on these 172 observations.",
+    "Both fitted predictors fail that same requirement; their failure does not exclude the class.",
+    "The class witness uses assessment targets and is not a predictor fitted on training data.",
+    "This is a fixed-cohort capacity diagnosis, without a population or future-forecast guarantee.",
+    "The example does not establish the cause of fit failure or superiority of this representation."
+  ],
+  "loss": "Mean squared error on normalized, unclipped cohort targets",
+  "mode": "stored_certificate_interpretation",
+  "outside_the_guarantee": "Numerical error in constructing the stored feature coordinates is not enclosed.",
+  "predictors": [
+    {
+      "computed": {
+        "excess_lower": "402995607996957388651254347580941712296355331499752409821881311831931847861585/8107573704315862964170112636811961304724533800818984964529220652576354275950592",
+        "excess_upper": "17521548173786447499566669138028785868917396425915309922890233868523819859671/352503204535472302790004897252693969770631904383434128892574810981580620693504",
+        "fails_requirement": true,
+        "meets_requirement": false
+      },
+      "name": "Clipped affine ridge fit",
+      "stored_fields": {
+        "candidate_id": "kahm_minmax01_cap4_p1::affine",
+        "decision_risk": {
+          "lower": "24871456520894101552301757814681255530119100806410987049624706403489134509783/352503204535472302790004897252693969770631904383434128892574810981580620693504",
+          "upper": "24871456520894101552301757814681255530119100806410987049624706403489134509783/352503204535472302790004897252693969770631904383434128892574810981580620693504",
+          "width": "0"
+        },
+        "excess_risk": {
+          "lower": "402995607996957388651254347580941712296355331499752409821881311831931847861585/8107573704315862964170112636811961304724533800818984964529220652576354275950592",
+          "upper": "17521548173786447499566669138028785868917396425915309922890233868523819859671/352503204535472302790004897252693969770631904383434128892574810981580620693504"
+        },
+        "positive_certified_excess": true,
+        "recipe": "affine",
+        "verified_eligible": false,
+        "verified_ineligible": true
+      }
+    },
+    {
+      "computed": {
+        "excess_lower": "1101299966226071941516850818959023799027100964059811778601337760660381793141/31740251017854011500421539259427283204201553941244174061078898605930313678848",
+        "excess_upper": "47355898547743129867095450601827264748109869949664233981179201594425792067351/1364830793767722494518126188155373177780666819473499484626392640055003488190464",
+        "fails_requirement": true,
+        "meets_requirement": false
+      },
+      "name": "Clipped Lipschitz extension fit (32 training anchors)",
+      "stored_fields": {
+        "candidate_id": "kahm_minmax01_cap4_p1::extension32",
+        "decision_risk": {
+          "lower": "75813458973959038232777581207572652832048187339187234939065783194391743432071/1364830793767722494518126188155373177780666819473499484626392640055003488190464",
+          "upper": "75813458973959038232778376554312581520880358439954910633401460725365100312343/1364830793767722494518126188155373177780666819473499484626392640055003488190464",
+          "width": "82961796961694116475130009099930680237/142364090421465433893873597178113428222753228937550177757036544"
+        },
+        "excess_risk": {
+          "lower": "1101299966226071941516850818959023799027100964059811778601337760660381793141/31740251017854011500421539259427283204201553941244174061078898605930313678848",
+          "upper": "47355898547743129867095450601827264748109869949664233981179201594425792067351/1364830793767722494518126188155373177780666819473499484626392640055003488190464"
+        },
+        "positive_certified_excess": true,
+        "recipe": "extension32",
+        "verified_eligible": false,
+        "verified_ineligible": true
+      }
+    }
+  ],
+  "question": "Can a decoder class meet a requirement when its fitted predictors fail?",
+  "stored_class_diagnosis": "ADEQUATE",
+  "target_normalization": "Exact (raw-training_target_min)/(training_target_max-training_target_min), separately per target",
+  "threshold": {
+    "approximate": "0.03499354976",
+    "exact": "504811/14425830",
+    "rule": "0.95 times exact normalized training persistence MSE"
+  }
+}

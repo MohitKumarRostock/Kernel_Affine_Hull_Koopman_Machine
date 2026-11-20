@@ -18,8 +18,8 @@ The command regenerates 4,096 calibration observations for each learning case fr
 
 ## Files and numerical assumptions
 
-`records/` contains dual vectors, candidate prediction vectors, numerical diagnostics, features, observations, fitted coefficients, and expected endpoints. `protocol/` contains the fixed design. `source/` retains the data-generation code, independent checker, model code, and numerical routines. `provenance/` records source identities and checksums. Original source identifiers are unchanged.
+`records/` contains dual vectors, candidate prediction vectors, numerical diagnostics, features, observations, fitted coefficients, and expected endpoints. `protocol/` contains the fixed design. `source/` contains the data-generation code, independent checker, model code, and numerical routines. `provenance/` records source identities and checksums.
 
-The calculations use floating-point safeguards and recorded feature checks. Reproduction does not bound every feature-generation or optimization rounding error and does not repeat feature construction. The original archive, `geometry_step17_reproducibility.zip`, also contains all training candidates and coordinate-wise feature bounds.
+The calculations use floating-point safeguards and recorded feature checks. Reproduction does not enclose every numerical error in feature construction and subsequent arithmetic, and it does not repeat feature construction. The population interpretation requires valid feature values, conservative optimization and loss bounds, and fitted predictors belonging to their prescribed classes. The original archive, `geometry_step17_reproducibility.zip`, also contains all training candidates and coordinate-wise feature bounds.
 
 Inputs are synthetic. The checker requires Python, NumPy, and SciPy and makes no network requests. Original training additionally uses scikit-learn and the recorded numerical software.

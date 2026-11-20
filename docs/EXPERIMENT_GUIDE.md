@@ -1,6 +1,6 @@
 # Experimental calculations and outputs
 
-A predictor class fixes the feature map, feature metric, output interval, and Lipschitz constant. For feature distance `d`, admissible predictions differ by at most `kappa * d`. A fitted predictor is one member of this class.
+A predictor class fixes the feature map, feature metric, output interval, and Lipschitz constant. For feature distance `d`, admissible predictions differ by at most `kappa * d`. A fitted predictor belongs to this class only if it satisfies the output and Lipschitz constraints.
 
 The experiments distinguish **population risk**, the expected squared error under the evaluation distribution, from **empirical risk**, the mean squared error (MSE) on specified observations. Empirical excess risk is a fitted predictor's empirical risk minus the minimum empirical risk over its class.
 
@@ -13,7 +13,7 @@ python3 scripts/explain_bike_certificate.py
 python3 scripts/explain_bike_certificate.py --json
 ```
 
-This standard-library script reads a registered-rentals task with 172 evaluation observations and a 24-hour horizon. The [stored representation](../experiments/class_diagnosis/records/classes/registered/kahm_minmax01_cap4_p1.json), `kahm_minmax01_cap4_p1`, has eight KAHM coordinates. The predictor class uses output interval `[0, 1]` and Lipschitz constant 2 under Euclidean distance.
+This standard-library script reads a registered-rentals task with 172 evaluation observations and a 24-hour horizon. The [stored representation](../experiments/class_diagnosis/records/classes/registered/kahm_minmax01_cap4_p1.json), `kahm_minmax01_cap4_p1`, has eight KAHM coordinates. The predictor class uses output interval `[0, 1]` and Lipschitz constant 2 under Euclidean distance. Stored coordinates include the reciprocal-median scaling computed from positive pairwise Euclidean distances between the unscaled feature vectors of 32 training-history probes.
 
 Targets are normalized using the training minimum and range. Evaluation targets are not clipped; 15 lie outside `[0, 1]`. The threshold is 0.95 times the normalized training MSE of persistence prediction, which repeats the most recent observation.
 
@@ -56,12 +56,12 @@ For the ECG command, `reproduction_ecg/summary.json` records the source, environ
 
 ## Interpreting the results
 
-For the controlled experiment, a lower confidence bound above the threshold excludes every predictor in a class. An upper confidence bound at or below the threshold establishes that the corresponding fitted predictor meets it. Otherwise the bounds leave the decision unresolved. The guarantee requires the stated sampling, class-membership, and numerical assumptions.
+For the controlled experiment, a lower confidence bound above the threshold excludes every predictor in a class. An upper confidence bound at or below the threshold establishes that the corresponding fitted predictor meets it; this establishes class feasibility only if the fitted predictor is admissible. If neither class condition is established, the decision remains unresolved. The confidence bounds require the stated iid sampling and numerical assumptions.
 
-The ECG calculation uses one history--target pair per patient and recorded feature bounds. Its separately selected 2-, 6-, and 14-coordinate representations are not nested. Excluding the two-coordinate class does not exclude all KAHM representations. The larger classes remain unresolved.
+The ECG calculation uses one history--target pair per patient and recorded feature bounds. Its 2-, 6-, and 14-coordinate representations are selected separately, and their predictor classes are not assumed to be nested. Excluding the two-coordinate class does not exclude all KAHM representations. The larger classes remain unresolved.
 
 The Bike Sharing analysis establishes empirical feasibility for all 54 classes; both fitted predictors fail in 39. The feasible predictions use evaluation targets, and the three related rental targets are not independent application replications.
 
-The deployment procedures fail the combined accuracy, storage, and inference-time requirement in every case. Screening avoids no additional predictor fits. `PASS` preserves these reported outcomes. Saved timing measurements are not new measurements on the machine running the checker.
+The deployment procedures fail the combined accuracy, storage, and inference-time requirement in every case. Screening avoids no additional predictor fits. `PASS` confirms agreement with these recorded numerical outcomes. Saved timing measurements are not new measurements on the machine running the checker.
 
 The commands verify stored records, not complete model-training runs. The controlled group regenerates calibration observations; the deployment group also regenerates forecasts from stored inputs and models. Each experiment README specifies its remaining inputs and checks. See [REPRODUCIBILITY.md](../REPRODUCIBILITY.md) for numerical assumptions and [DATA.md](../DATA.md) for dataset attribution.

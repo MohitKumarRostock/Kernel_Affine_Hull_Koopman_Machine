@@ -1,4 +1,4 @@
-# Predictor comparisons and affine constraint ablations
+# Supplementary predictor comparisons and affine constraint ablations
 
 ## Experiments and results
 
@@ -10,7 +10,7 @@ These experiments compare predictor families and hyperparameter-selection rules 
 | Temporal regularization and extension selection | Tetouan and Metro | Both primary comparisons fail. |
 | Joint selection of affine and Lipschitz-extension predictors | Household and Jena | Household passes; Jena fails; the combined criterion fails. |
 | Constrained affine forecasting | Specified Household and Jena periods | Both fail the requirement of MSE at most 1.05 times the selected conventional reference. |
-| Coefficient projection, intercept recentering, and clipping ablation | The same Household and Jena periods | All 720 configurations per task are retained. |
+| Coefficient projection, intercept recentering, and clipping ablation | The same Household and Jena periods | Reports all 720 configurations per task. |
 
 Each ablation compares an option's off/on settings while holding the other choices fixed. Equality, improvement, and worsening counts use exact rational mean squared errors (MSEs) in the original target units. Exact rational reference-prediction losses are checked separately. Small recentering differences can fall below the original display threshold. These periods were used during model development, so the ablation does not independently validate a selection rule.
 
@@ -28,6 +28,6 @@ For interval-valued predictions, the checker minimizes and maximizes squared los
 
 ## Files and verification scope
 
-`data/` contains evaluation targets, prediction intervals or binary64 outputs, expected risks, comparison criteria, and all ablation configurations. `source/` retains the scientific code and protocols. `source_provenance.json` identifies the original archive and files.
+`data/` contains evaluation targets, prediction intervals or binary64 outputs, expected risks, comparison criteria, and all ablation configurations. `source/` contains the scientific code and protocols. `source_provenance.json` identifies the original archive and files.
 
 The checker recomputes loss arithmetic and fixed comparisons. It does not repeat feature construction, model fitting, optimizer proposals, development selection, or the original numerical-output checker. Results concern the specified predictors and periods, not population-risk confidence bounds or demonstrated training-cost savings.

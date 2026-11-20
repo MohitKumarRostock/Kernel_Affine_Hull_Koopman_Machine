@@ -4,7 +4,7 @@
 
 ## Prediction-risk bounds
 
-This repository contains the experiments for the paper. We evaluate the minimum mean squared error (MSE) over bounded Lipschitz predictors using a fixed feature representation. Each predictor class specifies a feature map, a distance metric, an output interval, and a Lipschitz constant. A fitted predictor is one member of that class; its error need not equal the minimum error over the class.
+This repository contains experimental calculations for the paper and supplementary predictor diagnostics. We evaluate the minimum mean squared error (MSE) over bounded Lipschitz predictors using a fixed feature representation. Each predictor class specifies a feature map, a distance metric, an output interval, and a Lipschitz constant. A fitted predictor belongs to the class only if it satisfies these constraints; its error need not equal the class minimum. Several experiments use Kernel Affine Hull Machines (KAHMs) to construct features.
 
 For blocks of `b >= 2` independent and identically distributed (iid) observations with targets in the bounded predictor output interval, the method minimizes total squared error subject to pairwise Lipschitz and output constraints and divides the minimum by `b - 1`. The expected values are nondecreasing lower bounds on minimum population risk and converge to that risk on compact metric feature spaces. This monotonicity does not imply that larger blocks give tighter finite-sample confidence bounds.
 
@@ -19,13 +19,13 @@ Population risk is expected squared prediction error; empirical risk is average 
 | [class_diagnosis](experiments/class_diagnosis/) | All 54 Bike Sharing predictor classes admit predictions meeting their empirical thresholds; both fitted predictors fail in 39 classes. |
 | [deployment_cost](experiments/deployment_cost/) | Two KAHM-based procedures meet the accuracy allowance in all six cases but fail the combined storage and inference-time requirements. |
 | [public_screening](experiments/public_screening/) | Risk bounds avoid no additional predictor fits in the Beijing and Bike Sharing experiments. |
-| [decoder_diagnostics](experiments/decoder_diagnostics/) | Reports predictor comparisons and affine constraint ablations, including unsuccessful comparisons. |
+| [decoder_diagnostics](experiments/decoder_diagnostics/) | Supplementary predictor comparisons and affine constraint ablations, including unsuccessful comparisons. |
 
 The Bike Sharing feasible predictions use evaluation targets. They establish minimum empirical-risk upper bounds, not the future accuracy of independently trained predictors. The [experiment guide](docs/EXPERIMENT_GUIDE.md) includes a worked example and identifies each group's inputs and outputs.
 
 ## Reproduction
 
-Run from this branch's repository root with Python 3.12 and the pinned dependencies:
+Run from the repository root containing `reproduce.py`, with Python 3.12 and the pinned dependencies:
 
 ```bash
 python3 -m pip install -r requirements.txt
@@ -44,6 +44,6 @@ Use an output directory outside `docs/`, `experiments/`, `scripts/`, and `valida
 
 ## Source version and licenses
 
-Cite the exact commit used. `MANIFEST.json` identifies the source, documentation, and numerical inputs by SHA-256 hash. The [manuscript experiment index](docs/MANUSCRIPT_ALIGNMENT.md) maps the six groups to the revised paper. Historical protocols and source records retain their original identifiers.
+Cite the exact commit used. `MANIFEST.json` identifies the source, documentation, and numerical inputs by SHA-256 hash. The [experiment index](docs/MANUSCRIPT_ALIGNMENT.md) distinguishes the five manuscript experiment groups from the supplementary predictor diagnostics. Protocol and provenance files identify the data, software, and numerical inputs.
 
 Source and research-output licenses are specified in [LICENSE](LICENSE) and [DATA_LICENSE](DATA_LICENSE). Third-party datasets retain their providers' terms.

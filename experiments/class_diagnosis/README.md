@@ -2,9 +2,9 @@
 
 ## Design and results
 
-The experiment evaluates 54 Lipschitz predictor classes for casual, registered, and total rentals. Each target has 172 fixed evaluation observations. A class specifies stored feature coordinates, output interval `[0, 1]`, and Lipschitz constant 2 under Euclidean distance. Targets outside the output interval remain in the losses.
+The experiment evaluates 54 Lipschitz predictor classes for casual, registered, and total rentals. Each target has 172 fixed evaluation observations. A class specifies stored feature coordinates, output interval `[0, 1]`, and Lipschitz constant 2 under Euclidean distance. Stored coordinates include multiplication by the reciprocal median of positive pairwise Euclidean distances between the unscaled feature vectors of 32 training-history probes. The scale is one if no positive distance exists. Targets outside the output interval remain in the losses.
 
-All 54 classes contain feasible prediction vectors meeting their mean squared error (MSE) thresholds. Both fitted predictors fail in 39 classes. All 108 fitted predictors have a strictly positive lower bound on empirical excess risk: their empirical MSE minus the minimum empirical MSE over their class. Target-based feasible predictions also meet all 54 thresholds without an optimizer proposal; constant predictions meet none. The maximum interval width for minimum empirical risk is approximately `2.181e-14` in normalized MSE.
+Verified feasible prediction vectors establish that all 54 classes contain decoders meeting their empirical mean squared error (MSE) thresholds. Both fitted predictors fail in 39 classes. All 108 fitted predictors have a strictly positive lower bound on empirical excess risk: their empirical MSE minus the minimum empirical MSE over their class. Initializing the feasible-prediction construction from assessment targets also meets all 54 thresholds without an optimizer proposal; constant predictions meet none. The maximum interval width for minimum empirical risk is approximately `2.181e-14` in normalized MSE.
 
 ## Reproduction
 

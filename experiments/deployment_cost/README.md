@@ -28,11 +28,11 @@ To regenerate predictions from stored raw inputs and model parameters:
 python experiments/deployment_cost/replay.py --predict --output results/deployment_cost_predictions.json
 ```
 
-The checker recomputes exact squared losses from binary64 targets and forecasts, numerical parameter sizes, and latency medians from the original nine-repeat timing samples. It runs offline with NumPy, SciPy, scikit-learn, and threadpoolctl.
+The checker recomputes exact squared losses from binary64 targets and forecasts, numerical parameter sizes, and inference-time medians from the nine recorded timing repetitions. It runs offline with NumPy, SciPy, scikit-learn, and threadpoolctl.
 
 ## Files and measurement scope
 
-`data/` contains primary-horizon evaluation rows, selected parameters, forecasts, expected risks, timing samples, and procedure identifiers. `source/` retains the protocol, model implementation, selection procedures, and evaluation code. `source_provenance.json` and per-task records identify the original archive and files.
+`data/` contains primary-horizon evaluation rows, selected parameters, forecasts, expected risks, timing samples, and procedure identifiers. `source/` contains the protocol, model implementation, selection procedures, and evaluation code. `source_provenance.json` and per-task records identify the original archive and files.
 
 Storage includes representation and predictor arrays and scalars, not Python-object or runtime-library overhead. It is not process-memory usage. Timing summaries use saved measurements rather than new benchmarks. Prediction regeneration evaluates fixed models without refitting or reselection; the comparison concerns the specified observations rather than a population-risk noninferiority guarantee. It does not verify exact real-arithmetic feature values.
 

@@ -9,7 +9,16 @@ python3 -m pip install -r requirements.txt
 python3 reproduce.py --output reproduction
 ```
 
-To select one experiment:
+To reproduce the five experiment groups reported in the manuscript:
+
+```bash
+python3 reproduce.py \
+  --only controlled_calibration ecg_cohort class_diagnosis \
+         deployment_cost public_screening \
+  --output reproduction_manuscript
+```
+
+The command without `--only` also includes the supplementary `decoder_diagnostics` group. To select one experiment:
 
 ```bash
 python3 reproduce.py --only ecg_cohort --output reproduction_ecg
@@ -31,7 +40,7 @@ The driver checks `MANIFEST.json`, runs each selected group in a separate proces
 | `public_screening` | Prediction and optimization records, class exclusions, selected models, and fitted-model counts | Specified Beijing and Bike Sharing datasets |
 | `decoder_diagnostics` | Prediction losses, primary comparisons, and 1,440 affine-ablation configurations | Specified forecasting periods |
 
-The controlled group regenerates calibration observations from fixed random streams. The deployment group regenerates forecasts from stored raw inputs and model parameters, using the original comparison tolerances. Its MSE calculations treat stored binary64 targets and forecasts as exact values.
+The controlled group regenerates calibration observations from fixed random streams. The deployment group regenerates forecasts from stored raw inputs and model parameters, using the specified comparison tolerances. Its MSE calculations treat stored binary64 targets and forecasts as exact values.
 
 ## Numerical assumptions and file integrity
 

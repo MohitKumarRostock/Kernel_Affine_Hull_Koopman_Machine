@@ -24,7 +24,7 @@ The commands use bundled archives and numerical records without network access o
 
 The checker reconstructs evaluation indices and lag matrices using only observations preceding each target. It checks training-only target normalization and thresholds equal to 0.95 times exact training-persistence MSE. Evaluation targets outside the predictor output interval remain in the losses.
 
-For all 144 fitted predictors, it checks class membership, reconstructs decision and test predictions from stored features and fixed parameters, and recomputes squared-loss bounds. All 288 prediction records must match their original hashes. Affine predictions use rational arithmetic; Lipschitz-extension distances use exact squared dyadic distances and outward integer-square-root bounds. Predictor storage is recomputed; total storage uses the recorded representation sizes.
+For all 144 fitted predictors, it checks class membership, reconstructs decision and test predictions from stored features and fixed parameters, and recomputes squared-loss bounds. All 288 prediction records must match their recorded source hashes. Affine predictions use rational arithmetic; Lipschitz-extension distances use exact squared dyadic distances and outward integer-square-root bounds. Predictor storage is recomputed; total storage uses the recorded representation sizes.
 
 For Beijing, the checker reconstructs distance tables and verifies all 396 block optimization records, including primal feasibility and dual objectives. It recomputes all 36 decision/test minimum empirical-risk intervals, class exclusions, candidate eligibility, cost-based selections, and recorded screening costs. Aggregated upper bounds must correspond to one admissible predictor over the complete evaluation dataset.
 
@@ -34,10 +34,10 @@ For Bike Sharing, the checker verifies exact two-observation optima and dual val
 
 Beijing screening excludes no classes and avoids no predictor fits. It selects the same predictor as exhaustive search under the same selection rule and adds approximately 18.90 seconds of recorded bound-computation time. An inconclusive lower bound does not establish that the class meets the threshold.
 
-For Bike Sharing, ordinary and triggered searches retain the exhaustive selection for all three targets. Each fits two predictors for casual rentals and 36 for each of registered and total rentals in every recorded repetition. The triggered procedure avoids no additional fits. It makes no pairwise-bound calls for casual rentals and six per repetition for each other target. The specified comparison criterion fails across the evaluated tasks.
+For Bike Sharing, ordinary and triggered searches select the same predictors as exhaustive search for all three targets. Each fits two predictors for casual rentals and 36 for each of registered and total rentals in every recorded repetition. The triggered procedure avoids no additional fits. It makes no pairwise-bound calls for casual rentals and six per repetition for each other target. The specified comparison criterion fails across the evaluated tasks.
 
 ## Files and numerical assumptions
 
-`witnesses/` contains losslessly compressed numerical inputs and selected original records. `source_inventory.json` identifies original paths and hashes. `original/` contains source code, protocols, source-data archives, and evaluation records. The checker reconstructs omitted duplicate prediction and distance records and verifies their hashes.
+`witnesses/` contains losslessly compressed numerical inputs and selected source records. `source_inventory.json` identifies original paths and hashes. `original/` contains source code, protocols, source-data archives, and evaluation records. The checker reconstructs omitted duplicate prediction and distance records and verifies their hashes.
 
 Stored features are treated as exact dyadic numbers. The results concern fixed observations and prediction rules; feature-generation rounding error and model refitting are outside this calculation. Representation sizes and timing samples are recorded inputs. Timing summaries do not remeasure or independently authenticate the original runtimes, and the numerical checks do not establish future-observation guarantees.

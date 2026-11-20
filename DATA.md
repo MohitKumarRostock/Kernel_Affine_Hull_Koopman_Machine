@@ -1,6 +1,6 @@
 # Data and attribution
 
-Each experiment retains its original data split, normalization, target definition, selected models, and source records. The table identifies the datasets used by the six retained experiment groups.
+Each experiment's protocol specifies the data split, normalization, target definition, and model-selection procedure. The table identifies the datasets used by the six experiment groups, including the supplementary predictor diagnostics.
 
 | Data | Source | Used by |
 | --- | --- | --- |
@@ -15,6 +15,6 @@ Each experiment retains its original data split, normalization, target definitio
 | Beutenberg weather observations | [Max Planck Institute for Biogeochemistry weather archives](https://weather.bgc-jena.mpg.de/weather_data.html); acquisition metadata and archive hashes are in the experiment source records | Predictor comparisons and ablations |
 | Synthetic controlled episodes and HMM sequences | Generators and fixed protocols in the corresponding experiment source directories | Controlled calibration and deployment cost |
 
-Third-party data remain subject to their providers' terms; the repository's `DATA_LICENSE` applies to original research outputs and excludes third-party material. The source protocols preserve the original acquisition metadata and hashes.
+Third-party data remain subject to their providers' terms; the repository's `DATA_LICENSE` applies to original research outputs and excludes third-party material. The source protocols contain acquisition metadata and archive hashes.
 
 The ECG package contains the fixed 8,192-patient evaluation dataset and excludes reserved patients. Each experiment README specifies its observations, numerical input assumptions, and verification procedure.

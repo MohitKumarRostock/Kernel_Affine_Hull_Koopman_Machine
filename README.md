@@ -28,7 +28,7 @@ For $b\geq2$ independent and identically distributed (iid) feature–target obse
 ```math
 T_b=\frac{1}{b-1}\min_{v\in\mathbb R^b}
 \left\{\sum_{i=1}^b(Y_i-v_i)^2:
-|v_i-v_j|\leq\kappa d(U_i,U_j)\ \text{for all }i<j\right\},
+|v_i-v_j|\leq\kappa d(U_i,U_j)\ \text{for all }i\lt j\right\},
 \qquad \mathcal W_b=\mathbb E[T_b].
 ```
 

@@ -25,7 +25,7 @@ $y_i\in\mathbb R$ possibly outside $I$, the **minimum empirical risk** is
 ```math
 R_M^\star=\frac1M\min_{v\in I^M}
 \left\{\sum_{i=1}^M(y_i-v_i)^2:
-|v_i-v_j|\leq\kappa d(u_i,u_j)\ \text{for all }i<j\right\}.
+|v_i-v_j|\leq\kappa d(u_i,u_j)\ \text{for all }i\lt j\right\}.
 ```
 
 The empirical excess risk of a fitted decoder is its empirical MSE minus

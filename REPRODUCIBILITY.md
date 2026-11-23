@@ -9,7 +9,7 @@ python3 -m pip install -r requirements.txt
 python3 reproduce.py --output reproduction
 ```
 
-To reproduce the five experiment groups reported in the manuscript:
+To verify the five principal experimental groups:
 
 ```bash
 python3 reproduce.py \
@@ -52,6 +52,6 @@ Each group specifies whether stored feature coordinates are exact inputs or are 
 
 `PASS` means agreement with the stored numerical result, not success of every proposed method. The recorded results include no joint deployment-criterion passes, no additional predictor fits avoided by screening, and mixed or unsuccessful predictor comparisons.
 
-Population-risk confidence bounds use the controlled experiment's independent observations and prespecified calibration procedure. The PTB-XL and Bike Sharing optimization results concern minimum empirical risk on fixed datasets. Related rental targets and reused evaluation periods are not independent experimental replications.
+Population-risk confidence bounds use the controlled experiment's iid observations, independent of model development, and prespecified calibration procedure. The PTB-XL and Bike Sharing optimization results concern minimum empirical risk on fixed datasets. Related rental targets and reused evaluation periods are not independent experimental replications.
 
-The commands check stored inputs and calculations. They do not repeat every data-acquisition or feature-generation step, retrain all models, or authenticate the original execution history. Timing summaries use saved measurements rather than new benchmarks. Each experiment's source, protocol, and provenance files specify the inputs and execution steps for further regeneration. See the [experiment guide](docs/EXPERIMENT_GUIDE.md) and [data attribution](DATA.md).
+The commands check stored inputs and calculations. They do not repeat every data-acquisition or feature-generation step, retrain all models, or authenticate the original execution history. A documentation-only revision requires new entries in the root file-integrity manifest; an earlier validation report continues to describe only the source manifest that it identifies. Timing summaries use saved measurements rather than new benchmarks. Each experiment's source, protocol, and provenance files specify the inputs and execution steps for further regeneration. See the [experiment guide](docs/EXPERIMENT_GUIDE.md) and [data attribution](DATA.md).

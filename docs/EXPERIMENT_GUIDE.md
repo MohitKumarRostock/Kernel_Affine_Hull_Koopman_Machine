@@ -13,20 +13,20 @@ The experiments distinguish **population risk**, the expected squared
 prediction error under a specified evaluation law, from **empirical risk**,
 the mean squared error (MSE) on specified observations:
 
-$
+$$
 R(g)=\mathbb E[(Y-g(\Gamma(X)))^2],
 \qquad
 R_\kappa^*=\inf_{g\in\mathcal G_\kappa(d)}R(g).
-$
+$$
 
 For fixed feature–target pairs $(u_i,y_i)_{i=1}^M$, with
 $y_i\in\mathbb R$ possibly outside $I$, the **minimum empirical risk** is
 
-$
+$$
 R_M^\star=\frac1M\min_{v\in I^M}
 \left\{\sum_{i=1}^M(y_i-v_i)^2:
 |v_i-v_j|\leq\kappa d(u_i,u_j)\ \text{for all }i<j\right\}.
-$
+$$
 
 The empirical excess risk of a fitted decoder is its empirical MSE minus
 $R_M^\star$. Verified optimization bounds on $R_M^\star$ are deterministic

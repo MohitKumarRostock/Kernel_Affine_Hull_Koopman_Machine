@@ -1,8 +1,37 @@
 # Experimental calculations and outputs
 
-A predictor class fixes the feature map, feature metric, output interval, and Lipschitz constant. For feature distance `d`, admissible predictions differ by at most `kappa * d`. A fitted predictor belongs to this class only if it satisfies the output and Lipschitz constraints.
+For a prediction-time history $X$, a prescribed representation $\Gamma$ gives
+features $U=\Gamma(X)$ in a space with feature pseudometric $d$. A
+**representation–decoder class** fixes $\Gamma$, $d$, an output interval
+$I=[y_-,y_+]$, and a Lipschitz bound $\kappa\geq0$. Its decoders are
+measurable maps $g:\mathcal U\to I$ satisfying
+$|g(u)-g(v)|\leq\kappa d(u,v)$ for all feature values $u,v$.
+An independently fitted decoder $\widehat g$ belongs to that class only if
+these constraints are satisfied.
 
-The experiments distinguish **population risk**, the expected squared error under the evaluation distribution, from **empirical risk**, the mean squared error (MSE) on specified observations. Empirical excess risk is a fitted predictor's empirical risk minus the minimum empirical risk over its class.
+The experiments distinguish **population risk**, the expected squared
+prediction error under a specified evaluation law, from **empirical risk**,
+the mean squared error (MSE) on specified observations:
+
+$$
+R(g)=\mathbb E[(Y-g(\Gamma(X)))^2],
+\qquad
+R_\kappa^*=\inf_{g\in\mathcal G_\kappa(d)}R(g).
+$$
+
+For fixed feature–target pairs $(u_i,y_i)_{i=1}^M$, with
+$y_i\in\mathbb R$ possibly outside $I$, the **minimum empirical risk** is
+
+$$
+R_M^\star=\frac1M\min_{v\in I^M}
+\left\{\sum_{i=1}^M(y_i-v_i)^2:
+|v_i-v_j|\leq\kappa d(u_i,u_j)\ \text{for all }i<j\right\}.
+$$
+
+The empirical excess risk of a fitted decoder is its empirical MSE minus
+$R_M^\star$. Verified optimization bounds on $R_M^\star$ are deterministic
+statements about the fixed observations; unlike the controlled iid
+calibration experiments, they are not population-risk confidence bounds.
 
 ## Worked example: Bike Sharing
 

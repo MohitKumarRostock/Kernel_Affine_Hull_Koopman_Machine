@@ -1,8 +1,19 @@
-# Experiment index
+# Scientific experiment index
 
-This repository provides experimental calculations for **A Hierarchy of Risk Certificates for Representation-Based Forecasting**, by Mohit Kumar and Somayeh Kargaran.
+The following experiment groups assess risk certificates for prescribed
+representation–decoder classes and their computational consequences. The
+corresponding research article is *A Hierarchy of Risk Certificates for
+Representation-Based Prediction* by Mohit Kumar and Somayeh Kargaran. All
+experimental definitions, datasets, numerical assumptions, and verification
+commands are documented in this repository; the article is not needed to
+recompute the stored numerical results.
 
-## Manuscript experiments
+The controlled calibration study concerns population MSE under iid
+observations independent of development. PTB-XL and Bike Sharing instead
+support deterministic statements about minimum empirical MSE on fixed
+datasets. These distinctions determine the interpretation of the bounds.
+
+## Principal experiment groups
 
 | Directory under `experiments/` | Scientific result |
 | --- | --- |
@@ -12,7 +23,7 @@ This repository provides experimental calculations for **A Hierarchy of Risk Cer
 | `deployment_cost` | Prediction accuracy, numerical model storage, and inference time |
 | `public_screening` | Beijing and Bike Sharing class exclusions and fitted-model counts |
 
-The finite-support demonstrator has a separate [implementation and scientific documentation](https://github.com/MohitKumarRostock/certified-kahm-representations-forecasting/tree/d874b8ed426a635b158fdc02848d5b2efdba048b).
+The finite-support controlled forecasting demonstrator has separate [implementation and scientific documentation](https://github.com/MohitKumarRostock/certified-kahm-representations-forecasting/tree/d874b8ed426a635b158fdc02848d5b2efdba048b). That referenced commit is a historical evidence version; documentation revisions should use a separately identified commit.
 
 ## Supplementary predictor diagnostics
 

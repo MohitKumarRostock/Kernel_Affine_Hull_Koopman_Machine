@@ -1,14 +1,40 @@
-# A Hierarchy of Risk Certificates for Representation-Based Forecasting
+# Risk certificates for representation-based prediction: experimental archive
 
 **Mohit Kumar and Somayeh Kargaran**
 
 ## Prediction-risk bounds
 
-This repository contains experimental calculations for the paper and supplementary predictor diagnostics. We evaluate the minimum mean squared error (MSE) over bounded Lipschitz predictors using a fixed feature representation. Each predictor class specifies a feature map, a distance metric, an output interval, and a Lipschitz constant. A fitted predictor belongs to the class only if it satisfies these constraints; its error need not equal the class minimum. Several experiments use Kernel Affine Hull Machines (KAHMs) to construct features.
+This repository contains the numerical experiments, retained inputs, and verification programs for assessing **prescribed representation–decoder classes**. A class fixes a measurable representation $\Gamma:\mathcal X\to\mathcal U$ of a prediction-time history $X$, a measurable feature pseudometric $d$, an output interval $I$, and a Lipschitz bound $\kappa\geq0$. Its admissible decoders are
 
-For blocks of `b >= 2` independent and identically distributed (iid) observations with targets in the bounded predictor output interval, the method minimizes total squared error subject to pairwise Lipschitz and output constraints and divides the minimum by `b - 1`. The expected values are nondecreasing lower bounds on minimum population risk and converge to that risk on compact metric feature spaces. This monotonicity does not imply that larger blocks give tighter finite-sample confidence bounds.
+$$
+\mathcal G_\kappa(d)=
+\bigl\{g:\mathcal U\to I\text{ measurable}:
+|g(u)-g(v)|\leq\kappa d(u,v)\text{ for all }u,v\bigr\}.
+$$
 
-Population risk is expected squared prediction error; empirical risk is average squared error on a specified dataset. With iid evaluation observations independent of model development, simultaneous confidence bounds can establish that every predictor in a class exceeds an MSE threshold or that an admissible fitted predictor meets it. Deterministic optimization instead bounds minimum empirical risk on fixed observations.
+For a specified evaluation law of $(X,Y)$ and squared loss, **optimal class risk** and **fitted-decoder risk** are distinct:
+
+$$
+R_\kappa^*=\inf_{g\in\mathcal G_\kappa(d)}
+\mathbb E[(Y-g(\Gamma(X)))^2],
+\qquad
+R(\widehat g)=\mathbb E[(Y-\widehat g(\Gamma(X)))^2].
+$$
+
+A fitted decoder need not be admissible. Its individual-risk upper bound can establish class feasibility only after admissibility is verified. Some experiments use Kernel Affine Hull Machines (KAHMs) to construct representations; the method is not restricted to KAHM features.
+
+For $b\geq2$ independent and identically distributed (iid) feature–target observations with $Y\in I$ almost surely, the **block score** minimizes total squared error under all pairwise Lipschitz constraints and divides by $b-1$:
+
+$$
+T_b=\frac{1}{b-1}\min_{v\in\mathbb R^b}
+\left\{\sum_{i=1}^b(Y_i-v_i)^2:
+|v_i-v_j|\leq\kappa d(U_i,U_j)\ \text{for all }i<j\right\},
+\qquad \mathcal W_b=\mathbb E[T_b].
+$$
+
+The expected scores $\mathcal W_b$ are nondecreasing lower bounds on $R_\kappa^*$ and converge to it on compact metric feature spaces under the stated assumptions. Larger blocks do not necessarily give tighter finite-sample confidence bounds.
+
+**Population risk** is expected squared prediction error under the evaluation law; **empirical risk** is mean squared error on a fixed dataset. Under prespecified calibration and confidence allocations, iid evaluation observations independent of model development support simultaneous one-sided confidence bounds on population risks. By contrast, the PTB-XL and Bike Sharing calculations give deterministic bounds on minimum empirical risk for their fixed observations; those conclusions require neither iid sampling nor targets within $I$, and they do not imply population-risk guarantees.
 
 ## Experiments
 

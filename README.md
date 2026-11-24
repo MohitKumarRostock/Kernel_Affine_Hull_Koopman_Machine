@@ -47,7 +47,7 @@ The expected scores $\mathcal W_b$ are nondecreasing lower bounds on $`R_\kappa^
 | [public_screening](experiments/public_screening/) | Risk bounds avoid no additional predictor fits in the Beijing and Bike Sharing experiments. |
 | [decoder_diagnostics](experiments/decoder_diagnostics/) | Supplementary predictor comparisons and affine constraint ablations, including unsuccessful comparisons. |
 
-The Bike Sharing feasible predictions use evaluation targets. They establish minimum empirical-risk upper bounds, not the future accuracy of independently trained predictors. The [experiment guide](docs/EXPERIMENT_GUIDE.md) includes a worked example and identifies each group's inputs and outputs.
+The Bike Sharing feasible predictions use evaluation targets. They establish minimum empirical-risk upper bounds, not the future accuracy of independently trained predictors. The [experiment guide](docs/EXPERIMENT_GUIDE.md) includes a worked example and identifies each group's inputs and outputs. The [self-contained KAHM feature-computation reference](docs/FEATURE_COMPUTATION.md) identifies the preserved native implementation, numerical conventions, and validation limits without requiring an older manuscript.
 
 ## Reproduction
 

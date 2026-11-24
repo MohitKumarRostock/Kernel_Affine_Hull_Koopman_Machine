@@ -1,6 +1,6 @@
 # Soft state forecasting: computational reproduction and data
 
-This guide specifies the source code, inputs, environments and verification criteria for the four-state prediction-risk study, independent-pair Van der Pol study, and supplementary forecasting experiments. The mathematical definitions and experimental designs are given in [Prediction-error certificates](SOFT_STATE_CERTIFICATES.md) and [KAHKM](KAHKM.md).
+This guide specifies the source code, inputs, environments and verification criteria for the four-state prediction-risk study, independent-pair Van der Pol study, and supplementary forecasting experiments. The mathematical definitions and experimental designs are given in [Prediction-error certificates](SOFT_STATE_CERTIFICATES.md) and [KAHKM](KAHKM.md). The archived protocols and inventories are retained as source records; the instructions here specify the calculations directly.
 
 ## 1. Source and data identities
 

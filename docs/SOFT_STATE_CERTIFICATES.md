@@ -71,6 +71,8 @@ L_{\rm prototype}&=[\sqrt{V_\delta}-\kappa\sqrt{2Q_\delta}]_+.
 \end{aligned}
 $$
 
+To see the confidence mechanism, the empirical centered dispersion is the minimum of the average squared residual over class-specific simplex means. Replacing one observation changes that minimum by at most $2/M$, since squared distances between simplex points are at most two. Its expected value is no larger than the corresponding population dispersion. For the current-coordinate statistic the downward bias is at most $C/M$: conditional on an occupied class of size $n$, the expected unnormalized residual sum is $(n-1)$ times the class variance, which is at most one. One-sided bounded-difference inequalities therefore give $V_\delta\leq s$ and $t\leq T_\delta$ with individual failure probabilities at most $\delta/2$. For a mean of independent losses in $[0,1]$, the one-sided lower-tail inequality $\Pr(\widehat f<f-\sqrt{2fr})\leq e^{-Mr}$, inverted for $f$, gives $f\leq F_\delta$ at the same confidence; the prototype loss has the same range and yields $q\leq Q_\delta$. Combining the successor event with the appropriate current-coordinate event gives the stated bounds by a union bound.
+
 Each method has confidence at least $1-\delta$ under its assumptions. The event underlying each dispersion-based bound holds for every nonnegative $\kappa$ for the fixed representation and evaluation law. This is not a simultaneous guarantee across alternative representations, sample sizes, or evaluation laws selected from the data.
 
 For comparison, if $\underline m_\kappa$ is a certified lower bound on the constrained minimum **empirical** MSE, a generic pointwise empirical-risk bound is
@@ -80,7 +82,7 @@ L_{\rm ERM}=\sqrt{\left[\underline m_\kappa-(1+\kappa)^2
 \sqrt{\frac{\log(1/\delta)}{2M}}\right]_+}.
 $$
 
-This concentration penalty uses the loss bound $(1+\kappa)^2$. The empirical optimum must be lower-bounded, not replaced with the objective attained by an arbitrary feasible fitted model. That attained empirical objective is an upper bound on the empirical minimum. For several prespecified methods or pointwise ERM budgets, allocate the failure probabilities so that their sum does not exceed the desired joint failure probability.
+Indeed, the loss is bounded by $(1+\kappa)^2$ on the spectral-norm ball. The minimum empirical loss has expectation no larger than the minimum population loss and changes by at most $(1+\kappa)^2/M$ upon replacement of one pair. The one-sided bounded-difference inequality controls this minimum without requiring a union bound over fitted matrices. The empirical optimum must be lower-bounded, not replaced with the objective attained by an arbitrary feasible fitted model. That attained empirical objective is an upper bound on the empirical minimum. For several prespecified methods or pointwise ERM budgets, allocate the failure probabilities so that their sum does not exceed the desired joint failure probability.
 
 ## 4. Interpretation and scope
 
@@ -94,7 +96,7 @@ Under deterministic dynamics $F$, exact pointwise closure $\phi\circ F=B^\top\ph
 
 The [primary implementation](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/0bbb2bafa107892e32e221e882326890b14fe36e) contains `kahkm_certificate_statistics.py` and `kahkm_certificates.py`. The [four-method implementation](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/78a1a5e7ea9d3a2fecd3b335bbe5a9f3f2237eb2/reproduction/posthoc_four_state_erm) contains `scripts/certificate_reanalysis.py`. Use the pinned source checkout specified in [Reproduction](SOFT_STATE_REPRODUCIBILITY.md).
 
-The following example requires NumPy and the primary implementation at the checkout root. It illustrates a fixed two-class representation with independent uniform draws of four discrete states; no prediction matrix is fitted.
+The following illustrative calculation requires NumPy and the primary implementation at the checkout root. It illustrates a fixed two-class representation with independent uniform draws of four discrete states; no prediction matrix is fitted.
 
 ```python
 import numpy as np
@@ -104,9 +106,9 @@ from kahkm_certificates import certificate_from_statistics
 p = 31 / 32
 h = np.array([[p, 1-p], [1-p, p]])
 # States a,b have reference class 0; d,e have class 1.
-# Conflicting successors have class indices 0,1,0,0.
+# Conflicting successors have class indices 0,1,1,1.
 current_class = np.array([0, 0, 1, 1])
-next_class = np.array([0, 1, 0, 0])
+next_class = np.array([0, 1, 1, 1])
 rng = np.random.default_rng(42)
 states = rng.integers(0, 4, size=32768)
 
@@ -129,7 +131,7 @@ The pair arrays have shape $(M,C)$, contain finite simplex coordinates, and use 
 
 ### Controlled four-state distribution
 
-The input law is uniform on four states $a,b,d,e$. The two reference classes are $\{a,b\}$ and $\{d,e\}$, with coordinates $h_1=(p,1-p)^\top$ and $h_2=(1-p,p)^\top$. In the identity case, $R_{\sqrt2}=0$. In the conflicting-successor case the successor classes of $a,b,d,e$ are respectively $1,2,1,1$. The optimal class-conditional mean predictor is realizable by a matrix of spectral norm at most $\sqrt2$. Consequently
+The input law is uniform on four states $a,b,d,e$. The two reference classes are $\{a,b\}$ and $\{d,e\}$, with coordinates $h_1=(p,1-p)^\top$ and $h_2=(1-p,p)^\top$. In the identity case, $R_{\sqrt2}=0$. In the conflicting-successor case the successor classes of $a,b,d,e$ are respectively $1,2,2,2$. For the conflicting case, the column-prediction matrix $A=B^\top$ attaining the population class means is $A=\tfrac12 I+\tfrac12 h_2\mathbf1^\top$. For any $\alpha\in[0,1]$, the matrix $\alpha I+(1-\alpha)h_2\mathbf1^\top$ maps the simplex into itself and has spectral norm at most $\sqrt2$ (by the triangle inequality and $\|h_2\|_2\leq1$). Thus the population class-conditional mean predictor belongs to the constrained class. The empirical class means are attainable in the same manner with $\alpha=n_a/(n_a+n_b)$ when the first class is occupied, and any suitable $\alpha$ otherwise. Consequently
 
 $$
 R_{\sqrt2}=p-\tfrac12,\qquad

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Independently rebuild the central study's statistics from saved selected losses.
 
-This is new analysis code, not the original verify_saved_analysis.py. It does
-not reconstruct forecasts, fit models, or validate the native feature engine.
+The calculation uses the recorded selected losses as its empirical inputs. It
+does not reconstruct forecasts, fit models, or validate the native feature engine.
 """
 from __future__ import annotations
 

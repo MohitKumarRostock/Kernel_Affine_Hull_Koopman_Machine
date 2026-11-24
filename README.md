@@ -1,56 +1,43 @@
-# Kernel Affine Hull Koopman Machine
+# Predictive Enrichment of Geometry-Induced Soft-State Abstractions: Information Retention, Predictive Accessibility, and Stability
 
-Scientific software for reconstruction-based state representations, linear prediction in representation space, and the assessment of representation-dependent prediction limits.
+Scientific software, mathematical specification, and computational evidence for reconstruction-based forecasting.
 
-Given a collection of observed state transitions, the Kernel Affine Hull Koopman Machine (KAHKM) constructs local kernel affine hull models and represents each state by normalized reconstruction affinities. A linear transition matrix then predicts the successor representation. The associated risk-certificate methods quantify lower bounds on the prediction error achievable from a fixed representation under specified predictor constraints.
+## Scientific scope
 
-## Mathematical formulation
+Local reconstruction models represent an observed history by relative reconstruction affinities. Normalizing these affinities removes their common scale; weighted local coordinates retain additional position information. The central question is whether two information-equivalent encodings expose the same predictive functions to a restricted decoder. Kernel Affine Hull Machine (KAHM), positive-kernel, affine, and center-only reconstruction scores are compared using fixed reference geometries. The experiments predict future observations directly; they do not assume Markov sufficiency or fit an autonomous Koopman transition model.
 
-Let $x\in\mathbb R^D$ denote a state and let $T_c(x)\in[0,1]$ be the reconstruction score of reference class $c=1,\ldots,C$. For $\omega,\tau>0$, define
+The [scientific reference](docs/SCIENTIFIC_REFERENCE.md) defines the reconstruction, normalization, representations, population-risk results, and their assumptions. The [experimental protocols](docs/PROTOCOLS.md) specify the data-generating laws, sample allocations, reference fitting, decoder selection, metrics, and inferential units. [Results](docs/RESULTS.md) presents the principal numerical findings and their scope.
 
-$$
-\phi_c(x)=\frac{(1-T_c(x)+\tau)^\omega}{\sum_{j=1}^C(1-T_j(x)+\tau)^\omega}.
-$$
+## Computational evidence
 
-The vector $\phi(x)$ belongs to the probability simplex. The one-step forecasting problem is to approximate $\phi(x^+)$ from $\phi(x)$, where $x^+$ denotes the successor state. KAHKM uses the prediction $B^\top\phi(x)$ with a matrix $B\in\mathbb R^{C\times C}$ fitted to training transitions.
+| Investigation | Available computation | Evaluation scope |
+| --- | --- | --- |
+| Matched-dimensional finite-law example and weighted recovery | Deterministic mathematical checks in `scripts/` | Exact population formulas checked numerically; no fitted-forecast inference |
+| Fixed-geometry forecasting | [Executable simulation and fitting](ablation/) | 32 independent repetitions per law; 12 adjusted paired comparisons |
+| Target-changing alignment | [Executable simulation and fitting](ablation/) | 32 independent repetitions; descriptive excess MSE relative to known conditional means |
+| Chronological atmospheric CO2 forecasting | [Executable observed-series study](real_data/) | One series, three horizons, five reference fits; descriptive comparisons |
+| Archived forecasting experiment | [Saved-loss analysis](reproduction/score_enrichment/) | 64 repetitions per law; 40 separate adjusted comparisons; original training workflow unavailable |
+| Supporting decoder-capacity and related evaluations | [Related evidence](docs/RELATED_EVIDENCE.md) | Distinct protocols; capacity-summary arithmetic and reported contextual findings |
 
-A close correspondence between the soft coordinates and a reference partition does not imply that the coordinates preserve the information required for prediction. For a fixed evaluation law and a spectral-norm limit $\kappa$, the prediction-error certificates address the population quantity
+The executable simulations and chronological study are the principal empirical evidence. Their results show that membership weighting is beneficial for some aligned tasks and detrimental for others, even when the weighted and separated encodings preserve identical information. Under the tested fixed slope effective degrees of freedom of eight, weighting has higher observed mean forecasting loss in all 12 simulated law–reconstruction settings. On the historical CO2 series, separated positions have lower aggregate loss in all 20 reconstruction-method/reference-seed combinations under both tested penalty rules. These findings do not establish universal superiority of any reconstruction or encoding.
 
-$$
-R_\kappa=\inf_{\|B\|_2\leq\kappa}
-\left(\mathbb E\|\phi(X^+)-B^\top\phi(X)\|_2^2\right)^{1/2}.
-$$
+The [archived forecasting specification](docs/ARCHIVED_FORECASTING.md) describes the earlier cohort, including its numerical conventions and inferential scope. The [related evidence](docs/RELATED_EVIDENCE.md) identifies the supporting studies and their distinct comparison criteria. These are not pooled with the principal executable investigations.
 
-A valid lower confidence bound exceeding a prescribed error tolerance excludes that tolerance for the entire constrained predictor class. A zero bound does not establish predictive sufficiency.
+## Installation and verification
 
-## Installation and first calculation
-
-From a Git checkout of the default branch:
+Use Python 3.13 with the specified numerical dependencies. From this directory:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-python -c "import kernel_affine_hull_koopman_machines"
-python kernel_affine_hull_koopman_machines.py
+python reproduce.py verify
+python reproduce.py check
+python reproduce.py replay --output runs/replay
 ```
 
-The example constructs Duffing oscillator transitions, fits a reconstruction-based representation and linear predictor, and evaluates association-space errors on a later trajectory segment. It is a demonstration of forecasting, not an independent-pair confidence experiment.
+`verify` checks content identities with the standard library. `check` recomputes mathematical tests, saved-loss statistics, ablation summaries, and observed-series assessment arithmetic without retraining. `replay` refits the executable studies in a new directory, checks their generated records, and compares them with the distributed reference records. The commands do not modify the reference data or require LaTeX, a separate document, an external dataset download, or the shared numerical library. See [Reproduction](REPRODUCIBILITY.md) for precise commands, expected counts, numerical tolerances and reproducibility boundaries.
 
-[Mathematical specification and Python interface](docs/KAHKM.md) describes the reconstruction, normalization, fitting algorithm, array conventions, example code, and interpretation of diagnostics. The pinned dependencies on the default branch apply to the numerical library; experiment-specific environments are specified in the respective research records.
+## Licensing and attribution
 
-## Scientific studies
-
-| Research question | Documentation and computational records |
-| --- | --- |
-| Prediction limits and exact Koopman closure of simplex-valued state abstractions | [Theory and experimental designs](docs/SOFT_STATE_CERTIFICATES.md) · [Reproduction and data access](docs/SOFT_STATE_REPRODUCIBILITY.md) |
-| Forecasting with augmented reconstruction-based features | [Study description and records](docs/RESEARCH_STUDIES.md#forecasting-with-augmented-features) |
-| Risk bounds for representation-based forecasting with bounded Lipschitz predictors | [Study description and records](docs/RESEARCH_STUDIES.md#risk-certificates-for-representation-based-forecasting) |
-
-The [reproduction guide](REPRODUCIBILITY.md) identifies the available inputs, numerical procedures, and verification criteria for each study. The research code and data are available at the specified Git commit identifiers; the default branch contains the shared numerical library and scientific documentation.
-
-## License and citation
-
-The author-owned software is licensed under the [MIT License](LICENSE). Author-generated data and non-code research outputs are licensed under [CC BY 4.0](DATA_LICENSE), unless specified otherwise. Third-party material retains its applicable license.
-
-Software citation metadata is provided in [CITATION.cff](CITATION.cff). For a numerical result, cite the applicable study, its computational protocol, and the exact source or evidence commit identified in the reproduction guide.
+Author-owned software uses the [MIT License](LICENSE); original research outputs and non-code material use [CC BY 4.0](DATA_LICENSE), where applicable. The historical CO2 snapshot is third-party public-domain data; [data provenance](docs/DATA.md) identifies its source and terms. Source and data identities are recorded in `MANIFEST.json`. Hashes establish content identity, not scientific validity or execution chronology. [Computational provenance](provenance/README.md) documents execution records and the scope of AI assistance.

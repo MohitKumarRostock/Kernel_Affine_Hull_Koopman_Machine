@@ -1,31 +1,37 @@
-# Reproduction commands and requirements
+# Reproduction and verification
 
-Use the instructions for the relevant study. Statistical analysis of saved losses, numerical checks of stored predictions, and regeneration of fitted models are separate operations.
+This repository provides a shared Python numerical library and experiment-specific computational records. Select the computational procedure corresponding to the research question; the requirements on the default branch apply only to the shared library.
 
-## Study instructions
+| Scientific task | Procedure |
+| --- | --- |
+| Fit a KAHM representation and a linear predictor on supplied transitions | [Mathematical specification and executable example](docs/KAHKM.md) |
+| Evaluate label-based, centered, prototype or empirical-risk lower confidence bounds | [Definitions, assumptions and certificate example](docs/SOFT_STATE_CERTIFICATES.md) |
+| Recompute all 117,000 controlled count datasets, compare four certificate methods, examine the Van der Pol records, and regenerate forecasting summaries | [Data, source commits, environments, commands and expected values](docs/SOFT_STATE_REPRODUCIBILITY.md) |
+| Recompute feature-augmentation or Lipschitz-risk experiments | [Experiment-specific documentation and data](docs/RESEARCH_STUDIES.md) |
 
-| Task | Instructions | Calculation |
-| --- | --- | --- |
-| Central feature-augmentation comparisons | [Saved-loss analysis](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/reproduction/score_enrichment/README.md) | Recompute statistical comparisons from per-run losses |
-| Supplementary predictor-capacity experiment | [Experiment guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/reproduction/capacity_followup/README.md) | Verify stored records or rerun this separate experiment |
-| Supporting forecasting studies | [Study index](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/archive/pre-manuscript-cleanup-2026-11-02/docs/RESEARCH_INDEX.md) | Apply each study's protocol and checks to its data |
-| Prediction-risk experiments | [Reproduction guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/REPRODUCIBILITY.md) | Recompute six groups of numerical and statistical results from stored observations, features, predictions, and optimization records |
-
-The central feature-augmentation experiment does not supply its original generator, runner, exact task list, execution environment, fitted model states, or forecast arrays. Its checker analyzes supplied losses; it cannot regenerate their underlying observations or predictions. The supplementary capacity experiment and supporting studies have separate inputs and protocols.
-
-The prediction-risk driver verifies source and input hashes before and after execution. It checks population-risk confidence bounds, fixed-dataset empirical-risk bounds, and predictor comparisons. Its deployment group also regenerates predictions from stored inputs and fixed models. These checks do not rerun all model training or collect new timing measurements.
-
-## Library dependencies
-
-The [library overview](README.md#numerical-library) describes the modules on `main`. Install their dependencies with:
+## Shared library
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate
 python -m pip install -r requirements.txt
 python -c "import kernel_affine_hull_koopman_machines"
+python kernel_affine_hull_koopman_machines.py
 ```
 
-The [dependency file](requirements.txt) pins NumPy, SciPy, scikit-learn, joblib, Numba, and tqdm. Experiment branches have their own environment requirements. Record the Python version, operating system, architecture, and numerical libraries used. Checks that compare exact input or output hashes require byte-identical arrays and stop on a mismatch.
+The final command fits and evaluates an illustrative Duffing predictor. It does not reproduce the archived certificate or benchmark studies.
 
-## Source identification
+## Reproducibility criteria
 
-Cite the exact commit and protocol used for each analysis. The [source index](docs/BRANCH_ARCHIVE.json) records identifiers; [CITATION.cff](CITATION.cff) contains software citation metadata. [TMLR.md](TMLR.md) links the studies and their records.
+The experiment-specific guides identify the original inputs or sufficient statistics, fixed configuration, random sampling law where applicable, dependency specification, output schema, and expected numerical or checksum criteria. The supported operations include:
+
+- **Integrity verification:** comparison of file and archive-member SHA-256 digests.
+- **Statistical recomputation:** calculation of metrics, certificates and aggregate summaries from distributed observations or sufficient statistics.
+- **Numerical reconstruction:** evaluation of a stored representation or predictor on supplied inputs.
+- **Experiment regeneration:** generation of new or deterministically reconstructed observations and refitting according to a specified protocol.
+
+The availability of one operation does not establish availability of the others. In particular, the public Van der Pol confirmatory distribution provides sufficient statistics and verification records, not all underlying physical-state and coordinate arrays. The central augmented-feature study provides per-run losses for statistical analysis, not the original complete training and forecasting workflow.
+
+For each calculation use the applicable immutable source identifier. Record the Python version, platform, architecture and numerical-library versions; verify inputs before performing calculations. Do not interpret a successful import or a matching checksum as a statistical validation of the sampling assumptions.
+
+See [research studies](docs/RESEARCH_STUDIES.md) for the additional experiment-specific sources, and [CITATION.cff](CITATION.cff) for software citation metadata.

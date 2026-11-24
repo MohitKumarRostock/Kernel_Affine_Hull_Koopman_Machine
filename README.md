@@ -1,42 +1,56 @@
 # Kernel Affine Hull Koopman Machine
 
-This repository contains Python implementations of kernel affine hull reconstruction and forecasting, plus code and experimental records for two studies of feature representations. Reconstruction-based features assign normalized weights to local models according to their reconstruction errors on an observed time-series history.
+Scientific software for reconstruction-based state representations, linear prediction in representation space, and the assessment of representation-dependent prediction limits.
 
-## Forecasting studies
+Given a collection of observed state transitions, the Kernel Affine Hull Koopman Machine (KAHKM) constructs local kernel affine hull models and represents each state by normalized reconstruction affinities. A linear transition matrix then predicts the successor representation. The associated risk-certificate methods quantify lower bounds on the prediction error achievable from a fixed representation under specified predictor constraints.
 
-| Study | Subject | Code and reproduction |
-| --- | --- | --- |
-| **Feature Augmentation for Forecasting with Reconstruction-Based Representations** | Adding normalization factors and local coordinates to normalized reconstruction weights | [Study guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/paper/geometry-induced-soft-state-clean-2026-11-02), [reproduction instructions](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/paper/geometry-induced-soft-state-clean-2026-11-02/REPRODUCIBILITY.md) |
-| **A Hierarchy of Risk Certificates for Representation-Based Forecasting** | Lower bounds on minimum mean squared error over bounded Lipschitz predictors | [Study guide](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/tree/research/risk-certificates-consolidated-2026-11-08), [reproduction instructions](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/REPRODUCIBILITY.md) |
+## Mathematical formulation
 
-The feature-augmentation study supplies per-run losses and a statistical checker. Its separate predictor-capacity experiment includes source and regeneration commands. The [supporting-study index](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/archive/pre-manuscript-cleanup-2026-11-02/docs/RESEARCH_INDEX.md) covers forecasting comparisons, representation dimension, preprocessing, residual prediction, feature correction, and common-weight feature ablation. Each study has its own data, predictors, and comparison criteria.
+Let $x\in\mathbb R^D$ denote a state and let $T_c(x)\in[0,1]$ be the reconstruction score of reference class $c=1,\ldots,C$. For $\omega,\tau>0$, define
 
-The prediction-risk study contains six experiment groups: controlled calibration, PTB-XL empirical-risk bounds, Bike Sharing minimum empirical-risk analysis, deployment cost, public-data screening, and predictor comparisons. Its documentation distinguishes population-risk confidence bounds from fixed-dataset empirical-risk bounds and measured forecasting performance. The [manuscript experiment index](https://github.com/MohitKumarRostock/Kernel_Affine_Hull_Koopman_Machine/blob/research/risk-certificates-consolidated-2026-11-08/docs/MANUSCRIPT_ALIGNMENT.md) maps these groups to the revised paper.
+$$
+\phi_c(x)=\frac{(1-T_c(x)+\tau)^\omega}{\sum_{j=1}^C(1-T_j(x)+\tau)^\omega}.
+$$
 
-See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for the calculations each command performs and [TMLR.md](TMLR.md) for study links. The central feature-augmentation experiment supplies losses for statistical recomputation, but not its original generator, runner, exact task list, execution environment, fitted model states, or forecast arrays.
+The vector $\phi(x)$ belongs to the probability simplex. The one-step forecasting problem is to approximate $\phi(x^+)$ from $\phi(x)$, where $x^+$ denotes the successor state. KAHKM uses the prediction $B^\top\phi(x)$ with a matrix $B\in\mathbb R^{C\times C}$ fitted to training transitions.
 
-## Numerical library
+A close correspondence between the soft coordinates and a reference partition does not imply that the coordinates preserve the information required for prediction. For a fixed evaluation law and a spectral-norm limit $\kappa$, the prediction-error certificates address the population quantity
 
-| Module | Function |
-| --- | --- |
-| [kernel_affine_hull_koopman_machines.py](kernel_affine_hull_koopman_machines.py) | Fit representations and evaluate Koopman forecasts |
-| [autoencoder.py](autoencoder.py), [autoencoder_filtering_extended.py](autoencoder_filtering_extended.py) | Fit local reconstruction models and compute reconstructions and distances |
-| [parallel_autoencoders.py](parallel_autoencoders.py), [combine_multiple_autoencoders_extended.py](combine_multiple_autoencoders_extended.py) | Fit and combine multiple reconstruction models |
-| [dim_reduce.py](dim_reduce.py) | Compute principal-component projections |
-| [kernel_regularized_least_squares.py](kernel_regularized_least_squares.py) | Fit regularized kernel regression |
-| [kxx_matrix.py](kxx_matrix.py), [kxa_matrix.py](kxa_matrix.py), [distance_matrix.py](distance_matrix.py) | Compute kernel matrices and pairwise distances |
+$$
+R_\kappa=\inf_{\|B\|_2\leq\kappa}
+\left(\mathbb E\|\phi(X^+)-B^\top\phi(X)\|_2^2\right)^{1/2}.
+$$
 
-Install the library dependencies and check the main import:
+A valid lower confidence bound exceeding a prescribed error tolerance excludes that tolerance for the entire constrained predictor class. A zero bound does not establish predictive sufficiency.
+
+## Installation and first calculation
+
+From a Git checkout of the default branch:
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate
 python -m pip install -r requirements.txt
 python -c "import kernel_affine_hull_koopman_machines"
+python kernel_affine_hull_koopman_machines.py
 ```
 
-These dependencies describe the library on `main`. Use each study's own environment, protocol, and reproduction commands for its experiments.
+The example constructs Duffing oscillator transitions, fits a reconstruction-based representation and linear predictor, and evaluates association-space errors on a later trajectory segment. It is a demonstration of forecasting, not an independent-pair confidence experiment.
 
-## Source version and licenses
+[Mathematical specification and Python interface](docs/KAHKM.md) describes the reconstruction, normalization, fitting algorithm, array conventions, example code, and interpretation of diagnostics. The pinned dependencies on the default branch apply to the numerical library; experiment-specific environments are specified in the respective research records.
 
-Cite the exact commit and study protocol used. The [source index](docs/BRANCH_ARCHIVE.json) records source identifiers; [CITATION.cff](CITATION.cff) supplies software citation metadata.
+## Scientific studies
 
-Source code uses the [MIT License](LICENSE). Unless otherwise indicated, original generated data and non-code research outputs use [CC BY 4.0](DATA_LICENSE). Third-party material retains its own license.
+| Research question | Documentation and computational records |
+| --- | --- |
+| Prediction limits and exact Koopman closure of simplex-valued state abstractions | [Theory and experimental designs](docs/SOFT_STATE_CERTIFICATES.md) · [Reproduction and data access](docs/SOFT_STATE_REPRODUCIBILITY.md) |
+| Forecasting with augmented reconstruction-based features | [Study description and records](docs/RESEARCH_STUDIES.md#forecasting-with-augmented-features) |
+| Risk bounds for representation-based forecasting with bounded Lipschitz predictors | [Study description and records](docs/RESEARCH_STUDIES.md#risk-certificates-for-representation-based-forecasting) |
+
+The [reproduction guide](REPRODUCIBILITY.md) identifies the available inputs, numerical procedures, and verification criteria for each study. The research code and data are available at the specified Git commit identifiers; the default branch contains the shared numerical library and scientific documentation.
+
+## License and citation
+
+The author-owned software is licensed under the [MIT License](LICENSE). Author-generated data and non-code research outputs are licensed under [CC BY 4.0](DATA_LICENSE), unless specified otherwise. Third-party material retains its applicable license.
+
+Software citation metadata is provided in [CITATION.cff](CITATION.cff). For a numerical result, cite the applicable study, its computational protocol, and the exact source or evidence commit identified in the reproduction guide.
